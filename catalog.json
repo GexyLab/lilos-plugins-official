@@ -1,0 +1,13 @@
+{
+  "name": "lilOS ufficiale",
+  "apps": [
+    "apps/files",
+    "apps/editor",
+    "apps/settings",
+    "apps/appstore"
+  ],
+  "modules": [
+    "modules/users-basic",
+    "modules/fs-postgres"
+  ]
+}

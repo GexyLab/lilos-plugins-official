@@ -1,0 +1,143 @@
+{
+  "id": "editor",
+  "version": "1.0.0",
+  "kind": "local",
+  "name": "Editor",
+  "description": "Editor di testo e codice con evidenziazione, suggerimenti e controllo di JSON, CSS e HTML.",
+  "icon": {
+    "glyph": "code",
+    "color": "#7c5cdb"
+  },
+  "publisher": {
+    "id": "lilos",
+    "name": "lilOS"
+  },
+  "sdk": "1",
+  "system": true,
+  "permissions": [
+    "fs.write:~",
+    "ui.shortcuts",
+    "net:https://json.schemastore.org"
+  ],
+  "contributes": {
+    "window": {
+      "width": 900,
+      "height": 600
+    },
+    "fileTypes": [
+      "",
+      "txt",
+      "md",
+      "markdown",
+      "log",
+      "csv",
+      "json",
+      "js",
+      "mjs",
+      "cjs",
+      "ts",
+      "css",
+      "html",
+      "htm",
+      "xml",
+      "svg",
+      "py",
+      "sh",
+      "yml",
+      "yaml",
+      "ini",
+      "toml",
+      "env"
+    ],
+    "commands": [
+      {
+        "id": "editor.save",
+        "label": "Salva",
+        "keys": [
+          "Ctrl+S"
+        ]
+      },
+      {
+        "id": "editor.new",
+        "label": "Nuovo documento",
+        "keys": [
+          "Ctrl+Alt+N"
+        ]
+      },
+      {
+        "id": "editor.openFile",
+        "label": "Apri un file",
+        "keys": [
+          "Ctrl+O"
+        ]
+      },
+      {
+        "id": "editor.openFolder",
+        "label": "Apri una cartella",
+        "keys": [
+          "Ctrl+Alt+O"
+        ]
+      },
+      {
+        "id": "editor.sidebar",
+        "label": "Mostra o nascondi la cartella",
+        "keys": [
+          "Ctrl+B"
+        ]
+      },
+      {
+        "id": "editor.complete",
+        "label": "Mostra i suggerimenti",
+        "keys": [
+          "Ctrl+Space"
+        ]
+      }
+    ]
+  },
+  "entry": "dist/index.js",
+  "styles": [
+    "dist/index-BKgC3XmR.css"
+  ],
+  "files": {
+    "dist/__vite-browser-external-Bnr4_4cF.js": "sha256-FWZBjx72z+efT91bN1XsoY76QPT+X6dhflTSYKHY//A=",
+    "dist/css-BnAyJkjl.js": "sha256-DH06U3b3D0ScKqYKCLVJ9DReeRFkz6zPS7ID512zjQc=",
+    "dist/css.worker-ntRg7X_k.js": "sha256-enaPJoLAEoaIqVb6FS2ismIRS/mW4124sOKLpHtXTKE=",
+    "dist/dist-CIsKHyKw.js": "sha256-A9erxI2AZ6RXdGAXU+ah2X0ID/53ffVSCioQwAdS4nk=",
+    "dist/dist-CQ8hnDd0.js": "sha256-UtY5z/Rlw3ISQIsZ07lDUP9/0Ryv8EhEWNaEVmK4kl0=",
+    "dist/github-dark-xcSqNsVI.js": "sha256-rar3ro+bkoSym1MbapYa6Utvpn7rJbpXJyZ3s4tRtEc=",
+    "dist/github-light-BNubH2n_.js": "sha256-jXyVGTRpCh8/Pl+L8HcUIb1rpKmw0LQMRjQ8ht59XI4=",
+    "dist/html-B15Ssl5e.js": "sha256-PJMtOy7kJUfJFSHO8t7GbBYoT2yH+aK8FYcA23r21Rk=",
+    "dist/html.worker-X9Fc__8d.js": "sha256-jFf7ptUItSrts9eQ7N//iO01MztcEqg6xqw6BMaDFJk=",
+    "dist/index-BKgC3XmR.css": "sha256-vovbhb+Xej3G8EVbvzn4vwlY35aB8IBcBMYqaHMJu88=",
+    "dist/index.js": "sha256-e3SWMlRoY9pO3BXuZvN+aOOOVFp+hJW05yq9wX96Ij4=",
+    "dist/javascript-BSjxD7Ei.js": "sha256-s8CfycJSC1caXhuX6szihKZYWf7x7I2GYsoIuFpm4IQ=",
+    "dist/json-CWJmcBQn.js": "sha256-dVtXsP0tUNXlIISVsZ7QnwwXlVjM7mKTz5hRYVuq03M=",
+    "dist/json.worker-B3saI9fz.js": "sha256-BGs4zSqxY8hdyWDK4v0jTG79BA3Qp8G00azIsfKM83g=",
+    "dist/markdown-CNVZ8ok-.js": "sha256-JUsTNxhX8aJzzSsIcnLbVpcZ3bziw2MM5s0xEFdIFWE=",
+    "dist/python-BHaXfePs.js": "sha256-ZftqcERdg7cFL5XSwbkaBw4Vqn5Ezs+SPkqCqsgEkOw=",
+    "dist/rolldown-runtime-QGRDbDUS.js": "sha256-CJFhMOQYFvRMSKhtv6DAsCGeQy/oamwBuM0mfvhTkiU=",
+    "dist/shellscript-CB7IBf-7.js": "sha256-eKhNpIHujRwIB8B8IdOXbKgrPbSzXvcoTMvRhLhERxE=",
+    "dist/tree-sitter/bash/LICENSE": "sha256-GEnmvaxcwLkIo6ADztYu3BVBVzbEhacqzThAnYi5sHs=",
+    "dist/tree-sitter/bash/highlights.scm": "sha256-ZjxBEW6oUVDlL6o1G2UhuDgGKjZPtJnAlTAEPUHhohY=",
+    "dist/tree-sitter/bash/tree-sitter-bash.wasm": "sha256-gpKRnIig99P7MdDNAlPKWpUxvB7egrBTfyxj3Yq+ano=",
+    "dist/tree-sitter/css/LICENSE": "sha256-p5yq3+LhwxJu1R4Bvv3++FuE19Z5/l1Chf/+m+PI/Sw=",
+    "dist/tree-sitter/css/highlights.scm": "sha256-7TaRfHY8Rk12up3OUOIAkrj069m80DQ9/d0Lg2XThlk=",
+    "dist/tree-sitter/css/tree-sitter-css.wasm": "sha256-iiOXf+JxNXzObyVO+Iyb6/OFRgLYBGYFrvakXAITXFk=",
+    "dist/tree-sitter/html/LICENSE": "sha256-8IabcHilwl8yqZyJ9IlLf7FPPqu+UyV1vqdP3vg5ZI8=",
+    "dist/tree-sitter/html/highlights.scm": "sha256-20f8TcZ7iX+rrmoOPQfgWm0Sc62V6Be7H+g6fRU0Y/s=",
+    "dist/tree-sitter/html/tree-sitter-html.wasm": "sha256-xI/Ngsfqi/lDGACIun8oxIsrtSh4dBeRaL+dMeOUz4U=",
+    "dist/tree-sitter/javascript/LICENSE": "sha256-8IabcHilwl8yqZyJ9IlLf7FPPqu+UyV1vqdP3vg5ZI8=",
+    "dist/tree-sitter/javascript/highlights.scm": "sha256-UQ0qy9WAf00zs9TWPfG0wndM0f7gIuC0szYZVzaCTBM=",
+    "dist/tree-sitter/javascript/tree-sitter-javascript.wasm": "sha256-X7SI0Mq7R3WllLq4VoLeWtbOg8DWrJl6n4LdCE1XEkA=",
+    "dist/tree-sitter/json/LICENSE": "sha256-8IabcHilwl8yqZyJ9IlLf7FPPqu+UyV1vqdP3vg5ZI8=",
+    "dist/tree-sitter/json/highlights.scm": "sha256-nB755sH5yND677O9iktTcH+BV6bNGjrsC+F/JECPJq8=",
+    "dist/tree-sitter/json/tree-sitter-json.wasm": "sha256-0hGfuY1ZEnGbE/lFhXT4YI0tKd++Rfa+H4YOof4qJAU=",
+    "dist/tree-sitter/python/LICENSE": "sha256-2l61FJ+rPQeAukDbaVjg4yNH38AypLyc6e49t+Ihmzc=",
+    "dist/tree-sitter/python/highlights.scm": "sha256-2JqXbfDMxE3qinWtlj7lWW/7FM1HvO3GTI1Bozg4HKQ=",
+    "dist/tree-sitter/python/tree-sitter-python.wasm": "sha256-FhCLUN9O6aMBaHlCUqtV58k7/Fdl1/oKo+M1dSxRX0c=",
+    "dist/typescript-DcJ-ca4B.js": "sha256-dkADWqcONnw/Pcs83qZkke/PnMI0k/Ez5by12uMrNkw=",
+    "dist/web-tree-sitter-DoPK4l5c.js": "sha256-7K+bnFwHSgKdzQhkdorj73593h2Z49ADsQn+h3d8/fY=",
+    "dist/xml-D0f8rgW-.js": "sha256-cm+7flrmzmSI3f440/y68CAeYL14EsA77y9rz+kOPG8=",
+    "dist/yaml-CcAIbj8h.js": "sha256-YJayirpdTRH4e3BlU6cu0ocMhodswcZ5fS6iV20/Xtc="
+  }
+}

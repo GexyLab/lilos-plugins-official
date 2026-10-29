@@ -1,0 +1,8 @@
+/* AppStore */
+.appstore .as-actions { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+.appstore .as-status { font-size: 12px; color: var(--dim); white-space: nowrap; }
+.as-dialog { display: flex; flex-direction: column; gap: 10px; height: 100%; padding: 18px 20px 16px; font-size: 12.5px; line-height: 1.5; overflow: auto; }
+.as-dialog-lead { font-weight: 500; }
+.as-dialog ul { margin: 0; padding-left: 18px; color: var(--text); }
+.as-warning { padding: 8px 10px; border: 1px solid var(--notice-border); border-radius: var(--radius-sm); background: var(--notice-bg); color: var(--notice-text); }
+.as-dialog-buttons { margin-top: auto; display: flex; gap: 8px; justify-content: flex-end; }
