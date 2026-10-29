@@ -1,6 +1,6 @@
 {
   "id": "editor",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "kind": "local",
   "name": "Editor",
   "description": "Editor di testo e codice con evidenziazione, suggerimenti e controllo di JSON, CSS e HTML.",

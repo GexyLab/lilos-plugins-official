@@ -26,16 +26,18 @@
 .ed-gutter > .on { color: var(--text); }
 .ed-area { position: relative; flex: 1; min-width: 0; overflow: hidden; background: var(--surface); }
 .ed-current {
-  position: absolute; left: 0; right: 0; height: var(--lh); pointer-events: none;
-  top: calc(var(--pad) + var(--line, 0) * var(--lh) - var(--scroll, 0px)); background: var(--current-line);
+  position: absolute; left: 0; right: 0; height: var(--height, var(--lh)); pointer-events: none;
+  top: calc(var(--top, var(--pad)) - var(--scroll, 0px)); background: var(--current-line);
 }
+/* Long lines wrap: the copy and the textarea break them in the same places (same width, same rules) */
 .ed-hl, .ed-input {
   margin: 0; padding: var(--pad) 12px; border: 0; font: inherit; tab-size: inherit;
-  white-space: pre; overflow-wrap: normal; letter-spacing: normal;
+  white-space: pre-wrap; overflow-wrap: break-word; word-break: normal; letter-spacing: normal;
 }
-.ed-hl { position: absolute; left: 0; top: 0; min-width: 100%; color: var(--code); pointer-events: none; }
+.ed-hl { position: absolute; left: 0; top: 0; width: 100%; color: var(--code); pointer-events: none; }
+.ed-hl > div { min-height: var(--lh); }
 .ed-input {
-  position: absolute; inset: 0; width: 100%; height: 100%; resize: none; outline: 0; overflow: auto;
+  position: absolute; inset: 0; width: 100%; height: 100%; resize: none; outline: 0; overflow: hidden auto; scrollbar-gutter: stable;
   background: transparent; color: transparent; caret-color: var(--text); user-select: text;
 }
 .ed-input::selection { background: color-mix(in srgb, var(--accent) 25%, transparent); color: transparent; }

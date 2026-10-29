@@ -1,6 +1,6 @@
 {
   "id": "editor",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "kind": "local",
   "name": "Editor",
   "description": "Editor di testo e codice con evidenziazione, suggerimenti e controllo di JSON, CSS e HTML.",
@@ -96,7 +96,7 @@
   },
   "entry": "dist/index.js",
   "styles": [
-    "dist/index-BKgC3XmR.css"
+    "dist/index-C5_d6Wid.css"
   ],
   "files": {
     "dist/__vite-browser-external-Bnr4_4cF.js": "sha256-FWZBjx72z+efT91bN1XsoY76QPT+X6dhflTSYKHY//A=",
@@ -108,8 +108,8 @@
     "dist/github-light-BNubH2n_.js": "sha256-jXyVGTRpCh8/Pl+L8HcUIb1rpKmw0LQMRjQ8ht59XI4=",
     "dist/html-B15Ssl5e.js": "sha256-PJMtOy7kJUfJFSHO8t7GbBYoT2yH+aK8FYcA23r21Rk=",
     "dist/html.worker-X9Fc__8d.js": "sha256-jFf7ptUItSrts9eQ7N//iO01MztcEqg6xqw6BMaDFJk=",
-    "dist/index-BKgC3XmR.css": "sha256-vovbhb+Xej3G8EVbvzn4vwlY35aB8IBcBMYqaHMJu88=",
-    "dist/index.js": "sha256-e3SWMlRoY9pO3BXuZvN+aOOOVFp+hJW05yq9wX96Ij4=",
+    "dist/index-C5_d6Wid.css": "sha256-+UDiPFWyKaAfeyUJzxCNw66r3f40gHCWERaS+eOjRms=",
+    "dist/index.js": "sha256-0k58h2EHv3o7CYMuVxqUMCAUduSJNyeACSSlkSJg2Yk=",
     "dist/javascript-BSjxD7Ei.js": "sha256-s8CfycJSC1caXhuX6szihKZYWf7x7I2GYsoIuFpm4IQ=",
     "dist/json-CWJmcBQn.js": "sha256-dVtXsP0tUNXlIISVsZ7QnwwXlVjM7mKTz5hRYVuq03M=",
     "dist/json.worker-B3saI9fz.js": "sha256-BGs4zSqxY8hdyWDK4v0jTG79BA3Qp8G00azIsfKM83g=",

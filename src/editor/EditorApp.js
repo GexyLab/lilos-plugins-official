@@ -58,11 +58,16 @@ const lineOf = (text, pos) => {
   return line;
 };
 
-/** Visual column (tabs every 4) of a character offset inside its line. */
-const visualColumn = (line, chars) => {
-  let col = 0;
-  for (const ch of line.slice(0, chars)) col = ch === '\t' ? col + 4 - (col % 4) : col + 1;
-  return col;
+/** Text node and offset of the character `ch` inside a line of the highlighted copy. */
+const pointIn = (row, ch) => {
+  const walk = document.createTreeWalker(row, NodeFilter.SHOW_TEXT);
+  let node, last = null;
+  while ((node = walk.nextNode())) {
+    if (ch <= node.length) return [node, ch];
+    ch -= node.length;
+    last = node;
+  }
+  return last ? [last, last.length] : [row, 0];
 };
 
 const withTimeout = (promise, ms) => Promise.race([promise, new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), ms))]);
@@ -91,7 +96,6 @@ class TextEditor {
   #completion = null;     // { from, items, index, manual } while the suggestion list is open
   #suggestSeq = 0;
   #accepting = false;     // inserting a suggestion: its own input event must not reopen the list
-  #measure = null;        // canvas context to measure the monospace character width
 
   constructor(win, openWindow) {
     this.win = win;
@@ -111,7 +115,7 @@ class TextEditor {
     this.code = h('pre', { class: 'ed-hl', 'aria-hidden': 'true' });
     this.squiggles = h('div', { class: 'ed-diags', 'aria-hidden': 'true' });
     this.input = h('textarea', {
-      class: 'ed-input', wrap: 'off', spellcheck: 'false', autocapitalize: 'off', autocomplete: 'off', 'aria-label': 'Testo del documento',
+      class: 'ed-input', wrap: 'soft', spellcheck: 'false', autocapitalize: 'off', autocomplete: 'off', 'aria-label': 'Testo del documento',
       'aria-autocomplete': 'list', 'aria-expanded': 'false',
     });
     this.suggestions = h('div', { class: 'ed-complete', role: 'listbox', id: `ed-complete-${uid()}`, 'aria-label': 'Suggerimenti', hidden: true });
@@ -196,7 +200,10 @@ class TextEditor {
     // The panel keeps within 60% of the window
     const fit = new ResizeObserver(() => { if (!this.tree.el.hidden) this.tree.resize(this.tree.width, false); });
     fit.observe(win.body);
-    win.on('destroy', () => fit.disconnect());
+    // Another width wraps the lines elsewhere
+    const wrap = new ResizeObserver(() => this.#layout());
+    wrap.observe(this.input);
+    win.on('destroy', () => { fit.disconnect(); wrap.disconnect(); });
   }
 
   /** Undo / redo of the text, through the browser (execCommand keeps one history with typing). */
@@ -335,30 +342,68 @@ class TextEditor {
       this.#engineNote = err.message;
       tokens = this.#simple(lang).tokenize(text);
     }
-    // Text nodes only: file contents never become HTML
-    const frag = document.createDocumentFragment();
+    // One block per line, so that a wrapped line can be measured. Text nodes only: file contents never become HTML
+    let row = h('div', {});
+    const rows = [row];
     for (const [cls, part, color, style] of tokens) {
-      if (cls) frag.append(h('span', { class: `tk-${cls}` }, part));
-      else if (color || style) {
-        const span = h('span', {}, part);
-        if (color) span.style.color = color;
-        if (style & FONT_STYLE.ITALIC) span.style.fontStyle = 'italic';
-        if (style & FONT_STYLE.BOLD) span.style.fontWeight = '700';
-        if (style & FONT_STYLE.UNDERLINE) span.style.textDecoration = 'underline';
-        frag.append(span);
-      } else frag.append(part);
+      part.split('\n').forEach((piece, i) => {
+        if (i) rows.push(row = h('div', {}));
+        if (!piece) return;
+        if (cls) row.append(h('span', { class: `tk-${cls}` }, piece));
+        else if (color || style) {
+          const span = h('span', {}, piece);
+          if (color) span.style.color = color;
+          if (style & FONT_STYLE.ITALIC) span.style.fontStyle = 'italic';
+          if (style & FONT_STYLE.BOLD) span.style.fontWeight = '700';
+          if (style & FONT_STYLE.UNDERLINE) span.style.textDecoration = 'underline';
+          row.append(span);
+        } else row.append(piece);
+      });
     }
-    frag.append('\n ');   // a trailing newline needs a line to exist below it
-    this.code.replaceChildren(frag);
+    this.code.replaceChildren(...rows);
 
     const lines = text.split('\n').length;
     if (lines !== this.#lines) {
       this.#lines = lines;
       this.gutter.replaceChildren(...Array.from({ length: lines }, (_, i) => h('div', {}, String(i + 1))));
     }
+    this.#layout();
+  }
+
+  /** Follows the wrapping of the copy: width as the textarea's, line numbers as tall as their lines, current line, squiggles. */
+  #layout() {
+    this.code.style.width = `${this.input.clientWidth}px`;
+    // Read every height first, then write: one layout only
+    const heights = Array.from(this.code.children, row => `${row.offsetHeight}px`);
+    heights.forEach((px, i) => {
+      const num = this.gutter.children[i];
+      if (num && num.style.height !== px) num.style.height = px;
+    });
     this.#renderDiagnostics();
     this.#caret();
     this.#syncScroll();
+  }
+
+  /**
+   * Client rectangles of the characters from..to of a line, one per visual row (a wrapped line has
+   * more), read from the highlighted copy.
+   */
+  #rowRects(line, from, to) {
+    const row = this.code.children[line];
+    if (!row) return [];
+    const range = document.createRange();
+    range.setStart(...pointIn(row, from));
+    range.setEnd(...pointIn(row, to));
+    const box = row.getBoundingClientRect();
+    const lh = parseFloat(getComputedStyle(row).lineHeight);
+    const byRow = new Map();
+    for (const r of range.getClientRects()) {
+      const i = Math.max(0, Math.floor((r.top + r.height / 2 - box.top) / lh));
+      const prev = byRow.get(i);
+      byRow.set(i, prev ? { left: Math.min(prev.left, r.left), right: Math.max(prev.right, r.right) } : { left: r.left, right: r.right });
+    }
+    if (!byRow.size) byRow.set(0, { left: box.left, right: box.left });   // an empty line
+    return [...byRow].map(([i, r]) => ({ ...r, top: box.top + i * lh, height: lh }));
   }
 
   #renderInfo() {
@@ -387,7 +432,11 @@ class TextEditor {
     this.state.classList.toggle('diag', !!here);
     this.gutter.querySelector('.on')?.classList.remove('on');
     this.gutter.children[line - 1]?.classList.add('on');
-    this.current.style.setProperty('--line', line - 1);
+    const row = this.code.children[line - 1];
+    if (row) {
+      this.current.style.setProperty('--top', `${row.offsetTop}px`);
+      this.current.style.setProperty('--height', `${row.offsetHeight}px`);
+    }
   }
 
   #syncScroll() {
@@ -500,9 +549,8 @@ class TextEditor {
   #renderDiagnostics() {
     for (const el of this.gutter.querySelectorAll('.err, .warn')) { el.classList.remove('err', 'warn'); el.removeAttribute('title'); }
     if (!this.#diagnostics.length) return this.squiggles.replaceChildren();
-    const text = this.text;
-    const lines = text.split('\n');
-    const { charWidth, lh, padLeft, padTop } = this.#metrics();
+    const lines = this.text.split('\n');
+    const origin = this.code.getBoundingClientRect();
     const marks = [];
     const byLine = new Map();
     for (const d of this.#diagnostics.slice(0, 300)) {
@@ -511,12 +559,15 @@ class TextEditor {
       const end = d.range?.end ?? start;
       for (let l = start.line; l <= Math.min(end.line, lines.length - 1); l++) {
         const line = lines[l] ?? '';
-        const from = visualColumn(line, l === start.line ? start.character : 0);
-        const to = visualColumn(line, l === end.line ? end.character : line.length);
-        marks.push(h('div', {
-          class: `ed-sq ${sev}`,
-          style: { left: `${padLeft + from * charWidth}px`, top: `${padTop + l * lh + lh - 4}px`, width: `${Math.max(charWidth, (to - from) * charWidth)}px` },
-        }));
+        const from = Math.min(line.length, l === start.line ? start.character : 0);
+        let to = Math.min(line.length, l === end.line ? end.character : line.length);
+        if (to <= from) to = Math.min(line.length, from + 1);   // an empty range still marks one character
+        for (const r of this.#rowRects(l, from, to)) {
+          marks.push(h('div', {
+            class: `ed-sq ${sev}`,
+            style: { left: `${r.left - origin.left}px`, top: `${r.top - origin.top + r.height - 4}px`, width: `${Math.max(6, r.right - r.left)}px` },
+          }));
+        }
       }
       const entry = byLine.get(start.line) ?? { sev: 'warn', messages: [] };
       if (sev === 'err') entry.sev = 'err';
@@ -539,16 +590,6 @@ class TextEditor {
       const a = offsetAt(text, d.range.start), b = offsetAt(text, d.range.end);
       return pos >= a && pos <= Math.max(b, a + 1);
     }) ?? null;
-  }
-
-  #metrics() {
-    const cs = getComputedStyle(this.input);
-    this.#measure ??= document.createElement('canvas').getContext('2d');
-    this.#measure.font = `${cs.fontSize} ${cs.fontFamily}`;
-    return {
-      charWidth: this.#measure.measureText('0'.repeat(20)).width / 20,
-      lh: parseFloat(cs.lineHeight), padLeft: parseFloat(cs.paddingLeft), padTop: parseFloat(cs.paddingTop),
-    };
   }
 
   // ---------- JSON schema ----------
@@ -703,14 +744,15 @@ class TextEditor {
 
   /** Puts the list under the word being completed (above it if there is no room below). */
   #placeCompletion(from) {
-    const ta = this.input;
+    // The copy must show the text just typed (its repaint waits for the next frame)
+    if (this.#raf) { cancelAnimationFrame(this.#raf); this.#raf = 0; this.render(); }
     const text = this.text;
-    const { charWidth, lh, padLeft, padTop } = this.#metrics();
     const lineStart = text.lastIndexOf('\n', from - 1) + 1;
-    const x = padLeft + visualColumn(text.slice(lineStart), from - lineStart) * charWidth - ta.scrollLeft;
-    const y = padTop + (lineOf(text, from) - 1) * lh - ta.scrollTop;
+    const [at] = this.#rowRects(lineOf(text, from) - 1, from - lineStart, from - lineStart);
+    if (!at) return;
     const box = this.suggestions;
-    const area = ta.getBoundingClientRect();
+    const area = this.input.getBoundingClientRect();
+    const x = at.left - area.left, y = at.top - area.top, lh = at.height;
     const w = box.offsetWidth, hgt = box.offsetHeight;
     const below = y + lh + 2;
     const top = below + hgt > area.height && y - hgt - 2 >= 0 ? y - hgt - 2 : below;
@@ -759,7 +801,7 @@ class TextEditor {
   #changed() {
     this.#message = '';
     cancelAnimationFrame(this.#raf);
-    this.#raf = requestAnimationFrame(() => this.render());
+    this.#raf = requestAnimationFrame(() => { this.#raf = 0; this.render(); });
   }
 
   /** Inserts text keeping the native undo history (execCommand), with a fallback. */
