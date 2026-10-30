@@ -4,6 +4,7 @@
   "kind": "local",
   "name": "Impostazioni",
   "description": "Aspetto, workspace, tag, scorciatoie, tipi di file, archiviazione.",
+  "category": "system",
   "icon": {
     "glyph": "gear",
     "color": "#5f6673"

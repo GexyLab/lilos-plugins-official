@@ -4,6 +4,7 @@
   "kind": "local",
   "name": "File Manager",
   "description": "Sfoglia, cerca e organizza file e cartelle: tag, collegamenti, cestino, informazioni e anteprima.",
+  "category": "system",
   "icon": { "glyph": "folder", "color": "#3b6ef5" },
   "publisher": { "id": "lilos", "name": "lilOS" },
   "sdk": "1",

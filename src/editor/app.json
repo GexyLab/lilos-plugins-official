@@ -4,6 +4,7 @@
   "kind": "local",
   "name": "Editor",
   "description": "Editor di testo e codice con evidenziazione, suggerimenti e controllo di JSON, CSS e HTML.",
+  "category": "development",
   "icon": { "glyph": "code", "color": "#7c5cdb" },
   "publisher": { "id": "lilos", "name": "lilOS" },
   "sdk": "1",

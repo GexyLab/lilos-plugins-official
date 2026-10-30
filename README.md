@@ -16,12 +16,14 @@ Il repository ufficiale di [lilOS](https://github.com/GexyLab/lilos): le app di 
 
 `catalog.json` elenca le cartelle dei pacchetti: è ciò che l'AppStore legge.
 
+Ogni cartella di pacchetto (`apps/<id>/`, `modules/<nome>/`) ha un `README.md`: l'AppStore lo mostra nei dettagli del pacchetto (Markdown, niente HTML, immagini non caricate; oltre 64 KB se ne vede l'inizio e un link salva il file completo nella cartella Download di lilOS). In `app.json` il campo `category` (`system`, `productivity`, `media`, `development` o `other`, predefinita) decide in quale scheda dell'AppStore compare l'app; `module.json` può avere `icon: { glyph, color }`.
+
 Le app di sistema girano dentro lilOS, senza sandbox. Il kernel le accetta solo da questo repository. Si installano dalla versione più alta tra i tag `vX.Y.Z`.
 
 ## Struttura
 
 - `src/<app>/`: sorgenti di ogni app, con `app.json`, il modello del manifesto.
-- `apps/<app>/`: il pacchetto pronto, con `lilos.json` e `dist/`.
+- `apps/<app>/`: il pacchetto pronto, con `lilos.json`, `dist/` e il `README.md` (che si scrive qui, a mano).
   - Si genera con `npm run build` e si committa: il kernel installa i file così come sono, senza compilare niente.
   - `lilos.json` contiene l'hash di ogni file, controllato dal kernel all'installazione.
 - `modules/<nome>/`: un modulo del kernel così com'è (`module.json`, `index.js`, eventuale `package.json` con `package-lock.json`).

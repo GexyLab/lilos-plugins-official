@@ -1,9 +1,10 @@
 {
   "id": "appstore",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "kind": "local",
   "name": "AppStore",
   "description": "Installa, aggiorna e rimuove app e moduli del kernel dai repository.",
+  "category": "system",
   "icon": { "glyph": "download", "color": "#30a46c" },
   "publisher": { "id": "lilos", "name": "lilOS" },
   "sdk": "1",

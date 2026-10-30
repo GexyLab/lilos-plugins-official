@@ -1,9 +1,10 @@
 {
   "id": "appstore",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "kind": "local",
   "name": "AppStore",
   "description": "Installa, aggiorna e rimuove app e moduli del kernel dai repository.",
+  "category": "system",
   "icon": {
     "glyph": "download",
     "color": "#30a46c"
@@ -26,10 +27,10 @@
   },
   "entry": "dist/index.js",
   "styles": [
-    "dist/index-Bl5NM6KV.css"
+    "dist/index-BU4aGq1s.css"
   ],
   "files": {
-    "dist/index-Bl5NM6KV.css": "sha256-PCAqxflZUkdOBzdJL+1VD5BinIylJ9bZbl3zR82BTbQ=",
-    "dist/index.js": "sha256-eM9mViP7aK9xfVcI8qx3nr1rDFckHd9LcAEAaML8ZWg="
+    "dist/index-BU4aGq1s.css": "sha256-exhO1VKjacMS+GxMVIKXOKwiGYIBC126B7H0d8KBZwA=",
+    "dist/index.js": "sha256-VRoVndt26hPhEhPwiB2/h1jfV9A8uqmg1ZgCJpeabHQ="
   }
 }
