@@ -1,9 +1,9 @@
 {
   "id": "settings",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "kind": "local",
   "name": "Sistema",
-  "description": "Aspetto, workspace, tag, scorciatoie, tipi di file, archiviazione.",
+  "description": "Aspetto, workspace, tag, scorciatoie, tipi di file, app all’avvio, archiviazione.",
   "category": "system",
   "icon": {
     "glyph": "gear",
@@ -16,6 +16,55 @@
   "sdk": "1",
   "system": true,
   "required": true,
+  "entrypoints": {
+    "main": {
+      "kind": "window",
+      "params": {
+        "tab": {
+          "type": "choice",
+          "label": "Sezione",
+          "options": [
+            {
+              "value": "appearance",
+              "label": "Aspetto"
+            },
+            {
+              "value": "desk",
+              "label": "Scrivania"
+            },
+            {
+              "value": "workspaces",
+              "label": "Workspace"
+            },
+            {
+              "value": "tags",
+              "label": "Tag"
+            },
+            {
+              "value": "usability",
+              "label": "Usabilità"
+            },
+            {
+              "value": "apps",
+              "label": "App"
+            },
+            {
+              "value": "startup",
+              "label": "Avvio"
+            },
+            {
+              "value": "storage",
+              "label": "Archiviazione"
+            },
+            {
+              "value": "about",
+              "label": "Informazioni"
+            }
+          ]
+        }
+      }
+    }
+  },
   "permissions": [
     "settings.system",
     "workspaces.manage",
@@ -24,10 +73,10 @@
   ],
   "entry": "dist/index.js",
   "styles": [
-    "dist/index-BXGtpKy-.css"
+    "dist/index-BqgxtGt9.css"
   ],
   "files": {
-    "dist/index-BXGtpKy-.css": "sha256-nDbC9KKYPl4KBeYyFjnzqGgWe9FTvmqfiBgsCbSFDZs=",
-    "dist/index.js": "sha256-13V2CK6WbSBlxvJAn9swGQQdN7+OBrS+525GHlWLAnA="
+    "dist/index-BqgxtGt9.css": "sha256-F1eXoUzr5gRhiQjo+Kb1+JH4ImMl748e13jSvZw4wHM=",
+    "dist/index.js": "sha256-Fpli0BMW/LGvEE5YP52iuNCsJhdILJbrxX3P7l5vM+Q="
   }
 }

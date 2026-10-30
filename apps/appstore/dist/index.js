@@ -139,6 +139,7 @@ function O({ openWindow: m }) {
 		modules: [],
 		loading: !0,
 		busy: null,
+		pressed: null,
 		tab: "installed",
 		query: {},
 		view: "list",
@@ -372,7 +373,8 @@ function O({ openWindow: m }) {
 		reinstall: !0,
 		allowUnsigned: !e.verified
 	}), `${e.name} reinstallata`);
-	async function L(e) {
+	async function L(e, t) {
+		t.disabled = !0, t.setAttribute("aria-busy", "true");
 		try {
 			let t = await l.readme(e.repo.id, e.entry.path), n = i.children(i.root).find((e) => e.type === "folder" && e.system && e.name === "Download");
 			if (!n) throw Error("Manca la cartella Download");
@@ -383,17 +385,19 @@ function O({ openWindow: m }) {
 			await i.write(r.id, t), f(`README salvato in Download come «${r.name}»`, { timeout: 6e3 });
 		} catch (e) {
 			f(e.message, { timeout: 7e3 });
+		} finally {
+			t.disabled = !1, t.removeAttribute("aria-busy");
 		}
 	}
 	let ce = () => v("restart", async () => {
 		await c.restart(), await new Promise((e) => setTimeout(e, 2500));
-	}, "Kernel riavviato"), R = (e, n, r = {}) => {
-		let i = t({
+	}, "Kernel riavviato"), R = (e, n, { key: r = "", ...i } = {}) => {
+		let a = `${e}|${r}`, o = t({
 			label: e,
-			onClick: n,
-			...r
+			onClick: () => (g.pressed = a, n()),
+			...i
 		});
-		return i.disabled = !!g.busy, i;
+		return o.disabled = !!g.busy, g.busy && g.pressed === a && o.setAttribute("aria-busy", "true"), o;
 	}, z = (e, t = !1) => a("span", { class: "as-state" }, t ? o("check") : null, e), B = (e) => e.repo ? a("span", {
 		class: "as-repo",
 		title: e.repo.url
@@ -402,7 +406,10 @@ function O({ openWindow: m }) {
 		onclick: () => Z("list")
 	}, o("arrowLeft"), e);
 	function ue(e) {
-		return e.update ? h ? R("Aggiorna", () => N(e), { primary: !0 }) : z(`Aggiornamento ${e.update}`) : e.here ? z(e.kind === "module" && !e.have.enabled ? "Rimosso" : V(e), !0) : e.elsewhere ? z("Da un altro repository") : h ? R("Installa", () => A(e)) : z("Disponibile");
+		return e.update ? h ? R("Aggiorna", () => N(e), {
+			primary: !0,
+			key: e.key
+		}) : z(`Aggiornamento ${e.update}`) : e.here ? z(e.kind === "module" && !e.have.enabled ? "Rimosso" : V(e), !0) : e.elsewhere ? z("Da un altro repository") : h ? R("Installa", () => A(e), { key: e.key }) : z("Disponibile");
 	}
 	function de(e) {
 		let t = e.update ? `${e.installed} → ${e.update}` : e.here ? e.installed : e.offered;
@@ -449,9 +456,16 @@ function O({ openWindow: m }) {
 	}
 	function pe(e, t) {
 		let r = e.kind === "module", i = [];
-		e.here && !r && i.push(R("Apri", () => te(e.id), { primary: !e.update || !h })), h && (e.update && i.push(R(`Aggiorna a ${e.update}`, () => N(e), { primary: !0 })), e.here && (!r || e.have.enabled) && (!e.update && e.have.source && i.push(R("Cerca aggiornamenti", () => N(e))), r || i.push(R("Reinstalla", () => I(e))), e.required || i.push(R("Rimuovi", () => F(e), { danger: !0 }))), !e.here && !e.elsewhere && e.entry && i.push(R(e.repo.official ? "Installa" : "Installa comunque", () => A(e), {
+		e.here && !r && i.push(R("Apri", () => te(e.id), { primary: !e.update || !h })), h && (e.update && i.push(R(`Aggiorna a ${e.update}`, () => N(e), {
 			primary: !0,
-			danger: !e.repo.official
+			key: e.key
+		})), e.here && (!r || e.have.enabled) && (!e.update && e.have.source && i.push(R("Cerca aggiornamenti", () => N(e), { key: e.key })), r || i.push(R("Reinstalla", () => I(e), { key: e.key })), e.required || i.push(R("Rimuovi", () => F(e), {
+			danger: !0,
+			key: e.key
+		}))), !e.here && !e.elsewhere && e.entry && i.push(R(e.repo.official ? "Installa" : "Installa comunque", () => A(e), {
+			primary: !0,
+			danger: !e.repo.official,
+			key: e.key
 		})));
 		let s = r && e.have ? e.have.enabled ? e.have.running === e.have.enabled ? "In uso" : e.have.running ? `In uso la ${e.have.running} fino al riavvio` : "Attivo dal prossimo avvio" : "Rimosso: attivo fino al riavvio" : null, c = D(e.manifest?.permissions);
 		return X.textContent = `${e.name} ${e.offered ?? e.installed}`, a("div", { class: "as-detail" }, W(t.label), a("div", { class: "as-detail-head" }, n(e.icon), a("div", { class: "as-detail-title" }, a("h1", {}, e.name), a("div", { class: "as-sub" }, [
@@ -460,7 +474,7 @@ function O({ openWindow: m }) {
 			S.find((t) => t.id === e.category)?.label
 		].filter(Boolean).join(" · ")), a("div", { class: "as-meta" }, B(e), e.verified ? a("span", { class: "as-state" }, o("shield"), "Verificata") : e.repo ? a("span", { class: "as-unofficial" }, "non ufficiale · non verificata") : null, e.required ? a("span", { class: "as-state" }, "Necessaria a lilOS") : null, e.elsewhere ? a("span", { class: "as-state" }, `${V(e)} da un altro repository`) : null), i.length ? a("div", { class: "as-detail-actions" }, ...i) : null)), e.repo && !e.repo.official && !e.here ? a("div", { class: "as-banner" }, o("info"), a("span", {}, "Viene da un repository non ufficiale: non si può sapere chi l’ha scritta, né che il codice non sia stato modificato.")) : null, a("div", { class: "as-facts" }, U("Versione", e.offered ?? e.installed), U(V(e), e.installed ?? "—"), U("Repository", e.repo ? E(e.repo) : "—"), r ? U("Fornisce", e.provides.join(", ") || "—") : U("ID", e.id), s ? U("Stato", s) : null), r ? a("div", { class: "as-perm" }, a("h3", {}, o("info"), "Attenzione"), a("p", {}, "Il codice di un modulo gira nel kernel, con accesso completo a utenti e file. Le modifiche valgono dal prossimo avvio del kernel.")) : a("div", { class: "as-perm" }, a("h3", {}, o("shield"), "Potrà"), c.length ? a("ul", {}, ...c.map((e) => a("li", {}, o("check"), p(e)))) : a("p", { class: "as-muted" }, "Nessun permesso oltre ai propri dati.")), a("div", { class: "as-readme-title" }, o("file"), "README.md"), e.readme ? a("article", { class: "as-readme" }, ...b(e.readme)) : null, e.readme && e.readmeTruncated ? a("p", { class: "as-readme-cut" }, "Il README è troppo lungo: qui se ne vede solo l’inizio. ", a("button", {
 			class: "as-link",
-			onclick: () => L(e)
+			onclick: (t) => L(e, t.currentTarget)
 		}, o("download"), "Scarica il README completo")) : null, e.readme ? null : a("p", { class: "as-muted" }, e.repo ? "Questo pacchetto non ha un README." : "Il README si legge dal repository: questo elemento non viene da un repository elencato."));
 	}
 	function me(e) {
@@ -484,7 +498,10 @@ function O({ openWindow: m }) {
 			}), a("div", { class: "as-row-text" }, a("b", {}, E(e), a("span", { class: "as-muted" }, ` · ${e.name}`)), a("span", {}, e.url), a("span", {
 				class: g.errors.has(e.id) ? "as-error" : null,
 				title: i.map((e) => `${e.path}: ${e.error}`).join("\n") || null
-			}, o)), e.official ? a("span", { class: "as-muted" }, "Sempre presente") : h ? R("Rimuovi", () => v("repo", () => l.remove(e.id), `${E(e)} rimosso`), { danger: !0 }) : null);
+			}, o)), e.official ? a("span", { class: "as-muted" }, "Sempre presente") : h ? R("Rimuovi", () => v("repo", () => l.remove(e.id), `${E(e)} rimosso`), {
+				danger: !0,
+				key: e.id
+			}) : null);
 		})), H("Aggiungi un repository"), h ? a("div", { class: "as-group" }, a("div", { class: "as-row" }, a("div", { class: "as-row-text" }, a("b", {}, "Indirizzo"), a("span", {}, "Un repository git con catalog.json, per esempio https://github.com/nome/repo")), d({
 			value: t.url,
 			placeholder: "https://…",

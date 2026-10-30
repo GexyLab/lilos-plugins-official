@@ -40,7 +40,7 @@ const granted = permissions => (permissions ?? []).filter(p => !IMPLICIT.has(p.s
 export default function AppStore({ openWindow }) {
   const isAdmin = kernel.user?.role === 'admin';
   const state = {
-    repos: [], catalogs: new Map(), errors: new Map(), modules: [], loading: true, busy: null,
+    repos: [], catalogs: new Map(), errors: new Map(), modules: [], loading: true, busy: null, pressed: null,
     tab: 'installed', query: {}, view: 'list', key: null, newRepo: { url: '', name: '' },
   };
 
@@ -238,7 +238,9 @@ export default function AppStore({ openWindow }) {
   const reinstall = item => act('reinstall', () => apps.update(item.id, { reinstall: true, allowUnsigned: !item.verified }), `${item.name} reinstallata`);
 
   /** Saves the whole README of a package in the Download folder. */
-  async function downloadReadme(item) {
+  async function downloadReadme(item, link) {
+    link.disabled = true;
+    link.setAttribute('aria-busy', 'true');
     try {
       const text = await repositories.readme(item.repo.id, item.entry.path);
       const folder = fs.children(fs.root).find(n => n.type === 'folder' && n.system && n.name === 'Download');
@@ -248,6 +250,9 @@ export default function AppStore({ openWindow }) {
       toast(`README salvato in Download come «${file.name}»`, { timeout: 6000 });
     } catch (err) {
       toast(err.message, { timeout: 7000 });
+    } finally {
+      link.disabled = false;
+      link.removeAttribute('aria-busy');
     }
   }
 
@@ -258,9 +263,12 @@ export default function AppStore({ openWindow }) {
 
   // ---------- Views ----------
 
-  const button = (label, onClick, opts = {}) => {
-    const b = actionButton({ label, onClick, ...opts });
+  /** key: tells apart buttons with the same label, so the one pressed shows the spinner while its change runs. */
+  const button = (label, onClick, { key = '', ...opts } = {}) => {
+    const id = `${label}|${key}`;
+    const b = actionButton({ label, onClick: () => { state.pressed = id; return onClick(); }, ...opts });
     b.disabled = !!state.busy;
+    if (state.busy && state.pressed === id) b.setAttribute('aria-busy', 'true');
     return b;
   };
   const status = (text, ok = false) => h('span', { class: 'as-state' }, ok ? icon('check') : null, text);
@@ -274,10 +282,10 @@ export default function AppStore({ openWindow }) {
   const backButton = label => h('button', { class: 'as-back', onclick: () => show('list') }, icon('arrowLeft'), label);
 
   function cardControl(item) {
-    if (item.update) return isAdmin ? button('Aggiorna', () => update(item), { primary: true }) : status(`Aggiornamento ${item.update}`);
+    if (item.update) return isAdmin ? button('Aggiorna', () => update(item), { primary: true, key: item.key }) : status(`Aggiornamento ${item.update}`);
     if (item.here) return status(item.kind === 'module' && !item.have.enabled ? 'Rimosso' : installedWord(item), true);
     if (item.elsewhere) return status('Da un altro repository');
-    return isAdmin ? button('Installa', () => install(item)) : status('Disponibile');
+    return isAdmin ? button('Installa', () => install(item), { key: item.key }) : status('Disponibile');
   }
 
   function card(item) {
@@ -343,13 +351,13 @@ export default function AppStore({ openWindow }) {
     const actions = [];
     if (item.here && !isModule) actions.push(button('Apri', () => launch(item.id), { primary: !item.update || !isAdmin }));
     if (isAdmin) {
-      if (item.update) actions.push(button(`Aggiorna a ${item.update}`, () => update(item), { primary: true }));
+      if (item.update) actions.push(button(`Aggiorna a ${item.update}`, () => update(item), { primary: true, key: item.key }));
       if (item.here && (!isModule || item.have.enabled)) {
-        if (!item.update && item.have.source) actions.push(button('Cerca aggiornamenti', () => update(item)));
-        if (!isModule) actions.push(button('Reinstalla', () => reinstall(item)));
-        if (!item.required) actions.push(button('Rimuovi', () => remove(item), { danger: true }));
+        if (!item.update && item.have.source) actions.push(button('Cerca aggiornamenti', () => update(item), { key: item.key }));
+        if (!isModule) actions.push(button('Reinstalla', () => reinstall(item), { key: item.key }));
+        if (!item.required) actions.push(button('Rimuovi', () => remove(item), { danger: true, key: item.key }));
       }
-      if (!item.here && !item.elsewhere && item.entry) actions.push(button(item.repo.official ? 'Installa' : 'Installa comunque', () => install(item), { primary: true, danger: !item.repo.official }));
+      if (!item.here && !item.elsewhere && item.entry) actions.push(button(item.repo.official ? 'Installa' : 'Installa comunque', () => install(item), { primary: true, danger: !item.repo.official, key: item.key }));
     }
     const moduleState = isModule && item.have
       ? (!item.have.enabled ? 'Rimosso: attivo fino al riavvio' : item.have.running !== item.have.enabled ? (item.have.running ? `In uso la ${item.have.running} fino al riavvio` : 'Attivo dal prossimo avvio') : 'In uso')
@@ -383,7 +391,7 @@ export default function AppStore({ openWindow }) {
       h('div', { class: 'as-readme-title' }, icon('file'), 'README.md'),
       item.readme ? h('article', { class: 'as-readme' }, ...renderMarkdown(item.readme)) : null,
       item.readme && item.readmeTruncated ? h('p', { class: 'as-readme-cut' }, 'Il README è troppo lungo: qui se ne vede solo l’inizio. ',
-        h('button', { class: 'as-link', onclick: () => downloadReadme(item) }, icon('download'), 'Scarica il README completo')) : null,
+        h('button', { class: 'as-link', onclick: e => downloadReadme(item, e.currentTarget) }, icon('download'), 'Scarica il README completo')) : null,
       item.readme ? null
         : h('p', { class: 'as-muted' }, item.repo ? 'Questo pacchetto non ha un README.' : 'Il README si legge dal repository: questo elemento non viene da un repository elencato.'));
   }
@@ -405,7 +413,7 @@ export default function AppStore({ openWindow }) {
           h('b', {}, repoName(repo), h('span', { class: 'as-muted' }, ` · ${repo.name}`)),
           h('span', {}, repo.url),
           h('span', { class: state.errors.has(repo.id) ? 'as-error' : null, title: invalid.map(e => `${e.path}: ${e.error}`).join('\n') || null }, what)),
-        repo.official ? h('span', { class: 'as-muted' }, 'Sempre presente') : isAdmin ? button('Rimuovi', () => act('repo', () => repositories.remove(repo.id), `${repoName(repo)} rimosso`), { danger: true }) : null);
+        repo.official ? h('span', { class: 'as-muted' }, 'Sempre presente') : isAdmin ? button('Rimuovi', () => act('repo', () => repositories.remove(repo.id), `${repoName(repo)} rimosso`), { danger: true, key: repo.id }) : null);
     };
     return h('div', { class: 'as-options' },
       backButton(tab.label),

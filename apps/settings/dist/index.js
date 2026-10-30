@@ -1,10 +1,11 @@
-import { SDK_VERSION as e, SettingsWindow as t, TAG_COLORS as n, actionButton as r, apps as i, fileTypeList as a, fs as o, h as s, icon as c, kernel as l, menus as u, segmented as d, selectField as f, session as p, settings as m, shortcutField as h, shortcuts as g, storage as _, swatches as v, tags as y, textField as b, toast as x, toggle as S } from "/host/sdk.js";
-import { ACCENTS as C, LASSO_OPTIONS as w, RETENTION_OPTIONS as T, WORKSPACE_LIMITS as E, appFor as D, apps as O, canChangeExecution as k, defaultAppFor as A, executionMode as j, fileApps as M, knownExtensions as N, launch as P, pickFile as F, resetAppsFor as I, setAppFor as ee, setTag as te, showAppSecurity as L, version as R, workspaceManager as z } from "/host/system.js";
+import { SDK_VERSION as e, SettingsWindow as t, TAG_COLORS as n, actionButton as r, appIcon as i, apps as a, fileTypeList as o, fs as s, h as c, icon as l, kernel as u, menus as d, openMenu as f, segmented as p, selectField as m, session as h, settings as g, shortcutField as _, shortcuts as v, storage as y, swatches as b, tags as x, textField as S, toast as C, toggle as w } from "/host/sdk.js";
+import * as T from "/host/system.js";
+import { ACCENTS as E, LASSO_OPTIONS as D, RETENTION_OPTIONS as O, WORKSPACE_LIMITS as k, appFor as A, apps as j, canChangeExecution as M, defaultAppFor as N, executionMode as ee, fileApps as te, knownExtensions as P, launch as F, pickFile as I, resetAppsFor as L, setAppFor as ne, setTag as re, showAppSecurity as ie, startup as R, version as ae, workspaceManager as z } from "/host/system.js";
 // src/settings/menuEditor.js
-function B(e, { openWindow: t, rerender: n, confirmButton: i }) {
-	let a = u.layout(e), l = (t) => {
-		u.setLayout(e, t), n();
-	}, d = (e) => {
+function oe(e, { openWindow: t, rerender: n, confirmButton: i }) {
+	let a = d.layout(e), o = (t) => {
+		d.setLayout(e, t), n();
+	}, u = (e) => {
 		if (e.type === "separator") return {
 			label: "— Separatore —",
 			description: ""
@@ -13,9 +14,9 @@ function B(e, { openWindow: t, rerender: n, confirmButton: i }) {
 			label: e.label,
 			description: `Sottomenu · ${e.items.length} ${e.items.length === 1 ? "voce" : "voci"}`
 		};
-		let t = u.action(e.action), n = e.label ?? t?.label ?? e.action;
+		let t = d.action(e.action), n = e.label ?? t?.label ?? e.action;
 		if (e.action === "desktop.create") {
-			let t = e.params.kind === "folder" ? "Crea la cartella" : "Crea il file", r = e.params.template ? ` dal modello ${o.exists(e.params.template) ? o.path(e.params.template) : "(file eliminato)"}` : e.params.content ? " con un contenuto iniziale" : "";
+			let t = e.params.kind === "folder" ? "Crea la cartella" : "Crea il file", r = e.params.template ? ` dal modello ${s.exists(e.params.template) ? s.path(e.params.template) : "(file eliminato)"}` : e.params.content ? " con un contenuto iniziale" : "";
 			return {
 				label: n,
 				description: `${t} «${e.params.name}»${r}`
@@ -23,31 +24,31 @@ function B(e, { openWindow: t, rerender: n, confirmButton: i }) {
 		}
 		return e.action === "app.launch" ? {
 			label: n,
-			description: `Apre l’app ${O.find((t) => t.id === e.params.app)?.name ?? e.params.app}`
+			description: `Apre l’app ${j.find((t) => t.id === e.params.app)?.name ?? e.params.app}`
 		} : {
 			label: n,
 			description: "Azione"
 		};
-	}, p = (e, t) => {
+	}, f = (e, t) => {
 		let n = structuredClone(a);
 		return t(e.length === 1 ? n : n[e[0]].items, e[e.length - 1]), n;
-	}, m = (e, t) => l(p(e, (e, n) => {
+	}, p = (e, t) => o(f(e, (e, n) => {
 		let r = n + t;
 		r < 0 || r >= e.length || ([e[n], e[r]] = [e[r], e[n]]);
-	})), h = (e) => l(p(e, (e, t) => e.splice(t, 1))), g = (e, t, n) => {
-		let { label: r, description: i } = d(e), a = t[t.length - 1], o = (e, t, n, i) => s("button", {
+	})), h = (e) => o(f(e, (e, t) => e.splice(t, 1))), g = (e, t, n) => {
+		let { label: r, description: i } = u(e), a = t[t.length - 1], o = (e, t, n, i) => c("button", {
 			class: "mm-btn",
 			type: "button",
 			title: t,
 			"aria-label": `${t}: ${r}`,
 			disabled: i,
 			onclick: n
-		}, c(e));
+		}, l(e));
 		return {
 			label: t.length === 2 ? `↳ ${r}` : r,
 			description: i,
 			keywords: "menu contestuale voce separatore nuovo",
-			control: s("div", { class: "mm-ctl" }, o("arrowUp", "Sposta su", () => m(t, -1), a === 0), o("arrowDown", "Sposta giù", () => m(t, 1), a === n - 1), o("x", "Togli", () => h(t)))
+			control: c("div", { class: "mm-ctl" }, o("arrowUp", "Sposta su", () => p(t, -1), a === 0), o("arrowDown", "Sposta giù", () => p(t, 1), a === n - 1), o("x", "Togli", () => h(t)))
 		};
 	}, _ = [];
 	a.forEach((e, t) => {
@@ -59,31 +60,31 @@ function B(e, { openWindow: t, rerender: n, confirmButton: i }) {
 	}, ...v.map(([e, t]) => ({
 		value: String(t),
 		label: `Dentro «${e.label}»`
-	}))], x = (e, t) => l(p(e === "root" ? [0] : [Number(e), 0], (e) => e.push(t))), S = u.actions(e).filter((e) => e.id !== "desktop.create" && e.id !== "app.launch"), C = f({
-		value: S[0]?.id,
+	}))], b = (e, t) => o(f(e === "root" ? [0] : [Number(e), 0], (e) => e.push(t))), x = d.actions(e).filter((e) => e.id !== "desktop.create" && e.id !== "app.launch"), C = m({
+		value: x[0]?.id,
 		label: "Voce da aggiungere",
-		options: [...S.map((e) => ({
+		options: [...x.map((e) => ({
 			value: e.id,
 			label: e.label
-		})), ...O.filter((e) => e.load).map((e) => ({
+		})), ...j.filter((e) => e.load).map((e) => ({
 			value: `app:${e.id}`,
 			label: `Apri ${e.name}`
 		}))]
-	}), w = f({
+	}), w = m({
 		value: "root",
 		options: y,
 		label: "Dove"
-	}), T = f({
+	}), T = m({
 		value: "root",
 		options: y,
 		label: "Dove"
-	}), E = v[0], D = b({
+	}), E = v[0], D = S({
 		placeholder: "Etichetta (es. Foglio di stile)",
 		label: "Etichetta"
-	}), k = b({
+	}), O = S({
 		placeholder: "Nome (es. stile.css)",
 		label: "Nome del file o della cartella"
-	}), A = f({
+	}), k = m({
 		value: "file",
 		options: [{
 			value: "file",
@@ -93,18 +94,18 @@ function B(e, { openWindow: t, rerender: n, confirmButton: i }) {
 			label: "Cartella"
 		}],
 		label: "Tipo"
-	}), j = null, M = r({
+	}), A = null, M = r({
 		label: "Modello…",
 		onClick: async () => {
-			let e = await F(t, {
+			let e = await I(t, {
 				title: "Scegli il file modello",
 				text: "Il nuovo file partirà con il contenuto di questo file."
 			});
-			e && (j = e.id, M.textContent = `Modello: ${e.name}`);
+			e && (A = e.id, M.textContent = `Modello: ${e.name}`);
 		}
-	}), N = s("small", { class: "mm-note" });
+	}), N = c("small", { class: "mm-note" });
 	return [{
-		title: u.list().find((t) => t.id === e)?.label ?? e,
+		title: d.list().find((t) => t.id === e)?.label ?? e,
 		rows: _
 	}, {
 		title: "Aggiungi",
@@ -112,48 +113,48 @@ function B(e, { openWindow: t, rerender: n, confirmButton: i }) {
 			{
 				label: "Voce",
 				description: "Un’azione o l’apertura di un’app",
-				control: s("div", { class: "mm-add" }, C, w, r({
+				control: c("div", { class: "mm-add" }, C, w, r({
 					label: "Aggiungi",
 					onClick: () => {
 						let e = C.value, t = e.startsWith("app:") ? {
 							type: "action",
 							action: "app.launch",
-							label: `Apri ${O.find((t) => t.id === e.slice(4))?.name}`,
+							label: `Apri ${j.find((t) => t.id === e.slice(4))?.name}`,
 							params: { app: e.slice(4) }
 						} : {
 							type: "action",
 							action: e
 						};
-						x(w.value, t);
+						b(w.value, t);
 					}
 				}))
 			},
 			{
 				label: "Separatore",
 				description: "Una linea per raggruppare le voci",
-				control: s("div", { class: "mm-add" }, T, r({
+				control: c("div", { class: "mm-add" }, T, r({
 					label: "Aggiungi",
-					onClick: () => x(T.value, { type: "separator" })
+					onClick: () => b(T.value, { type: "separator" })
 				}))
 			},
 			...E ? [{
 				label: `Nuovo elemento in «${E[0].label}»`,
 				description: "Crea un file o una cartella con questo nome; un file può partire dal contenuto di un modello",
-				control: s("div", { class: "mm-add" }, D, k, A, M, r({
+				control: c("div", { class: "mm-add" }, D, O, k, M, r({
 					label: "Aggiungi",
 					primary: !0,
 					onClick: () => {
-						let e = D.value.trim(), t = k.value.trim();
+						let e = D.value.trim(), t = O.value.trim();
 						if (!e || !t) {
 							N.textContent = "Servono l’etichetta e il nome";
 							return;
 						}
 						let n = {
-							kind: A.value,
+							kind: k.value,
 							name: t,
-							...j && A.value === "file" && { template: j }
+							...A && k.value === "file" && { template: A }
 						};
-						x(String(E[1]), {
+						b(String(E[1]), {
 							type: "action",
 							action: "desktop.create",
 							label: e,
@@ -165,17 +166,199 @@ function B(e, { openWindow: t, rerender: n, confirmButton: i }) {
 			}] : [],
 			{
 				label: "Voci predefinite",
-				description: u.isCustom(e) ? "Il menu è stato personalizzato" : "Il menu è quello predefinito",
+				description: d.isCustom(e) ? "Il menu è stato personalizzato" : "Il menu è quello predefinito",
 				control: i("Ripristina", "Conferma", () => {
-					u.reset(e), n();
+					d.reset(e), n();
 				})
 			}
 		]
 	}];
 }
+// src/settings/startup.js
+function se() {
+	return [{
+		title: "Avvio automatico",
+		rows: [{
+			label: "Apri le app quando entri",
+			description: "Si aprono le app scelte in App, con i loro parametri. Solo nella prima scheda di lilOS di questo browser: le altre si aprono vuote.",
+			keywords: "avvio automatico accesso login esecuzione automatica",
+			control: w({
+				value: g.get("startupApps"),
+				label: "Apri le app quando entri",
+				onChange: (e) => g.set("startupApps", e)
+			})
+		}]
+	}, {
+		title: "Se qualcosa non va",
+		rows: [{
+			label: "Avvio senza app",
+			description: "Per una volta sola: apri lilOS con ?avvio=no in fondo all’indirizzo. Le scelte salvate restano.",
+			keywords: "avvio sicuro avvio=no",
+			control: R.skipped ? "Attivo ora" : ""
+		}]
+	}];
+}
+function B(e) {
+	let t = R.apps().filter((e) => j.some((t) => t.id === e.app));
+	return [{
+		title: "Si aprono quando entri",
+		content: () => c("div", { class: "su-apps" }, c("p", { class: "su-hint" }, "Nel workspace in cui si apre lilOS, nell’ordine dell’elenco. Togli tutti i punti d’ingresso di un’app e l’app esce dall’elenco."), t.length ? t.map((t) => V(t, e)) : c("p", { class: "su-empty" }, "Nessuna app si apre da sola."), W(t, e))
+	}];
+}
+function V(e, t) {
+	let n = j.find((t) => t.id === e.app), a = R.windowEntries(n.id), o = new Map(e.entries.map((e) => [e.entry, e.params])), s = a.filter((e) => o.has(e.entry)).length, l = c("div", { class: "st-row su-head" }, i(n, "su-icon"), c("div", { class: "st-label" }, c("b", {}, n.name), c("small", {}, a.length === 1 ? "1 punto d’ingresso" : `${s} di ${a.length} punti d’ingresso`)), r({
+		label: "Rimuovi dall’avvio",
+		onClick: () => {
+			R.removeApp(n.id), t.rerender();
+		}
+	})), u = a.flatMap((e) => {
+		let r = o.has(e.entry), i = c("div", { class: "st-row su-entry" }, w({
+			value: r,
+			label: `${n.name}: ${e.label}`,
+			onChange: (r) => {
+				try {
+					R.setEntry(n.id, e.entry, r);
+				} catch (e) {
+					C(e.message);
+				}
+				t.rerender();
+			}
+		}), c("div", { class: "st-label" }, c("b", {}, e.label), c("small", {}, c("code", {}, e.entry))));
+		return r ? [i, H(n, e, o.get(e.entry), t)] : [i];
+	});
+	return c("div", { class: "st-card su-app" }, l, u);
+}
+function H(e, t, n, { openWindow: r }) {
+	let i = `${t.label} di ${e.name}`;
+	if (!t.params) {
+		let r = "Questo punto d’ingresso non descrive i suoi parametri: arrivano all’app così come sono, come args.", a = c("span", { class: "su-note" }, r), o = c("textarea", {
+			class: "su-json",
+			spellcheck: "false",
+			placeholder: "{ }",
+			"aria-label": `Parametri (JSON) di ${i}`
+		});
+		return o.value = Object.keys(n).length ? JSON.stringify(n) : "", o.addEventListener("change", () => {
+			let n = o.value.trim();
+			try {
+				let i;
+				try {
+					i = n ? JSON.parse(n) : {};
+				} catch {
+					throw Error("Non è JSON valido");
+				}
+				R.setParams(e.id, t.entry, i), o.removeAttribute("aria-invalid"), a.classList.remove("bad"), a.textContent = r;
+			} catch (e) {
+				o.setAttribute("aria-invalid", "true"), a.classList.add("bad"), a.textContent = `Non salvati: ${e.message}`;
+			}
+		}), c("div", { class: "su-params" }, c("span", { class: "su-plabel" }, "Parametri (JSON)"), c("span"), o, a);
+	}
+	let a = { ...n }, o = (n, r) => {
+		let i = { ...a };
+		r === "" || r == null ? delete i[n] : i[n] = r;
+		try {
+			return R.setParams(e.id, t.entry, i), a = i, !0;
+		} catch (e) {
+			return C(e.message, { timeout: 6e3 }), !1;
+		}
+	}, s = Object.entries(t.params).flatMap(([e, t]) => {
+		let n = Object.hasOwn(a, e) ? a[e] : t.default, s = `${t.label} (${i})`, l;
+		if (t.type === "boolean") l = w({
+			value: n === !0,
+			label: s,
+			onChange: (t) => o(e, t)
+		});
+		else if (t.type === "choice") {
+			let r = [{
+				value: "",
+				label: "—"
+			}, ...t.options.map((e) => ({
+				value: String(e.value),
+				label: e.label
+			}))];
+			l = m({
+				value: n === void 0 ? "" : String(n),
+				options: r,
+				label: s,
+				onChange: (n) => o(e, n === "" ? null : t.options.find((e) => String(e.value) === n)?.value)
+			});
+		} else t.type === "number" ? (l = c("input", {
+			class: "ctl-text su-number",
+			type: "number",
+			min: t.min,
+			max: t.max,
+			"aria-label": s
+		}), l.value = n ?? "", l.addEventListener("change", () => {
+			o(e, l.value === "" ? null : Number(l.value)) || (l.value = a[e] ?? "");
+		})) : t.type === "file" || t.type === "folder" ? l = U(t, n, s, (t) => o(e, t), r) : (l = S({
+			value: n ?? "",
+			label: s,
+			onChange: (t) => {
+				o(e, t) || (l.value = a[e] ?? "");
+			}
+		}), t.maxLength && (l.maxLength = t.maxLength));
+		return [c("label", {
+			class: "su-plabel",
+			title: t.description ?? ""
+		}, t.label), c("div", { class: "su-field" }, l)];
+	});
+	return c("div", { class: "su-params" }, s);
+}
+function U(e, t, n, i, a) {
+	let o = e.type === "folder", u = c("input", {
+		class: "ctl-text",
+		type: "text",
+		readonly: !0,
+		placeholder: o ? "Nessuna cartella" : "Nessun file",
+		"aria-label": n
+	}), d = (e) => {
+		u.value = e ? s.exists(e) ? s.path(e) : "(non c’è più)" : "";
+	};
+	d(t);
+	let f = r({
+		label: "Scegli…",
+		onClick: async () => {
+			let t = await I(a, {
+				kind: o ? "folder" : "file",
+				title: e.label
+			});
+			t && i(t.id) && d(t.id);
+		}
+	}), p = c("button", {
+		class: "ctl-btn su-clear",
+		type: "button",
+		title: "Togli",
+		"aria-label": `Togli ${e.label}`
+	}, l("x"));
+	return p.addEventListener("click", () => {
+		i(null) && d(null);
+	}), c("div", { class: "su-path" }, u, f, p);
+}
+function W(e, { rerender: t }) {
+	let n = r({
+		label: "Aggiungi…",
+		onClick: () => {
+			let r = j.filter((t) => t.load && !e.some((e) => e.app === t.id) && R.windowEntries(t.id).length).sort((e, t) => e.name.localeCompare(t.name));
+			if (!r.length) return C("Tutte le app sono già all’avvio");
+			let i = n.getBoundingClientRect();
+			f(i.left, i.bottom + 4, r.map((e) => ({
+				label: e.name,
+				icon: e.glyph,
+				action: () => {
+					try {
+						R.addApp(e.id);
+					} catch (e) {
+						C(e.message);
+					}
+					t();
+				}
+			})));
+		}
+	});
+	return c("div", { class: "st-row su-add" }, c("span", { class: "su-plus" }, l("plus")), c("div", { class: "st-label" }, c("b", {}, "Aggiungi un’app all’avvio"), c("small", {}, "Si apre la sua finestra principale; poi scegli altri punti d’ingresso e parametri")), n);
+}
 // src/settings/SettingsApp.js
-var V = null, H = (e, t, n) => e === 1 ? `1 ${t}` : `${e} ${n}`;
-function ne() {
+var G = null, K = (e, t, n) => e === 1 ? `1 ${t}` : `${e} ${n}`;
+function ce() {
 	let e = z(), t = e?.current;
 	return t ? [{
 		title: "Workspace",
@@ -184,21 +367,21 @@ function ne() {
 				label: "Nome",
 				keywords: "rinomina workspace",
 				control: () => {
-					let n = b({
+					let n = S({
 						value: t.name,
 						label: "Nome del workspace",
 						onChange: (n) => e.rename(t.id, n)
 					});
-					return n.maxLength = E.MAX_NAME, n;
+					return n.maxLength = k.MAX_NAME, n;
 				}
 			},
 			{
 				label: "Colore",
 				description: "Il pallino nella barra in basso e accanto ai suoi file nel File Manager",
 				keywords: "colore workspace",
-				control: () => v({
+				control: () => b({
 					value: t.color,
-					colors: C,
+					colors: E,
 					onChange: (n) => e.setColor(t.id, n)
 				})
 			},
@@ -210,11 +393,11 @@ function ne() {
 		]
 	}, {
 		title: "App",
-		rows: O.map((t) => ({
+		rows: j.map((t) => ({
 			label: t.name,
 			description: t.system ? "App di sistema: c’è in ogni workspace" : "Installata in lilOS: qui la puoi nascondere",
 			keywords: `app nascondi mostra ${t.name}`,
-			control: t.system ? "Sempre visibile" : () => S({
+			control: t.system ? "Sempre visibile" : () => w({
 				value: e.isInstalled(t.id),
 				label: `${t.name} visibile in questo workspace`,
 				onChange: (n) => e.setInstalled(t.id, n)
@@ -222,19 +405,19 @@ function ne() {
 		}))
 	}] : [];
 }
-function U() {
+function le() {
 	let e = z();
 	if (!e) return [];
 	let t = e.list();
 	return [{
 		title: "Workspace",
 		rows: [...t.map((n) => {
-			let i = n.id === e.currentId, a = O.filter((t) => e.isInstalled(t.id, n.id)).length;
+			let i = n.id === e.currentId, a = j.filter((t) => e.isInstalled(t.id, n.id)).length;
 			return {
 				label: i ? `${n.name} (attuale)` : n.name,
-				description: `${H(e.ownedCount(n.id), "elemento creato", "elementi creati")} · ${H(a, "app", "app")}`,
+				description: `${K(e.ownedCount(n.id), "elemento creato", "elementi creati")} · ${K(a, "app", "app")}`,
 				keywords: "workspace passa elimina",
-				control: () => s("div", { class: "ws-settings-actions" }, i ? null : r({
+				control: () => c("div", { class: "ws-settings-actions" }, i ? null : r({
 					label: "Passa a questo",
 					onClick: () => e.switchTo(n.id)
 				}), t.length > 1 ? Q("Elimina…", "Elimina", () => e.remove(n.id)) : null)
@@ -261,51 +444,51 @@ function U() {
 		}]
 	}];
 }
-var W = [];
-function G() {
+var q = [];
+function ue() {
 	let e = (e) => {
 		try {
-			let t = y.create({ name: e.value });
-			W.length && te(W, t.id, !0), W = [];
+			let t = x.create({ name: e.value });
+			q.length && re(q, t.id, !0), q = [];
 		} catch (t) {
-			x(t.message), e.focus();
+			C(t.message), e.focus();
 		}
-	}, t = W.filter((e) => o.exists(e)).length;
+	}, t = q.filter((e) => s.exists(e)).length;
 	return [{
 		title: "Nuovo tag",
 		rows: [{
 			label: "Nome",
-			description: t ? `Il nuovo tag andrà su ${H(t, "elemento selezionato", "elementi selezionati")}` : "Poi si assegna dal menu del tasto destro → Tag, sulla scrivania e nel File Manager",
+			description: t ? `Il nuovo tag andrà su ${K(t, "elemento selezionato", "elementi selezionati")}` : "Poi si assegna dal menu del tasto destro → Tag, sulla scrivania e nel File Manager",
 			keywords: "nuovo tag crea etichetta",
 			control: () => {
-				let t = b({
+				let t = S({
 					placeholder: "Per esempio: Urgente",
 					label: "Nome del nuovo tag"
 				});
 				return t.maxLength = 30, t.classList.add("tag-new-name"), t.addEventListener("keydown", (n) => {
 					n.key === "Enter" && (n.preventDefault(), e(t));
-				}), s("div", { class: "tag-settings-actions" }, t, r({
+				}), c("div", { class: "tag-settings-actions" }, t, r({
 					label: "Crea",
 					primary: !0,
 					onClick: () => e(t)
 				}));
 			}
 		}]
-	}, ...y.list().map((e) => ({
+	}, ...x.list().map((e) => ({
 		title: e.name,
 		rows: [
 			{
 				label: "Nome",
 				keywords: "rinomina tag",
 				control: () => {
-					let t = b({
+					let t = S({
 						value: e.name,
 						label: `Nome del tag ${e.name}`,
 						onChange: (n) => {
 							try {
-								y.rename(e.id, n);
+								x.rename(e.id, n);
 							} catch (n) {
-								x(n.message), t.value = y.get(e.id)?.name ?? "";
+								C(n.message), t.value = x.get(e.id)?.name ?? "";
 							}
 						}
 					});
@@ -315,64 +498,79 @@ function G() {
 			{
 				label: "Colore",
 				keywords: "colore tag",
-				control: () => v({
+				control: () => b({
 					value: e.color,
 					colors: n,
-					onChange: (t) => y.setColor(e.id, t)
+					onChange: (t) => x.setColor(e.id, t)
 				})
 			},
 			{
 				label: "Visibile",
 				description: e.visible ? "Gli elementi con questo tag si vedono ovunque" : "Gli elementi con questo tag sono nascosti ovunque: si ritrovano nel File Manager → Tag",
 				keywords: "nascondi mostra invisibile tag",
-				control: () => S({
+				control: () => w({
 					value: e.visible,
 					label: `Tag ${e.name} visibile`,
-					onChange: (t) => y.setVisible(e.id, t)
+					onChange: (t) => x.setVisible(e.id, t)
 				})
 			},
 			{
 				label: "Elementi",
-				description: `${H(o.tagged(e.id).length, "elemento", "elementi")} in questo workspace e nelle cartelle condivise`,
-				control: () => s("div", { class: "tag-settings-actions" }, r({
+				description: `${K(s.tagged(e.id).length, "elemento", "elementi")} in questo workspace e nelle cartelle condivise`,
+				control: () => c("div", { class: "tag-settings-actions" }, r({
 					label: "Mostra nel File Manager",
-					onClick: () => P("files", { tag: e.id })
-				}), Q("Elimina…", "Elimina il tag", () => y.remove(e.id)))
+					onClick: () => F("files", { tag: e.id })
+				}), Q("Elimina…", "Elimina il tag", () => x.remove(e.id)))
 			}
 		]
 	}))];
 }
-var K = (e) => () => S({
-	value: m.get(e),
-	onChange: (t) => m.set(e, t)
-}), q = [
+function de() {
+	let e = T.DESK_FIXED_ITEMS ?? [];
+	return e.length ? [{
+		title: "Elementi fissi",
+		rows: [{
+			label: "Sempre sulla scrivania",
+			description: "Ci sono sulla scrivania di ogni workspace. Si aprono e si spostano come gli altri, ma non si rinominano e non si eliminano."
+		}, ...e.map((e) => ({
+			label: e.name,
+			description: e.description,
+			keywords: `elementi fissi scrivania elimina ${e.name}`,
+			control: "Fisso"
+		}))]
+	}] : [];
+}
+var J = (e) => () => w({
+	value: g.get(e),
+	onChange: (t) => g.set(e, t)
+}), Y = [
 	"Generale",
 	"Scrivania",
 	"Elementi",
 	"Finestre"
 ];
-function J() {
-	let e = new Set(N()), t = /* @__PURE__ */ new Set(), n = (e) => {
+function fe() {
+	let e = new Set(P()), t = /* @__PURE__ */ new Set(), n = (e) => {
 		t.add(e);
-		let n = A(e);
+		let n = N(e);
 		return {
 			label: e ? `.${e}` : "Senza estensione",
 			description: n ? `Predefinita: ${n.name}` : "Nessuna app predefinita",
 			keywords: `tipo file estensione apri con ${e}`,
-			control: () => f({
-				value: D(e)?.id ?? "ask",
+			control: () => m({
+				value: A(e)?.id ?? "ask",
 				label: `App per ${e ? "." + e : "i file senza estensione"}`,
 				options: [{
 					value: "ask",
 					label: "Chiedi ogni volta"
-				}, ...M().map((e) => ({
+				}, ...te().map((e) => ({
 					value: e.id,
 					label: e.name
 				}))],
-				onChange: (t) => ee(e, t)
+				onChange: (t) => ne(e, t)
 			})
 		};
-	}, r = a().map((t) => ({
+	}, r = o().map((t) => ({
 		title: t.label,
 		rows: t.exts.filter((t) => e.has(t)).map(n)
 	})).filter((e) => e.rows.length), i = [...e].filter((e) => !t.has(e)).sort((e, t) => e === "" ? -1 : t === "" ? 1 : e.localeCompare(t));
@@ -383,7 +581,7 @@ function J() {
 				label: "Tutti i tipi di file",
 				description: "Aprendo un file, lilOS usa l’app scelta qui. Con «Chiedi ogni volta» compare la finestra Apri con.",
 				control: Q("Ripristina tutti", "Conferma", () => {
-					I(), V?.render();
+					L(), G?.render();
 				})
 			}]
 		},
@@ -394,20 +592,20 @@ function J() {
 		}] : []
 	];
 }
-function Y() {
-	let e = o.trashed(), t = e.reduce((e, t) => e + t.bytes, 0);
+function pe() {
+	let e = s.trashed(), t = e.reduce((e, t) => e + t.bytes, 0);
 	return [{
 		title: "Eliminazione",
 		rows: [{
 			label: "Chiedi conferma",
 			description: "Prima di eliminare file e cartelle, un piccolo menu chiede di confermare",
 			keywords: "conferma elimina cancella domanda",
-			control: K("deleteConfirm")
+			control: J("deleteConfirm")
 		}, {
 			label: "Elimina definitivamente",
 			description: "Gli elementi eliminati non passano dal cestino: si recuperano solo con Ctrl Z, finché la pagina resta aperta",
 			keywords: "cestino definitivo subito cancella salta",
-			control: K("deletePermanent")
+			control: J("deletePermanent")
 		}]
 	}, {
 		title: "Cestino",
@@ -417,58 +615,58 @@ function Y() {
 				description: "Passato questo tempo, quello che è nel cestino viene eliminato definitivamente",
 				keywords: "retention durata giorni pulizia automatica svuota",
 				control: () => {
-					let e = m.get("trashRetention"), t = T.some((t) => t.value === e) ? T : [...T, {
+					let e = g.get("trashRetention"), t = O.some((t) => t.value === e) ? O : [...O, {
 						value: e,
 						label: e > 0 ? `${e} giorni` : "Per sempre"
 					}];
-					return f({
+					return m({
 						value: e,
 						label: "Conserva gli elementi nel cestino per",
 						options: t,
-						onChange: (e) => m.set("trashRetention", Number(e))
+						onChange: (e) => g.set("trashRetention", Number(e))
 					});
 				}
 			},
 			{
 				label: "Contenuto",
-				description: e.length ? `${H(e.length, "elemento", "elementi")} · ${$(t)}` : "Il cestino è vuoto",
+				description: e.length ? `${K(e.length, "elemento", "elementi")} · ${$(t)}` : "Il cestino è vuoto",
 				keywords: "apri cestino ripristina",
 				control: r({
 					label: "Apri il cestino",
-					onClick: () => P("files", { trash: !0 })
+					onClick: () => F("files", { trash: !0 })
 				})
 			},
 			{
 				label: "Svuota il cestino",
 				description: "Elimina definitivamente tutto quello che contiene",
 				keywords: "svuota cestino",
-				control: e.length ? Q("Svuota…", "Svuota", () => o.purgeTrash()) : "Vuoto"
+				control: e.length ? Q("Svuota…", "Svuota", () => s.purgeTrash()) : "Vuoto"
 			}
 		]
 	}];
 }
-function X(e = o.root) {
-	return o.children(e).reduce((e, t) => e + (t.type === "folder" ? X(t.id) : t.size ?? 0), 0);
+function X(e = s.root) {
+	return s.children(e).reduce((e, t) => e + (t.type === "folder" ? X(t.id) : t.size ?? 0), 0);
 }
-function re() {
+function me() {
 	let e = /* @__PURE__ */ new Map();
-	for (let t of g.list()) e.has(t.group) || e.set(t.group, []), e.get(t.group).push(t);
-	let t = (e) => q.includes(e) ? q.indexOf(e) : q.length;
+	for (let t of v.list()) e.has(t.group) || e.set(t.group, []), e.get(t.group).push(t);
+	let t = (e) => Y.includes(e) ? Y.indexOf(e) : Y.length;
 	return [
 		{
 			title: "Scorciatoie da tastiera",
 			rows: [{
 				label: "Tutte le scorciatoie",
 				description: "Le modifiche valgono subito. Per registrare una combinazione premi +, poi i tasti; Esc annulla.",
-				control: Q("Ripristina tutte", "Conferma", () => g.resetAll())
+				control: Q("Ripristina tutte", "Conferma", () => v.resetAll())
 			}]
 		},
 		...[...e].sort(([e], [n]) => t(e) - t(n)).map(([e, t]) => ({
 			title: e,
 			rows: t.map((e) => ({
 				label: e.label,
-				keywords: `scorciatoia tasti ${e.keys.map((e) => g.format(e)).join(" ")}`,
-				control: h(e.id)
+				keywords: `scorciatoia tasti ${e.keys.map((e) => v.format(e)).join(" ")}`,
+				control: _(e.id)
 			}))
 		})),
 		{
@@ -478,10 +676,10 @@ function re() {
 					label: "Selezione a mano libera",
 					description: "Disegna un percorso chiuso: si selezionano gli elementi che contiene",
 					keywords: "lazo lasso percorso selezione alt",
-					control: () => f({
-						value: m.get("lasso"),
-						options: w,
-						onChange: (e) => m.set("lasso", e)
+					control: () => m({
+						value: g.get("lasso"),
+						options: D,
+						onChange: (e) => g.set("lasso", e)
 					})
 				},
 				{
@@ -510,30 +708,30 @@ function re() {
 		}
 	];
 }
-var ie = {
+var he = {
 	isolated: "Isolata",
 	open: "Non isolata",
 	system: "Dentro lilOS",
 	remote: "Isolata, nel suo sito"
 };
 function Z() {
-	let e = k(), { isolated: t } = i.security(), n = O.filter((e) => e.package && !e.package.system);
+	let e = M(), { isolated: t } = a.security(), n = j.filter((e) => e.package && !e.package.system);
 	return [{
 		title: "Esecuzione delle app",
 		rows: [{
 			label: "Esegui le app isolate",
 			description: e ? "Ogni app gira in una sandbox e vede solo quello che i suoi permessi le concedono. Se lo togli, le app girano nella pagina di lilOS e in un Web Worker: più veloci, ma possono fare tutto quello che puoi fare tu. Vale dalla prossima apertura di ogni app." : "Solo un amministratore la cambia.",
 			keywords: "sicurezza isolamento sandbox iframe worker",
-			control: e ? S({
+			control: e ? w({
 				value: t,
 				label: "Esegui le app isolate",
 				onChange: async (e) => {
 					try {
-						await i.setSecurity({ isolated: e });
+						await a.setSecurity({ isolated: e });
 					} catch (e) {
-						x(`Non cambiata: ${e.message}`);
+						C(`Non cambiata: ${e.message}`);
 					}
-					V?.render();
+					G?.render();
 				}
 			}) : t ? "Sì" : "No"
 		}, {
@@ -543,14 +741,14 @@ function Z() {
 	}, {
 		title: "App installate",
 		rows: n.length ? n.map((e) => {
-			let t = j(e.package), n = t.fixed ? t.reason : t.own === null ? "Come le altre app" : "Scelta per questa app";
+			let t = ee(e.package), n = t.fixed ? t.reason : t.own === null ? "Come le altre app" : "Scelta per questa app";
 			return {
 				label: e.name,
-				description: `${ie[t.mode]} · ${n}`,
+				description: `${he[t.mode]} · ${n}`,
 				keywords: "sicurezza isolamento",
 				control: r({
 					label: "Proprietà…",
-					onClick: () => L(e.id)
+					onClick: () => ie(e.id)
 				})
 			};
 		}) : [{ label: "Nessuna app installata oltre a quelle di sistema" }]
@@ -560,34 +758,42 @@ function Q(e, t, n) {
 	let i = 0, a = r({
 		label: e,
 		onClick: () => {
-			a.classList.contains("primary") ? (clearTimeout(i), o(), n()) : (a.textContent = t, a.classList.add("danger", "primary"), i = setTimeout(o, 4e3));
+			if (!a.classList.contains("primary")) {
+				a.textContent = t, a.classList.add("danger", "primary"), i = setTimeout(o, 4e3);
+				return;
+			}
+			clearTimeout(i);
+			let e = n();
+			typeof e?.then == "function" ? (a.disabled = !0, a.setAttribute("aria-busy", "true"), e.catch((e) => C(e.message, { timeout: 7e3 })).finally(() => {
+				a.disabled = !1, a.removeAttribute("aria-busy"), o();
+			})) : o();
 		}
 	}), o = () => {
 		a.textContent = e, a.classList.remove("danger", "primary");
 	};
 	return a;
 }
-function ae() {
-	return _.bytes();
+function ge() {
+	return y.bytes();
 }
 function $(e) {
-	return e == null ? "Non disponibile" : e < 1024 ? `${e} B` : `${(e / 1024).toLocaleString(p.locale, { maximumFractionDigits: 1 })} KB`;
+	return e == null ? "Non disponibile" : e < 1024 ? `${e} B` : `${(e / 1024).toLocaleString(h.locale, { maximumFractionDigits: 1 })} KB`;
 }
-var oe = [
+var _e = [
 	[/Edg\/(\d+)/, "Edge"],
 	[/Firefox\/(\d+)/, "Firefox"],
 	[/Chrome\/(\d+)/, "Chrome"],
 	[/Version\/(\d+).*Safari/, "Safari"]
 ];
-function se() {
-	for (let [e, t] of oe) {
+function ve() {
+	for (let [e, t] of _e) {
 		let n = navigator.userAgent.match(e);
 		if (n) return `${t} ${n[1]}`;
 	}
 	return "Sconosciuto";
 }
-function ce({ openWindow: n, args: r } = {}) {
-	let a = new t({
+function ye({ openWindow: n, args: r } = {}) {
+	let i = new t({
 		title: "Sistema",
 		icon: "gear",
 		width: 760,
@@ -608,8 +814,8 @@ function ce({ openWindow: n, args: r } = {}) {
 							label: "Tema",
 							description: "Chiaro o scuro: scrivania, barra, menu e finestre",
 							keywords: "tema chiaro scuro dark light notte",
-							control: d({
-								value: m.get("theme"),
+							control: p({
+								value: g.get("theme"),
 								label: "Tema",
 								options: [{
 									value: "light",
@@ -618,7 +824,7 @@ function ce({ openWindow: n, args: r } = {}) {
 									value: "dark",
 									label: "Scuro"
 								}],
-								onChange: (e) => m.set("theme", e)
+								onChange: (e) => g.set("theme", e)
 							})
 						}]
 					}, {
@@ -627,10 +833,10 @@ function ce({ openWindow: n, args: r } = {}) {
 							label: "Colore",
 							description: "Selezione, pulsanti, tab attivi e logo",
 							keywords: "accento tema",
-							control: v({
-								value: m.get("accent"),
-								colors: C,
-								onChange: (e) => m.set("accent", e)
+							control: b({
+								value: g.get("accent"),
+								colors: E,
+								onChange: (e) => g.set("accent", e)
 							})
 						}]
 					}]
@@ -643,7 +849,7 @@ function ce({ openWindow: n, args: r } = {}) {
 							label: "Animazioni",
 							description: "Spostamenti della vista, menu e transizioni. Se il sistema operativo chiede movimento ridotto, restano ridotte.",
 							keywords: "movimento transizioni",
-							control: K("motion")
+							control: J("motion")
 						}]
 					}]
 				}]
@@ -656,13 +862,13 @@ function ce({ openWindow: n, args: r } = {}) {
 				subtabs: [{
 					id: "items",
 					label: "Elementi",
-					sections: () => [{
+					sections: () => [...de(), {
 						title: "Posizionamento",
 						rows: [{
 							label: "Allinea alla griglia",
 							description: "Gli elementi trascinati si allineano a una griglia invisibile",
 							keywords: "icone snap",
-							control: K("snap")
+							control: J("snap")
 						}]
 					}]
 				}, {
@@ -673,7 +879,7 @@ function ce({ openWindow: n, args: r } = {}) {
 						rows: [{
 							label: "Mostra la minimappa",
 							keywords: "mappa miniatura",
-							control: K("minimap")
+							control: J("minimap")
 						}]
 					}]
 				}]
@@ -686,11 +892,11 @@ function ce({ openWindow: n, args: r } = {}) {
 				subtabs: [{
 					id: "current",
 					label: "Questo workspace",
-					sections: ne
+					sections: ce
 				}, {
 					id: "all",
 					label: "Tutti",
-					sections: U
+					sections: le
 				}]
 			},
 			{
@@ -698,7 +904,7 @@ function ce({ openWindow: n, args: r } = {}) {
 				label: "Tag",
 				icon: "tag",
 				description: "Etichette colorate per ritrovare file e cartelle ovunque siano. Un tag invisibile nasconde i suoi elementi.",
-				sections: G
+				sections: ue
 			},
 			{
 				id: "usability",
@@ -709,26 +915,26 @@ function ce({ openWindow: n, args: r } = {}) {
 					{
 						id: "shortcuts",
 						label: "Scorciatoie",
-						sections: re
+						sections: me
 					},
 					{
 						id: "filetypes",
 						label: "Tipi di file",
-						sections: J
+						sections: fe
 					},
 					{
 						id: "contextmenu",
 						label: "Menu contestuale",
-						sections: () => B("desktop.background", {
+						sections: () => oe("desktop.background", {
 							openWindow: n,
 							confirmButton: Q,
-							rerender: () => V?.render()
+							rerender: () => G?.render()
 						})
 					},
 					{
 						id: "trash",
 						label: "Cestino",
-						sections: Y
+						sections: pe
 					}
 				]
 			},
@@ -743,18 +949,36 @@ function ce({ openWindow: n, args: r } = {}) {
 					sections: Z
 				}]
 			},
+			{
+				id: "startup",
+				label: "Avvio",
+				icon: "power",
+				description: "Le app che si aprono da sole quando entri in lilOS.",
+				subtabs: [{
+					id: "options",
+					label: "Opzioni",
+					sections: se
+				}, {
+					id: "apps",
+					label: "App",
+					sections: () => B({
+						openWindow: n,
+						rerender: () => G?.render()
+					})
+				}]
+			},
 			{ group: "Dati" },
 			{
 				id: "storage",
 				label: "Archiviazione",
 				icon: "disk",
-				description: l.connected ? "Dati di lilOS salvati nella tua cartella utente." : "Dati di lilOS salvati in questo browser.",
+				description: u.connected ? "Dati di lilOS salvati nella tua cartella utente." : "Dati di lilOS salvati in questo browser.",
 				sections: () => [{
 					title: "Spazio",
 					rows: [{
 						label: "Spazio usato",
 						description: "Posizioni, vista e impostazioni",
-						control: $(ae())
+						control: $(ge())
 					}, {
 						label: "Contenuto dei file",
 						description: "Testo salvato nei file",
@@ -775,15 +999,16 @@ function ce({ openWindow: n, args: r } = {}) {
 								"lasso",
 								"deleteConfirm",
 								"deletePermanent",
-								"trashRetention"
-							].forEach((e) => m.reset(e)), g.resetAll(), I(), u.list().forEach((e) => u.reset(e.id));
+								"trashRetention",
+								"startupApps"
+							].forEach((e) => g.reset(e)), v.resetAll(), L(), d.list().forEach((e) => d.reset(e.id));
 						})
 					}, {
 						label: "Scrivania e file iniziali",
 						description: "Elimina tutte le cartelle e i file creati, i workspace, i tag, le posizioni e la vista salvate, poi ricarica lilOS",
 						keywords: "reset desktop workspace tag",
 						control: Q("Ripristina…", "Elimina e ricarica", async () => {
-							await o.reset(), [
+							await s.reset(), [
 								"workspaces",
 								"tags",
 								"desktop-layout",
@@ -793,7 +1018,7 @@ function ce({ openWindow: n, args: r } = {}) {
 								"editor-tree",
 								"files-sidebar",
 								"app-setup"
-							].forEach((e) => _.remove(e)), await l.flush().catch(() => {}), location.reload();
+							].forEach((e) => y.remove(e)), await u.flush().catch(() => {}), location.reload();
 						})
 					}]
 				}]
@@ -809,7 +1034,7 @@ function ce({ openWindow: n, args: r } = {}) {
 					rows: [
 						{
 							label: "Versione",
-							control: R
+							control: ae
 						},
 						{
 							label: "Versione dell’SDK",
@@ -817,25 +1042,25 @@ function ce({ openWindow: n, args: r } = {}) {
 						},
 						{
 							label: "Lingua",
-							control: p.locale
+							control: h.locale
 						},
 						{
 							label: "Browser",
-							control: se()
+							control: ve()
 						}
 					]
 				}]
 			}
 		]
 	});
-	V = a.view;
-	let s = (e) => {
-		Array.isArray(e?.tagFor) && (W = e.tagFor.filter((e) => typeof e == "string" && o.exists(e))), typeof e?.tab == "string" && a.view.select(e.tab), e?.tab === "tags" && a.view.panel.querySelector(".tag-new-name")?.focus();
+	G = i.view;
+	let o = (e) => {
+		Array.isArray(e?.tagFor) && (q = e.tagFor.filter((e) => typeof e == "string" && s.exists(e))), typeof e?.tab == "string" && i.view.select(e.tab), e?.tab === "tags" && i.view.panel.querySelector(".tag-new-name")?.focus();
 	};
-	s(r), a.on("launch", s);
-	let c = z()?.on("change", () => a.view.render()), f = o.on("trash", () => a.view.render()), h = y.on("change", () => a.view.render()), b = [i.on("change", () => a.view.render()), i.on("security", () => a.view.render())];
-	return a.on("destroy", () => {
-		c?.(), f(), h(), b.forEach((e) => e()), V === a.view && (V = null);
-	}), a;
+	o(r), i.on("launch", o);
+	let c = z()?.on("change", () => i.view.render()), l = s.on("trash", () => i.view.render()), f = x.on("change", () => i.view.render()), m = [a.on("change", () => i.view.render()), a.on("security", () => i.view.render())];
+	return i.on("destroy", () => {
+		c?.(), l(), f(), m.forEach((e) => e()), G === i.view && (G = null);
+	}), i;
 }
-export { ce as default };
+export { ye as default };

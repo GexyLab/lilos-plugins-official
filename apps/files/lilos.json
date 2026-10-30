@@ -1,6 +1,6 @@
 {
   "id": "files",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "kind": "local",
   "name": "File Manager",
   "description": "Sfoglia, cerca e organizza file e cartelle: tag, collegamenti, cestino, informazioni e anteprima.",
@@ -16,6 +16,18 @@
   "sdk": "1",
   "system": true,
   "required": true,
+  "entrypoints": {
+    "main": {
+      "kind": "window",
+      "params": {
+        "folder": {
+          "type": "folder",
+          "label": "Cartella",
+          "description": "La cartella che mostra all’apertura"
+        }
+      }
+    }
+  },
   "permissions": [
     "fs.write:~",
     "fs.workspaces",

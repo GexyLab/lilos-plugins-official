@@ -6,8 +6,10 @@ import { ACCENTS, LASSO_OPTIONS, RETENTION_OPTIONS } from '@lilos/system';
 import { apps, launch } from '@lilos/system';
 import { fileApps, appFor, defaultAppFor, setAppFor, resetAppsFor, knownExtensions } from '@lilos/system';
 import { workspaceManager } from '@lilos/system';
+import * as system from '@lilos/system';   // DESK_FIXED_ITEMS: missing in older lilOS, so not imported by name
 import { WORKSPACE_LIMITS } from '@lilos/system';
 import { menuSections } from './menuEditor.js';
+import { startupOptionsSections, startupAppsSections } from './startup.js';
 import './settings-app.css';
 
 let view = null;   // the open SettingsView, to redraw after resets
@@ -157,6 +159,19 @@ function tagSections() {
       ],
     })),
   ];
+}
+
+/** The items that are always on every desk (lilOS's list: none in older versions). */
+function fixedItemsSections() {
+  const fixed = system.DESK_FIXED_ITEMS ?? [];
+  if (!fixed.length) return [];
+  return [{
+    title: 'Elementi fissi',
+    rows: [
+      { label: 'Sempre sulla scrivania', description: 'Ci sono sulla scrivania di ogni workspace. Si aprono e si spostano come gli altri, ma non si rinominano e non si eliminano.' },
+      ...fixed.map(f => ({ label: f.name, description: f.description, keywords: `elementi fissi scrivania elimina ${f.name}`, control: 'Fisso' })),
+    ],
+  }];
 }
 
 const settingToggle = key => () => toggle({ value: settings.get(key), onChange: v => settings.set(key, v) });
@@ -367,8 +382,16 @@ function confirmButton(label, confirmLabel, action) {
         return;
       }
       clearTimeout(timer);
-      reset();
-      action();
+      const result = action();
+      if (typeof result?.then !== 'function') { reset(); return; }
+      // Waits with the confirm label and a spinner (lilOS styles [aria-busy]) until the action ends
+      btn.disabled = true;
+      btn.setAttribute('aria-busy', 'true');
+      result.catch(err => toast(err.message, { timeout: 7000 })).finally(() => {
+        btn.disabled = false;
+        btn.removeAttribute('aria-busy');
+        reset();
+      });
     },
   });
   const reset = () => {
@@ -450,7 +473,7 @@ export default function createSettings({ openWindow, args } = {}) {
         subtabs: [
           {
             id: 'items', label: 'Elementi',
-            sections: () => [{
+            sections: () => [...fixedItemsSections(), {
               title: 'Posizionamento',
               rows: [{
                 label: 'Allinea alla griglia', description: 'Gli elementi trascinati si allineano a una griglia invisibile',
@@ -497,6 +520,14 @@ export default function createSettings({ openWindow, args } = {}) {
           { id: 'security', label: 'Sicurezza', sections: appSecuritySections },
         ],
       },
+      {
+        id: 'startup', label: 'Avvio', icon: 'power',
+        description: 'Le app che si aprono da sole quando entri in lilOS.',
+        subtabs: [
+          { id: 'options', label: 'Opzioni', sections: startupOptionsSections },
+          { id: 'apps', label: 'App', sections: () => startupAppsSections({ openWindow, rerender: () => view?.render() }) },
+        ],
+      },
       { group: 'Dati' },
       {
         id: 'storage', label: 'Archiviazione', icon: 'disk',
@@ -515,7 +546,7 @@ export default function createSettings({ openWindow, args } = {}) {
               {
                 label: 'Impostazioni predefinite', description: 'Riporta impostazioni, scorciatoie, app dei tipi di file e menu ai valori iniziali',
                 control: confirmButton('Ripristina', 'Conferma', () => {
-                  ['accent', 'theme', 'motion', 'snap', 'minimap', 'lasso', 'deleteConfirm', 'deletePermanent', 'trashRetention'].forEach(k => settings.reset(k));
+                  ['accent', 'theme', 'motion', 'snap', 'minimap', 'lasso', 'deleteConfirm', 'deletePermanent', 'trashRetention', 'startupApps'].forEach(k => settings.reset(k));
                   shortcuts.resetAll();
                   resetAppsFor();
                   menus.list().forEach(m => menus.reset(m.id));

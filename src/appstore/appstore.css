@@ -54,6 +54,8 @@
 .appstore .as-link { display: inline-flex; align-items: center; gap: 5px; color: var(--accent); font-weight: 500; }
 .appstore .as-link:hover { text-decoration: underline; }
 .appstore .as-link .ico { width: 13px; height: 13px; }
+.appstore .as-link[aria-busy="true"] .ico { display: none; }
+.appstore .as-link[aria-busy="true"]::before { margin-right: 0; }
 
 /* Details */
 .appstore .as-back { display: inline-flex; align-items: center; gap: 5px; margin: -4px 0 12px -4px; padding: 3px 7px 3px 4px; border-radius: 4px; color: var(--dim); font-weight: 500; }

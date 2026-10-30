@@ -9,3 +9,32 @@
 .mm-add .ctl-text { width: 170px; }
 .mm-note { width: 100%; text-align: right; color: var(--danger); font-size: 11px; }
 .mm-note:empty { display: none; }
+
+/* ---------- Settings app: Avvio → App (startup.js) ---------- */
+.st-card:has(> .su-apps) { border: 0; }
+.su-hint { margin: -2px 2px 8px; color: var(--faint); font-size: 11.5px; }
+.su-empty { padding: 14px 12px; border: 1px solid var(--border); border-radius: 6px; color: var(--dim); }
+.su-app { margin-bottom: 10px; }
+.su-head { min-height: 46px; background: var(--stripe); border-radius: 6px 6px 0 0; }
+.su-head .st-label b { font-weight: 500; }
+.su-icon { width: 26px; height: 26px; flex: none; display: grid; place-items: center; border-radius: 6px; color: #fff; }
+.su-icon .ico { width: 15px; height: 15px; }
+.su-entry { padding-left: 50px; }
+.st-label code { font: 11px var(--mono); color: var(--faint); }
+.su-params { display: grid; grid-template-columns: 120px 1fr; align-items: center; gap: 6px 10px; padding: 8px 12px 10px 92px; border-top: 1px solid var(--border); }
+.su-plabel { color: var(--dim); font-size: 11.5px; }
+.su-field { display: flex; min-width: 0; }
+.su-field > .ctl-text, .su-field > .ctl-select { flex: 1; min-width: 0; max-width: 320px; }
+.su-number { max-width: 120px !important; }
+.su-path { flex: 1; display: flex; gap: 6px; min-width: 0; }
+.su-path .ctl-text { flex: 1; min-width: 0; }
+.su-clear { width: 26px; padding: 0; display: grid; place-items: center; }
+.su-clear .ico { width: 12px; height: 12px; }
+.su-json { grid-column: 1 / -1; min-height: 52px; resize: vertical; padding: 6px 8px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--field-bg); color: var(--text); font: 11.5px/1.45 var(--mono); user-select: text; }
+.su-json:focus { outline: 0; border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft); }
+.su-json[aria-invalid="true"] { border-color: var(--danger); }
+.su-note { grid-column: 1 / -1; color: var(--faint); font-size: 11px; }
+.su-note.bad { color: var(--danger); }
+.su-add { border: 1px dashed var(--toggle-off); border-radius: 6px; color: var(--dim); }
+.su-plus { width: 26px; height: 26px; flex: none; display: grid; place-items: center; border: 1px dashed var(--toggle-off); border-radius: 6px; }
+.su-plus .ico { width: 14px; height: 14px; }
