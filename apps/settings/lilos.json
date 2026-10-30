@@ -1,8 +1,8 @@
 {
   "id": "settings",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "kind": "local",
-  "name": "Impostazioni",
+  "name": "Sistema",
   "description": "Aspetto, workspace, tag, scorciatoie, tipi di file, archiviazione.",
   "category": "system",
   "icon": {
@@ -28,6 +28,6 @@
   ],
   "files": {
     "dist/index-BXGtpKy-.css": "sha256-nDbC9KKYPl4KBeYyFjnzqGgWe9FTvmqfiBgsCbSFDZs=",
-    "dist/index.js": "sha256-KITVrCicTBHeNSVexe/cQ/CEJ/kX1Mw35Oq5eoqvuRc="
+    "dist/index.js": "sha256-13V2CK6WbSBlxvJAn9swGQQdN7+OBrS+525GHlWLAnA="
   }
 }

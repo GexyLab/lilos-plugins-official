@@ -335,7 +335,7 @@ function appSecuritySections() {
             })
             : (isolated ? 'Sì' : 'No'),
         },
-        { label: 'App di sistema', description: 'File Manager, Editor, Impostazioni e AppStore fanno parte di lilOS e girano sempre dentro lilOS.' },
+        { label: 'App di sistema', description: 'File Manager, Editor, Sistema e AppStore fanno parte di lilOS e girano sempre dentro lilOS.' },
       ],
     },
     {
@@ -402,7 +402,7 @@ function browserName() {
 /** The system Settings app: only settings that actually work. */
 export default function createSettings({ openWindow, args } = {}) {
   const win = new SettingsWindow({
-    title: 'Impostazioni',
+    title: 'Sistema',
     icon: 'gear',
     width: 760,
     height: 500,

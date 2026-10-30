@@ -1,4 +1,4 @@
-# Impostazioni
+# Sistema
 
 Le preferenze di lilOS in un posto solo.
 

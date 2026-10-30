@@ -8,7 +8,7 @@ Il repository ufficiale di [lilOS](https://github.com/GexyLab/lilos): le app di 
 |---|---|---|
 | `apps/files` | **File Manager**: sfoglia, cerca e organizza file e cartelle, con pannelli di informazioni e anteprima | Necessaria |
 | `apps/editor` | **Editor** di testo e codice | Si può nascondere o rimuovere |
-| `apps/settings` | **Impostazioni** | Necessaria |
+| `apps/settings` | **Sistema**: le impostazioni di lilOS | Necessaria |
 | `apps/appstore` | **AppStore**: app e moduli dei repository | Necessaria |
 | `apps/photo` | **Photo**: guarda le immagini e le ritocca (disegno, testo, ritaglio, ridimensionamento, conversione in PNG, JPEG e WebP) | Si installa dall'AppStore; vuole lilOS con i file binari (`fs.readBlob`) |
 | `modules/users-basic` | Modulo del kernel: utenti e accesso, in `users.json` | |

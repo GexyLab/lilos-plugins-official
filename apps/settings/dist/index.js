@@ -538,7 +538,7 @@ function Z() {
 			}) : t ? "Sì" : "No"
 		}, {
 			label: "App di sistema",
-			description: "File Manager, Editor, Impostazioni e AppStore fanno parte di lilOS e girano sempre dentro lilOS."
+			description: "File Manager, Editor, Sistema e AppStore fanno parte di lilOS e girano sempre dentro lilOS."
 		}]
 	}, {
 		title: "App installate",
@@ -588,7 +588,7 @@ function se() {
 }
 function ce({ openWindow: n, args: r } = {}) {
 	let a = new t({
-		title: "Impostazioni",
+		title: "Sistema",
 		icon: "gear",
 		width: 760,
 		height: 500,
