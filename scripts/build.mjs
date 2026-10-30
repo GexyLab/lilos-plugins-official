@@ -16,6 +16,7 @@ const APPS = [
   { id: 'editor', entry: 'EditorApp.js' },
   { id: 'settings', entry: 'SettingsApp.js' },
   { id: 'appstore', entry: 'AppStoreApp.js' },
+  { id: 'photo', entry: 'PhotoApp.js' },
 ];
 
 const walk = dir => readdirSync(dir, { withFileTypes: true }).flatMap(e => (e.isDirectory() ? walk(join(dir, e.name)) : [join(dir, e.name)]));

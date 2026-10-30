@@ -10,6 +10,7 @@ Il repository ufficiale di [lilOS](https://github.com/GexyLab/lilos): le app di 
 | `apps/editor` | **Editor** di testo e codice | Si può nascondere o rimuovere |
 | `apps/settings` | **Impostazioni** | Necessaria |
 | `apps/appstore` | **AppStore**: app e moduli dei repository | Necessaria |
+| `apps/photo` | **Photo**: guarda le immagini e le ritocca (disegno, testo, ritaglio, ridimensionamento, conversione in PNG, JPEG e WebP) | Si installa dall'AppStore; vuole lilOS con i file binari (`fs.readBlob`) |
 | `modules/users-basic` | Modulo del kernel: utenti e accesso, in `users.json` | |
 | `modules/fs-postgres` | Modulo del kernel: file system su PostgreSQL | |
 
