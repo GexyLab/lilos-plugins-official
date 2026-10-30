@@ -1,6 +1,6 @@
 {
   "id": "settings",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "kind": "local",
   "name": "Impostazioni",
   "description": "Aspetto, workspace, tag, scorciatoie, tipi di file, archiviazione.",
@@ -27,6 +27,6 @@
   ],
   "files": {
     "dist/index-BXGtpKy-.css": "sha256-nDbC9KKYPl4KBeYyFjnzqGgWe9FTvmqfiBgsCbSFDZs=",
-    "dist/index.js": "sha256-SnjwCuNx0HDmXf0ahFPVpTV/TMR9j3dEkyMxHNnuh/Q="
+    "dist/index.js": "sha256-PB1BSRgXJ0ZVUR1ZHifr0GJlr/HcrQhiWpWZN2zV744="
   }
 }

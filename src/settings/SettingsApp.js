@@ -1,4 +1,5 @@
-import { SettingsWindow, settings, shortcuts, shortcutField, storage, session, fs, tags, TAG_COLORS, menus, fileTypeList, toggle, swatches, segmented, selectField, textField, actionButton, toast, h, kernel, SDK_VERSION } from '@lilos/sdk';
+import { SettingsWindow, settings, shortcuts, shortcutField, storage, session, fs, tags, TAG_COLORS, menus, fileTypeList, toggle, swatches, segmented, selectField, textField, actionButton, toast, h, kernel, SDK_VERSION, apps as packages } from '@lilos/sdk';
+import { executionMode, canChangeExecution, showAppSecurity } from '@lilos/system';
 import { setTag } from '@lilos/system';
 import { version } from '@lilos/system';
 import { ACCENTS, LASSO_OPTIONS, RETENTION_OPTIONS } from '@lilos/system';
@@ -299,6 +300,60 @@ function shortcutSections() {
   ];
 }
 
+const MODE_LABELS = { isolated: 'Isolata', open: 'Non isolata', system: 'Dentro lilOS', remote: 'Isolata, nel suo sito' };
+
+/**
+ * How installed apps run: isolated (a sandbox: only what their permissions allow) or not
+ * (lilOS's page and a Web Worker: faster, with everything the user can do). Only an
+ * administrator changes it; each app may have its own choice (its Proprietà → Sicurezza).
+ */
+function appSecuritySections() {
+  const admin = canChangeExecution();
+  const { isolated } = packages.security();
+  const listed = apps.filter(a => a.package && !a.package.system);
+  return [
+    {
+      title: 'Esecuzione delle app',
+      rows: [
+        {
+          label: 'Esegui le app isolate',
+          description: admin
+            ? 'Ogni app gira in una sandbox e vede solo quello che i suoi permessi le concedono. Se lo togli, le app girano nella pagina di lilOS e in un Web Worker: più veloci, ma possono fare tutto quello che puoi fare tu. Vale dalla prossima apertura di ogni app.'
+            : 'Solo un amministratore la cambia.',
+          keywords: 'sicurezza isolamento sandbox iframe worker',
+          control: admin
+            ? toggle({
+              value: isolated, label: 'Esegui le app isolate',
+              onChange: async v => {
+                try {
+                  await packages.setSecurity({ isolated: v });
+                } catch (err) {
+                  toast(`Non cambiata: ${err.message}`);
+                }
+                view?.render();
+              },
+            })
+            : (isolated ? 'Sì' : 'No'),
+        },
+        { label: 'App di sistema', description: 'File Manager, Editor, Impostazioni e AppStore fanno parte di lilOS e girano sempre dentro lilOS.' },
+      ],
+    },
+    {
+      title: 'App installate',
+      rows: listed.length
+        ? listed.map(a => {
+          const mode = executionMode(a.package);
+          const why = mode.fixed ? mode.reason : mode.own === null ? 'Come le altre app' : 'Scelta per questa app';
+          return {
+            label: a.name, description: `${MODE_LABELS[mode.mode]} · ${why}`, keywords: 'sicurezza isolamento',
+            control: actionButton({ label: 'Proprietà…', onClick: () => showAppSecurity(a.id) }),
+          };
+        })
+        : [{ label: 'Nessuna app installata oltre a quelle di sistema' }],
+    },
+  ];
+}
+
 /** Destructive action in two clicks: the first one asks for confirmation for a few seconds. */
 function confirmButton(label, confirmLabel, action) {
   let timer = 0;
@@ -435,6 +490,13 @@ export default function createSettings({ openWindow, args } = {}) {
           { id: 'trash', label: 'Cestino', sections: trashSections },
         ],
       },
+      {
+        id: 'apps', label: 'App', icon: 'window',
+        description: 'Come girano le app installate.',
+        subtabs: [
+          { id: 'security', label: 'Sicurezza', sections: appSecuritySections },
+        ],
+      },
       { group: 'Dati' },
       {
         id: 'storage', label: 'Archiviazione', icon: 'disk',
@@ -503,6 +565,7 @@ export default function createSettings({ openWindow, args } = {}) {
   const offWorkspaces = workspaceManager()?.on('change', () => win.view.render());
   const offTrash = fs.on('trash', () => win.view.render());
   const offTags = tags.on('change', () => win.view.render());
-  win.on('destroy', () => { offWorkspaces?.(); offTrash(); offTags(); if (view === win.view) view = null; });
+  const offApps = [packages.on('change', () => win.view.render()), packages.on('security', () => win.view.render())];
+  win.on('destroy', () => { offWorkspaces?.(); offTrash(); offTags(); offApps.forEach(off => off()); if (view === win.view) view = null; });
   return win;
 }
