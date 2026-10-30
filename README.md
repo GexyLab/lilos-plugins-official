@@ -6,7 +6,7 @@ Il repository ufficiale di [lilOS](https://github.com/GexyLab/lilos): le app di 
 
 | Cartella | Cosa | Note |
 |---|---|---|
-| `apps/files` | **File**: sfoglia, cerca e organizza file e cartelle | Necessaria |
+| `apps/files` | **File Manager**: sfoglia, cerca e organizza file e cartelle, con pannelli di informazioni e anteprima | Necessaria |
 | `apps/editor` | **Editor** di testo e codice | Si può nascondere o rimuovere |
 | `apps/settings` | **Impostazioni** | Necessaria |
 | `apps/appstore` | **AppStore**: app e moduli dei repository | Necessaria |

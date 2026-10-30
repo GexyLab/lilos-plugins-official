@@ -1,9 +1,9 @@
 {
   "id": "files",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "kind": "local",
-  "name": "File",
-  "description": "Sfoglia, cerca e organizza file e cartelle: tag, collegamenti, cestino.",
+  "name": "File Manager",
+  "description": "Sfoglia, cerca e organizza file e cartelle: tag, collegamenti, cestino, informazioni e anteprima.",
   "icon": {
     "glyph": "folder",
     "color": "#3b6ef5"
@@ -19,14 +19,37 @@
     "fs.write:~",
     "fs.workspaces",
     "tags.write",
-    "desktop.items"
+    "desktop.items",
+    "ui.shortcuts"
   ],
+  "contributes": {
+    "window": {
+      "width": 1000,
+      "height": 520
+    },
+    "commands": [
+      {
+        "id": "files.info",
+        "label": "Mostra o nascondi le informazioni",
+        "keys": [
+          "Alt+I"
+        ]
+      },
+      {
+        "id": "files.preview",
+        "label": "Mostra o nascondi l’anteprima",
+        "keys": [
+          "Alt+P"
+        ]
+      }
+    ]
+  },
   "entry": "dist/index.js",
   "styles": [
-    "dist/index-ByUurBFc.css"
+    "dist/index-QNdSYFB0.css"
   ],
   "files": {
-    "dist/index-ByUurBFc.css": "sha256-eARCURyJ0plhPYQZuSlpReFCcdKzUcdr8LNQCE/Q7FQ=",
-    "dist/index.js": "sha256-F/NPWiw43LLoqAhXjYB1ugFybAtM+KfUcIkLUEwv4CI="
+    "dist/index-QNdSYFB0.css": "sha256-osP0jIKKHVKU5zXDJTmkPUirDi+p43NTV0E2Gh3Azhk=",
+    "dist/index.js": "sha256-yKpGugBnaCp5i203ooOkDP5tHkqhSnyscZuEgoP8VIk="
   }
 }

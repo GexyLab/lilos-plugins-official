@@ -1,5 +1,5 @@
-import { Window, h, icon, fs, tags, fileType, session, storage, settings, openMenu, shortcuts, toast, UndoStack, history } from '@lilos/sdk';
-import { launch } from '@lilos/system';
+import { Window, h, icon, fs, tags, session, storage, openMenu, shortcuts, toast, UndoStack, history } from '@lilos/sdk';
+import { launch, handleCommand } from '@lilos/system';
 import { openFile } from '@lilos/system';
 import { itemIcon } from '@lilos/system';
 import { addTarget } from '@lilos/system';
@@ -8,9 +8,16 @@ import { recordCreated, renameNode, restoreNodes, removeNodes } from '@lilos/sys
 import { markItem, dropZone, dragItems, movableInto, moveInto } from '@lilos/system';
 import { links, linkEntry } from '@lilos/system';
 import { SYSTEM_FOLDERS, DESK_NAME } from '@lilos/system';
-import { describeWorkspace, onWorkspacesChange } from '@lilos/system';
+import { onWorkspacesChange } from '@lilos/system';
 import { tagDots, tagSubmenu, setTag } from '@lilos/system';
+import { showProperties } from '@lilos/system';
+import { typeLabel, folderName, locationLabel, originLabel, ownerLabel, ownerNode, sizeLabel, retentionLabel, dateLabel } from './format.js';
+import { SidePanel, MIN_WIDTH } from './SidePanel.js';
+import { infoView, Preview, readable, contentKey } from './details.js';
 import './files.css';
+
+/** Narrowest the list gets before the panels on the right give up some of their width. */
+const MAIN_MIN = 260;
 
 const VIEW_KEY = 'files-view';
 /** The trash is shown like a folder, with this id (not a node: fs.get() does not see it). */
@@ -40,28 +47,6 @@ const TAG_COLUMNS = [
 ];
 /** The tag a view id shows (null if it is not a tag view, or the tag is gone). */
 const viewTag = id => (typeof id === 'string' && id.startsWith(TAG_VIEW) ? tags.get(id.slice(TAG_VIEW.length)) : null);
-const locationLabel = n => (n.parent === fs.root ? 'Home' : fs.path(n.parent));
-
-/** Where a trashed item goes back when restored: the folder it left, or Home if that is gone. */
-function originLabel(n) {
-  const from = n.trashed.from;
-  return fs.exists(from) && from !== fs.root ? fs.path(from) : 'Home';
-}
-
-/** Whose a node is: the workspace that made it, or shared (system folders). */
-function ownerLabel(n) {
-  const ws = describeWorkspace(n.workspace);
-  if (!ws) return n.workspace ? 'Sconosciuto' : 'Condiviso';
-  return ws.removed ? `${ws.name} (eliminato)` : ws.name;
-}
-
-function ownerNode(n) {
-  const ws = describeWorkspace(n.workspace);
-  const dot = h('span', { class: 'ws-owner-dot', 'aria-hidden': 'true' });
-  if (ws) dot.style.background = ws.color;   // validated hex color (workspaces/store.js)
-  return h('span', { class: ['ws-owner', !ws && 'shared', ws?.removed && 'removed'].filter(Boolean).join(' '), title: `Workspace: ${ownerLabel(n)}` },
-    dot, h('span', {}, ownerLabel(n)));
-}
 
 /** Folder to show for launch arguments: args.folder, the trash with args.trash, a tag's items with args.tag. */
 function startFolder(a) {
@@ -73,7 +58,7 @@ function startFolder(a) {
 
 /** File Manager: browse the folders of the file system. One window, opened on args.folder (or the trash, or a tag). */
 export default function createFiles({ args } = {}) {
-  const win = new Window({ title: 'File', icon: 'folder', width: 780, height: 480, minWidth: 520, minHeight: 300 });
+  const win = new Window({ title: 'File Manager', icon: 'folder', width: 1000, height: 520, minWidth: 520, minHeight: 300 });
   const browser = new FileBrowser(win);
   browser.go(startFolder(args) ?? fs.root, false);
   // Launched again (e.g. a folder opened from the desk): show that folder in this window
@@ -84,34 +69,6 @@ export default function createFiles({ args } = {}) {
 
 /** Lowercase without accents, for search. */
 const fold = s => String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
-
-const typeLabel = n => (n.type === 'folder' ? 'Cartella' : n.type === 'app' ? 'App' : fileType(n.name).label);
-const folderName = n => (n.id === fs.root ? 'Home' : n.name);
-
-function formatBytes(bytes) {
-  if (bytes < 1024) return `${bytes} B`;
-  const units = ['KB', 'MB', 'GB'];
-  let v = bytes, u = -1;
-  do { v /= 1024; u++; } while (v >= 1024 && u < units.length - 1);
-  return `${v.toLocaleString(session.locale, { maximumFractionDigits: 1 })} ${units[u]}`;
-}
-
-function sizeLabel(n) {
-  if (n.type === 'folder') {
-    const count = n.trashed ? n.inside : fs.children(n.id).length;
-    return count === 0 ? 'Vuota' : count === 1 ? '1 elemento' : `${count} elementi`;
-  }
-  return n.type === 'file' ? formatBytes(n.size ?? 0) : '—';
-}
-
-/** Status bar of the trash: how long it keeps what it holds. */
-function retentionLabel() {
-  const days = settings.get('trashRetention');
-  if (days <= 0) return 'Gli elementi restano finché non li elimini';
-  return `Eliminati definitivamente dopo ${days === 1 ? '1 giorno' : `${days} giorni`}`;
-}
-
-const dateLabel = t => new Date(t).toLocaleString(session.locale, { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
 
 class FileBrowser {
   folder = fs.root;
@@ -127,6 +84,7 @@ class FileBrowser {
   #editing = null;      // id being renamed
   #message = '';
   #side = { defaults: [], desk: null };   // the sidebar's default places and the desk's id (last render)
+  #content = { key: null, text: null };   // the last file read for the panels (one read for both)
   /** Undo history of this window (Ctrl Z while it has the focus): create, rename, delete. */
   history = new UndoStack();
 
@@ -141,6 +99,8 @@ class FileBrowser {
     this.newBtn = tool('folderPlus', 'Nuova cartella', () => this.create('folder'));
     this.listBtn = tool('list', 'Vista elenco', () => this.setView('list'));
     this.gridBtn = tool('grid', 'Vista a icone', () => this.setView('grid'));
+    this.previewBtn = tool('sidebar', '', () => this.preview.toggle());
+    this.infoBtn = tool('info', '', () => this.info.toggle());
     this.search = h('input', { type: 'text', spellcheck: 'false', 'aria-label': 'Cerca nella cartella' });
     this.search.addEventListener('input', () => { this.#query = fold(this.search.value.trim()); this.render(); });
     this.search.addEventListener('keydown', e => {
@@ -153,6 +113,21 @@ class FileBrowser {
     this.statusLeft = h('span');
     this.statusRight = h('span', { class: 'fm-status-right' });
 
+    // Panels on the right: the preview next to the list, the information at the edge
+    const panel = (key, title, label, width, open) => new SidePanel({
+      key, title, label, width, open, signal: win.signal,
+      room: () => this.#room() - (key === 'info' ? this.preview : this.info).shown,
+      onLayout: () => { this.#fit(); this.#renderPanels(); },
+    });
+    this.preview = panel('preview', 'Anteprima', 'dell’anteprima', 300, false);
+    this.info = panel('info', 'Informazioni', 'delle informazioni', 260, true);
+    this.previewView = new Preview(this.preview.body, { text: n => this.#read(n), open: n => this.open(n) });
+
+    this.main = h('div', { class: 'fm' },
+      this.side,
+      h('div', { class: 'fm-main' }, this.list, h('div', { class: 'fm-status' }, this.statusLeft, this.statusRight)),
+      this.preview.el,
+      this.info.el);
     win.body.append(
       h('div', { class: 'fm-toolbar' },
         this.backBtn, this.forwardBtn, this.upBtn,
@@ -160,10 +135,13 @@ class FileBrowser {
         this.newBtn,
         h('span', { class: 'fm-sep' }),
         this.listBtn, this.gridBtn,
+        h('span', { class: 'fm-sep' }),
+        this.previewBtn, this.infoBtn,
         h('label', { class: 'fm-search' }, icon('search'), this.search)),
-      h('div', { class: 'fm' },
-        this.side,
-        h('div', { class: 'fm-main' }, this.list, h('div', { class: 'fm-status' }, this.statusLeft, this.statusRight))));
+      this.main);
+    // A narrower window: the panels give up width before the list does
+    const fit = new ResizeObserver(() => this.#fit());
+    fit.observe(this.main);
 
     this.#bindList();
     // Files and folders dropped on the list (not on one of its folders) go into the folder shown
@@ -193,7 +171,14 @@ class FileBrowser {
       deselect: () => this.#select([]),
     });
     const detach = history.attach(win.el, this.history);
-    win.on('destroy', () => { off(); offLinks(); offScope(); offWorkspaces(); offTrash(); offTags(); removeTarget(); detach(); });
+    const commands = [
+      handleCommand('files.info', { isActive: () => win.active, run: () => this.info.toggle() }),
+      handleCommand('files.preview', { isActive: () => win.active, run: () => this.preview.toggle() }),
+    ];
+    win.on('destroy', () => {
+      off(); offLinks(); offScope(); offWorkspaces(); offTrash(); offTags(); removeTarget(); detach();
+      commands.forEach(c => c()); fit.disconnect(); this.previewView.destroy();
+    });
   }
 
   /** True while the trash is shown. */
@@ -355,7 +340,7 @@ class FileBrowser {
       : tag ? { id: this.folder, name: `Tag «${tag.name}»`, parent: null }
       : fs.get(this.folder);
     if (!folder) return;
-    this.win.setTitle(folderName(folder), 'File');
+    this.win.setTitle(folderName(folder), 'File Manager');
     this.#renderToolbar(folder);
     this.#renderSide();
 
@@ -388,6 +373,55 @@ class FileBrowser {
       : tag ? (tag.visible ? 'Tutti gli elementi con questo tag' : 'Tag invisibile: questi elementi sono nascosti altrove')
       : fs.path(this.folder));
     this.statusRight.classList.toggle('msg', !!this.#message);
+    this.#renderPanels();
+  }
+
+  // ---------- Panels on the right ----------
+
+  /** Information and preview of the selection (the information of the folder shown, with none). */
+  #renderPanels() {
+    for (const [btn, panel, label, id] of [[this.previewBtn, this.preview, 'l’anteprima', 'files.preview'], [this.infoBtn, this.info, 'le informazioni', 'files.info']]) {
+      const keys = shortcuts.label(id);
+      const title = `${panel.open ? 'Nascondi' : 'Mostra'} ${label}${keys ? ` (${keys})` : ''}`;
+      btn.title = title;
+      btn.setAttribute('aria-label', title);
+      btn.setAttribute('aria-pressed', String(panel.open));
+      btn.classList.toggle('on', panel.open);
+    }
+    if (!this.info.open && !this.preview.open) return;
+    const nodes = this.#items.filter(n => this.#selection.has(n.id));
+    if (this.preview.open) this.previewView.update(nodes);
+    if (this.info.open) {
+      const tag = this.inTag;
+      const place = this.inTrash ? { trash: true } : tag ? { tag } : { node: fs.get(this.folder) };
+      if (!place.trash && !place.tag && !place.node) return;
+      const body = this.info.body;
+      const scroll = body.scrollTop;
+      body.replaceChildren(infoView({ nodes, place, text: n => this.#read(n) }));
+      body.scrollTop = scroll;
+    }
+  }
+
+  /** Content of a file for the panels: read once while it does not change. */
+  #read(n) {
+    if (!readable(n)) return Promise.reject(new Error('Non è un file'));
+    const key = contentKey(n);
+    if (this.#content.key !== key) this.#content = { key, text: fs.read(n.id) };
+    return this.#content.text;
+  }
+
+  /** Width the panels on the right can take together, leaving the list at least MAIN_MIN. */
+  #room() {
+    return this.main.clientWidth - this.side.offsetWidth - MAIN_MIN;
+  }
+
+  /** Shows each open panel as wide as chosen, or narrower (in proportion) if the window is not wide enough. */
+  #fit() {
+    const open = [this.preview, this.info].filter(p => p.open);
+    if (!open.length || !this.main.isConnected) return;
+    const want = open.reduce((sum, p) => sum + p.width, 0);
+    const scale = Math.min(1, Math.max(0, this.#room()) / want);
+    open.forEach(p => p.show(Math.max(MIN_WIDTH, Math.floor(p.width * scale))));
   }
 
   #renderToolbar(folder) {
@@ -777,6 +811,7 @@ class FileBrowser {
       const ids = nodes.map(n => n.id);
       return openMenu(e.clientX, e.clientY, [
         { label: many ? `Ripristina ${nodes.length} elementi` : 'Ripristina', icon: 'undo', action: () => this.restore(ids) },
+        { label: 'Informazioni', icon: 'info', shortcut: shortcuts.label('files.info'), action: () => this.info.setOpen(true) },
         '-',
         { label: 'Elimina definitivamente…', icon: 'trash', shortcut: shortcuts.label('items.delete'), danger: true, action: () => this.purge(ids) },
       ]);
@@ -794,6 +829,8 @@ class FileBrowser {
       tagSubmenu(ids),
       tag && { label: `Togli il tag «${tag.name}»`, icon: 'x', action: () => setTag(ids, tag.id, false) },
       linkEntry(ids),
+      { label: 'Informazioni', icon: 'info', shortcut: shortcuts.label('files.info'), action: () => this.info.setOpen(true) },
+      !many && { label: 'Proprietà…', icon: 'info', action: () => showProperties(nodes[0].id) },
       '-',
       { label: many ? `Elimina ${nodes.length} elementi` : 'Elimina', icon: 'trash', shortcut: shortcuts.label('items.delete'), danger: true, disabled: system, action: () => this.remove(nodes.map(n => n.id)) },
     ].filter(Boolean));
