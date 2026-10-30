@@ -194,7 +194,7 @@ function ne() {
 			},
 			{
 				label: "Colore",
-				description: "Il pallino nella barra in basso e accanto ai suoi file nell’app File",
+				description: "Il pallino nella barra in basso e accanto ai suoi file nel File Manager",
 				keywords: "colore workspace",
 				control: () => v({
 					value: t.color,
@@ -275,7 +275,7 @@ function G() {
 		title: "Nuovo tag",
 		rows: [{
 			label: "Nome",
-			description: t ? `Il nuovo tag andrà su ${H(t, "elemento selezionato", "elementi selezionati")}` : "Poi si assegna dal menu del tasto destro → Tag, sulla scrivania e nell’app File",
+			description: t ? `Il nuovo tag andrà su ${H(t, "elemento selezionato", "elementi selezionati")}` : "Poi si assegna dal menu del tasto destro → Tag, sulla scrivania e nel File Manager",
 			keywords: "nuovo tag crea etichetta",
 			control: () => {
 				let t = b({
@@ -323,7 +323,7 @@ function G() {
 			},
 			{
 				label: "Visibile",
-				description: e.visible ? "Gli elementi con questo tag si vedono ovunque" : "Gli elementi con questo tag sono nascosti ovunque: si ritrovano in File → Tag",
+				description: e.visible ? "Gli elementi con questo tag si vedono ovunque" : "Gli elementi con questo tag sono nascosti ovunque: si ritrovano nel File Manager → Tag",
 				keywords: "nascondi mostra invisibile tag",
 				control: () => S({
 					value: e.visible,
@@ -335,7 +335,7 @@ function G() {
 				label: "Elementi",
 				description: `${H(o.tagged(e.id).length, "elemento", "elementi")} in questo workspace e nelle cartelle condivise`,
 				control: () => s("div", { class: "tag-settings-actions" }, r({
-					label: "Mostra in File",
+					label: "Mostra nel File Manager",
 					onClick: () => P("files", { tag: e.id })
 				}), Q("Elimina…", "Elimina il tag", () => y.remove(e.id)))
 			}

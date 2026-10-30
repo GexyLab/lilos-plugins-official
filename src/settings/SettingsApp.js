@@ -32,7 +32,7 @@ function currentWorkspaceSections() {
           },
         },
         {
-          label: 'Colore', description: 'Il pallino nella barra in basso e accanto ai suoi file nell’app File', keywords: 'colore workspace',
+          label: 'Colore', description: 'Il pallino nella barra in basso e accanto ai suoi file nel File Manager', keywords: 'colore workspace',
           control: () => swatches({ value: cur.color, colors: ACCENTS, onChange: v => ws.setColor(cur.id, v) }),
         },
         {
@@ -116,7 +116,7 @@ function tagSections() {
         label: 'Nome',
         description: pending
           ? `Il nuovo tag andrà su ${count(pending, 'elemento selezionato', 'elementi selezionati')}`
-          : 'Poi si assegna dal menu del tasto destro → Tag, sulla scrivania e nell’app File',
+          : 'Poi si assegna dal menu del tasto destro → Tag, sulla scrivania e nel File Manager',
         keywords: 'nuovo tag crea etichetta',
         control: () => {
           const field = textField({ placeholder: 'Per esempio: Urgente', label: 'Nome del nuovo tag' });
@@ -144,14 +144,14 @@ function tagSections() {
         { label: 'Colore', keywords: 'colore tag', control: () => swatches({ value: t.color, colors: TAG_COLORS, onChange: v => tags.setColor(t.id, v) }) },
         {
           label: 'Visibile',
-          description: t.visible ? 'Gli elementi con questo tag si vedono ovunque' : 'Gli elementi con questo tag sono nascosti ovunque: si ritrovano in File → Tag',
+          description: t.visible ? 'Gli elementi con questo tag si vedono ovunque' : 'Gli elementi con questo tag sono nascosti ovunque: si ritrovano nel File Manager → Tag',
           keywords: 'nascondi mostra invisibile tag',
           control: () => toggle({ value: t.visible, label: `Tag ${t.name} visibile`, onChange: v => tags.setVisible(t.id, v) }),
         },
         {
           label: 'Elementi', description: `${count(fs.tagged(t.id).length, 'elemento', 'elementi')} in questo workspace e nelle cartelle condivise`,
           control: () => h('div', { class: 'tag-settings-actions' },
-            actionButton({ label: 'Mostra in File', onClick: () => launch('files', { tag: t.id }) }),
+            actionButton({ label: 'Mostra nel File Manager', onClick: () => launch('files', { tag: t.id }) }),
             confirmButton('Elimina…', 'Elimina il tag', () => tags.remove(t.id))),
         },
       ],
