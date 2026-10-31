@@ -9,6 +9,7 @@
   ],
   "modules": [
     "modules/users-basic",
-    "modules/fs-postgres"
+    "modules/fs-postgres",
+    "modules/services-isolate"
   ]
 }
