@@ -492,7 +492,7 @@ function A({ openWindow: g }) {
 		}, o("download"), "Scarica il README completo")) : null, e.readme ? null : a("p", { class: "as-muted" }, e.repo ? "Questo pacchetto non ha un README." : "Il README si legge dal repository: questo elemento non viene da un repository elencato."));
 	}
 	function _e() {
-		let e = v.updates, t = !e || e.system && !e.canControl, n = e ? e.system ? "Scelto da un amministratore per tutti: si cambia da Sistema → Avvio → Servizi" : "Quando entri e poi ogni giorno, anche con lilOS chiuso: un avviso dice cosa si può aggiornare" : "Serve il motore dei servizi del kernel (modulo services-isolate)", r = p({
+		let e = v.updates, t = !e || e.system && !e.canControl, n = e ? e.system ? "Scelto da un amministratore per tutti: si cambia da Sistema → Avvio → Servizi" : "Quando entri e poi a intervalli (ogni 24 ore, si cambia in Sistema → Avvio → Servizi), anche con lilOS chiuso: un avviso dice cosa si può aggiornare" : "Serve il motore dei servizi del kernel (modulo services-isolate)", r = p({
 			value: !!e && e.startup !== "none",
 			label: "Controlla gli aggiornamenti all’avvio",
 			onChange: C

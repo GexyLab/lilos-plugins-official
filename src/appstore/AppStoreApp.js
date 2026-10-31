@@ -423,7 +423,7 @@ export default function AppStore({ openWindow }) {
     const locked = !svc || (svc.system && !svc.canControl);
     const text = !svc ? 'Serve il motore dei servizi del kernel (modulo services-isolate)'
       : svc.system ? 'Scelto da un amministratore per tutti: si cambia da Sistema → Avvio → Servizi'
-        : 'Quando entri e poi ogni giorno, anche con lilOS chiuso: un avviso dice cosa si può aggiornare';
+        : 'Quando entri e poi a intervalli (ogni 24 ore, si cambia in Sistema → Avvio → Servizi), anche con lilOS chiuso: un avviso dice cosa si può aggiornare';
     const control = toggle({ value: !!svc && svc.startup !== 'none', label: 'Controlla gli aggiornamenti all’avvio', onChange: setUpdatesAtStart });
     control.disabled = locked;
     return h('div', { class: 'as-row' }, h('div', { class: 'as-row-text' }, h('b', {}, 'Controlla gli aggiornamenti all’avvio'), h('span', {}, text)), control);
