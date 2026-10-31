@@ -17,7 +17,7 @@ import { Incomplete, ParseError } from './signals.js';
  *   subshell  { type: 'subshell', body }   ( … )
  *   arithcmd  { type: 'arithcmd', word }   (( … ))
  *   cond      { type: 'cond', expr }       [[ … ]]
- *   func      { type: 'func', name, body }
+ *   func      { type: 'func', name, body, text }   text: the definition as written
  * Compound commands have `redirs` too.
  *
  *   Word   { parts: [Part], noSplit? }
@@ -46,6 +46,14 @@ const normalStop = c => isBlank(c) || c === '\n' || META.has(c);
 
 export function parse(src, { aliases = null } = {}) {
   return new Parser(src, aliases).program();
+}
+
+/**
+ * The commands of a text one line at a time, as bash reads them: an alias defined on a line works
+ * from the next one, because each line is parsed only after the previous one ran.
+ */
+export function* commands(src, { aliases = null } = {}) {
+  yield* new Parser(src, aliases).lines();
 }
 
 /** A word in arithmetic mode from a text: `$((…))`, `((…))`, array subscripts. */
@@ -144,6 +152,37 @@ class Parser {
     return list;
   }
 
+  /** Lists of the top level, one per line (see commands()). */
+  *lines() {
+    for (;;) {
+      this.linebreak();
+      if (this.eof) {
+        if (this.heredocs.length) throw new Incomplete();
+        return;
+      }
+      const items = [];
+      for (;;) {
+        if (this.atTerminator()) throw new ParseError(`errore di sintassi vicino a ${this.near()}`);
+        const start = this.pos;
+        const node = this.andOr();
+        const text = this.src.slice(start, this.pos).trim();
+        this.skipBlanks();
+        const op = this.peekOp();
+        if (op === '&' || op === ';') {
+          this.pos++;
+          items.push({ node, async: op === '&', text });
+          this.skipBlanks();
+          if (this.eof || this.newline()) break;
+          continue;
+        }
+        items.push({ node, async: false, text });
+        if (this.eof || this.newline()) break;
+        throw new ParseError(`errore di sintassi vicino a ${this.near()}`);
+      }
+      yield { type: 'list', items };
+    }
+  }
+
   list() {
     const items = [];
     this.linebreak();
@@ -211,6 +250,7 @@ class Parser {
   command() {
     this.skipBlanks();
     if (this.eof) throw new Incomplete();
+    const start = this.pos;
     let node;
     if (this.starts('((') && (node = this.arithCommand())) return this.redirects(node);
     const op = this.peekOp();
@@ -252,23 +292,24 @@ class Parser {
         if (this.ch !== ')') this.fail('atteso «)» dopo il nome della funzione');
         this.pos++;
       }
-      return this.funcBody(name);
+      return this.funcBody(name, start);
     }
     const def = /([A-Za-z_][\w.:-]*)[ \t]*\([ \t]*\)/y;
     def.lastIndex = this.pos;
     const m = def.exec(this.src);
     if (m) {
       this.pos += m[0].length;
-      return this.funcBody(m[1]);
+      return this.funcBody(m[1], start);
     }
     if (TERMINATORS.some(kw => this.atKeyword(kw))) throw new ParseError(`errore di sintassi vicino a ${this.near()}`);
     return this.simple();
   }
 
-  funcBody(name) {
+  funcBody(name, start) {
     this.linebreak();
     if (this.eof) throw new Incomplete();
-    return { type: 'func', name, body: this.command() };
+    const body = this.command();
+    return { type: 'func', name, body, text: this.src.slice(start, this.pos).trim() };
   }
 
   redirects(node) {
@@ -295,6 +336,12 @@ class Parser {
       const asg = ASSIGN.exec(raw);
       if (asg && !node.words.length) {
         node.assigns.push(this.assignment(start, asg));
+        continue;
+      }
+      if (asg && declaration && this.ch === '(' && raw.endsWith('=')) {
+        // local a=(x y): the list is read like an array assignment
+        const { array } = this.assignment(start, asg);
+        node.words.push({ parts: [{ type: 'lit', value: raw }], declArray: { name: asg[1], append: asg[3] === '+', words: array } });
         continue;
       }
       if (asg && declaration) word.noSplit = true;

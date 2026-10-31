@@ -5,7 +5,8 @@
     "apps/editor",
     "apps/settings",
     "apps/appstore",
-    "apps/photo"
+    "apps/photo",
+    "apps/terminal"
   ],
   "modules": [
     "modules/users-basic",

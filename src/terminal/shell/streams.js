@@ -31,13 +31,16 @@ export class Reader {
     return text;
   }
 
-  /** One line without its newline, or null at the end (a last line without newline is a line). */
-  async readLine() {
+  /**
+   * One line without its newline (or up to `delim`), or null at the end (a last line without
+   * newline is a line).
+   */
+  async readLine(delim = '\n') {
     for (;;) {
-      const nl = this.#buffer.indexOf('\n');
+      const nl = this.#buffer.indexOf(delim);
       if (nl >= 0) {
         const line = this.#buffer.slice(0, nl);
-        this.#buffer = this.#buffer.slice(nl + 1);
+        this.#buffer = this.#buffer.slice(nl + delim.length);
         return line;
       }
       if (this.#ended) break;
