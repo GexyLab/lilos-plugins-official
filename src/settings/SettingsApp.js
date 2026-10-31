@@ -17,10 +17,10 @@ import './settings-app.css';
 
 let view = null;   // the open SettingsView, to redraw after resets
 
-/** The current workspace: name, color, what it made, the apps installed in it. */
-function currentWorkspaceSections() {
+/** A workspace (the current one or another): name, color, what it made, its apps and fixed desk items. */
+function workspaceSections(id) {
   const ws = workspaceManager();
-  const cur = ws?.current;
+  const cur = ws?.list().find(w => w.id === id);
   if (!cur) return [];
   return [
     {
@@ -42,7 +42,11 @@ function currentWorkspaceSections() {
           label: t('workspaces.owned.label'), description: t('workspaces.owned.description'),
           control: String(ws.ownedCount(cur.id)),
         },
-      ],
+        id !== ws.currentId && {
+          label: t('workspaces.switch.label'), keywords: t('workspaces.list.keywords'),
+          control: () => actionButton({ label: t('workspaces.list.switch'), onClick: () => ws.switchTo(id) }),
+        },
+      ].filter(Boolean),
     },
     {
       title: t('workspaces.apps.title'),
@@ -51,12 +55,33 @@ function currentWorkspaceSections() {
         description: app.system ? t('workspaces.apps.system') : t('workspaces.apps.installed'),
         keywords: t('workspaces.apps.keywords', { name: app.name }),
         control: app.system ? t('workspaces.apps.alwaysVisible') : () => toggle({
-          value: ws.isInstalled(app.id), label: t('workspaces.apps.toggle', { name: app.name }),
-          onChange: v => ws.setInstalled(app.id, v),
+          value: ws.isInstalled(app.id, id),
+          label: id === ws.currentId ? t('workspaces.apps.toggle', { name: app.name }) : t('workspaces.apps.toggleIn', { name: app.name, workspace: cur.name }),
+          onChange: v => ws.setInstalled(app.id, v, id),
         }),
       })),
     },
+    ...workspaceFixedSections(id),
   ];
+}
+
+/**
+ * Secondary tabs of Workspace: this one, one per other workspace (named after it), all of them.
+ * The same objects at every render, as SettingsView needs to know which one is shown.
+ */
+const currentTab = { id: 'current', get label() { return t('workspaces.current.label'); }, sections: () => workspaceSections(workspaceManager()?.currentId) };
+const allTab = { id: 'all', get label() { return t('workspaces.all.label'); }, sections: allWorkspacesSections };
+const otherTabs = new Map();   // workspace id → its tab
+
+function workspaceSubtabs() {
+  const ws = workspaceManager();
+  const others = (ws?.list() ?? []).filter(w => w.id !== ws.currentId).map(w => {
+    if (!otherTabs.has(w.id)) {
+      otherTabs.set(w.id, { id: `ws-${w.id}`, get label() { return workspaceManager()?.describe(w.id)?.name ?? ''; }, sections: () => workspaceSections(w.id) });
+    }
+    return otherTabs.get(w.id);
+  });
+  return [currentTab, ...others, allTab];
 }
 
 /** Every workspace: change to it, delete it; make a new one. */
@@ -86,6 +111,7 @@ function allWorkspacesSections() {
         },
       ],
     },
+    ...allFixedSections(),
     {
       title: t('workspaces.deleting.title'),
       rows: [
@@ -161,27 +187,68 @@ function tagSections() {
 }
 
 /**
- * The fixed items of the desks (lilOS's list: none in older versions), each one turned on or off
- * for every desk (always on, without a switch, in lilOS versions that cannot turn them off).
+ * The fixed items of the desks (lilOS's list: none in older versions), with what `row(item)` adds
+ * to each one's row (control, description).
  */
-function fixedItemsSections() {
+function fixedItemsSections(description, row) {
   const fixed = system.DESK_FIXED_ITEMS ?? [];
   if (!fixed.length) return [];
-  const switchable = typeof system.setFixedShown === 'function';
   return [{
     title: t('desk.fixed.title'),
     rows: [
-      {
-        label: t('desk.fixed.label'),
-        description: switchable ? t('desk.fixed.descriptionSwitchable') : t('desk.fixed.description'),
-      },
-      ...fixed.map(f => ({
-        label: f.name, description: f.description, keywords: t('desk.fixed.keywords', { name: f.name }),
-        control: switchable
-          ? () => toggle({ value: system.isFixedShown(f.key), label: t('desk.fixed.toggle', { name: f.name }), onChange: v => system.setFixedShown(f.key, v) })
-          : t('desk.fixed.always'),
-      })),
+      { label: t('desk.fixed.label'), description },
+      ...fixed.map(f => ({ label: f.name, description: f.description, keywords: t('desk.fixed.keywords', { name: f.name }), ...row(f) })),
     ],
+  }];
+}
+
+/** lilOS keeps the fixed items of each workspace apart (older ones: one choice for every desk). */
+const fixedPerWorkspace = () => typeof system.setFixedShownEverywhere === 'function';
+
+/** The fixed items of one workspace's desk, each one on or off there. */
+function workspaceFixedSections(id) {
+  if (!fixedPerWorkspace()) return [];
+  const ws = workspaceManager();
+  // Another workspace's tab: its name in the label, for screen readers
+  const label = name => (id === ws?.currentId ? t('desk.fixed.toggle', { name }) : t('desk.fixed.toggleIn', { name, workspace: ws?.describe(id)?.name ?? '' }));
+  return fixedItemsSections(t('desk.fixed.descriptionWorkspace'), f => ({
+    control: () => toggle({ value: system.isFixedShown(f.key, id), label: label(f.name), onChange: v => system.setFixedShown(f.key, v, id) }),
+  }));
+}
+
+/**
+ * The fixed items of every desk: each one turned on or off in all the workspaces at once (and in
+ * new ones). In older lilOS, the single choice for every desk, or just the list (always on).
+ */
+function allFixedSections() {
+  const ws = workspaceManager();
+  if (fixedPerWorkspace() && ws) {
+    const list = ws.list();
+    return fixedItemsSections(t('desk.fixed.descriptionAll'), f => {
+      const on = list.filter(w => system.isFixedShown(f.key, w.id)).length;
+      return {
+        description: on && on < list.length ? t('desk.fixed.some', { on, n: list.length }) : f.description,
+        control: () => toggle({ value: on === list.length, label: t('desk.fixed.toggleAll', { name: f.name }), onChange: v => system.setFixedShownEverywhere(f.key, v) }),
+      };
+    });
+  }
+  const switchable = typeof system.setFixedShown === 'function';
+  return fixedItemsSections(switchable ? t('desk.fixed.descriptionSwitchable') : t('desk.fixed.description'), f => ({
+    control: switchable
+      ? () => toggle({ value: system.isFixedShown(f.key), label: t('desk.fixed.toggle', { name: f.name }), onChange: v => system.setFixedShown(f.key, v) })
+      : t('desk.fixed.always'),
+  }));
+}
+
+/** Where the fixed items went (Scrivania → Elementi had them before they were per workspace). */
+function deskFixedSections() {
+  if (!(system.DESK_FIXED_ITEMS ?? []).length) return [];
+  return [{
+    title: t('desk.fixed.title'),
+    rows: [{
+      label: t('desk.fixed.moved.label'), description: t('desk.fixed.moved.description'), keywords: t('desk.fixed.moved.keywords'),
+      control: () => actionButton({ label: t('desk.fixed.moved.open'), onClick: () => view?.select('workspaces', 'current') }),
+    }],
   }];
 }
 
@@ -528,7 +595,7 @@ export default function createSettings({ openWindow, args } = {}) {
         subtabs: [
           {
             id: 'items', get label() { return t('common.items'); },
-            sections: () => [...fixedItemsSections(), {
+            sections: () => [...deskFixedSections(), {
               title: t('desk.placement.title'),
               rows: [{
                 label: t('desk.snap.label'), description: t('desk.snap.description'),
@@ -549,10 +616,7 @@ export default function createSettings({ openWindow, args } = {}) {
         id: 'workspaces', icon: 'workspace',
         get label() { return t('workspaces.label'); },
         get description() { return t('workspaces.description'); },
-        subtabs: [
-          { id: 'current', get label() { return t('workspaces.current.label'); }, sections: currentWorkspaceSections },
-          { id: 'all', get label() { return t('workspaces.all.label'); }, sections: allWorkspacesSections },
-        ],
+        get subtabs() { return workspaceSubtabs(); },
       },
       {
         id: 'tags', icon: 'tag',
@@ -647,26 +711,30 @@ export default function createSettings({ openWindow, args } = {}) {
     ].filter(Boolean),
   });
   view = win.view;
-  // Opened on a tab (args.tab, e.g. 'workspaces' from the taskbar), also when launched again.
+  // Opened on a tab (args.tab, e.g. 'workspaces' from the taskbar; args.subtab, one of its
+  // secondary tabs), also when launched again.
   // args.tagFor: items the next tag made here goes on (Tag → Nuovo tag… in a menu)
   const show = a => {
     if (Array.isArray(a?.tagFor)) pendingTagFor = a.tagFor.filter(id => typeof id === 'string' && fs.exists(id));
-    if (typeof a?.tab === 'string') win.view.select(a.tab);
+    if (typeof a?.tab === 'string') win.view.select(a.tab, typeof a.subtab === 'string' ? a.subtab : undefined);
     if (a?.tab === 'tags') win.view.panel.querySelector('.tag-new-name')?.focus();
   };
   show(args);
   win.on('launch', show);
-  const offWorkspaces = workspaceManager()?.on('change', () => win.view.render());
+  // Workspaces changed or switched: Workspace has a tab per other workspace (back to the first
+  // one if the workspace shown went away, or became the current one)
+  const refresh = () => (win.view.tab?.subtabs?.length && !win.view.subtab ? win.view.select(win.view.tab.id) : win.view.render());
+  const offWorkspaces = [workspaceManager()?.on('change', refresh), workspaceManager()?.on('switch', refresh)];
   const offTrash = fs.on('trash', () => win.view.render());
   const offTags = tags.on('change', () => win.view.render());
   const offApps = [packages.on('change', () => win.view.render()), packages.on('security', () => win.view.render()), watchServices(() => win.view.render())];
-  // Fixed desk items turned off from the desk's menu meanwhile
+  // Fixed desk items turned off from the desk's menu meanwhile (older lilOS: one choice for every desk)
   const offDesk = settings.on('change:deskHidden', () => win.view.render());
   // The language changed (here or elsewhere): every text again in the new one. The title too,
   // which SettingsWindow sets on each tab change with the text it was made with
   const retitle = () => win.setTitle(t('window.title'), win.view.tab?.label ?? '');
   win.view.on('select', retitle);
   const offLocale = sdk.locale?.on('change', () => { win.view.render(); retitle(); });
-  win.on('destroy', () => { offWorkspaces?.(); offTrash(); offTags(); offDesk(); offLocale?.(); offApps.forEach(off => off?.()); if (view === win.view) view = null; });
+  win.on('destroy', () => { offWorkspaces.forEach(off => off?.()); offTrash(); offTags(); offDesk(); offLocale?.(); offApps.forEach(off => off?.()); if (view === win.view) view = null; });
   return win;
 }
