@@ -1,16 +1,18 @@
 import { h, icon, appIcon, fs, settings, toggle, selectField, textField, actionButton, openMenu, toast } from '@lilos/sdk';
 import { apps, startup, pickFile } from '@lilos/system';
+import { servicesOptionRow } from './services.js';
 
 /**
- * Sistema → Avvio: what starts by itself when the user comes in (lilOS's apps/startup.js).
- *   Opzioni   the switch, and the way out (?avvio=no)
+ * Sistema → Avvio: what starts by itself (lilOS's apps/startup.js, and the kernel's services).
+ *   Opzioni   the switches, and the way out (?avvio=no)
+ *   Servizi   services.js
  *   App       the apps that open, each window entry point with its params; "Aggiungi…" at the end
  */
-export function startupOptionsSections() {
+export function startupOptionsSections({ rerender }) {
   return [
     {
       title: 'Avvio automatico',
-      rows: [{
+      rows: [servicesOptionRow(rerender), {
         label: 'Apri le app quando entri',
         description: 'Si aprono le app scelte in App, con i loro parametri. Solo nella prima scheda di lilOS di questo browser: le altre si aprono vuote.',
         keywords: 'avvio automatico accesso login esecuzione automatica',

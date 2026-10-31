@@ -1,5 +1,7 @@
 import { Window, h, icon, appIcon, apps, repositories, kernelModules, kernel, fs, settings, toast, actionButton, textField, toggle } from '@lilos/sdk';
 import { describePermission, launch } from '@lilos/system';
+// Namespace import: lilOS versions without services (before the kernel's services) still load the AppStore
+import * as system from '@lilos/system';
 import { renderMarkdown } from './markdown.js';
 import './appstore.css';
 
@@ -41,7 +43,7 @@ export default function AppStore({ openWindow }) {
   const isAdmin = kernel.user?.role === 'admin';
   const state = {
     repos: [], catalogs: new Map(), errors: new Map(), modules: [], loading: true, busy: null, pressed: null,
-    tab: 'installed', query: {}, view: 'list', key: null, newRepo: { url: '', name: '' },
+    tab: 'installed', query: {}, view: 'list', key: null, newRepo: { url: '', name: '' }, updates: null,
   };
 
   const win = new Window({ title: 'AppStore', icon: 'download', width: 960, height: 640, minWidth: 560, minHeight: 420 });
@@ -64,6 +66,24 @@ export default function AppStore({ openWindow }) {
     }
   }
 
+  /** The AppStore's own service (Aggiornamenti), as Sistema → Avvio → Servizi shows it, or null without services. */
+  async function loadUpdatesService() {
+    const list = await system.services?.list().catch(() => null);
+    state.updates = list?.available ? list.services.find(s => s.app === 'appstore' && s.entry === 'updates') ?? null : null;
+  }
+
+  async function setUpdatesAtStart(on) {
+    try {
+      await system.services.setStartup('appstore', 'updates', on ? 'login' : 'none');
+      await system.services[on ? 'start' : 'stop']('appstore', 'updates');
+      toast(on ? 'L’AppStore controllerà gli aggiornamenti quando entri' : 'Controllo degli aggiornamenti all’avvio spento');
+    } catch (err) {
+      toast(err.message, { timeout: 7000 });
+    }
+    await loadUpdatesService();
+    render();
+  }
+
   async function load({ quiet = false } = {}) {
     if (!quiet) { state.loading = true; render(); }
     try {
@@ -78,6 +98,7 @@ export default function AppStore({ openWindow }) {
         }
       }));
       state.modules = isAdmin ? await kernelModules.list().catch(() => []) : [];
+      await loadUpdatesService();
       await apps.refresh();
     } catch (err) {
       toast(err.message, { timeout: 7000 });
@@ -396,6 +417,18 @@ export default function AppStore({ openWindow }) {
         : h('p', { class: 'as-muted' }, item.repo ? 'Questo pacchetto non ha un README.' : 'Il README si legge dal repository: questo elemento non viene da un repository elencato.'));
   }
 
+  /** "Controlla gli aggiornamenti all'avvio": the AppStore's service, started when the user comes in. */
+  function updatesRow() {
+    const svc = state.updates;
+    const locked = !svc || (svc.system && !svc.canControl);
+    const text = !svc ? 'Serve il motore dei servizi del kernel (modulo services-isolate)'
+      : svc.system ? 'Scelto da un amministratore per tutti: si cambia da Sistema → Avvio → Servizi'
+        : 'Quando entri e poi ogni giorno, anche con lilOS chiuso: un avviso dice cosa si può aggiornare';
+    const control = toggle({ value: !!svc && svc.startup !== 'none', label: 'Controlla gli aggiornamenti all’avvio', onChange: setUpdatesAtStart });
+    control.disabled = locked;
+    return h('div', { class: 'as-row' }, h('div', { class: 'as-row-text' }, h('b', {}, 'Controlla gli aggiornamenti all’avvio'), h('span', {}, text)), control);
+  }
+
   function optionsView(tab) {
     const draft = state.newRepo;
     footerText.textContent = 'Opzioni';
@@ -423,7 +456,8 @@ export default function AppStore({ openWindow }) {
       h('div', { class: 'as-group' },
         h('div', { class: 'as-row' },
           h('div', { class: 'as-row-text' }, h('b', {}, 'Mostra i repository non ufficiali'), h('span', {}, 'Se spento, le schede elencano solo quello che offre il repository ufficiale')),
-          toggle({ value: settings.get('appstore.showUnofficial'), label: 'Mostra i repository non ufficiali', onChange: v => settings.set('appstore.showUnofficial', v) }))),
+          toggle({ value: settings.get('appstore.showUnofficial'), label: 'Mostra i repository non ufficiali', onChange: v => settings.set('appstore.showUnofficial', v) })),
+        updatesRow()),
       section('Repository', h('span', { class: 'as-bulk' }, button('Ricarica', () => load()))),
       h('div', { class: 'as-group' }, ...state.repos.map(repoRow)),
       section('Aggiungi un repository'),
@@ -510,7 +544,8 @@ export default function AppStore({ openWindow }) {
   });
   const offApps = apps.on('change', () => render());
   const offSetting = settings.on('change:appstore.showUnofficial', () => render());
-  win.on('destroy', () => { offApps(); offSetting(); });
+  const offServices = system.services?.on('change', e => { if (e.app === 'appstore') loadUpdatesService().then(render); });
+  win.on('destroy', () => { offApps(); offSetting(); offServices?.(); });
   render();
   load();
   return win;

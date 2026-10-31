@@ -1,9 +1,9 @@
 {
   "id": "settings",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "kind": "local",
   "name": "Sistema",
-  "description": "Aspetto, workspace, tag, scorciatoie, tipi di file, app all’avvio, archiviazione.",
+  "description": "Aspetto, workspace, tag, scorciatoie, tipi di file, servizi e app all’avvio, archiviazione.",
   "category": "system",
   "icon": {
     "glyph": "gear",
@@ -73,10 +73,10 @@
   ],
   "entry": "dist/index.js",
   "styles": [
-    "dist/index-BqgxtGt9.css"
+    "dist/index-DMCTzBuQ.css"
   ],
   "files": {
-    "dist/index-BqgxtGt9.css": "sha256-F1eXoUzr5gRhiQjo+Kb1+JH4ImMl748e13jSvZw4wHM=",
-    "dist/index.js": "sha256-Fpli0BMW/LGvEE5YP52iuNCsJhdILJbrxX3P7l5vM+Q="
+    "dist/index-DMCTzBuQ.css": "sha256-jpgkcQaE+tYi8g4te2u8bfwR9lai1Ix6V4dxsufm0gw=",
+    "dist/index.js": "sha256-aqNv5nmrihSkf+WhH/jHCzs7pRs7DIs9Ff33NYT5els="
   }
 }

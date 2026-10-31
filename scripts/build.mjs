@@ -7,7 +7,7 @@
  */
 import { build } from 'vite';
 import { createHash } from 'node:crypto';
-import { readFileSync, readdirSync, writeFileSync } from 'node:fs';
+import { copyFileSync, existsSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { join, relative, sep } from 'node:path';
 import { appConfig } from '../vite.config.js';
 
@@ -26,6 +26,9 @@ const sha256 = data => `sha256-${createHash('sha256').update(data).digest('base6
 for (const { id, entry } of APPS.filter(a => !process.argv[2] || process.argv.slice(2).includes(a.id))) {
   await build({ configFile: false, ...appConfig(id, entry) });
   const pkg = join('apps', id);
+  // Services (entry points of kind 'service') run in the kernel's isolate: modules without imports, copied as they are
+  const services = join('src', id, 'services');
+  if (existsSync(services)) for (const f of readdirSync(services).filter(f => f.endsWith('.js'))) copyFileSync(join(services, f), join(pkg, 'dist', f));
   const files = {};
   for (const file of walk(join(pkg, 'dist')).sort()) files[relative(pkg, file).split(sep).join('/')] = sha256(readFileSync(file));
   const styles = readdirSync(join(pkg, 'dist')).filter(f => f.endsWith('.css')).map(f => `dist/${f}`);

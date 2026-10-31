@@ -10,6 +10,7 @@ import * as system from '@lilos/system';   // DESK_FIXED_ITEMS: missing in older
 import { WORKSPACE_LIMITS } from '@lilos/system';
 import { menuSections } from './menuEditor.js';
 import { startupOptionsSections, startupAppsSections } from './startup.js';
+import { servicesSections, watchServices } from './services.js';
 import './settings-app.css';
 
 let view = null;   // the open SettingsView, to redraw after resets
@@ -522,9 +523,10 @@ export default function createSettings({ openWindow, args } = {}) {
       },
       {
         id: 'startup', label: 'Avvio', icon: 'power',
-        description: 'Le app che si aprono da sole quando entri in lilOS.',
+        description: 'Servizi e app che partono da soli all’avvio di lilOS e quando entri.',
         subtabs: [
-          { id: 'options', label: 'Opzioni', sections: startupOptionsSections },
+          { id: 'options', label: 'Opzioni', sections: () => startupOptionsSections({ rerender: () => view?.render() }) },
+          { id: 'services', label: 'Servizi', sections: () => servicesSections({ openWindow, rerender: () => view?.render() }) },
           { id: 'apps', label: 'App', sections: () => startupAppsSections({ openWindow, rerender: () => view?.render() }) },
         ],
       },
@@ -596,7 +598,7 @@ export default function createSettings({ openWindow, args } = {}) {
   const offWorkspaces = workspaceManager()?.on('change', () => win.view.render());
   const offTrash = fs.on('trash', () => win.view.render());
   const offTags = tags.on('change', () => win.view.render());
-  const offApps = [packages.on('change', () => win.view.render()), packages.on('security', () => win.view.render())];
-  win.on('destroy', () => { offWorkspaces?.(); offTrash(); offTags(); offApps.forEach(off => off()); if (view === win.view) view = null; });
+  const offApps = [packages.on('change', () => win.view.render()), packages.on('security', () => win.view.render()), watchServices(() => win.view.render())];
+  win.on('destroy', () => { offWorkspaces?.(); offTrash(); offTags(); offApps.forEach(off => off?.()); if (view === win.view) view = null; });
   return win;
 }

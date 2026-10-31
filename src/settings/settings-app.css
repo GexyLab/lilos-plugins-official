@@ -38,3 +38,17 @@
 .su-add { border: 1px dashed var(--toggle-off); border-radius: 6px; color: var(--dim); }
 .su-plus { width: 26px; height: 26px; flex: none; display: grid; place-items: center; border: 1px dashed var(--toggle-off); border-radius: 6px; }
 .su-plus .ico { width: 14px; height: 14px; }
+
+/* ---------- Settings app: Avvio → Servizi (services.js) ---------- */
+.su-service { gap: 8px; }
+.su-service .ctl-select { min-width: 150px; }
+.su-power { min-width: 72px; justify-content: center; }
+.su-state::before { content: ""; display: inline-block; width: 7px; height: 7px; margin-right: 5px; border-radius: 50%; background: var(--faint); vertical-align: 1px; }
+.su-state.on::before { background: #30a46c; }
+.su-state.starting::before { background: var(--warning); }
+.su-state.error { color: var(--danger); }
+.su-state.error::before { background: var(--danger); }
+.su-log { height: 100%; overflow: auto; padding: 8px 12px; font: 11.5px/1.5 var(--mono); user-select: text; white-space: pre-wrap; }
+.su-line span { color: var(--faint); }
+.su-line.warn { color: var(--warning); }
+.su-line.error { color: var(--danger); }

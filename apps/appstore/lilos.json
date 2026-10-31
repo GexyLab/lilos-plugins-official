@@ -1,9 +1,9 @@
 {
   "id": "appstore",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "kind": "local",
   "name": "AppStore",
-  "description": "Installa, aggiorna e rimuove app e moduli del kernel dai repository.",
+  "description": "Installa, aggiorna e rimuove app e moduli del kernel dai repository; controlla gli aggiornamenti anche a lilOS chiuso.",
   "category": "system",
   "icon": {
     "glyph": "download",
@@ -16,8 +16,25 @@
   "sdk": "1",
   "system": true,
   "required": true,
+  "entrypoints": {
+    "updates": {
+      "kind": "service",
+      "file": "dist/updates.js",
+      "label": "Aggiornamenti",
+      "params": {
+        "ore": {
+          "type": "number",
+          "label": "Controlla ogni (ore)",
+          "min": 1,
+          "max": 168,
+          "default": 24
+        }
+      }
+    }
+  },
   "permissions": [
-    "apps.manage"
+    "apps.manage",
+    "background"
   ],
   "contributes": {
     "window": {
@@ -31,6 +48,7 @@
   ],
   "files": {
     "dist/index-BI4EHm56.css": "sha256-5q2fc19quKv8F4sM3BSZEANdC0p2E426wEejxqxAsqM=",
-    "dist/index.js": "sha256-SouQ/MPBWCDY4tDLLtJRyFDSSqx5jvgdrTreo9cBono="
+    "dist/index.js": "sha256-s9fMAoZdpB/zSuq7tOhdBmH8puUpKI6KGTOQu7YKPNM=",
+    "dist/updates.js": "sha256-pGGp4b/pH0TRilPaXFM0c4E155pOBDw7K6f4m8cVcjU="
   }
 }
