@@ -1,8 +1,8 @@
 {
   "id": "settings",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "kind": "local",
-  "name": "System",
+  "name": "Control Panel",
   "description": "Appearance, language, desk, user page, workspaces, tags, shortcuts, file types, startup services and apps, storage.",
   "category": "system",
   "icon": { "glyph": "gear", "color": "#5f6673" },

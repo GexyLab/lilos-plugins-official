@@ -70,7 +70,7 @@ export default function AppStore({ openWindow }) {
     }
   }
 
-  /** The AppStore's own service (Updates), as System → Startup → Services shows it, or null without services. */
+  /** The AppStore's own service (Updates), as Control Panel → Startup → Services shows it, or null without services. */
   async function loadUpdatesService() {
     const list = await system.services?.list().catch(() => null);
     state.updates = list?.available ? list.services.find(s => s.app === 'appstore' && s.entry === 'updates') ?? null : null;

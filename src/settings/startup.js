@@ -4,7 +4,7 @@ import { servicesOptionRow } from './services.js';
 import { t } from './i18n.js';
 
 /**
- * Sistema → Avvio: what starts by itself (lilOS's apps/startup.js, and the kernel's services).
+ * Control Panel → Avvio: what starts by itself (lilOS's apps/startup.js, and the kernel's services).
  *   Opzioni   the switches, and the way out (?avvio=no)
  *   Servizi   services.js
  *   App       the apps that open, each window entry point with its params; "Aggiungi…" at the end

@@ -1,10 +1,10 @@
 import { actionButton, h } from '@lilos/sdk';
-// Namespace import: lilOS versions without pipes still load Sistema
+// Namespace import: lilOS versions without pipes still load Control Panel
 import * as sdk from '@lilos/sdk';
 import { t } from './i18n.js';
 
 /**
- * Sistema → App → Pipe: the events of the system (the SDK's pipes.js) and, for each one with
+ * Control Panel → App → Pipe: the events of the system (the SDK's pipes.js) and, for each one with
  * handlers, its chain before and after the operation, in the order it runs. Inside each band
  * (first, middle, last) the user moves a handler up or down (pipes.setOrder); "Reset" goes back to
  * the order of installation. The after stage runs in the reverse order of before: the list shows
@@ -13,7 +13,7 @@ import { t } from './i18n.js';
  */
 const STAGES = ['before', 'after'];
 
-/** The label of an event in the language of Sistema; an app's own event keeps its own. */
+/** The label of an event in the language of Control Panel; an app's own event keeps its own. */
 const eventLabel = def => {
   const key = `pipes.event.${def.name}`;
   const text = t(key);

@@ -1,11 +1,11 @@
 import { Window, h, icon, appIcon, fs, toggle, selectField, textField, actionButton, toast, session } from '@lilos/sdk';
 import { pickFile } from '@lilos/system';
-// Namespace import: lilOS versions without services still load Sistema
+// Namespace import: lilOS versions without services still load Control Panel
 import * as system from '@lilos/system';
 import { t, i18n } from './i18n.js';
 
 /**
- * Sistema → Avvio → Servizi: the services of installed apps (entry points of kind 'service'),
+ * Control Panel → Avvio → Servizi: the services of installed apps (entry points of kind 'service'),
  * which run in lilOS's kernel, also with lilOS closed (lilOS's apps/services.js). For each one:
  * how it is now, when it starts by itself (never, when the user comes in, when the system starts:
  * for everyone, admins only), its params, and buttons to start, stop, restart and read its log.
@@ -25,7 +25,7 @@ export function loadServices(rerender) {
     .finally(() => { loading = null; rerender(); });
 }
 
-/** Follows the changes of the services while Sistema is open; returns the function that stops. */
+/** Follows the changes of the services while Control Panel is open; returns the function that stops. */
 export function watchServices(rerender) {
   return system.services?.on('change', () => loadServices(rerender)) ?? null;
 }

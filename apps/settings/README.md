@@ -1,4 +1,4 @@
-# Sistema
+# Pannello di controllo
 
 Le preferenze di lilOS in un posto solo.
 

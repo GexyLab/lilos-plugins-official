@@ -166,8 +166,8 @@ var { t: T } = w("appstore", {
 		"updates.atStartOn": "The AppStore will check for updates when you sign in",
 		"updates.atStartOff": "Checking for updates at startup turned off",
 		"updates.needsEngine": "Needs the kernel’s service engine (the services-isolate module)",
-		"updates.bySystem": "Chosen by an administrator for everyone: change it in System → Startup → Services",
-		"updates.description": "When you sign in and then at intervals (every 24 hours, change it in System → Startup → Services), even with lilOS closed: a notification tells you what can be updated",
+		"updates.bySystem": "Chosen by an administrator for everyone: change it in Control Panel → Startup → Services",
+		"updates.description": "When you sign in and then at intervals (every 24 hours, change it in Control Panel → Startup → Services), even with lilOS closed: a notification tells you what can be updated",
 		"notify.updates": {
 			one: "Update available: {names}. Open the AppStore.",
 			other: "{n} updates available: {names}. Open the AppStore."
@@ -318,8 +318,8 @@ var { t: T } = w("appstore", {
 		"updates.atStartOn": "L’AppStore controllerà gli aggiornamenti quando entri",
 		"updates.atStartOff": "Controllo degli aggiornamenti all’avvio spento",
 		"updates.needsEngine": "Serve il motore dei servizi del kernel (modulo services-isolate)",
-		"updates.bySystem": "Scelto da un amministratore per tutti: si cambia da Sistema → Avvio → Servizi",
-		"updates.description": "Quando entri e poi a intervalli (ogni 24 ore, si cambia in Sistema → Avvio → Servizi), anche con lilOS chiuso: un avviso dice cosa si può aggiornare",
+		"updates.bySystem": "Scelto da un amministratore per tutti: si cambia dal Pannello di controllo → Avvio → Servizi",
+		"updates.description": "Quando entri e poi a intervalli (ogni 24 ore, si cambia nel Pannello di controllo → Avvio → Servizi), anche con lilOS chiuso: un avviso dice cosa si può aggiornare",
 		"notify.updates": {
 			one: "Aggiornamento disponibile: {names}. Apri l’AppStore.",
 			other: "{n} aggiornamenti disponibili: {names}. Apri l’AppStore."

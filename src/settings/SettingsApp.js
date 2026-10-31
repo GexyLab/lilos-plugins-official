@@ -263,7 +263,7 @@ const TRANSLATED_USER_PAGE = {
 
 /**
  * What the page opened from the user's name shows (lilOS's lists: none in older versions), one
- * switch per item, a section per group. Items Sistema does not know keep lilOS's Italian texts.
+ * switch per item, a section per group. Items Control Panel does not know keep lilOS's Italian texts.
  */
 function userPageSections() {
   const items = system.USER_PAGE_ITEMS ?? [];
