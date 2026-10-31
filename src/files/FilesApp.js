@@ -1027,7 +1027,7 @@ class FileBrowser {
         { label: t('menu.purge'), icon: 'trash', shortcut: shortcuts.label('items.delete'), danger: true, action: () => this.purge(ids) },
       ]);
     }
-    const system = nodes.some(n => n.system);
+    const fixed = nodes.some(n => n.system);   // main folders: no rename, no delete (not `system`: that is the module)
     const ids = nodes.map(n => n.id);
     const tag = this.inTag;
     const folder = !many && this.tree && nodes[0].type === 'folder' && nodes[0];
@@ -1040,7 +1040,7 @@ class FileBrowser {
       !many && nodes[0].type === 'folder' && { label: t('menu.openInEditor'), icon: 'code', action: () => launch('editor', { folder: nodes[0].id }) },
       // In a tag's view items come from everywhere: show one where it is
       tag && !many && { label: t('menu.reveal'), icon: 'folderOpen', action: () => this.reveal(nodes[0].id) },
-      { label: t('menu.rename'), icon: 'pencil', shortcut: shortcuts.label('items.rename'), disabled: many || system, action: () => this.rename(nodes[0].id) },
+      { label: t('menu.rename'), icon: 'pencil', shortcut: shortcuts.label('items.rename'), disabled: many || fixed, action: () => this.rename(nodes[0].id) },
       tagSubmenu(ids),
       tag && { label: t('menu.untag', { name: tag.name }), icon: 'x', action: () => setTag(ids, tag.id, false) },
       linkEntry(ids),
@@ -1048,7 +1048,7 @@ class FileBrowser {
       !many && { label: t('menu.properties'), icon: 'info', action: () => showProperties(nodes[0].id) },
       ...(system.appActionEntries?.(ids, { separator: true }) ?? []),
       '-',
-      { label: many ? t('menu.deleteMany', { count }) : t('menu.delete'), icon: 'trash', shortcut: shortcuts.label('items.delete'), danger: true, disabled: system, action: () => this.remove(nodes.map(n => n.id)) },
+      { label: many ? t('menu.deleteMany', { count }) : t('menu.delete'), icon: 'trash', shortcut: shortcuts.label('items.delete'), danger: true, disabled: fixed, action: () => this.remove(nodes.map(n => n.id)) },
     ].filter(Boolean));
   }
 
