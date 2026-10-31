@@ -1,12 +1,13 @@
 /**
  * Images as canvases: reading a file, the formats a browser can write, resizing, cropping.
  */
+import { t, i18n } from './i18n.js';
 
-/** Formats Photo writes. JPEG has no transparency: what is transparent becomes white. */
+/** Formats Photo writes. JPEG has no transparency: what is transparent becomes white. note: a sentence about it, in the system's language. */
 export const FORMATS = [
-  { id: 'png', label: 'PNG', type: 'image/png', ext: 'png', lossy: false, note: 'Senza perdita di qualità, con la trasparenza.' },
-  { id: 'jpeg', label: 'JPEG', type: 'image/jpeg', ext: 'jpg', lossy: true, note: 'Più leggero, adatto alle foto; le parti trasparenti diventano bianche.' },
-  { id: 'webp', label: 'WebP', type: 'image/webp', ext: 'webp', lossy: true, note: 'Leggero e con la trasparenza.' },
+  { id: 'png', label: 'PNG', type: 'image/png', ext: 'png', lossy: false, get note() { return t('format.png.note'); } },
+  { id: 'jpeg', label: 'JPEG', type: 'image/jpeg', ext: 'jpg', lossy: true, get note() { return t('format.jpeg.note'); } },
+  { id: 'webp', label: 'WebP', type: 'image/webp', ext: 'webp', lossy: true, get note() { return t('format.webp.note'); } },
 ];
 
 /** Extensions Photo opens; only some of them it can also write (formatOf). */
@@ -16,7 +17,7 @@ const BY_EXT = { png: 'png', jpg: 'jpeg', jpeg: 'jpeg', webp: 'webp' };
 const LABELS = { png: 'PNG', jpg: 'JPEG', jpeg: 'JPEG', gif: 'GIF', webp: 'WebP', bmp: 'BMP', avif: 'AVIF', ico: 'ICO', svg: 'SVG' };
 
 export const extOf = name => (/\.([^.]+)$/.exec(name)?.[1] ?? '').toLowerCase();
-export const labelOf = name => LABELS[extOf(name)] ?? (extOf(name).toUpperCase() || 'Immagine');
+export const labelOf = name => LABELS[extOf(name)] ?? (extOf(name).toUpperCase() || t('format.generic'));
 
 /** The format to save a file with that name in, or null when it cannot be written back (GIF, SVG…). */
 export function formatOf(name) {
@@ -76,7 +77,7 @@ export function encode(canvas, format, quality = 0.92) {
     ctx.drawImage(canvas, 0, 0);
   }
   return new Promise((resolve, reject) => {
-    source.toBlob(blob => (blob ? resolve(blob) : reject(new Error('Immagine troppo grande da salvare'))), format.type, format.lossy ? quality : undefined);
+    source.toBlob(blob => (blob ? resolve(blob) : reject(new Error(t('error.tooLarge')))), format.type, format.lossy ? quality : undefined);
   });
 }
 
@@ -114,7 +115,7 @@ export function cropped(source, { x, y, width, height }) {
 
 export function formatBytes(n) {
   if (!Number.isFinite(n)) return '';
-  if (n < 1024) return `${n} byte`;
+  if (n < 1024) return t('size.bytes', { n });
   if (n < 1024 * 1024) return `${Math.round(n / 1024)} KB`;
-  return `${(n / 1024 / 1024).toFixed(1).replace('.', ',')} MB`;
+  return `${i18n.number(n / 1024 / 1024, { minimumFractionDigits: 1, maximumFractionDigits: 1, useGrouping: false })} MB`;
 }

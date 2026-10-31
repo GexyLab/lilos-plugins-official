@@ -1,4 +1,5 @@
 import { ShellError } from '../shell/signals.js';
+import { t } from '../i18n.js';
 
 /**
  * Options of a command, GNU style: `-la`, `-n 5`, `-n5`, `--lines=5`, `--lines 5`, `--` ends them,
@@ -15,7 +16,7 @@ export function options(ctx, { flags = '', values = '', multi = '', long = {}, n
     if (multi.includes(k)) (opts[k] ??= []).push(v);
     else opts[k] = v;
   };
-  const bad = what => new ShellError(`opzione non valida -- «${what}»${ctx.cmd.usage ? `\nUso: ${ctx.cmd.usage}` : ''}`, 2);
+  const bad = what => new ShellError(`${t('opt.invalid', { option: what })}${ctx.cmd.usage ? `\n${t('help.usageLine', { usage: ctx.cmd.usage })}` : ''}`, 2);
   for (let i = 0; i < list.length; i++) {
     const a = list[i];
     if (a === '--') { args.push(...list.slice(i + 1)); break; }
@@ -25,7 +26,7 @@ export function options(ctx, { flags = '', values = '', multi = '', long = {}, n
       if (key == null) throw bad(`--${name}`);
       if (values.includes(key) || multi.includes(key)) {
         const v = inline ?? list[++i];
-        if (v == null) throw new ShellError(`l’opzione «--${name}» richiede un argomento`, 2);
+        if (v == null) throw new ShellError(t('opt.longNeedsArgument', { name }), 2);
         set(key, v);
       } else opts[key] = true;
       continue;
@@ -36,7 +37,7 @@ export function options(ctx, { flags = '', values = '', multi = '', long = {}, n
         const c = a[j];
         if (values.includes(c) || multi.includes(c)) {
           const v = j + 1 < a.length ? a.slice(j + 1) : list[++i];
-          if (v == null) throw new ShellError(`l’opzione richiede un argomento -- «${c}»`, 2);
+          if (v == null) throw new ShellError(t('opt.needsArgument', { option: c }), 2);
           set(c, v);
           break;
         }
@@ -52,7 +53,7 @@ export function options(ctx, { flags = '', values = '', multi = '', long = {}, n
 }
 
 /** A whole number option ('5', '+5', '-5'), or a usage error. */
-export function int(value, what = 'numero') {
-  if (!/^[+-]?\d+$/.test(String(value))) throw new ShellError(`${what} non valido: «${value}»`, 2);
+export function int(value) {
+  if (!/^[+-]?\d+$/.test(String(value))) throw new ShellError(t('opt.badNumber', { value }), 2);
   return Number(value);
 }

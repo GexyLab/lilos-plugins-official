@@ -6,6 +6,7 @@ import { confirmRemove } from '@lilos/system';
 import { recordCreated, renameNode, moveNode } from '@lilos/system';
 import { pickFile } from '@lilos/system';
 import { FOLDER_COLOR } from '@lilos/system';
+import { t } from './i18n.js';
 
 const STATE_KEY = 'editor-tree';   // { root, expanded: [ids], width }
 const MIN_WIDTH = 160;
@@ -46,18 +47,18 @@ export class FileTree extends Emitter {
     this.title = h('span', { class: 'ft-title' });
     this.rootIcon = h('span', { class: 'ft-icon folder' }, icon('folder'));
     const tool = (glyph, label, onclick) => h('button', { class: 'ft-btn', type: 'button', title: label, 'aria-label': label, onclick }, icon(glyph));
-    this.tree = h('div', { class: 'ft-tree', role: 'tree', tabindex: '0', 'aria-label': 'Contenuto della cartella' });
+    this.tree = h('div', { class: 'ft-tree', role: 'tree', tabindex: '0', 'aria-label': t('tree.label') });
     this.note = h('div', { class: 'ft-note', role: 'status', 'aria-live': 'polite' });
     this.split = h('div', {
       class: 'ft-split', role: 'separator', tabindex: '0', 'aria-orientation': 'vertical',
-      'aria-label': 'Larghezza del pannello della cartella', 'aria-valuemin': MIN_WIDTH,
+      'aria-label': t('tree.resize'), 'aria-valuemin': MIN_WIDTH,
     });
-    this.el = h('aside', { class: 'ft', 'aria-label': 'Cartella aperta' }, this.split,
+    this.el = h('aside', { class: 'ft', 'aria-label': t('tree.panel') }, this.split,
       h('div', { class: 'ft-head' },
         this.rootIcon, this.title,
-        tool('filePlus', 'Nuovo file', () => this.create('file', this.#targetFolder())),
-        tool('folderPlus', 'Nuova cartella', () => this.create('folder', this.#targetFolder())),
-        tool('x', 'Chiudi la cartella', () => this.setRoot(null))),
+        tool('filePlus', t('tree.newFile'), () => this.create('file', this.#targetFolder())),
+        tool('folderPlus', t('tree.newFolder'), () => this.create('folder', this.#targetFolder())),
+        tool('x', t('tree.close'), () => this.setRoot(null))),
       this.tree, this.note);
 
     this.#bind(signal);
@@ -132,7 +133,7 @@ export class FileTree extends Emitter {
   /** New file or folder inside a folder of the root, then straight into rename. */
   create(type, parentId = this.root) {
     if (!this.root || !this.#inRoot(parentId)) return;
-    const node = fs.create(parentId, { type, name: type === 'folder' ? 'Nuova cartella' : 'nuovo.txt' });
+    const node = fs.create(parentId, { type, name: type === 'folder' ? t('tree.defaultFolderName') : t('tree.defaultFileName') });
     if (parentId !== this.root) this.#expanded.add(parentId);
     this.#select(node.id);
     this.rename(node.id, true);
@@ -199,7 +200,7 @@ export class FileTree extends Emitter {
     if (!node || id === this.root) return;
     const target = await pickFile(this.openWindow, {
       kind: 'folder', within: this.root, exclude: id,
-      title: `Sposta «${node.name}»`, text: `Scegli la cartella, dentro «${fs.get(this.root).name}», in cui spostarlo.`,
+      title: t('tree.move.title', { name: node.name }), text: t('tree.move.text', { root: fs.get(this.root).name }),
     });
     if (target) this.move(id, target.id);
   }
@@ -222,7 +223,7 @@ export class FileTree extends Emitter {
       }
     };
     walk(root.id, 0);
-    this.tree.replaceChildren(...(rows.length ? rows : [h('div', { class: 'ft-empty' }, 'Cartella vuota')]));
+    this.tree.replaceChildren(...(rows.length ? rows : [h('div', { class: 'ft-empty' }, t('tree.empty'))]));
     this.tree.setAttribute('aria-activedescendant', this.#selected && this.#row(this.#selected) ? `ft-${this.#selected}` : '');
     this.note.textContent = this.#message;
   }
@@ -231,7 +232,7 @@ export class FileTree extends Emitter {
     const folder = n.type === 'folder';
     const open = folder && this.#expanded.has(n.id);
     const name = this.#editing === n.id
-      ? h('input', { class: 'ft-rename', type: 'text', value: n.name, spellcheck: 'false', 'aria-label': 'Nuovo nome' })
+      ? h('input', { class: 'ft-rename', type: 'text', value: n.name, spellcheck: 'false', 'aria-label': t('tree.newName') })
       : h('span', { class: 'ft-name' }, n.name);
     const glyph = folder
       ? h('span', { class: 'ft-icon folder', style: { color: n.color ?? FOLDER_COLOR } }, icon('folder'))
@@ -303,16 +304,16 @@ export class FileTree extends Emitter {
       const node = id && fs.get(id);
       const folder = node?.type === 'folder' ? node.id : node ? node.parent : this.root;
       openMenu(e.clientX, e.clientY, [
-        node?.type === 'file' && { label: 'Apri', icon: 'open', shortcut: shortcuts.label('items.open'), action: () => this.emit('open', id) },
-        { label: 'Nuovo file', icon: 'filePlus', action: () => this.create('file', folder) },
-        { label: 'Nuova cartella', icon: 'folderPlus', action: () => this.create('folder', folder) },
+        node?.type === 'file' && { label: t('tree.menu.open'), icon: 'open', shortcut: shortcuts.label('items.open'), action: () => this.emit('open', id) },
+        { label: t('tree.newFile'), icon: 'filePlus', action: () => this.create('file', folder) },
+        { label: t('tree.newFolder'), icon: 'folderPlus', action: () => this.create('folder', folder) },
         ...(node ? [
           '-',
-          { label: 'Rinomina', icon: 'pencil', shortcut: shortcuts.label('items.rename'), disabled: node.system, action: () => this.rename(id) },
-          { label: 'Sposta in…', icon: 'arrowRight', disabled: node.system, action: () => this.moveTo(id) },
+          { label: t('tree.menu.rename'), icon: 'pencil', shortcut: shortcuts.label('items.rename'), disabled: node.system, action: () => this.rename(id) },
+          { label: t('tree.menu.moveTo'), icon: 'arrowRight', disabled: node.system, action: () => this.moveTo(id) },
           linkEntry([id]),
           '-',
-          { label: 'Elimina', icon: 'trash', shortcut: shortcuts.label('items.delete'), danger: true, disabled: node.system, action: () => this.remove(id) },
+          { label: t('tree.menu.delete'), icon: 'trash', shortcut: shortcuts.label('items.delete'), danger: true, disabled: node.system, action: () => this.remove(id) },
         ] : []),
       ].filter(Boolean));
     }, { signal });

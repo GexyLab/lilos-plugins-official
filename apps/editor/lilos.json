@@ -1,9 +1,9 @@
 {
   "id": "editor",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "kind": "local",
   "name": "Editor",
-  "description": "Editor di testo e codice con evidenziazione, suggerimenti e controllo di JSON, CSS e HTML.",
+  "description": "Text and code editor with syntax highlighting, suggestions and checking of JSON, CSS and HTML.",
   "category": "development",
   "icon": {
     "glyph": "code",
@@ -22,12 +22,12 @@
         "file": {
           "type": "file",
           "label": "File",
-          "description": "Il file da aprire"
+          "description": "The file to open"
         },
         "folder": {
           "type": "folder",
-          "label": "Cartella",
-          "description": "La cartella nel pannello a destra"
+          "label": "Folder",
+          "description": "The folder in the panel on the right"
         }
       }
     }
@@ -70,42 +70,42 @@
     "commands": [
       {
         "id": "editor.save",
-        "label": "Salva",
+        "label": "Save",
         "keys": [
           "Ctrl+S"
         ]
       },
       {
         "id": "editor.new",
-        "label": "Nuovo documento",
+        "label": "New document",
         "keys": [
           "Ctrl+Alt+N"
         ]
       },
       {
         "id": "editor.openFile",
-        "label": "Apri un file",
+        "label": "Open file",
         "keys": [
           "Ctrl+O"
         ]
       },
       {
         "id": "editor.openFolder",
-        "label": "Apri una cartella",
+        "label": "Open folder",
         "keys": [
           "Ctrl+Alt+O"
         ]
       },
       {
         "id": "editor.sidebar",
-        "label": "Mostra o nascondi la cartella",
+        "label": "Show or hide folder",
         "keys": [
           "Ctrl+B"
         ]
       },
       {
         "id": "editor.complete",
-        "label": "Mostra i suggerimenti",
+        "label": "Show suggestions",
         "keys": [
           "Ctrl+Space"
         ]
@@ -116,6 +116,7 @@
   "styles": [
     "dist/index-C5_d6Wid.css"
   ],
+  "locales": "locales.json",
   "files": {
     "dist/__vite-browser-external-Bnr4_4cF.js": "sha256-FWZBjx72z+efT91bN1XsoY76QPT+X6dhflTSYKHY//A=",
     "dist/css-BnAyJkjl.js": "sha256-DH06U3b3D0ScKqYKCLVJ9DReeRFkz6zPS7ID512zjQc=",
@@ -127,7 +128,7 @@
     "dist/html-B15Ssl5e.js": "sha256-PJMtOy7kJUfJFSHO8t7GbBYoT2yH+aK8FYcA23r21Rk=",
     "dist/html.worker-X9Fc__8d.js": "sha256-jFf7ptUItSrts9eQ7N//iO01MztcEqg6xqw6BMaDFJk=",
     "dist/index-C5_d6Wid.css": "sha256-+UDiPFWyKaAfeyUJzxCNw66r3f40gHCWERaS+eOjRms=",
-    "dist/index.js": "sha256-0k58h2EHv3o7CYMuVxqUMCAUduSJNyeACSSlkSJg2Yk=",
+    "dist/index.js": "sha256-SAkeDYRHit48jH42+P/F0Prd91HZaBUQ2kLBx+Qzizw=",
     "dist/javascript-BSjxD7Ei.js": "sha256-s8CfycJSC1caXhuX6szihKZYWf7x7I2GYsoIuFpm4IQ=",
     "dist/json-CWJmcBQn.js": "sha256-dVtXsP0tUNXlIISVsZ7QnwwXlVjM7mKTz5hRYVuq03M=",
     "dist/json.worker-B3saI9fz.js": "sha256-BGs4zSqxY8hdyWDK4v0jTG79BA3Qp8G00azIsfKM83g=",
@@ -156,6 +157,7 @@
     "dist/typescript-DcJ-ca4B.js": "sha256-dkADWqcONnw/Pcs83qZkke/PnMI0k/Ez5by12uMrNkw=",
     "dist/web-tree-sitter-DoPK4l5c.js": "sha256-7K+bnFwHSgKdzQhkdorj73593h2Z49ADsQn+h3d8/fY=",
     "dist/xml-D0f8rgW-.js": "sha256-cm+7flrmzmSI3f440/y68CAeYL14EsA77y9rz+kOPG8=",
-    "dist/yaml-CcAIbj8h.js": "sha256-YJayirpdTRH4e3BlU6cu0ocMhodswcZ5fS6iV20/Xtc="
+    "dist/yaml-CcAIbj8h.js": "sha256-YJayirpdTRH4e3BlU6cu0ocMhodswcZ5fS6iV20/Xtc=",
+    "locales.json": "sha256-GydB+A/AdIvyCdxj8J3+YQsZWtz/a+nxRCPj6trRWnI="
   }
 }

@@ -1,31 +1,32 @@
-import { TAG_COLORS as e, Window as t, fs as n, h as r, session as i, storage as a, tags as o } from "/host/sdk.js";
-import { callEntrypoint as s, installedApps as c, launch as l, openFile as u } from "/host/system.js";
+import * as e from "/host/sdk.js";
+import { TAG_COLORS as t, Window as n, fs as r, h as i, session as a, storage as o, tags as s } from "/host/sdk.js";
+import { callEntrypoint as c, installedApps as l, launch as u, openFile as d } from "/host/system.js";
 // src/terminal/shell/signals.js
-var d = class {
-	constructor(e = 1) {
-		this.levels = e;
-	}
-}, f = class {
+var f = class {
 	constructor(e = 1) {
 		this.levels = e;
 	}
 }, p = class {
-	constructor(e) {
-		this.code = e;
+	constructor(e = 1) {
+		this.levels = e;
 	}
 }, m = class {
 	constructor(e) {
 		this.code = e;
 	}
 }, h = class {
-	code = 130;
+	constructor(e) {
+		this.code = e;
+	}
 }, g = class {
+	code = 130;
+}, _ = class {
 	code = 141;
-}, _ = class extends Error {}, v = class extends Error {}, y = class extends Error {
+}, v = class extends Error {}, y = class extends Error {}, b = class extends Error {
 	constructor(e, t = 1) {
 		super(e), this.code = t;
 	}
-}, b = class {
+}, x = class {
 	aborted = !1;
 	#e = /* @__PURE__ */ new Set();
 	abort() {
@@ -39,9 +40,34 @@ var d = class {
 		return this.aborted ? (e(), () => {}) : (this.#e.add(e), () => this.#e.delete(e));
 	}
 	check() {
-		if (this.aborted) throw new h();
+		if (this.aborted) throw new g();
 	}
-}, x = [
+};
+// src/shared/i18n.js
+function S(t, n) {
+	if (e.locale) return e.locale.forApp(t).i18n;
+	let r = {
+		...n.en.strings,
+		...n.it?.strings
+	}, i = (e, t) => !!e && Object.hasOwn(e, t), a = (e, t) => e.replace(/\{(\w+)\}/g, (e, n) => i(t, n) ? String(t[n]) : e), o = new Intl.PluralRules("it");
+	return {
+		t: (e, t) => {
+			let n = i(r, e) ? r[e] : void 0;
+			if (n === void 0) return String(e);
+			if (typeof n == "string") return a(n, t);
+			let s = Number(i(t, "n") ? t.n : 0);
+			return a(s === 0 && n.zero ? n.zero : n[o.select(s)] ?? n.other, t);
+		},
+		lang: "it",
+		date: (e, t) => new Intl.DateTimeFormat("it-IT", t).format(e instanceof Date ? e : new Date(e)),
+		number: (e, t) => new Intl.NumberFormat("it-IT", t).format(e)
+	};
+}
+// src/terminal/i18n.js
+var C = S("terminal", {
+	en: /* @__PURE__ */ JSON.parse("{\"strings\":{\"@name\":\"Terminal\",\"@description\":\"A bash-like shell over the files of lilOS: commands, pipes, redirections, variables, loops, functions and scripts.\",\"@entrypoints.main.params.cwd.label\":\"Folder\",\"@entrypoints.main.params.cwd.description\":\"The folder to open the terminal in\",\"ui.title\":\"Terminal\",\"ui.commandLine\":\"Command line\",\"ui.welcome\":\"lilOS Terminal · \\\"help\\\" lists the commands\",\"shell.defaultUser\":\"user\",\"shell.readonly\":\"{name}: readonly variable\",\"shell.cannotUnset\":\"{name}: cannot unset: readonly variable\",\"shell.badSubscript\":\"{index}: bad array subscript\",\"shell.unknownConstruct\":\"unknown construct: {type}\",\"shell.badRegex\":\"invalid regular expression\",\"shell.unaryExpected\":\"{op}: unary operator expected\",\"shell.integerExpected\":\"{value}: integer expression expected\",\"shell.binaryExpected\":\"{op}: binary operator expected\",\"shell.commandNotFound\":\"{name}: command not found\",\"shell.tooDeep\":\"{name}: maximum function nesting level exceeded\",\"shell.badFd\":\"{fd}: Bad file descriptor\",\"shell.fdExpected\":\"{target}: file descriptor expected\",\"shell.ambiguousRedirect\":\"{target}: ambiguous redirect\",\"shell.isAppLink\":\"{path}: is a link to an app\",\"err.noSuchFile\":\"{path}: No such file or directory\",\"err.isADirectory\":\"{path}: Is a directory\",\"err.notAFile\":\"{path}: Not a regular file\",\"err.missingParen\":\"`)' expected\",\"err.badIdentifier\":\"`{name}': not a valid identifier\",\"err.numericArgument\":\"{value}: numeric argument required\",\"err.tooManyArguments\":\"too many arguments\",\"err.notADirectory\":\"{path}: Not a directory\",\"err.notFound\":\"{name}: not found\",\"err.missingOperand\":\"missing operand\",\"err.unknownSubcommand\":\"unknown subcommand: '{sub}'\",\"parse.unexpectedEnd\":\"syntax error: unexpected end of input\",\"parse.unexpectedEndOfFile\":\"syntax error: unexpected end of file\",\"parse.nearEnd\":\"end of input\",\"parse.nearNewline\":\"`newline'\",\"parse.nearToken\":\"`{token}'\",\"parse.near\":\"syntax error near unexpected token {near}\",\"parse.nearExpected\":\"syntax error near unexpected token {near}: expected `{expected}'\",\"parse.badFunctionName\":\"invalid function name\",\"parse.parenAfterName\":\"expected `)' after the function name\",\"parse.aliasLoop\":\"aliases expanded too many times\",\"parse.missingTarget\":\"syntax error near unexpected token {near}: missing target of `{op}'\",\"parse.forBadName\":\"for: invalid variable name\",\"parse.caseNoWord\":\"case: missing word\",\"parse.condNear\":\"syntax error in conditional expression near {near}\",\"parse.condNoOperand\":\"syntax error in conditional expression: missing operand\",\"parse.condNoRegex\":\"syntax error in conditional expression: missing regular expression\",\"parse.badSubstitution\":\"bad substitution\",\"parse.badSubstitutionBrace\":\"bad substitution: missing `}'\",\"parse.backquotes\":\"syntax error in backquoted command substitution\",\"jobs.done\":\"Done\",\"jobs.interrupted\":\"Interrupt\",\"jobs.exit\":\"Exit {code}\",\"jobs.running\":\"Running\",\"help.usageLine\":\"Usage: {usage}\",\"help.usageShort\":\"usage: {usage}\",\"help.noHelp\":\"no help topics match `{name}'\",\"help.intro\":\"lilOS Terminal: a bash-like shell over the files of lilOS.\\n\\\"help command\\\" or \\\"command --help\\\" explains a command; \\\"help if\\\", \\\"help for\\\", \\\"help case\\\"… the syntax.\",\"help.syntaxList\":\"Syntax: {list}\",\"help.sh.summary\":\"Like bash.\",\"help.sh.usage\":\"sh [-c commands | script] [arguments…]\",\"help.bash.text\":\"\\\"bash script.sh a b\\\" runs the script with $1=a, $2=b; \\\"bash -c 'echo $1' name x\\\" runs the text; \\\"cat script.sh | bash\\\" reads the script from the input.\",\"help.bash.summary\":\"Runs a script or commands in a new shell.\",\"help.bash.usage\":\"bash [-c commands | script] [arguments…]\",\"help.sleep.summary\":\"Waits: 5 (seconds), 0.5, 2m, 1h.\",\"help.sleep.usage\":\"sleep duration…\",\"help.kill.summary\":\"Interrupts commands in the background.\",\"help.kill.usage\":\"kill [-signal] %job | pid…\",\"help.fg.summary\":\"Brings a command in the background to the foreground: it is waited for and Ctrl C interrupts it.\",\"help.wait.summary\":\"Waits for the commands in the background to finish (all of them, or the ones named).\",\"help.jobs.summary\":\"Lists the commands started in the background with &.\",\"help.clear.summary\":\"Clears the screen (Ctrl L too).\",\"help.help.summary\":\"Lists the commands, or explains the one named.\",\"help.help.usage\":\"help [command]\",\"help.history.summary\":\"Shows the commands given (the last n); -c clears the history.\",\"help.which.summary\":\"Tells where a command is.\",\"help.which.usage\":\"which name…\",\"help.command.summary\":\"Starts a command ignoring the functions with the same name; with -v tells what it would start.\",\"help.command.usage\":\"command [-v] name [arguments…]\",\"help.type.summary\":\"Tells what a name is: alias, keyword, function, command.\",\"help.type.usage\":\"type [-t] name…\",\"help.unalias.summary\":\"Removes aliases (all of them with -a).\",\"help.unalias.usage\":\"unalias [-a] name…\",\"help.alias.text\":\"Example: alias ll='ls -l'. Aliases work from the line after the one that defines them.\",\"help.alias.summary\":\"Defines or shows aliases (short names for commands).\",\"help.alias.usage\":\"alias [name[=value]…]\",\"help.eval.summary\":\"Runs the arguments, joined by spaces, as a command.\",\"help.eval.usage\":\"eval [arguments…]\",\"help.dot.summary\":\"Like source.\",\"help.dot.usage\":\". file [arguments…]\",\"help.source.summary\":\"Runs the commands of a file in this shell (variables, functions and aliases stay).\",\"help.source.usage\":\"source file [arguments…]\",\"help.read.text\":\"-r  backslashes stay as they are\\n-p  shows a prompt\\n-a  puts the words in an array\\n-d  reads up to this character instead of up to the newline\\n-s  does not show what is typed (for passwords)\\nStatus 1 at the end of the input.\",\"help.read.summary\":\"Reads a line and splits it into the variables named ($REPLY without names).\",\"help.read.usage\":\"read [-rs] [-p prompt] [-a array] [-d delim] [name…]\",\"help.continue.summary\":\"Goes on to the next round of the loop (or of the n-th enclosing loop).\",\"help.break.summary\":\"Exits the loop (or n loops).\",\"help.return.summary\":\"Exits the function (or the script read with source).\",\"help.return.usage\":\"return [status]\",\"help.exit.summary\":\"Closes the terminal (or exits the script) with a status.\",\"help.exit.usage\":\"exit [status]\",\"help.let.summary\":\"Computes arithmetic expressions (status 1 if the last one is 0).\",\"help.let.usage\":\"let expression…\",\"help.bracket.summary\":\"Like test, with a final \\\"]\\\".\",\"help.bracket.usage\":\"[ expression ]\",\"help.test.text\":\"Files: -e exists, -f is a file, -d is a directory, -s is not empty\\nText: -z empty, -n not empty, a = b, a != b\\nNumbers: -eq -ne -lt -le -gt -ge\\nCombined: ! not, -a and, -o or, ( … )\",\"help.test.summary\":\"Evaluates an expression: status 0 if true, 1 if false.\",\"help.test.usage\":\"test expression\",\"help.colon.summary\":\"Does nothing (status 0); the arguments are expanded anyway.\",\"help.colon.usage\":\": [arguments…]\",\"help.false.summary\":\"Does nothing, unsuccessfully (status 1).\",\"help.true.summary\":\"Does nothing, successfully (status 0).\",\"help.shift.summary\":\"Shifts the positional parameters: $2 becomes $1…\",\"help.set.text\":\"-e  exits at the first command that fails\\n-u  error when an unset variable is used\\n-x  shows the commands before running them\\n-f  no expansion of * and ?\\n-o pipefail  a pipeline fails if one of its commands fails\\n+e, +u… turn them off. Without arguments it shows every variable.\",\"help.set.summary\":\"Sets the options of the shell and the positional parameters ($1, $2…).\",\"help.set.usage\":\"set [-euxf] [-o option] [--] [arguments…]\",\"help.printenv.summary\":\"Shows the exported variables (or the value of the ones named).\",\"help.printenv.usage\":\"printenv [name…]\",\"help.env.summary\":\"Shows the exported variables, or starts a command with more variables.\",\"help.env.usage\":\"env [name=value…] [command [arguments…]]\",\"help.unset.summary\":\"Removes variables (or functions with -f).\",\"help.unset.usage\":\"unset [-fv] name…\",\"help.typeset.summary\":\"Like declare.\",\"help.typeset.usage\":\"typeset [-aprxifF] [name[=value]…]\",\"help.declare.text\":\"-a array, -x exported, -r read-only, -i integer (the value is computed), -p shows, -f shows the functions, -g global inside a function.\",\"help.declare.summary\":\"Declares variables and shows their attributes.\",\"help.declare.usage\":\"declare [-aprxifF] [name[=value]…]\",\"help.local.summary\":\"Variables visible only inside the function.\",\"help.local.usage\":\"local [-arx] name[=value]…\",\"help.readonly.summary\":\"Makes variables read-only.\",\"help.readonly.usage\":\"readonly [name[=value]…]\",\"help.export.text\":\"Without arguments it lists the exported variables. -n removes the export.\",\"help.export.summary\":\"Makes variables visible to the commands and scripts it starts.\",\"help.export.usage\":\"export [-n] [name[=value]…]\",\"help.printf.text\":\"The format is applied again while arguments are left. -v saves the result in a variable.\",\"help.printf.summary\":\"Writes the arguments according to a format (%s, %d, %5.2f, %x, %b, %q…).\",\"help.printf.usage\":\"printf [-v var] format [arguments…]\",\"help.echo.text\":\"-n  no final newline\\n-e  interprets \\\\n, \\\\t, \\\\\\\\, \\\\e… \\n-E  does not interpret them (default)\",\"help.echo.summary\":\"Writes the arguments, separated by a space.\",\"help.echo.usage\":\"echo [-neE] [text…]\",\"help.pwd.summary\":\"Shows the working directory.\",\"help.cd.text\":\"Without arguments it goes to the home ($HOME). \\\"cd -\\\" goes back to the previous directory ($OLDPWD).\",\"help.cd.summary\":\"Changes the working directory.\",\"help.cd.usage\":\"cd [dir]\",\"help.realpath.summary\":\"The full path.\",\"help.realpath.usage\":\"realpath [-m] path…\",\"help.dirname.summary\":\"The path without its last part.\",\"help.dirname.usage\":\"dirname path…\",\"help.basename.summary\":\"The last part of a path (without the suffix).\",\"help.basename.usage\":\"basename path [suffix]\",\"help.tree.summary\":\"Shows directories as a tree.\",\"help.tree.usage\":\"tree [-adf] [-L levels] [dir…]\",\"help.find.text\":\"Tests: -name pattern, -iname, -path, -type f|d|l, -empty, -size [+-]n[ckMG], -mtime [+-]days, -mmin, -newer file\\nActions: -print, -print0, -delete (to the trash), -exec command {} \\\\; or +\\nOptions: -maxdepth n, -mindepth n. Combined: ! (not), -o (or), ( … )\\nExample: find . -name \\\"*.txt\\\" -size +1k\",\"help.find.summary\":\"Searches for files and directories.\",\"help.find.usage\":\"find [path…] [expression]\",\"help.stat.text\":\"-c  format: %n name, %s size, %F type, %y modification date, %Y in seconds, %w %W creation, %i id\",\"help.stat.summary\":\"Shows the details of files and directories.\",\"help.stat.usage\":\"stat [-c format] path…\",\"help.rmdir.summary\":\"Removes empty directories (to the trash).\",\"help.rmdir.usage\":\"rmdir [-p] dir…\",\"help.rm.text\":\"-r  directories too, with their contents\\n-d  empty directories\\n-f  no error for what does not exist\\n--purge  deletes permanently, without the trash\\nWhat goes to the trash can be put back with \\\"trash restore\\\".\",\"help.rm.summary\":\"Moves files and directories to the trash (with --purge deletes them forever).\",\"help.rm.usage\":\"rm [-rfvd] [--purge] path…\",\"help.mv.text\":\"If the destination is a directory, it moves into it; otherwise it renames. An overwritten file goes to the trash.\\n-n  does not overwrite\\n-v  tells what it moves\",\"help.mv.summary\":\"Moves or renames files and directories.\",\"help.mv.usage\":\"mv [-nv] source… dest\",\"help.cp.text\":\"-r  copies directories too, with their contents\\n-n  does not overwrite existing files\\n-v  tells what it copies\",\"help.cp.summary\":\"Copies files and directories.\",\"help.cp.usage\":\"cp [-rnv] source… dest\",\"help.touch.summary\":\"Creates empty files, or updates the modification date of the ones that exist.\",\"help.mkdir.text\":\"-p  creates the intermediate directories too; no error if it already exists\",\"help.mkdir.summary\":\"Creates directories.\",\"help.mkdir.usage\":\"mkdir [-pv] dir…\",\"help.cat.text\":\"-n  numbers the lines\\n-b  numbers only the non-empty ones\\n-s  only one empty line in a row\\n-E  $ at the end of every line\",\"help.cat.summary\":\"Shows the contents of files (or of the input), one after the other.\",\"help.ls.text\":\"-l  details (type, size, date, tags)\\n-a  also the names starting with \\\".\\\"\\n-h  human-readable sizes (1.2K)\\n-t  by date, -S by size, -r reversed\\n-1  one per line\\n-d  the directory itself, not its contents\\n-R  subdirectories too\\n-F  / after directories, @ after links, * after scripts\",\"help.ls.summary\":\"Lists the contents of directories.\",\"help.ls.usage\":\"ls [-laAh1trSdRF] [path…]\",\"help.xargs.text\":\"-n N  at most N arguments at a time\\n-I {}  one command per line, with {} replaced by the line\\n-0  words separated by the null character (find -print0)\\n-d C  words separated by C\\n-t  shows the commands before starting them\\n-r  starts nothing if the input is empty\\nExample: find . -name \\\"*.tmp\\\" | xargs rm\",\"help.xargs.summary\":\"Starts a command with the words of the input as arguments.\",\"help.xargs.usage\":\"xargs [-n N] [-I {}] [-0] [-t] [command [arguments…]]\",\"help.yes.summary\":\"Repeats a line forever (y if not given): useful in a pipeline.\",\"help.yes.usage\":\"yes [text]\",\"help.seq.text\":\"-s S  separator (newline if not given)\\n-w  same width, padded with zeros\",\"help.seq.summary\":\"Writes a sequence of numbers.\",\"help.seq.usage\":\"seq [first [step]] last\",\"help.nl.summary\":\"Numbers the lines (non-empty ones, or all with -b a).\",\"help.rev.summary\":\"Writes every line reversed.\",\"help.tr.text\":\"tr a-z A-Z  to uppercase\\ntr -d '\\\\r'  removes Windows carriage returns\\ntr -s ' '  only one space in a row\\nClasses: [:upper:] [:lower:] [:digit:] [:alpha:] [:alnum:] [:space:] [:punct:]\",\"help.tr.summary\":\"Replaces or deletes characters.\",\"help.tr.usage\":\"tr [-dsc] set1 [set2]\",\"help.cut.text\":\"-f 1,3  fields 1 and 3 (separated by tab or by -d)\\n-d ,  the separator\\n-c 1-5  characters 1 to 5\\n-s  only the lines with the separator\",\"help.cut.summary\":\"Extracts columns from every line.\",\"help.cut.usage\":\"cut -f fields [-d separator] | -c characters [file…]\",\"help.tee.text\":\"-a  appends instead of overwriting\",\"help.tee.summary\":\"Copies the input both to the output and to files.\",\"help.uniq.text\":\"-c  with the number of repetitions\\n-d  only the repeated lines\\n-u  only the unique ones\\n-i  ignoring case\",\"help.uniq.summary\":\"Removes lines repeated one after the other (usually after sort).\",\"help.sort.text\":\"-r  reversed\\n-n  by number\\n-h  by human-readable size (2K, 1M)\\n-u  without duplicates\\n-f  ignoring case\\n-k N[,M]  by field N (up to M)\\n-t C  fields separated by C\\n-V  numbers inside the text (file2 before file10)\\n-o file  writes to the file\",\"help.sort.summary\":\"Sorts lines.\",\"help.sort.usage\":\"sort [-rnufhV] [-k field] [-t separator] [file…]\",\"help.grep.text\":\"-i  ignoring case\\n-v  the lines that do NOT match\\n-n  with the line number\\n-c  counts the lines\\n-l  only the names of the files\\n-r  searches in directories\\n-w  whole words, -x whole lines\\n-E  extended regular expressions (| + ? () without backslash)\\n-F  plain text, not a regular expression\\n-o  only the part that matches\\n-q  no output, only the status\\n-A N, -B N, -C N  lines of context after, before, around\\nStatus: 0 found, 1 not found, 2 error.\",\"help.grep.summary\":\"Searches for the lines that contain a pattern (regular expression).\",\"help.grep.usage\":\"grep [-ivnclrwxEFoqH] [-e pattern] pattern [file…]\",\"help.wc.text\":\"-l lines, -w words, -c bytes, -m characters, -L the longest line\",\"help.wc.summary\":\"Counts lines, words and bytes.\",\"help.tail.text\":\"-n N  the last N lines (-n +N: from line N on)\\n-c N  the last N characters\",\"help.tail.summary\":\"The last lines (10 if not given).\",\"help.tail.usage\":\"tail [-n lines] [-c bytes] [file…]\",\"help.head.text\":\"-n N  the first N lines (-n -N: all but the last N)\\n-c N  the first N characters\\n-5 is like -n 5\",\"help.head.summary\":\"The first lines (10 if not given).\",\"help.head.usage\":\"head [-n lines] [-c bytes] [file…]\",\"help.sed.text\":\"s/old/new/g  replaces (g: every time, i: ignoring case, p: prints)\\n3d, /re/d, 2,5d  deletes lines     -n …p  prints only the chosen ones\\ny/abc/xyz/  transliterates     a text, i text, c text  appends, inserts, changes\\n=  line number   q  quits   h H g G x  hold space   b t :label  jumps\\nAddresses: n, $, /re/, a,b, a,+n, ! to negate, { … } to group.\\n-n  does not print lines by itself    -E  extended regular expressions    -i  edits the files\\nExamples: sed 's/red/blue/g' notes.txt    sed -n '1,5p' file    sed -i '/^#/d' conf.txt\",\"help.sed.summary\":\"Edits text line by line (substitutions, deletions…).\",\"help.diff.text\":\"-u  unified format (with 3 lines of context; -U N for N)\\n-q  only tells whether they differ\\n-i  ignoring case\\n-w  ignoring spaces, -b ignoring how many there are\\n-B  ignoring empty lines\\n-s  tells also when they are identical\\n\\\"-\\\" is the input. Status: 0 same, 1 different, 2 error.\",\"help.diff.summary\":\"Shows the differences between two files.\",\"help.uname.summary\":\"The name of the operating system.\",\"help.hostname.summary\":\"The name of the system.\",\"help.whoami.summary\":\"The name of the user.\",\"help.date.text\":\"Format: %Y year, %m month, %d day, %H:%M:%S time, %A day of the week, %B month, %s seconds since 1970, %F = %Y-%m-%d, %T = %H:%M:%S\\n-d @1700000000, -d 2026-01-01, -d yesterday\\nExample: date +%F\",\"help.date.summary\":\"Date and time.\",\"help.date.usage\":\"date [-u] [-d date] [+format]\",\"help.apps.summary\":\"Lists the installed apps (id, name, version).\",\"help.tag.text\":\"tag                lists the tags\\ntag ls Work        the items with the tag\\ntag show file      the tags of an item\\ntag add Work f     puts the tag (creates it if missing)\\ntag rm Work f      removes it\\ntag new name color creates a tag\\ntag delete name    deletes a tag\",\"help.tag.summary\":\"The tags of lilOS: lists, assigns, removes.\",\"help.tag.usage\":\"tag [ls [tag…] | show path… | add tag path… | rm tag path… | new name [color] | delete tag…]\",\"help.trash.text\":\"trash              lists what is in the trash\\ntrash put file     moves to the trash (like rm -r)\\ntrash restore name puts back\\ntrash rm name      deletes permanently\\ntrash empty        empties the trash\",\"help.trash.summary\":\"The trash: lists, puts back, empties.\",\"help.trash.usage\":\"trash [list | put path… | restore name… | rm name… | empty]\",\"help.open.text\":\"open notes.txt   opens with the default app\\nopen .   opens the directory in the File Manager\\nopen -a editor notes.txt   with a given app\\nopen -a photo   starts an app\",\"help.open.summary\":\"Opens files and directories with their app (or with the one given).\",\"help.open.usage\":\"open [-a app] path…\",\"arith.tooDeep\":\"expression recursion level exceeded\",\"arith.syntax\":\"{expr}: syntax error in expression (error token is \\\"{token}\\\")\",\"arith.end\":\"end\",\"arith.missingBracket\":\"{expr}: missing `]'\",\"arith.operandExpected\":\"{expr}: syntax error: operand expected\",\"arith.badBase\":\"{value}: invalid arithmetic base\",\"arith.tooGreatForBase\":\"{value}: value too great for base\",\"arith.invalid\":\"invalid expression\",\"arith.divisionByZero\":\"division by 0\",\"arith.negativeExponent\":\"exponent less than 0\",\"arith.unknownOperator\":\"unknown operator {op}\",\"expand.braceTooLarge\":\"brace expansion too large\",\"expand.badSubstitution\":\"{name}: bad substitution\",\"expand.unbound\":\"{name}: unbound variable\",\"expand.cannotAssign\":\"{name}: cannot assign in this way\",\"expand.nullOrNotSet\":\"parameter null or not set\",\"expand.negativeSubstring\":\"{count}: substring expression < 0\",\"opt.invalid\":\"invalid option -- '{option}'\",\"opt.longNeedsArgument\":\"option '--{name}' requires an argument\",\"opt.needsArgument\":\"option requires an argument -- '{option}'\",\"opt.badNumber\":\"invalid number: '{value}'\",\"regex.unmatchedBracket\":\"Unmatched [ in regular expression\",\"regex.invalid\":\"invalid regular expression: {pattern}\",\"appCmd.summary\":\"A command of the {app} app.\",\"appCmd.usage\":\"{name} [arguments…]\",\"printf.badNumber\":\"{value}: invalid number\",\"test.argumentExpected\":\"argument expected\",\"test.unexpectedArgument\":\"{arg}: unexpected argument\",\"test.missingBracket\":\"missing `]'\",\"cd.oldpwdNotSet\":\"OLDPWD not set\",\"local.onlyInFunction\":\"can only be used in a function\",\"set.badOptionName\":\"{name}: invalid option name\",\"set.badOption\":\"{option}: invalid option\",\"let.noExpression\":\"expression expected\",\"return.onlyInFunction\":\"can only `return' from a function or sourced script\",\"loop.onlyInLoop\":\"only meaningful in a `for', `while', or `until' loop\",\"loop.badCount\":\"{n}: loop count out of range\",\"alias.badName\":\"`{name}': invalid alias name\",\"which.builtIn\":\"{name}: built into the Terminal\",\"wait.notAJob\":\"{spec}: not a job of this shell\",\"fg.noSuchJob\":\"{job}: no such job\",\"fg.current\":\"current\",\"kill.noSuchJob\":\"{spec}: no such job or process\",\"sleep.missing\":\"missing operand\",\"sleep.badDuration\":\"invalid time interval '{value}'\",\"source.noFile\":\"filename argument required\",\"bash.noCommand\":\"-c: option requires an argument\",\"bash.already\":\"You are already in bash: for a script type \\\"bash file.sh\\\" or \\\"source file.sh\\\".\",\"type.alias\":\"{name} is aliased to `{value}'\",\"type.keyword\":\"{name} is a shell keyword\",\"type.function\":\"{name} is a function\",\"type.builtin\":\"{name} is a shell builtin\",\"type.appCommand\":\"{name} is a command of the {app} app\",\"type.command\":\"{name} is a Terminal command\",\"type.file\":\"{name} is {path}\",\"syntax.topic.variables\":\"variables\",\"syntax.topic.redirections\":\"redirections\",\"syntax.if\":\"if commands; then commands; [elif commands; then commands;] [else commands;] fi\\nRuns the branch of the first \\\"if\\\"/\\\"elif\\\" whose commands succeed (status 0).\\n  if [ -f notes.txt ]; then echo found; else echo missing; fi\",\"syntax.for\":\"for name in words…; do commands; done\\nfor (( init; condition; step )); do commands; done\\n  for f in *.txt; do wc -l \\\"$f\\\"; done\\n  for ((i = 1; i <= 3; i++)); do echo $i; done\",\"syntax.while\":\"while commands; do commands; done   (until: as long as the commands do NOT succeed)\\n  n=0; while [ $n -lt 3 ]; do echo $n; n=$((n + 1)); done\\n  ls | while read -r name; do echo \\\"- $name\\\"; done\",\"syntax.until\":\"until commands; do commands; done: repeats as long as the commands do not succeed.\",\"syntax.case\":\"case word in pattern|pattern) commands;; … esac\\nPatterns use * ? [ ]. \\\";&\\\" goes on into the next branch, \\\";;&\\\" tries the following patterns too.\\n  case \\\"$f\\\" in *.txt) echo text;; *.png|*.jpg) echo image;; *) echo other;; esac\",\"syntax.function\":\"name() { commands; }   or   function name { commands; }\\nThe arguments are $1, $2…, $@; \\\"local\\\" creates variables of the function, \\\"return n\\\" exits.\\n  greet() { echo \\\"Hello, $1\\\"; }; greet Eugenio\",\"syntax.cond\":\"[[ expression ]]: test without word splitting or expansion of *.\\n  [[ $name == *.txt ]]      comparison with a pattern\\n  [[ $s =~ ^[0-9]+$ ]]      regular expression (groups in BASH_REMATCH)\\n  [[ -d dir && ! -e file ]] -e -f -d -s -z -n, && || ! ( )\",\"syntax.arith\":\"(( expression )): integer arithmetic; status 0 if the result is not 0.\\n  (( n++ )); (( n > 3 )) && echo big; echo $(( 2 ** 10 ))\",\"syntax.variables\":\"name=value (no spaces), $name or ${name}. Arrays: a=(x y z), ${a[0]}, ${a[@]}, ${#a[@]}.\\n${v:-default} ${v:=default} ${v:+alt} ${#v} ${v#prefix} ${v%suffix} ${v/from/to} ${v//from/to} ${v:start:length} ${v^^} ${v,,}\\nSpecial: $? status of the last command, $$ the shell, $! the last command in the background, $# $@ $* the arguments.\",\"syntax.redirections\":\"> file (overwrites), >> file (appends), < file (reads), 2> errors, 2>&1, &> file, <<EOF … EOF, <<< text, | pipe.\\n/dev/null discards everything.\",\"files.cannotAccess\":\"cannot access '{path}': No such file or directory\",\"files.cannotCreate\":\"cannot create '{path}': No such file or directory\",\"files.overwriteFolder\":\"cannot overwrite directory '{name}' with non-directory\",\"files.missingDestination\":\"missing destination file operand after '{path}'\",\"files.targetNotFolder\":\"target '{path}' is not a directory\",\"files.cannotStat\":\"cannot stat '{path}': No such file or directory\",\"files.cannotRemove\":\"cannot remove '{path}': {reason}\",\"files.quotedNoSuchFile\":\"'{path}': No such file or directory\",\"mkdir.notAFolder\":\"cannot create directory '{path}': '{name}' exists and is not a directory\",\"mkdir.exists\":\"cannot create directory '{path}': File exists\",\"mkdir.noParent\":\"cannot create directory '{path}': No such file or directory\",\"mkdir.created\":\"created directory '{path}'\",\"cp.overwriteFile\":\"cannot overwrite non-directory '{name}' with directory\",\"cp.verbose\":\"'{from}' -> '{to}'\",\"cp.omitting\":\"-r not specified; omitting directory '{path}'\",\"cp.intoItself\":\"cannot copy a directory, '{path}', into itself\",\"mv.system\":\"cannot move '{path}': it is a system folder\",\"mv.intoItself\":\"cannot move '{path}' to a subdirectory of itself\",\"mv.notEmpty\":\"cannot move '{path}' to '{name}': Directory not empty\",\"mv.verbose\":\"renamed '{from}' -> '{to}'\",\"reason.noSuchFile\":\"No such file or directory\",\"reason.isADirectory\":\"Is a directory\",\"reason.notADirectory\":\"Not a directory\",\"reason.notEmpty\":\"Directory not empty\",\"reason.system\":\"it is a system folder\",\"reason.containsSystem\":\"it contains system folders\",\"rm.home\":\"it is dangerous to operate on '{path}': it is the home\",\"rm.purged\":\"permanently deleted '{path}'\",\"rm.trashed\":\"moved to the trash '{path}'\",\"rmdir.removed\":\"removed directory '{path}'\",\"stat.folder\":\"directory\",\"stat.appLink\":\"link to the app {app}\",\"stat.file\":\"regular file\",\"stat.emptyFile\":\"regular empty file\",\"stat.type\":\"Type: {type}\",\"stat.path\":\"Path: {path}\",\"stat.items\":\"Items: {n} ({total} in all)\",\"stat.size\":\"Size: {size} bytes ({human})\",\"stat.created\":\"Created: {date}\",\"stat.modified\":\"Modified: {date}\",\"stat.tags\":\"Tags: {tags}\",\"stat.system\":\"System folder\",\"find.missingArgument\":\"missing argument to `{name}'\",\"find.badType\":\"unknown argument to -type: {type} (f, d or l)\",\"find.badSize\":\"invalid -size argument '{value}'\",\"find.badValue\":\"invalid argument '{value}' to {option}\",\"find.cannotFind\":\"cannot find '{path}'\",\"find.execEnd\":\"missing end of `-exec' (`;' or `+')\",\"find.execCommand\":\"missing command of `-exec'\",\"find.unknownPredicate\":\"unknown predicate `{name}'\",\"find.unexpected\":\"unexpected argument: '{arg}'\",\"tree.folders\":{\"one\":\"{n} directory\",\"other\":\"{n} directories\"},\"tree.files\":{\"one\":\"{n} file\",\"other\":\"{n} files\"},\"ls.date\":\"{month} {day}\",\"wc.total\":\"total\",\"grep.noPattern\":\"missing pattern\\nUsage: grep [options] pattern [file…]\",\"sort.badKey\":\"invalid key: '{key}'\",\"sort.disorder\":\"-:{n}: disorder: {line}\",\"cut.badList\":\"invalid list: '{spec}'\",\"cut.noList\":\"you must specify a list of fields (-f) or characters (-c)\",\"cut.badDelimiter\":\"the delimiter must be a single character\",\"tr.reverseRange\":\"range-endpoints of '{range}' are in reverse collating sequence order\",\"tr.missingSet2\":\"missing operand after '{set}'\",\"seq.badArgument\":\"invalid floating point argument: '{value}'\",\"seq.zeroStep\":\"invalid Zero increment value: '0'\",\"xargs.unmatchedDouble\":\"unmatched double quote\",\"xargs.unmatchedSingle\":\"unmatched single quote\",\"xargs.badCount\":\"value for -n option should be >= 1\",\"sed.at\":\"-e expression #1, char {pos}: {message}\",\"sed.unterminated\":\"unterminated `s' command\",\"sed.badAddress\":\"invalid address\",\"sed.missingAddress\":\"missing second address\",\"sed.missingCommand\":\"missing command\",\"sed.unexpectedBrace\":\"unexpected `}'\",\"sed.badDelimiter\":\"invalid delimiter for `s'\",\"sed.yLengths\":\"strings for `y' command are different lengths\",\"sed.noLabel\":\"\\\":\\\" lacks a label\",\"sed.unknownCommand\":\"unknown command: `{cmd}'\",\"sed.unmatchedBrace\":\"unmatched `{'\",\"sed.noSuchLabel\":\"can't find label for jump to `{label}'\",\"sed.noPreviousRegex\":\"no previous regular expression\",\"sed.cannotRead\":\"can't read {path}: No such file or directory\",\"sed.noScript\":\"missing script\\nUsage: sed [-n] [-E] [-i] script [file…]\",\"sed.noFiles\":\"no input files to edit with -i\",\"diff.missingOperand\":\"missing operand after '{arg}'\",\"diff.extraOperand\":\"extra operand '{arg}'\",\"diff.identical\":\"Files {a} and {b} are identical\",\"diff.differ\":\"Files {a} and {b} differ\",\"diff.tooBig\":\"the files are too different and too large to compare\",\"open.noApp\":\"app not found: '{app}' (see \\\"apps\\\")\",\"trash.notInTrash\":\"'{name}' is not in the trash\",\"trash.empty\":\"The trash is empty.\",\"trash.deletedFolder\":\"(deleted folder)\",\"trash.items\":{\"one\":\"{n} item\",\"other\":\"{n} items\"},\"trash.missingPut\":\"missing what to move to the trash\",\"trash.cannotTrash\":\"{path}: cannot be moved to the trash (system folder)\",\"trash.missingRestore\":\"missing the name of what to put back\",\"trash.restored\":\"restored to {path}\",\"trash.missingName\":\"missing name\",\"trash.purged\":{\"one\":\"permanently deleted {n} item\",\"other\":\"permanently deleted {n} items\"},\"trash.emptied\":{\"one\":\"Trash emptied ({n} item).\",\"other\":\"Trash emptied ({n} items).\"},\"trash.alreadyEmpty\":\"The trash was already empty.\",\"tag.noSuchTag\":\"no such tag: '{name}' (see \\\"tag ls\\\")\",\"tag.none\":\"No tags. Create one with \\\"tag new name\\\".\",\"tag.hidden\":\"hidden\",\"tag.noTags\":\"no tags\",\"tag.usageAddRm\":\"tag {sub} name file…\",\"tag.created\":\"created tag '{name}'\",\"tag.system\":\"{path}: system items have no tags\",\"tag.usageNew\":\"tag new name [color]\",\"tag.createdShown\":\"created tag {tag}\",\"tag.usageDelete\":\"tag delete name…\",\"date.formatC\":\"%a %b %e %H:%M:%S %Y\",\"date.formatX\":\"%m/%d/%y\",\"date.format\":\"%a %b %e %H:%M:%S %Z %Y\",\"date.invalid\":\"invalid date '{date}'\"}}"),
+	it: /* @__PURE__ */ JSON.parse("{\"strings\":{\"@name\":\"Terminale\",\"@description\":\"Una shell come bash sui file di lilOS: comandi, pipe, redirezioni, variabili, cicli, funzioni e script.\",\"@entrypoints.main.params.cwd.label\":\"Cartella\",\"@entrypoints.main.params.cwd.description\":\"La cartella in cui aprire il terminale\",\"ui.title\":\"Terminale\",\"ui.commandLine\":\"Riga di comando\",\"ui.welcome\":\"Terminale di lilOS · «help» elenca i comandi\",\"shell.defaultUser\":\"utente\",\"shell.readonly\":\"{name}: variabile in sola lettura\",\"shell.cannotUnset\":\"{name}: impossibile eliminare: variabile in sola lettura\",\"shell.badSubscript\":\"{index}: indice dell’array non valido\",\"shell.unknownConstruct\":\"costrutto sconosciuto: {type}\",\"shell.badRegex\":\"espressione regolare non valida\",\"shell.unaryExpected\":\"{op}: operatore unario atteso\",\"shell.integerExpected\":\"{value}: è attesa un’espressione intera\",\"shell.binaryExpected\":\"{op}: operatore binario atteso\",\"shell.commandNotFound\":\"{name}: comando non trovato\",\"shell.tooDeep\":\"{name}: troppi livelli di ricorsione\",\"shell.badFd\":\"{fd}: descrittore di file errato\",\"shell.fdExpected\":\"{target}: è richiesto un descrittore di file\",\"shell.ambiguousRedirect\":\"{target}: redirezione ambigua\",\"shell.isAppLink\":\"{path}: è un collegamento a un’app\",\"err.noSuchFile\":\"{path}: file o cartella inesistente\",\"err.isADirectory\":\"{path}: è una cartella\",\"err.notAFile\":\"{path}: non è un file\",\"err.missingParen\":\"manca «)»\",\"err.badIdentifier\":\"«{name}»: identificatore non valido\",\"err.numericArgument\":\"{value}: è richiesto un argomento numerico\",\"err.tooManyArguments\":\"troppi argomenti\",\"err.notADirectory\":\"{path}: non è una cartella\",\"err.notFound\":\"{name}: non trovato\",\"err.missingOperand\":\"manca l’operando\",\"err.unknownSubcommand\":\"sottocomando sconosciuto: «{sub}»\",\"parse.unexpectedEnd\":\"errore di sintassi: fine del testo inattesa\",\"parse.unexpectedEndOfFile\":\"errore di sintassi: fine del file inattesa\",\"parse.nearEnd\":\"fine del testo\",\"parse.nearNewline\":\"a capo\",\"parse.nearToken\":\"«{token}»\",\"parse.near\":\"errore di sintassi vicino a {near}\",\"parse.nearExpected\":\"errore di sintassi vicino a {near}: atteso «{expected}»\",\"parse.badFunctionName\":\"nome di funzione non valido\",\"parse.parenAfterName\":\"atteso «)» dopo il nome della funzione\",\"parse.aliasLoop\":\"alias espansi troppe volte\",\"parse.missingTarget\":\"errore di sintassi vicino a {near}: manca la destinazione di «{op}»\",\"parse.forBadName\":\"for: nome di variabile non valido\",\"parse.caseNoWord\":\"case: manca la parola\",\"parse.condNear\":\"errore di sintassi in [[ vicino a {near}\",\"parse.condNoOperand\":\"errore di sintassi in [[: manca un operando\",\"parse.condNoRegex\":\"errore di sintassi in [[: manca l’espressione regolare\",\"parse.badSubstitution\":\"sostituzione errata\",\"parse.badSubstitutionBrace\":\"sostituzione errata: manca «}»\",\"parse.backquotes\":\"errore di sintassi tra gli apici inversi\",\"jobs.done\":\"Fatto\",\"jobs.interrupted\":\"Interrotto\",\"jobs.exit\":\"Uscita {code}\",\"jobs.running\":\"In esecuzione\",\"help.usageLine\":\"Uso: {usage}\",\"help.usageShort\":\"uso: {usage}\",\"help.noHelp\":\"nessun aiuto per «{name}»\",\"help.intro\":\"Terminale di lilOS: una shell come bash sui file di lilOS.\\n«help comando» o «comando --help» spiega un comando; «help if», «help for», «help case»… la sintassi.\",\"help.syntaxList\":\"Sintassi: {list}\",\"help.sh.summary\":\"Come bash.\",\"help.sh.usage\":\"sh [-c comandi | script] [argomenti…]\",\"help.bash.text\":\"«bash script.sh a b» esegue lo script con $1=a, $2=b; «bash -c 'echo $1' nome x» esegue il testo; «cat script.sh | bash» legge lo script dall’input.\",\"help.bash.summary\":\"Esegue uno script o dei comandi in una nuova shell.\",\"help.bash.usage\":\"bash [-c comandi | script] [argomenti…]\",\"help.sleep.summary\":\"Aspetta: 5 (secondi), 0.5, 2m, 1h.\",\"help.sleep.usage\":\"sleep durata…\",\"help.kill.summary\":\"Interrompe dei comandi in background.\",\"help.kill.usage\":\"kill [-segnale] %job | pid…\",\"help.fg.summary\":\"Porta in primo piano un comando in background: lo si aspetta e Ctrl C lo interrompe.\",\"help.wait.summary\":\"Aspetta che finiscano i comandi in background (tutti, o quelli indicati).\",\"help.jobs.summary\":\"Elenca i comandi avviati in background con &.\",\"help.clear.summary\":\"Pulisce lo schermo (anche Ctrl L).\",\"help.help.summary\":\"Elenca i comandi, o spiega quello indicato.\",\"help.help.usage\":\"help [comando]\",\"help.history.summary\":\"Mostra i comandi dati (gli ultimi n); -c cancella la cronologia.\",\"help.which.summary\":\"Dice dove si trova un comando.\",\"help.which.usage\":\"which nome…\",\"help.command.summary\":\"Avvia un comando ignorando le funzioni con lo stesso nome; con -v dice cosa avvierebbe.\",\"help.command.usage\":\"command [-v] nome [argomenti…]\",\"help.type.summary\":\"Dice cos’è un nome: alias, parola chiave, funzione, comando.\",\"help.type.usage\":\"type [-t] nome…\",\"help.unalias.summary\":\"Elimina degli alias (tutti con -a).\",\"help.unalias.usage\":\"unalias [-a] nome…\",\"help.alias.text\":\"Esempio: alias ll='ls -l'. Gli alias valgono dalla riga successiva a quella che li definisce.\",\"help.alias.summary\":\"Definisce o mostra gli alias (nomi brevi per comandi).\",\"help.alias.usage\":\"alias [nome[=valore]…]\",\"help.eval.summary\":\"Esegue gli argomenti, uniti da spazi, come un comando.\",\"help.eval.usage\":\"eval [argomenti…]\",\"help.dot.summary\":\"Come source.\",\"help.dot.usage\":\". file [argomenti…]\",\"help.source.summary\":\"Esegue i comandi di un file in questa shell (variabili, funzioni e alias restano).\",\"help.source.usage\":\"source file [argomenti…]\",\"help.read.text\":\"-r  le barre rovesciate restano come sono\\n-p  mostra un prompt\\n-a  mette le parole in un array\\n-d  legge fino a questo carattere invece che fino all’a capo\\n-s  non mostra ciò che si scrive (per le password)\\nStato 1 alla fine dell’input.\",\"help.read.summary\":\"Legge una riga e la divide nelle variabili indicate ($REPLY senza nomi).\",\"help.read.usage\":\"read [-rs] [-p prompt] [-a array] [-d delim] [nome…]\",\"help.continue.summary\":\"Passa al giro successivo del ciclo (o dell’n-esimo ciclo esterno).\",\"help.break.summary\":\"Esce dal ciclo (o da n cicli).\",\"help.return.summary\":\"Esce dalla funzione (o dallo script letto con source).\",\"help.return.usage\":\"return [stato]\",\"help.exit.summary\":\"Chiude il terminale (o esce dallo script) con uno stato.\",\"help.exit.usage\":\"exit [stato]\",\"help.let.summary\":\"Calcola espressioni aritmetiche (stato 1 se l’ultima vale 0).\",\"help.let.usage\":\"let espressione…\",\"help.bracket.summary\":\"Come test, con una «]» finale.\",\"help.bracket.usage\":\"[ espressione ]\",\"help.test.text\":\"File: -e esiste, -f è un file, -d è una cartella, -s non è vuoto\\nTesto: -z vuoto, -n non vuoto, a = b, a != b\\nNumeri: -eq -ne -lt -le -gt -ge\\nInsieme: ! negazione, -a e, -o o, ( … )\",\"help.test.summary\":\"Valuta un’espressione: stato 0 se vera, 1 se falsa.\",\"help.test.usage\":\"test espressione\",\"help.colon.summary\":\"Non fa niente (stato 0); gli argomenti vengono comunque espansi.\",\"help.colon.usage\":\": [argomenti…]\",\"help.false.summary\":\"Non fa niente, senza successo (stato 1).\",\"help.true.summary\":\"Non fa niente, con successo (stato 0).\",\"help.shift.summary\":\"Sposta i parametri posizionali: $2 diventa $1…\",\"help.set.text\":\"-e  esce al primo comando che fallisce\\n-u  errore se si usa una variabile non impostata\\n-x  mostra i comandi prima di eseguirli\\n-f  niente espansione di * e ?\\n-o pipefail  una pipe fallisce se fallisce uno dei suoi comandi\\n+e, +u… le disattivano. Senza argomenti mostra tutte le variabili.\",\"help.set.summary\":\"Imposta le opzioni della shell e i parametri posizionali ($1, $2…).\",\"help.set.usage\":\"set [-euxf] [-o opzione] [--] [argomenti…]\",\"help.printenv.summary\":\"Mostra le variabili esportate (o il valore di quelle indicate).\",\"help.printenv.usage\":\"printenv [nome…]\",\"help.env.summary\":\"Mostra le variabili esportate, o avvia un comando con variabili in più.\",\"help.env.usage\":\"env [nome=valore…] [comando [argomenti…]]\",\"help.unset.summary\":\"Elimina variabili (o funzioni con -f).\",\"help.unset.usage\":\"unset [-fv] nome…\",\"help.typeset.summary\":\"Come declare.\",\"help.typeset.usage\":\"typeset [-aprxifF] [nome[=valore]…]\",\"help.declare.text\":\"-a array, -x esportata, -r sola lettura, -i intero (il valore si calcola), -p mostra, -f mostra le funzioni, -g globale dentro una funzione.\",\"help.declare.summary\":\"Dichiara variabili e ne mostra gli attributi.\",\"help.declare.usage\":\"declare [-aprxifF] [nome[=valore]…]\",\"help.local.summary\":\"Variabili visibili solo dentro la funzione.\",\"help.local.usage\":\"local [-arx] nome[=valore]…\",\"help.readonly.summary\":\"Rende le variabili di sola lettura.\",\"help.readonly.usage\":\"readonly [nome[=valore]…]\",\"help.export.text\":\"Senza argomenti elenca le variabili esportate. -n toglie l’esportazione.\",\"help.export.summary\":\"Rende le variabili visibili ai comandi e agli script avviati.\",\"help.export.usage\":\"export [-n] [nome[=valore]…]\",\"help.printf.text\":\"Il formato si riapplica finché restano argomenti. -v salva il risultato in una variabile.\",\"help.printf.summary\":\"Scrive gli argomenti secondo un formato (%s, %d, %5.2f, %x, %b, %q…).\",\"help.printf.usage\":\"printf [-v var] formato [argomenti…]\",\"help.echo.text\":\"-n  senza a capo finale\\n-e  interpreta \\\\n, \\\\t, \\\\\\\\, \\\\e… \\n-E  non le interpreta (predefinito)\",\"help.echo.summary\":\"Scrive gli argomenti, separati da uno spazio.\",\"help.echo.usage\":\"echo [-neE] [testo…]\",\"help.pwd.summary\":\"Mostra la cartella di lavoro.\",\"help.cd.text\":\"Senza argomenti va nella home ($HOME). «cd -» torna alla cartella precedente ($OLDPWD).\",\"help.cd.summary\":\"Cambia la cartella di lavoro.\",\"help.cd.usage\":\"cd [cartella]\",\"help.realpath.summary\":\"Il percorso completo.\",\"help.realpath.usage\":\"realpath [-m] percorso…\",\"help.dirname.summary\":\"Il percorso senza l’ultima parte.\",\"help.dirname.usage\":\"dirname percorso…\",\"help.basename.summary\":\"L’ultima parte di un percorso (senza il suffisso).\",\"help.basename.usage\":\"basename percorso [suffisso]\",\"help.tree.summary\":\"Mostra le cartelle ad albero.\",\"help.tree.usage\":\"tree [-adf] [-L livelli] [cartella…]\",\"help.find.text\":\"Test: -name modello, -iname, -path, -type f|d|l, -empty, -size [+-]n[ckMG], -mtime [+-]giorni, -mmin, -newer file\\nAzioni: -print, -print0, -delete (nel cestino), -exec comando {} \\\\; oppure +\\nOpzioni: -maxdepth n, -mindepth n. Insieme: ! (negazione), -o (o), ( … )\\nEsempio: find . -name \\\"*.txt\\\" -size +1k\",\"help.find.summary\":\"Cerca file e cartelle.\",\"help.find.usage\":\"find [percorso…] [espressione]\",\"help.stat.text\":\"-c  formato: %n nome, %s dimensione, %F tipo, %y data di modifica, %Y in secondi, %w %W creazione, %i id\",\"help.stat.summary\":\"Mostra i dettagli di file e cartelle.\",\"help.stat.usage\":\"stat [-c formato] percorso…\",\"help.rmdir.summary\":\"Rimuove cartelle vuote (nel cestino).\",\"help.rmdir.usage\":\"rmdir [-p] cartella…\",\"help.rm.text\":\"-r  anche le cartelle, con il loro contenuto\\n-d  le cartelle vuote\\n-f  nessun errore per ciò che non esiste\\n--purge  elimina definitivamente, senza cestino\\nCiò che va nel cestino si rimette a posto con «trash restore».\",\"help.rm.summary\":\"Sposta file e cartelle nel cestino (con --purge li elimina per sempre).\",\"help.rm.usage\":\"rm [-rfvd] [--purge] percorso…\",\"help.mv.text\":\"Se la destinazione è una cartella, ci sposta dentro; altrimenti rinomina. Un file sovrascritto va nel cestino.\\n-n  non sovrascrive\\n-v  dice cosa sposta\",\"help.mv.summary\":\"Sposta o rinomina file e cartelle.\",\"help.mv.usage\":\"mv [-nv] origine… destinazione\",\"help.cp.text\":\"-r  copia anche le cartelle, con il loro contenuto\\n-n  non sovrascrive i file che esistono\\n-v  dice cosa copia\",\"help.cp.summary\":\"Copia file e cartelle.\",\"help.cp.usage\":\"cp [-rnv] origine… destinazione\",\"help.touch.summary\":\"Crea dei file vuoti, o aggiorna la data di modifica di quelli che esistono.\",\"help.mkdir.text\":\"-p  crea anche le cartelle intermedie; nessun errore se esiste già\",\"help.mkdir.summary\":\"Crea delle cartelle.\",\"help.mkdir.usage\":\"mkdir [-pv] cartella…\",\"help.cat.text\":\"-n  numera le righe\\n-b  numera solo quelle non vuote\\n-s  una sola riga vuota di fila\\n-E  $ alla fine di ogni riga\",\"help.cat.summary\":\"Mostra il contenuto dei file (o dell’input), uno dopo l’altro.\",\"help.ls.text\":\"-l  dettagli (tipo, dimensione, data, tag)\\n-a  anche i nomi che iniziano con «.»\\n-h  dimensioni leggibili (1,2K)\\n-t  per data, -S per dimensione, -r al contrario\\n-1  uno per riga\\n-d  la cartella stessa, non il contenuto\\n-R  anche le sottocartelle\\n-F  / dopo le cartelle, @ dopo i collegamenti, * dopo gli script\",\"help.ls.summary\":\"Elenca il contenuto delle cartelle.\",\"help.ls.usage\":\"ls [-laAh1trSdRF] [percorso…]\",\"help.xargs.text\":\"-n N  al massimo N argomenti per volta\\n-I {}  un comando per riga, con {} sostituito dalla riga\\n-0  parole separate dal carattere nullo (find -print0)\\n-d C  parole separate da C\\n-t  mostra i comandi prima di avviarli\\n-r  non avvia niente se l’input è vuoto\\nEsempio: find . -name \\\"*.tmp\\\" | xargs rm\",\"help.xargs.summary\":\"Avvia un comando con le parole dell’input come argomenti.\",\"help.xargs.usage\":\"xargs [-n N] [-I {}] [-0] [-t] [comando [argomenti…]]\",\"help.yes.summary\":\"Ripete una riga all’infinito (y se non indicata): utile in una pipe.\",\"help.yes.usage\":\"yes [testo]\",\"help.seq.text\":\"-s S  separatore (a capo se non indicato)\\n-w  stessa larghezza, con zeri davanti\",\"help.seq.summary\":\"Scrive una sequenza di numeri.\",\"help.seq.usage\":\"seq [primo [passo]] ultimo\",\"help.nl.summary\":\"Numera le righe (non vuote, o tutte con -b a).\",\"help.rev.summary\":\"Scrive ogni riga al contrario.\",\"help.tr.text\":\"tr a-z A-Z  in maiuscolo\\ntr -d '\\\\r'  elimina i ritorni a capo di Windows\\ntr -s ' '  un solo spazio di fila\\nClassi: [:upper:] [:lower:] [:digit:] [:alpha:] [:alnum:] [:space:] [:punct:]\",\"help.tr.summary\":\"Sostituisce o elimina caratteri.\",\"help.tr.usage\":\"tr [-dsc] insieme1 [insieme2]\",\"help.cut.text\":\"-f 1,3  i campi 1 e 3 (separati da tab o da -d)\\n-d ,  il separatore\\n-c 1-5  i caratteri da 1 a 5\\n-s  solo le righe con il separatore\",\"help.cut.summary\":\"Estrae colonne da ogni riga.\",\"help.cut.usage\":\"cut -f campi [-d separatore] | -c caratteri [file…]\",\"help.tee.text\":\"-a  aggiunge in fondo invece di sovrascrivere\",\"help.tee.summary\":\"Copia l’input sia sull’output sia nei file.\",\"help.uniq.text\":\"-c  con il numero di ripetizioni\\n-d  solo le righe ripetute\\n-u  solo quelle uniche\\n-i  senza distinguere maiuscole e minuscole\",\"help.uniq.summary\":\"Toglie le righe ripetute una dopo l’altra (di solito dopo sort).\",\"help.sort.text\":\"-r  al contrario\\n-n  per numero\\n-h  per dimensione leggibile (2K, 1M)\\n-u  senza doppioni\\n-f  senza distinguere maiuscole e minuscole\\n-k N[,M]  per il campo N (fino a M)\\n-t C  campi separati da C\\n-V  numeri dentro il testo (file2 prima di file10)\\n-o file  scrive nel file\",\"help.sort.summary\":\"Ordina le righe.\",\"help.sort.usage\":\"sort [-rnufhV] [-k campo] [-t separatore] [file…]\",\"help.grep.text\":\"-i  senza distinguere maiuscole e minuscole\\n-v  le righe che NON corrispondono\\n-n  con il numero di riga\\n-c  conta le righe\\n-l  solo i nomi dei file\\n-r  cerca nelle cartelle\\n-w  parole intere, -x righe intere\\n-E  espressioni regolari estese (| + ? () senza barra)\\n-F  testo semplice, non espressione regolare\\n-o  solo la parte che corrisponde\\n-q  nessun risultato, solo lo stato\\n-A N, -B N, -C N  righe di contesto dopo, prima, intorno\\nStato: 0 trovato, 1 non trovato, 2 errore.\",\"help.grep.summary\":\"Cerca le righe che contengono un modello (espressione regolare).\",\"help.grep.usage\":\"grep [-ivnclrwxEFoqH] [-e modello] modello [file…]\",\"help.wc.text\":\"-l righe, -w parole, -c byte, -m caratteri, -L la riga più lunga\",\"help.wc.summary\":\"Conta righe, parole e byte.\",\"help.tail.text\":\"-n N  le ultime N righe (-n +N: dalla riga N in poi)\\n-c N  gli ultimi N caratteri\",\"help.tail.summary\":\"Le ultime righe (10 se non indicato).\",\"help.tail.usage\":\"tail [-n righe] [-c byte] [file…]\",\"help.head.text\":\"-n N  le prime N righe (-n -N: tutte tranne le ultime N)\\n-c N  i primi N caratteri\\n-5 è come -n 5\",\"help.head.summary\":\"Le prime righe (10 se non indicato).\",\"help.head.usage\":\"head [-n righe] [-c byte] [file…]\",\"help.sed.text\":\"s/vecchio/nuovo/g  sostituisce (g: tutte le volte, i: senza maiuscole, p: stampa)\\n3d, /re/d, 2,5d  elimina righe     -n …p  stampa solo quelle scelte\\ny/abc/xyz/  traslittera     a testo, i testo, c testo  aggiunge, inserisce, cambia\\n=  numero di riga   q  esce   h H g G x  spazio di riserva   b t :etichetta  salti\\nIndirizzi: n, $, /re/, a,b, a,+n, ! per negare, { … } per raggruppare.\\n-n  non stampa le righe da sola    -E  espressioni regolari estese    -i  modifica i file\\nEsempi: sed 's/rosso/blu/g' note.txt    sed -n '1,5p' file    sed -i '/^#/d' conf.txt\",\"help.sed.summary\":\"Modifica il testo riga per riga (sostituzioni, cancellazioni…).\",\"help.diff.text\":\"-u  formato unificato (con 3 righe di contesto; -U N per N)\\n-q  dice solo se sono diversi\\n-i  senza distinguere maiuscole e minuscole\\n-w  ignorando gli spazi, -b ignorando quanti sono\\n-B  ignorando le righe vuote\\n-s  dice anche quando sono identici\\n«-» è l’input. Stato: 0 uguali, 1 diversi, 2 errore.\",\"help.diff.summary\":\"Mostra le differenze tra due file.\",\"help.uname.summary\":\"Il nome del sistema operativo.\",\"help.hostname.summary\":\"Il nome del sistema.\",\"help.whoami.summary\":\"Il nome dell’utente.\",\"help.date.text\":\"Formato: %Y anno, %m mese, %d giorno, %H:%M:%S ora, %A giorno della settimana, %B mese, %s secondi dal 1970, %F = %Y-%m-%d, %T = %H:%M:%S\\n-d @1700000000, -d 2026-01-01, -d ieri\\nEsempio: date +%F\",\"help.date.summary\":\"Data e ora.\",\"help.date.usage\":\"date [-u] [-d data] [+formato]\",\"help.apps.summary\":\"Elenca le app installate (id, nome, versione).\",\"help.tag.text\":\"tag                elenca i tag\\ntag ls Lavoro      gli elementi con il tag\\ntag show file      i tag di un elemento\\ntag add Lavoro f   mette il tag (lo crea se non c’è)\\ntag rm Lavoro f    lo toglie\\ntag new nome blu   crea un tag\\ntag delete nome    elimina un tag\",\"help.tag.summary\":\"I tag di lilOS: elenca, assegna, toglie.\",\"help.tag.usage\":\"tag [ls [tag…] | show percorso… | add tag percorso… | rm tag percorso… | new nome [colore] | delete tag…]\",\"help.trash.text\":\"trash              elenca ciò che è nel cestino\\ntrash put file     sposta nel cestino (come rm -r)\\ntrash restore nome rimette a posto\\ntrash rm nome      elimina definitivamente\\ntrash empty        svuota il cestino\",\"help.trash.summary\":\"Il cestino: elenca, rimette a posto, svuota.\",\"help.trash.usage\":\"trash [list | put percorso… | restore nome… | rm nome… | empty]\",\"help.open.text\":\"open note.txt   apre con l’app predefinita\\nopen .   apre la cartella nel File Manager\\nopen -a editor note.txt   con un’app precisa\\nopen -a photo   avvia un’app\",\"help.open.summary\":\"Apre file e cartelle con la loro app (o con quella indicata).\",\"help.open.usage\":\"open [-a app] percorso…\",\"arith.tooDeep\":\"espressione: troppi livelli di ricorsione\",\"arith.syntax\":\"{expr}: errore di sintassi nell’espressione (simbolo errato «{token}»)\",\"arith.end\":\"fine\",\"arith.missingBracket\":\"{expr}: manca «]»\",\"arith.operandExpected\":\"{expr}: errore di sintassi nell’espressione (operando atteso)\",\"arith.badBase\":\"{value}: base non valida\",\"arith.tooGreatForBase\":\"{value}: valore troppo grande per la base\",\"arith.invalid\":\"espressione non valida\",\"arith.divisionByZero\":\"divisione per zero\",\"arith.negativeExponent\":\"esponente negativo\",\"arith.unknownOperator\":\"operatore sconosciuto {op}\",\"expand.braceTooLarge\":\"espansione delle graffe troppo grande\",\"expand.badSubstitution\":\"{name}: sostituzione errata\",\"expand.unbound\":\"{name}: variabile non impostata\",\"expand.cannotAssign\":\"{name}: impossibile assegnare in questo modo\",\"expand.nullOrNotSet\":\"parametro nullo o non impostato\",\"expand.negativeSubstring\":\"{count}: espressione di sottostringa < 0\",\"opt.invalid\":\"opzione non valida -- «{option}»\",\"opt.longNeedsArgument\":\"l’opzione «--{name}» richiede un argomento\",\"opt.needsArgument\":\"l’opzione richiede un argomento -- «{option}»\",\"opt.badNumber\":\"numero non valido: «{value}»\",\"regex.unmatchedBracket\":\"«[» senza «]» nell’espressione regolare\",\"regex.invalid\":\"espressione regolare non valida: {pattern}\",\"appCmd.summary\":\"Comando dell’app {app}.\",\"appCmd.usage\":\"{name} [argomenti…]\",\"printf.badNumber\":\"{value}: è richiesto un numero\",\"test.argumentExpected\":\"manca un argomento\",\"test.unexpectedArgument\":\"{arg}: argomento inatteso\",\"test.missingBracket\":\"manca «]»\",\"cd.oldpwdNotSet\":\"OLDPWD non impostata\",\"local.onlyInFunction\":\"si può usare solo in una funzione\",\"set.badOptionName\":\"{name}: nome di opzione non valido\",\"set.badOption\":\"{option}: opzione non valida\",\"let.noExpression\":\"manca l’espressione\",\"return.onlyInFunction\":\"si può usare solo in una funzione o in uno script letto con source\",\"loop.onlyInLoop\":\"ha senso solo in un ciclo for, while o until\",\"loop.badCount\":\"{n}: numero di cicli non valido\",\"alias.badName\":\"«{name}»: nome di alias non valido\",\"which.builtIn\":\"{name}: comando integrato nel Terminale\",\"wait.notAJob\":\"{spec}: non è un job di questa shell\",\"fg.noSuchJob\":\"{job}: job inesistente\",\"fg.current\":\"attuale\",\"kill.noSuchJob\":\"{spec}: job o processo inesistente\",\"sleep.missing\":\"manca la durata\",\"sleep.badDuration\":\"durata non valida: «{value}»\",\"source.noFile\":\"manca il nome del file\",\"bash.noCommand\":\"-c: manca il testo dei comandi\",\"bash.already\":\"Sei già in bash: per uno script scrivi «bash file.sh» o «source file.sh».\",\"type.alias\":\"{name} è un alias di «{value}»\",\"type.keyword\":\"{name} è una parola chiave della shell\",\"type.function\":\"{name} è una funzione\",\"type.builtin\":\"{name} è un comando interno della shell\",\"type.appCommand\":\"{name} è un comando dell’app {app}\",\"type.command\":\"{name} è un comando del Terminale\",\"type.file\":\"{name} è {path}\",\"syntax.topic.variables\":\"variabili\",\"syntax.topic.redirections\":\"redirezioni\",\"syntax.if\":\"if comandi; then comandi; [elif comandi; then comandi;] [else comandi;] fi\\nEsegue il ramo del primo «if»/«elif» i cui comandi riescono (stato 0).\\n  if [ -f note.txt ]; then echo c’è; else echo manca; fi\",\"syntax.for\":\"for nome in parole…; do comandi; done\\nfor (( inizio; condizione; passo )); do comandi; done\\n  for f in *.txt; do wc -l \\\"$f\\\"; done\\n  for ((i = 1; i <= 3; i++)); do echo $i; done\",\"syntax.while\":\"while comandi; do comandi; done   (until: finché i comandi NON riescono)\\n  n=0; while [ $n -lt 3 ]; do echo $n; n=$((n + 1)); done\\n  ls | while read -r nome; do echo \\\"- $nome\\\"; done\",\"syntax.until\":\"until comandi; do comandi; done: ripete finché i comandi non riescono.\",\"syntax.case\":\"case parola in modello|modello) comandi;; … esac\\nI modelli usano * ? [ ]. «;&» prosegue nel ramo dopo, «;;&» prova anche i modelli successivi.\\n  case \\\"$f\\\" in *.txt) echo testo;; *.png|*.jpg) echo immagine;; *) echo altro;; esac\",\"syntax.function\":\"nome() { comandi; }   oppure   function nome { comandi; }\\nGli argomenti sono $1, $2…, $@; «local» crea variabili della funzione, «return n» esce.\\n  saluta() { echo \\\"Ciao, $1\\\"; }; saluta Eugenio\",\"syntax.cond\":\"[[ espressione ]]: test senza divisione in parole né espansione di *.\\n  [[ $nome == *.txt ]]      confronto con un modello\\n  [[ $s =~ ^[0-9]+$ ]]      espressione regolare (gruppi in BASH_REMATCH)\\n  [[ -d dir && ! -e file ]] -e -f -d -s -z -n, && || ! ( )\",\"syntax.arith\":\"(( espressione )): aritmetica intera; stato 0 se il risultato non è 0.\\n  (( n++ )); (( n > 3 )) && echo grande; echo $(( 2 ** 10 ))\",\"syntax.variables\":\"nome=valore (senza spazi), $nome o ${nome}. Array: a=(x y z), ${a[0]}, ${a[@]}, ${#a[@]}.\\n${v:-predefinito} ${v:=predefinito} ${v:+alt} ${#v} ${v#prefisso} ${v%suffisso} ${v/da/a} ${v//da/a} ${v:inizio:lunghezza} ${v^^} ${v,,}\\nSpeciali: $? stato dell’ultimo comando, $$ la shell, $! l’ultimo comando in background, $# $@ $* gli argomenti.\",\"syntax.redirections\":\"> file (sovrascrive), >> file (aggiunge), < file (legge), 2> errori, 2>&1, &> file, <<EOF … EOF, <<< testo, | pipe.\\n/dev/null scarta tutto.\",\"files.cannotAccess\":\"impossibile accedere a «{path}»: file o cartella inesistente\",\"files.cannotCreate\":\"impossibile creare «{path}»: file o cartella inesistente\",\"files.overwriteFolder\":\"impossibile sovrascrivere la cartella «{name}» con un file\",\"files.missingDestination\":\"manca la destinazione dopo «{path}»\",\"files.targetNotFolder\":\"la destinazione «{path}» non è una cartella\",\"files.cannotStat\":\"impossibile fare stat di «{path}»: file o cartella inesistente\",\"files.cannotRemove\":\"impossibile rimuovere «{path}»: {reason}\",\"files.quotedNoSuchFile\":\"«{path}»: file o cartella inesistente\",\"mkdir.notAFolder\":\"impossibile creare la cartella «{path}»: «{name}» esiste e non è una cartella\",\"mkdir.exists\":\"impossibile creare la cartella «{path}»: il file esiste\",\"mkdir.noParent\":\"impossibile creare la cartella «{path}»: file o cartella inesistente\",\"mkdir.created\":\"creata la cartella «{path}»\",\"cp.overwriteFile\":\"impossibile sovrascrivere «{name}», che non è una cartella, con una cartella\",\"cp.verbose\":\"«{from}» -> «{to}»\",\"cp.omitting\":\"-r non specificato; si omette la cartella «{path}»\",\"cp.intoItself\":\"impossibile copiare la cartella «{path}» dentro se stessa\",\"mv.system\":\"impossibile spostare «{path}»: è una cartella di sistema\",\"mv.intoItself\":\"impossibile spostare «{path}» in una sua sottocartella\",\"mv.notEmpty\":\"impossibile spostare «{path}» su «{name}»: la cartella non è vuota\",\"mv.verbose\":\"rinominato «{from}» -> «{to}»\",\"reason.noSuchFile\":\"file o cartella inesistente\",\"reason.isADirectory\":\"è una cartella\",\"reason.notADirectory\":\"non è una cartella\",\"reason.notEmpty\":\"la cartella non è vuota\",\"reason.system\":\"è una cartella di sistema\",\"reason.containsSystem\":\"contiene cartelle di sistema\",\"rm.home\":\"è pericoloso agire su «{path}»: è la home\",\"rm.purged\":\"eliminato definitivamente «{path}»\",\"rm.trashed\":\"spostato nel cestino «{path}»\",\"rmdir.removed\":\"rimossa la cartella «{path}»\",\"stat.folder\":\"cartella\",\"stat.appLink\":\"collegamento all’app {app}\",\"stat.file\":\"file\",\"stat.emptyFile\":\"file vuoto\",\"stat.type\":\"Tipo: {type}\",\"stat.path\":\"Percorso: {path}\",\"stat.items\":\"Elementi: {n} ({total} in tutto)\",\"stat.size\":\"Dimensione: {size} byte ({human})\",\"stat.created\":\"Creato: {date}\",\"stat.modified\":\"Modificato: {date}\",\"stat.tags\":\"Tag: {tags}\",\"stat.system\":\"Cartella di sistema\",\"find.missingArgument\":\"manca l’argomento di «{name}»\",\"find.badType\":\"tipo sconosciuto per -type: «{type}» (f, d o l)\",\"find.badSize\":\"dimensione non valida: «{value}»\",\"find.badValue\":\"valore non valido per {option}: «{value}»\",\"find.cannotFind\":\"impossibile trovare «{path}»\",\"find.execEnd\":\"manca la fine di «-exec» («;» o «+»)\",\"find.execCommand\":\"manca il comando di «-exec»\",\"find.unknownPredicate\":\"predicato sconosciuto: «{name}»\",\"find.unexpected\":\"argomento inatteso: «{arg}»\",\"tree.folders\":{\"one\":\"{n} cartella\",\"other\":\"{n} cartelle\"},\"tree.files\":{\"one\":\"{n} file\",\"other\":\"{n} file\"},\"ls.date\":\"{day} {month}\",\"wc.total\":\"totale\",\"grep.noPattern\":\"manca il modello da cercare\\nUso: grep [opzioni] modello [file…]\",\"sort.badKey\":\"chiave non valida: «{key}»\",\"sort.disorder\":\"-:{n}: disordine: {line}\",\"cut.badList\":\"elenco non valido: «{spec}»\",\"cut.noList\":\"indicare un elenco di campi (-f) o di caratteri (-c)\",\"cut.badDelimiter\":\"il delimitatore deve essere un solo carattere\",\"tr.reverseRange\":\"intervallo al contrario: «{range}»\",\"tr.missingSet2\":\"manca il secondo insieme dopo «{set}»\",\"seq.badArgument\":\"argomento non valido: «{value}»\",\"seq.zeroStep\":\"il passo non può essere 0\",\"xargs.unmatchedDouble\":\"virgolette doppie non chiuse\",\"xargs.unmatchedSingle\":\"virgolette singole non chiuse\",\"xargs.badCount\":\"il numero di argomenti deve essere almeno 1\",\"sed.at\":\"-e espressione #1, carattere {pos}: {message}\",\"sed.unterminated\":\"comando «s» non terminato\",\"sed.badAddress\":\"indirizzo non valido\",\"sed.missingAddress\":\"manca il secondo indirizzo\",\"sed.missingCommand\":\"manca il comando\",\"sed.unexpectedBrace\":\"«}» inatteso\",\"sed.badDelimiter\":\"delimitatore non valido per «s»\",\"sed.yLengths\":\"le stringhe di «y» hanno lunghezze diverse\",\"sed.noLabel\":\"«:» senza etichetta\",\"sed.unknownCommand\":\"comando sconosciuto: «{cmd}»\",\"sed.unmatchedBrace\":\"manca «}»\",\"sed.noSuchLabel\":\"etichetta inesistente per un salto: «{label}»\",\"sed.noPreviousRegex\":\"nessuna espressione regolare precedente\",\"sed.cannotRead\":\"impossibile leggere {path}: file o cartella inesistente\",\"sed.noScript\":\"manca lo script\\nUso: sed [-n] [-E] [-i] script [file…]\",\"sed.noFiles\":\"nessun file da modificare con -i\",\"diff.missingOperand\":\"manca un operando dopo «{arg}»\",\"diff.extraOperand\":\"operando in più: «{arg}»\",\"diff.identical\":\"I file {a} e {b} sono identici\",\"diff.differ\":\"I file {a} e {b} sono diversi\",\"diff.tooBig\":\"i file sono troppo diversi e troppo grandi da confrontare\",\"open.noApp\":\"app non trovata: «{app}» (vedi «apps»)\",\"trash.notInTrash\":\"«{name}» non è nel cestino\",\"trash.empty\":\"Il cestino è vuoto.\",\"trash.deletedFolder\":\"(cartella eliminata)\",\"trash.items\":{\"one\":\"{n} elemento\",\"other\":\"{n} elementi\"},\"trash.missingPut\":\"manca cosa mettere nel cestino\",\"trash.cannotTrash\":\"{path}: non si può cestinare (cartella di sistema)\",\"trash.missingRestore\":\"manca il nome di ciò che va rimesso a posto\",\"trash.restored\":\"rimesso in {path}\",\"trash.missingName\":\"manca il nome\",\"trash.purged\":{\"one\":\"eliminato definitivamente {n} elemento\",\"other\":\"eliminati definitivamente {n} elementi\"},\"trash.emptied\":{\"one\":\"Cestino svuotato ({n} elemento).\",\"other\":\"Cestino svuotato ({n} elementi).\"},\"trash.alreadyEmpty\":\"Il cestino era già vuoto.\",\"tag.noSuchTag\":\"tag inesistente: «{name}» (vedi «tag ls»)\",\"tag.none\":\"Nessun tag. Creane uno con «tag new nome».\",\"tag.hidden\":\"nascosto\",\"tag.noTags\":\"nessun tag\",\"tag.usageAddRm\":\"tag {sub} nome file…\",\"tag.created\":\"creato il tag «{name}»\",\"tag.system\":\"{path}: gli elementi di sistema non hanno tag\",\"tag.usageNew\":\"tag new nome [colore]\",\"tag.createdShown\":\"creato il tag {tag}\",\"tag.usageDelete\":\"tag delete nome…\",\"date.formatC\":\"%a %e %b %Y, %H:%M:%S\",\"date.formatX\":\"%d/%m/%Y\",\"date.format\":\"%a %e %b %Y, %H:%M:%S %Z\",\"date.invalid\":\"data non valida: «{date}»\"}}")
+}), { t: w } = C, ee = [
 	"&>>",
 	"<<<",
 	"<<-",
@@ -65,7 +91,7 @@ var d = class {
 	">",
 	"(",
 	")"
-], S = /* @__PURE__ */ new Set([
+], te = /* @__PURE__ */ new Set([
 	"|",
 	"&",
 	";",
@@ -73,7 +99,7 @@ var d = class {
 	">",
 	"(",
 	")"
-]), ee = [
+]), ne = [
 	"then",
 	"else",
 	"elif",
@@ -82,18 +108,18 @@ var d = class {
 	"done",
 	"esac",
 	"}"
-], te = /* @__PURE__ */ new Set([
+], re = /* @__PURE__ */ new Set([
 	")",
 	";;",
 	";&",
 	";;&"
-]), ne = /* @__PURE__ */ new Set([
+]), ie = /* @__PURE__ */ new Set([
 	"export",
 	"local",
 	"declare",
 	"typeset",
 	"readonly"
-]), re = [
+]), ae = [
 	"==",
 	"!=",
 	"=~",
@@ -109,17 +135,17 @@ var d = class {
 	"-nt",
 	"-ot",
 	"-ef"
-], ie = /^([A-Za-z_]\w*)(?:\[([^\]]*)\])?(\+?)=/, ae = /(\d+)?(&>>|<<<|<<-|<<|>>|<&|>&|<>|>\||&>|<|>)/y, oe = 100, C = (e) => e === " " || e === "	" || e === "\r", w = (e) => e === void 0 || C(e) || e === "\n" || S.has(e), se = (e) => C(e) || e === "\n" || S.has(e);
-function ce(e, { aliases: t = null } = {}) {
-	return new ue(e, t).program();
+], oe = /^([A-Za-z_]\w*)(?:\[([^\]]*)\])?(\+?)=/, se = /(\d+)?(&>>|<<<|<<-|<<|>>|<&|>&|<>|>\||&>|<|>)/y, ce = 100, T = (e) => e === " " || e === "	" || e === "\r", le = (e) => e === void 0 || T(e) || e === "\n" || te.has(e), ue = (e) => T(e) || e === "\n" || te.has(e);
+function de(e, { aliases: t = null } = {}) {
+	return new me(e, t).program();
 }
-function* le(e, { aliases: t = null } = {}) {
-	yield* new ue(e, t).lines();
+function* fe(e, { aliases: t = null } = {}) {
+	yield* new me(e, t).lines();
 }
-function T(e) {
-	return { parts: new ue(String(e), null).readParts({ stop: () => !1 }) };
+function pe(e) {
+	return { parts: new me(String(e), null).readParts({ stop: () => !1 }) };
 }
-var ue = class e {
+var me = class e {
 	heredocs = [];
 	aliasActive = /* @__PURE__ */ new Set();
 	aliasCount = 0;
@@ -136,17 +162,17 @@ var ue = class e {
 		return this.src.startsWith(e, this.pos);
 	}
 	fail(e) {
-		throw this.eof ? new _(e) : new v(e);
+		throw this.eof ? new v(e) : new y(e);
 	}
 	near() {
-		return this.eof ? "fine del testo" : this.ch === "\n" ? "a capo" : `«${this.peekOp() ?? this.src.slice(this.pos).match(/^\S{1,20}/)?.[0] ?? this.ch}»`;
+		return this.eof ? w("parse.nearEnd") : this.ch === "\n" ? w("parse.nearNewline") : w("parse.nearToken", { token: this.peekOp() ?? this.src.slice(this.pos).match(/^\S{1,20}/)?.[0] ?? this.ch });
 	}
 	skipBlanks() {
 		for (;;) {
 			let e = this.ch;
-			if (C(e)) this.pos++;
+			if (T(e)) this.pos++;
 			else if (e === "\\" && this.src[this.pos + 1] === "\n") this.pos += 2;
-			else if (e === "\\" && this.pos === this.src.length - 1) throw new _();
+			else if (e === "\\" && this.pos === this.src.length - 1) throw new v();
 			else if (e === "#") {
 				let e = this.src.indexOf("\n", this.pos);
 				this.pos = e < 0 ? this.src.length : e;
@@ -163,36 +189,39 @@ var ue = class e {
 		for (this.skipBlanks(); this.newline();) this.skipBlanks();
 	}
 	peekOp() {
-		return x.find((e) => this.starts(e)) ?? null;
+		return ee.find((e) => this.starts(e)) ?? null;
 	}
 	atKeyword(e) {
 		if (!this.starts(e)) return !1;
 		let t = this.src[this.pos + e.length];
-		return e === "{" || e === "!" || e === "[[" ? t === void 0 || C(t) || t === "\n" : w(t);
+		return e === "{" || e === "!" || e === "[[" ? t === void 0 || T(t) || t === "\n" : le(t);
 	}
 	keyword(e) {
-		this.linebreak(), this.atKeyword(e) || this.fail(`errore di sintassi vicino a ${this.near()}: atteso «${e}»`), this.pos += e.length;
+		this.linebreak(), this.atKeyword(e) || this.fail(w("parse.nearExpected", {
+			near: this.near(),
+			expected: e
+		})), this.pos += e.length;
 	}
 	atTerminator() {
 		if (this.eof) return !0;
 		let e = this.peekOp();
-		return e && te.has(e) ? !0 : ee.some((e) => this.atKeyword(e));
+		return e && re.has(e) ? !0 : ne.some((e) => this.atKeyword(e));
 	}
 	program() {
 		let e = this.list();
-		if (this.linebreak(), !this.eof) throw new v(`errore di sintassi vicino a ${this.near()}`);
-		if (this.heredocs.length) throw new _();
+		if (this.linebreak(), !this.eof) throw new y(w("parse.near", { near: this.near() }));
+		if (this.heredocs.length) throw new v();
 		return e;
 	}
 	*lines() {
 		for (;;) {
 			if (this.linebreak(), this.eof) {
-				if (this.heredocs.length) throw new _();
+				if (this.heredocs.length) throw new v();
 				return;
 			}
 			let e = [];
 			for (;;) {
-				if (this.atTerminator()) throw new v(`errore di sintassi vicino a ${this.near()}`);
+				if (this.atTerminator()) throw new y(w("parse.near", { near: this.near() }));
 				let t = this.pos, n = this.andOr(), r = this.src.slice(t, this.pos).trim();
 				this.skipBlanks();
 				let i = this.peekOp();
@@ -208,7 +237,7 @@ var ue = class e {
 						async: !1,
 						text: r
 					}), this.eof || this.newline()) break;
-					throw new v(`errore di sintassi vicino a ${this.near()}`);
+					throw new y(w("parse.near", { near: this.near() }));
 				}
 			}
 			yield {
@@ -238,7 +267,7 @@ var ue = class e {
 					node: n,
 					async: !1,
 					text: r
-				}), this.linebreak(), !this.atTerminator()) throw new v(`errore di sintassi vicino a ${this.near()}`);
+				}), this.linebreak(), !this.atTerminator()) throw new y(w("parse.near", { near: this.near() }));
 				break;
 			}
 			this.linebreak();
@@ -254,7 +283,7 @@ var ue = class e {
 			this.skipBlanks();
 			let e = this.peekOp();
 			if (e !== "&&" && e !== "||") break;
-			if (this.pos += 2, this.linebreak(), this.eof) throw new _();
+			if (this.pos += 2, this.linebreak(), this.eof) throw new v();
 			t.push({
 				op: e,
 				node: this.pipeline()
@@ -275,7 +304,7 @@ var ue = class e {
 			this.skipBlanks();
 			let e = this.peekOp();
 			if (e !== "|" && e !== "|&") break;
-			if (this.pos += e.length, n.push(e === "|&"), this.linebreak(), this.eof) throw new _();
+			if (this.pos += e.length, n.push(e === "|&"), this.linebreak(), this.eof) throw new v();
 			t.push(this.command());
 		}
 		return t.length === 1 && !e ? t[0] : {
@@ -286,19 +315,22 @@ var ue = class e {
 		};
 	}
 	command() {
-		if (this.skipBlanks(), this.eof) throw new _();
+		if (this.skipBlanks(), this.eof) throw new v();
 		let e = this.pos, t;
 		if (this.starts("((") && (t = this.arithCommand())) return this.redirects(t);
 		let n = this.peekOp();
 		if (n === "(") {
 			this.pos++;
 			let e = this.list();
-			return this.linebreak(), this.ch !== ")" && this.fail(`errore di sintassi vicino a ${this.near()}: atteso «)»`), this.pos++, this.redirects({
+			return this.linebreak(), this.ch !== ")" && this.fail(w("parse.nearExpected", {
+				near: this.near(),
+				expected: ")"
+			})), this.pos++, this.redirects({
 				type: "subshell",
 				body: e
 			});
 		}
-		if (n && !n.startsWith("<") && !n.startsWith(">") && n !== "&>" && n !== "&>>") throw new v(`errore di sintassi vicino a «${n}»`);
+		if (n && !n.startsWith("<") && !n.startsWith(">") && n !== "&>" && n !== "&>>") throw new y(w("parse.near", { near: w("parse.nearToken", { token: n }) }));
 		if (this.atKeyword("if")) return this.redirects(this.ifClause());
 		if (this.atKeyword("while")) return this.redirects(this.whileClause(!1));
 		if (this.atKeyword("until")) return this.redirects(this.whileClause(!0));
@@ -318,17 +350,17 @@ var ue = class e {
 			let t = /[A-Za-z_][\w.:-]*/y;
 			t.lastIndex = this.pos;
 			let n = t.exec(this.src)?.[0];
-			return n || this.fail("nome di funzione non valido"), this.pos += n.length, this.skipBlanks(), this.starts("(") && (this.pos++, this.skipBlanks(), this.ch !== ")" && this.fail("atteso «)» dopo il nome della funzione"), this.pos++), this.funcBody(n, e);
+			return n || this.fail(w("parse.badFunctionName")), this.pos += n.length, this.skipBlanks(), this.starts("(") && (this.pos++, this.skipBlanks(), this.ch !== ")" && this.fail(w("parse.parenAfterName")), this.pos++), this.funcBody(n, e);
 		}
 		let r = /([A-Za-z_][\w.:-]*)[ \t]*\([ \t]*\)/y;
 		r.lastIndex = this.pos;
 		let i = r.exec(this.src);
 		if (i) return this.pos += i[0].length, this.funcBody(i[1], e);
-		if (ee.some((e) => this.atKeyword(e))) throw new v(`errore di sintassi vicino a ${this.near()}`);
+		if (ne.some((e) => this.atKeyword(e))) throw new y(w("parse.near", { near: this.near() }));
 		return this.simple();
 	}
 	funcBody(e, t) {
-		if (this.linebreak(), this.eof) throw new _();
+		if (this.linebreak(), this.eof) throw new v();
 		return {
 			type: "func",
 			name: e,
@@ -352,7 +384,7 @@ var ue = class e {
 			if (!e.words.length && this.aliases?.size && this.expandAlias()) continue;
 			let n = this.pos, r = this.word();
 			if (!r) break;
-			let i = this.src.slice(n, this.pos), a = ie.exec(i);
+			let i = this.src.slice(n, this.pos), a = oe.exec(i);
 			if (a && !e.words.length) e.assigns.push(this.assignment(n, a));
 			else if (a && t && this.ch === "(" && i.endsWith("=")) {
 				let { array: t } = this.assignment(n, a);
@@ -367,9 +399,9 @@ var ue = class e {
 						words: t
 					}
 				});
-			} else a && t && (r.noSplit = !0), e.words.push(r), e.words.length === 1 && (t = r.parts.length === 1 && r.parts[0].type === "lit" && ne.has(r.parts[0].value));
+			} else a && t && (r.noSplit = !0), e.words.push(r), e.words.length === 1 && (t = r.parts.length === 1 && r.parts[0].type === "lit" && ie.has(r.parts[0].value));
 		}
-		if (this.aliasActive.clear(), !e.words.length && !e.assigns.length && !e.redirs.length) throw new v(`errore di sintassi vicino a ${this.near()}`);
+		if (this.aliasActive.clear(), !e.words.length && !e.assigns.length && !e.redirs.length) throw new y(w("parse.near", { near: this.near() }));
 		return e;
 	}
 	assignment(e, t) {
@@ -382,13 +414,13 @@ var ue = class e {
 			array: null
 		};
 		if (this.ch === "(" && n.index == null) for (this.pos++, n.array = [];;) {
-			if (this.linebreak(), this.eof) throw new _();
+			if (this.linebreak(), this.eof) throw new v();
 			if (this.ch === ")") {
 				this.pos++;
 				break;
 			}
 			let e = this.word();
-			if (!e) throw new v(`errore di sintassi vicino a ${this.near()}`);
+			if (!e) throw new y(w("parse.near", { near: this.near() }));
 			n.array.push(e);
 		}
 		else n.value = this.word() ?? { parts: [] };
@@ -398,21 +430,24 @@ var ue = class e {
 		let e = /[^\s|&;<>()'"\\$`]+/y;
 		e.lastIndex = this.pos;
 		let t = e.exec(this.src)?.[0];
-		if (!t || !w(this.src[this.pos + t.length])) return !1;
+		if (!t || !le(this.src[this.pos + t.length])) return !1;
 		let n = this.aliases.get(t);
 		if (n == null || this.aliasActive.has(t)) return !1;
-		if (++this.aliasCount > oe) throw new v("alias espansi troppe volte");
+		if (++this.aliasCount > ce) throw new y(w("parse.aliasLoop"));
 		return this.aliasActive.add(t), this.src = this.src.slice(0, this.pos) + n + this.src.slice(this.pos + t.length), !0;
 	}
 	redirect(e) {
-		ae.lastIndex = this.pos;
-		let t = ae.exec(this.src);
+		se.lastIndex = this.pos;
+		let t = se.exec(this.src);
 		if (!t) return !1;
 		this.pos += t[0].length;
 		let n = t[2], r = t[1] == null ? null : Number(t[1]);
 		this.skipBlanks();
 		let i = this.pos, a = this.word();
-		a || this.fail(`errore di sintassi vicino a ${this.near()}: manca la destinazione di «${n}»`);
+		a || this.fail(w("parse.missingTarget", {
+			near: this.near(),
+			op: n
+		}));
 		let o = {
 			fd: r,
 			op: n,
@@ -432,7 +467,7 @@ var ue = class e {
 	readHeredoc(t) {
 		let { delim: n, strip: r, quoted: i } = t.heredoc, a = "";
 		for (;;) {
-			if (this.eof) throw new _();
+			if (this.eof) throw new v();
 			let e = this.src.indexOf("\n", this.pos), t = this.src.slice(this.pos, e < 0 ? this.src.length : e);
 			if (this.pos = e < 0 ? this.src.length : e + 1, r && (t = t.replace(/^\t+/, "")), t.replace(/\r$/, "") === n) break;
 			a += t + "\n";
@@ -488,22 +523,22 @@ var ue = class e {
 			let r = this.list();
 			return this.keyword("done"), {
 				type: "cfor",
-				init: T(e),
-				cond: T(t),
-				step: T(n),
+				init: pe(e),
+				cond: pe(t),
+				step: pe(n),
 				body: r
 			};
 		}
 		let e = /[A-Za-z_]\w*/y;
 		e.lastIndex = this.pos;
 		let t = e.exec(this.src)?.[0];
-		t && w(this.src[this.pos + t.length]) || this.fail("for: nome di variabile non valido"), this.pos += t.length;
+		t && le(this.src[this.pos + t.length]) || this.fail(w("parse.forBadName")), this.pos += t.length;
 		let n = null;
 		if (this.linebreak(), this.atKeyword("in")) for (this.pos += 2, n = [];;) {
-			if (this.skipBlanks(), this.eof) throw new _();
+			if (this.skipBlanks(), this.eof) throw new v();
 			if (this.ch === ";" || this.ch === "\n") break;
 			let e = this.word();
-			if (!e) throw new v(`errore di sintassi vicino a ${this.near()}`);
+			if (!e) throw new y(w("parse.near", { near: this.near() }));
 			n.push(e);
 		}
 		this.skipBlanks(), this.ch === ";" && this.pos++, this.keyword("do");
@@ -528,15 +563,15 @@ var ue = class e {
 				e--;
 			}
 		}
-		throw new _();
+		throw new v();
 	}
 	caseClause() {
 		this.pos += 4, this.skipBlanks();
 		let e = this.word();
-		e || this.fail("case: manca la parola"), this.keyword("in");
+		e || this.fail(w("parse.caseNoWord")), this.keyword("in");
 		let t = [];
 		for (;;) {
-			if (this.linebreak(), this.eof) throw new _();
+			if (this.linebreak(), this.eof) throw new v();
 			if (this.atKeyword("esac")) {
 				this.pos += 4;
 				break;
@@ -546,14 +581,20 @@ var ue = class e {
 			for (;;) {
 				this.skipBlanks();
 				let t = this.word();
-				if (t || this.fail(`errore di sintassi vicino a ${this.near()}`), e.push(t), this.skipBlanks(), this.ch !== "|") break;
+				if (t || this.fail(w("parse.near", { near: this.near() })), e.push(t), this.skipBlanks(), this.ch !== "|") break;
 				this.pos++;
 			}
-			this.ch !== ")" && this.fail(`errore di sintassi vicino a ${this.near()}: atteso «)»`), this.pos++;
+			this.ch !== ")" && this.fail(w("parse.nearExpected", {
+				near: this.near(),
+				expected: ")"
+			})), this.pos++;
 			let n = this.list();
 			this.skipBlanks();
 			let r = this.peekOp(), i = ";;";
-			r === ";;" || r === ";&" || r === ";;&" ? (this.pos += r.length, i = r) : (this.linebreak(), this.atKeyword("esac") || this.fail(`errore di sintassi vicino a ${this.near()}: atteso «;;»`)), t.push({
+			r === ";;" || r === ";&" || r === ";;&" ? (this.pos += r.length, i = r) : (this.linebreak(), this.atKeyword("esac") || this.fail(w("parse.nearExpected", {
+				near: this.near(),
+				expected: ";;"
+			}))), t.push({
 				patterns: e,
 				body: n,
 				term: i
@@ -571,17 +612,17 @@ var ue = class e {
 		try {
 			return {
 				type: "arithcmd",
-				word: T(this.rawUntilDoubleParen())
+				word: pe(this.rawUntilDoubleParen())
 			};
 		} catch (t) {
-			if (!(t instanceof _) || (this.pos = e, !this.src.includes(")", e))) throw t;
+			if (!(t instanceof v) || (this.pos = e, !this.src.includes(")", e))) throw t;
 			return null;
 		}
 	}
 	condCommand() {
 		this.pos += 2;
 		let e = this.condOr();
-		return this.linebreak(), this.starts("]]") || this.fail(`errore di sintassi in [[ vicino a ${this.near()}`), this.pos += 2, {
+		return this.linebreak(), this.starts("]]") || this.fail(w("parse.condNear", { near: this.near() })), this.pos += 2, {
 			type: "cond",
 			expr: e
 		};
@@ -615,11 +656,11 @@ var ue = class e {
 		}) : this.condPrimary();
 	}
 	condPrimary() {
-		if (this.linebreak(), this.eof) throw new _();
+		if (this.linebreak(), this.eof) throw new v();
 		if (this.ch === "(") {
 			this.pos++;
 			let e = this.condOr();
-			return this.linebreak(), this.ch !== ")" && this.fail(`errore di sintassi in [[ vicino a ${this.near()}`), this.pos++, e;
+			return this.linebreak(), this.ch !== ")" && this.fail(w("parse.condNear", { near: this.near() })), this.pos++, e;
 		}
 		let e = /-[a-zA-Z](?=[ \t])/y;
 		e.lastIndex = this.pos;
@@ -631,7 +672,7 @@ var ue = class e {
 		};
 		let n = this.condWord();
 		this.skipBlanks();
-		let r = re.find((e) => this.starts(e) && (e[0] !== "-" || w(this.src[this.pos + e.length])));
+		let r = ae.find((e) => this.starts(e) && (e[0] !== "-" || le(this.src[this.pos + e.length])));
 		return r ? (this.pos += r.length, this.skipBlanks(), {
 			op: "binary",
 			bop: r,
@@ -643,9 +684,9 @@ var ue = class e {
 		};
 	}
 	condWord() {
-		this.starts("]]") && this.fail("errore di sintassi in [[: manca un operando");
+		this.starts("]]") && this.fail(w("parse.condNoOperand"));
 		let e = this.word();
-		return e || this.fail(`errore di sintassi in [[ vicino a ${this.near()}`), e;
+		return e || this.fail(w("parse.condNear", { near: this.near() })), e;
 	}
 	regexWord() {
 		let e = 0, t = this.readParts({ stop: (t) => {
@@ -654,15 +695,15 @@ var ue = class e {
 				if (e === 0) return !0;
 				e--;
 			}
-			return e === 0 && (C(t) || t === "\n" || t === ";" || t === "&");
+			return e === 0 && (T(t) || t === "\n" || t === ";" || t === "&");
 		} });
-		return t.length || this.fail("errore di sintassi in [[: manca l’espressione regolare"), { parts: t };
+		return t.length || this.fail(w("parse.condNoRegex")), { parts: t };
 	}
 	word() {
-		let e = this.readParts({ stop: se });
+		let e = this.readParts({ stop: ue });
 		return e.length ? { parts: e } : null;
 	}
-	readParts({ stop: e = se, dq: t = !1, heredoc: n = !1 } = {}) {
+	readParts({ stop: e = ue, dq: t = !1, heredoc: n = !1 } = {}) {
 		let r = [], i = "", a = () => {
 			i && r.push({
 				type: "lit",
@@ -679,7 +720,7 @@ var ue = class e {
 						i += s, this.pos++;
 						continue;
 					}
-					throw new _();
+					throw new v();
 				}
 				if (e === "\n") {
 					this.pos += 2;
@@ -695,7 +736,7 @@ var ue = class e {
 				}), this.pos += 2;
 			} else if (o && s === "'") {
 				let e = this.src.indexOf("'", this.pos + 1);
-				if (e < 0) throw new _();
+				if (e < 0) throw new v();
 				a(), r.push({
 					type: "sq",
 					value: this.src.slice(this.pos + 1, e)
@@ -703,7 +744,7 @@ var ue = class e {
 			} else if (o && s === "\"") {
 				a(), this.pos++;
 				let e = this.readParts({ dq: !0 });
-				if (this.ch !== "\"") throw new _();
+				if (this.ch !== "\"") throw new v();
 				this.pos++, r.push({
 					type: "dq",
 					parts: e
@@ -751,14 +792,17 @@ var ue = class e {
 				type: "arith",
 				word: { parts: n }
 			};
-			if (this.eof) throw new _();
+			if (this.eof) throw new v();
 			this.pos = e;
 		}
 		if (e === "(") {
 			this.pos += 2;
 			let e = this.list();
-			if (this.linebreak(), this.eof) throw new _();
-			if (this.ch !== ")") throw new v(`errore di sintassi vicino a ${this.near()}: atteso «)»`);
+			if (this.linebreak(), this.eof) throw new v();
+			if (this.ch !== ")") throw new y(w("parse.nearExpected", {
+				near: this.near(),
+				expected: ")"
+			}));
 			return this.pos++, {
 				type: "cmdsub",
 				body: e
@@ -783,18 +827,18 @@ var ue = class e {
 		let t = /[A-Za-z_]\w*|[0-9]+|[@*#?$!\-]/y;
 		t.lastIndex = this.pos;
 		let n = t.exec(this.src)?.[0];
-		if (n || this.fail("sostituzione errata"), e.name = n, this.pos += n.length, this.ch === "[") {
+		if (n || this.fail(w("parse.badSubstitution")), e.name = n, this.pos += n.length, this.ch === "[") {
 			let t = this.src.indexOf("]", this.pos);
-			if (t < 0) throw new _();
+			if (t < 0) throw new v();
 			e.index = this.src.slice(this.pos + 1, t), this.pos = t + 1;
 		}
 		let r = this.ch;
-		if (r === "}" || e.length) return this.ch !== "}" && this.fail("sostituzione errata"), this.pos++, e;
+		if (r === "}" || e.length) return this.ch !== "}" && this.fail(w("parse.badSubstitution")), this.pos++, e;
 		if (r === ":") {
 			let t = this.src[this.pos + 1];
 			"-=?+".includes(t) && t ? (e.op = ":" + t, this.pos += 2, e.arg = this.braceWord("}")) : (e.op = "substr", this.pos++, e.offset = this.braceWord(":}"), this.ch === ":" && (this.pos++, e.count = this.braceWord("}")));
-		} else "-=?+".includes(r) ? (e.op = r, this.pos++, e.arg = this.braceWord("}")) : r === "#" || r === "%" || r === "^" || r === "," ? (e.op = this.src[this.pos + 1] === r ? r + r : r, this.pos += e.op.length, e.arg = this.braceWord("}")) : r === "/" ? (this.pos++, e.op = "/", "/#%".includes(this.ch) && (e.op += this.ch, this.pos++), e.arg = this.braceWord("/}"), this.ch === "/" ? (this.pos++, e.replace = this.braceWord("}")) : e.replace = { parts: [] }) : this.fail("sostituzione errata");
-		return this.ch !== "}" && this.fail("sostituzione errata: manca «}»"), this.pos++, e;
+		} else "-=?+".includes(r) ? (e.op = r, this.pos++, e.arg = this.braceWord("}")) : r === "#" || r === "%" || r === "^" || r === "," ? (e.op = this.src[this.pos + 1] === r ? r + r : r, this.pos += e.op.length, e.arg = this.braceWord("}")) : r === "/" ? (this.pos++, e.op = "/", "/#%".includes(this.ch) && (e.op += this.ch, this.pos++), e.arg = this.braceWord("/}"), this.ch === "/" ? (this.pos++, e.replace = this.braceWord("}")) : e.replace = { parts: [] }) : this.fail(w("parse.badSubstitution"));
+		return this.ch !== "}" && this.fail(w("parse.badSubstitutionBrace")), this.pos++, e;
 	}
 	braceWord(e) {
 		let t = 0, n = this.readParts({ stop: (n) => {
@@ -802,13 +846,13 @@ var ue = class e {
 			else if (n === "}" && t > 0) return t--, !1;
 			return t === 0 && e.includes(n);
 		} });
-		if (this.eof) throw new _();
+		if (this.eof) throw new v();
 		return { parts: n };
 	}
 	backtick(t) {
 		let n = "";
 		for (this.pos++;;) {
-			if (this.eof) throw new _();
+			if (this.eof) throw new v();
 			let e = this.ch;
 			if (e === "`") {
 				this.pos++;
@@ -829,7 +873,7 @@ var ue = class e {
 				body: new e(n, this.aliases).program()
 			};
 		} catch (e) {
-			throw e instanceof _ ? new v("errore di sintassi tra gli apici inversi") : e;
+			throw e instanceof v ? new y(w("parse.backquotes")) : e;
 		}
 	}
 	ansiC() {
@@ -850,7 +894,7 @@ var ue = class e {
 			"?": "?"
 		};
 		for (;;) {
-			if (this.eof) throw new _();
+			if (this.eof) throw new v();
 			let n = this.ch;
 			if (n === "'") return this.pos++, e;
 			if (n !== "\\") {
@@ -858,7 +902,7 @@ var ue = class e {
 				continue;
 			}
 			let r = this.src[this.pos + 1];
-			if (r === void 0) throw new _();
+			if (r === void 0) throw new v();
 			if (t[r] !== void 0) {
 				e += t[r], this.pos += 2;
 				continue;
@@ -874,7 +918,7 @@ var ue = class e {
 			this.pos += 1 + i[0].length;
 		}
 	}
-}, de = /* @__PURE__ */ "**=.<<=.>>=.**.<<.>>.<=.>=.==.!=.&&.||.++.--.+=.-=.*=./=.%=.&=.^=.|=.+.-.*./.%.<.>.=.!.~.&.^.|.?.:.(.).,".split("."), fe = /* @__PURE__ */ new Set([
+}, he = /* @__PURE__ */ "**=.<<=.>>=.**.<<.>>.<=.>=.==.!=.&&.||.++.--.+=.-=.*=./=.%=.&=.^=.|=.+.-.*./.%.<.>.=.!.~.&.^.|.?.:.(.).,".split("."), ge = /* @__PURE__ */ new Set([
 	"=",
 	"+=",
 	"-=",
@@ -887,7 +931,7 @@ var ue = class e {
 	"^=",
 	"|=",
 	"**="
-]), pe = [
+]), _e = [
 	["||"],
 	["&&"],
 	["|"],
@@ -907,21 +951,24 @@ var ue = class e {
 		"/",
 		"%"
 	]
-], E = (e) => BigInt.asIntN(64, e), me = 32;
-function he(e, t, n = 0) {
-	if (n > me) throw new y("espressione: troppi livelli di ricorsione");
-	let r = ge(String(e));
+], E = (e) => BigInt.asIntN(64, e), ve = 32;
+function D(e, t, n = 0) {
+	if (n > ve) throw new b(C.t("arith.tooDeep"));
+	let r = ye(String(e));
 	if (!r.length) return 0n;
 	let i = {
 		tokens: r,
 		i: 0,
 		text: e
-	}, a = ve(i);
-	if (i.i < r.length) throw D(i);
-	return Ee(a, t, n);
+	}, a = xe(i);
+	if (i.i < r.length) throw O(i);
+	return ke(a, t, n);
 }
-var D = (e) => new y(`${String(e.text).trim()}: errore di sintassi nell’espressione (simbolo errato «${e.tokens[e.i]?.v ?? "fine"}»)`);
-function ge(e) {
+var O = (e) => new b(C.t("arith.syntax", {
+	expr: String(e.text).trim(),
+	token: e.tokens[e.i]?.v ?? C.t("arith.end")
+}));
+function ye(e) {
 	let t = [], n = 0;
 	for (; n < e.length;) {
 		let r = e[n];
@@ -944,7 +991,7 @@ function ge(e) {
 				let t = 0, i = n;
 				for (; i < e.length; i++) if (e[i] === "[") t++;
 				else if (e[i] === "]" && --t === 0) break;
-				if (i >= e.length) throw new y(`${e.trim()}: manca «]»`);
+				if (i >= e.length) throw new b(C.t("arith.missingBracket", { expr: e.trim() }));
 				r = e.slice(n + 1, i), n = i + 1;
 			}
 			t.push({
@@ -954,8 +1001,11 @@ function ge(e) {
 			});
 			continue;
 		}
-		let o = de.find((t) => e.startsWith(t, n));
-		if (!o) throw new y(`${e.trim()}: errore di sintassi nell’espressione (simbolo errato «${r}»)`);
+		let o = he.find((t) => e.startsWith(t, n));
+		if (!o) throw new b(C.t("arith.syntax", {
+			expr: e.trim(),
+			token: r
+		}));
 		t.push({
 			t: "op",
 			v: o
@@ -963,68 +1013,68 @@ function ge(e) {
 	}
 	return t;
 }
-var _e = (e) => e.tokens[e.i], O = (e, ...t) => _e(e)?.t === "op" && t.includes(_e(e).v), k = (e) => e.tokens[e.i++];
-function ve(e) {
-	let t = A(e);
-	for (; O(e, ",");) k(e), t = {
+var be = (e) => e.tokens[e.i], k = (e, ...t) => be(e)?.t === "op" && t.includes(be(e).v), A = (e) => e.tokens[e.i++];
+function xe(e) {
+	let t = j(e);
+	for (; k(e, ",");) A(e), t = {
 		k: "comma",
 		a: t,
-		b: A(e)
+		b: j(e)
 	};
 	return t;
 }
-function A(e) {
-	let t = e.i, n = _e(e);
-	return n?.t === "var" && e.tokens[e.i + 1]?.t === "op" && fe.has(e.tokens[e.i + 1].v) ? (e.i += 2, {
+function j(e) {
+	let t = e.i, n = be(e);
+	return n?.t === "var" && e.tokens[e.i + 1]?.t === "op" && ge.has(e.tokens[e.i + 1].v) ? (e.i += 2, {
 		k: "assign",
 		name: n.v,
 		index: n.index,
 		op: e.tokens[t + 1].v,
-		value: A(e)
-	}) : ye(e);
+		value: j(e)
+	}) : Se(e);
 }
-function ye(e) {
-	let t = be(e, 0);
-	if (!O(e, "?")) return t;
-	k(e);
-	let n = A(e);
-	if (!O(e, ":")) throw D(e);
-	return k(e), {
+function Se(e) {
+	let t = Ce(e, 0);
+	if (!k(e, "?")) return t;
+	A(e);
+	let n = j(e);
+	if (!k(e, ":")) throw O(e);
+	return A(e), {
 		k: "ternary",
 		cond: t,
 		yes: n,
-		no: A(e)
+		no: j(e)
 	};
 }
-function be(e, t) {
-	if (t >= pe.length) return xe(e);
-	let n = be(e, t + 1);
-	for (; O(e, ...pe[t]);) n = {
+function Ce(e, t) {
+	if (t >= _e.length) return we(e);
+	let n = Ce(e, t + 1);
+	for (; k(e, ..._e[t]);) n = {
 		k: "bin",
-		op: k(e).v,
+		op: A(e).v,
 		a: n,
-		b: be(e, t + 1)
+		b: Ce(e, t + 1)
 	};
 	return n;
 }
-function xe(e) {
-	let t = Se(e);
-	return O(e, "**") ? (k(e), {
+function we(e) {
+	let t = Te(e);
+	return k(e, "**") ? (A(e), {
 		k: "bin",
 		op: "**",
 		a: t,
-		b: xe(e)
+		b: we(e)
 	}) : t;
 }
-function Se(e) {
-	if (O(e, "!", "~", "+", "-")) return {
+function Te(e) {
+	if (k(e, "!", "~", "+", "-")) return {
 		k: "unary",
-		op: k(e).v,
-		a: Se(e)
+		op: A(e).v,
+		a: Te(e)
 	};
-	if (O(e, "++", "--")) {
-		let t = k(e).v, n = k(e);
-		if (n?.t !== "var") throw D(e);
+	if (k(e, "++", "--")) {
+		let t = A(e).v, n = A(e);
+		if (n?.t !== "var") throw O(e);
 		return {
 			k: "pre",
 			op: t,
@@ -1032,18 +1082,18 @@ function Se(e) {
 			index: n.index
 		};
 	}
-	return Ce(e);
+	return Ee(e);
 }
-function Ce(e) {
-	let t = k(e);
-	if (!t) throw new y(`${String(e.text).trim()}: errore di sintassi nell’espressione (operando atteso)`);
+function Ee(e) {
+	let t = A(e);
+	if (!t) throw new b(C.t("arith.operandExpected", { expr: String(e.text).trim() }));
 	if (t.t === "num") return {
 		k: "num",
 		v: t.v
 	};
-	if (t.t === "var") return O(e, "++", "--") ? {
+	if (t.t === "var") return k(e, "++", "--") ? {
 		k: "post",
-		op: k(e).v,
+		op: A(e).v,
 		name: t.v,
 		index: t.index
 	} : {
@@ -1052,40 +1102,40 @@ function Ce(e) {
 		index: t.index
 	};
 	if (t.v === "(") {
-		let t = ve(e);
-		if (!O(e, ")")) throw D(e);
-		return k(e), t;
+		let t = xe(e);
+		if (!k(e, ")")) throw O(e);
+		return A(e), t;
 	}
-	throw e.i--, D(e);
+	throw e.i--, O(e);
 }
-function we(e) {
+function De(e) {
 	let t = String(e);
 	if (/^0[xX]/.test(t)) return BigInt(t);
 	let n = /^(\d+)#(.+)$/.exec(t);
 	if (n) {
 		let e = Number(n[1]);
-		if (e < 2 || e > 64) throw new y(`${t}: base non valida`);
+		if (e < 2 || e > 64) throw new b(C.t("arith.badBase", { value: t }));
 		let r = 0n;
 		for (let i of n[2]) {
 			let n = /\d/.test(i) ? +i : /[a-z]/.test(i) ? i.charCodeAt(0) - 87 : /[A-Z]/.test(i) ? e <= 36 ? i.charCodeAt(0) - 55 : i.charCodeAt(0) - 29 : i === "@" ? 62 : 63;
-			if (n >= e) throw new y(`${t}: valore troppo grande per la base`);
+			if (n >= e) throw new b(C.t("arith.tooGreatForBase", { value: t }));
 			r = r * BigInt(e) + BigInt(n);
 		}
 		return E(r);
 	}
 	if (/^0[0-7]+$/.test(t)) return E(BigInt("0o" + t.slice(1)));
-	if (/^0\d+$/.test(t)) throw new y(`${t}: valore troppo grande per la base`);
+	if (/^0\d+$/.test(t)) throw new b(C.t("arith.tooGreatForBase", { value: t }));
 	return E(BigInt(t));
 }
-function Te(e, t, n, r) {
-	let i = String(e.get(t, n == null ? null : String(he(n, e, r + 1))) ?? "").trim();
-	return i ? /^-?\d+$/.test(i) ? E(BigInt(i)) : he(i, e, r + 1) : 0n;
+function Oe(e, t, n, r) {
+	let i = String(e.get(t, n == null ? null : String(D(n, e, r + 1))) ?? "").trim();
+	return i ? /^-?\d+$/.test(i) ? E(BigInt(i)) : D(i, e, r + 1) : 0n;
 }
-function Ee(e, t, n) {
-	let r = (e) => Ee(e, t, n), i = (e) => e.index == null ? null : String(he(e.index, t, n + 1));
+function ke(e, t, n) {
+	let r = (e) => ke(e, t, n), i = (e) => e.index == null ? null : String(D(e.index, t, n + 1));
 	switch (e.k) {
-		case "num": return we(e.v);
-		case "var": return Te(t, e.name, e.index, n);
+		case "num": return De(e.v);
+		case "var": return Oe(t, e.name, e.index, n);
 		case "comma": return r(e.a), r(e.b);
 		case "ternary": return r(e.cond) === 0n ? r(e.no) : r(e.yes);
 		case "unary": {
@@ -1094,28 +1144,28 @@ function Ee(e, t, n) {
 		}
 		case "pre":
 		case "post": {
-			let r = i(e), a = Te(t, e.name, r ?? null, n), o = E(e.op === "++" ? a + 1n : a - 1n);
+			let r = i(e), a = Oe(t, e.name, r ?? null, n), o = E(e.op === "++" ? a + 1n : a - 1n);
 			return t.set(e.name, r, String(o)), e.k === "pre" ? o : a;
 		}
 		case "assign": {
 			let a = i(e), o = r(e.value);
-			return e.op !== "=" && (o = De(e.op.slice(0, -1), Te(t, e.name, a, n), o)), t.set(e.name, a, String(o)), o;
+			return e.op !== "=" && (o = Ae(e.op.slice(0, -1), Oe(t, e.name, a, n), o)), t.set(e.name, a, String(o)), o;
 		}
-		case "bin": return e.op === "&&" ? r(e.a) !== 0n && r(e.b) !== 0n ? 1n : 0n : e.op === "||" ? r(e.a) !== 0n || r(e.b) !== 0n ? 1n : 0n : De(e.op, r(e.a), r(e.b));
+		case "bin": return e.op === "&&" ? r(e.a) !== 0n && r(e.b) !== 0n ? 1n : 0n : e.op === "||" ? r(e.a) !== 0n || r(e.b) !== 0n ? 1n : 0n : Ae(e.op, r(e.a), r(e.b));
 	}
-	throw new y("espressione non valida");
+	throw new b(C.t("arith.invalid"));
 }
-function De(e, t, n) {
+function Ae(e, t, n) {
 	switch (e) {
 		case "+": return E(t + n);
 		case "-": return E(t - n);
 		case "*": return E(t * n);
 		case "/":
 		case "%":
-			if (n === 0n) throw new y("divisione per zero");
+			if (n === 0n) throw new b(C.t("arith.divisionByZero"));
 			return E(e === "/" ? t / n : t % n);
 		case "**":
-			if (n < 0n) throw new y("esponente negativo");
+			if (n < 0n) throw new b(C.t("arith.negativeExponent"));
 			for (var r = 1n; n > 0n; n >>= 1n, t = E(t * t)) n & 1n && (r = E(r * t));
 			return r;
 		case "<<": return E(t << (n & 63n));
@@ -1130,10 +1180,10 @@ function De(e, t, n) {
 		case "==": return t === n ? 1n : 0n;
 		case "!=": return t === n ? 0n : 1n;
 	}
-	throw new y(`operatore sconosciuto ${e}`);
+	throw new b(C.t("arith.unknownOperator", { op: e }));
 }
 // src/terminal/shell/pattern.js
-var Oe = {
+var je = {
 	alpha: "a-zA-Z",
 	digit: "0-9",
 	alnum: "a-zA-Z0-9",
@@ -1147,17 +1197,17 @@ var Oe = {
 	cntrl: "\\x00-\\x1f\\x7f",
 	print: "\\x20-\\x7e",
 	graph: "\\x21-\\x7e"
-}, j = /* @__PURE__ */ new Map(), ke = (e) => String(e).replace(/[\\*?[\]]/g, "\\$&"), Ae = (e) => e.replace(/[.*+?^${}()|[\]\\/-]/g, "\\$&");
-function je(e) {
+}, Me = /* @__PURE__ */ new Map(), Ne = (e) => String(e).replace(/[\\*?[\]]/g, "\\$&"), Pe = (e) => e.replace(/[.*+?^${}()|[\]\\/-]/g, "\\$&");
+function Fe(e) {
 	for (let t = 0; t < e.length; t++) {
 		let n = e[t];
 		if (n === "\\") t++;
 		else if (n === "*" || n === "?") return !0;
-		else if (n === "[" && Me(e, t) > 0) return !0;
+		else if (n === "[" && Ie(e, t) > 0) return !0;
 	}
 	return !1;
 }
-function Me(e, t) {
+function Ie(e, t) {
 	let n = t + 1;
 	for ((e[n] === "!" || e[n] === "^") && n++, e[n] === "]" && n++; n < e.length; n++) if (e[n] === "\\") n++;
 	else if (e[n] === "[" && e[n + 1] === ":") {
@@ -1166,94 +1216,94 @@ function Me(e, t) {
 	} else if (e[n] === "]") return n;
 	return -1;
 }
-function Ne(e) {
+function Le(e) {
 	let t = "";
 	for (let n = 0; n < e.length; n++) {
 		let r = e[n];
-		if (r === "\\") n + 1 < e.length ? t += Ae(e[++n]) : t += "\\\\";
+		if (r === "\\") n + 1 < e.length ? t += Pe(e[++n]) : t += "\\\\";
 		else if (r === "*") t += "[\\s\\S]*";
 		else if (r === "?") t += "[\\s\\S]";
-		else if (r === "[" && Me(e, n) > 0) {
-			let r = Me(e, n), i = n + 1, a = "";
+		else if (r === "[" && Ie(e, n) > 0) {
+			let r = Ie(e, n), i = n + 1, a = "";
 			for ((e[i] === "!" || e[i] === "^") && (a += "^", i++); i < r; i++) {
 				let t = e[i];
 				if (t === "[" && e[i + 1] === ":") {
 					let t = e.indexOf(":]", i + 2), n = e.slice(i + 2, t);
-					a += Oe[n] ?? "", i = t + 1;
+					a += je[n] ?? "", i = t + 1;
 				} else t === "\\" ? a += "\\" + (e[++i] ?? "\\") : t === "-" && i > n + 1 && i < r - 1 && a && a !== "^" ? a += "-" : a += /[\]\\^-]/.test(t) ? "\\" + t : t;
 			}
 			t += `[${a}]`, n = r;
-		} else t += Ae(r);
+		} else t += Pe(r);
 	}
 	return t;
 }
 function M(e, t, { ignoreCase: n = !1 } = {}) {
-	let r = (n ? "i" : "s") + e, i = j.get(r);
-	return i || (i = RegExp(`^(?:${Ne(e)})$`, n ? "i" : ""), j.size > 500 && j.clear(), j.set(r, i)), i.test(t);
+	let r = (n ? "i" : "s") + e, i = Me.get(r);
+	return i || (i = RegExp(`^(?:${Le(e)})$`, n ? "i" : ""), Me.size > 500 && Me.clear(), Me.set(r, i)), i.test(t);
 }
-var Pe = (e) => String(e).replace(/\\([\s\S])/g, "$1");
+var Re = (e) => String(e).replace(/\\([\s\S])/g, "$1");
 // src/terminal/shell/paths.js
 function N(e, t) {
 	t = String(t);
-	let r = n.home, i;
+	let n = r.home, i;
 	if (t === "~" || t.startsWith("~/")) i = t.slice(1);
 	else if (t.startsWith("/")) {
-		let e = t.toLowerCase(), n = r.toLowerCase();
-		i = e === n || e.startsWith(n + "/") ? t.slice(r.length) : t;
-	} else i = n.ancestors(e).slice(1).map((e) => e.name).join("/") + "/" + t;
+		let e = t.toLowerCase(), r = n.toLowerCase();
+		i = e === r || e.startsWith(r + "/") ? t.slice(n.length) : t;
+	} else i = r.ancestors(e).slice(1).map((e) => e.name).join("/") + "/" + t;
 	let a = [];
 	for (let e of i.split("/")) e && e !== "." && (e === ".." ? a.pop() : a.push(e));
 	return a;
 }
 function P(e, t) {
-	return t === "" ? null : n.resolve("~/" + N(e, t).join("/"));
+	return t === "" ? null : r.resolve("~/" + N(e, t).join("/"));
 }
-function Fe(e, t) {
-	let r = N(e, t), i = r.pop() ?? "";
+function ze(e, t) {
+	let n = N(e, t), i = n.pop() ?? "";
 	return {
-		parent: n.resolve("~/" + r.join("/")),
+		parent: r.resolve("~/" + n.join("/")),
 		name: i
 	};
 }
-function Ie(e) {
-	let t = n.ancestors(e).slice(1).map((e) => e.name);
+function Be(e) {
+	let t = r.ancestors(e).slice(1).map((e) => e.name);
 	return t.length ? "~/" + t.join("/") : "~";
 }
-var Le = (e, t) => e === "" ? t : e.endsWith("/") ? e + t : `${e}/${t}`;
-function Re(e, t) {
-	let r = t.startsWith("/"), i = t.split("/"), a = [r ? "/" : ""];
-	r && i.shift();
+var Ve = (e, t) => e === "" ? t : e.endsWith("/") ? e + t : `${e}/${t}`;
+function He(e, t) {
+	let n = t.startsWith("/"), i = t.split("/"), a = [n ? "/" : ""];
+	n && i.shift();
 	let o = !1;
 	return i.forEach((t) => {
 		if (t === "") return;
-		if (!je(t)) {
-			a = a.map((e) => Le(e, Pe(t)));
+		if (!Fe(t)) {
+			a = a.map((e) => Ve(e, Re(t)));
 			return;
 		}
 		o = !0;
-		let r = [];
+		let n = [];
 		for (let i of a) {
 			let a = P(e, i || ".");
-			a?.type === "folder" && n.children(a.id).map((e) => e.name).filter((e) => (!e.startsWith(".") || t.startsWith(".") || t.startsWith("\\.")) && M(t, e)).sort(F).forEach((e) => r.push(Le(i, e)));
+			a?.type === "folder" && r.children(a.id).map((e) => e.name).filter((e) => (!e.startsWith(".") || t.startsWith(".") || t.startsWith("\\.")) && M(t, e)).sort(F).forEach((e) => n.push(Ve(i, e)));
 		}
-		a = r;
+		a = n;
 	}), o ? (t.endsWith("/") && (a = a.filter((t) => P(e, t)?.type === "folder").map((e) => e + "/")), a.filter((t) => P(e, t))) : [];
 }
-var F = (e, t) => e.localeCompare(t), ze = { brk: !0 }, Be = 1e5;
-async function I(e, t) {
+var F = (e, t) => e.localeCompare(t), Ue = { brk: !0 }, We = 1e5;
+async function Ge(e, t) {
 	let n = [];
-	for (let r of t) n.push(...await Ve(e, r));
+	for (let r of t) n.push(...await Ke(e, r));
 	return n;
 }
-async function Ve(e, t, { split: n = !t.noSplit, braces: r = n } = {}) {
-	let i = r ? Ke(t.parts) : [t.parts], a = [];
+async function Ke(e, t, { split: n = !t.noSplit, braces: r = n } = {}) {
+	let i = r ? Qe(t.parts) : [t.parts], a = [];
 	for (let t of i) {
-		let r = await B(e, Xe(e, t), !1), i = n ? Ge(r, Ue(e)) : [z(r)];
+		let r = await R(e, nt(e, t), !1), i = n ? Ze(r, Je(e)) : [Xe(r)];
 		for (let t of i) {
 			if (n && !e.options.noglob) {
-				let n = We(t);
-				if (je(n)) {
-					let t = Re(e.cwd, n);
+				let n = Ye(t);
+				if (Fe(n)) {
+					let t = He(e.cwd, n);
 					if (t.length) {
 						a.push(...t);
 						continue;
@@ -1265,23 +1315,23 @@ async function Ve(e, t, { split: n = !t.noSplit, braces: r = n } = {}) {
 	}
 	return a;
 }
+async function I(e, t) {
+	return t ? Xe(await R(e, nt(e, t.parts), !1)).map((e) => e.text).join("") : "";
+}
 async function L(e, t) {
-	return t ? z(await B(e, Xe(e, t.parts), !1)).map((e) => e.text).join("") : "";
+	return t ? Ye(Xe(await R(e, nt(e, t.parts), !1))) : "";
 }
-async function R(e, t) {
-	return t ? We(z(await B(e, Xe(e, t.parts), !1))) : "";
+async function qe(e, t) {
+	return Xe(await R(e, t.parts, !1)).map((e) => e.quoted ? e.text.replace(/[.*+?^${}()|[\]\\/]/g, "\\$&") : e.text).join("");
 }
-async function He(e, t) {
-	return z(await B(e, t.parts, !1)).map((e) => e.quoted ? e.text.replace(/[.*+?^${}()|[\]\\/]/g, "\\$&") : e.text).join("");
-}
-var Ue = (e) => e.getVar("IFS") ?? " 	\n", We = (e) => e.map((e) => e.quoted ? ke(e.text) : e.text).join("");
-function z(e) {
+var Je = (e) => e.getVar("IFS") ?? " 	\n", Ye = (e) => e.map((e) => e.quoted ? Ne(e.text) : e.text).join("");
+function Xe(e) {
 	return e.map((e) => e.brk ? {
 		text: " ",
 		quoted: !0
 	} : e);
 }
-function Ge(e, t) {
+function Ze(e, t) {
 	let n = [], r = [], i = !1, a = () => {
 		n.push(r), r = [], i = !1;
 	};
@@ -1306,13 +1356,13 @@ function Ge(e, t) {
 	}
 	return i && a(), n;
 }
-function Ke(e) {
+function Qe(e) {
 	if (!e.some((e) => e.type === "lit" && e.value.includes("{"))) return [e];
 	let t = e.flatMap((e) => e.type === "lit" ? [...e.value].map((e) => ({ c: e })) : [{ part: e }]), n = [];
-	return qe(t, n), n.map(Ye);
+	return $e(t, n), n.map(tt);
 }
-function qe(e, t) {
-	if (t.length > Be) throw new y("espansione delle graffe troppo grande");
+function $e(e, t) {
+	if (t.length > We) throw new b(w("expand.braceTooLarge"));
 	for (let n = 0; n < e.length; n++) {
 		if (e[n].c !== "{") continue;
 		let r = 0, i = n, a = [];
@@ -1330,16 +1380,16 @@ function qe(e, t) {
 				...a,
 				i
 			];
-			for (let n = 0; n < r.length - 1; n++) qe([
+			for (let n = 0; n < r.length - 1; n++) $e([
 				...o,
 				...e.slice(r[n] + 1, r[n + 1]),
 				...s
 			], t);
 			return;
 		}
-		let c = e.slice(n + 1, i), l = c.every((e) => e.c != null) ? Je(c.map((e) => e.c).join("")) : null;
+		let c = e.slice(n + 1, i), l = c.every((e) => e.c != null) ? et(c.map((e) => e.c).join("")) : null;
 		if (l) {
-			for (let e of l) qe([
+			for (let e of l) $e([
 				...o,
 				...[...e].map((e) => ({ c: e })),
 				...s
@@ -1349,11 +1399,11 @@ function qe(e, t) {
 	}
 	t.push(e);
 }
-function Je(e) {
+function et(e) {
 	let t = /^(-?\d+)\.\.(-?\d+)(?:\.\.(-?\d+))?$/.exec(e);
 	if (t) {
 		let [e, n] = [Number(t[1]), Number(t[2])], r = Math.abs(Number(t[3] ?? 1)) || 1, i = /^-?0\d/.test(t[1]) || /^-?0\d/.test(t[2]) ? Math.max(t[1].length, t[2].length) : 0;
-		if (Math.abs(n - e) / r > Be) throw new y("espansione delle graffe troppo grande");
+		if (Math.abs(n - e) / r > We) throw new b(w("expand.braceTooLarge"));
 		let a = [];
 		for (let t = e; e <= n ? t <= n : t >= n; t += e <= n ? r : -r) {
 			let e = String(Math.abs(t)).padStart(i - +(t < 0), "0");
@@ -1368,7 +1418,7 @@ function Je(e) {
 	}
 	return null;
 }
-function Ye(e) {
+function tt(e) {
 	let t = [];
 	for (let n of e) n.part ? t.push(n.part) : t.at(-1)?.type === "lit" && t.at(-1).fresh ? t.at(-1).value += n.c : t.push({
 		type: "lit",
@@ -1377,11 +1427,11 @@ function Ye(e) {
 	});
 	return t;
 }
-function Xe(e, t) {
-	let r = t[0];
-	if (r?.type !== "lit" || !r.value.startsWith("~")) return t;
-	let i = r.value.indexOf("/"), a = i < 0 ? r.value : r.value.slice(0, i), o = i < 0 ? "" : r.value.slice(i), s = null;
-	return a === "~" ? s = e.getVar("HOME") ?? n.home : a === "~+" ? s = e.getVar("PWD") : a === "~-" ? s = e.getVar("OLDPWD") : a.slice(1) === e.getVar("USER") && (s = n.home), s == null || i < 0 && t.length > 1 && t[1].type !== "lit" ? t : [
+function nt(e, t) {
+	let n = t[0];
+	if (n?.type !== "lit" || !n.value.startsWith("~")) return t;
+	let i = n.value.indexOf("/"), a = i < 0 ? n.value : n.value.slice(0, i), o = i < 0 ? "" : n.value.slice(i), s = null;
+	return a === "~" ? s = e.getVar("HOME") ?? r.home : a === "~+" ? s = e.getVar("PWD") : a === "~-" ? s = e.getVar("OLDPWD") : a.slice(1) === e.getVar("USER") && (s = r.home), s == null || i < 0 && t.length > 1 && t[1].type !== "lit" ? t : [
 		{
 			type: "sq",
 			value: s
@@ -1393,7 +1443,7 @@ function Xe(e, t) {
 		...t.slice(1)
 	];
 }
-async function B(e, t, n) {
+async function R(e, t, n) {
 	let r = [];
 	for (let i of t) switch (i.type) {
 		case "lit":
@@ -1410,7 +1460,7 @@ async function B(e, t, n) {
 			});
 			break;
 		case "dq": {
-			let t = await B(e, i.parts, !0), n = i.parts.length > 0 && i.parts.every((e) => e.type === "param" && Ze(e));
+			let t = await R(e, i.parts, !0), n = i.parts.length > 0 && i.parts.every((e) => e.type === "param" && rt(e));
 			!t.length && !n && r.push({
 				text: "",
 				quoted: !0
@@ -1427,7 +1477,7 @@ async function B(e, t, n) {
 			break;
 		}
 		case "arith": {
-			let t = await L(e, i.word);
+			let t = await I(e, i.word);
 			r.push({
 				text: String(e.arith(t)),
 				quoted: n,
@@ -1435,21 +1485,21 @@ async function B(e, t, n) {
 			});
 			break;
 		}
-		case "param": r.push(...await Qe(e, i, n));
+		case "param": r.push(...await it(e, i, n));
 	}
 	return r;
 }
-var Ze = (e) => !e.length && !e.op && (e.name === "@" || e.index === "@");
-async function Qe(e, t, n) {
-	let { values: r, multi: i, star: a } = await $e(e, t);
+var rt = (e) => !e.length && !e.op && (e.name === "@" || e.index === "@");
+async function it(e, t, n) {
+	let { values: r, multi: i, star: a } = await at(e, t);
 	if (i || a) {
 		if (a && n) return [{
-			text: r.join((Ue(e) || "")[0] ?? ""),
+			text: r.join((Je(e) || "")[0] ?? ""),
 			quoted: !0
 		}];
 		let t = [];
 		return r.forEach((e, r) => {
-			r && t.push(ze), t.push({
+			r && t.push(Ue), t.push({
 				text: e,
 				quoted: n,
 				split: !n
@@ -1462,7 +1512,7 @@ async function Qe(e, t, n) {
 		split: !n
 	}];
 }
-async function $e(e, t) {
+async function at(e, t) {
 	let n = t.name, r = t.index ?? null;
 	if (t.indirect && (r === "@" || r === "*")) return {
 		values: e.arrayKeys(n),
@@ -1470,15 +1520,15 @@ async function $e(e, t) {
 		star: r === "*"
 	};
 	if (t.indirect) {
-		let t = et(e, n, r).values[0] ?? "", i = /^([A-Za-z_]\w*|[0-9]+|[@*#?$!-])(?:\[(.*)\])?$/.exec(t);
-		if (!i) throw new y(`${t}: sostituzione errata`);
+		let t = ot(e, n, r).values[0] ?? "", i = /^([A-Za-z_]\w*|[0-9]+|[@*#?$!-])(?:\[(.*)\])?$/.exec(t);
+		if (!i) throw new b(w("expand.badSubstitution", { name: t }));
 		[, n, r = null] = i;
 	}
-	let { values: i, set: a, multi: o, star: s } = et(e, n, r);
+	let { values: i, set: a, multi: o, star: s } = ot(e, n, r);
 	if (t.length) return o || s ? { values: [String(i.length)] } : { values: [String([...i[0] ?? ""].length)] };
 	let c = t.op;
 	if (!c) {
-		if (!a && e.options.nounset && !(o || s)) throw new y(`${n}: variabile non impostata`);
+		if (!a && e.options.nounset && !(o || s)) throw new b(w("expand.unbound", { name: n }));
 		return {
 			values: i,
 			multi: o,
@@ -1488,7 +1538,7 @@ async function $e(e, t) {
 	let l = !a || i.length === 0 || i.length === 1 && i[0] === "" && !(o || s), u = c.startsWith(":") ? l : !a;
 	switch (c) {
 		case "-":
-		case ":-": return u ? { values: [await L(e, t.arg)] } : {
+		case ":-": return u ? { values: [await I(e, t.arg)] } : {
 			values: i,
 			multi: o,
 			star: s
@@ -1500,8 +1550,8 @@ async function $e(e, t) {
 				multi: o,
 				star: s
 			};
-			if (!/^[A-Za-z_]\w*$/.test(n)) throw new y(`${n}: impossibile assegnare in questo modo`);
-			return e.setVar(n, await L(e, t.arg), r), { values: [e.getVar(n, r) ?? ""] };
+			if (!/^[A-Za-z_]\w*$/.test(n)) throw new b(w("expand.cannotAssign", { name: n }));
+			return e.setVar(n, await I(e, t.arg), r), { values: [e.getVar(n, r) ?? ""] };
 		case "?":
 		case ":?":
 			if (!u) return {
@@ -1509,9 +1559,9 @@ async function $e(e, t) {
 				multi: o,
 				star: s
 			};
-			throw new y(`${n}: ${await L(e, t.arg) || "parametro nullo o non impostato"}`);
+			throw new b(`${n}: ${await I(e, t.arg) || w("expand.nullOrNotSet")}`);
 		case "+":
-		case ":+": return u ? { values: [] } : { values: [await L(e, t.arg)] };
+		case ":+": return u ? { values: [] } : { values: [await I(e, t.arg)] };
 	}
 	let d = async (e) => ({
 		values: await Promise.all(i.map(e)),
@@ -1523,29 +1573,29 @@ async function $e(e, t) {
 		case "##":
 		case "%":
 		case "%%": {
-			let n = await R(e, t.arg);
-			return d((e) => tt(e, n, c));
+			let n = await L(e, t.arg);
+			return d((e) => st(e, n, c));
 		}
 		case "/":
 		case "//":
 		case "/#":
 		case "/%": {
-			let n = await R(e, t.arg), r = await L(e, t.replace);
-			return d((e) => nt(e, n, r, c));
+			let n = await L(e, t.arg), r = await I(e, t.replace);
+			return d((e) => ct(e, n, r, c));
 		}
 		case "^":
 		case "^^":
 		case ",":
 		case ",,": {
-			let n = t.arg?.parts.length ? await R(e, t.arg) : "?", r = c[0] === "^";
+			let n = t.arg?.parts.length ? await L(e, t.arg) : "?", r = c[0] === "^";
 			return d((e) => [...e].map((e, t) => (c.length === 2 || t === 0) && M(n, e) ? r ? e.toUpperCase() : e.toLowerCase() : e).join(""));
 		}
 		case "substr": {
-			let r = Number(e.arith(await L(e, t.offset))), a = t.count ? Number(e.arith(await L(e, t.count))) : null, c = (e) => {
+			let r = Number(e.arith(await I(e, t.offset))), a = t.count ? Number(e.arith(await I(e, t.count))) : null, c = (e) => {
 				let t = r < 0 ? Math.max(0, e.length + r) : Math.min(r, e.length);
 				if (a == null) return e.slice(t);
 				if (a < 0) {
-					if (o || s) throw new y(`${a}: espressione di sottostringa < 0`);
+					if (o || s) throw new b(w("expand.negativeSubstring", { count: a }));
 					return e.slice(t, Math.max(t, e.length + a));
 				}
 				return e.slice(t, t + a);
@@ -1557,9 +1607,9 @@ async function $e(e, t) {
 			} : { values: [c([...i[0] ?? ""]).join("")] };
 		}
 	}
-	throw new y(`${n}: sostituzione errata`);
+	throw new b(w("expand.badSubstitution", { name: n }));
 }
-function et(e, t, n) {
+function ot(e, t, n) {
 	if (t === "@" || t === "*") return {
 		values: e.positional,
 		set: !0,
@@ -1599,7 +1649,7 @@ function et(e, t, n) {
 		set: r != null
 	};
 }
-function tt(e, t, n) {
+function st(e, t, n) {
 	let r = n.length === 2;
 	if (n[0] === "#") {
 		let n = [...Array(e.length + 1).keys()];
@@ -1612,9 +1662,9 @@ function tt(e, t, n) {
 	}
 	return e;
 }
-function nt(e, t, n, r) {
+function ct(e, t, n, r) {
 	if (!t) return e;
-	let i = Ne(t);
+	let i = Le(t);
 	if (r === "/#") return e.replace(RegExp(`^(?:${i})`), () => n);
 	if (r === "/%") {
 		for (let r = 0; r <= e.length; r++) if (M(t, e.slice(r))) return e.slice(0, r) + n;
@@ -1624,7 +1674,7 @@ function nt(e, t, n, r) {
 	return e.replace(a, (e) => e === "" ? e : n);
 }
 // src/terminal/shell/streams.js
-var V = class {
+var lt = class {
 	#e = "";
 	#t = !1;
 	async pull() {
@@ -1667,7 +1717,7 @@ var V = class {
 		for (let e; (e = await this.readLine()) != null;) yield e;
 	}
 	close() {}
-}, rt = class extends V {
+}, ut = class extends lt {
 	#e;
 	constructor(e) {
 		super(), this.#e = String(e);
@@ -1676,38 +1726,38 @@ var V = class {
 		let e = this.#e;
 		return this.#e = null, e || null;
 	}
-}, H = class extends V {}, U = class {
+}, z = class extends lt {}, B = class {
 	write() {}
 	async close() {}
-}, it = class extends U {}, at = class extends U {
+}, dt = class extends B {}, ft = class extends B {
 	text = "";
 	write(e) {
 		this.text += e;
 	}
-}, ot = class extends U {
+}, pt = class extends B {
 	constructor(e) {
 		super(), this.fn = e;
 	}
 	write(e) {
 		return this.fn(String(e));
 	}
-}, st = 65536;
-function ct() {
+}, mt = 65536;
+function ht() {
 	let e = [], t = 0, n = !1, r = !1, i = null, a = [], o = () => {
 		i?.(), i = null;
 	}, s = () => {
 		let e = a;
 		a = [], e.forEach((e) => e());
 	};
-	class c extends U {
+	class c extends B {
 		async write(n) {
-			if (r || (n = String(n), n && (e.push(n), t += n.length, o(), t > st && await new Promise((e) => a.push(e)), r))) throw new g();
+			if (r || (n = String(n), n && (e.push(n), t += n.length, o(), t > mt && await new Promise((e) => a.push(e)), r))) throw new _();
 		}
 		async close() {
 			n = !0, o();
 		}
 	}
-	class l extends V {
+	class l extends lt {
 		async pull() {
 			for (; !e.length;) {
 				if (n || r) return null;
@@ -1728,7 +1778,7 @@ function ct() {
 	};
 }
 // src/terminal/shell/Shell.js
-var lt = 200, ut = 0, dt = 1e3, ft = class e {
+var gt = 200, _t = 0, vt = 1e3, yt = class e {
 	scopes = [/* @__PURE__ */ new Map()];
 	functions = /* @__PURE__ */ new Map();
 	aliases = /* @__PURE__ */ new Map();
@@ -1746,21 +1796,21 @@ var lt = 200, ut = 0, dt = 1e3, ft = class e {
 	loopDepth = 0;
 	funcDepth = 0;
 	exempt = !1;
-	#e = n.root;
-	constructor({ host: e, commands: t, parent: r = null }) {
-		if (this.host = e, this.commands = t, r) return;
-		this.token = new b(), this.jobs = {
+	#e = r.root;
+	constructor({ host: e, commands: t, parent: n = null }) {
+		if (this.host = e, this.commands = t, n) return;
+		this.token = new x(), this.jobs = {
 			list: [],
 			next: 1
-		}, this.pid = dt++, this.started = Date.now();
-		let a = i.user?.username || "utente", o = {
-			HOME: n.home,
-			USER: a,
-			LOGNAME: a,
+		}, this.pid = vt++, this.started = Date.now();
+		let i = a.user?.username || w("shell.defaultUser"), o = {
+			HOME: r.home,
+			USER: i,
+			LOGNAME: i,
 			HOSTNAME: "lilos",
 			SHELL: "/bin/bash",
 			TERM: "lilos",
-			PATH: `${n.home}/bin`,
+			PATH: `${r.home}/bin`,
 			PS1: "\\u@\\h:\\w\\$ ",
 			PS2: "> ",
 			0: "bash",
@@ -1775,20 +1825,20 @@ var lt = 200, ut = 0, dt = 1e3, ft = class e {
 				"BASH_VERSION"
 			].includes(e)
 		});
-		this.cwd = n.root;
+		this.cwd = r.root;
 	}
 	get cwd() {
-		return n.get(this.#e)?.type === "folder" ? this.#e : n.root;
+		return r.get(this.#e)?.type === "folder" ? this.#e : r.root;
 	}
 	set cwd(e) {
 		let t = this.getVar("PWD");
-		this.#e = e, t != null && t !== n.path(e) && this.setVar("OLDPWD", t), this.setVar("PWD", n.path(e));
+		this.#e = e, t != null && t !== r.path(e) && this.setVar("OLDPWD", t), this.setVar("PWD", r.path(e));
 	}
 	resolve(e) {
 		return P(this.cwd, e);
 	}
 	locate(e) {
-		return Fe(this.cwd, e);
+		return ze(this.cwd, e);
 	}
 	#t(e) {
 		for (let t = this.scopes.length - 1; t >= 0; t--) if (this.scopes[t].has(e)) return this.scopes[t].get(e);
@@ -1813,7 +1863,7 @@ var lt = 200, ut = 0, dt = 1e3, ft = class e {
 	}
 	setVar(e, t, n = null, { local: r = !1, exported: i, readonly: a } = {}) {
 		let o = r ? this.scopes.at(-1).get(e) : this.#t(e);
-		if (o?.readonly) throw new y(`${e}: variabile in sola lettura`);
+		if (o?.readonly) throw new b(w("shell.readonly", { name: e }));
 		return o || (o = {
 			value: null,
 			exported: !1
@@ -1823,7 +1873,7 @@ var lt = 200, ut = 0, dt = 1e3, ft = class e {
 		for (let n = this.scopes.length - 1; n >= 0; n--) {
 			let r = this.scopes[n].get(e);
 			if (r) {
-				if (r.readonly) throw new y(`${e}: impossibile eliminare: variabile in sola lettura`);
+				if (r.readonly) throw new b(w("shell.cannotUnset", { name: e }));
 				t != null && Array.isArray(r.value) ? delete r.value[t] : this.scopes[n].delete(e);
 				return;
 			}
@@ -1851,7 +1901,7 @@ var lt = 200, ut = 0, dt = 1e3, ft = class e {
 		}
 	}
 	arith(e) {
-		return he(e, this.#n);
+		return D(e, this.#n);
 	}
 	#n = {
 		get: (e, t) => this.getVar(e, t == null ? null : Number(t)),
@@ -1859,7 +1909,7 @@ var lt = 200, ut = 0, dt = 1e3, ft = class e {
 	};
 	arrayIndex(e) {
 		let t = String(e).replace(/\$\{?([A-Za-z_]\w*|[0-9#?])\}?/g, (e, t) => (/^\d$/.test(t) ? this.positional[t - 1] : t === "#" ? this.positional.length : t === "?" ? this.status : this.getVar(t)) ?? ""), n = Number(this.arith(t));
-		if (n < 0) throw new y(`${e}: indice dell’array non valido`);
+		if (n < 0) throw new b(w("shell.badSubscript", { index: e }));
 		return n;
 	}
 	subshell({ script: t = !1 } = {}) {
@@ -1877,7 +1927,7 @@ var lt = 200, ut = 0, dt = 1e3, ft = class e {
 		}]))), n.functions = new Map(this.functions), n.aliases = new Map(this.aliases), n.positional = [...this.positional]), n.options = { ...this.options }, n.status = this.status, n.lastBg = this.lastBg, n.token = this.token, n.jobs = this.jobs, n.pid = this.pid, n.started = this.started, n.#e = this.cwd, n.subshellLevel = (this.subshellLevel ?? 0) + 1, n;
 	}
 	async run(e, t = this.host) {
-		return ce(e, { aliases: this.aliases }), this.exec({
+		return de(e, { aliases: this.aliases }), this.exec({
 			type: "script",
 			source: e
 		}, t);
@@ -1885,12 +1935,12 @@ var lt = 200, ut = 0, dt = 1e3, ft = class e {
 	async tick() {
 		this.token.check();
 		let e = performance.now();
-		e - ut > 12 && (ut = e, await new Promise((e) => setTimeout(e)), this.token.check());
+		e - _t > 12 && (_t = e, await new Promise((e) => setTimeout(e)), this.token.check());
 	}
 	sleep(e) {
 		return new Promise((t, n) => {
 			let r = this.token.onAbort(() => {
-				clearTimeout(i), n(new h());
+				clearTimeout(i), n(new g());
 			}), i = setTimeout(() => {
 				r(), t();
 			}, e);
@@ -1904,7 +1954,7 @@ var lt = 200, ut = 0, dt = 1e3, ft = class e {
 			case "simple": return this.execSimple(e, t);
 			case "script": {
 				let n = this.status;
-				for (let r of le(e.source, { aliases: this.aliases })) n = await this.execList(r, t);
+				for (let r of fe(e.source, { aliases: this.aliases })) n = await this.execList(r, t);
 				return n;
 			}
 		}
@@ -1912,7 +1962,7 @@ var lt = 200, ut = 0, dt = 1e3, ft = class e {
 	}
 	async execList(e, t) {
 		let n = this.status;
-		for (let r of e.items) if (r.async ? (this.startJob(r, t), n = 0) : (this.exempt = !1, n = await this.exec(r.node, t)), this.status = n, n !== 0 && this.options.errexit && !this.condDepth && !this.exempt && !r.async) throw new m(n);
+		for (let r of e.items) if (r.async ? (this.startJob(r, t), n = 0) : (this.exempt = !1, n = await this.exec(r.node, t)), this.status = n, n !== 0 && this.options.errexit && !this.condDepth && !this.exempt && !r.async) throw new h(n);
 		return n;
 	}
 	async execAndOr(e, t) {
@@ -1936,7 +1986,7 @@ var lt = 200, ut = 0, dt = 1e3, ft = class e {
 		try {
 			if (e.cmds.length === 1) n = await this.exec(e.cmds[0], t);
 			else {
-				let r = e.cmds.slice(1).map(() => ct()), i = e.cmds.length - 1, a = await Promise.all(e.cmds.map(async (n, a) => {
+				let r = e.cmds.slice(1).map(() => ht()), i = e.cmds.length - 1, a = await Promise.all(e.cmds.map(async (n, a) => {
 					let o = a === i ? t.stdout : r[a].writer, s = {
 						stdin: a === 0 ? t.stdin : r[a - 1].reader,
 						stdout: o,
@@ -1959,11 +2009,11 @@ var lt = 200, ut = 0, dt = 1e3, ft = class e {
 		try {
 			return await this.exec(e, t);
 		} catch (e) {
+			if (e instanceof h) return e.code;
+			if (e instanceof _) return 141;
+			if (e instanceof f || e instanceof p) return 0;
 			if (e instanceof m) return e.code;
-			if (e instanceof g) return 141;
-			if (e instanceof d || e instanceof f) return 0;
-			if (e instanceof p) return e.code;
-			if (e instanceof y) return await t.stderr.write(`bash: ${e.message}\n`), e.code;
+			if (e instanceof b) return await t.stderr.write(`bash: ${e.message}\n`), e.code;
 			throw e;
 		}
 	}
@@ -1980,20 +2030,20 @@ var lt = 200, ut = 0, dt = 1e3, ft = class e {
 				return await this.loop(async () => await this.condition(e.cond, t) === 0 !== e.until && (n = await this.exec(e.body, t), !0)), n;
 			}
 			case "for": {
-				let n = e.words ? await I(this, e.words) : [...this.positional], r = 0, i = 0;
+				let n = e.words ? await Ge(this, e.words) : [...this.positional], r = 0, i = 0;
 				return await this.loop(async () => i >= n.length ? !1 : (this.setVar(e.name, n[i++]), r = await this.exec(e.body, t), !0)), r;
 			}
 			case "cfor": {
-				let n = async (e) => this.arith(await L(this, e)), r = 0;
+				let n = async (e) => this.arith(await I(this, e)), r = 0;
 				e.init.parts.length && await n(e.init);
 				let i = !0;
 				return await this.loop(async () => (!i && e.step.parts.length && await n(e.step), i = !1, e.cond.parts.length && await n(e.cond) === 0n ? !1 : (r = await this.exec(e.body, t), !0))), r;
 			}
 			case "case": {
-				let n = await L(this, e.word), r = 0;
+				let n = await I(this, e.word), r = 0;
 				for (let i = 0; i < e.items.length; i++) {
 					let a = e.items[i], o = !1;
-					for (let e of a.patterns) if (M(await R(this, e), n)) {
+					for (let e of a.patterns) if (M(await L(this, e), n)) {
 						o = !0;
 						break;
 					}
@@ -2004,15 +2054,15 @@ var lt = 200, ut = 0, dt = 1e3, ft = class e {
 				}
 				return r;
 			}
-			case "arithcmd": return +(this.arith(await L(this, e.word)) === 0n);
+			case "arithcmd": return +(this.arith(await I(this, e.word)) === 0n);
 			case "cond": try {
 				return +!await this.cond(e.expr);
 			} catch (e) {
-				if (!(e instanceof y)) throw e;
+				if (!(e instanceof b)) throw e;
 				return await t.stderr.write(`bash: ${e.message}\n`), 2;
 			}
 		}
-		throw new y(`costrutto sconosciuto: ${e.type}`);
+		throw new b(w("shell.unknownConstruct", { type: e.type }));
 	}
 	async condition(e, t) {
 		this.condDepth++;
@@ -2030,12 +2080,12 @@ var lt = 200, ut = 0, dt = 1e3, ft = class e {
 				try {
 					if (!await e()) return;
 				} catch (e) {
-					if (e instanceof d) {
-						if (e.levels > 1) throw new d(e.levels - 1);
-						return;
-					}
 					if (e instanceof f) {
 						if (e.levels > 1) throw new f(e.levels - 1);
+						return;
+					}
+					if (e instanceof p) {
+						if (e.levels > 1) throw new p(e.levels - 1);
 						continue;
 					}
 					throw e;
@@ -2050,26 +2100,26 @@ var lt = 200, ut = 0, dt = 1e3, ft = class e {
 			case "!": return !await this.cond(e.expr);
 			case "&&": return await this.cond(e.left) && this.cond(e.right);
 			case "||": return await this.cond(e.left) || this.cond(e.right);
-			case "word": return await L(this, e.word) !== "";
-			case "unary": return this.unaryTest(e.flag, await L(this, e.arg));
+			case "word": return await I(this, e.word) !== "";
+			case "unary": return this.unaryTest(e.flag, await I(this, e.arg));
 		}
-		let t = await L(this, e.left);
+		let t = await I(this, e.left);
 		switch (e.bop) {
 			case "==":
-			case "=": return M(await R(this, e.right), t);
-			case "!=": return !M(await R(this, e.right), t);
+			case "=": return M(await L(this, e.right), t);
+			case "!=": return !M(await L(this, e.right), t);
 			case "=~": {
 				let n;
 				try {
-					n = new RegExp(await He(this, e.right));
+					n = new RegExp(await qe(this, e.right));
 				} catch {
-					throw new y("espressione regolare non valida");
+					throw new b(w("shell.badRegex"));
 				}
 				let r = n.exec(t);
 				return this.setVar("BASH_REMATCH", r ? [...r].map((e) => e ?? "") : []), !!r;
 			}
 		}
-		return this.binaryTest(e.bop, t, await L(this, e.right), !0);
+		return this.binaryTest(e.bop, t, await I(this, e.right), !0);
 	}
 	unaryTest(e, t) {
 		let n = () => t === "" ? null : this.resolve(t);
@@ -2096,11 +2146,11 @@ var lt = 200, ut = 0, dt = 1e3, ft = class e {
 			case "-h": return n()?.type === "app";
 			case "-t": return t === "0" || t === "1" || t === "2";
 		}
-		throw new y(`${e}: operatore unario atteso`);
+		throw new b(w("shell.unaryExpected", { op: e }));
 	}
 	binaryTest(e, t, n) {
 		let r = (e) => {
-			if (!/^\s*-?\d+\s*$/.test(e)) throw new y(`${e}: è attesa un’espressione intera`);
+			if (!/^\s*-?\d+\s*$/.test(e)) throw new b(w("shell.integerExpected", { value: e }));
 			return BigInt(e.trim());
 		};
 		switch (e) {
@@ -2122,7 +2172,7 @@ var lt = 200, ut = 0, dt = 1e3, ft = class e {
 				return !!e && e.id === r?.id;
 			}
 		}
-		throw new y(`${e}: operatore binario atteso`);
+		throw new b(w("shell.binaryExpected", { op: e }));
 	}
 	async execSimple(e, t) {
 		await this.tick(), this.curIo = t, this.substStatus = null;
@@ -2131,21 +2181,21 @@ var lt = 200, ut = 0, dt = 1e3, ft = class e {
 			n = [];
 			for (let t of e.words) {
 				if (!t.declArray) {
-					n.push(...await Ve(this, t));
+					n.push(...await Ke(this, t));
 					continue;
 				}
-				let { name: e, append: r, words: i } = t.declArray, a = await I(this, i);
+				let { name: e, append: r, words: i } = t.declArray, a = await Ge(this, i);
 				(this.declArrays ??= /* @__PURE__ */ new Map()).set(e, a), n.push(`${e}${r ? "+" : ""}=(${a.join(" ")})`);
 			}
 		} catch (e) {
-			if (!(e instanceof y)) throw e;
+			if (!(e instanceof b)) throw e;
 			return await t.stderr.write(`bash: ${e.message}\n`), 1;
 		}
 		if (!n.length) {
 			try {
 				for (let t of e.assigns) await this.assign(t);
 			} catch (e) {
-				if (!(e instanceof y)) throw e;
+				if (!(e instanceof b)) throw e;
 				return await t.stderr.write(`bash: ${e.message}\n`), 1;
 			}
 			let n = this.substStatus ?? 0;
@@ -2155,11 +2205,11 @@ var lt = 200, ut = 0, dt = 1e3, ft = class e {
 		if (e.assigns.length) {
 			r = /* @__PURE__ */ new Map();
 			for (let t of e.assigns) r.set(t.name, {
-				value: t.array ? await I(this, t.array) : await L(this, t.value),
+				value: t.array ? await Ge(this, t.array) : await I(this, t.value),
 				exported: !0
 			});
 		}
-		return this.options.xtrace && await t.stderr.write(`+ ${n.map(W).join(" ")}\n`), this.withRedirects(e.redirs, t, async (e) => {
+		return this.options.xtrace && await t.stderr.write(`+ ${n.map(V).join(" ")}\n`), this.withRedirects(e.redirs, t, async (e) => {
 			r && this.scopes.push(r);
 			try {
 				return await this.invoke(n, e);
@@ -2170,12 +2220,12 @@ var lt = 200, ut = 0, dt = 1e3, ft = class e {
 	}
 	async assign(e) {
 		if (e.array) {
-			let t = await I(this, e.array);
+			let t = await Ge(this, e.array);
 			this.setVar(e.name, e.append ? [...this.getArray(e.name) ?? [], ...t] : t);
 			return;
 		}
-		let t = await L(this, e.value), n = e.index == null ? null : this.arrayIndex(e.index);
-		e.append ? this.setVar(e.name, (this.getVar(e.name, n) ?? "") + t, n) : this.setVar(e.name, t, n), this.options.xtrace && await this.curIo?.stderr.write(`+ ${e.name}=${W(t)}\n`);
+		let t = await I(this, e.value), n = e.index == null ? null : this.arrayIndex(e.index);
+		e.append ? this.setVar(e.name, (this.getVar(e.name, n) ?? "") + t, n) : this.setVar(e.name, t, n), this.options.xtrace && await this.curIo?.stderr.write(`+ ${e.name}=${V(t)}\n`);
 	}
 	async invoke(e, t, { functions: n = !0 } = {}) {
 		let r = e[0];
@@ -2184,34 +2234,34 @@ var lt = 200, ut = 0, dt = 1e3, ft = class e {
 		let i = this.commands.get(r);
 		if (i) return this.runCommand(i, e, t);
 		for (let n of (this.getVar("PATH") ?? "").split(":").filter(Boolean)) for (let i of [r, `${r}.sh`]) if (this.resolve(`${n}/${i}`)?.type === "file") return this.runScript(`${n}/${i}`, e.slice(1), t);
-		return await t.stderr.write(`bash: ${r}: comando non trovato\n`), 127;
+		return await t.stderr.write(`bash: ${w("shell.commandNotFound", { name: r })}\n`), 127;
 	}
 	async runCommand(e, t, n) {
-		let r = new pt(this, e, t, n);
-		if (t[1] === "--help" && !e.ownHelp) return await r.out(gt(e)), 0;
+		let r = new bt(this, e, t, n);
+		if (t[1] === "--help" && !e.ownHelp) return await r.out(Ct(e)), 0;
 		try {
 			let t = await e.run(r);
 			return typeof t == "number" ? t : 0;
 		} catch (e) {
-			if (e instanceof g) return 141;
+			if (e instanceof _) return 141;
 			let t = async (e) => {
 				try {
 					await r.error(e);
 				} catch {}
 			};
-			if (e instanceof y) return await t(e.message), e.code;
-			if (e instanceof d || e instanceof f || e instanceof p || e instanceof m || e instanceof h) throw e;
-			return e instanceof _ || e instanceof v ? (await t(e.message || "errore di sintassi: fine del testo inattesa"), 2) : (await t(e?.message ?? String(e)), 1);
+			if (e instanceof b) return await t(e.message), e.code;
+			if (e instanceof f || e instanceof p || e instanceof m || e instanceof h || e instanceof g) throw e;
+			return e instanceof v || e instanceof y ? (await t(e.message || w("parse.unexpectedEnd")), 2) : (await t(e?.message ?? String(e)), 1);
 		}
 	}
 	async callFunction(e, t, n) {
-		if (this.funcDepth >= lt) throw new y(`${e}: troppi livelli di ricorsione`);
+		if (this.funcDepth >= gt) throw new b(w("shell.tooDeep", { name: e }));
 		let r = this.functions.get(e), i = this.positional, a = /* @__PURE__ */ new Map();
 		this.positional = t.slice(1), this.scopes.push(a), this.funcDepth++;
 		try {
 			return await this.exec(r.body, n);
 		} catch (e) {
-			if (e instanceof p) return e.code;
+			if (e instanceof m) return e.code;
 			throw e;
 		} finally {
 			this.funcDepth--, this.scopes.splice(this.scopes.indexOf(a), 1), this.positional = i;
@@ -2219,17 +2269,17 @@ var lt = 200, ut = 0, dt = 1e3, ft = class e {
 	}
 	async readScript(e) {
 		let t = this.resolve(e);
-		if (!t) throw new y(`${e}: file o cartella inesistente`, 127);
-		if (t.type === "folder") throw new y(`${e}: è una cartella`, 126);
-		if (t.type !== "file") throw new y(`${e}: non è un file`, 126);
-		return n.read(t.id);
+		if (!t) throw new b(w("err.noSuchFile", { path: e }), 127);
+		if (t.type === "folder") throw new b(w("err.isADirectory", { path: e }), 126);
+		if (t.type !== "file") throw new b(w("err.notAFile", { path: e }), 126);
+		return r.read(t.id);
 	}
 	async runScript(e, t, n) {
 		let r;
 		try {
 			r = await this.readScript(e);
 		} catch (e) {
-			if (!(e instanceof y)) throw e;
+			if (!(e instanceof b)) throw e;
 			return await n.stderr.write(`bash: ${e.message}\n`), e.code;
 		}
 		let i = this.subshell({ script: !0 });
@@ -2237,10 +2287,10 @@ var lt = 200, ut = 0, dt = 1e3, ft = class e {
 	}
 	async runSource(e, t, n) {
 		try {
-			ce(e, { aliases: this.aliases });
+			de(e, { aliases: this.aliases });
 		} catch (e) {
-			if (!(e instanceof v || e instanceof _)) throw e;
-			return await t.stderr.write(`${n}: ${e.message || "errore di sintassi: fine del file inattesa"}\n`), 2;
+			if (!(e instanceof y || e instanceof v)) throw e;
+			return await t.stderr.write(`${n}: ${e.message || w("parse.unexpectedEndOfFile")}\n`), 2;
 		}
 		return this.runSubshell({
 			type: "script",
@@ -2248,7 +2298,7 @@ var lt = 200, ut = 0, dt = 1e3, ft = class e {
 		}, t);
 	}
 	async substitute(e) {
-		let t = new at(), n = this.curIo ?? this.host, r = await this.subshell().runSubshell(e, {
+		let t = new ft(), n = this.curIo ?? this.host, r = await this.subshell().runSubshell(e, {
 			stdin: n.stdin,
 			stdout: t,
 			stderr: n.stderr
@@ -2286,25 +2336,25 @@ var lt = 200, ut = 0, dt = 1e3, ft = class e {
 					case ">&":
 					case "<&": {
 						let a = await this.redirTarget(n);
-						if (a === "-") r[e] = n.op === ">&" ? new it() : new H();
+						if (a === "-") r[e] = n.op === ">&" ? new dt() : new z();
 						else if (/^\d+$/.test(a)) {
-							if (!r[a]) throw new y(`${a}: descrittore di file errato`);
+							if (!r[a]) throw new b(w("shell.badFd", { fd: a }));
 							r[e] = r[a];
 						} else if (n.op === ">&" && n.fd == null) {
 							let e = await this.openWrite(a, !1, t);
 							i.push(e), r[1] = r[2] = e;
-						} else throw new y(`${a}: è richiesto un descrittore di file`);
+						} else throw new b(w("shell.fdExpected", { target: a }));
 						break;
 					}
 					case "<<":
 					case "<<-":
-						r[e] = new rt(await L(this, n.heredoc.body));
+						r[e] = new ut(await I(this, n.heredoc.body));
 						break;
-					case "<<<": r[e] = new rt(await L(this, n.target) + "\n");
+					case "<<<": r[e] = new ut(await I(this, n.target) + "\n");
 				}
 			}
 		} catch (e) {
-			if (!(e instanceof y)) throw e;
+			if (!(e instanceof b)) throw e;
 			await t.stderr.write(`bash: ${e.message}\n`);
 			for (let e of i) await e.close().catch(() => {});
 			return 1;
@@ -2324,45 +2374,45 @@ var lt = 200, ut = 0, dt = 1e3, ft = class e {
 		}
 	}
 	async redirTarget(e) {
-		let t = await Ve(this, e.target);
-		if (t.length !== 1) throw new y(`${await L(this, e.target)}: redirezione ambigua`);
+		let t = await Ke(this, e.target);
+		if (t.length !== 1) throw new b(w("shell.ambiguousRedirect", { target: await I(this, e.target) }));
 		return t[0];
 	}
 	async openRead(e, t) {
-		if (e === "/dev/null") return new H();
+		if (e === "/dev/null") return new z();
 		if (e === "/dev/stdin") return t.stdin;
-		let r = this.resolve(e);
-		if (!r) throw new y(`${e}: file o cartella inesistente`);
-		if (r.type === "folder") throw new y(`${e}: è una cartella`);
-		if (r.type !== "file") throw new y(`${e}: non è un file`);
-		return new rt(await n.read(r.id));
+		let n = this.resolve(e);
+		if (!n) throw new b(w("err.noSuchFile", { path: e }));
+		if (n.type === "folder") throw new b(w("err.isADirectory", { path: e }));
+		if (n.type !== "file") throw new b(w("err.notAFile", { path: e }));
+		return new ut(await r.read(n.id));
 	}
-	async openWrite(e, t, r) {
-		if (e === "/dev/null") return new it();
-		if (e === "/dev/stdout") return ht(r.stdout);
-		if (e === "/dev/stderr") return ht(r.stderr);
-		if (e === "/dev/tty") return ht(this.host.stdout);
+	async openWrite(e, t, n) {
+		if (e === "/dev/null") return new dt();
+		if (e === "/dev/stdout") return St(n.stdout);
+		if (e === "/dev/stderr") return St(n.stderr);
+		if (e === "/dev/tty") return St(this.host.stdout);
 		let i = this.fileFor(e).id;
-		return t || await n.write(i, ""), new mt(i, t);
+		return t || await r.write(i, ""), new xt(i, t);
 	}
 	fileFor(e) {
 		let t = this.resolve(e);
-		if (t?.type === "folder") throw new y(`${e}: è una cartella`);
-		if (t?.type === "app") throw new y(`${e}: è un collegamento a un’app`);
+		if (t?.type === "folder") throw new b(w("err.isADirectory", { path: e }));
+		if (t?.type === "app") throw new b(w("shell.isAppLink", { path: e }));
 		if (t) return t;
-		let { parent: r, name: i } = this.locate(e);
-		if (r?.type !== "folder" || !i) throw new y(`${e}: file o cartella inesistente`);
-		return n.create(r.id, {
+		let { parent: n, name: i } = this.locate(e);
+		if (n?.type !== "folder" || !i) throw new b(w("err.noSuchFile", { path: e }));
+		return r.create(n.id, {
 			type: "file",
 			name: i
 		});
 	}
 	startJob(e, t) {
 		let n = this.subshell();
-		n.token = new b();
+		n.token = new x();
 		let r = {
 			id: this.jobs.next++,
-			pid: dt++,
+			pid: vt++,
 			text: e.text.replace(/&\s*$/, "").trim(),
 			state: "running",
 			code: null,
@@ -2370,10 +2420,10 @@ var lt = 200, ut = 0, dt = 1e3, ft = class e {
 			notified: !1
 		};
 		return n.pid = r.pid, r.promise = n.runSubshell(e.node, {
-			stdin: new H(),
+			stdin: new z(),
 			stdout: t.stdout,
 			stderr: t.stderr
-		}).then((e) => e, (e) => e instanceof h ? 130 : (t.stderr.write(`bash: ${e?.message ?? e}\n`), 1)).then((e) => (r.state = "done", r.code = e, e)), this.jobs.list.push(r), this.lastBg = r.pid, this.subshellLevel || t.stderr.write(`[${r.id}] ${r.pid}\n`), r;
+		}).then((e) => e, (e) => e instanceof g ? 130 : (t.stderr.write(`bash: ${e?.message ?? e}\n`), 1)).then((e) => (r.state = "done", r.code = e, e)), this.jobs.list.push(r), this.lastBg = r.pid, this.subshellLevel || t.stderr.write(`[${r.id}] ${r.pid}\n`), r;
 	}
 	findJob(e) {
 		let t = this.jobs.list;
@@ -2381,12 +2431,12 @@ var lt = 200, ut = 0, dt = 1e3, ft = class e {
 	}
 	reapJobs() {
 		let e = this.jobs.list.filter((e) => e.state === "done");
-		return this.jobs.list = this.jobs.list.filter((e) => e.state !== "done"), this.jobs.list.length || (this.jobs.next = 1), e.map((e) => `[${e.id}]  ${e.code === 0 ? "Fatto" : e.code === 130 ? "Interrotto" : `Uscita ${e.code}`}\t\t${e.text}\n`);
+		return this.jobs.list = this.jobs.list.filter((e) => e.state !== "done"), this.jobs.list.length || (this.jobs.next = 1), e.map((e) => `[${e.id}]  ${e.code === 0 ? w("jobs.done") : e.code === 130 ? w("jobs.interrupted") : w("jobs.exit", { code: e.code })}\t\t${e.text}\n`);
 	}
 	async waitJob(e, { forward: t = !1 } = {}) {
 		let n, r = new Promise((r, i) => {
 			n = this.token.onAbort(() => {
-				t ? e.token.abort() : i(new h());
+				t ? e.token.abort() : i(new g());
 			});
 		});
 		try {
@@ -2395,7 +2445,7 @@ var lt = 200, ut = 0, dt = 1e3, ft = class e {
 			n();
 		}
 	}
-}, pt = class {
+}, bt = class {
 	constructor(e, t, n, r) {
 		this.shell = e, this.cmd = t, this.name = n[0], this.argv = n, this.args = n.slice(1), this.stdin = r.stdin, this.stdout = r.stdout, this.stderr = r.stderr, this.io = r;
 	}
@@ -2431,14 +2481,14 @@ var lt = 200, ut = 0, dt = 1e3, ft = class e {
 				continue;
 			}
 			let e = this.resolve(t);
-			e ? e.type === "folder" ? (await this.error(`${t}: è una cartella`), this.failed = !0) : e.type === "file" ? (yield {
+			e ? e.type === "folder" ? (await this.error(w("err.isADirectory", { path: t })), this.failed = !0) : e.type === "file" ? (yield {
 				name: t,
 				node: e,
-				text: await n.read(e.id)
-			}, await this.tick()) : (await this.error(`${t}: non è un file`), this.failed = !0) : (await this.error(`${t}: file o cartella inesistente`), this.failed = !0);
+				text: await r.read(e.id)
+			}, await this.tick()) : (await this.error(w("err.notAFile", { path: t })), this.failed = !0) : (await this.error(w("err.noSuchFile", { path: t })), this.failed = !0);
 		}
 	}
-}, mt = class extends U {
+}, xt = class extends B {
 	#e = "";
 	constructor(e, t) {
 		super(), this.id = e, this.append = t;
@@ -2447,22 +2497,22 @@ var lt = 200, ut = 0, dt = 1e3, ft = class e {
 		this.#e += e;
 	}
 	async close() {
-		if (!n.exists(this.id) || this.append && !this.#e) return;
-		let e = this.append ? await n.read(this.id) : "";
-		await n.write(this.id, e + this.#e);
+		if (!r.exists(this.id) || this.append && !this.#e) return;
+		let e = this.append ? await r.read(this.id) : "";
+		await r.write(this.id, e + this.#e);
 	}
-}, ht = (e) => ({
+}, St = (e) => ({
 	write: (t) => e.write(t),
 	close: async () => {}
-}), W = (e) => e === "" ? "''" : /^[\w@%+=:,./~-]+$/.test(e) ? e : `'${e.replace(/'/g, "'\\''")}'`;
-function gt(e) {
-	return `${e.usage ? `Uso: ${e.usage}\n` : ""}${e.summary ?? ""}\n${e.help ? `\n${e.help.trim()}\n` : ""}`;
+}), V = (e) => e === "" ? "''" : /^[\w@%+=:,./~-]+$/.test(e) ? e : `'${e.replace(/'/g, "'\\''")}'`;
+function Ct(e) {
+	return `${e.usage ? `${w("help.usageLine", { usage: e.usage })}\n` : ""}${e.summary ?? ""}\n${e.help ? `\n${e.help.trim()}\n` : ""}`;
 }
 // src/terminal/commands/options.js
-function G(e, { flags: t = "", values: n = "", multi: r = "", long: i = {}, number: a = !1, stopAtArg: o = !1 } = {}) {
+function H(e, { flags: t = "", values: n = "", multi: r = "", long: i = {}, number: a = !1, stopAtArg: o = !1 } = {}) {
 	let s = {}, c = [], l = e.args, u = (e, t) => {
 		r.includes(e) ? (s[e] ??= []).push(t) : s[e] = t;
-	}, d = (t) => new y(`opzione non valida -- «${t}»${e.cmd.usage ? `\nUso: ${e.cmd.usage}` : ""}`, 2);
+	}, d = (t) => new b(`${w("opt.invalid", { option: t })}${e.cmd.usage ? `\n${w("help.usageLine", { usage: e.cmd.usage })}` : ""}`, 2);
 	for (let e = 0; e < l.length; e++) {
 		let f = l[e];
 		if (f === "--") {
@@ -2474,7 +2524,7 @@ function G(e, { flags: t = "", values: n = "", multi: r = "", long: i = {}, numb
 			if (o == null) throw d(`--${t}`);
 			if (n.includes(o) || r.includes(o)) {
 				let n = a ?? l[++e];
-				if (n == null) throw new y(`l’opzione «--${t}» richiede un argomento`, 2);
+				if (n == null) throw new b(w("opt.longNeedsArgument", { name: t }), 2);
 				u(o, n);
 			} else s[o] = !0;
 		} else if (f.startsWith("-") && f.length > 1) {
@@ -2486,7 +2536,7 @@ function G(e, { flags: t = "", values: n = "", multi: r = "", long: i = {}, numb
 				let a = f[i];
 				if (n.includes(a) || r.includes(a)) {
 					let t = i + 1 < f.length ? f.slice(i + 1) : l[++e];
-					if (t == null) throw new y(`l’opzione richiede un argomento -- «${a}»`, 2);
+					if (t == null) throw new b(w("opt.needsArgument", { option: a }), 2);
 					u(a, t);
 					break;
 				}
@@ -2506,12 +2556,12 @@ function G(e, { flags: t = "", values: n = "", multi: r = "", long: i = {}, numb
 		args: c
 	};
 }
-function K(e, t = "numero") {
-	if (!/^[+-]?\d+$/.test(String(e))) throw new y(`${t} non valido: «${e}»`, 2);
+function U(e) {
+	if (!/^[+-]?\d+$/.test(String(e))) throw new b(w("opt.badNumber", { value: e }), 2);
 	return Number(e);
 }
 // src/terminal/commands/builtins.js
-var _t = [
+var wt = [
 	"if",
 	"then",
 	"else",
@@ -2531,13 +2581,13 @@ var _t = [
 	"!",
 	"[[",
 	"]]"
-], vt = {
+], Tt = {
 	errexit: "e",
 	nounset: "u",
 	xtrace: "x",
 	noglob: "f",
 	pipefail: null
-}, yt = {
+}, Et = {
 	n: "\n",
 	t: "	",
 	r: "\r",
@@ -2549,7 +2599,7 @@ var _t = [
 	v: "\v",
 	"\\": "\\"
 };
-function bt(e, { printf: t = !1 } = {}) {
+function Dt(e, { printf: t = !1 } = {}) {
 	let n = "";
 	for (let r = 0; r < e.length; r++) {
 		let i = e[r];
@@ -2558,8 +2608,8 @@ function bt(e, { printf: t = !1 } = {}) {
 			continue;
 		}
 		let a = e[++r];
-		if (yt[a] != null) {
-			n += yt[a];
+		if (Et[a] != null) {
+			n += Et[a];
 			continue;
 		}
 		if (a === "c") return {
@@ -2578,7 +2628,7 @@ function bt(e, { printf: t = !1 } = {}) {
 		stop: !1
 	};
 }
-function xt(e, t) {
+function Ot(e, t) {
 	let n = "", r = 0, i = [], a = /%([-+ #0]*)(\*|\d+)?(?:\.(\*|\d*))?([diouxXfFeEgGcsbq%])/y, o = () => r < t.length ? t[r++] : void 0, s = (e) => {
 		if (e == null || e === "") return 0;
 		if (/^['"]./.test(e)) return e.codePointAt(1);
@@ -2586,14 +2636,14 @@ function xt(e, t) {
 		if (/^[+-]?(0[xX][0-9a-fA-F]+|\d+)$/.test(t)) return Number(t.startsWith("-") ? -Number(t.slice(1)) : Number(t.replace(/^\+/, "")));
 		if (/^[+-]?0[0-7]+$/.test(t)) return parseInt(t, 8);
 		let n = Number(t);
-		return Number.isFinite(n) ? n : (i.push(`${e}: è richiesto un numero`), 0);
+		return Number.isFinite(n) ? n : (i.push(w("printf.badNumber", { value: e })), 0);
 	};
 	do {
 		let t = r;
 		for (let t = 0; t < e.length;) {
 			let r = e[t];
 			if (r === "\\") {
-				let r = /^\\(x[0-9a-fA-F]{1,2}|u[0-9a-fA-F]{1,4}|[0-7]{1,3}|.)/s.exec(e.slice(t))[0], { text: a, stop: o } = bt(r, { printf: !0 });
+				let r = /^\\(x[0-9a-fA-F]{1,2}|u[0-9a-fA-F]{1,4}|[0-7]{1,3}|.)/s.exec(e.slice(t))[0], { text: a, stop: o } = Dt(r, { printf: !0 });
 				if (n += a, o) return {
 					text: n,
 					errors: i
@@ -2624,10 +2674,10 @@ function xt(e, t) {
 					m = p ?? "", d && (m = m.slice(0, Number(d)));
 					break;
 				case "b":
-					m = bt(p ?? "").text;
+					m = Dt(p ?? "").text;
 					break;
 				case "q":
-					m = W(p ?? "");
+					m = V(p ?? "");
 					break;
 				case "c":
 					m = (p ?? "")[0] ?? "";
@@ -2670,7 +2720,7 @@ function xt(e, t) {
 		errors: i
 	};
 }
-function St(e, t) {
+function kt(e, t) {
 	let n = 0, r = [
 		"=",
 		"==",
@@ -2705,11 +2755,11 @@ function St(e, t) {
 		}
 		return e;
 	}, s = () => t[n] === "!" && n + 1 < t.length ? (n++, !s()) : c(), c = () => {
-		if (n >= t.length) throw new y("manca un argomento", 2);
+		if (n >= t.length) throw new b(w("test.argumentExpected"), 2);
 		if (t[n] === "(" && n + 2 < t.length) {
 			n++;
 			let e = a();
-			if (t[n] !== ")") throw new y("manca «)»", 2);
+			if (t[n] !== ")") throw new b(w("err.missingParen"), 2);
 			return n++, e;
 		}
 		if (n + 2 < t.length + 0 && r.includes(t[n + 1]) && n + 2 <= t.length - 1) {
@@ -2724,15 +2774,15 @@ function St(e, t) {
 	};
 	if (!t.length) return !1;
 	let l = a();
-	if (n < t.length) throw new y(`${t[n]}: argomento inatteso`, 2);
+	if (n < t.length) throw new b(w("test.unexpectedArgument", { arg: t[n] }), 2);
 	return l;
 }
-function Ct(e, t) {
+function At(e, t) {
 	let n = (Array.isArray(t.value) ? "a" : "") + (t.exported ? "x" : "") + (t.readonly ? "r" : ""), r = Array.isArray(t.value) ? `(${Object.keys(t.value).map((e) => `[${e}]=${JSON.stringify(t.value[e])}`).join(" ")})` : JSON.stringify(t.value);
 	return `declare -${n || "-"} ${e}=${r}\n`;
 }
-async function q(e, { local: t = !1, exported: n, readonly: r = !1, flags: i = "axrigpfFn" } = {}) {
-	let a = e.shell, { opts: o, args: s } = G(e, { flags: i });
+async function W(e, { local: t = !1, exported: n, readonly: r = !1, flags: i = "axrigpfFn" } = {}) {
+	let a = e.shell, { opts: o, args: s } = H(e, { flags: i });
 	if (o.f || o.F) {
 		let t = s.length ? s : [...a.functions.keys()].sort(), n = 0;
 		for (let r of t) {
@@ -2744,14 +2794,14 @@ async function q(e, { local: t = !1, exported: n, readonly: r = !1, flags: i = "
 	let c = t || e.name !== "export" && e.name !== "readonly" && a.funcDepth > 0 && !o.g;
 	if (!s.length || o.p) {
 		let t = a.variables().filter(([t, n]) => (!s.length || s.includes(t)) && (!(o.x || e.name === "export") || n.exported) && (!(o.r || e.name === "readonly") || n.readonly) && (!o.a || Array.isArray(n.value)));
-		for (let [n, r] of t) await e.out(Ct(n, r));
+		for (let [n, r] of t) await e.out(At(n, r));
 		return 0;
 	}
 	let l = 0;
 	for (let t of s) {
 		let i = /^([A-Za-z_]\w*)(?:\[([^\]]*)\])?(\+?)(?:=(.*))?$/s.exec(t);
 		if (!i) {
-			await e.error(`«${t}»: identificatore non valido`), l = 1;
+			await e.error(w("err.badIdentifier", { name: t })), l = 1;
 			continue;
 		}
 		let [, s, u, d, f] = i, p = o.n ? !1 : o.x || n ? !0 : void 0;
@@ -2783,43 +2833,57 @@ async function q(e, { local: t = !1, exported: n, readonly: r = !1, flags: i = "
 	}
 	return l;
 }
-var wt = (e, t, n) => {
+var jt = (e, t, n) => {
 	if (t == null) return n;
-	if (!/^-?\d+$/.test(t)) throw new y(`${t}: è richiesto un argomento numerico`, 2);
+	if (!/^-?\d+$/.test(t)) throw new b(w("err.numericArgument", { value: t }), 2);
 	return (Number(t) % 256 + 256) % 256;
-}, Tt = [
+}, Mt = [
 	{
 		name: "cd",
-		usage: "cd [cartella]",
-		summary: "Cambia la cartella di lavoro.",
-		help: "Senza argomenti va nella home ($HOME). «cd -» torna alla cartella precedente ($OLDPWD).",
+		get usage() {
+			return w("help.cd.usage");
+		},
+		get summary() {
+			return w("help.cd.summary");
+		},
+		get help() {
+			return w("help.cd.text");
+		},
 		async run(e) {
-			let t = e.shell, { args: n } = G(e, { flags: "LPe" }), r = n[0] ?? t.getVar("HOME") ?? "~";
-			if (n.length > 1) throw new y("troppi argomenti");
+			let t = e.shell, { args: n } = H(e, { flags: "LPe" }), r = n[0] ?? t.getVar("HOME") ?? "~";
+			if (n.length > 1) throw new b(w("err.tooManyArguments"));
 			if (r === "-") {
-				if (r = t.getVar("OLDPWD"), r == null) throw new y("OLDPWD non impostata");
+				if (r = t.getVar("OLDPWD"), r == null) throw new b(w("cd.oldpwdNotSet"));
 				await e.out(r + "\n");
 			}
 			let i = e.resolve(r);
-			if (!i) throw new y(`${r}: file o cartella inesistente`);
-			if (i.type !== "folder") throw new y(`${r}: non è una cartella`);
+			if (!i) throw new b(w("err.noSuchFile", { path: r }));
+			if (i.type !== "folder") throw new b(w("err.notADirectory", { path: r }));
 			t.cwd = i.id;
 		}
 	},
 	{
 		name: "pwd",
 		usage: "pwd",
-		summary: "Mostra la cartella di lavoro.",
+		get summary() {
+			return w("help.pwd.summary");
+		},
 		async run(e) {
-			await e.out(n.path(e.cwd) + "\n");
+			await e.out(r.path(e.cwd) + "\n");
 		}
 	},
 	{
 		name: "echo",
 		ownHelp: !0,
-		usage: "echo [-neE] [testo…]",
-		summary: "Scrive gli argomenti, separati da uno spazio.",
-		help: "-n  senza a capo finale\n-e  interpreta \\n, \\t, \\\\, \\e… \n-E  non le interpreta (predefinito)",
+		get usage() {
+			return w("help.echo.usage");
+		},
+		get summary() {
+			return w("help.echo.summary");
+		},
+		get help() {
+			return w("help.echo.text");
+		},
 		async run(e) {
 			let t = e.args, n = !0, r = !1;
 			for (; t.length && /^-[neE]+$/.test(t[0]);) {
@@ -2828,7 +2892,7 @@ var wt = (e, t, n) => {
 			}
 			let i = t.join(" ");
 			if (r) {
-				let e = bt(i);
+				let e = Dt(i);
 				i = e.text, e.stop && (n = !1);
 			}
 			await e.out(i + (n ? "\n" : ""));
@@ -2837,43 +2901,63 @@ var wt = (e, t, n) => {
 	{
 		name: "printf",
 		ownHelp: !0,
-		usage: "printf [-v var] formato [argomenti…]",
-		summary: "Scrive gli argomenti secondo un formato (%s, %d, %5.2f, %x, %b, %q…).",
-		help: "Il formato si riapplica finché restano argomenti. -v salva il risultato in una variabile.",
+		get usage() {
+			return w("help.printf.usage");
+		},
+		get summary() {
+			return w("help.printf.summary");
+		},
+		get help() {
+			return w("help.printf.text");
+		},
 		async run(e) {
 			let t = e.args, n = null;
-			if (t[0] === "-v" && (n = t[1], t = t.slice(2)), t[0] === "--" && (t = t.slice(1)), !t.length) throw new y(`uso: ${this.usage}`, 2);
-			let { text: r, errors: i } = xt(t[0], t.slice(1));
+			if (t[0] === "-v" && (n = t[1], t = t.slice(2)), t[0] === "--" && (t = t.slice(1)), !t.length) throw new b(w("help.usageShort", { usage: this.usage }), 2);
+			let { text: r, errors: i } = Ot(t[0], t.slice(1));
 			for (let t of i) await e.error(t);
 			return n ? e.shell.setVar(n, r) : await e.out(r), +!!i.length;
 		}
 	},
 	{
 		name: "export",
-		usage: "export [-n] [nome[=valore]…]",
-		summary: "Rende le variabili visibili ai comandi e agli script avviati.",
-		help: "Senza argomenti elenca le variabili esportate. -n toglie l’esportazione.",
-		run: (e) => q(e, {
+		get usage() {
+			return w("help.export.usage");
+		},
+		get summary() {
+			return w("help.export.summary");
+		},
+		get help() {
+			return w("help.export.text");
+		},
+		run: (e) => W(e, {
 			exported: !0,
 			flags: "npf"
 		})
 	},
 	{
 		name: "readonly",
-		usage: "readonly [nome[=valore]…]",
-		summary: "Rende le variabili di sola lettura.",
-		run: (e) => q(e, {
+		get usage() {
+			return w("help.readonly.usage");
+		},
+		get summary() {
+			return w("help.readonly.summary");
+		},
+		run: (e) => W(e, {
 			readonly: !0,
 			flags: "ap"
 		})
 	},
 	{
 		name: "local",
-		usage: "local [-arx] nome[=valore]…",
-		summary: "Variabili visibili solo dentro la funzione.",
+		get usage() {
+			return w("help.local.usage");
+		},
+		get summary() {
+			return w("help.local.summary");
+		},
 		run(e) {
-			if (!e.shell.funcDepth) throw new y("si può usare solo in una funzione");
-			return q(e, {
+			if (!e.shell.funcDepth) throw new b(w("local.onlyInFunction"));
+			return W(e, {
 				local: !0,
 				flags: "axrin"
 			});
@@ -2881,38 +2965,56 @@ var wt = (e, t, n) => {
 	},
 	{
 		name: "declare",
-		usage: "declare [-aprxifF] [nome[=valore]…]",
-		summary: "Dichiara variabili e ne mostra gli attributi.",
-		help: "-a array, -x esportata, -r sola lettura, -i intero (il valore si calcola), -p mostra, -f mostra le funzioni, -g globale dentro una funzione.",
-		run: (e) => q(e)
+		get usage() {
+			return w("help.declare.usage");
+		},
+		get summary() {
+			return w("help.declare.summary");
+		},
+		get help() {
+			return w("help.declare.text");
+		},
+		run: (e) => W(e)
 	},
 	{
 		name: "typeset",
-		usage: "typeset [-aprxifF] [nome[=valore]…]",
-		summary: "Come declare.",
-		run: (e) => q(e)
+		get usage() {
+			return w("help.typeset.usage");
+		},
+		get summary() {
+			return w("help.typeset.summary");
+		},
+		run: (e) => W(e)
 	},
 	{
 		name: "unset",
-		usage: "unset [-fv] nome…",
-		summary: "Elimina variabili (o funzioni con -f).",
+		get usage() {
+			return w("help.unset.usage");
+		},
+		get summary() {
+			return w("help.unset.summary");
+		},
 		async run(e) {
-			let { opts: t, args: n } = G(e, { flags: "fv" });
+			let { opts: t, args: n } = H(e, { flags: "fv" });
 			for (let r of n) {
 				if (t.f) {
 					e.shell.functions.delete(r);
 					continue;
 				}
 				let n = /^([A-Za-z_]\w*)(?:\[(.*)\])?$/.exec(r);
-				if (!n) throw new y(`«${r}»: identificatore non valido`);
+				if (!n) throw new b(w("err.badIdentifier", { name: r }));
 				n[2] == null && !t.v && !e.shell.isSet(n[1]) && e.shell.functions.has(n[1]) ? e.shell.functions.delete(n[1]) : e.shell.unsetVar(n[1], n[2] == null ? null : e.shell.arrayIndex(n[2]));
 			}
 		}
 	},
 	{
 		name: "env",
-		usage: "env [nome=valore…] [comando [argomenti…]]",
-		summary: "Mostra le variabili esportate, o avvia un comando con variabili in più.",
+		get usage() {
+			return w("help.env.usage");
+		},
+		get summary() {
+			return w("help.env.summary");
+		},
 		async run(e) {
 			let t = [...e.args], n = /* @__PURE__ */ new Map();
 			for (; t.length && /^[A-Za-z_]\w*=/.test(t[0]);) {
@@ -2940,8 +3042,12 @@ var wt = (e, t, n) => {
 	},
 	{
 		name: "printenv",
-		usage: "printenv [nome…]",
-		summary: "Mostra le variabili esportate (o il valore di quelle indicate).",
+		get usage() {
+			return w("help.printenv.usage");
+		},
+		get summary() {
+			return w("help.printenv.summary");
+		},
 		async run(e) {
 			let t = e.shell.environment();
 			if (!e.args.length) {
@@ -2956,13 +3062,19 @@ var wt = (e, t, n) => {
 	{
 		name: "set",
 		ownHelp: !0,
-		usage: "set [-euxf] [-o opzione] [--] [argomenti…]",
-		summary: "Imposta le opzioni della shell e i parametri posizionali ($1, $2…).",
-		help: "-e  esce al primo comando che fallisce\n-u  errore se si usa una variabile non impostata\n-x  mostra i comandi prima di eseguirli\n-f  niente espansione di * e ?\n-o pipefail  una pipe fallisce se fallisce uno dei suoi comandi\n+e, +u… le disattivano. Senza argomenti mostra tutte le variabili.",
+		get usage() {
+			return w("help.set.usage");
+		},
+		get summary() {
+			return w("help.set.summary");
+		},
+		get help() {
+			return w("help.set.text");
+		},
 		async run(e) {
 			let t = e.shell, n = e.args;
 			if (!n.length) {
-				for (let [n, r] of t.variables()) await e.out(`${n}=${Array.isArray(r.value) ? `(${r.value.map(W).join(" ")})` : W(r.value)}\n`);
+				for (let [n, r] of t.variables()) await e.out(`${n}=${Array.isArray(r.value) ? `(${r.value.map(V).join(" ")})` : V(r.value)}\n`);
 				return 0;
 			}
 			for (let r = 0; r < n.length; r++) {
@@ -2971,17 +3083,17 @@ var wt = (e, t, n) => {
 				if (/^[-+]o$/.test(i)) {
 					let a = n[++r];
 					if (a == null) {
-						for (let [n] of Object.entries(vt)) await e.out(`${n.padEnd(15)}${t.options[n] ? "on" : "off"}\n`);
+						for (let [n] of Object.entries(Tt)) await e.out(`${n.padEnd(15)}${t.options[n] ? "on" : "off"}\n`);
 						continue;
 					}
-					if (!(a in vt)) throw new y(`${a}: nome di opzione non valido`, 2);
+					if (!(a in Tt)) throw new b(w("set.badOptionName", { name: a }), 2);
 					t.options[a] = i[0] === "-";
 				} else if (/^[-+][euxfv]+$/.test(i)) for (let e of i.slice(1)) {
-					let n = Object.keys(vt).find((t) => vt[t] === e);
+					let n = Object.keys(Tt).find((t) => Tt[t] === e);
 					n && (t.options[n] = i[0] === "-");
 				}
 				else {
-					if (/^[-+]/.test(i) && i.length > 1) throw new y(`${i}: opzione non valida`, 2);
+					if (/^[-+]/.test(i) && i.length > 1) throw new b(w("set.badOption", { option: i }), 2);
 					return t.positional = n.slice(r), 0;
 				}
 			}
@@ -2991,9 +3103,11 @@ var wt = (e, t, n) => {
 	{
 		name: "shift",
 		usage: "shift [n]",
-		summary: "Sposta i parametri posizionali: $2 diventa $1…",
+		get summary() {
+			return w("help.shift.summary");
+		},
 		run(e) {
-			let t = e.args[0] == null ? 1 : K(e.args[0]);
+			let t = e.args[0] == null ? 1 : U(e.args[0]);
 			return t > e.shell.positional.length ? 1 : (e.shell.positional = e.shell.positional.slice(t), 0);
 		}
 	},
@@ -3001,48 +3115,70 @@ var wt = (e, t, n) => {
 		name: "true",
 		ownHelp: !0,
 		usage: "true",
-		summary: "Non fa niente, con successo (stato 0).",
+		get summary() {
+			return w("help.true.summary");
+		},
 		run: () => 0
 	},
 	{
 		name: "false",
 		ownHelp: !0,
 		usage: "false",
-		summary: "Non fa niente, senza successo (stato 1).",
+		get summary() {
+			return w("help.false.summary");
+		},
 		run: () => 1
 	},
 	{
 		name: ":",
 		ownHelp: !0,
-		usage: ": [argomenti…]",
-		summary: "Non fa niente (stato 0); gli argomenti vengono comunque espansi.",
+		get usage() {
+			return w("help.colon.usage");
+		},
+		get summary() {
+			return w("help.colon.summary");
+		},
 		run: () => 0
 	},
 	{
 		name: "test",
 		ownHelp: !0,
-		usage: "test espressione",
-		summary: "Valuta un’espressione: stato 0 se vera, 1 se falsa.",
-		help: "File: -e esiste, -f è un file, -d è una cartella, -s non è vuoto\nTesto: -z vuoto, -n non vuoto, a = b, a != b\nNumeri: -eq -ne -lt -le -gt -ge\nInsieme: ! negazione, -a e, -o o, ( … )",
-		run: (e) => +!St(e.shell, e.args)
+		get usage() {
+			return w("help.test.usage");
+		},
+		get summary() {
+			return w("help.test.summary");
+		},
+		get help() {
+			return w("help.test.text");
+		},
+		run: (e) => +!kt(e.shell, e.args)
 	},
 	{
 		name: "[",
 		ownHelp: !0,
-		usage: "[ espressione ]",
-		summary: "Come test, con una «]» finale.",
+		get usage() {
+			return w("help.bracket.usage");
+		},
+		get summary() {
+			return w("help.bracket.summary");
+		},
 		run(e) {
-			if (e.args.at(-1) !== "]") throw new y("manca «]»", 2);
-			return +!St(e.shell, e.args.slice(0, -1));
+			if (e.args.at(-1) !== "]") throw new b(w("test.missingBracket"), 2);
+			return +!kt(e.shell, e.args.slice(0, -1));
 		}
 	},
 	{
 		name: "let",
 		ownHelp: !0,
-		usage: "let espressione…",
-		summary: "Calcola espressioni aritmetiche (stato 1 se l’ultima vale 0).",
+		get usage() {
+			return w("help.let.usage");
+		},
+		get summary() {
+			return w("help.let.summary");
+		},
 		run(e) {
-			if (!e.args.length) throw new y("manca l’espressione", 2);
+			if (!e.args.length) throw new b(w("let.noExpression"), 2);
 			let t = 0n;
 			for (let n of e.args) t = e.shell.arith(n);
 			return +(t === 0n);
@@ -3050,47 +3186,65 @@ var wt = (e, t, n) => {
 	},
 	{
 		name: "exit",
-		usage: "exit [stato]",
-		summary: "Chiude il terminale (o esce dallo script) con uno stato.",
+		get usage() {
+			return w("help.exit.usage");
+		},
+		get summary() {
+			return w("help.exit.summary");
+		},
 		run(e) {
-			throw new m(wt(e, e.args[0], e.shell.status));
+			throw new h(jt(e, e.args[0], e.shell.status));
 		}
 	},
 	{
 		name: "return",
-		usage: "return [stato]",
-		summary: "Esce dalla funzione (o dallo script letto con source).",
+		get usage() {
+			return w("help.return.usage");
+		},
+		get summary() {
+			return w("help.return.summary");
+		},
 		run(e) {
-			throw !e.shell.funcDepth && !e.shell.sourceDepth ? new y("si può usare solo in una funzione o in uno script letto con source") : new p(wt(e, e.args[0], e.shell.status));
+			throw !e.shell.funcDepth && !e.shell.sourceDepth ? new b(w("return.onlyInFunction")) : new m(jt(e, e.args[0], e.shell.status));
 		}
 	},
 	{
 		name: "break",
 		usage: "break [n]",
-		summary: "Esce dal ciclo (o da n cicli).",
+		get summary() {
+			return w("help.break.summary");
+		},
 		async run(e) {
-			if (!e.shell.loopDepth) return await e.error("ha senso solo in un ciclo for, while o until"), 0;
-			let t = e.args[0] == null ? 1 : K(e.args[0]);
-			throw t < 1 ? new y(`${t}: numero di cicli non valido`) : new d(Math.min(t, e.shell.loopDepth));
+			if (!e.shell.loopDepth) return await e.error(w("loop.onlyInLoop")), 0;
+			let t = e.args[0] == null ? 1 : U(e.args[0]);
+			throw t < 1 ? new b(w("loop.badCount", { n: t })) : new f(Math.min(t, e.shell.loopDepth));
 		}
 	},
 	{
 		name: "continue",
 		usage: "continue [n]",
-		summary: "Passa al giro successivo del ciclo (o dell’n-esimo ciclo esterno).",
+		get summary() {
+			return w("help.continue.summary");
+		},
 		async run(e) {
-			if (!e.shell.loopDepth) return await e.error("ha senso solo in un ciclo for, while o until"), 0;
-			let t = e.args[0] == null ? 1 : K(e.args[0]);
-			throw t < 1 ? new y(`${t}: numero di cicli non valido`) : new f(Math.min(t, e.shell.loopDepth));
+			if (!e.shell.loopDepth) return await e.error(w("loop.onlyInLoop")), 0;
+			let t = e.args[0] == null ? 1 : U(e.args[0]);
+			throw t < 1 ? new b(w("loop.badCount", { n: t })) : new p(Math.min(t, e.shell.loopDepth));
 		}
 	},
 	{
 		name: "read",
-		usage: "read [-rs] [-p prompt] [-a array] [-d delim] [nome…]",
-		summary: "Legge una riga e la divide nelle variabili indicate ($REPLY senza nomi).",
-		help: "-r  le barre rovesciate restano come sono\n-p  mostra un prompt\n-a  mette le parole in un array\n-d  legge fino a questo carattere invece che fino all’a capo\n-s  non mostra ciò che si scrive (per le password)\nStato 1 alla fine dell’input.",
+		get usage() {
+			return w("help.read.usage");
+		},
+		get summary() {
+			return w("help.read.summary");
+		},
+		get help() {
+			return w("help.read.text");
+		},
 		async run(e) {
-			let t = e.shell, { opts: n, args: r } = G(e, {
+			let t = e.shell, { opts: n, args: r } = H(e, {
 				flags: "rs",
 				values: "pad"
 			});
@@ -3109,7 +3263,7 @@ var wt = (e, t, n) => {
 			n.s && e.stdin === t.host.stdin && await e.err("\n");
 			let o = a == null;
 			a ??= "";
-			let s = n.r ? a : a.replace(/\\(.)/g, "$1"), c = t.getVar("IFS") ?? " 	\n", l = [...c].filter((e) => /\s/.test(e)).join(""), u = (e) => e.replace(RegExp(`^[${J(l)}]+|[${J(l)}]+$`, "g"), ""), d = (e) => c ? u(e).split(RegExp(`[${J(l)}]*[${J(c)}][${J(l)}]*|[${J(l)}]+`)).filter((e, t, n) => e !== "" || t < n.length - 1) : [e];
+			let s = n.r ? a : a.replace(/\\(.)/g, "$1"), c = t.getVar("IFS") ?? " 	\n", l = [...c].filter((e) => /\s/.test(e)).join(""), u = (e) => e.replace(RegExp(`^[${G(l)}]+|[${G(l)}]+$`, "g"), ""), d = (e) => c ? u(e).split(RegExp(`[${G(l)}]*[${G(c)}][${G(l)}]*|[${G(l)}]+`)).filter((e, t, n) => e !== "" || t < n.length - 1) : [e];
 			if (n.a) return t.setVar(n.a, s === "" ? [] : d(s)), +!!o;
 			if (!r.length) return t.setVar("REPLY", a), o && !a ? 1 : +!!o;
 			let f = c ? u(s) : s;
@@ -3118,45 +3272,63 @@ var wt = (e, t, n) => {
 					t.setVar(e, f);
 					return;
 				}
-				let i = c ? RegExp(`^([^${J(c)}]*)(?:[${J(l)}]*[${J(c)}][${J(l)}]*|[${J(l)}]+|$)`).exec(f) : null;
+				let i = c ? RegExp(`^([^${G(c)}]*)(?:[${G(l)}]*[${G(c)}][${G(l)}]*|[${G(l)}]+|$)`).exec(f) : null;
 				t.setVar(e, i ? i[1] : f), f = i ? f.slice(i[0].length) : "";
 			}), +!!o;
 		}
 	},
 	{
 		name: "source",
-		usage: "source file [argomenti…]",
-		summary: "Esegue i comandi di un file in questa shell (variabili, funzioni e alias restano).",
-		run: (e) => Et(e)
+		get usage() {
+			return w("help.source.usage");
+		},
+		get summary() {
+			return w("help.source.summary");
+		},
+		run: (e) => Nt(e)
 	},
 	{
 		name: ".",
-		usage: ". file [argomenti…]",
-		summary: "Come source.",
-		run: (e) => Et(e)
+		get usage() {
+			return w("help.dot.usage");
+		},
+		get summary() {
+			return w("help.dot.summary");
+		},
+		run: (e) => Nt(e)
 	},
 	{
 		name: "eval",
 		ownHelp: !0,
-		usage: "eval [argomenti…]",
-		summary: "Esegue gli argomenti, uniti da spazi, come un comando.",
+		get usage() {
+			return w("help.eval.usage");
+		},
+		get summary() {
+			return w("help.eval.summary");
+		},
 		async run(e) {
 			try {
 				return await e.shell.run(e.args.join(" "), e.io);
 			} catch (e) {
-				throw e instanceof v || e instanceof _ ? new y(e.message || "errore di sintassi: fine del testo inattesa", 2) : e;
+				throw e instanceof y || e instanceof v ? new b(e.message || w("parse.unexpectedEnd"), 2) : e;
 			}
 		}
 	},
 	{
 		name: "alias",
-		usage: "alias [nome[=valore]…]",
-		summary: "Definisce o mostra gli alias (nomi brevi per comandi).",
-		help: "Esempio: alias ll='ls -l'. Gli alias valgono dalla riga successiva a quella che li definisce.",
+		get usage() {
+			return w("help.alias.usage");
+		},
+		get summary() {
+			return w("help.alias.summary");
+		},
+		get help() {
+			return w("help.alias.text");
+		},
 		async run(e) {
-			let t = e.shell.aliases, { args: n } = G(e, { flags: "p" });
+			let t = e.shell.aliases, { args: n } = H(e, { flags: "p" });
 			if (!n.length) {
-				for (let [n, r] of [...t].sort()) await e.out(`alias ${n}=${W(r)}\n`);
+				for (let [n, r] of [...t].sort()) await e.out(`alias ${n}=${V(r)}\n`);
 				return 0;
 			}
 			let r = 0;
@@ -3165,46 +3337,58 @@ var wt = (e, t, n) => {
 				if (n > 0) {
 					let a = i.slice(0, n);
 					if (/[\s/$`=|&;<>()'"\\]/.test(a)) {
-						await e.error(`«${a}»: nome di alias non valido`), r = 1;
+						await e.error(w("alias.badName", { name: a })), r = 1;
 						continue;
 					}
 					t.set(a, i.slice(n + 1));
-				} else t.has(i) ? await e.out(`alias ${i}=${W(t.get(i))}\n`) : (await e.error(`${i}: non trovato`), r = 1);
+				} else t.has(i) ? await e.out(`alias ${i}=${V(t.get(i))}\n`) : (await e.error(w("err.notFound", { name: i })), r = 1);
 			}
 			return r;
 		}
 	},
 	{
 		name: "unalias",
-		usage: "unalias [-a] nome…",
-		summary: "Elimina degli alias (tutti con -a).",
+		get usage() {
+			return w("help.unalias.usage");
+		},
+		get summary() {
+			return w("help.unalias.summary");
+		},
 		async run(e) {
-			let { opts: t, args: n } = G(e, { flags: "a" });
+			let { opts: t, args: n } = H(e, { flags: "a" });
 			if (t.a) return e.shell.aliases.clear(), 0;
 			let r = 0;
-			for (let t of n) e.shell.aliases.delete(t) || (await e.error(`${t}: non trovato`), r = 1);
+			for (let t of n) e.shell.aliases.delete(t) || (await e.error(w("err.notFound", { name: t })), r = 1);
 			return r;
 		}
 	},
 	{
 		name: "type",
-		usage: "type [-t] nome…",
-		summary: "Dice cos’è un nome: alias, parola chiave, funzione, comando.",
+		get usage() {
+			return w("help.type.usage");
+		},
+		get summary() {
+			return w("help.type.summary");
+		},
 		async run(e) {
-			let { opts: t, args: n } = G(e, { flags: "ta" }), r = 0;
+			let { opts: t, args: n } = H(e, { flags: "ta" }), r = 0;
 			for (let i of n) {
-				let n = Ot(e.shell, i);
-				n ? t.t ? await e.out(n.kind + "\n") : await e.out(n.text + "\n") : (t.t || await e.error(`${i}: non trovato`), r = 1);
+				let n = Ft(e.shell, i);
+				n ? t.t ? await e.out(n.kind + "\n") : await e.out(n.text + "\n") : (t.t || await e.error(w("err.notFound", { name: i })), r = 1);
 			}
 			return r;
 		}
 	},
 	{
 		name: "command",
-		usage: "command [-v] nome [argomenti…]",
-		summary: "Avvia un comando ignorando le funzioni con lo stesso nome; con -v dice cosa avvierebbe.",
+		get usage() {
+			return w("help.command.usage");
+		},
+		get summary() {
+			return w("help.command.summary");
+		},
 		async run(e) {
-			let { opts: t, args: n } = G(e, {
+			let { opts: t, args: n } = H(e, {
 				flags: "vVp",
 				stopAtArg: !0
 			});
@@ -3212,8 +3396,8 @@ var wt = (e, t, n) => {
 			if (t.v || t.V) {
 				let r = 0;
 				for (let i of n) {
-					let n = Ot(e.shell, i);
-					n ? await e.out((t.V ? n.text : n.kind === "alias" ? `alias ${i}=${W(e.shell.aliases.get(i))}` : n.path ?? i) + "\n") : r = 1;
+					let n = Ft(e.shell, i);
+					n ? await e.out((t.V ? n.text : n.kind === "alias" ? `alias ${i}=${V(e.shell.aliases.get(i))}` : n.path ?? i) + "\n") : r = 1;
 				}
 				return r;
 			}
@@ -3222,13 +3406,17 @@ var wt = (e, t, n) => {
 	},
 	{
 		name: "which",
-		usage: "which nome…",
-		summary: "Dice dove si trova un comando.",
+		get usage() {
+			return w("help.which.usage");
+		},
+		get summary() {
+			return w("help.which.summary");
+		},
 		async run(e) {
 			let t = 0;
 			for (let n of e.args) {
-				let r = Ot(e.shell, n);
-				!r || r.kind === "alias" || r.kind === "keyword" || r.kind === "function" ? t = 1 : await e.out((r.path ?? `${n}: comando integrato nel Terminale`) + "\n");
+				let r = Ft(e.shell, n);
+				!r || r.kind === "alias" || r.kind === "keyword" || r.kind === "function" ? t = 1 : await e.out((r.path ?? w("which.builtIn", { name: n })) + "\n");
 			}
 			return t;
 		}
@@ -3236,39 +3424,47 @@ var wt = (e, t, n) => {
 	{
 		name: "history",
 		usage: "history [-c] [n]",
-		summary: "Mostra i comandi dati (gli ultimi n); -c cancella la cronologia.",
+		get summary() {
+			return w("help.history.summary");
+		},
 		async run(e) {
-			let { opts: t, args: n } = G(e, { flags: "c" }), r = e.shell.host.history;
+			let { opts: t, args: n } = H(e, { flags: "c" }), r = e.shell.host.history;
 			if (!r) return 0;
 			if (t.c) return r.clear(), 0;
-			let i = r.list(), a = n[0] == null ? i.length : K(n[0]), o = Math.max(0, i.length - a);
+			let i = r.list(), a = n[0] == null ? i.length : U(n[0]), o = Math.max(0, i.length - a);
 			for (let t = o; t < i.length; t++) await e.out(`${String(t + 1).padStart(5)}  ${i[t]}\n`);
 		}
 	},
 	{
 		name: "help",
-		usage: "help [comando]",
-		summary: "Elenca i comandi, o spiega quello indicato.",
+		get usage() {
+			return w("help.help.usage");
+		},
+		get summary() {
+			return w("help.help.summary");
+		},
 		async run(e) {
 			let t = e.shell.commands;
 			if (e.args.length) {
 				let n = 0;
 				for (let r of e.args) {
 					let i = t.get(r);
-					i ? await e.out(gt(i)) : kt[r] ? await e.out(kt[r].trim() + "\n") : (await e.error(`nessun aiuto per «${r}»`), n = 1);
+					i ? await e.out(Ct(i)) : Rt(r) ? await e.out(It[Rt(r)]().trim() + "\n") : (await e.error(w("help.noHelp", { name: r })), n = 1);
 				}
 				return n;
 			}
 			let n = [...t.values()].filter((e, t, n) => n.indexOf(e) === t && !e.hidden).sort((e, t) => e.name.localeCompare(t.name)), r = Math.max(...n.map((e) => e.name.length)) + 2;
-			await e.out("Terminale di lilOS: una shell come bash sui file di lilOS.\n«help comando» o «comando --help» spiega un comando; «help if», «help for», «help case»… la sintassi.\n\n");
+			await e.out(`${w("help.intro")}\n\n`);
 			for (let t of n) await e.out(`  ${t.name.padEnd(r)}${t.summary ?? ""}${t.app ? ` (${t.app})` : ""}\n`);
-			await e.out(`\nSintassi: ${Object.keys(kt).join(", ")}\n`);
+			await e.out(`\n${w("help.syntaxList", { list: Object.keys(It).map(Lt).join(", ") })}\n`);
 		}
 	},
 	{
 		name: "clear",
 		usage: "clear",
-		summary: "Pulisce lo schermo (anche Ctrl L).",
+		get summary() {
+			return w("help.clear.summary");
+		},
 		async run(e) {
 			e.stdout === e.shell.host.stdout ? e.shell.host.clear?.() : await e.out("\x1B[2J\x1B[H");
 		}
@@ -3276,19 +3472,23 @@ var wt = (e, t, n) => {
 	{
 		name: "jobs",
 		usage: "jobs [-lp]",
-		summary: "Elenca i comandi avviati in background con &.",
+		get summary() {
+			return w("help.jobs.summary");
+		},
 		async run(e) {
-			let { opts: t } = G(e, { flags: "lp" }), n = e.shell.jobs.list;
+			let { opts: t } = H(e, { flags: "lp" }), n = e.shell.jobs.list;
 			for (let r of n) {
 				let i = r === n.at(-1) ? "+" : r === n.at(-2) ? "-" : " ";
-				t.p ? await e.out(`${r.pid}\n`) : await e.out(`[${r.id}]${i} ${t.l ? `${r.pid} ` : ""}${r.state === "done" ? r.code === 0 ? "Fatto" : `Uscita ${r.code}` : "In esecuzione"}\t\t${r.text}\n`);
+				t.p ? await e.out(`${r.pid}\n`) : await e.out(`[${r.id}]${i} ${t.l ? `${r.pid} ` : ""}${r.state === "done" ? r.code === 0 ? w("jobs.done") : w("jobs.exit", { code: r.code }) : w("jobs.running")}\t\t${r.text}\n`);
 			}
 		}
 	},
 	{
 		name: "wait",
 		usage: "wait [%job | pid…]",
-		summary: "Aspetta che finiscano i comandi in background (tutti, o quelli indicati).",
+		get summary() {
+			return w("help.wait.summary");
+		},
 		async run(e) {
 			let t = e.shell;
 			if (!e.args.length) {
@@ -3299,7 +3499,7 @@ var wt = (e, t, n) => {
 			let n = 0;
 			for (let r of e.args) {
 				let i = t.findJob(r);
-				i ? n = await t.waitJob(i) : (await e.error(`${r}: non è un job di questa shell`), n = 127);
+				i ? n = await t.waitJob(i) : (await e.error(w("wait.notAJob", { spec: r })), n = 127);
 			}
 			return n;
 		}
@@ -3307,10 +3507,12 @@ var wt = (e, t, n) => {
 	{
 		name: "fg",
 		usage: "fg [%job]",
-		summary: "Porta in primo piano un comando in background: lo si aspetta e Ctrl C lo interrompe.",
+		get summary() {
+			return w("help.fg.summary");
+		},
 		async run(e) {
 			let t = e.shell, n = t.findJob(e.args[0]);
-			if (!n) throw new y(`${e.args[0] ?? "attuale"}: job inesistente`);
+			if (!n) throw new b(w("fg.noSuchJob", { job: e.args[0] ?? w("fg.current") }));
 			await e.out(n.text + "\n");
 			let r = await t.waitJob(n, { forward: !0 });
 			return t.jobs.list = t.jobs.list.filter((e) => e !== n), r;
@@ -3318,30 +3520,38 @@ var wt = (e, t, n) => {
 	},
 	{
 		name: "kill",
-		usage: "kill [-segnale] %job | pid…",
-		summary: "Interrompe dei comandi in background.",
+		get usage() {
+			return w("help.kill.usage");
+		},
+		get summary() {
+			return w("help.kill.summary");
+		},
 		async run(e) {
 			let t = e.args;
 			if (t[0] === "-l") return await e.out("HUP INT QUIT KILL TERM\n"), 0;
-			if (t[0] === "-s" || t[0] === "-n" ? t = t.slice(2) : /^-\w+$/.test(t[0] ?? "") && (t = t.slice(1)), !t.length) throw new y(`uso: ${this.usage}`, 2);
+			if (t[0] === "-s" || t[0] === "-n" ? t = t.slice(2) : /^-\w+$/.test(t[0] ?? "") && (t = t.slice(1)), !t.length) throw new b(w("help.usageShort", { usage: this.usage }), 2);
 			let n = 0;
 			for (let r of t) {
 				let t = e.shell.findJob(r);
-				t ? t.token.abort() : (await e.error(`${r}: job o processo inesistente`), n = 1);
+				t ? t.token.abort() : (await e.error(w("kill.noSuchJob", { spec: r })), n = 1);
 			}
 			return n;
 		}
 	},
 	{
 		name: "sleep",
-		usage: "sleep durata…",
-		summary: "Aspetta: 5 (secondi), 0.5, 2m, 1h.",
+		get usage() {
+			return w("help.sleep.usage");
+		},
+		get summary() {
+			return w("help.sleep.summary");
+		},
 		async run(e) {
-			if (!e.args.length) throw new y("manca la durata", 2);
+			if (!e.args.length) throw new b(w("sleep.missing"), 2);
 			let t = 0;
 			for (let n of e.args) {
 				let e = /^(\d+(?:\.\d*)?|\.\d+)([smhd]?)$/.exec(n);
-				if (!e) throw new y(`durata non valida: «${n}»`, 2);
+				if (!e) throw new b(w("sleep.badDuration", { value: n }), 2);
 				t += Number(e[1]) * {
 					"": 1,
 					s: 1,
@@ -3355,21 +3565,31 @@ var wt = (e, t, n) => {
 	},
 	{
 		name: "bash",
-		usage: "bash [-c comandi | script] [argomenti…]",
-		summary: "Esegue uno script o dei comandi in una nuova shell.",
-		help: "«bash script.sh a b» esegue lo script con $1=a, $2=b; «bash -c 'echo $1' nome x» esegue il testo; «cat script.sh | bash» legge lo script dall’input.",
-		run: (e) => Dt(e)
+		get usage() {
+			return w("help.bash.usage");
+		},
+		get summary() {
+			return w("help.bash.summary");
+		},
+		get help() {
+			return w("help.bash.text");
+		},
+		run: (e) => Pt(e)
 	},
 	{
 		name: "sh",
-		usage: "sh [-c comandi | script] [argomenti…]",
-		summary: "Come bash.",
-		run: (e) => Dt(e)
+		get usage() {
+			return w("help.sh.usage");
+		},
+		get summary() {
+			return w("help.sh.summary");
+		},
+		run: (e) => Pt(e)
 	}
 ];
-async function Et(e) {
+async function Nt(e) {
 	let t = e.shell, [n, ...r] = e.args;
-	if (!n) throw new y("manca il nome del file", 2);
+	if (!n) throw new b(w("source.noFile"), 2);
 	let i = n;
 	if (!n.includes("/") && !e.resolve(n)) {
 		let r = (t.getVar("PATH") ?? "").split(":").find((t) => t && e.resolve(`${t}/${n}`)?.type === "file");
@@ -3377,9 +3597,9 @@ async function Et(e) {
 	}
 	let a = await t.readScript(i);
 	try {
-		ce(a, { aliases: t.aliases });
+		de(a, { aliases: t.aliases });
 	} catch (e) {
-		throw e instanceof v || e instanceof _ ? new y(`${n}: ${e.message || "errore di sintassi: fine del file inattesa"}`, 2) : e;
+		throw e instanceof y || e instanceof v ? new b(`${n}: ${e.message || w("parse.unexpectedEndOfFile")}`, 2) : e;
 	}
 	let o = t.positional;
 	r.length && (t.positional = r), t.sourceDepth = (t.sourceDepth ?? 0) + 1;
@@ -3389,20 +3609,20 @@ async function Et(e) {
 			source: a
 		}, e.io);
 	} catch (e) {
-		if (e instanceof p) return e.code;
+		if (e instanceof m) return e.code;
 		throw e;
 	} finally {
 		t.sourceDepth--, r.length && (t.positional = o);
 	}
 }
-async function Dt(e) {
+async function Pt(e) {
 	let t = e.shell, n = [...e.args], r = {
 		e: !1,
 		x: !1,
 		u: !1
 	}, i = null;
 	for (; n.length && /^-[cexu]+$/.test(n[0]);) for (let e of n.shift().slice(1)) e === "c" ? i = n.shift() : r[e] = !0;
-	if (i == null && n[0] === "-c") throw new y("-c: manca il testo dei comandi", 2);
+	if (i == null && n[0] === "-c") throw new b(w("bash.noCommand"), 2);
 	let a = t.subshell({ script: !0 });
 	if (Object.assign(a.options, {
 		errexit: r.e,
@@ -3415,84 +3635,86 @@ async function Dt(e) {
 		try {
 			r = await t.readScript(n[0]);
 		} catch (e) {
-			throw e instanceof y ? new y(e.message, e.code) : e;
+			throw e instanceof b ? new b(e.message, e.code) : e;
 		}
 		return a.runSource(r, e.io, n[0]);
 	}
-	return e.stdin === t.host.stdin ? (await e.err("Sei già in bash: per uno script scrivi «bash file.sh» o «source file.sh».\n"), 0) : a.runSource(await e.stdin.readAll(), e.io, "bash");
+	return e.stdin === t.host.stdin ? (await e.err(`${w("bash.already")}\n`), 0) : a.runSource(await e.stdin.readAll(), e.io, "bash");
 }
-function Ot(e, t) {
+function Ft(e, t) {
 	if (e.aliases.has(t)) return {
 		kind: "alias",
-		text: `${t} è un alias di «${e.aliases.get(t)}»`
+		text: w("type.alias", {
+			name: t,
+			value: e.aliases.get(t)
+		})
 	};
-	if (_t.includes(t)) return {
+	if (wt.includes(t)) return {
 		kind: "keyword",
-		text: `${t} è una parola chiave della shell`
+		text: w("type.keyword", { name: t })
 	};
 	if (e.functions.has(t)) return {
 		kind: "function",
-		text: `${t} è una funzione\n${e.functions.get(t).text}`
+		text: `${w("type.function", { name: t })}\n${e.functions.get(t).text}`
 	};
-	let r = e.commands.get(t);
-	if (r?.builtin) return {
+	let n = e.commands.get(t);
+	if (n?.builtin) return {
 		kind: "builtin",
-		text: `${t} è un comando interno della shell`
+		text: w("type.builtin", { name: t })
 	};
-	if (r?.app) return {
+	if (n?.app) return {
 		kind: "file",
-		text: `${t} è un comando dell’app ${r.app}`
+		text: w("type.appCommand", {
+			name: t,
+			app: n.app
+		})
 	};
-	if (r) return {
+	if (n) return {
 		kind: "file",
-		text: `${t} è un comando del Terminale`
+		text: w("type.command", { name: t })
 	};
-	for (let r of (e.getVar("PATH") ?? "").split(":").filter(Boolean)) for (let i of [t, `${t}.sh`]) {
-		let a = e.resolve(`${r}/${i}`);
+	for (let n of (e.getVar("PATH") ?? "").split(":").filter(Boolean)) for (let i of [t, `${t}.sh`]) {
+		let a = e.resolve(`${n}/${i}`);
 		if (a?.type === "file") return {
 			kind: "file",
-			text: `${t} è ${n.path(a.id)}`,
-			path: n.path(a.id)
+			text: w("type.file", {
+				name: t,
+				path: r.path(a.id)
+			}),
+			path: r.path(a.id)
 		};
 	}
 	return t.includes("/") && e.resolve(t)?.type === "file" ? {
 		kind: "file",
-		text: `${t} è ${t}`,
+		text: w("type.file", {
+			name: t,
+			path: t
+		}),
 		path: t
 	} : null;
 }
-var J = (e) => e.replace(/[\]\\^-]/g, "\\$&"), kt = {
-	if: "if comandi; then comandi; [elif comandi; then comandi;] [else comandi;] fi\nEsegue il ramo del primo «if»/«elif» i cui comandi riescono (stato 0).\n  if [ -f note.txt ]; then echo c’è; else echo manca; fi",
-	for: "for nome in parole…; do comandi; done\nfor (( inizio; condizione; passo )); do comandi; done\n  for f in *.txt; do wc -l \"$f\"; done\n  for ((i = 1; i <= 3; i++)); do echo $i; done",
-	while: "while comandi; do comandi; done   (until: finché i comandi NON riescono)\n  n=0; while [ $n -lt 3 ]; do echo $n; n=$((n + 1)); done\n  ls | while read -r nome; do echo \"- $nome\"; done",
-	until: "until comandi; do comandi; done: ripete finché i comandi non riescono.",
-	case: "case parola in modello|modello) comandi;; … esac\nI modelli usano * ? [ ]. «;&» prosegue nel ramo dopo, «;;&» prova anche i modelli successivi.\n  case \"$f\" in *.txt) echo testo;; *.png|*.jpg) echo immagine;; *) echo altro;; esac",
-	function: "nome() { comandi; }   oppure   function nome { comandi; }\nGli argomenti sono $1, $2…, $@; «local» crea variabili della funzione, «return n» esce.\n  saluta() { echo \"Ciao, $1\"; }; saluta Eugenio",
-	"[[": "[[ espressione ]]: test senza divisione in parole né espansione di *.\n  [[ $nome == *.txt ]]      confronto con un modello\n  [[ $s =~ ^[0-9]+$ ]]      espressione regolare (gruppi in BASH_REMATCH)\n  [[ -d dir && ! -e file ]] -e -f -d -s -z -n, && || ! ( )",
-	"((": "(( espressione )): aritmetica intera; stato 0 se il risultato non è 0.\n  (( n++ )); (( n > 3 )) && echo grande; echo $(( 2 ** 10 ))",
-	variabili: "nome=valore (senza spazi), $nome o ${nome}. Array: a=(x y z), ${a[0]}, ${a[@]}, ${#a[@]}.\n${v:-predefinito} ${v:=predefinito} ${v:+alt} ${#v} ${v#prefisso} ${v%suffisso} ${v/da/a} ${v//da/a} ${v:inizio:lunghezza} ${v^^} ${v,,}\nSpeciali: $? stato dell’ultimo comando, $$ la shell, $! l’ultimo comando in background, $# $@ $* gli argomenti.",
-	redirezioni: "> file (sovrascrive), >> file (aggiunge), < file (legge), 2> errori, 2>&1, &> file, <<EOF … EOF, <<< testo, | pipe.\n/dev/null scarta tutto."
-}, At = [
-	"gen",
-	"feb",
-	"mar",
-	"apr",
-	"mag",
-	"giu",
-	"lug",
-	"ago",
-	"set",
-	"ott",
-	"nov",
-	"dic"
-], Y = {
+var G = (e) => e.replace(/[\]\\^-]/g, "\\$&"), It = {
+	if: () => w("syntax.if"),
+	for: () => w("syntax.for"),
+	while: () => w("syntax.while"),
+	until: () => w("syntax.until"),
+	case: () => w("syntax.case"),
+	function: () => w("syntax.function"),
+	"[[": () => w("syntax.cond"),
+	"((": () => w("syntax.arith"),
+	variables: () => w("syntax.variables"),
+	redirections: () => w("syntax.redirections")
+}, Lt = (e) => ({
+	variables: w("syntax.topic.variables"),
+	redirections: w("syntax.topic.redirections")
+})[e] ?? e, Rt = (e) => Object.keys(It).find((t) => t === e || Lt(t) === e), K = {
 	reset: "\x1B[0m",
 	folder: "\x1B[1;34m",
 	app: "\x1B[36m",
 	script: "\x1B[32m",
 	dim: "\x1B[2m"
-}, jt = (e) => e.type === "file" && /\.(sh|bash)$/i.test(e.name), Mt = (e) => `impossibile accedere a «${e}»: file o cartella inesistente`, Nt = (e) => e.stdout === e.shell.host.stdout;
-function Pt(e) {
+}, zt = (e) => e.type === "file" && /\.(sh|bash)$/i.test(e.name), Bt = (e) => w("files.cannotAccess", { path: e }), q = (e) => e.stdout === e.shell.host.stdout;
+function Vt(e) {
 	if (e < 1024) return String(e);
 	let t = [
 		"K",
@@ -3503,20 +3725,23 @@ function Pt(e) {
 	do
 		n /= 1024, r++;
 	while (n >= 1024 && r < t.length - 1);
-	return (n < 10 ? n.toFixed(1) : String(Math.round(n))).replace(".", ",") + t[r];
+	return (n < 10 ? C.number(Number(n.toFixed(1)), { minimumFractionDigits: 1 }) : String(Math.round(n))) + t[r];
 }
-function Ft(e) {
-	let t = new Date(e), n = /* @__PURE__ */ new Date(), r = String(t.getDate()).padStart(2) + " " + At[t.getMonth()];
+function Ht(e) {
+	let t = new Date(e), n = /* @__PURE__ */ new Date(), r = w("ls.date", {
+		day: String(t.getDate()).padStart(2),
+		month: C.date(t, { month: "short" })
+	});
 	return Math.abs(n - t) < 15552e6 ? `${r} ${String(t.getHours()).padStart(2, "0")}:${String(t.getMinutes()).padStart(2, "0")}` : `${r}  ${t.getFullYear()}`;
 }
-var It = (e) => e.type === "file" ? e.size ?? 0 : e.type === "folder" ? n.children(e.id).length : 0;
-function X(e, t, n = t.name, r = !1) {
-	let i = r ? t.type === "folder" ? "/" : t.type === "app" ? "@" : jt(t) ? "*" : "" : "";
-	if (!Nt(e)) return n + i;
-	let a = t.type === "folder" ? Y.folder : t.type === "app" ? Y.app : jt(t) ? Y.script : "";
-	return a ? `${a}${n}${Y.reset}${i}` : n + i;
+var Ut = (e) => e.type === "file" ? e.size ?? 0 : e.type === "folder" ? r.children(e.id).length : 0;
+function J(e, t, n = t.name, r = !1) {
+	let i = r ? t.type === "folder" ? "/" : t.type === "app" ? "@" : zt(t) ? "*" : "" : "";
+	if (!q(e)) return n + i;
+	let a = t.type === "folder" ? K.folder : t.type === "app" ? K.app : zt(t) ? K.script : "";
+	return a ? `${a}${n}${K.reset}${i}` : n + i;
 }
-function Lt(e, t) {
+function Wt(e, t) {
 	if (!e.length) return "";
 	let n = (e) => e.plain.length;
 	for (let r = Math.min(e.length, Math.max(1, Math.floor(t / 3))); r >= 1; r--) {
@@ -3538,37 +3763,37 @@ function Lt(e, t) {
 	}
 	return e.map((e) => e.text).join("\n") + "\n";
 }
-function Rt(e, t) {
-	let n = [...e].sort((e, n) => (t.t ? n.modified - e.modified : t.S ? It(n) - It(e) : 0) || F(e.name, n.name));
+function Gt(e, t) {
+	let n = [...e].sort((e, n) => (t.t ? n.modified - e.modified : t.S ? Ut(n) - Ut(e) : 0) || F(e.name, n.name));
 	return t.r ? n.reverse() : n;
 }
-async function zt(e, t, r) {
+async function Kt(e, t, n) {
 	if (!t.length) return;
-	if (!r.l) {
-		if (r[1] || !Nt(e)) for (let { node: n, name: i } of t) await e.out(X(e, n, i, r.F) + "\n");
+	if (!n.l) {
+		if (n[1] || !q(e)) for (let { node: r, name: i } of t) await e.out(J(e, r, i, n.F) + "\n");
 		else {
-			let n = t.map(({ node: t, name: n }) => ({
-				text: X(e, t, n, r.F),
-				plain: n + (r.F && (t.type !== "file" || jt(t)) ? " " : "")
+			let r = t.map(({ node: t, name: r }) => ({
+				text: J(e, t, r, n.F),
+				plain: r + (n.F && (t.type !== "file" || zt(t)) ? " " : "")
 			}));
-			await e.out(Lt(n, e.shell.host.columns?.() ?? 80));
+			await e.out(Wt(r, e.shell.host.columns?.() ?? 80));
 		}
 		return;
 	}
 	let i = t.map(({ node: t, name: i }) => {
-		let a = t.type === "folder" ? "d" : t.type === "app" ? "l" : "-", s = t.type === "file" ? r.h ? Pt(t.size ?? 0) : String(t.size ?? 0) : t.type === "folder" ? String(n.children(t.id).length) : "-", c = (t.tags ?? []).map((e) => o.get(e)?.name).filter(Boolean), l = X(e, t, i, r.F);
-		return t.type === "app" && (l += ` -> app:${t.app}`), c.length && (l += (Nt(e) ? Y.dim : "") + " " + c.map((e) => "#" + e).join(" ") + (Nt(e) ? Y.reset : "")), {
+		let a = t.type === "folder" ? "d" : t.type === "app" ? "l" : "-", o = t.type === "file" ? n.h ? Vt(t.size ?? 0) : String(t.size ?? 0) : t.type === "folder" ? String(r.children(t.id).length) : "-", c = (t.tags ?? []).map((e) => s.get(e)?.name).filter(Boolean), l = J(e, t, i, n.F);
+		return t.type === "app" && (l += ` -> app:${t.app}`), c.length && (l += (q(e) ? K.dim : "") + " " + c.map((e) => "#" + e).join(" ") + (q(e) ? K.reset : "")), {
 			type: a,
-			size: s,
-			date: Ft(t.modified ?? t.created ?? 0),
+			size: o,
+			date: Ht(t.modified ?? t.created ?? 0),
 			shown: l
 		};
 	}), a = Math.max(...i.map((e) => e.size.length));
 	for (let t of i) await e.out(`${t.type}  ${t.size.padStart(a)}  ${t.date}  ${t.shown}\n`);
 }
-var Bt = (e, t) => n.children(e).filter((e) => t.a || t.A || !e.name.startsWith("."));
-async function Vt(e) {
-	let { opts: t, args: r } = G(e, {
+var qt = (e, t) => r.children(e).filter((e) => t.a || t.A || !e.name.startsWith("."));
+async function Jt(e) {
+	let { opts: t, args: n } = H(e, {
 		flags: "laA1htrSdRF",
 		long: {
 			all: "a",
@@ -3579,7 +3804,7 @@ async function Vt(e) {
 			directory: "d",
 			classify: "F"
 		}
-	}), i = r.length ? r : ["."], a = 0, o = [], s = [];
+	}), i = n.length ? n : ["."], a = 0, o = [], s = [];
 	for (let n of i) {
 		let r = e.resolve(n);
 		r ? r.type === "folder" && !t.d ? s.push({
@@ -3588,34 +3813,34 @@ async function Vt(e) {
 		}) : o.push({
 			node: r,
 			name: n
-		}) : (await e.error(Mt(n)), a = 2);
+		}) : (await e.error(Bt(n)), a = 2);
 	}
-	await zt(e, Rt(o.map((e) => ({
+	await Kt(e, Gt(o.map((e) => ({
 		...e.node,
 		shownName: e.name
 	})), t).map((e) => ({
 		node: e,
 		name: e.shownName
 	})), t);
-	let c = i.length > 1 || t.R, l = !o.length, u = async (r, i) => {
+	let c = i.length > 1 || t.R, l = !o.length, u = async (n, i) => {
 		await e.tick(), c && await e.out(`${l ? "" : "\n"}${i}:\n`), l = !1;
-		let a = Rt(Bt(r.id, t), t), o = a.map((e) => ({
+		let a = Gt(qt(n.id, t), t), o = a.map((e) => ({
 			node: e,
 			name: e.name
 		}));
 		if (t.a && o.unshift({
-			node: r,
+			node: n,
 			name: "."
-		}, ...r.id === n.root ? [] : [{
-			node: n.get(r.parent),
+		}, ...n.id === r.root ? [] : [{
+			node: r.get(n.parent),
 			name: ".."
-		}]), await zt(e, o, t), t.R) for (let e of a.filter((e) => e.type === "folder")) await u(e, `${i.replace(/\/$/, "")}/${e.name}`);
+		}]), await Kt(e, o, t), t.R) for (let e of a.filter((e) => e.type === "folder")) await u(e, `${i.replace(/\/$/, "")}/${e.name}`);
 	};
 	for (let { node: e, name: t } of s) await u(e, t);
 	return a;
 }
-async function Ht(e) {
-	let { opts: t, args: n } = G(e, {
+async function Yt(e) {
+	let { opts: t, args: n } = H(e, {
 		flags: "nbsEA",
 		long: {
 			number: "n",
@@ -3642,105 +3867,114 @@ async function Ht(e) {
 	}
 	return +!!e.failed;
 }
-function Ut(e, t) {
-	let r = n.get(n.root);
+function Xt(e, t) {
+	let n = r.get(r.root);
 	for (let i of N(e.cwd, t)) {
-		let e = n.children(r.id).find((e) => e.name.toLowerCase() === i.toLowerCase()) ?? n.resolve(`${n.path(r.id)}/${i}`);
-		if (e && e.type !== "folder") throw new y(`impossibile creare la cartella «${t}»: «${i}» esiste e non è una cartella`);
-		r = e ?? n.create(r.id, {
+		let e = r.children(n.id).find((e) => e.name.toLowerCase() === i.toLowerCase()) ?? r.resolve(`${r.path(n.id)}/${i}`);
+		if (e && e.type !== "folder") throw new b(w("mkdir.notAFolder", {
+			path: t,
+			name: i
+		}));
+		n = e ?? r.create(n.id, {
 			type: "folder",
 			name: i
 		});
 	}
-	return r;
+	return n;
 }
-async function Wt(e) {
-	let { opts: t, args: r } = G(e, {
+async function Zt(e) {
+	let { opts: t, args: n } = H(e, {
 		flags: "pv",
 		long: {
 			parents: "p",
 			verbose: "v"
 		}
 	});
-	if (!r.length) throw new y("manca l’operando", 2);
+	if (!n.length) throw new b(w("err.missingOperand"), 2);
 	let i = 0;
-	for (let a of r) try {
-		let r = e.resolve(a);
-		if (r) {
-			if (t.p && r.type === "folder") continue;
-			throw new y(`impossibile creare la cartella «${a}»: il file esiste`);
+	for (let a of n) try {
+		let n = e.resolve(a);
+		if (n) {
+			if (t.p && n.type === "folder") continue;
+			throw new b(w("mkdir.exists", { path: a }));
 		}
-		if (t.p) Ut(e, a);
+		if (t.p) Xt(e, a);
 		else {
-			let { parent: t, name: r } = e.locate(a);
-			if (t?.type !== "folder" || !r) throw new y(`impossibile creare la cartella «${a}»: file o cartella inesistente`);
-			n.create(t.id, {
+			let { parent: t, name: n } = e.locate(a);
+			if (t?.type !== "folder" || !n) throw new b(w("mkdir.noParent", { path: a }));
+			r.create(t.id, {
 				type: "folder",
-				name: r
+				name: n
 			});
 		}
-		t.v && await e.out(`creata la cartella «${a}»\n`);
+		t.v && await e.out(`${w("mkdir.created", { path: a })}\n`);
 	} catch (t) {
 		await e.error(t.message), i = 1;
 	}
 	return i;
 }
-async function Gt(e) {
-	let { opts: t, args: r } = G(e, {
+async function Qt(e) {
+	let { opts: t, args: n } = H(e, {
 		flags: "cam",
 		long: { "no-create": "c" }
 	});
-	if (!r.length) throw new y("manca l’operando", 2);
+	if (!n.length) throw new b(w("err.missingOperand"), 2);
 	let i = 0;
-	for (let a of r) {
-		let r = e.resolve(a);
-		if (r) {
-			r.type === "file" && await n.write(r.id, await n.readBlob(r.id));
+	for (let a of n) {
+		let n = e.resolve(a);
+		if (n) {
+			n.type === "file" && await r.write(n.id, await r.readBlob(n.id));
 			continue;
 		}
 		if (t.c) continue;
 		let { parent: o, name: s } = e.locate(a);
-		o?.type !== "folder" || !s ? (await e.error(`impossibile creare «${a}»: file o cartella inesistente`), i = 1) : n.create(o.id, {
+		o?.type !== "folder" || !s ? (await e.error(w("files.cannotCreate", { path: a })), i = 1) : r.create(o.id, {
 			type: "file",
 			name: s
 		});
 	}
 	return i;
 }
-async function Kt(e, t, r, i, a) {
+async function $t(e, t, n, i, a) {
 	await e.tick();
-	let o = n.children(r).find((e) => e.name.toLowerCase() === i.toLowerCase());
+	let o = r.children(n).find((e) => e.name.toLowerCase() === i.toLowerCase());
 	if (t.type === "folder") {
 		let s = o;
-		if (s && s.type !== "folder") throw new y(`impossibile sovrascrivere «${i}», che non è una cartella, con una cartella`);
-		s ??= n.create(r, {
+		if (s && s.type !== "folder") throw new b(w("cp.overwriteFile", { name: i }));
+		s ??= r.create(n, {
 			type: "folder",
 			name: i,
 			color: t.color
 		});
-		for (let r of n.children(t.id)) await Kt(e, r, s.id, r.name, a);
+		for (let n of r.children(t.id)) await $t(e, n, s.id, n.name, a);
 		return;
 	}
 	if (o) {
 		if (a.n) return;
-		if (o.type === "folder") throw new y(`impossibile sovrascrivere la cartella «${i}» con un file`);
+		if (o.type === "folder") throw new b(w("files.overwriteFolder", { name: i }));
 		if (o.type === "file" && t.type === "file") {
-			await n.write(o.id, await n.readBlob(t.id)), a.v && await e.out(`«${n.path(t.id)}» -> «${n.path(o.id)}»\n`);
+			await r.write(o.id, await r.readBlob(t.id)), a.v && await e.out(`${w("cp.verbose", {
+				from: r.path(t.id),
+				to: r.path(o.id)
+			})}\n`);
 			return;
 		}
-		n.trash([o.id]);
+		r.trash([o.id]);
 	}
-	let s = n.create(r, {
+	let s = r.create(n, {
 		type: t.type,
 		name: i,
 		app: t.app
 	});
-	t.type === "file" && await n.write(s.id, await n.readBlob(t.id)), a.v && await e.out(`«${n.path(t.id)}» -> «${n.path(s.id)}»\n`);
+	t.type === "file" && await r.write(s.id, await r.readBlob(t.id)), a.v && await e.out(`${w("cp.verbose", {
+		from: r.path(t.id),
+		to: r.path(s.id)
+	})}\n`);
 }
-function qt(e, t) {
-	if (t.length < 2) throw new y(t.length ? `manca la destinazione dopo «${t[0]}»` : "manca l’operando", 2);
-	let r = t.at(-1), i = t.slice(0, -1), a = e.resolve(r);
-	if (i.length > 1 && a?.type !== "folder") throw new y(`la destinazione «${r}» non è una cartella`);
+function en(e, t) {
+	if (t.length < 2) throw new b(t.length ? w("files.missingDestination", { path: t[0] }) : w("err.missingOperand"), 2);
+	let n = t.at(-1), i = t.slice(0, -1), a = e.resolve(n);
+	if (i.length > 1 && a?.type !== "folder") throw new b(w("files.targetNotFolder", { path: n }));
 	return {
 		sources: i,
 		target: (t) => {
@@ -3749,12 +3983,12 @@ function qt(e, t) {
 				name: t.name
 			};
 			if (a) return {
-				parent: n.get(a.parent),
-				name: a.id === t.id ? N(e.cwd, r).at(-1) : a.name,
+				parent: r.get(a.parent),
+				name: a.id === t.id ? N(e.cwd, n).at(-1) : a.name,
 				existing: a
 			};
-			let { parent: i, name: o } = e.locate(r);
-			if (i?.type !== "folder" || !o) throw new y(`impossibile creare «${r}»: file o cartella inesistente`);
+			let { parent: i, name: o } = e.locate(n);
+			if (i?.type !== "folder" || !o) throw new b(w("files.cannotCreate", { path: n }));
 			return {
 				parent: i,
 				name: o
@@ -3762,8 +3996,8 @@ function qt(e, t) {
 		}
 	};
 }
-async function Jt(e) {
-	let { opts: t, args: r } = G(e, {
+async function tn(e) {
+	let { opts: t, args: n } = H(e, {
 		flags: "rRanvfp",
 		long: {
 			recursive: "r",
@@ -3772,50 +4006,56 @@ async function Jt(e) {
 			force: "f",
 			archive: "a"
 		}
-	}), { sources: i, target: a } = qt(e, r), o = 0;
-	for (let r of i) try {
-		let i = e.resolve(r);
-		if (!i) throw new y(`impossibile fare stat di «${r}»: file o cartella inesistente`);
-		if (i.type === "folder" && !(t.r || t.R || t.a)) throw new y(`-r non specificato; si omette la cartella «${r}»`);
+	}), { sources: i, target: a } = en(e, n), o = 0;
+	for (let n of i) try {
+		let i = e.resolve(n);
+		if (!i) throw new b(w("files.cannotStat", { path: n }));
+		if (i.type === "folder" && !(t.r || t.R || t.a)) throw new b(w("cp.omitting", { path: n }));
 		let { parent: o, name: s } = a(i);
-		if (i.type === "folder" && n.isInside(o.id, i.id)) throw new y(`impossibile copiare la cartella «${r}» dentro se stessa`);
-		await Kt(e, i, o.id, s, t);
+		if (i.type === "folder" && r.isInside(o.id, i.id)) throw new b(w("cp.intoItself", { path: n }));
+		await $t(e, i, o.id, s, t);
 	} catch (t) {
-		if (!(t instanceof y) && !(t instanceof Error)) throw t;
+		if (!(t instanceof b) && !(t instanceof Error)) throw t;
 		await e.error(t.message), o = 1;
 	}
 	return o;
 }
-async function Yt(e) {
-	let { opts: t, args: r } = G(e, {
+async function nn(e) {
+	let { opts: t, args: n } = H(e, {
 		flags: "nvfi",
 		long: {
 			"no-clobber": "n",
 			verbose: "v",
 			force: "f"
 		}
-	}), { sources: i, target: a } = qt(e, r), o = 0;
-	for (let r of i) try {
-		let i = e.resolve(r);
-		if (!i) throw new y(`impossibile fare stat di «${r}»: file o cartella inesistente`);
-		if (i.system) throw new y(`impossibile spostare «${r}»: è una cartella di sistema`);
+	}), { sources: i, target: a } = en(e, n), o = 0;
+	for (let n of i) try {
+		let i = e.resolve(n);
+		if (!i) throw new b(w("files.cannotStat", { path: n }));
+		if (i.system) throw new b(w("mv.system", { path: n }));
 		let { parent: o, name: s } = a(i);
-		if (i.type === "folder" && n.isInside(o.id, i.id)) throw new y(`impossibile spostare «${r}» in una sua sottocartella`);
-		let c = n.children(o.id).find((e) => e.id !== i.id && e.name.toLowerCase() === s.toLowerCase());
+		if (i.type === "folder" && r.isInside(o.id, i.id)) throw new b(w("mv.intoItself", { path: n }));
+		let c = r.children(o.id).find((e) => e.id !== i.id && e.name.toLowerCase() === s.toLowerCase());
 		if (c) {
 			if (t.n) continue;
-			if (c.type === "folder" && i.type !== "folder") throw new y(`impossibile sovrascrivere la cartella «${s}» con un file`);
-			if (c.type === "folder" && n.children(c.id).length) throw new y(`impossibile spostare «${r}» su «${s}»: la cartella non è vuota`);
-			n.trash([c.id]);
+			if (c.type === "folder" && i.type !== "folder") throw new b(w("files.overwriteFolder", { name: s }));
+			if (c.type === "folder" && r.children(c.id).length) throw new b(w("mv.notEmpty", {
+				path: n,
+				name: s
+			}));
+			r.trash([c.id]);
 		}
-		i.parent !== o.id && n.move(i.id, o.id), n.get(i.id).name !== s && n.rename(i.id, s), t.v && await e.out(`rinominato «${r}» -> «${n.path(i.id)}»\n`);
+		i.parent !== o.id && r.move(i.id, o.id), r.get(i.id).name !== s && r.rename(i.id, s), t.v && await e.out(`${w("mv.verbose", {
+			from: n,
+			to: r.path(i.id)
+		})}\n`);
 	} catch (t) {
 		await e.error(t.message), o = 1;
 	}
 	return o;
 }
-async function Xt(e) {
-	let { opts: t, args: r } = G(e, {
+async function rn(e) {
+	let { opts: t, args: n } = H(e, {
 		flags: "rRfvdi",
 		long: {
 			recursive: "r",
@@ -3825,148 +4065,172 @@ async function Xt(e) {
 			purge: "P"
 		}
 	});
-	if (!r.length && !t.f) throw new y("manca l’operando", 2);
+	if (!n.length && !t.f) throw new b(w("err.missingOperand"), 2);
 	let i = 0;
-	for (let a of r) {
-		let r = e.resolve(a);
-		if (!r) t.f || (await e.error(`impossibile rimuovere «${a}»: file o cartella inesistente`), i = 1);
+	for (let a of n) {
+		let n = e.resolve(a);
+		if (!n) t.f || (await e.error(w("files.cannotRemove", {
+			path: a,
+			reason: w("reason.noSuchFile")
+		})), i = 1);
 		else try {
-			if (r.id === n.root) throw new y(`è pericoloso agire su «${a}»: è la home`);
-			if (r.type === "folder" && !(t.r || t.R)) {
-				if (!t.d) throw new y(`impossibile rimuovere «${a}»: è una cartella`);
-				if (n.children(r.id).length) throw new y(`impossibile rimuovere «${a}»: la cartella non è vuota`);
+			if (n.id === r.root) throw new b(w("rm.home", { path: a }));
+			if (n.type === "folder" && !(t.r || t.R)) {
+				if (!t.d) throw new b(w("files.cannotRemove", {
+					path: a,
+					reason: w("reason.isADirectory")
+				}));
+				if (r.children(n.id).length) throw new b(w("files.cannotRemove", {
+					path: a,
+					reason: w("reason.notEmpty")
+				}));
 			}
-			if (r.system) throw new y(`impossibile rimuovere «${a}»: è una cartella di sistema`);
-			if (t.P) n.remove(r.id);
-			else if (!n.trash([r.id]).length) throw new y(`impossibile rimuovere «${a}»: contiene cartelle di sistema`);
-			t.v && await e.out(t.P ? `eliminato definitivamente «${a}»\n` : `spostato nel cestino «${a}»\n`);
+			if (n.system) throw new b(w("files.cannotRemove", {
+				path: a,
+				reason: w("reason.system")
+			}));
+			if (t.P) r.remove(n.id);
+			else if (!r.trash([n.id]).length) throw new b(w("files.cannotRemove", {
+				path: a,
+				reason: w("reason.containsSystem")
+			}));
+			t.v && await e.out(`${t.P ? w("rm.purged", { path: a }) : w("rm.trashed", { path: a })}\n`);
 		} catch (t) {
 			await e.error(t.message), i = 1;
 		}
 	}
 	return i;
 }
-async function Zt(e) {
-	let { opts: t, args: r } = G(e, {
+async function an(e) {
+	let { opts: t, args: n } = H(e, {
 		flags: "pv",
 		long: {
 			parents: "p",
 			verbose: "v"
 		}
 	});
-	if (!r.length) throw new y("manca l’operando", 2);
+	if (!n.length) throw new b(w("err.missingOperand"), 2);
 	let i = 0;
-	for (let a of r) {
-		let r = t.p ? N(e.cwd, a).map((e, t, n) => "~/" + n.slice(0, n.length - t).join("/")) : [a];
-		for (let a of r) {
-			let r = e.resolve(a), o = async (t) => {
-				await e.error(`impossibile rimuovere «${a}»: ${t}`), i = 1;
+	for (let a of n) {
+		let n = t.p ? N(e.cwd, a).map((e, t, n) => "~/" + n.slice(0, n.length - t).join("/")) : [a];
+		for (let a of n) {
+			let n = e.resolve(a), o = async (t) => {
+				await e.error(w("files.cannotRemove", {
+					path: a,
+					reason: t
+				})), i = 1;
 			};
-			if (!r) {
-				await o("file o cartella inesistente");
+			if (!n) {
+				await o(w("reason.noSuchFile"));
 				break;
 			}
-			if (r.type !== "folder") {
-				await o("non è una cartella");
+			if (n.type !== "folder") {
+				await o(w("reason.notADirectory"));
 				break;
 			}
-			if (n.children(r.id).length) {
-				await o("la cartella non è vuota");
+			if (r.children(n.id).length) {
+				await o(w("reason.notEmpty"));
 				break;
 			}
-			if (r.system || r.id === n.root) {
-				await o("è una cartella di sistema");
+			if (n.system || n.id === r.root) {
+				await o(w("reason.system"));
 				break;
 			}
-			n.trash([r.id]), t.v && await e.out(`rimossa la cartella «${a}»\n`);
+			r.trash([n.id]), t.v && await e.out(`${w("rmdir.removed", { path: a })}\n`);
 		}
 	}
 	return i;
 }
-var Qt = (e) => new Date(e).toLocaleString("it-IT", {
+var on = (e) => C.date(e, {
 	dateStyle: "medium",
 	timeStyle: "medium"
-}), $t = (e) => e.type === "folder" ? "cartella" : e.type === "app" ? `collegamento all’app ${e.app}` : e.size ? "file" : "file vuoto";
-async function en(e) {
-	let { opts: t, args: r } = G(e, {
+}), sn = (e) => e.type === "folder" ? w("stat.folder") : e.type === "app" ? w("stat.appLink", { app: e.app }) : e.size ? w("stat.file") : w("stat.emptyFile");
+async function cn(e) {
+	let { opts: t, args: n } = H(e, {
 		values: "c",
 		long: { format: "c" }
 	});
-	if (!r.length) throw new y("manca l’operando", 2);
+	if (!n.length) throw new b(w("err.missingOperand"), 2);
 	let i = 0;
-	for (let a of r) {
-		let r = e.resolve(a);
-		if (!r) {
-			await e.error(Mt(a)), i = 1;
+	for (let a of n) {
+		let n = e.resolve(a);
+		if (!n) {
+			await e.error(Bt(a)), i = 1;
 			continue;
 		}
 		if (t.c != null) {
-			let n = {
+			let r = {
 				n: a,
 				N: `'${a}'`,
-				s: String(r.size ?? 0),
-				F: $t(r),
-				Y: String(Math.floor(r.modified / 1e3)),
-				y: new Date(r.modified).toISOString(),
-				W: String(Math.floor(r.created / 1e3)),
-				w: new Date(r.created).toISOString(),
-				i: r.id,
+				s: String(n.size ?? 0),
+				F: sn(n),
+				Y: String(Math.floor(n.modified / 1e3)),
+				y: new Date(n.modified).toISOString(),
+				W: String(Math.floor(n.created / 1e3)),
+				w: new Date(n.created).toISOString(),
+				i: n.id,
 				"%": "%"
 			};
-			await e.out(t.c.replace(/%(.)/g, (e, t) => n[t] ?? e) + "\n");
+			await e.out(t.c.replace(/%(.)/g, (e, t) => r[t] ?? e) + "\n");
 			continue;
 		}
-		let s = (r.tags ?? []).map((e) => o.get(e)?.name).filter(Boolean);
+		let o = (n.tags ?? []).map((e) => s.get(e)?.name).filter(Boolean);
 		await e.out([
 			`  File: ${a}`,
-			`  Tipo: ${$t(r)}`,
-			`  Percorso: ${n.path(r.id)}`,
-			r.type === "folder" ? `  Elementi: ${n.children(r.id).length} (${n.count(r.id)} in tutto)` : r.type === "file" ? `  Dimensione: ${r.size ?? 0} byte (${Pt(r.size ?? 0)})` : null,
-			`  Creato: ${Qt(r.created)}`,
-			`  Modificato: ${Qt(r.modified)}`,
-			s.length ? `  Tag: ${s.join(", ")}` : null,
-			r.system ? "  Cartella di sistema" : null,
-			`  Id: ${r.id}`
+			`  ${w("stat.type", { type: sn(n) })}`,
+			`  ${w("stat.path", { path: r.path(n.id) })}`,
+			n.type === "folder" ? `  ${w("stat.items", {
+				n: r.children(n.id).length,
+				total: r.count(n.id)
+			})}` : n.type === "file" ? `  ${w("stat.size", {
+				size: n.size ?? 0,
+				human: Vt(n.size ?? 0)
+			})}` : null,
+			`  ${w("stat.created", { date: on(n.created) })}`,
+			`  ${w("stat.modified", { date: on(n.modified) })}`,
+			o.length ? `  ${w("stat.tags", { tags: o.join(", ") })}` : null,
+			n.system ? `  ${w("stat.system")}` : null,
+			`  Id: ${n.id}`
 		].filter(Boolean).join("\n") + "\n");
 	}
 	return i;
 }
-function tn(e, t) {
-	let r = 0, i = {
+function ln(e, t) {
+	let n = 0, i = {
 		maxdepth: Infinity,
 		mindepth: 0
 	}, a = [], o = () => {
 		let e = s();
-		for (; t[r] === "-o" || t[r] === "-or";) {
-			r++;
-			let t = s(), n = e;
-			e = (e) => n(e) || t(e);
+		for (; t[n] === "-o" || t[n] === "-or";) {
+			n++;
+			let t = s(), r = e;
+			e = (e) => r(e) || t(e);
 		}
 		return e;
 	}, s = () => {
 		let e = c();
 		for (;;) {
-			if (t[r] === "-a" || t[r] === "-and") r++;
-			else if (r >= t.length || t[r] === "-o" || t[r] === "-or" || t[r] === ")") return e;
-			let n = c(), i = e;
-			e = (e) => i(e) && n(e);
+			if (t[n] === "-a" || t[n] === "-and") n++;
+			else if (n >= t.length || t[n] === "-o" || t[n] === "-or" || t[n] === ")") return e;
+			let r = c(), i = e;
+			e = (e) => i(e) && r(e);
 		}
 	}, c = () => {
-		if (t[r] === "!" || t[r] === "-not") {
-			r++;
+		if (t[n] === "!" || t[n] === "-not") {
+			n++;
 			let e = c();
 			return (t) => !e(t);
 		}
 		return u();
 	}, l = (e) => {
-		if (r >= t.length) throw new y(`manca l’argomento di «${e}»`);
-		return t[r++];
+		if (n >= t.length) throw new b(w("find.missingArgument", { name: e }));
+		return t[n++];
 	}, u = () => {
-		let s = t[r++];
+		let s = t[n++];
 		switch (s) {
 			case "(": {
 				let e = o();
-				if (t[r++] !== ")") throw new y("manca «)»");
+				if (t[n++] !== ")") throw new b(w("err.missingParen"));
 				return e;
 			}
 			case "-name": {
@@ -3992,13 +4256,13 @@ function tn(e, t) {
 					d: "folder",
 					l: "app"
 				}[e];
-				if (!t) throw new y(`tipo sconosciuto per -type: «${e}» (f, d o l)`);
+				if (!t) throw new b(w("find.badType", { type: e }));
 				return (e) => e.node.type === t;
 			}
-			case "-empty": return (e) => e.node.type === "folder" ? !n.children(e.node.id).length : e.node.type === "file" && !e.node.size;
+			case "-empty": return (e) => e.node.type === "folder" ? !r.children(e.node.id).length : e.node.type === "file" && !e.node.size;
 			case "-size": {
 				let e = l(s), t = /^([+-]?)(\d+)([ckMG]?)$/.exec(e);
-				if (!t) throw new y(`dimensione non valida: «${e}»`);
+				if (!t) throw new b(w("find.badSize", { value: e }));
 				let n = {
 					c: 1,
 					k: 1024,
@@ -4015,7 +4279,10 @@ function tn(e, t) {
 			case "-mtime":
 			case "-mmin": {
 				let e = l(s), t = /^([+-]?)(\d+)$/.exec(e);
-				if (!t) throw new y(`valore non valido per ${s}: «${e}»`);
+				if (!t) throw new b(w("find.badValue", {
+					option: s,
+					value: e
+				}));
 				let n = s === "-mtime" ? 864e5 : 6e4;
 				return (e) => {
 					let r = Math.floor((Date.now() - e.node.modified) / n);
@@ -4023,12 +4290,12 @@ function tn(e, t) {
 				};
 			}
 			case "-newer": {
-				let n = e.resolve(l(s));
-				if (!n) throw new y(`impossibile trovare «${t[r - 1]}»`);
-				return (e) => e.node.modified > n.modified;
+				let r = e.resolve(l(s));
+				if (!r) throw new b(w("find.cannotFind", { path: t[n - 1] }));
+				return (e) => e.node.modified > r.modified;
 			}
-			case "-maxdepth": return i.maxdepth = K(l(s)), () => !0;
-			case "-mindepth": return i.mindepth = K(l(s)), () => !0;
+			case "-maxdepth": return i.maxdepth = U(l(s)), () => !0;
+			case "-mindepth": return i.mindepth = U(l(s)), () => !0;
 			case "-true": return () => !0;
 			case "-false": return () => !1;
 			case "-print": return i.printed = !0, (e) => (e.out.push(e.path), !0);
@@ -4037,57 +4304,57 @@ function tn(e, t) {
 			case "-exec":
 			case "-ok": {
 				let e = [];
-				for (; r < t.length && t[r] !== ";" && t[r] !== "+";) e.push(t[r++]);
-				let n = t[r] === "+";
-				if (r >= t.length) throw new y("manca la fine di «-exec» («;» o «+»)");
-				if (r++, !e.length) throw new y("manca il comando di «-exec»");
+				for (; n < t.length && t[n] !== ";" && t[n] !== "+";) e.push(t[n++]);
+				let r = t[n] === "+";
+				if (n >= t.length) throw new b(w("find.execEnd"));
+				if (n++, !e.length) throw new b(w("find.execCommand"));
 				i.printed = !0;
 				let o = {
 					cmd: e,
-					plus: n,
+					plus: r,
 					batch: []
 				};
-				return a.push(o), (t) => n ? (o.batch.push(t.path), !0) : (t.runs.push(e.map((e) => e.replaceAll("{}", t.path))), !0);
+				return a.push(o), (t) => r ? (o.batch.push(t.path), !0) : (t.runs.push(e.map((e) => e.replaceAll("{}", t.path))), !0);
 			}
 		}
-		throw new y(`predicato sconosciuto: «${s}»`);
+		throw new b(w("find.unknownPredicate", { name: s }));
 	}, d = t.length ? o() : () => !0;
-	if (r < t.length) throw new y(`argomento inatteso: «${t[r]}»`);
+	if (n < t.length) throw new b(w("find.unexpected", { arg: t[n] }));
 	return {
 		expr: d,
 		global: i,
 		execs: a
 	};
 }
-async function nn(e) {
-	let t = e.args, r = 0;
-	for (; r < t.length && !/^[-(!]/.test(t[r]);) r++;
-	let i = r ? t.slice(0, r) : ["."], { expr: a, global: o, execs: s } = tn(e, t.slice(r)), c = 0, l = [], u = async (t) => {
+async function un(e) {
+	let t = e.args, n = 0;
+	for (; n < t.length && !/^[-(!]/.test(t[n]);) n++;
+	let i = n ? t.slice(0, n) : ["."], { expr: a, global: o, execs: s } = ln(e, t.slice(n)), c = 0, l = [], u = async (t) => {
 		let n = await e.shell.invoke(t, e.io);
 		return n !== 0 && (c = 1), n === 0;
 	};
 	for (let t of i) {
-		let r = e.resolve(t);
-		if (!r) {
-			await e.error(`«${t}»: file o cartella inesistente`), c = 1;
+		let n = e.resolve(t);
+		if (!n) {
+			await e.error(w("files.quotedNoSuchFile", { path: t })), c = 1;
 			continue;
 		}
-		let i = async (t, r, s) => {
+		let i = async (t, n, s) => {
 			if (await e.tick(), s >= o.mindepth) {
-				let n = {
+				let r = {
 					node: t,
-					path: r,
+					path: n,
 					out: [],
 					deletes: l,
 					runs: []
 				};
-				a(n) && !o.printed && n.out.push(r);
-				for (let t of n.out) await e.out(t.endsWith("\0") ? t : t + "\n");
-				for (let e of n.runs) await u(e);
+				a(r) && !o.printed && r.out.push(n);
+				for (let t of r.out) await e.out(t.endsWith("\0") ? t : t + "\n");
+				for (let e of r.runs) await u(e);
 			}
-			if (t.type === "folder" && s < o.maxdepth) for (let e of [...n.children(t.id)].sort((e, t) => F(e.name, t.name))) await i(e, r.endsWith("/") ? r + e.name : `${r}/${e.name}`, s + 1);
+			if (t.type === "folder" && s < o.maxdepth) for (let e of [...r.children(t.id)].sort((e, t) => F(e.name, t.name))) await i(e, n.endsWith("/") ? n + e.name : `${n}/${e.name}`, s + 1);
 		};
-		await i(r, t, 0);
+		await i(n, t, 0);
 	}
 	for (let e of s.filter((e) => e.plus && e.batch.length)) {
 		let t = e.cmd.indexOf("{}");
@@ -4097,35 +4364,35 @@ async function nn(e) {
 			...e.cmd.slice(t + 1)
 		]);
 	}
-	return l.length && n.trash([...l].reverse().filter((e) => n.exists(e))), c;
+	return l.length && r.trash([...l].reverse().filter((e) => r.exists(e))), c;
 }
-async function rn(e) {
-	let { opts: t, args: n } = G(e, {
+async function dn(e) {
+	let { opts: t, args: n } = H(e, {
 		flags: "adf",
 		values: "L"
-	}), r = t.L == null ? Infinity : K(t.L), i = 0, a = 0, o = 0;
+	}), r = t.L == null ? Infinity : U(t.L), i = 0, a = 0, o = 0;
 	for (let s of n.length ? n : ["."]) {
 		let n = e.resolve(s);
 		if (!n) {
-			await e.error(`«${s}»: file o cartella inesistente`), o = 1;
+			await e.error(w("files.quotedNoSuchFile", { path: s })), o = 1;
 			continue;
 		}
-		await e.out(X(e, n, s) + "\n");
+		await e.out(J(e, n, s) + "\n");
 		let c = async (n, o, s) => {
 			if (s > r) return;
-			let l = Rt(Bt(n.id, t).filter((e) => !t.d || e.type === "folder"), {});
+			let l = Gt(qt(n.id, t).filter((e) => !t.d || e.type === "folder"), {});
 			for (let n = 0; n < l.length; n++) {
 				await e.tick();
 				let r = l[n], u = n === l.length - 1, d = t.f ? `${o.replace(/[│├└─ ]/g, "")}${r.name}` : r.name;
-				await e.out(`${o}${u ? "└── " : "├── "}${X(e, r, d)}${r.type === "app" ? ` -> app:${r.app}` : ""}\n`), r.type === "folder" ? (i++, await c(r, o + (u ? "    " : "│   "), s + 1)) : a++;
+				await e.out(`${o}${u ? "└── " : "├── "}${J(e, r, d)}${r.type === "app" ? ` -> app:${r.app}` : ""}\n`), r.type === "folder" ? (i++, await c(r, o + (u ? "    " : "│   "), s + 1)) : a++;
 			}
 		};
 		await c(n, "", 1);
 	}
-	return await e.out(`\n${i} ${i === 1 ? "cartella" : "cartelle"}${t.d ? "" : `, ${a} file`}\n`), o;
+	return await e.out(`\n${w("tree.folders", { n: i })}${t.d ? "" : `, ${w("tree.files", { n: a })}`}\n`), o;
 }
-async function an(e) {
-	let { opts: t, args: n } = G(e, {
+async function fn(e) {
+	let { opts: t, args: n } = H(e, {
 		flags: "az",
 		values: "s",
 		long: {
@@ -4133,122 +4400,190 @@ async function an(e) {
 			suffix: "s"
 		}
 	});
-	if (!n.length) throw new y("manca l’operando", 2);
+	if (!n.length) throw new b(w("err.missingOperand"), 2);
 	let r = t.a || t.s != null ? n : [n[0]], i = t.s ?? (t.a ? null : n[1]);
 	for (let n of r) {
 		let r = n.replace(/\/+$/, "").split("/").pop() || (n.startsWith("/") ? "/" : "");
 		i && r.endsWith(i) && r !== i && (r = r.slice(0, -i.length)), await e.out(r + (t.z ? "\0" : "\n"));
 	}
 }
-async function on(e) {
-	if (!e.args.length) throw new y("manca l’operando", 2);
+async function pn(e) {
+	if (!e.args.length) throw new b(w("err.missingOperand"), 2);
 	for (let t of e.args) {
 		let n = t.replace(/\/+$/, ""), r = n.lastIndexOf("/");
 		await e.out((r < 0 ? "." : r === 0 ? "/" : n.slice(0, r).replace(/\/+$/, "") || "/") + "\n");
 	}
 }
-async function sn(e) {
-	let { opts: t, args: r } = G(e, { flags: "emq" }), i = 0;
-	for (let a of r.length ? r : ["."]) {
-		let r = e.resolve(a);
-		r ? await e.out(n.path(r.id) + "\n") : t.m ? await e.out([n.home, ...N(e.cwd, a)].join("/") + "\n") : (t.q || await e.error(`${a}: file o cartella inesistente`), i = 1);
+async function mn(e) {
+	let { opts: t, args: n } = H(e, { flags: "emq" }), i = 0;
+	for (let a of n.length ? n : ["."]) {
+		let n = e.resolve(a);
+		n ? await e.out(r.path(n.id) + "\n") : t.m ? await e.out([r.home, ...N(e.cwd, a)].join("/") + "\n") : (t.q || await e.error(w("err.noSuchFile", { path: a })), i = 1);
 	}
 	return i;
 }
-var cn = [
+var hn = [
 	{
 		name: "ls",
-		usage: "ls [-laAh1trSdRF] [percorso…]",
-		summary: "Elenca il contenuto delle cartelle.",
-		run: Vt,
-		help: "-l  dettagli (tipo, dimensione, data, tag)\n-a  anche i nomi che iniziano con «.»\n-h  dimensioni leggibili (1,2K)\n-t  per data, -S per dimensione, -r al contrario\n-1  uno per riga\n-d  la cartella stessa, non il contenuto\n-R  anche le sottocartelle\n-F  / dopo le cartelle, @ dopo i collegamenti, * dopo gli script"
+		get usage() {
+			return w("help.ls.usage");
+		},
+		get summary() {
+			return w("help.ls.summary");
+		},
+		run: Jt,
+		get help() {
+			return w("help.ls.text");
+		}
 	},
 	{
 		name: "cat",
 		usage: "cat [-nbsE] [file…]",
-		summary: "Mostra il contenuto dei file (o dell’input), uno dopo l’altro.",
-		run: Ht,
-		help: "-n  numera le righe\n-b  numera solo quelle non vuote\n-s  una sola riga vuota di fila\n-E  $ alla fine di ogni riga"
+		get summary() {
+			return w("help.cat.summary");
+		},
+		run: Yt,
+		get help() {
+			return w("help.cat.text");
+		}
 	},
 	{
 		name: "mkdir",
-		usage: "mkdir [-pv] cartella…",
-		summary: "Crea delle cartelle.",
-		run: Wt,
-		help: "-p  crea anche le cartelle intermedie; nessun errore se esiste già"
+		get usage() {
+			return w("help.mkdir.usage");
+		},
+		get summary() {
+			return w("help.mkdir.summary");
+		},
+		run: Zt,
+		get help() {
+			return w("help.mkdir.text");
+		}
 	},
 	{
 		name: "touch",
 		usage: "touch [-c] file…",
-		summary: "Crea dei file vuoti, o aggiorna la data di modifica di quelli che esistono.",
-		run: Gt
+		get summary() {
+			return w("help.touch.summary");
+		},
+		run: Qt
 	},
 	{
 		name: "cp",
-		usage: "cp [-rnv] origine… destinazione",
-		summary: "Copia file e cartelle.",
-		run: Jt,
-		help: "-r  copia anche le cartelle, con il loro contenuto\n-n  non sovrascrive i file che esistono\n-v  dice cosa copia"
+		get usage() {
+			return w("help.cp.usage");
+		},
+		get summary() {
+			return w("help.cp.summary");
+		},
+		run: tn,
+		get help() {
+			return w("help.cp.text");
+		}
 	},
 	{
 		name: "mv",
-		usage: "mv [-nv] origine… destinazione",
-		summary: "Sposta o rinomina file e cartelle.",
-		run: Yt,
-		help: "Se la destinazione è una cartella, ci sposta dentro; altrimenti rinomina. Un file sovrascritto va nel cestino.\n-n  non sovrascrive\n-v  dice cosa sposta"
+		get usage() {
+			return w("help.mv.usage");
+		},
+		get summary() {
+			return w("help.mv.summary");
+		},
+		run: nn,
+		get help() {
+			return w("help.mv.text");
+		}
 	},
 	{
 		name: "rm",
-		usage: "rm [-rfvd] [--purge] percorso…",
-		summary: "Sposta file e cartelle nel cestino (con --purge li elimina per sempre).",
-		run: Xt,
-		help: "-r  anche le cartelle, con il loro contenuto\n-d  le cartelle vuote\n-f  nessun errore per ciò che non esiste\n--purge  elimina definitivamente, senza cestino\nCiò che va nel cestino si rimette a posto con «trash restore»."
+		get usage() {
+			return w("help.rm.usage");
+		},
+		get summary() {
+			return w("help.rm.summary");
+		},
+		run: rn,
+		get help() {
+			return w("help.rm.text");
+		}
 	},
 	{
 		name: "rmdir",
-		usage: "rmdir [-p] cartella…",
-		summary: "Rimuove cartelle vuote (nel cestino).",
-		run: Zt
-	},
-	{
-		name: "stat",
-		usage: "stat [-c formato] percorso…",
-		summary: "Mostra i dettagli di file e cartelle.",
-		run: en,
-		help: "-c  formato: %n nome, %s dimensione, %F tipo, %y data di modifica, %Y in secondi, %w %W creazione, %i id"
-	},
-	{
-		name: "find",
-		usage: "find [percorso…] [espressione]",
-		summary: "Cerca file e cartelle.",
-		run: nn,
-		help: "Test: -name modello, -iname, -path, -type f|d|l, -empty, -size [+-]n[ckMG], -mtime [+-]giorni, -mmin, -newer file\nAzioni: -print, -print0, -delete (nel cestino), -exec comando {} \\; oppure +\nOpzioni: -maxdepth n, -mindepth n. Insieme: ! (negazione), -o (o), ( … )\nEsempio: find . -name \"*.txt\" -size +1k"
-	},
-	{
-		name: "tree",
-		usage: "tree [-adf] [-L livelli] [cartella…]",
-		summary: "Mostra le cartelle ad albero.",
-		run: rn
-	},
-	{
-		name: "basename",
-		usage: "basename percorso [suffisso]",
-		summary: "L’ultima parte di un percorso (senza il suffisso).",
+		get usage() {
+			return w("help.rmdir.usage");
+		},
+		get summary() {
+			return w("help.rmdir.summary");
+		},
 		run: an
 	},
 	{
+		name: "stat",
+		get usage() {
+			return w("help.stat.usage");
+		},
+		get summary() {
+			return w("help.stat.summary");
+		},
+		run: cn,
+		get help() {
+			return w("help.stat.text");
+		}
+	},
+	{
+		name: "find",
+		get usage() {
+			return w("help.find.usage");
+		},
+		get summary() {
+			return w("help.find.summary");
+		},
+		run: un,
+		get help() {
+			return w("help.find.text");
+		}
+	},
+	{
+		name: "tree",
+		get usage() {
+			return w("help.tree.usage");
+		},
+		get summary() {
+			return w("help.tree.summary");
+		},
+		run: dn
+	},
+	{
+		name: "basename",
+		get usage() {
+			return w("help.basename.usage");
+		},
+		get summary() {
+			return w("help.basename.summary");
+		},
+		run: fn
+	},
+	{
 		name: "dirname",
-		usage: "dirname percorso…",
-		summary: "Il percorso senza l’ultima parte.",
-		run: on
+		get usage() {
+			return w("help.dirname.usage");
+		},
+		get summary() {
+			return w("help.dirname.summary");
+		},
+		run: pn
 	},
 	{
 		name: "realpath",
-		usage: "realpath [-m] percorso…",
-		summary: "Il percorso completo.",
-		run: sn
+		get usage() {
+			return w("help.realpath.usage");
+		},
+		get summary() {
+			return w("help.realpath.summary");
+		},
+		run: mn
 	}
-], ln = {
+], gn = {
 	alpha: "a-zA-Z",
 	digit: "0-9",
 	alnum: "a-zA-Z0-9",
@@ -4262,7 +4597,7 @@ var cn = [
 	cntrl: "\\x00-\\x1f\\x7f",
 	print: "\\x20-\\x7e",
 	graph: "\\x21-\\x7e"
-}, un = /* @__PURE__ */ new Set([
+}, _n = /* @__PURE__ */ new Set([
 	"(",
 	")",
 	"{",
@@ -4271,7 +4606,7 @@ var cn = [
 	"+",
 	"?"
 ]);
-function dn(e, t) {
+function vn(e, t) {
 	let n = "";
 	for (let r = 0; r < e.length; r++) {
 		let i = e[r];
@@ -4281,23 +4616,23 @@ function dn(e, t) {
 				if (e[t] === "[" && e[t + 1] === ":") {
 					let n = e.indexOf(":]", t + 2);
 					if (n > 0) {
-						i += ln[e.slice(t + 2, n)] ?? "", t = n + 1;
+						i += gn[e.slice(t + 2, n)] ?? "", t = n + 1;
 						continue;
 					}
 				}
 				i += e[t] === "\\" ? "\\\\" : e[t] === "[" ? "\\[" : e[t];
 			}
-			if (t >= e.length) throw new y("«[» senza «]» nell’espressione regolare", 2);
+			if (t >= e.length) throw new b(w("regex.unmatchedBracket"), 2);
 			n += i + "]", r = t;
 		} else if (i === "\\" && r + 1 < e.length) {
 			let i = e[++r];
-			i === "<" || i === ">" ? n += "\\b" : !t && un.has(i) ? n += i : n += "\\" + i;
-		} else !t && un.has(i) ? n += "\\" + i : i === "*" && (r === 0 || !t && e.slice(0, r).endsWith("\\(")) ? n += "\\*" : n += i;
+			i === "<" || i === ">" ? n += "\\b" : !t && _n.has(i) ? n += i : n += "\\" + i;
+		} else !t && _n.has(i) ? n += "\\" + i : i === "*" && (r === 0 || !t && e.slice(0, r).endsWith("\\(")) ? n += "\\*" : n += i;
 	}
 	return n;
 }
-function fn(e, { extended: t = !1, fixed: n = !1, ignoreCase: r = !1, word: i = !1, line: a = !1, global: o = !1 } = {}) {
-	let s = n ? e.replace(/[.*+?^${}()|[\]\\/]/g, "\\$&") : dn(e, t);
+function Y(e, { extended: t = !1, fixed: n = !1, ignoreCase: r = !1, word: i = !1, line: a = !1, global: o = !1 } = {}) {
+	let s = n ? e.replace(/[.*+?^${}()|[\]\\/]/g, "\\$&") : vn(e, t);
 	i && (s = `(?<![\\w])(?:${s})(?![\\w])`), a && (s = `^(?:${s})$`);
 	try {
 		return new RegExp(s, (r ? "i" : "") + (o ? "g" : "") + "u");
@@ -4305,21 +4640,21 @@ function fn(e, { extended: t = !1, fixed: n = !1, ignoreCase: r = !1, word: i = 
 		try {
 			return new RegExp(s, (r ? "i" : "") + (o ? "g" : ""));
 		} catch {
-			throw new y(`espressione regolare non valida: ${e}`, 2);
+			throw new b(w("regex.invalid", { pattern: e }), 2);
 		}
 	}
 }
 // src/terminal/commands/text.js
-var pn = (e) => e.stdout === e.shell.host.stdout, mn = (e) => new TextEncoder().encode(e).length;
-function Z(e) {
+var yn = (e) => e.stdout === e.shell.host.stdout, bn = (e) => new TextEncoder().encode(e).length;
+function X(e) {
 	let t = e.split("\n"), n = e.endsWith("\n");
 	return (n || e === "") && t.pop(), {
 		lines: t,
 		ended: n
 	};
 }
-async function hn(e) {
-	let { opts: t, args: n } = G(e, {
+async function xn(e) {
+	let { opts: t, args: n } = H(e, {
 		flags: "qv",
 		values: "nc",
 		long: {
@@ -4328,7 +4663,7 @@ async function hn(e) {
 			quiet: "q"
 		},
 		number: !0
-	}), r = t.n == null ? 10 : K(t.n), i = n.length ? n : ["-"], a = !0;
+	}), r = t.n == null ? 10 : U(t.n), i = n.length ? n : ["-"], a = !0;
 	for (let n of i) if (i.length > 1 && !t.q && await e.out(`${a ? "" : "\n"}==> ${n === "-" ? "standard input" : n} <==\n`), a = !1, n === "-" && t.c == null && r >= 0) {
 		let t = 0;
 		for (; t < r;) {
@@ -4339,17 +4674,17 @@ async function hn(e) {
 		e.stdin.close();
 	} else for await (let { text: i } of e.inputs([n])) {
 		if (t.c != null) {
-			let n = K(t.c);
+			let n = U(t.c);
 			await e.out(n >= 0 ? i.slice(0, n) : i.slice(0, Math.max(0, i.length + n)));
 			continue;
 		}
-		let { lines: n, ended: a } = Z(i), o = r >= 0 ? n.slice(0, r) : n.slice(0, Math.max(0, n.length + r)), s = o.map((e) => e + "\n").join("");
+		let { lines: n, ended: a } = X(i), o = r >= 0 ? n.slice(0, r) : n.slice(0, Math.max(0, n.length + r)), s = o.map((e) => e + "\n").join("");
 		await e.out(!a && o.length && o.length === n.length ? s.slice(0, -1) : s);
 	}
 	return +!!e.failed;
 }
-async function gn(e) {
-	let { opts: t, args: n } = G(e, {
+async function Sn(e) {
+	let { opts: t, args: n } = H(e, {
 		flags: "qvf",
 		values: "nc",
 		long: {
@@ -4361,17 +4696,17 @@ async function gn(e) {
 	}), r = n.length ? n : ["-"], i = !0;
 	for await (let { name: n, text: a } of e.inputs(r)) {
 		if (r.length > 1 && !t.q && await e.out(`${i ? "" : "\n"}==> ${n === "-" ? "standard input" : n} <==\n`), i = !1, t.c != null) {
-			let n = String(t.c), r = K(n.replace(/^[+-]/, ""));
+			let n = String(t.c), r = U(n.replace(/^[+-]/, ""));
 			await e.out(n.startsWith("+") ? a.slice(Math.max(0, r - 1)) : a.slice(Math.max(0, a.length - r)));
 			continue;
 		}
-		let o = String(t.n ?? "10"), { lines: s, ended: c } = Z(a), l = K(o.replace(/^[+-]/, "")), u = o.startsWith("+") ? s.slice(Math.max(0, l - 1)) : l === 0 ? [] : s.slice(-l), d = u.map((e) => e + "\n").join("");
+		let o = String(t.n ?? "10"), { lines: s, ended: c } = X(a), l = U(o.replace(/^[+-]/, "")), u = o.startsWith("+") ? s.slice(Math.max(0, l - 1)) : l === 0 ? [] : s.slice(-l), d = u.map((e) => e + "\n").join("");
 		await e.out(!c && u.length ? d.slice(0, -1) : d);
 	}
 	return +!!e.failed;
 }
-async function _n(e) {
-	let { opts: t, args: n } = G(e, {
+async function Cn(e) {
+	let { opts: t, args: n } = H(e, {
 		flags: "lwcmL",
 		long: {
 			lines: "l",
@@ -4388,12 +4723,12 @@ async function _n(e) {
 		name: t === "-" && !n.length ? "" : t,
 		l: (r.match(/\n/g) ?? []).length,
 		w: (r.match(/\S+/g) ?? []).length,
-		c: mn(r),
+		c: bn(r),
 		m: [...r].length,
 		L: Math.max(0, ...r.split("\n").map((e) => e.length))
 	});
 	i.length > 1 && i.push({
-		name: "totale",
+		name: w("wc.total"),
 		...Object.fromEntries([
 			"l",
 			"w",
@@ -4412,8 +4747,8 @@ async function _n(e) {
 	for (let t of i) await e.out(a.map((e) => String(t[e]).padStart(o)).join(" ") + (t.name ? ` ${t.name}` : "") + "\n");
 	return +!!e.failed;
 }
-async function vn(e) {
-	let { opts: t, args: r } = G(e, {
+async function wn(e) {
+	let { opts: t, args: n } = H(e, {
 		flags: "ivnclLrRwxEFoqsHhGPz",
 		values: "mABC",
 		multi: "ef",
@@ -4444,14 +4779,14 @@ async function vn(e) {
 			color: "K",
 			colour: "K"
 		}
-	}), i = [...r], a = t.e ?? [];
-	for (let r of t.f ?? []) {
-		let t = e.resolve(r);
-		if (t?.type !== "file") throw new y(`${r}: file o cartella inesistente`, 2);
-		a.push(...(await n.read(t.id)).split("\n").filter(Boolean));
+	}), i = [...n], a = t.e ?? [];
+	for (let n of t.f ?? []) {
+		let t = e.resolve(n);
+		if (t?.type !== "file") throw new b(w("err.noSuchFile", { path: n }), 2);
+		a.push(...(await r.read(t.id)).split("\n").filter(Boolean));
 	}
 	if (!a.length) {
-		if (!i.length) throw new y("manca il modello da cercare\nUso: grep [opzioni] modello [file…]", 2);
+		if (!i.length) throw new b(w("grep.noPattern"), 2);
 		a = [i.shift()];
 	}
 	let o = {
@@ -4460,34 +4795,34 @@ async function vn(e) {
 		ignoreCase: t.i,
 		word: t.w,
 		line: t.x
-	}, s = a.map((e) => fn(e, o)), c = a.map((e) => fn(e, {
+	}, s = a.map((e) => Y(e, o)), c = a.map((e) => Y(e, {
 		...o,
 		global: !0
-	})), l = pn(e), u = t.r || t.R, d = [], f = (e, t) => {
+	})), l = yn(e), u = t.r || t.R, d = [], f = (e, t) => {
 		if (e.type === "file") d.push(t);
-		else if (e.type === "folder") for (let r of [...n.children(e.id)].sort((e, t) => F(e.name, t.name))) f(r, t.endsWith("/") ? t + r.name : `${t}/${r.name}`);
+		else if (e.type === "folder") for (let n of [...r.children(e.id)].sort((e, t) => F(e.name, t.name))) f(n, t.endsWith("/") ? t + n.name : `${t}/${n.name}`);
 	};
 	if (u) for (let n of i.length ? i : ["."]) {
 		let r = e.resolve(n);
-		r ? f(r, n) : (t.s || await e.error(`${n}: file o cartella inesistente`), e.failed = !0);
+		r ? f(r, n) : (t.s || await e.error(w("err.noSuchFile", { path: n })), e.failed = !0);
 	}
 	else d.push(...i);
-	let p = t.H || (d.length > 1 || u) && !t.h, m = K(t.A ?? t.C ?? 0), h = K(t.B ?? t.C ?? 0), g = t.m == null ? Infinity : K(t.m), _ = !1, v = (e) => l ? `\x1b[1;31m${e}\x1b[0m` : e, b = (e, n, r) => (p ? l ? `\x1b[35m${e}\x1b[0m${r}` : e + r : "") + (t.n ? l ? `\x1b[32m${n}\x1b[0m${r}` : n + r : ""), x = async (n, r) => {
-		let { lines: i } = Z(r), a = 0, o = -1, u = 0;
+	let p = t.H || (d.length > 1 || u) && !t.h, m = U(t.A ?? t.C ?? 0), h = U(t.B ?? t.C ?? 0), g = t.m == null ? Infinity : U(t.m), _ = !1, v = (e) => l ? `\x1b[1;31m${e}\x1b[0m` : e, y = (e, n, r) => (p ? l ? `\x1b[35m${e}\x1b[0m${r}` : e + r : "") + (t.n ? l ? `\x1b[32m${n}\x1b[0m${r}` : n + r : ""), x = async (n, r) => {
+		let { lines: i } = X(r), a = 0, o = -1, u = 0;
 		for (let r = 0; r < i.length && a < g; r++) {
 			r % 2e3 == 0 && await e.tick();
 			let d = i[r];
-			if (s.some((e) => e.test(d)) === !!t.v) u > 0 && !t.c && !t.l && !t.L && !t.q && (await e.out(b(n, r + 1, "-") + d + "\n"), o = r, u--);
+			if (s.some((e) => e.test(d)) === !!t.v) u > 0 && !t.c && !t.l && !t.L && !t.q && (await e.out(y(n, r + 1, "-") + d + "\n"), o = r, u--);
 			else {
 				if (a++, _ = !0, t.q) return a;
 				if (!(t.c || t.l || t.L)) {
 					(h || m) && o >= 0 && r - h > o + 1 && await e.out(l ? "\x1B[36m--\x1B[0m\n" : "--\n");
-					for (let t = Math.max(o + 1, r - h); t < r; t++) await e.out(b(n, t + 1, "-") + i[t] + "\n");
-					if (t.o && !t.v) for (let t of c) for (let i of d.matchAll(t)) i[0] && await e.out(b(n, r + 1, ":") + v(i[0]) + "\n");
+					for (let t = Math.max(o + 1, r - h); t < r; t++) await e.out(y(n, t + 1, "-") + i[t] + "\n");
+					if (t.o && !t.v) for (let t of c) for (let i of d.matchAll(t)) i[0] && await e.out(y(n, r + 1, ":") + v(i[0]) + "\n");
 					else {
 						let i = d;
 						if (l && !t.v) for (let e of c) i = i.replace(e, (e) => e && v(e));
-						await e.out(b(n, r + 1, ":") + i + "\n");
+						await e.out(y(n, r + 1, ":") + i + "\n");
 					}
 					o = r, u = m;
 				}
@@ -4495,21 +4830,21 @@ async function vn(e) {
 		}
 		return a;
 	}, S = d.length ? d : ["-"];
-	for (let r of S) {
-		let i, a = r === "-" ? "(standard input)" : r;
-		if (r === "-") i = await e.stdin.readAll();
+	for (let n of S) {
+		let i, a = n === "-" ? "(standard input)" : n;
+		if (n === "-") i = await e.stdin.readAll();
 		else {
-			let a = e.resolve(r);
+			let a = e.resolve(n);
 			if (!a) {
-				t.s || await e.error(`${r}: file o cartella inesistente`), e.failed = !0;
+				t.s || await e.error(w("err.noSuchFile", { path: n })), e.failed = !0;
 				continue;
 			}
 			if (a.type === "folder") {
-				t.s || await e.error(`${r}: è una cartella`);
+				t.s || await e.error(w("err.isADirectory", { path: n }));
 				continue;
 			}
 			if (a.type !== "file") continue;
-			i = await n.read(a.id);
+			i = await r.read(a.id);
 		}
 		let o = await x(a, i);
 		if (t.q && _) return 0;
@@ -4517,23 +4852,23 @@ async function vn(e) {
 	}
 	return e.failed && !t.q ? 2 : +!_;
 }
-function yn(e, t, n) {
+function Tn(e, t, n) {
 	if (!t) return e;
 	let r = n == null ? e.trim().split(/\s+/) : e.split(n), i = t.end ?? r.length;
 	return r.slice(t.start - 1, i).join(n ?? " ");
 }
-var bn = {
+var En = {
 	K: 1e3,
 	M: 1e6,
 	G: 1e9,
 	T: 0xe8d4a51000,
 	k: 1e3
-}, xn = (e) => {
+}, Dn = (e) => {
 	let t = /^\s*([+-]?\d*[.,]?\d+)/.exec(e);
 	return t ? Number(t[1].replace(",", ".")) : 0;
 };
-async function Sn(e) {
-	let { opts: t, args: r } = G(e, {
+async function On(e) {
+	let { opts: t, args: n } = H(e, {
 		flags: "rnufhbVsc",
 		values: "kto",
 		long: {
@@ -4547,45 +4882,48 @@ async function Sn(e) {
 			output: "o"
 		}
 	}), i = [];
-	for await (let { text: t } of e.inputs(r)) i.push(...Z(t).lines);
+	for await (let { text: t } of e.inputs(n)) i.push(...X(t).lines);
 	let a = null;
 	if (t.k) {
 		let e = /^(\d+)(?:\.\d+)?[a-zA-Z]*(?:,(\d+)(?:\.\d+)?[a-zA-Z]*)?$/.exec(t.k);
-		if (!e) throw new y(`chiave non valida: «${t.k}»`, 2);
+		if (!e) throw new b(w("sort.badKey", { key: t.k }), 2);
 		a = {
 			start: Number(e[1]),
 			end: e[2] ? Number(e[2]) : null
 		}, /n/.test(t.k) && (t.n = !0), /r/.test(t.k) && (t.r = !0);
 	}
 	let o = (e) => {
-		let n = yn(e, a, t.t);
+		let n = Tn(e, a, t.t);
 		return t.b && (n = n.trim()), t.f && (n = n.toLowerCase()), n;
 	}, s = (e, n) => {
 		let r = o(e), i = o(n);
-		if (t.n) return xn(r) - xn(i) || F(e, n);
+		if (t.n) return Dn(r) - Dn(i) || F(e, n);
 		if (t.h) {
 			let t = (e) => {
 				let t = /^\s*([+-]?\d*\.?\d+)([KMGTk]?)/.exec(e);
-				return t ? Number(t[1]) * (bn[t[2]] ?? 1) : 0;
+				return t ? Number(t[1]) * (En[t[2]] ?? 1) : 0;
 			};
 			return t(r) - t(i) || F(e, n);
 		}
 		return t.V ? r.localeCompare(i, void 0, { numeric: !0 }) : F(r, i) || (r < i ? -1 : +(r > i));
 	};
 	if (t.c) {
-		for (let t = 1; t < i.length; t++) if (s(i[t - 1], i[t]) > 0) return await e.error(`-:${t + 1}: disordine: ${i[t]}`), 1;
+		for (let t = 1; t < i.length; t++) if (s(i[t - 1], i[t]) > 0) return await e.error(w("sort.disorder", {
+			n: t + 1,
+			line: i[t]
+		})), 1;
 		return 0;
 	}
 	i.sort(t.r ? (e, t) => s(t, e) : s), t.u && (i = i.filter((e, t) => t === 0 || s(i[t - 1], e) !== 0));
 	let c = i.map((e) => e + "\n").join("");
 	if (t.o) {
-		let r = e.shell.fileFor(t.o).id;
-		await n.write(r, c);
+		let n = e.shell.fileFor(t.o).id;
+		await r.write(n, c);
 	} else await e.out(c);
 	return e.failed ? 2 : 0;
 }
-async function Cn(e) {
-	let { opts: t, args: r } = G(e, {
+async function kn(e) {
+	let { opts: t, args: n } = H(e, {
 		flags: "cdui",
 		values: "fs",
 		long: {
@@ -4596,11 +4934,11 @@ async function Cn(e) {
 			"skip-fields": "f",
 			"skip-chars": "s"
 		}
-	}), [i, a] = r, o = [];
-	for await (let { text: t } of e.inputs(i ? [i] : [])) o = Z(t).lines;
+	}), [i, a] = n, o = [];
+	for await (let { text: t } of e.inputs(i ? [i] : [])) o = X(t).lines;
 	let s = (e) => {
 		let n = e;
-		return t.f && (n = n.replace(RegExp(`^(\\s*\\S+){${K(t.f)}}`), "")), t.s && (n = n.slice(K(t.s))), t.i ? n.toLowerCase() : n;
+		return t.f && (n = n.replace(RegExp(`^(\\s*\\S+){${U(t.f)}}`), "")), t.s && (n = n.slice(U(t.s))), t.i ? n.toLowerCase() : n;
 	}, c = "";
 	for (let e = 0; e < o.length;) {
 		let n = e + 1;
@@ -4608,33 +4946,33 @@ async function Cn(e) {
 		let r = n - e;
 		(!t.d || r > 1) && (!t.u || r === 1) && (c += (t.c ? `${String(r).padStart(7)} ` : "") + o[e] + "\n"), e = n;
 	}
-	return a ? await n.write(e.shell.fileFor(a).id, c) : await e.out(c), +!!e.failed;
+	return a ? await r.write(e.shell.fileFor(a).id, c) : await e.out(c), +!!e.failed;
 }
-async function wn(e) {
-	let { opts: t, args: r } = G(e, {
+async function An(e) {
+	let { opts: t, args: n } = H(e, {
 		flags: "ai",
 		long: { append: "a" }
-	}), i = r.map((t) => ({
+	}), i = n.map((t) => ({
 		path: t,
 		id: e.shell.fileFor(t).id
 	})), a = "";
 	for (let t; (t = await e.stdin.read()) != null;) a += t, await e.out(t);
 	for (let e of i) {
-		let r = t.a ? await n.read(e.id) : "";
-		await n.write(e.id, r + a);
+		let n = t.a ? await r.read(e.id) : "";
+		await r.write(e.id, n + a);
 	}
 }
-function Tn(e) {
+function jn(e) {
 	let t = String(e).split(",").map((t) => {
 		let n = /^(\d*)(-?)(\d*)$/.exec(t);
-		if (!n || !n[1] && !n[3]) throw new y(`elenco non valido: «${e}»`, 2);
+		if (!n || !n[1] && !n[3]) throw new b(w("cut.badList", { spec: e }), 2);
 		let r = n[1] ? Number(n[1]) : 1;
 		return [r, n[2] ? n[3] ? Number(n[3]) : Infinity : r];
 	});
 	return (e) => t.some(([t, n]) => e >= t && e <= n);
 }
-async function En(e) {
-	let { opts: t, args: n } = G(e, {
+async function Mn(e) {
+	let { opts: t, args: n } = H(e, {
 		flags: "s",
 		values: "dfcb",
 		long: {
@@ -4646,24 +4984,24 @@ async function En(e) {
 			"output-delimiter": "O"
 		}
 	});
-	if (!t.f && !t.c && !t.b) throw new y("indicare un elenco di campi (-f) o di caratteri (-c)", 2);
+	if (!t.f && !t.c && !t.b) throw new b(w("cut.noList"), 2);
 	let r = t.d ?? "	";
-	if (r.length !== 1) throw new y("il delimitatore deve essere un solo carattere", 2);
+	if (r.length !== 1) throw new b(w("cut.badDelimiter"), 2);
 	let i = t.O ?? r, a = "";
-	for await (let { text: o } of e.inputs(n)) for (let e of Z(o).lines) if (t.f) {
+	for await (let { text: o } of e.inputs(n)) for (let e of X(o).lines) if (t.f) {
 		if (!e.includes(r)) {
 			t.s || (a += e + "\n");
 			continue;
 		}
-		let n = Tn(t.f);
+		let n = jn(t.f);
 		a += e.split(r).filter((e, t) => n(t + 1)).join(i) + "\n";
 	} else {
-		let n = Tn(t.c ?? t.b);
+		let n = jn(t.c ?? t.b);
 		a += [...e].filter((e, t) => n(t + 1)).join("") + "\n";
 	}
 	return await e.out(a), +!!e.failed;
 }
-var Q = {
+var Z = {
 	upper: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
 	lower: "abcdefghijklmnopqrstuvwxyz",
 	digit: "0123456789",
@@ -4671,12 +5009,12 @@ var Q = {
 	blank: " 	",
 	punct: "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"
 };
-Q.alpha = Q.upper + Q.lower, Q.alnum = Q.alpha + Q.digit, Q.xdigit = "0123456789ABCDEFabcdef";
-function Dn(e) {
+Z.alpha = Z.upper + Z.lower, Z.alnum = Z.alpha + Z.digit, Z.xdigit = "0123456789ABCDEFabcdef";
+function Nn(e) {
 	let t = [], n = [];
 	for (let t = 0; t < e.length; t++) {
 		if (e[t] === "[" && e[t + 1] === ":") {
-			let r = e.indexOf(":]", t + 2), i = Q[e.slice(t + 2, r)];
+			let r = e.indexOf(":]", t + 2), i = Z[e.slice(t + 2, r)];
 			if (r > 0 && i) {
 				n.push(...[...i].map((e) => ({
 					c: e,
@@ -4710,14 +5048,14 @@ function Dn(e) {
 	}
 	for (let e = 0; e < n.length; e++) if (n[e + 1]?.c === "-" && n[e + 2] && !n[e].cls && !n[e + 1].cls) {
 		let r = n[e].c.codePointAt(0), i = n[e + 2].c.codePointAt(0);
-		if (r > i) throw new y(`intervallo al contrario: «${n[e].c}-${n[e + 2].c}»`);
+		if (r > i) throw new b(w("tr.reverseRange", { range: `${n[e].c}-${n[e + 2].c}` }));
 		for (let e = r; e <= i; e++) t.push(String.fromCodePoint(e));
 		e += 2;
 	} else t.push(n[e].c);
 	return t;
 }
-async function On(e) {
-	let { opts: t, args: n } = G(e, {
+async function Pn(e) {
+	let { opts: t, args: n } = H(e, {
 		flags: "dscC",
 		long: {
 			delete: "d",
@@ -4725,9 +5063,9 @@ async function On(e) {
 			complement: "c"
 		}
 	});
-	if (!n.length) throw new y("manca l’operando", 2);
-	let r = Dn(n[0]), i = n[1] == null ? null : Dn(n[1]);
-	if (!t.d && !t.s && !i) throw new y(`manca il secondo insieme dopo «${n[0]}»`, 2);
+	if (!n.length) throw new b(w("err.missingOperand"), 2);
+	let r = Nn(n[0]), i = n[1] == null ? null : Nn(n[1]);
+	if (!t.d && !t.s && !i) throw new b(w("tr.missingSet2", { set: n[0] }), 2);
 	let a = t.c || t.C, o = a ? (e) => !r.includes(e) : (e) => r.includes(e), s = await e.stdin.readAll(), c = "", l = /* @__PURE__ */ new Map();
 	i && !t.d && !a && r.forEach((e, t) => l.set(e, i[Math.min(t, i.length - 1)]));
 	let u = t.s ? new Set(i && !t.d ? i : i ?? r) : null, d = null;
@@ -4738,21 +5076,21 @@ async function On(e) {
 	}
 	await e.out(c);
 }
-async function kn(e) {
+async function Fn(e) {
 	let t = "";
 	for await (let { text: n } of e.inputs(e.args)) {
-		let { lines: e } = Z(n);
+		let { lines: e } = X(n);
 		t += e.map((e) => [...e].reverse().join("") + "\n").join("");
 	}
 	return await e.out(t), +!!e.failed;
 }
-async function An(e) {
-	let { opts: t, args: n } = G(e, { values: "bwsv" }), r = t.b === "a", i = t.w == null ? 6 : K(t.w), a = t.s ?? "	", o = t.v == null ? 1 : K(t.v), s = "";
-	for await (let { text: t } of e.inputs(n)) for (let e of Z(t).lines) s += r || e.trim() ? `${String(o++).padStart(i)}${a}${e}\n` : `${" ".repeat(i)}${a}${e}\n`.replace(/^\s+\t\n$/, "\n");
+async function In(e) {
+	let { opts: t, args: n } = H(e, { values: "bwsv" }), r = t.b === "a", i = t.w == null ? 6 : U(t.w), a = t.s ?? "	", o = t.v == null ? 1 : U(t.v), s = "";
+	for await (let { text: t } of e.inputs(n)) for (let e of X(t).lines) s += r || e.trim() ? `${String(o++).padStart(i)}${a}${e}\n` : `${" ".repeat(i)}${a}${e}\n`.replace(/^\s+\t\n$/, "\n");
 	await e.out(s);
 }
-async function jn(e) {
-	let { opts: t, args: n } = G(e, {
+async function Ln(e) {
+	let { opts: t, args: n } = H(e, {
 		flags: "w",
 		values: "sf",
 		long: {
@@ -4761,10 +5099,10 @@ async function jn(e) {
 			format: "f"
 		}
 	}), r = n.map((e) => {
-		if (!/^[+-]?(\d+\.?\d*|\.\d+)$/.test(e)) throw new y(`argomento non valido: «${e}»`, 2);
+		if (!/^[+-]?(\d+\.?\d*|\.\d+)$/.test(e)) throw new b(w("seq.badArgument", { value: e }), 2);
 		return Number(e);
 	});
-	if (!r.length || r.length > 3) throw new y("uso: seq [primo [passo]] ultimo", 2);
+	if (!r.length || r.length > 3) throw new b(w("help.usageShort", { usage: w("help.seq.usage") }), 2);
 	let [i, a, o] = r.length === 1 ? [
 		1,
 		1,
@@ -4774,7 +5112,7 @@ async function jn(e) {
 		1,
 		r[1]
 	] : r;
-	if (a === 0) throw new y("il passo non può essere 0", 2);
+	if (a === 0) throw new b(w("seq.zeroStep"), 2);
 	let s = Math.max(...n.map((e) => (e.split(".")[1] ?? "").length)), c = t.s ?? "\n", l = (e) => {
 		let n = e.toFixed(s);
 		if (t.w) {
@@ -4790,21 +5128,21 @@ async function jn(e) {
 	}
 	await e.out(u + (d ? "\n" : ""));
 }
-async function Mn(e) {
+async function Rn(e) {
 	let t = (e.args.length ? e.args.join(" ") : "y") + "\n", n = t.repeat(Math.max(1, Math.floor(4096 / t.length)));
 	for (;;) await e.out(n), await e.tick();
 }
-function Nn(e) {
+function zn(e) {
 	let t = [], n = "", r = !1, i = null;
 	for (let a = 0; a < e.length; a++) {
 		let o = e[a];
 		i ? o === i ? i = null : n += o : o === "\"" || o === "'" ? (i = o, r = !0) : o === "\\" && a + 1 < e.length ? (n += e[++a], r = !0) : /\s/.test(o) ? (r && t.push(n), n = "", r = !1) : (n += o, r = !0);
 	}
-	if (i) throw new y(`virgolette ${i === "\"" ? "doppie" : "singole"} non chiuse`);
+	if (i) throw new b(w(i === "\"" ? "xargs.unmatchedDouble" : "xargs.unmatchedSingle"));
 	return r && t.push(n), t;
 }
-async function Pn(e) {
-	let { opts: t, args: n } = G(e, {
+async function Bn(e) {
+	let { opts: t, args: n } = H(e, {
 		flags: "0rtpx",
 		values: "nIdLP",
 		long: {
@@ -4818,14 +5156,14 @@ async function Pn(e) {
 		},
 		stopAtArg: !0
 	}), r = n.length ? n : ["echo"], i = await e.stdin.readAll(), a;
-	a = t[0] ? i.split("\0").filter((e, t, n) => e !== "" || t < n.length - 1) : t.d == null ? t.I != null || t.L != null ? i.split("\n").map((e) => e.trim()).filter(Boolean) : Nn(i) : i.split(t.d.replace(/\\n/, "\n").replace(/\\t/, "	")).filter((e, t, n) => e !== "" || t < n.length - 1), t.d != null && a.at(-1)?.endsWith("\n") && (a[a.length - 1] = a.at(-1).slice(0, -1));
+	a = t[0] ? i.split("\0").filter((e, t, n) => e !== "" || t < n.length - 1) : t.d == null ? t.I != null || t.L != null ? i.split("\n").map((e) => e.trim()).filter(Boolean) : zn(i) : i.split(t.d.replace(/\\n/, "\n").replace(/\\t/, "	")).filter((e, t, n) => e !== "" || t < n.length - 1), t.d != null && a.at(-1)?.endsWith("\n") && (a[a.length - 1] = a.at(-1).slice(0, -1));
 	let o = [];
 	if (t.I != null) for (let e of a) o.push(r.map((n) => n.replaceAll(t.I, e)));
 	else {
-		let e = t.n == null ? t.L == null ? Infinity : K(t.L) : K(t.n);
-		if (e < 1) throw new y("il numero di argomenti deve essere almeno 1", 2);
+		let e = t.n == null ? t.L == null ? Infinity : U(t.L) : U(t.n);
+		if (e < 1) throw new b(w("xargs.badCount"), 2);
 		for (let n = 0; n < a.length; n += e === Infinity ? a.length : e) {
-			let i = t.L == null ? a.slice(n, n + (e === Infinity ? a.length : e)) : a.slice(n, n + e).flatMap(Nn);
+			let i = t.L == null ? a.slice(n, n + (e === Infinity ? a.length : e)) : a.slice(n, n + e).flatMap(zn);
 			o.push([...r, ...i]);
 		}
 		!a.length && !t.r && o.push([...r]);
@@ -4834,7 +5172,7 @@ async function Pn(e) {
 	for (let n of o) {
 		(t.t || t.p) && await e.err(n.join(" ") + "\n");
 		let r = await e.shell.invoke(n, {
-			stdin: new H(),
+			stdin: new z(),
 			stdout: e.stdout,
 			stderr: e.stderr
 		});
@@ -4843,113 +5181,184 @@ async function Pn(e) {
 	}
 	return s;
 }
-var Fn = [
+var Vn = [
 	{
 		name: "head",
-		usage: "head [-n righe] [-c byte] [file…]",
-		summary: "Le prime righe (10 se non indicato).",
-		run: hn,
-		help: "-n N  le prime N righe (-n -N: tutte tranne le ultime N)\n-c N  i primi N caratteri\n-5 è come -n 5"
+		get usage() {
+			return w("help.head.usage");
+		},
+		get summary() {
+			return w("help.head.summary");
+		},
+		run: xn,
+		get help() {
+			return w("help.head.text");
+		}
 	},
 	{
 		name: "tail",
-		usage: "tail [-n righe] [-c byte] [file…]",
-		summary: "Le ultime righe (10 se non indicato).",
-		run: gn,
-		help: "-n N  le ultime N righe (-n +N: dalla riga N in poi)\n-c N  gli ultimi N caratteri"
+		get usage() {
+			return w("help.tail.usage");
+		},
+		get summary() {
+			return w("help.tail.summary");
+		},
+		run: Sn,
+		get help() {
+			return w("help.tail.text");
+		}
 	},
 	{
 		name: "wc",
 		usage: "wc [-lwcmL] [file…]",
-		summary: "Conta righe, parole e byte.",
-		run: _n,
-		help: "-l righe, -w parole, -c byte, -m caratteri, -L la riga più lunga"
+		get summary() {
+			return w("help.wc.summary");
+		},
+		run: Cn,
+		get help() {
+			return w("help.wc.text");
+		}
 	},
 	{
 		name: "grep",
-		usage: "grep [-ivnclrwxEFoqH] [-e modello] modello [file…]",
-		summary: "Cerca le righe che contengono un modello (espressione regolare).",
-		run: vn,
-		help: "-i  senza distinguere maiuscole e minuscole\n-v  le righe che NON corrispondono\n-n  con il numero di riga\n-c  conta le righe\n-l  solo i nomi dei file\n-r  cerca nelle cartelle\n-w  parole intere, -x righe intere\n-E  espressioni regolari estese (| + ? () senza barra)\n-F  testo semplice, non espressione regolare\n-o  solo la parte che corrisponde\n-q  nessun risultato, solo lo stato\n-A N, -B N, -C N  righe di contesto dopo, prima, intorno\nStato: 0 trovato, 1 non trovato, 2 errore."
+		get usage() {
+			return w("help.grep.usage");
+		},
+		get summary() {
+			return w("help.grep.summary");
+		},
+		run: wn,
+		get help() {
+			return w("help.grep.text");
+		}
 	},
 	{
 		name: "sort",
-		usage: "sort [-rnufhV] [-k campo] [-t separatore] [file…]",
-		summary: "Ordina le righe.",
-		run: Sn,
-		help: "-r  al contrario\n-n  per numero\n-h  per dimensione leggibile (2K, 1M)\n-u  senza doppioni\n-f  senza distinguere maiuscole e minuscole\n-k N[,M]  per il campo N (fino a M)\n-t C  campi separati da C\n-V  numeri dentro il testo (file2 prima di file10)\n-o file  scrive nel file"
+		get usage() {
+			return w("help.sort.usage");
+		},
+		get summary() {
+			return w("help.sort.summary");
+		},
+		run: On,
+		get help() {
+			return w("help.sort.text");
+		}
 	},
 	{
 		name: "uniq",
 		usage: "uniq [-cdui] [input [output]]",
-		summary: "Toglie le righe ripetute una dopo l’altra (di solito dopo sort).",
-		run: Cn,
-		help: "-c  con il numero di ripetizioni\n-d  solo le righe ripetute\n-u  solo quelle uniche\n-i  senza distinguere maiuscole e minuscole"
+		get summary() {
+			return w("help.uniq.summary");
+		},
+		run: kn,
+		get help() {
+			return w("help.uniq.text");
+		}
 	},
 	{
 		name: "tee",
 		usage: "tee [-a] [file…]",
-		summary: "Copia l’input sia sull’output sia nei file.",
-		run: wn,
-		help: "-a  aggiunge in fondo invece di sovrascrivere"
+		get summary() {
+			return w("help.tee.summary");
+		},
+		run: An,
+		get help() {
+			return w("help.tee.text");
+		}
 	},
 	{
 		name: "cut",
-		usage: "cut -f campi [-d separatore] | -c caratteri [file…]",
-		summary: "Estrae colonne da ogni riga.",
-		run: En,
-		help: "-f 1,3  i campi 1 e 3 (separati da tab o da -d)\n-d ,  il separatore\n-c 1-5  i caratteri da 1 a 5\n-s  solo le righe con il separatore"
+		get usage() {
+			return w("help.cut.usage");
+		},
+		get summary() {
+			return w("help.cut.summary");
+		},
+		run: Mn,
+		get help() {
+			return w("help.cut.text");
+		}
 	},
 	{
 		name: "tr",
-		usage: "tr [-dsc] insieme1 [insieme2]",
-		summary: "Sostituisce o elimina caratteri.",
-		run: On,
-		help: "tr a-z A-Z  in maiuscolo\ntr -d '\\r'  elimina i ritorni a capo di Windows\ntr -s ' '  un solo spazio di fila\nClassi: [:upper:] [:lower:] [:digit:] [:alpha:] [:alnum:] [:space:] [:punct:]"
+		get usage() {
+			return w("help.tr.usage");
+		},
+		get summary() {
+			return w("help.tr.summary");
+		},
+		run: Pn,
+		get help() {
+			return w("help.tr.text");
+		}
 	},
 	{
 		name: "rev",
 		usage: "rev [file…]",
-		summary: "Scrive ogni riga al contrario.",
-		run: kn
+		get summary() {
+			return w("help.rev.summary");
+		},
+		run: Fn
 	},
 	{
 		name: "nl",
 		usage: "nl [-b a] [file…]",
-		summary: "Numera le righe (non vuote, o tutte con -b a).",
-		run: An
+		get summary() {
+			return w("help.nl.summary");
+		},
+		run: In
 	},
 	{
 		name: "seq",
-		usage: "seq [primo [passo]] ultimo",
-		summary: "Scrive una sequenza di numeri.",
-		run: jn,
-		help: "-s S  separatore (a capo se non indicato)\n-w  stessa larghezza, con zeri davanti"
+		get usage() {
+			return w("help.seq.usage");
+		},
+		get summary() {
+			return w("help.seq.summary");
+		},
+		run: Ln,
+		get help() {
+			return w("help.seq.text");
+		}
 	},
 	{
 		name: "yes",
-		usage: "yes [testo]",
-		summary: "Ripete una riga all’infinito (y se non indicata): utile in una pipe.",
-		run: Mn
+		get usage() {
+			return w("help.yes.usage");
+		},
+		get summary() {
+			return w("help.yes.summary");
+		},
+		run: Rn
 	},
 	{
 		name: "xargs",
-		usage: "xargs [-n N] [-I {}] [-0] [-t] [comando [argomenti…]]",
-		summary: "Avvia un comando con le parole dell’input come argomenti.",
-		run: Pn,
-		help: "-n N  al massimo N argomenti per volta\n-I {}  un comando per riga, con {} sostituito dalla riga\n-0  parole separate dal carattere nullo (find -print0)\n-d C  parole separate da C\n-t  mostra i comandi prima di avviarli\n-r  non avvia niente se l’input è vuoto\nEsempio: find . -name \"*.tmp\" | xargs rm"
+		get usage() {
+			return w("help.xargs.usage");
+		},
+		get summary() {
+			return w("help.xargs.summary");
+		},
+		run: Bn,
+		get help() {
+			return w("help.xargs.text");
+		}
 	}
 ];
 // src/terminal/commands/sed.js
-function In(e, t) {
+function Hn(e, t) {
 	let n = [], r = [], i = 0, a = () => e[i], o = () => {
 		for (; i < e.length && /[ \t]/.test(e[i]);) i++;
 	}, s = (e) => {
-		throw new y(`-e espressione #1, carattere ${i}: ${e}`);
+		throw new b(w("sed.at", {
+			pos: i,
+			message: e
+		}));
 	}, c = (t, n) => {
 		let r = "";
 		for (;;) {
-			i >= e.length && s("comando «s» non terminato");
+			i >= e.length && s(w("sed.unterminated"));
 			let a = e[i++];
 			if (a === t) return r;
 			if (a === "\\") {
@@ -5011,28 +5420,28 @@ function In(e, t) {
 			if (i++, o(), a() === "+") {
 				i++;
 				let n = /^\d+/.exec(e.slice(i));
-				n || s("indirizzo non valido"), i += n[0].length, t.a2 = { plus: Number(n[0]) };
-			} else t.a2 = u(), t.a2 || s("manca il secondo indirizzo");
+				n || s(w("sed.badAddress")), i += n[0].length, t.a2 = { plus: Number(n[0]) };
+			} else t.a2 = u(), t.a2 || s(w("sed.missingAddress"));
 		}
 		for (o(); a() === "!";) t.neg = !t.neg, i++, o();
 		let l = e[i++];
-		switch (l ?? s("manca il comando"), t.type = l, l) {
+		switch (l ?? s(w("sed.missingCommand")), t.type = l, l) {
 			case "{":
 				r.push(n.length);
 				break;
 			case "}":
-				r.length || s("«}» inatteso"), n[r.pop()].end = n.length;
+				r.length || s(w("sed.unexpectedBrace")), n[r.pop()].end = n.length;
 				break;
 			case "s": {
 				let n = e[i++];
-				n && n !== "\n" && n !== "\\" || s("delimitatore non valido per «s»"), t.re = c(n, !0), t.rep = c(n, !1);
+				n && n !== "\n" && n !== "\\" || s(w("sed.badDelimiter")), t.re = c(n, !0), t.rep = c(n, !1);
 				let r = /^[gGiIpPe0-9mM]*/.exec(e.slice(i));
 				i += r[0].length, t.global = /g/i.test(r[0]), t.print = /p/i.test(r[0]), t.ignoreCase = /i/i.test(r[0]), t.nth = Number(/\d+/.exec(r[0])?.[0] ?? 1);
 				break;
 			}
 			case "y": {
 				let n = e[i++], r = [...c(n, !1)], a = [...c(n, !1)];
-				r.length !== a.length && s("le stringhe di «y» hanno lunghezze diverse"), t.map = new Map(r.map((e, t) => [e, a[t]]));
+				r.length !== a.length && s(w("sed.yLengths")), t.map = new Map(r.map((e, t) => [e, a[t]]));
 				break;
 			}
 			case "a":
@@ -5041,7 +5450,7 @@ function In(e, t) {
 				t.text = f();
 				break;
 			case ":":
-				t.label = d(), t.label || s("«:» senza etichetta");
+				t.label = d(), t.label || s(w("sed.noLabel"));
 				break;
 			case "b":
 			case "t":
@@ -5073,19 +5482,19 @@ function In(e, t) {
 			case "x":
 			case "l":
 			case "z": break;
-			default: s(`comando sconosciuto: «${l}»`);
+			default: s(w("sed.unknownCommand", { cmd: l }));
 		}
 		n.push(t);
 	}
-	r.length && s("manca «}»");
+	r.length && s(w("sed.unmatchedBrace"));
 	let p = new Map(n.map((e, t) => [e, t]).filter(([e]) => e.type === ":").map(([e, t]) => [e.label, t]));
 	for (let e of n) {
-		if ((e.type === "b" || e.type === "t" || e.type === "T") && e.label && !p.has(e.label)) throw new y(`etichetta inesistente per un salto: «${e.label}»`);
-		for (let n of [e.a1, e.a2]) n?.re != null && (n.compiled = n.re === "" ? null : fn(n.re, {
+		if ((e.type === "b" || e.type === "t" || e.type === "T") && e.label && !p.has(e.label)) throw new b(w("sed.noSuchLabel", { label: e.label }));
+		for (let n of [e.a1, e.a2]) n?.re != null && (n.compiled = n.re === "" ? null : Y(n.re, {
 			extended: t,
 			ignoreCase: n.ignoreCase
 		}));
-		e.type === "s" && (e.compiled = e.re === "" ? null : fn(e.re, {
+		e.type === "s" && (e.compiled = e.re === "" ? null : Y(e.re, {
 			extended: t,
 			ignoreCase: e.ignoreCase,
 			global: !0
@@ -5096,7 +5505,7 @@ function In(e, t) {
 		labels: p
 	};
 }
-function Ln(e, t) {
+function Un(e, t) {
 	let n = "";
 	for (let r = 0; r < e.length; r++) {
 		let i = e[r];
@@ -5108,24 +5517,24 @@ function Ln(e, t) {
 	}
 	return n;
 }
-async function Rn(e, t, r, { quiet: i, write: a }) {
+async function Wn(e, t, n, { quiet: i, write: a }) {
 	let { cmds: o, labels: s } = t, c = "", l = null, u = 0, d = 0, f = !1;
 	for (let e of o) e.active = !1;
-	let p = () => u >= r.length, m = (e, t, n) => {
+	let p = () => u >= n.length, m = (e, t, n) => {
 		if (e.line != null) return n === e.line;
 		if (e.last) return p();
 		if (e.step) return e.step[1] > 0 ? n >= e.step[0] && (n - e.step[0]) % e.step[1] === 0 : n === e.step[0];
 		let r = e.compiled ?? l;
-		if (!r) throw new y("nessuna espressione regolare precedente");
+		if (!r) throw new b(w("sed.noPreviousRegex"));
 		return l = r, r.test(t);
 	}, h = (e, t, n) => {
 		let r;
 		return e.a1 ? e.a2 ? e.active ? (r = !0, (e.a2.line == null ? e.a2.plus == null ? m(e.a2, t, n) : n >= e.end2 : n >= e.a2.line) && (e.active = !1)) : m(e.a1, t, n) ? (r = !0, e.active = !0, e.a2.line != null && e.a2.line <= n && (e.active = !1), e.a2.plus != null && (e.end2 = n + e.a2.plus, e.a2.plus === 0 && (e.active = !1))) : r = !1 : r = m(e.a1, t, n) : r = !0, e.neg ? !r : r;
 	}, g = 0;
-	for (; !f && u < r.length;) {
-		let t = r[u++];
+	for (; !f && u < n.length;) {
+		let t = n[u++];
 		g++;
-		let m = "", _ = !1, v = !i, b = !1;
+		let m = "", _ = !1, v = !i, y = !1;
 		await e.tick();
 		cycle: for (;;) {
 			for (let x = 0; x < o.length; x++) {
@@ -5136,11 +5545,11 @@ async function Rn(e, t, r, { quiet: i, write: a }) {
 						case "{": break;
 						case "s": {
 							let n = S.compiled ?? l;
-							if (!n) throw new y("nessuna espressione regolare precedente");
+							if (!n) throw new b(w("sed.noPreviousRegex"));
 							l = n;
 							let r = 0, i = !1, a = t.replace(new RegExp(n.source, n.flags.includes("g") ? n.flags : n.flags + "g"), (...e) => {
 								let t = typeof e.at(-1) == "object" && e.at(-1) !== null, n = e.slice(0, t ? -3 : -2);
-								return r++, r < S.nth || i && !S.global ? n[0] : (i = !0, Ln(S.rep, n));
+								return r++, r < S.nth || i && !S.global ? n[0] : (i = !0, Un(S.rep, n));
 							});
 							i && (t = a, _ = !0, S.print && await e.out(t + "\n"));
 							break;
@@ -5156,7 +5565,7 @@ async function Rn(e, t, r, { quiet: i, write: a }) {
 								v = !1;
 								break cycle;
 							}
-							t = t.slice(t.indexOf("\n") + 1), b = !0, v = !1;
+							t = t.slice(t.indexOf("\n") + 1), y = !0, v = !1;
 							break cycle;
 						case "p":
 							await e.out(t + "\n");
@@ -5193,14 +5602,14 @@ async function Rn(e, t, r, { quiet: i, write: a }) {
 								v = !1, f = !0;
 								break cycle;
 							}
-							t = r[u++], g++;
+							t = n[u++], g++;
 							break;
 						case "N":
 							if (p()) {
 								f = !0;
 								break cycle;
 							}
-							t += "\n" + r[u++], g++;
+							t += "\n" + n[u++], g++;
 							break;
 						case "h":
 							c = t;
@@ -5230,7 +5639,7 @@ async function Rn(e, t, r, { quiet: i, write: a }) {
 							break;
 						case "r": {
 							let t = e.resolve(S.file);
-							t?.type === "file" && (m += await n.read(t.id));
+							t?.type === "file" && (m += await r.read(t.id));
 							break;
 						}
 						case "w": a(S.file, t + "\n");
@@ -5239,12 +5648,12 @@ async function Rn(e, t, r, { quiet: i, write: a }) {
 			}
 			break;
 		}
-		v && await e.out(t + "\n"), m && await e.out(m), b && !f && (r.splice(u, 0, t), g--);
+		v && await e.out(t + "\n"), m && await e.out(m), y && !f && (n.splice(u, 0, t), g--);
 	}
 	return d;
 }
-async function zn(e) {
-	let { opts: t, args: r } = G(e, {
+async function Gn(e) {
+	let { opts: t, args: n } = H(e, {
 		flags: "nEris",
 		values: "I",
 		multi: "ef",
@@ -5257,27 +5666,27 @@ async function zn(e) {
 			"regexp-extended": "E",
 			separate: "s"
 		}
-	}), i = [...r], a = [...t.e ?? []];
-	for (let r of t.f ?? []) {
-		let t = e.resolve(r);
-		if (t?.type !== "file") throw new y(`impossibile leggere ${r}: file o cartella inesistente`);
-		a.push(await n.read(t.id));
+	}), i = [...n], a = [...t.e ?? []];
+	for (let n of t.f ?? []) {
+		let t = e.resolve(n);
+		if (t?.type !== "file") throw new b(w("sed.cannotRead", { path: n }));
+		a.push(await r.read(t.id));
 	}
 	if (!a.length) {
-		if (!i.length) throw new y("manca lo script\nUso: sed [-n] [-E] [-i] script [file…]", 1);
+		if (!i.length) throw new b(w("sed.noScript"), 1);
 		a.push(i.shift());
 	}
-	let o = In(a.join("\n"), t.E || t.r), s = /* @__PURE__ */ new Map(), c = (e, t) => s.set(e, (s.get(e) ?? "") + t), l = 0;
+	let o = Hn(a.join("\n"), t.E || t.r), s = /* @__PURE__ */ new Map(), c = (e, t) => s.set(e, (s.get(e) ?? "") + t), l = 0;
 	if (t.i || t.I != null) {
-		if (!i.length) throw new y("nessun file da modificare con -i");
-		for (let r of i) {
-			let i = e.resolve(r);
+		if (!i.length) throw new b(w("sed.noFiles"));
+		for (let n of i) {
+			let i = e.resolve(n);
 			if (i?.type !== "file") {
-				await e.error(`impossibile leggere ${r}: file o cartella inesistente`), l = 2;
+				await e.error(w("sed.cannotRead", { path: n })), l = 2;
 				continue;
 			}
-			let { lines: a, ended: s } = Bn(await n.read(i.id)), u = "";
-			l = await Rn({
+			let { lines: a, ended: s } = Kn(await r.read(i.id)), u = "";
+			l = await Wn({
 				...e,
 				out: (e) => {
 					u += e;
@@ -5287,16 +5696,16 @@ async function zn(e) {
 			}, o, a, {
 				quiet: t.n,
 				write: c
-			}) || l, await n.write(i.id, s || !u.endsWith("\n") ? u : u.slice(0, -1));
+			}) || l, await r.write(i.id, s || !u.endsWith("\n") ? u : u.slice(0, -1));
 		}
 	} else {
 		let n = i.length ? i : ["-"], r = [], a = !0;
 		for await (let { text: t } of e.inputs(n)) {
-			let e = Bn(t);
+			let e = Kn(t);
 			r.push(...e.lines), a = e.ended;
 		}
 		let s = "";
-		l = await Rn({
+		l = await Wn({
 			...e,
 			out: (e) => {
 				s += e;
@@ -5308,37 +5717,41 @@ async function zn(e) {
 			write: c
 		}), await e.out(a || !s.endsWith("\n") ? s : s.slice(0, -1)), e.failed && (l = 2);
 	}
-	for (let [t, r] of s) await n.write(e.shell.fileFor(t).id, r);
+	for (let [t, n] of s) await r.write(e.shell.fileFor(t).id, n);
 	return l;
 }
-function Bn(e) {
+function Kn(e) {
 	let t = e.split("\n"), n = e.endsWith("\n") || e === "";
 	return n && t.pop(), {
 		lines: t,
 		ended: n
 	};
 }
-var Vn = [{
+var qn = [{
 	name: "sed",
 	usage: "sed [-nEi] [-e script] [script] [file…]",
-	summary: "Modifica il testo riga per riga (sostituzioni, cancellazioni…).",
-	run: zn,
-	help: "s/vecchio/nuovo/g  sostituisce (g: tutte le volte, i: senza maiuscole, p: stampa)\n3d, /re/d, 2,5d  elimina righe     -n …p  stampa solo quelle scelte\ny/abc/xyz/  traslittera     a testo, i testo, c testo  aggiunge, inserisce, cambia\n=  numero di riga   q  esce   h H g G x  spazio di riserva   b t :etichetta  salti\nIndirizzi: n, $, /re/, a,b, a,+n, ! per negare, { … } per raggruppare.\n-n  non stampa le righe da sola    -E  espressioni regolari estese    -i  modifica i file\nEsempi: sed 's/rosso/blu/g' note.txt    sed -n '1,5p' file    sed -i '/^#/d' conf.txt"
+	get summary() {
+		return w("help.sed.summary");
+	},
+	run: Gn,
+	get help() {
+		return w("help.sed.text");
+	}
 }];
 // src/terminal/commands/diff.js
-function Hn(e, t, n = (e, t) => e === t) {
+function Jn(e, t, n = (e, t) => e === t) {
 	let r = 0, i = 0;
 	for (; r < e.length && r < t.length && n(e[r], t[r]);) r++;
 	for (; i < e.length - r && i < t.length - r && n(e[e.length - 1 - i], t[t.length - 1 - i]);) i++;
-	let a = Wn(e.slice(r, e.length - i), t.slice(r, t.length - i), n);
+	let a = Xn(e.slice(r, e.length - i), t.slice(r, t.length - i), n);
 	for (let e of a) e.a += r, e.b += r;
 	return a;
 }
-var Un = 4e7;
-function Wn(e, t, n) {
+var Yn = 4e7;
+function Xn(e, t, n) {
 	let r = e.length, i = t.length, a = r + i, o = new Int32Array(2 * a + 2), s = [], c = !1;
 	for (let l = 0; l <= a && !c; l++) {
-		if ((l + 1) * o.length > Un) throw new y("i file sono troppo diversi e troppo grandi da confrontare", 2);
+		if ((l + 1) * o.length > Yn) throw new b(w("diff.tooBig"), 2);
 		s.push(o.slice());
 		for (let s = -l; s <= l; s += 2) {
 			let u = s === -l || s !== l && o[a + s - 1] < o[a + s + 1] ? o[a + s + 1] : o[a + s - 1] + 1, d = u - s;
@@ -5381,19 +5794,19 @@ function Wn(e, t, n) {
 	}
 	return f;
 }
-var Gn = (e, t) => t <= 1 ? String(e + +!!t) : `${e + 1},${e + t}`, Kn = (e, t) => t === 1 ? String(e + 1) : `${t ? e + 1 : e},${t}`;
-function qn(e, t, n) {
+var Zn = (e, t) => t <= 1 ? String(e + +!!t) : `${e + 1},${e + t}`, Qn = (e, t) => t === 1 ? String(e + 1) : `${t ? e + 1 : e},${t}`;
+function $n(e, t, n) {
 	let r = "";
 	for (let i of n) {
 		let n = i.del && i.ins ? "c" : i.del ? "d" : "a";
-		r += `${n === "a" ? String(i.a) : Gn(i.a, i.del)}${n}${n === "d" ? String(i.b) : Gn(i.b, i.ins)}\n`;
+		r += `${n === "a" ? String(i.a) : Zn(i.a, i.del)}${n}${n === "d" ? String(i.b) : Zn(i.b, i.ins)}\n`;
 		for (let t = 0; t < i.del; t++) r += `< ${e[i.a + t]}\n`;
 		n === "c" && (r += "---\n");
 		for (let e = 0; e < i.ins; e++) r += `> ${t[i.b + e]}\n`;
 	}
 	return r;
 }
-function Jn(e, t, n, r) {
+function er(e, t, n, r) {
 	let i = "", a = [];
 	for (let e of n) {
 		let t = a.at(-1);
@@ -5401,7 +5814,7 @@ function Jn(e, t, n, r) {
 	}
 	for (let n of a) {
 		let a = n[0], o = n.at(-1), s = Math.max(0, a.a - r), c = Math.max(0, a.b - r), l = Math.min(e.length, o.a + o.del + r), u = Math.min(t.length, o.b + o.ins + r);
-		i += `@@ -${Kn(s, l - s)} +${Kn(c, u - c)} @@\n`;
+		i += `@@ -${Qn(s, l - s)} +${Qn(c, u - c)} @@\n`;
 		let d = s;
 		for (let r of n) {
 			for (; d < r.a; d++) i += ` ${e[d]}\n`;
@@ -5413,12 +5826,12 @@ function Jn(e, t, n, r) {
 	}
 	return i;
 }
-var Yn = (e) => {
+var tr = (e) => {
 	let t = new Date(e), n = (e) => String(e).padStart(2, "0");
 	return `${t.getFullYear()}-${n(t.getMonth() + 1)}-${n(t.getDate())} ${n(t.getHours())}:${n(t.getMinutes())}:${n(t.getSeconds())}`;
 };
-async function Xn(e) {
-	let { opts: t, args: r } = G(e, {
+async function nr(e) {
+	let { opts: t, args: n } = H(e, {
 		flags: "uqiwbBsN",
 		values: "U",
 		long: {
@@ -5431,221 +5844,210 @@ async function Xn(e) {
 			"report-identical-files": "s"
 		}
 	});
-	if (r.length !== 2) throw new y(r.length < 2 ? `manca un operando dopo «${r[0] ?? "diff"}»` : `operando in più: «${r[2]}»`, 2);
+	if (n.length !== 2) throw new b(n.length < 2 ? w("diff.missingOperand", { arg: n[0] ?? "diff" }) : w("diff.extraOperand", { arg: n[2] }), 2);
 	let i = async (t) => {
 		if (t === "-") return {
 			text: await e.stdin.readAll(),
 			time: Date.now()
 		};
-		let r = e.resolve(t);
-		if (!r) throw new y(`${t}: file o cartella inesistente`, 2);
-		if (r.type !== "file") throw new y(`${t}: ${r.type === "folder" ? "è una cartella" : "non è un file"}`, 2);
+		let n = e.resolve(t);
+		if (!n) throw new b(w("err.noSuchFile", { path: t }), 2);
+		if (n.type !== "file") throw new b(n.type === "folder" ? w("err.isADirectory", { path: t }) : w("err.notAFile", { path: t }), 2);
 		return {
-			text: await n.read(r.id),
-			time: r.modified
+			text: await r.read(n.id),
+			time: n.modified
 		};
-	}, [a, o] = [await i(r[0]), await i(r[1])], s = (e) => {
+	}, [a, o] = [await i(n[0]), await i(n[1])], s = (e) => {
 		let t = e.split("\n");
 		return (e.endsWith("\n") || e === "") && t.pop(), t;
-	}, c = s(a.text), l = s(o.text), u = (e) => (t.i && (e = e.toLowerCase()), t.w ? e = e.replace(/\s+/g, "") : t.b && (e = e.replace(/\s+/g, " ").trimEnd()), e), d = Hn(c, l, (e, t) => u(e) === u(t));
-	if (t.B && (d = d.filter((e) => !(c.slice(e.a, e.a + e.del).every((e) => !e.trim()) && l.slice(e.b, e.b + e.ins).every((e) => !e.trim())))), !d.length) return t.s && await e.out(`I file ${r[0]} e ${r[1]} sono identici\n`), 0;
-	if (t.q) return await e.out(`I file ${r[0]} e ${r[1]} sono diversi\n`), 1;
+	}, c = s(a.text), l = s(o.text), u = (e) => (t.i && (e = e.toLowerCase()), t.w ? e = e.replace(/\s+/g, "") : t.b && (e = e.replace(/\s+/g, " ").trimEnd()), e), d = Jn(c, l, (e, t) => u(e) === u(t));
+	if (t.B && (d = d.filter((e) => !(c.slice(e.a, e.a + e.del).every((e) => !e.trim()) && l.slice(e.b, e.b + e.ins).every((e) => !e.trim())))), !d.length) return t.s && await e.out(`${w("diff.identical", {
+		a: n[0],
+		b: n[1]
+	})}\n`), 0;
+	if (t.q) return await e.out(`${w("diff.differ", {
+		a: n[0],
+		b: n[1]
+	})}\n`), 1;
 	if (t.u || t.U != null) {
-		let n = t.U == null ? 3 : K(t.U);
-		await e.out(`--- ${r[0]}\t${Yn(a.time)}\n+++ ${r[1]}\t${Yn(o.time)}\n` + Jn(c, l, d, n));
-	} else await e.out(qn(c, l, d));
+		let r = t.U == null ? 3 : U(t.U);
+		await e.out(`--- ${n[0]}\t${tr(a.time)}\n+++ ${n[1]}\t${tr(o.time)}\n` + er(c, l, d, r));
+	} else await e.out($n(c, l, d));
 	return 1;
 }
-var Zn = [{
+var rr = [{
 	name: "diff",
 	usage: "diff [-uqiwB] file1 file2",
-	summary: "Mostra le differenze tra due file.",
-	run: Xn,
-	help: "-u  formato unificato (con 3 righe di contesto; -U N per N)\n-q  dice solo se sono diversi\n-i  senza distinguere maiuscole e minuscole\n-w  ignorando gli spazi, -b ignorando quanti sono\n-B  ignorando le righe vuote\n-s  dice anche quando sono identici\n«-» è l’input. Stato: 0 uguali, 1 diversi, 2 errore."
-}], Qn = (e) => e.stdout === e.shell.host.stdout, $n = (e) => {
+	get summary() {
+		return w("help.diff.summary");
+	},
+	run: nr,
+	get help() {
+		return w("help.diff.text");
+	}
+}], ir = (e) => e.stdout === e.shell.host.stdout, ar = (e) => {
 	let t = String(e).toLowerCase();
-	return c().find((e) => e.id.toLowerCase() === t) ?? c().find((e) => e.name.toLowerCase() === t) ?? null;
+	return l().find((e) => e.id.toLowerCase() === t) ?? l().find((e) => e.name.toLowerCase() === t) ?? null;
 };
-async function er(e) {
-	let { opts: t, args: n } = G(e, {
+async function or(e) {
+	let { opts: t, args: n } = H(e, {
 		values: "a",
 		long: { app: "a" }
 	});
 	if (t.a != null) {
-		let r = $n(t.a);
-		if (!r) throw new y(`app non trovata: «${t.a}» (vedi «apps»)`);
-		if (!n.length) return l(r.id), 0;
+		let r = ar(t.a);
+		if (!r) throw new b(w("open.noApp", { app: t.a }));
+		if (!n.length) return u(r.id), 0;
 		for (let t of n) {
 			let n = e.resolve(t);
-			if (!n) throw new y(`${t}: file o cartella inesistente`);
-			l(r.id, n.type === "folder" ? { folder: n.id } : { file: n.id });
+			if (!n) throw new b(w("err.noSuchFile", { path: t }));
+			u(r.id, n.type === "folder" ? { folder: n.id } : { file: n.id });
 		}
 		return 0;
 	}
-	if (!n.length) throw new y(`uso: ${e.cmd.usage}`, 2);
+	if (!n.length) throw new b(w("help.usageShort", { usage: e.cmd.usage }), 2);
 	let r = 0;
 	for (let t of n) {
 		let n = e.resolve(t);
-		n ? n.type === "folder" ? l("files", { folder: n.id }) : n.type === "app" ? l(n.app) : u(n) : (await e.error(`${t}: file o cartella inesistente`), r = 1);
+		n ? n.type === "folder" ? u("files", { folder: n.id }) : n.type === "app" ? u(n.app) : d(n) : (await e.error(w("err.noSuchFile", { path: t })), r = 1);
 	}
 	return r;
 }
-var tr = (e) => new Date(e).toLocaleString("it-IT", {
+var sr = (e) => C.date(e, {
 	day: "2-digit",
 	month: "short",
 	hour: "2-digit",
 	minute: "2-digit"
 });
-function nr(e, t) {
-	let r = n.trashed();
+function cr(e, t) {
+	let n = r.trashed();
 	return t.map((e) => {
-		let t = r.find((t) => t.id === e) ?? r.find((t) => t.name === e) ?? r.find((t) => t.name.toLowerCase() === e.toLowerCase());
-		if (!t) throw new y(`«${e}» non è nel cestino`);
+		let t = n.find((t) => t.id === e) ?? n.find((t) => t.name === e) ?? n.find((t) => t.name.toLowerCase() === e.toLowerCase());
+		if (!t) throw new b(w("trash.notInTrash", { name: e }));
 		return t;
 	});
 }
-async function rr(e) {
-	let [t = "list", ...r] = e.args;
+async function lr(e) {
+	let [t = "list", ...n] = e.args;
 	switch (t) {
 		case "list":
 		case "ls": {
-			let t = n.trashed();
-			if (!t.length) return await e.out("Il cestino è vuoto.\n"), 0;
-			for (let r of t) {
-				let t = n.exists(r.trashed.from) ? n.path(r.trashed.from) : "(cartella eliminata)", i = r.type === "folder" ? `${r.inside} elementi` : Pt(r.bytes);
-				await e.out(`${tr(r.trashed.at)}  ${i.padStart(10)}  ${r.name}${r.type === "folder" ? "/" : ""}  ← ${t}\n`);
+			let t = r.trashed();
+			if (!t.length) return await e.out(`${w("trash.empty")}\n`), 0;
+			for (let n of t) {
+				let t = r.exists(n.trashed.from) ? r.path(n.trashed.from) : w("trash.deletedFolder"), i = n.type === "folder" ? w("trash.items", { n: n.inside }) : Vt(n.bytes);
+				await e.out(`${sr(n.trashed.at)}  ${i.padStart(10)}  ${n.name}${n.type === "folder" ? "/" : ""}  ← ${t}\n`);
 			}
 			return 0;
 		}
 		case "put": {
-			if (!r.length) throw new y("manca cosa mettere nel cestino", 2);
+			if (!n.length) throw new b(w("trash.missingPut"), 2);
 			let t = 0;
-			for (let i of r) {
-				let r = e.resolve(i);
-				r ? n.trash([r.id]).length || (await e.error(`${i}: non si può cestinare (cartella di sistema)`), t = 1) : (await e.error(`${i}: file o cartella inesistente`), t = 1);
+			for (let i of n) {
+				let n = e.resolve(i);
+				n ? r.trash([n.id]).length || (await e.error(w("trash.cannotTrash", { path: i })), t = 1) : (await e.error(w("err.noSuchFile", { path: i })), t = 1);
 			}
 			return t;
 		}
 		case "restore":
-			if (!r.length) throw new y("manca il nome di ciò che va rimesso a posto", 2);
-			for (let { id: t, parent: i } of n.untrash(nr(e, r).map((e) => e.id))) await e.out(`rimesso in ${n.path(t)}${n.root, ""}\n`);
+			if (!n.length) throw new b(w("trash.missingRestore"), 2);
+			for (let { id: t, parent: i } of r.untrash(cr(e, n).map((e) => e.id))) await e.out(`${w("trash.restored", { path: r.path(t) })}${r.root, ""}\n`);
 			return 0;
 		case "rm": {
-			if (!r.length) throw new y("manca il nome", 2);
-			let t = n.purge(nr(e, r).map((e) => e.id));
-			return await e.out(`${t === 1 ? "eliminato definitivamente 1 elemento" : `eliminati definitivamente ${t} elementi`}\n`), 0;
+			if (!n.length) throw new b(w("trash.missingName"), 2);
+			let t = r.purge(cr(e, n).map((e) => e.id));
+			return await e.out(`${w("trash.purged", { n: t })}\n`), 0;
 		}
 		case "empty": {
-			let t = n.purgeTrash();
-			return await e.out(t ? `Cestino svuotato (${t} ${t === 1 ? "elemento" : "elementi"}).\n` : "Il cestino era già vuoto.\n"), 0;
+			let t = r.purgeTrash();
+			return await e.out(`${t ? w("trash.emptied", { n: t }) : w("trash.alreadyEmpty")}\n`), 0;
 		}
 	}
-	throw new y(`sottocomando sconosciuto: «${t}»\nUso: ${e.cmd.usage}`, 2);
+	throw new b(`${w("err.unknownSubcommand", { sub: t })}\n${w("help.usageLine", { usage: e.cmd.usage })}`, 2);
 }
-function ir(e, t = !1) {
-	let n = o.byName(e) ?? o.get(e);
+function ur(e, t = !1) {
+	let n = s.byName(e) ?? s.get(e);
 	if (n) return n;
-	if (t) return o.create({ name: e });
-	throw new y(`tag inesistente: «${e}» (vedi «tag ls»)`);
+	if (t) return s.create({ name: e });
+	throw new b(w("tag.noSuchTag", { name: e }));
 }
-async function ar(t) {
-	let [r = "ls", ...i] = t.args, a = (e) => Qn(t) ? `\x1b[38;2;${parseInt(e.slice(1, 3), 16)};${parseInt(e.slice(3, 5), 16)};${parseInt(e.slice(5, 7), 16)}m●\x1b[0m ` : "";
-	switch (r) {
+async function dr(e) {
+	let [n = "ls", ...i] = e.args, a = (t) => ir(e) ? `\x1b[38;2;${parseInt(t.slice(1, 3), 16)};${parseInt(t.slice(3, 5), 16)};${parseInt(t.slice(5, 7), 16)}m●\x1b[0m ` : "";
+	switch (n) {
 		case "ls":
 		case "list": {
 			if (i.length) {
-				for (let e of i) {
-					let r = ir(e);
-					for (let e of n.tagged(r.id).sort((e, t) => F(n.path(e.id), n.path(t.id)))) await t.out(n.path(e.id) + (e.type === "folder" ? "/" : "") + "\n");
+				for (let t of i) {
+					let n = ur(t);
+					for (let t of r.tagged(n.id).sort((e, t) => F(r.path(e.id), r.path(t.id)))) await e.out(r.path(t.id) + (t.type === "folder" ? "/" : "") + "\n");
 				}
 				return 0;
 			}
-			let e = o.list();
-			if (!e.length) return await t.out("Nessun tag. Creane uno con «tag new nome».\n"), 0;
-			for (let r of e) await t.out(`${a(r.color)}${r.name}  (${n.tagged(r.id).length})${r.visible ? "" : "  nascosto"}\n`);
+			let t = s.list();
+			if (!t.length) return await e.out(`${w("tag.none")}\n`), 0;
+			for (let n of t) await e.out(`${a(n.color)}${n.name}  (${r.tagged(n.id).length})${n.visible ? "" : `  ${w("tag.hidden")}`}\n`);
 			return 0;
 		}
 		case "show": {
-			let e = 0;
+			let t = 0;
 			for (let n of i.length ? i : ["."]) {
-				let r = t.resolve(n);
+				let r = e.resolve(n);
 				if (!r) {
-					await t.error(`${n}: file o cartella inesistente`), e = 1;
+					await e.error(w("err.noSuchFile", { path: n })), t = 1;
 					continue;
 				}
-				let i = (r.tags ?? []).map((e) => o.get(e)).filter(Boolean).map((e) => a(e.color) + e.name);
-				await t.out(`${n}: ${i.length ? i.join(", ") : "nessun tag"}\n`);
+				let i = (r.tags ?? []).map((e) => s.get(e)).filter(Boolean).map((e) => a(e.color) + e.name);
+				await e.out(`${n}: ${i.length ? i.join(", ") : w("tag.noTags")}\n`);
 			}
-			return e;
+			return t;
 		}
 		case "add":
 		case "rm": {
-			let [e, ...a] = i;
-			if (!e || !a.length) throw new y(`uso: tag ${r} nome file…`, 2);
-			let s = r === "add" && !o.byName(e), c = ir(e, r === "add");
-			s && await t.out(`creato il tag «${c.name}»\n`);
+			let [t, ...a] = i;
+			if (!t || !a.length) throw new b(w("help.usageShort", { usage: w("tag.usageAddRm", { sub: n }) }), 2);
+			let o = n === "add" && !s.byName(t), c = ur(t, n === "add");
+			o && await e.out(`${w("tag.created", { name: c.name })}\n`);
 			let l = 0;
-			for (let e of a) {
-				let i = t.resolve(e);
+			for (let t of a) {
+				let i = e.resolve(t);
 				if (!i) {
-					await t.error(`${e}: file o cartella inesistente`), l = 1;
+					await e.error(w("err.noSuchFile", { path: t })), l = 1;
 					continue;
 				}
 				if (i.system) {
-					await t.error(`${e}: gli elementi di sistema non hanno tag`), l = 1;
+					await e.error(w("tag.system", { path: t })), l = 1;
 					continue;
 				}
 				let a = i.tags ?? [];
-				n.setTags(i.id, r === "add" ? [...a, c.id] : a.filter((e) => e !== c.id));
+				r.setTags(i.id, n === "add" ? [...a, c.id] : a.filter((e) => e !== c.id));
 			}
 			return l;
 		}
 		case "new": {
 			let [n, r] = i;
-			if (!n) throw new y("uso: tag new nome [colore]", 2);
-			let s = r ? e.find((e) => e.label.toLowerCase() === r.toLowerCase())?.value ?? r : void 0, c = o.create({
+			if (!n) throw new b(w("help.usageShort", { usage: w("tag.usageNew") }), 2);
+			let o = r ? t.find((e) => e.label.toLowerCase() === r.toLowerCase())?.value ?? r : void 0, c = s.create({
 				name: n,
-				color: s
+				color: o
 			});
-			return await t.out(`creato il tag ${a(c.color)}${c.name}\n`), 0;
+			return await e.out(`${w("tag.createdShown", { tag: a(c.color) + c.name })}\n`), 0;
 		}
 		case "delete":
-			if (!i.length) throw new y("uso: tag delete nome…", 2);
-			for (let e of i) o.remove(ir(e).id);
+			if (!i.length) throw new b(w("help.usageShort", { usage: w("tag.usageDelete") }), 2);
+			for (let e of i) s.remove(ur(e).id);
 			return 0;
 	}
-	throw new y(`sottocomando sconosciuto: «${r}»\nUso: ${t.cmd.usage}`, 2);
+	throw new b(`${w("err.unknownSubcommand", { sub: n })}\n${w("help.usageLine", { usage: e.cmd.usage })}`, 2);
 }
-async function or(e) {
-	let t = [...c()].sort((e, t) => F(e.name, t.name)), n = Math.max(...t.map((e) => e.id.length));
+async function fr(e) {
+	let t = [...l()].sort((e, t) => F(e.name, t.name)), n = Math.max(...t.map((e) => e.id.length));
 	for (let r of t) {
 		let t = r.package?.manifest?.version ?? "";
 		await e.out(`${r.id.padEnd(n)}  ${r.name}${t ? `  ${t}` : ""}\n`);
 	}
 }
-var sr = [
-	"domenica",
-	"lunedì",
-	"martedì",
-	"mercoledì",
-	"giovedì",
-	"venerdì",
-	"sabato"
-], cr = [
-	"gennaio",
-	"febbraio",
-	"marzo",
-	"aprile",
-	"maggio",
-	"giugno",
-	"luglio",
-	"agosto",
-	"settembre",
-	"ottobre",
-	"novembre",
-	"dicembre"
-];
-function lr(e, t, n = !1) {
+var pr = (e, t) => C.date(new Date(2024, 0, 7 + e, 12), { weekday: t }), mr = (e, t) => C.date(new Date(2024, e, 15, 12), { month: t });
+function Q(e, t, n = !1) {
 	let r = (e) => n ? t[`getUTC${e}`]() : t[`get${e}`](), i = (e, t = 2) => String(e).padStart(t, "0"), a = n ? Date.UTC(r("FullYear"), 0, 1) : new Date(r("FullYear"), 0, 1).getTime(), o = n ? 0 : -t.getTimezoneOffset(), s = {
 		Y: () => r("FullYear"),
 		y: () => i(r("FullYear") % 100),
@@ -5658,11 +6060,11 @@ function lr(e, t, n = !1) {
 		S: () => i(r("Seconds")),
 		N: () => i(r("Milliseconds"), 3) + "000000",
 		p: () => r("Hours") < 12 ? "AM" : "PM",
-		A: () => sr[r("Day")],
-		a: () => sr[r("Day")].slice(0, 3),
-		B: () => cr[r("Month")],
-		b: () => cr[r("Month")].slice(0, 3),
-		h: () => cr[r("Month")].slice(0, 3),
+		A: () => pr(r("Day"), "long"),
+		a: () => pr(r("Day"), "short"),
+		B: () => mr(r("Month"), "long"),
+		b: () => mr(r("Month"), "short"),
+		h: () => mr(r("Month"), "short"),
 		j: () => i(Math.floor((t - a) / 864e5) + 1, 3),
 		u: () => r("Day") || 7,
 		w: () => r("Day"),
@@ -5673,8 +6075,8 @@ function lr(e, t, n = !1) {
 		T: () => `${s.H()}:${s.M()}:${s.S()}`,
 		D: () => `${s.m()}/${s.d()}/${s.y()}`,
 		R: () => `${s.H()}:${s.M()}`,
-		c: () => `${s.a()} ${s.e()} ${s.b()} ${s.Y()}, ${s.T()}`,
-		x: () => `${s.d()}/${s.m()}/${s.Y()}`,
+		c: () => Q(w("date.formatC"), t, n),
+		x: () => Q(w("date.formatX"), t, n),
 		X: () => s.T(),
 		n: () => "\n",
 		t: () => "	",
@@ -5682,8 +6084,8 @@ function lr(e, t, n = !1) {
 	};
 	return e.replace(/%([a-zA-Z%])/g, (e, t) => s[t] ? String(s[t]()) : e);
 }
-async function ur(e) {
-	let { opts: t, args: n } = G(e, {
+async function hr(e) {
+	let { opts: t, args: n } = H(e, {
 		flags: "uR",
 		values: "dI",
 		long: {
@@ -5695,115 +6097,144 @@ async function ur(e) {
 	}), r = /* @__PURE__ */ new Date();
 	if (t.d != null) {
 		let e = t.d.trim();
-		if (r = /^@\d+$/.test(e) ? /* @__PURE__ */ new Date(Number(e.slice(1)) * 1e3) : e === "now" ? /* @__PURE__ */ new Date() : e === "yesterday" || e === "ieri" ? /* @__PURE__ */ new Date(Date.now() - 864e5) : e === "tomorrow" || e === "domani" ? new Date(Date.now() + 864e5) : new Date(e), Number.isNaN(r.getTime())) throw new y(`data non valida: «${t.d}»`);
+		if (r = /^@\d+$/.test(e) ? /* @__PURE__ */ new Date(Number(e.slice(1)) * 1e3) : e === "now" ? /* @__PURE__ */ new Date() : e === "yesterday" || e === "ieri" ? /* @__PURE__ */ new Date(Date.now() - 864e5) : e === "tomorrow" || e === "domani" ? new Date(Date.now() + 864e5) : new Date(e), Number.isNaN(r.getTime())) throw new b(w("date.invalid", { date: t.d }));
 	}
 	let i = n.find((e) => e.startsWith("+"));
-	if (i) return e.out(lr(i.slice(1), r, t.u) + "\n");
-	if (t.I != null) return e.out(lr(t.I === "seconds" ? "%Y-%m-%dT%H:%M:%S%z" : "%F", r, t.u) + "\n");
+	if (i) return e.out(Q(i.slice(1), r, t.u) + "\n");
+	if (t.I != null) return e.out(Q(t.I === "seconds" ? "%Y-%m-%dT%H:%M:%S%z" : "%F", r, t.u) + "\n");
 	if (t.R) return e.out(r.toUTCString() + "\n");
-	await e.out(lr("%a %e %b %Y, %H:%M:%S %Z", r, t.u) + "\n");
+	await e.out(Q(w("date.format"), r, t.u) + "\n");
 }
-var dr = [
+var gr = [
 	{
 		name: "open",
-		usage: "open [-a app] percorso…",
-		summary: "Apre file e cartelle con la loro app (o con quella indicata).",
-		run: er,
-		help: "open note.txt   apre con l’app predefinita\nopen .   apre la cartella nel File Manager\nopen -a editor note.txt   con un’app precisa\nopen -a photo   avvia un’app"
+		get usage() {
+			return w("help.open.usage");
+		},
+		get summary() {
+			return w("help.open.summary");
+		},
+		run: or,
+		get help() {
+			return w("help.open.text");
+		}
 	},
 	{
 		name: "trash",
-		usage: "trash [list | put percorso… | restore nome… | rm nome… | empty]",
-		summary: "Il cestino: elenca, rimette a posto, svuota.",
-		run: rr,
-		help: "trash              elenca ciò che è nel cestino\ntrash put file     sposta nel cestino (come rm -r)\ntrash restore nome rimette a posto\ntrash rm nome      elimina definitivamente\ntrash empty        svuota il cestino"
+		get usage() {
+			return w("help.trash.usage");
+		},
+		get summary() {
+			return w("help.trash.summary");
+		},
+		run: lr,
+		get help() {
+			return w("help.trash.text");
+		}
 	},
 	{
 		name: "tag",
-		usage: "tag [ls [tag…] | show percorso… | add tag percorso… | rm tag percorso… | new nome [colore] | delete tag…]",
-		summary: "I tag di lilOS: elenca, assegna, toglie.",
-		run: ar,
-		help: "tag                elenca i tag\ntag ls Lavoro      gli elementi con il tag\ntag show file      i tag di un elemento\ntag add Lavoro f   mette il tag (lo crea se non c’è)\ntag rm Lavoro f    lo toglie\ntag new nome blu   crea un tag\ntag delete nome    elimina un tag"
+		get usage() {
+			return w("help.tag.usage");
+		},
+		get summary() {
+			return w("help.tag.summary");
+		},
+		run: dr,
+		get help() {
+			return w("help.tag.text");
+		}
 	},
 	{
 		name: "apps",
 		usage: "apps",
-		summary: "Elenca le app installate (id, nome, versione).",
-		run: or
+		get summary() {
+			return w("help.apps.summary");
+		},
+		run: fr
 	},
 	{
 		name: "date",
-		usage: "date [-u] [-d data] [+formato]",
-		summary: "Data e ora.",
-		run: ur,
-		help: "Formato: %Y anno, %m mese, %d giorno, %H:%M:%S ora, %A giorno della settimana, %B mese, %s secondi dal 1970, %F = %Y-%m-%d, %T = %H:%M:%S\n-d @1700000000, -d 2026-01-01, -d ieri\nEsempio: date +%F"
+		get usage() {
+			return w("help.date.usage");
+		},
+		get summary() {
+			return w("help.date.summary");
+		},
+		run: hr,
+		get help() {
+			return w("help.date.text");
+		}
 	},
 	{
 		name: "whoami",
 		usage: "whoami",
-		summary: "Il nome dell’utente.",
-		run: (e) => e.out((i.user?.username || e.shell.getVar("USER") || "utente") + "\n")
+		get summary() {
+			return w("help.whoami.summary");
+		},
+		run: (e) => e.out((a.user?.username || e.shell.getVar("USER") || w("shell.defaultUser")) + "\n")
 	},
 	{
 		name: "hostname",
 		usage: "hostname",
-		summary: "Il nome del sistema.",
+		get summary() {
+			return w("help.hostname.summary");
+		},
 		run: (e) => e.out((e.shell.getVar("HOSTNAME") ?? "lilos") + "\n")
 	},
 	{
 		name: "uname",
 		usage: "uname [-a]",
-		summary: "Il nome del sistema operativo.",
+		get summary() {
+			return w("help.uname.summary");
+		},
 		run: (e) => e.out(e.args.includes("-a") ? `lilOS lilos ${e.shell.getVar("BASH_VERSION")} ${navigator.platform || ""}\n`.replace(/ \n$/, "\n") : "lilOS\n")
 	}
-], fr = /^[a-z][\w.-]{0,39}$/, $ = /* @__PURE__ */ new Map();
-for (let e of Tt) $.set(e.name, {
-	...e,
-	builtin: !0
-});
+], _r = /^[a-z][\w.-]{0,39}$/, $ = /* @__PURE__ */ new Map();
+for (let e of Mt) $.set(e.name, Object.assign(e, { builtin: !0 }));
 for (let e of [
-	...cn,
-	...Fn,
+	...hn,
 	...Vn,
-	...Zn,
-	...dr
+	...qn,
+	...rr,
+	...gr
 ]) $.set(e.name, e);
-function pr() {
+function vr() {
 	let e = /* @__PURE__ */ new Map();
-	for (let t of c()) {
+	for (let t of l()) {
 		let n = t.package?.manifest?.contributes?.shell;
-		if (Array.isArray(n)) for (let r of n.slice(0, 50)) r && fr.test(r.name ?? "") && typeof r.entry == "string" && !$.has(r.name) && !e.has(r.name) && e.set(r.name, {
+		if (Array.isArray(n)) for (let r of n.slice(0, 50)) r && _r.test(r.name ?? "") && typeof r.entry == "string" && !$.has(r.name) && !e.has(r.name) && e.set(r.name, {
 			name: r.name,
 			app: t.name,
-			summary: typeof r.summary == "string" ? r.summary.slice(0, 120) : `Comando dell’app ${t.name}.`,
-			usage: typeof r.usage == "string" ? r.usage.slice(0, 200) : `${r.name} [argomenti…]`,
+			summary: typeof r.summary == "string" ? r.summary.slice(0, 120) : w("appCmd.summary", { app: t.name }),
+			usage: typeof r.usage == "string" ? r.usage.slice(0, 200) : w("appCmd.usage", { name: r.name }),
 			ownHelp: r.help === !0,
-			run: (e) => mr(e, t.id, r.entry)
+			run: (e) => yr(e, t.id, r.entry)
 		});
 	}
 	return e;
 }
-async function mr(e, t, r) {
+async function yr(e, t, n) {
 	let i = e.shell, a = e.stdin === i.host.stdin ? null : await e.stdin.readAll(), o;
 	try {
-		o = await s(t, r, {
+		o = await c(t, n, {
 			command: e.name,
 			args: e.args,
 			stdin: a,
-			cwd: n.path(e.cwd),
+			cwd: r.path(e.cwd),
 			env: i.environment()
 		}, { from: "terminal" });
 	} catch (e) {
-		throw new y(e?.message ?? String(e));
+		throw new b(e?.message ?? String(e));
 	}
 	return o == null ? 0 : typeof o == "string" ? (await e.out(o), 0) : (typeof o.stdout == "string" && await e.out(o.stdout), typeof o.stderr == "string" && await e.err(o.stderr), Number.isInteger(o.code) ? (o.code % 256 + 256) % 256 : 0);
 }
-var hr = {
-	get: (e) => $.get(e) ?? pr().get(e) ?? null,
-	has: (e) => $.has(e) || pr().has(e),
-	names: () => [...$.keys(), ...pr().keys()],
-	values: () => [...$.values(), ...pr().values()]
-}, gr = /\x1b\[([0-9;?]*)([A-Za-z])|\x1b\][^\x07\x1b]*(?:\x07|\x1b\\)|\x1b[()][0-9A-Za-z]|\x1b./g, _r = [
+var br = {
+	get: (e) => $.get(e) ?? vr().get(e) ?? null,
+	has: (e) => $.has(e) || vr().has(e),
+	names: () => [...$.keys(), ...vr().keys()],
+	values: () => [...$.values(), ...vr().values()]
+}, xr = /\x1b\[([0-9;?]*)([A-Za-z])|\x1b\][^\x07\x1b]*(?:\x07|\x1b\\)|\x1b[()][0-9A-Za-z]|\x1b./g, Sr = [
 	0,
 	95,
 	135,
@@ -5811,21 +6242,21 @@ var hr = {
 	215,
 	255
 ];
-function vr(e) {
+function Cr(e) {
 	if (e < 16) return { cls: e };
 	if (e >= 232) {
 		let t = 8 + (e - 232) * 10;
 		return { css: `rgb(${t},${t},${t})` };
 	}
 	let t = e - 16;
-	return { css: `rgb(${_r[Math.floor(t / 36)]},${_r[Math.floor(t / 6) % 6]},${_r[t % 6]})` };
+	return { css: `rgb(${Sr[Math.floor(t / 36)]},${Sr[Math.floor(t / 6) % 6]},${Sr[t % 6]})` };
 }
-var yr = class {
+var wr = class {
 	style = {};
 	write(e, t, n = null, r = () => {}) {
 		let i = 0;
-		gr.lastIndex = 0;
-		for (let a; a = gr.exec(e);) this.#e(e.slice(i, a.index), t, n), i = gr.lastIndex, a[2] === "m" ? this.#t(a[1]) : a[2] === "J" && (a[1] === "2" || a[1] === "3") && r();
+		xr.lastIndex = 0;
+		for (let a; a = xr.exec(e);) this.#e(e.slice(i, a.index), t, n), i = xr.lastIndex, a[2] === "m" ? this.#t(a[1]) : a[2] === "J" && (a[1] === "2" || a[1] === "3") && r();
 		this.#e(e.slice(i), t, n);
 	}
 	#e(e, t, n) {
@@ -5868,7 +6299,7 @@ var yr = class {
 			else if (r === 49) delete n.bg;
 			else if (r === 38 || r === 48) {
 				let i = r === 38 ? "fg" : "bg";
-				if (t[e + 1] === 5) n[i] = vr(t[e + 2] ?? 0), e += 2;
+				if (t[e + 1] === 5) n[i] = Cr(t[e + 2] ?? 0), e += 2;
 				else if (t[e + 1] === 2) {
 					let [r, a, o] = t.slice(e + 2, e + 5).map((e) => Math.max(0, Math.min(255, e || 0)));
 					n[i] = { css: `rgb(${r},${a},${o})` }, e += 4;
@@ -5880,19 +6311,19 @@ var yr = class {
 	reset() {
 		this.style = {};
 	}
-}, br = /[\s'"\\$`|&;<>()*?[\]{}!#]/g, xr = (e) => e.replace(br, "\\$&");
-function Sr(e, t, r) {
-	let i = t.slice(0, r), a = r;
+}, Tr = /[\s'"\\$`|&;<>()*?[\]{}!#]/g, Er = (e) => e.replace(Tr, "\\$&");
+function Dr(e, t, n) {
+	let i = t.slice(0, n), a = n;
 	for (; a > 0 && !(/[\s|&;<>()]/.test(i[a - 1]) && i[a - 2] !== "\\");) a--;
 	let o = i.slice(a).replace(/\\(.)/g, "$1").replace(/^['"]/, ""), s = i.slice(0, a).trimEnd(), c = !s || /(^|[|&;(]|\$\(|\b(then|do|else|elif|if|while|until|sudo|xargs|time|command|which|type|help))$/.test(s), l = /\$\{?([A-Za-z_]\w*)?$/.exec(o);
 	if (l) {
-		let t = l[1] ?? "", n = o.slice(0, o.length - t.length), i = e.variables().map(([e]) => e).filter((e) => e.startsWith(t)).map((e) => ({
-			value: n + e + (n.endsWith("{") ? "}" : ""),
+		let t = l[1] ?? "", r = o.slice(0, o.length - t.length), i = e.variables().map(([e]) => e).filter((e) => e.startsWith(t)).map((e) => ({
+			value: r + e + (r.endsWith("{") ? "}" : ""),
 			label: e
 		}));
 		return {
 			start: a,
-			end: r,
+			end: n,
 			items: i
 		};
 	}
@@ -5902,35 +6333,35 @@ function Sr(e, t, r) {
 			...e.functions.keys(),
 			...e.aliases.keys()
 		])].filter((e) => e.startsWith(o)).sort(F).map((e) => ({
-			value: xr(e),
+			value: Er(e),
 			label: e
 		}));
 		if (t.length || !o) return {
 			start: a,
-			end: r,
+			end: n,
 			items: t
 		};
 	}
 	let u = o.lastIndexOf("/"), d = u >= 0 ? o.slice(0, u + 1) : "", f = u >= 0 ? o.slice(u + 1) : o, p = d || ".";
-	(p === "~/" || p.startsWith("~/")) && (p = (e.getVar("HOME") ?? n.home) + p.slice(1));
+	(p === "~/" || p.startsWith("~/")) && (p = (e.getVar("HOME") ?? r.home) + p.slice(1));
 	let m = P(e.cwd, p);
 	if (m?.type !== "folder") return {
 		start: a,
-		end: r,
+		end: n,
 		items: []
 	};
-	let h = f.toLowerCase(), g = n.children(m.id).filter((e) => e.name.toLowerCase().startsWith(h) && (f.startsWith(".") || !e.name.startsWith("."))).sort((e, t) => F(e.name, t.name)).map((e) => ({
-		value: xr(d) + xr(e.name) + (e.type === "folder" ? "/" : ""),
+	let h = f.toLowerCase(), g = r.children(m.id).filter((e) => e.name.toLowerCase().startsWith(h) && (f.startsWith(".") || !e.name.startsWith("."))).sort((e, t) => F(e.name, t.name)).map((e) => ({
+		value: Er(d) + Er(e.name) + (e.type === "folder" ? "/" : ""),
 		label: e.name + (e.type === "folder" ? "/" : ""),
 		folder: e.type === "folder"
 	}));
 	return {
 		start: a,
-		end: r,
+		end: n,
 		items: g
 	};
 }
-function Cr(e) {
+function Or(e) {
 	if (!e.length) return "";
 	let t = e[0];
 	for (let n of e.slice(1)) {
@@ -5941,21 +6372,21 @@ function Cr(e) {
 	return t;
 }
 // src/terminal/TerminalApp.js
-var wr = "terminal.history", Tr = 4e5, Er = ".bashrc";
-function Dr({ args: e } = {}) {
-	let r = new t({
-		title: "Terminale",
+var kr = "terminal.history", Ar = 4e5, jr = ".bashrc";
+function Mr({ args: e } = {}) {
+	let t = new n({
+		title: w("ui.title"),
 		icon: "terminal",
 		width: 760,
 		height: 460,
 		minWidth: 360,
 		minHeight: 200
-	}), i = new kr(r, e);
-	return r.getState = () => ({ cwd: i.shell.cwd }), r.on("launch", (e) => {
-		e?.cwd && n.get(e.cwd)?.type === "folder" && i.changeDir(e.cwd);
-	}), r;
+	}), i = new Pr(t, e);
+	return t.getState = () => ({ cwd: i.shell.cwd }), t.on("launch", (e) => {
+		e?.cwd && r.get(e.cwd)?.type === "folder" && i.changeDir(e.cwd);
+	}), t;
 }
-var Or = class extends V {
+var Nr = class extends lt {
 	silent = !1;
 	constructor(e) {
 		super(), this.term = e;
@@ -5963,7 +6394,7 @@ var Or = class extends V {
 	pull() {
 		return this.term.readInput(this);
 	}
-}, kr = class {
+}, Pr = class {
 	text = "";
 	cursor = 0;
 	pending = "";
@@ -5978,30 +6409,30 @@ var Or = class extends V {
 	#a = 0;
 	#o = null;
 	constructor(e, t) {
-		this.win = e, this.ansi = new yr();
-		let { signal: i } = e;
-		this.edit = r("span", { class: "tm-edit" }), this.output = r("div", {
+		this.win = e, this.ansi = new wr();
+		let { signal: n } = e;
+		this.edit = i("span", { class: "tm-edit" }), this.output = i("div", {
 			class: "tm-out",
 			role: "log",
 			"aria-live": "polite"
-		}, this.edit), this.input = r("textarea", {
+		}, this.edit), this.input = i("textarea", {
 			class: "tm-input",
 			spellcheck: "false",
 			autocapitalize: "off",
 			autocomplete: "off",
 			autocorrect: "off",
 			rows: "1",
-			"aria-label": "Riga di comando"
-		}), this.screen = r("div", { class: "tm-screen" }, this.output, this.input), e.body.classList.add("tm"), e.body.append(this.screen), this.input.addEventListener("keydown", (e) => this.#g(e), { signal: i }), this.input.addEventListener("input", (e) => this.#d(e), { signal: i }), this.input.addEventListener("paste", (e) => this.#f(e), { signal: i }), this.input.addEventListener("focus", () => this.screen.classList.add("focused"), { signal: i }), this.input.addEventListener("blur", () => this.screen.classList.remove("focused"), { signal: i }), this.screen.addEventListener("mouseup", () => {
+			"aria-label": w("ui.commandLine")
+		}), this.screen = i("div", { class: "tm-screen" }, this.output, this.input), e.body.classList.add("tm"), e.body.append(this.screen), this.input.addEventListener("keydown", (e) => this.#g(e), { signal: n }), this.input.addEventListener("input", (e) => this.#d(e), { signal: n }), this.input.addEventListener("paste", (e) => this.#f(e), { signal: n }), this.input.addEventListener("focus", () => this.screen.classList.add("focused"), { signal: n }), this.input.addEventListener("blur", () => this.screen.classList.remove("focused"), { signal: n }), this.screen.addEventListener("mouseup", () => {
 			String(getSelection()).length || this.focus();
-		}, { signal: i });
+		}, { signal: n });
 		let a = new ResizeObserver(() => {
 			this.#a = 0;
 		});
-		a.observe(this.screen), this.history = Ar();
-		let o = new ot((e) => this.write(e));
+		a.observe(this.screen), this.history = Fr();
+		let o = new pt((e) => this.write(e));
 		this.host = {
-			stdin: new Or(this),
+			stdin: new Nr(this),
 			stdout: o,
 			stderr: o,
 			clear: () => this.clear(),
@@ -6009,20 +6440,20 @@ var Or = class extends V {
 			history: {
 				list: () => [...this.history],
 				clear: () => {
-					this.history = [], jr([]);
+					this.history = [], Ir([]);
 				}
 			}
-		}, this.shell = new ft({
+		}, this.shell = new yt({
 			host: this.host,
-			commands: hr
-		}), t?.cwd && n.get(t.cwd)?.type === "folder" && (this.shell.cwd = t.cwd), this.shell.setVar("PS1", "\\[\\e[1;32m\\]\\u@\\h\\[\\e[0m\\]:\\[\\e[1;34m\\]\\w\\[\\e[0m\\]\\$ "), e.on("destroy", () => {
+			commands: br
+		}), t?.cwd && r.get(t.cwd)?.type === "folder" && (this.shell.cwd = t.cwd), this.shell.setVar("PS1", "\\[\\e[1;32m\\]\\u@\\h\\[\\e[0m\\]:\\[\\e[1;34m\\]\\w\\[\\e[0m\\]\\$ "), e.on("destroy", () => {
 			a.disconnect(), cancelAnimationFrame(this.#t), this.#o?.abort();
 			for (let e of this.shell.jobs.list) e.token.abort();
-			this.reader?.reject(new h());
+			this.reader?.reject(new g());
 		}), this.#E(), this.#s();
 	}
 	async #s() {
-		this.write("\x1B[2mTerminale di lilOS · «help» elenca i comandi\x1B[0m\n"), this.shell.resolve(`~/${Er}`)?.type === "file" ? await this.#C(`source ~/${Er}`, { record: !1 }) : this.prompt(), requestAnimationFrame(() => this.focus());
+		this.write(`\x1b[2m${w("ui.welcome")}\x1b[0m\n`), this.shell.resolve(`~/${jr}`)?.type === "file" ? await this.#C(`source ~/${jr}`, { record: !1 }) : this.prompt(), requestAnimationFrame(() => this.focus());
 	}
 	focus() {
 		this.input.focus({ preventScroll: !0 });
@@ -6039,7 +6470,7 @@ var Or = class extends V {
 	}
 	#c() {
 		let e = this.output.textContent.length;
-		for (; e > Tr && this.output.firstChild !== this.edit;) e -= this.output.firstChild.textContent.length, this.output.firstChild.remove();
+		for (; e > Ar && this.output.firstChild !== this.edit;) e -= this.output.firstChild.textContent.length, this.output.firstChild.remove();
 	}
 	#l() {
 		return this.screen.scrollHeight - this.screen.scrollTop - this.screen.clientHeight < 40;
@@ -6053,33 +6484,33 @@ var Or = class extends V {
 	}
 	columns() {
 		if (!this.#a) {
-			let e = r("span", { class: "tm-probe" }, "MMMMMMMMMM");
+			let e = i("span", { class: "tm-probe" }, "MMMMMMMMMM");
 			this.screen.append(e), this.#a = e.getBoundingClientRect().width / 10 || 8, e.remove();
 		}
 		return Math.max(20, Math.floor((this.screen.clientWidth - 24) / this.#a));
 	}
 	promptText(e = "PS1") {
-		let t = this.shell.getVar(e) ?? "$ ", r = i.user?.username || this.shell.getVar("USER") || "utente", a = /* @__PURE__ */ new Date(), o = (e) => String(e).padStart(2, "0");
+		let t = this.shell.getVar(e) ?? "$ ", n = a.user?.username || this.shell.getVar("USER") || w("shell.defaultUser"), i = /* @__PURE__ */ new Date(), o = (e) => String(e).padStart(2, "0");
 		return t.replace(/\\([uhHwW$nte\\[\]dA@])/g, (e, t) => ({
-			u: r,
+			u: n,
 			h: this.shell.getVar("HOSTNAME") ?? "lilos",
 			H: this.shell.getVar("HOSTNAME") ?? "lilos",
-			w: Ie(this.shell.cwd),
-			W: this.shell.cwd === n.root ? "~" : n.get(this.shell.cwd)?.name ?? "~",
+			w: Be(this.shell.cwd),
+			W: this.shell.cwd === r.root ? "~" : r.get(this.shell.cwd)?.name ?? "~",
 			$: "$",
 			n: "\n",
 			e: "\x1B",
 			"\\": "\\",
 			"[": "",
 			"]": "",
-			t: `${o(a.getHours())}:${o(a.getMinutes())}:${o(a.getSeconds())}`,
-			A: `${o(a.getHours())}:${o(a.getMinutes())}`,
-			d: a.toLocaleDateString("it-IT", {
+			t: `${o(i.getHours())}:${o(i.getMinutes())}:${o(i.getSeconds())}`,
+			A: `${o(i.getHours())}:${o(i.getMinutes())}`,
+			d: C.date(i, {
 				weekday: "short",
 				day: "numeric",
 				month: "short"
 			}),
-			"@": a.toLocaleTimeString("it-IT")
+			"@": C.date(i, { timeStyle: "medium" })
 		})[t]);
 	}
 	prompt() {
@@ -6087,8 +6518,8 @@ var Or = class extends V {
 		this.flush(), this.ansi.reset(), this.write(this.promptText(this.pending ? "PS2" : "PS1")), this.flush(), this.renderLine(), this.scrollToEnd();
 	}
 	renderLine() {
-		let e = this.reader?.reader.silent, t = e ? "" : this.text, n = e ? 0 : this.cursor, i = r("span", { class: "tm-cursor" }, t[n] ?? " ");
-		this.edit.replaceChildren(t.slice(0, n), i, t.slice(n + 1)), this.edit.hidden = this.running && !this.reader && !this.text;
+		let e = this.reader?.reader.silent, t = e ? "" : this.text, n = e ? 0 : this.cursor, r = i("span", { class: "tm-cursor" }, t[n] ?? " ");
+		this.edit.replaceChildren(t.slice(0, n), r, t.slice(n + 1)), this.edit.hidden = this.running && !this.reader && !this.text;
 	}
 	setLine(e, t = e.length) {
 		this.text = e, this.cursor = Math.max(0, Math.min(t, e.length)), this.#i = 0, this.renderLine();
@@ -6188,7 +6619,7 @@ var Or = class extends V {
 	}
 	#v() {
 		if (this.reader) return;
-		let { start: e, end: t, items: n } = Sr(this.shell, this.text, this.cursor);
+		let { start: e, end: t, items: n } = Dr(this.shell, this.text, this.cursor);
 		if (this.#i++, !n.length) return;
 		let r = (n) => this.setLine(this.text.slice(0, e) + n + this.text.slice(t), e + n.length);
 		if (n.length === 1) {
@@ -6196,14 +6627,14 @@ var Or = class extends V {
 			r(e.value + (e.folder || /[}/]$/.test(e.value) ? "" : " "));
 			return;
 		}
-		let i = Cr(n.map((e) => e.value)), a = this.text.slice(e, t);
+		let i = Or(n.map((e) => e.value)), a = this.text.slice(e, t);
 		if (i.length > a.length) {
 			r(i), this.#i = 1;
 			return;
 		}
 		if (this.#i < 2) return;
 		let o = this.text, s = this.cursor;
-		this.#u(o), this.write(Lt(n.map((e) => ({
+		this.#u(o), this.write(Wt(n.map((e) => ({
 			text: e.label,
 			plain: e.label
 		})), this.columns())), this.prompt(), this.setLine(o, s), this.#i = 0;
@@ -6231,23 +6662,23 @@ var Or = class extends V {
 			this.pending = "", this.prompt();
 			return;
 		}
-		this.running = !0, this.renderLine(), this.#o = new b(), this.shell.token = this.#o, this.host.stdin = new Or(this);
+		this.running = !0, this.renderLine(), this.#o = new x(), this.shell.token = this.#o, this.host.stdin = new Nr(this);
 		let n = !1;
 		try {
 			await this.shell.run(e, this.host);
 		} catch (e) {
-			if (e instanceof _) n = !0;
-			else if (e instanceof v) this.write(`bash: ${e.message}\n`), this.shell.status = 2;
-			else if (e instanceof m) {
+			if (e instanceof v) n = !0;
+			else if (e instanceof y) this.write(`bash: ${e.message}\n`), this.shell.status = 2;
+			else if (e instanceof h) {
 				this.flush(), this.#D();
 				return;
-			} else e instanceof h ? this.shell.status = 130 : (this.write(`bash: ${e?.message ?? e}\n`), this.shell.status = 1);
+			} else e instanceof g ? this.shell.status = 130 : (this.write(`bash: ${e?.message ?? e}\n`), this.shell.status = 1);
 		}
 		this.pending = n ? e : "", t && !n && this.#w(e), this.running = !1, this.reader = null, this.#E(), this.flush(), /\n$/.test(this.edit.previousSibling?.textContent ?? "\n") || this.write("\n"), this.prompt(), this.#x();
 	}
 	#w(e) {
 		let t = e.trim();
-		t && !e.startsWith(" ") && this.history.at(-1) !== t && (this.history = [...Ar().filter((e) => e !== t), t].slice(-1e3), jr(this.history));
+		t && !e.startsWith(" ") && this.history.at(-1) !== t && (this.history = [...Fr().filter((e) => e !== t), t].slice(-1e3), Ir(this.history));
 	}
 	readInput(e) {
 		if (this.queue.length) {
@@ -6256,7 +6687,7 @@ var Or = class extends V {
 		}
 		return this.flush(), new Promise((t, n) => {
 			let r = this.#o?.onAbort(() => {
-				this.reader = null, n(new h());
+				this.reader = null, n(new g());
 			});
 			this.reader = {
 				reader: e,
@@ -6274,18 +6705,18 @@ var Or = class extends V {
 		this.reader = null, this.renderLine(), t?.resolve(e);
 	}
 	changeDir(e) {
-		this.shell.cwd = e, this.#E(), this.running || (this.write(`\ncd ${Ie(e)}\n`), this.prompt());
+		this.shell.cwd = e, this.#E(), this.running || (this.write(`\ncd ${Be(e)}\n`), this.prompt());
 	}
 	#E() {
-		this.win.setTitle("Terminale", Ie(this.shell.cwd));
+		this.win.setTitle(w("ui.title"), Be(this.shell.cwd));
 	}
 	#D() {
 		this.running = !0, this.renderLine(), this.win.emit("close");
 	}
 };
-function Ar() {
-	let e = a.get(wr, []);
+function Fr() {
+	let e = o.get(kr, []);
 	return Array.isArray(e) ? e.filter((e) => typeof e == "string").slice(-1e3) : [];
 }
-var jr = (e) => a.set(wr, e);
-export { Dr as default };
+var Ir = (e) => o.set(kr, e);
+export { Mr as default };

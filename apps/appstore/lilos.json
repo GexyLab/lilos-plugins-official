@@ -1,9 +1,9 @@
 {
   "id": "appstore",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "kind": "local",
   "name": "AppStore",
-  "description": "Installa, aggiorna e rimuove app e moduli del kernel dai repository; controlla gli aggiornamenti anche a lilOS chiuso.",
+  "description": "Installs, updates and removes apps and kernel modules from repositories; checks for updates even with lilOS closed.",
   "category": "system",
   "icon": {
     "glyph": "download",
@@ -20,11 +20,11 @@
     "updates": {
       "kind": "service",
       "file": "dist/updates.js",
-      "label": "Aggiornamenti",
+      "label": "Updates",
       "params": {
         "ore": {
           "type": "number",
-          "label": "Controlla ogni (ore)",
+          "label": "Check every (hours)",
           "min": 1,
           "max": 168,
           "default": 24
@@ -46,9 +46,11 @@
   "styles": [
     "dist/index-BI4EHm56.css"
   ],
+  "locales": "locales.json",
   "files": {
     "dist/index-BI4EHm56.css": "sha256-5q2fc19quKv8F4sM3BSZEANdC0p2E426wEejxqxAsqM=",
-    "dist/index.js": "sha256-wowPKvBFopqvpGaG9ZZavxUVvaccxVr5C5rHw6V8KN0=",
-    "dist/updates.js": "sha256-pGGp4b/pH0TRilPaXFM0c4E155pOBDw7K6f4m8cVcjU="
+    "dist/index.js": "sha256-pUKziylpdQRIxA9b4+dXX0gRcMzkNbT9gJO6eCsfqHU=",
+    "dist/updates.js": "sha256-GKIl6BOOALNK0ObBK/xKkkd4cmy1AmzZTprBpYrOj3o=",
+    "locales.json": "sha256-UwByrhOgnYWWGwf6MElE4CNdhm5dRUMfbXg6CxPh0sE="
   }
 }

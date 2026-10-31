@@ -1,4 +1,5 @@
 import { Incomplete, ParseError } from './signals.js';
+import { t } from '../i18n.js';
 
 /**
  * Parser of the bash language, straight from the source text (bash parsing depends on where it
@@ -84,9 +85,9 @@ class Parser {
   }
 
   near() {
-    if (this.eof) return 'fine del testo';
-    if (this.ch === '\n') return 'a capo';
-    return `«${this.peekOp() ?? this.src.slice(this.pos).match(/^\S{1,20}/)?.[0] ?? this.ch}»`;
+    if (this.eof) return t('parse.nearEnd');
+    if (this.ch === '\n') return t('parse.nearNewline');
+    return t('parse.nearToken', { token: this.peekOp() ?? this.src.slice(this.pos).match(/^\S{1,20}/)?.[0] ?? this.ch });
   }
 
   // ---------- Blanks, newlines, operators ----------
@@ -131,7 +132,7 @@ class Parser {
 
   keyword(kw) {
     this.linebreak();
-    if (!this.atKeyword(kw)) this.fail(`errore di sintassi vicino a ${this.near()}: atteso «${kw}»`);
+    if (!this.atKeyword(kw)) this.fail(t('parse.nearExpected', { near: this.near(), expected: kw }));
     this.pos += kw.length;
   }
 
@@ -147,7 +148,7 @@ class Parser {
   program() {
     const list = this.list();
     this.linebreak();
-    if (!this.eof) throw new ParseError(`errore di sintassi vicino a ${this.near()}`);
+    if (!this.eof) throw new ParseError(t('parse.near', { near: this.near() }));
     if (this.heredocs.length) throw new Incomplete();
     return list;
   }
@@ -162,7 +163,7 @@ class Parser {
       }
       const items = [];
       for (;;) {
-        if (this.atTerminator()) throw new ParseError(`errore di sintassi vicino a ${this.near()}`);
+        if (this.atTerminator()) throw new ParseError(t('parse.near', { near: this.near() }));
         const start = this.pos;
         const node = this.andOr();
         const text = this.src.slice(start, this.pos).trim();
@@ -177,7 +178,7 @@ class Parser {
         }
         items.push({ node, async: false, text });
         if (this.eof || this.newline()) break;
-        throw new ParseError(`errore di sintassi vicino a ${this.near()}`);
+        throw new ParseError(t('parse.near', { near: this.near() }));
       }
       yield { type: 'list', items };
     }
@@ -200,7 +201,7 @@ class Parser {
       } else {
         items.push({ node, async: false, text });
         this.linebreak();
-        if (!this.atTerminator()) throw new ParseError(`errore di sintassi vicino a ${this.near()}`);
+        if (!this.atTerminator()) throw new ParseError(t('parse.near', { near: this.near() }));
         break;
       }
       this.linebreak();
@@ -258,12 +259,12 @@ class Parser {
       this.pos++;
       const body = this.list();
       this.linebreak();
-      if (this.ch !== ')') this.fail(`errore di sintassi vicino a ${this.near()}: atteso «)»`);
+      if (this.ch !== ')') this.fail(t('parse.nearExpected', { near: this.near(), expected: ')' }));
       this.pos++;
       return this.redirects({ type: 'subshell', body });
     }
     if (op && !op.startsWith('<') && !op.startsWith('>') && op !== '&>' && op !== '&>>') {
-      throw new ParseError(`errore di sintassi vicino a «${op}»`);
+      throw new ParseError(t('parse.near', { near: t('parse.nearToken', { token: op }) }));
     }
     if (this.atKeyword('if')) return this.redirects(this.ifClause());
     if (this.atKeyword('while')) return this.redirects(this.whileClause(false));
@@ -283,13 +284,13 @@ class Parser {
       const m = /[A-Za-z_][\w.:-]*/y;
       m.lastIndex = this.pos;
       const name = m.exec(this.src)?.[0];
-      if (!name) this.fail('nome di funzione non valido');
+      if (!name) this.fail(t('parse.badFunctionName'));
       this.pos += name.length;
       this.skipBlanks();
       if (this.starts('(')) {
         this.pos++;
         this.skipBlanks();
-        if (this.ch !== ')') this.fail('atteso «)» dopo il nome della funzione');
+        if (this.ch !== ')') this.fail(t('parse.parenAfterName'));
         this.pos++;
       }
       return this.funcBody(name, start);
@@ -301,7 +302,7 @@ class Parser {
       this.pos += m[0].length;
       return this.funcBody(m[1], start);
     }
-    if (TERMINATORS.some(kw => this.atKeyword(kw))) throw new ParseError(`errore di sintassi vicino a ${this.near()}`);
+    if (TERMINATORS.some(kw => this.atKeyword(kw))) throw new ParseError(t('parse.near', { near: this.near() }));
     return this.simple();
   }
 
@@ -349,7 +350,7 @@ class Parser {
       if (node.words.length === 1) declaration = word.parts.length === 1 && word.parts[0].type === 'lit' && DECLARATIONS.has(word.parts[0].value);
     }
     this.aliasActive.clear();
-    if (!node.words.length && !node.assigns.length && !node.redirs.length) throw new ParseError(`errore di sintassi vicino a ${this.near()}`);
+    if (!node.words.length && !node.assigns.length && !node.redirs.length) throw new ParseError(t('parse.near', { near: this.near() }));
     return node;
   }
 
@@ -365,7 +366,7 @@ class Parser {
         if (this.eof) throw new Incomplete();
         if (this.ch === ')') { this.pos++; break; }
         const w = this.word();
-        if (!w) throw new ParseError(`errore di sintassi vicino a ${this.near()}`);
+        if (!w) throw new ParseError(t('parse.near', { near: this.near() }));
         asg.array.push(w);
       }
     } else {
@@ -381,7 +382,7 @@ class Parser {
     if (!name || !isDelim(this.src[this.pos + name.length])) return false;
     const value = this.aliases.get(name);
     if (value == null || this.aliasActive.has(name)) return false;
-    if (++this.aliasCount > MAX_ALIASES) throw new ParseError('alias espansi troppe volte');
+    if (++this.aliasCount > MAX_ALIASES) throw new ParseError(t('parse.aliasLoop'));
     this.aliasActive.add(name);
     this.src = this.src.slice(0, this.pos) + value + this.src.slice(this.pos + name.length);
     return true;
@@ -397,7 +398,7 @@ class Parser {
     this.skipBlanks();
     const start = this.pos;
     const target = this.word();
-    if (!target) this.fail(`errore di sintassi vicino a ${this.near()}: manca la destinazione di «${op}»`);
+    if (!target) this.fail(t('parse.missingTarget', { near: this.near(), op }));
     const redir = { fd, op, target };
     if (op === '<<' || op === '<<-') {
       const raw = this.src.slice(start, this.pos);
@@ -480,7 +481,7 @@ class Parser {
     const m = /[A-Za-z_]\w*/y;
     m.lastIndex = this.pos;
     const name = m.exec(this.src)?.[0];
-    if (!name || !isDelim(this.src[this.pos + name.length])) this.fail('for: nome di variabile non valido');
+    if (!name || !isDelim(this.src[this.pos + name.length])) this.fail(t('parse.forBadName'));
     this.pos += name.length;
     let words = null;
     this.linebreak();
@@ -492,7 +493,7 @@ class Parser {
         if (this.eof) throw new Incomplete();
         if (this.ch === ';' || this.ch === '\n') break;
         const w = this.word();
-        if (!w) throw new ParseError(`errore di sintassi vicino a ${this.near()}`);
+        if (!w) throw new ParseError(t('parse.near', { near: this.near() }));
         words.push(w);
       }
     }
@@ -526,7 +527,7 @@ class Parser {
     this.pos += 4;
     this.skipBlanks();
     const word = this.word();
-    if (!word) this.fail('case: manca la parola');
+    if (!word) this.fail(t('parse.caseNoWord'));
     this.keyword('in');
     const items = [];
     for (;;) {
@@ -538,13 +539,13 @@ class Parser {
       for (;;) {
         this.skipBlanks();
         const p = this.word();
-        if (!p) this.fail(`errore di sintassi vicino a ${this.near()}`);
+        if (!p) this.fail(t('parse.near', { near: this.near() }));
         patterns.push(p);
         this.skipBlanks();
         if (this.ch !== '|') break;
         this.pos++;
       }
-      if (this.ch !== ')') this.fail(`errore di sintassi vicino a ${this.near()}: atteso «)»`);
+      if (this.ch !== ')') this.fail(t('parse.nearExpected', { near: this.near(), expected: ')' }));
       this.pos++;
       const body = this.list();
       this.skipBlanks();
@@ -555,7 +556,7 @@ class Parser {
         term = op;
       } else {
         this.linebreak();
-        if (!this.atKeyword('esac')) this.fail(`errore di sintassi vicino a ${this.near()}: atteso «;;»`);
+        if (!this.atKeyword('esac')) this.fail(t('parse.nearExpected', { near: this.near(), expected: ';;' }));
       }
       items.push({ patterns, body, term });
     }
@@ -581,7 +582,7 @@ class Parser {
     this.pos += 2;
     const expr = this.condOr();
     this.linebreak();
-    if (!this.starts(']]')) this.fail(`errore di sintassi in [[ vicino a ${this.near()}`);
+    if (!this.starts(']]')) this.fail(t('parse.condNear', { near: this.near() }));
     this.pos += 2;
     return { type: 'cond', expr };
   }
@@ -622,7 +623,7 @@ class Parser {
       this.pos++;
       const expr = this.condOr();
       this.linebreak();
-      if (this.ch !== ')') this.fail(`errore di sintassi in [[ vicino a ${this.near()}`);
+      if (this.ch !== ')') this.fail(t('parse.condNear', { near: this.near() }));
       this.pos++;
       return expr;
     }
@@ -644,9 +645,9 @@ class Parser {
   }
 
   condWord() {
-    if (this.starts(']]')) this.fail('errore di sintassi in [[: manca un operando');
+    if (this.starts(']]')) this.fail(t('parse.condNoOperand'));
     const w = this.word();
-    if (!w) this.fail(`errore di sintassi in [[ vicino a ${this.near()}`);
+    if (!w) this.fail(t('parse.condNear', { near: this.near() }));
     return w;
   }
 
@@ -660,7 +661,7 @@ class Parser {
         return depth === 0 && (isBlank(c) || c === '\n' || c === ';' || c === '&');
       },
     });
-    if (!parts.length) this.fail('errore di sintassi in [[: manca l’espressione regolare');
+    if (!parts.length) this.fail(t('parse.condNoRegex'));
     return { parts };
   }
 
@@ -772,7 +773,7 @@ class Parser {
       const body = this.list();
       this.linebreak();
       if (this.eof) throw new Incomplete();
-      if (this.ch !== ')') throw new ParseError(`errore di sintassi vicino a ${this.near()}: atteso «)»`);
+      if (this.ch !== ')') throw new ParseError(t('parse.nearExpected', { near: this.near(), expected: ')' }));
       this.pos++;
       return { type: 'cmdsub', body };
     }
@@ -793,7 +794,7 @@ class Parser {
     const m = /[A-Za-z_]\w*|[0-9]+|[@*#?$!\-]/y;
     m.lastIndex = this.pos;
     const name = m.exec(this.src)?.[0];
-    if (!name) this.fail('sostituzione errata');
+    if (!name) this.fail(t('parse.badSubstitution'));
     part.name = name;
     this.pos += name.length;
     if (this.ch === '[') {
@@ -804,7 +805,7 @@ class Parser {
     }
     const c = this.ch;
     if (c === '}' || part.length) {
-      if (this.ch !== '}') this.fail('sostituzione errata');
+      if (this.ch !== '}') this.fail(t('parse.badSubstitution'));
       this.pos++;
       return part;
     }
@@ -840,8 +841,8 @@ class Parser {
         this.pos++;
         part.replace = this.braceWord('}');
       } else part.replace = { parts: [] };
-    } else this.fail('sostituzione errata');
-    if (this.ch !== '}') this.fail('sostituzione errata: manca «}»');
+    } else this.fail(t('parse.badSubstitution'));
+    if (this.ch !== '}') this.fail(t('parse.badSubstitutionBrace'));
     this.pos++;
     return part;
   }
@@ -876,7 +877,7 @@ class Parser {
     try {
       return { type: 'cmdsub', body: new Parser(text, this.aliases).program() };
     } catch (err) {
-      if (err instanceof Incomplete) throw new ParseError('errore di sintassi tra gli apici inversi');
+      if (err instanceof Incomplete) throw new ParseError(t('parse.backquotes'));
       throw err;
     }
   }

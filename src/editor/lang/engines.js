@@ -1,5 +1,6 @@
 import treeSitterWasm from 'web-tree-sitter/web-tree-sitter.wasm?url';
 import { tokenize as simpleTokenize } from '../highlight.js';
+import { t } from '../i18n.js';
 
 /**
  * Highlighting engines. highlighter(lang, engine) resolves to { engine, tokenize(text) } where
@@ -62,7 +63,7 @@ function loadShiki() {
 }
 
 async function textmate(lang) {
-  if (!lang.textmate) throw new Error(`Nessuna grammatica TextMate per ${lang.label}`);
+  if (!lang.textmate) throw new Error(t('engine.noTextmate', { language: lang.label }));
   const h = await loadShiki();
   const spec = lang.textmate;
   const name = typeof spec === 'string' ? spec : spec.grammar.name;
@@ -115,7 +116,7 @@ function classFor(capture) {
 const HERE = import.meta.url;
 
 async function treesitter(lang) {
-  if (!lang.treesitter) throw new Error(`Nessuna grammatica Tree-sitter per ${lang.label}`);
+  if (!lang.treesitter) throw new Error(t('engine.noTreesitter', { language: lang.label }));
   const { Parser, Language, Query } = await import('web-tree-sitter');
   parserReady ??= Parser.init({ locateFile: () => treeSitterWasm });
   await parserReady;

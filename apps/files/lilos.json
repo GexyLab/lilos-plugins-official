@@ -1,9 +1,9 @@
 {
   "id": "files",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "kind": "local",
   "name": "File Manager",
-  "description": "Sfoglia, cerca e organizza file e cartelle: tag, collegamenti, cestino, informazioni e anteprima.",
+  "description": "Browse, search and organize files and folders: tags, links, trash, info and preview.",
   "category": "system",
   "icon": {
     "glyph": "folder",
@@ -22,8 +22,8 @@
       "params": {
         "folder": {
           "type": "folder",
-          "label": "Cartella",
-          "description": "La cartella che mostra all’apertura"
+          "label": "Folder",
+          "description": "The folder it shows when it opens"
         }
       }
     }
@@ -43,14 +43,14 @@
     "commands": [
       {
         "id": "files.info",
-        "label": "Mostra o nascondi le informazioni",
+        "label": "Show or hide the info panel",
         "keys": [
           "Alt+I"
         ]
       },
       {
         "id": "files.preview",
-        "label": "Mostra o nascondi l’anteprima",
+        "label": "Show or hide the preview",
         "keys": [
           "Alt+P"
         ]
@@ -61,8 +61,10 @@
   "styles": [
     "dist/index-QNdSYFB0.css"
   ],
+  "locales": "locales.json",
   "files": {
     "dist/index-QNdSYFB0.css": "sha256-osP0jIKKHVKU5zXDJTmkPUirDi+p43NTV0E2Gh3Azhk=",
-    "dist/index.js": "sha256-yKpGugBnaCp5i203ooOkDP5tHkqhSnyscZuEgoP8VIk="
+    "dist/index.js": "sha256-EKJ99D0YkduDHiBc5h6J1F5IvkfxmdG5QCwKUaMY1fg=",
+    "locales.json": "sha256-SZkHSpe7h64huWXChfJqaquSnK6yj3jHdBKvH0N0rkw="
   }
 }

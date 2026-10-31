@@ -1,5 +1,6 @@
 import { fs, splitName, Emitter } from '@lilos/sdk';
 import { editorConfig } from './config.js';
+import { t } from '../i18n.js';
 
 /**
  * Languages the Editor knows. For each, which engines can highlight it and which language server
@@ -10,7 +11,7 @@ import { editorConfig } from './config.js';
  *   server:     the built-in language server ('json' | 'css' | 'html')
  */
 const BUILTIN = [
-  { id: 'text', label: 'Testo', exts: ['txt', 'log', ''], simple: 'text' },
+  { id: 'text', get label() { return t('language.text'); }, exts: ['txt', 'log', ''], simple: 'text' },
   { id: 'markdown', label: 'Markdown', exts: ['md', 'markdown'], textmate: 'markdown', simple: 'markdown' },
   { id: 'javascript', label: 'JavaScript', exts: ['js', 'mjs', 'cjs'], textmate: 'javascript', treesitter: 'javascript', simple: 'javascript' },
   { id: 'typescript', label: 'TypeScript', exts: ['ts'], textmate: 'typescript', simple: 'javascript' },
@@ -23,7 +24,7 @@ const BUILTIN = [
   { id: 'yaml', label: 'YAML', exts: ['yml', 'yaml'], textmate: 'yaml', simple: 'text' },
 ];
 
-export const ENGINE_LABELS = { treesitter: 'Tree-sitter', textmate: 'TextMate', simple: 'Semplice' };
+export const ENGINE_LABELS = { treesitter: 'Tree-sitter', textmate: 'TextMate', get simple() { return t('engine.simple'); } };
 
 /** Languages from TextMate grammars the user added (see loadCustomGrammars). */
 const custom = new Map();   // id → language
@@ -58,10 +59,10 @@ export async function loadCustomGrammars() {
   const problems = [];
   for (const fileId of editorConfig.get('grammars')) {
     const node = fs.get(fileId);
-    if (!node) { problems.push({ fileId, error: 'File eliminato' }); continue; }
+    if (!node) { problems.push({ fileId, error: t('grammar.fileDeleted') }); continue; }
     try {
       const grammar = JSON.parse(await fs.read(fileId));
-      if (!grammar || typeof grammar.scopeName !== 'string' || !Array.isArray(grammar.patterns)) throw new Error('Non è una grammatica TextMate (mancano scopeName o patterns)');
+      if (!grammar || typeof grammar.scopeName !== 'string' || !Array.isArray(grammar.patterns)) throw new Error(t('grammar.invalid'));
       const id = `tm:${grammar.scopeName}`;
       custom.set(id, {
         id, label: String(grammar.name || grammar.displayName || grammar.scopeName), custom: true, fileId,

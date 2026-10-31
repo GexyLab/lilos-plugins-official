@@ -1,5 +1,6 @@
 import { Emitter } from '@lilos/sdk';
 import { Connection } from './jsonrpc.js';
+import { t } from '../i18n.js';
 
 /**
  * Language Server Protocol client over a transport:
@@ -21,7 +22,7 @@ export class LanguageClient extends Emitter {
     this.transport = transport;
     this.conn = new Connection(msg => transport.send(msg));
     transport.onMessage(msg => this.conn.receive(msg));
-    transport.onClose(reason => this.#fail(reason ?? 'Il server si è chiuso'));
+    transport.onClose(reason => this.#fail(reason ?? t('server.closed')));
 
     this.conn.onNotification('textDocument/publishDiagnostics', p => this.emit('diagnostics', p));
     this.conn.onNotification('window/logMessage', p => this.emit('log', p?.message));
@@ -108,7 +109,7 @@ export class LanguageClient extends Emitter {
 export function workerTransport(worker) {
   const listeners = { message: null, close: null };
   worker.onmessage = e => listeners.message?.(e.data);
-  worker.onerror = e => { e.preventDefault?.(); listeners.close?.(`Errore nel server: ${e.message ?? 'sconosciuto'}`); };
+  worker.onerror = e => { e.preventDefault?.(); listeners.close?.(t('server.crashed', { message: e.message ?? t('server.unknown') })); };
   return {
     ready: Promise.resolve(),
     send: msg => worker.postMessage(msg),
@@ -124,7 +125,7 @@ export function socketTransport(url) {
   const listeners = { message: null, close: null };
   const ready = new Promise((resolve, reject) => {
     ws.onopen = () => { queue.splice(0).forEach(m => ws.send(m)); resolve(); };
-    ws.onerror = () => reject(new Error(`Impossibile collegarsi a ${url}`));
+    ws.onerror = () => reject(new Error(t('server.connectFailed', { url })));
   });
   ready.catch(() => {});
   ws.onmessage = e => {
@@ -133,7 +134,7 @@ export function socketTransport(url) {
     const body = e.data.startsWith('Content-Length') ? e.data.slice(e.data.indexOf('\r\n\r\n') + 4) : e.data;
     try { listeners.message?.(JSON.parse(body)); } catch { /* not JSON: ignored */ }
   };
-  ws.onclose = e => listeners.close?.(`Connessione chiusa (${e.code})`);
+  ws.onclose = e => listeners.close?.(t('server.connectionClosed', { code: e.code }));
   return {
     ready,
     send: msg => { const data = JSON.stringify(msg); if (ws.readyState === WebSocket.OPEN) ws.send(data); else queue.push(data); },

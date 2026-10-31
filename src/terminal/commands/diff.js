@@ -1,6 +1,7 @@
 import { fs } from '@lilos/sdk';
 import { options, int } from './options.js';
 import { ShellError } from '../shell/signals.js';
+import { t } from '../i18n.js';
 
 /** diff: differences between two files, in the normal format or unified (-u). */
 
@@ -26,7 +27,7 @@ function myers(a, b, same) {
   const trace = [];
   let found = false;
   for (let d = 0; d <= max && !found; d++) {
-    if ((d + 1) * v.length > MAX_TRACE) throw new ShellError('i file sono troppo diversi e troppo grandi da confrontare', 2);
+    if ((d + 1) * v.length > MAX_TRACE) throw new ShellError(t('diff.tooBig'), 2);
     trace.push(v.slice());
     for (let k = -d; k <= d; k += 2) {
       let x = k === -d || (k !== d && v[max + k - 1] < v[max + k + 1]) ? v[max + k + 1] : v[max + k - 1] + 1;
@@ -111,12 +112,12 @@ const stamp = ms => {
 
 async function diff(ctx) {
   const { opts, args } = options(ctx, { flags: 'uqiwbBsN', values: 'U', long: { unified: 'u', brief: 'q', 'ignore-case': 'i', 'ignore-all-space': 'w', 'ignore-space-change': 'b', 'ignore-blank-lines': 'B', 'report-identical-files': 's' } });
-  if (args.length !== 2) throw new ShellError(args.length < 2 ? `manca un operando dopo «${args[0] ?? 'diff'}»` : `operando in più: «${args[2]}»`, 2);
+  if (args.length !== 2) throw new ShellError(args.length < 2 ? t('diff.missingOperand', { arg: args[0] ?? 'diff' }) : t('diff.extraOperand', { arg: args[2] }), 2);
   const read = async path => {
     if (path === '-') return { text: await ctx.stdin.readAll(), time: Date.now() };
     const node = ctx.resolve(path);
-    if (!node) throw new ShellError(`${path}: file o cartella inesistente`, 2);
-    if (node.type !== 'file') throw new ShellError(`${path}: ${node.type === 'folder' ? 'è una cartella' : 'non è un file'}`, 2);
+    if (!node) throw new ShellError(t('err.noSuchFile', { path }), 2);
+    if (node.type !== 'file') throw new ShellError(node.type === 'folder' ? t('err.isADirectory', { path }) : t('err.notAFile', { path }), 2);
     return { text: await fs.read(node.id), time: node.modified };
   };
   const [fa, fb] = [await read(args[0]), await read(args[1])];
@@ -131,11 +132,11 @@ async function diff(ctx) {
   let hunks = diffLines(a, b, (x, y) => norm(x) === norm(y));
   if (opts.B) hunks = hunks.filter(h => !(a.slice(h.a, h.a + h.del).every(l => !l.trim()) && b.slice(h.b, h.b + h.ins).every(l => !l.trim())));
   if (!hunks.length) {
-    if (opts.s) await ctx.out(`I file ${args[0]} e ${args[1]} sono identici\n`);
+    if (opts.s) await ctx.out(`${t('diff.identical', { a: args[0], b: args[1] })}\n`);
     return 0;
   }
   if (opts.q) {
-    await ctx.out(`I file ${args[0]} e ${args[1]} sono diversi\n`);
+    await ctx.out(`${t('diff.differ', { a: args[0], b: args[1] })}\n`);
     return 1;
   }
   if (opts.u || opts.U != null) {
@@ -147,7 +148,7 @@ async function diff(ctx) {
 
 export const diffCommands = [
   {
-    name: 'diff', usage: 'diff [-uqiwB] file1 file2', summary: 'Mostra le differenze tra due file.', run: diff,
-    help: '-u  formato unificato (con 3 righe di contesto; -U N per N)\n-q  dice solo se sono diversi\n-i  senza distinguere maiuscole e minuscole\n-w  ignorando gli spazi, -b ignorando quanti sono\n-B  ignorando le righe vuote\n-s  dice anche quando sono identici\n«-» è l’input. Stato: 0 uguali, 1 diversi, 2 errore.',
+    name: 'diff', usage: 'diff [-uqiwB] file1 file2', get summary() { return t('help.diff.summary'); }, run: diff,
+    get help() { return t('help.diff.text'); },
   },
 ];

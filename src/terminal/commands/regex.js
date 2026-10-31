@@ -1,4 +1,5 @@
 import { ShellError } from '../shell/signals.js';
+import { t } from '../i18n.js';
 
 /**
  * POSIX regular expressions (grep, sed) turned into JavaScript ones. Basic syntax (BRE, the
@@ -28,7 +29,7 @@ export function toJsSource(pattern, extended) {
         }
         cls += pattern[j] === '\\' ? '\\\\' : pattern[j] === '[' ? '\\[' : pattern[j];
       }
-      if (j >= pattern.length) throw new ShellError('«[» senza «]» nell’espressione regolare', 2);
+      if (j >= pattern.length) throw new ShellError(t('regex.unmatchedBracket'), 2);
       out += cls + ']';
       i = j;
       continue;
@@ -57,7 +58,7 @@ export function compile(pattern, { extended = false, fixed = false, ignoreCase =
     try {
       return new RegExp(source, (ignoreCase ? 'i' : '') + (global ? 'g' : ''));
     } catch (err) {
-      throw new ShellError(`espressione regolare non valida: ${pattern}`, 2);
+      throw new ShellError(t('regex.invalid', { pattern }), 2);
     }
   }
 }

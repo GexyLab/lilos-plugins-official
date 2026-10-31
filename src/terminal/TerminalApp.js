@@ -7,6 +7,7 @@ import { tildePath } from './shell/paths.js';
 import { columns } from './commands/files.js';
 import { AnsiRenderer } from './ansi.js';
 import { complete, commonPrefix } from './completion.js';
+import { i18n, t } from './i18n.js';
 import './terminal.css';
 
 const HISTORY_KEY = 'terminal.history';
@@ -20,7 +21,7 @@ const RC = '.bashrc';
  * of the output work as on any page). args.cwd (a folder id) opens it there.
  */
 export default function createTerminal({ args } = {}) {
-  const win = new Window({ title: 'Terminale', icon: 'terminal', width: 760, height: 460, minWidth: 360, minHeight: 200 });
+  const win = new Window({ title: t('ui.title'), icon: 'terminal', width: 760, height: 460, minWidth: 360, minHeight: 200 });
   const term = new Terminal(win, args);
   win.getState = () => ({ cwd: term.shell.cwd });
   // Opened again on a folder (File Manager, a link): go there
@@ -59,7 +60,7 @@ class Terminal {
     this.output = h('div', { class: 'tm-out', role: 'log', 'aria-live': 'polite' }, this.edit);
     this.input = h('textarea', {
       class: 'tm-input', spellcheck: 'false', autocapitalize: 'off', autocomplete: 'off', autocorrect: 'off',
-      rows: '1', 'aria-label': 'Riga di comando',
+      rows: '1', 'aria-label': t('ui.commandLine'),
     });
     this.screen = h('div', { class: 'tm-screen' }, this.output, this.input);
     win.body.classList.add('tm');
@@ -104,7 +105,7 @@ class Terminal {
   }
 
   async #start() {
-    this.write('\x1b[2mTerminale di lilOS · «help» elenca i comandi\x1b[0m\n');
+    this.write(`\x1b[2m${t('ui.welcome')}\x1b[0m\n`);
     if (this.shell.resolve(`~/${RC}`)?.type === 'file') {
       await this.#execute(`source ~/${RC}`, { record: false });
     } else this.prompt();
@@ -165,7 +166,7 @@ class Terminal {
 
   promptText(name = 'PS1') {
     const ps = this.shell.getVar(name) ?? '$ ';
-    const user = session.user?.username || this.shell.getVar('USER') || 'utente';
+    const user = session.user?.username || this.shell.getVar('USER') || t('shell.defaultUser');
     const now = new Date();
     const pad = n => String(n).padStart(2, '0');
     return ps.replace(/\\([uhHwW$nte\\[\]dA@])/g, (_, c) => ({
@@ -173,7 +174,7 @@ class Terminal {
       w: tildePath(this.shell.cwd), W: this.shell.cwd === fs.root ? '~' : fs.get(this.shell.cwd)?.name ?? '~',
       $: '$', n: '\n', e: '\x1b', '\\': '\\', '[': '', ']': '',
       t: `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`, A: `${pad(now.getHours())}:${pad(now.getMinutes())}`,
-      d: now.toLocaleDateString('it-IT', { weekday: 'short', day: 'numeric', month: 'short' }), '@': now.toLocaleTimeString('it-IT'),
+      d: i18n.date(now, { weekday: 'short', day: 'numeric', month: 'short' }), '@': i18n.date(now, { timeStyle: 'medium' }),
     })[c]);
   }
 
@@ -484,7 +485,7 @@ class Terminal {
   }
 
   #updateTitle() {
-    this.win.setTitle('Terminale', tildePath(this.shell.cwd));
+    this.win.setTitle(t('ui.title'), tildePath(this.shell.cwd));
   }
 
   #exit() {

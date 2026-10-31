@@ -1,4 +1,5 @@
 import { ShellError } from './signals.js';
+import { i18n } from '../i18n.js';
 
 /**
  * Integer arithmetic of `$((…))`, `((…))`, `let` and array subscripts: 64-bit signed integers
@@ -15,7 +16,7 @@ const wrap = v => BigInt.asIntN(64, v);
 const MAX_DEPTH = 32;
 
 export function evaluate(text, vars, depth = 0) {
-  if (depth > MAX_DEPTH) throw new ShellError('espressione: troppi livelli di ricorsione');
+  if (depth > MAX_DEPTH) throw new ShellError(i18n.t('arith.tooDeep'));
   const tokens = tokenize(String(text));
   if (!tokens.length) return 0n;
   const p = { tokens, i: 0, text };
@@ -24,7 +25,7 @@ export function evaluate(text, vars, depth = 0) {
   return run(ast, vars, depth);
 }
 
-const syntax = p => new ShellError(`${String(p.text).trim()}: errore di sintassi nell’espressione (simbolo errato «${p.tokens[p.i]?.v ?? 'fine'}»)`);
+const syntax = p => new ShellError(i18n.t('arith.syntax', { expr: String(p.text).trim(), token: p.tokens[p.i]?.v ?? i18n.t('arith.end') }));
 
 function tokenize(s) {
   const out = [];
@@ -48,7 +49,7 @@ function tokenize(s) {
           if (s[j] === '[') depth++;
           else if (s[j] === ']' && --depth === 0) break;
         }
-        if (j >= s.length) throw new ShellError(`${s.trim()}: manca «]»`);
+        if (j >= s.length) throw new ShellError(i18n.t('arith.missingBracket', { expr: s.trim() }));
         index = s.slice(i + 1, j);
         i = j + 1;
       }
@@ -56,7 +57,7 @@ function tokenize(s) {
       continue;
     }
     const op = OPS.find(o => s.startsWith(o, i));
-    if (!op) throw new ShellError(`${s.trim()}: errore di sintassi nell’espressione (simbolo errato «${c}»)`);
+    if (!op) throw new ShellError(i18n.t('arith.syntax', { expr: s.trim(), token: c }));
     out.push({ t: 'op', v: op });
     i += op.length;
   }
@@ -126,7 +127,7 @@ function parseUnary(p) {
 
 function parsePostfix(p) {
   const t = take(p);
-  if (!t) throw new ShellError(`${String(p.text).trim()}: errore di sintassi nell’espressione (operando atteso)`);
+  if (!t) throw new ShellError(i18n.t('arith.operandExpected', { expr: String(p.text).trim() }));
   if (t.t === 'num') return { k: 'num', v: t.v };
   if (t.t === 'var') {
     if (isOp(p, '++', '--')) return { k: 'post', op: take(p).v, name: t.v, index: t.index };
@@ -148,17 +149,17 @@ function number(text) {
   const based = /^(\d+)#(.+)$/.exec(s);
   if (based) {
     const base = Number(based[1]);
-    if (base < 2 || base > 64) throw new ShellError(`${s}: base non valida`);
+    if (base < 2 || base > 64) throw new ShellError(i18n.t('arith.badBase', { value: s }));
     let v = 0n;
     for (const ch of based[2]) {
       const d = /\d/.test(ch) ? +ch : /[a-z]/.test(ch) ? ch.charCodeAt(0) - 87 : /[A-Z]/.test(ch) ? (base <= 36 ? ch.charCodeAt(0) - 55 : ch.charCodeAt(0) - 29) : ch === '@' ? 62 : 63;
-      if (d >= base) throw new ShellError(`${s}: valore troppo grande per la base`);
+      if (d >= base) throw new ShellError(i18n.t('arith.tooGreatForBase', { value: s }));
       v = v * BigInt(base) + BigInt(d);
     }
     return wrap(v);
   }
   if (/^0[0-7]+$/.test(s)) return wrap(BigInt('0o' + s.slice(1)));
-  if (/^0\d+$/.test(s)) throw new ShellError(`${s}: valore troppo grande per la base`);
+  if (/^0\d+$/.test(s)) throw new ShellError(i18n.t('arith.tooGreatForBase', { value: s }));
   return wrap(BigInt(s));
 }
 
@@ -204,7 +205,7 @@ function run(node, vars, depth) {
       return binary(node.op, ev(node.a), ev(node.b));
     }
   }
-  throw new ShellError('espressione non valida');
+  throw new ShellError(i18n.t('arith.invalid'));
 }
 
 function binary(op, a, b) {
@@ -214,10 +215,10 @@ function binary(op, a, b) {
     case '*': return wrap(a * b);
     case '/':
     case '%':
-      if (b === 0n) throw new ShellError('divisione per zero');
+      if (b === 0n) throw new ShellError(i18n.t('arith.divisionByZero'));
       return wrap(op === '/' ? a / b : a % b);
     case '**':
-      if (b < 0n) throw new ShellError('esponente negativo');
+      if (b < 0n) throw new ShellError(i18n.t('arith.negativeExponent'));
       // By squaring, wrapped at every step: 64-bit like bash, never a huge BigInt
       for (var result = 1n; b > 0n; b >>= 1n, a = wrap(a * a)) if (b & 1n) result = wrap(result * a);
       return result;
@@ -233,5 +234,5 @@ function binary(op, a, b) {
     case '==': return a === b ? 1n : 0n;
     case '!=': return a !== b ? 1n : 0n;
   }
-  throw new ShellError(`operatore sconosciuto ${op}`);
+  throw new ShellError(i18n.t('arith.unknownOperator', { op }));
 }

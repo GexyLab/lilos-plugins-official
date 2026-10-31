@@ -3,13 +3,13 @@ import { options, int } from './options.js';
 import { ShellError } from '../shell/signals.js';
 import { matchPattern } from '../shell/pattern.js';
 import { byName, segments } from '../shell/paths.js';
+import { i18n, t } from '../i18n.js';
 
 /** Commands on files and folders of lilOS: ls, cat, mkdir, touch, cp, mv, rm, rmdir, stat, find, tree… */
-const MONTHS = ['gen', 'feb', 'mar', 'apr', 'mag', 'giu', 'lug', 'ago', 'set', 'ott', 'nov', 'dic'];
 const C = { reset: '\x1b[0m', folder: '\x1b[1;34m', app: '\x1b[36m', script: '\x1b[32m', dim: '\x1b[2m' };
 
 const isScript = node => node.type === 'file' && /\.(sh|bash)$/i.test(node.name);
-const missing = path => `impossibile accedere a «${path}»: file o cartella inesistente`;
+const missing = path => t('files.cannotAccess', { path });
 const toTerminal = ctx => ctx.stdout === ctx.shell.host.stdout;
 
 export function human(bytes) {
@@ -17,12 +17,12 @@ export function human(bytes) {
   const units = ['K', 'M', 'G', 'T'];
   let v = bytes, u = -1;
   do { v /= 1024; u++; } while (v >= 1024 && u < units.length - 1);
-  return (v < 10 ? v.toFixed(1) : String(Math.round(v))).replace('.', ',') + units[u];
+  return (v < 10 ? i18n.number(Number(v.toFixed(1)), { minimumFractionDigits: 1 }) : String(Math.round(v))) + units[u];
 }
 
 function shortDate(ms) {
   const d = new Date(ms), now = new Date();
-  const day = String(d.getDate()).padStart(2) + ' ' + MONTHS[d.getMonth()];
+  const day = t('ls.date', { day: String(d.getDate()).padStart(2), month: i18n.date(d, { month: 'short' }) });
   const recent = Math.abs(now - d) < 180 * 86400e3;
   return recent ? `${day} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}` : `${day}  ${d.getFullYear()}`;
 }
@@ -148,7 +148,7 @@ function makeFolders(ctx, path) {
   let node = fs.get(fs.root);
   for (const name of segments(ctx.cwd, path)) {
     const next = fs.children(node.id).find(n => n.name.toLowerCase() === name.toLowerCase()) ?? fs.resolve(`${fs.path(node.id)}/${name}`);
-    if (next && next.type !== 'folder') throw new ShellError(`impossibile creare la cartella «${path}»: «${name}» esiste e non è una cartella`);
+    if (next && next.type !== 'folder') throw new ShellError(t('mkdir.notAFolder', { path, name }));
     node = next ?? fs.create(node.id, { type: 'folder', name });
   }
   return node;
@@ -156,22 +156,22 @@ function makeFolders(ctx, path) {
 
 async function mkdir(ctx) {
   const { opts, args } = options(ctx, { flags: 'pv', long: { parents: 'p', verbose: 'v' } });
-  if (!args.length) throw new ShellError('manca l’operando', 2);
+  if (!args.length) throw new ShellError(t('err.missingOperand'), 2);
   let status = 0;
   for (const path of args) {
     try {
       const existing = ctx.resolve(path);
       if (existing) {
         if (opts.p && existing.type === 'folder') continue;
-        throw new ShellError(`impossibile creare la cartella «${path}»: il file esiste`);
+        throw new ShellError(t('mkdir.exists', { path }));
       }
       if (opts.p) makeFolders(ctx, path);
       else {
         const { parent, name } = ctx.locate(path);
-        if (parent?.type !== 'folder' || !name) throw new ShellError(`impossibile creare la cartella «${path}»: file o cartella inesistente`);
+        if (parent?.type !== 'folder' || !name) throw new ShellError(t('mkdir.noParent', { path }));
         fs.create(parent.id, { type: 'folder', name });
       }
-      if (opts.v) await ctx.out(`creata la cartella «${path}»\n`);
+      if (opts.v) await ctx.out(`${t('mkdir.created', { path })}\n`);
     } catch (err) {
       await ctx.error(err.message);
       status = 1;
@@ -182,7 +182,7 @@ async function mkdir(ctx) {
 
 async function touch(ctx) {
   const { opts, args } = options(ctx, { flags: 'cam', long: { 'no-create': 'c' } });
-  if (!args.length) throw new ShellError('manca l’operando', 2);
+  if (!args.length) throw new ShellError(t('err.missingOperand'), 2);
   let status = 0;
   for (const path of args) {
     const node = ctx.resolve(path);
@@ -193,7 +193,7 @@ async function touch(ctx) {
     }
     if (opts.c) continue;
     const { parent, name } = ctx.locate(path);
-    if (parent?.type !== 'folder' || !name) { await ctx.error(`impossibile creare «${path}»: file o cartella inesistente`); status = 1; continue; }
+    if (parent?.type !== 'folder' || !name) { await ctx.error(t('files.cannotCreate', { path })); status = 1; continue; }
     fs.create(parent.id, { type: 'file', name });
   }
   return status;
@@ -205,40 +205,40 @@ async function copyNode(ctx, node, parentId, name, opts) {
   const existing = fs.children(parentId).find(n => n.name.toLowerCase() === name.toLowerCase());
   if (node.type === 'folder') {
     let target = existing;
-    if (target && target.type !== 'folder') throw new ShellError(`impossibile sovrascrivere «${name}», che non è una cartella, con una cartella`);
+    if (target && target.type !== 'folder') throw new ShellError(t('cp.overwriteFile', { name }));
     target ??= fs.create(parentId, { type: 'folder', name, color: node.color });
     for (const child of fs.children(node.id)) await copyNode(ctx, child, target.id, child.name, opts);
     return;
   }
   if (existing) {
     if (opts.n) return;
-    if (existing.type === 'folder') throw new ShellError(`impossibile sovrascrivere la cartella «${name}» con un file`);
+    if (existing.type === 'folder') throw new ShellError(t('files.overwriteFolder', { name }));
     if (existing.type === 'file' && node.type === 'file') {
       await fs.write(existing.id, await fs.readBlob(node.id));
-      if (opts.v) await ctx.out(`«${fs.path(node.id)}» -> «${fs.path(existing.id)}»\n`);
+      if (opts.v) await ctx.out(`${t('cp.verbose', { from: fs.path(node.id), to: fs.path(existing.id) })}\n`);
       return;
     }
     fs.trash([existing.id]);
   }
   const copy = fs.create(parentId, { type: node.type, name, app: node.app });
   if (node.type === 'file') await fs.write(copy.id, await fs.readBlob(node.id));
-  if (opts.v) await ctx.out(`«${fs.path(node.id)}» -> «${fs.path(copy.id)}»\n`);
+  if (opts.v) await ctx.out(`${t('cp.verbose', { from: fs.path(node.id), to: fs.path(copy.id) })}\n`);
 }
 
 /** Sources and target of cp / mv: [{ node, path }], and where each goes: (node) → { parent, name }. */
 function plan(ctx, args) {
-  if (args.length < 2) throw new ShellError(args.length ? `manca la destinazione dopo «${args[0]}»` : 'manca l’operando', 2);
+  if (args.length < 2) throw new ShellError(args.length ? t('files.missingDestination', { path: args[0] }) : t('err.missingOperand'), 2);
   const destPath = args.at(-1);
   const sources = args.slice(0, -1);
   const dest = ctx.resolve(destPath);
-  if (sources.length > 1 && dest?.type !== 'folder') throw new ShellError(`la destinazione «${destPath}» non è una cartella`);
+  if (sources.length > 1 && dest?.type !== 'folder') throw new ShellError(t('files.targetNotFolder', { path: destPath }));
   return {
     sources,
     target: node => {
       if (dest?.type === 'folder' && dest.id !== node.id) return { parent: dest, name: node.name };
       if (dest) return { parent: fs.get(dest.parent), name: dest.id === node.id ? segments(ctx.cwd, destPath).at(-1) : dest.name, existing: dest };
       const { parent, name } = ctx.locate(destPath);
-      if (parent?.type !== 'folder' || !name) throw new ShellError(`impossibile creare «${destPath}»: file o cartella inesistente`);
+      if (parent?.type !== 'folder' || !name) throw new ShellError(t('files.cannotCreate', { path: destPath }));
       return { parent, name };
     },
   };
@@ -251,10 +251,10 @@ async function cp(ctx) {
   for (const path of sources) {
     try {
       const node = ctx.resolve(path);
-      if (!node) throw new ShellError(`impossibile fare stat di «${path}»: file o cartella inesistente`);
-      if (node.type === 'folder' && !(opts.r || opts.R || opts.a)) throw new ShellError(`-r non specificato; si omette la cartella «${path}»`);
+      if (!node) throw new ShellError(t('files.cannotStat', { path }));
+      if (node.type === 'folder' && !(opts.r || opts.R || opts.a)) throw new ShellError(t('cp.omitting', { path }));
       const { parent, name } = target(node);
-      if (node.type === 'folder' && fs.isInside(parent.id, node.id)) throw new ShellError(`impossibile copiare la cartella «${path}» dentro se stessa`);
+      if (node.type === 'folder' && fs.isInside(parent.id, node.id)) throw new ShellError(t('cp.intoItself', { path }));
       await copyNode(ctx, node, parent.id, name, opts);
     } catch (err) {
       if (!(err instanceof ShellError) && !(err instanceof Error)) throw err;
@@ -272,20 +272,20 @@ async function mv(ctx) {
   for (const path of sources) {
     try {
       const node = ctx.resolve(path);
-      if (!node) throw new ShellError(`impossibile fare stat di «${path}»: file o cartella inesistente`);
-      if (node.system) throw new ShellError(`impossibile spostare «${path}»: è una cartella di sistema`);
+      if (!node) throw new ShellError(t('files.cannotStat', { path }));
+      if (node.system) throw new ShellError(t('mv.system', { path }));
       const { parent, name } = target(node);
-      if (node.type === 'folder' && fs.isInside(parent.id, node.id)) throw new ShellError(`impossibile spostare «${path}» in una sua sottocartella`);
+      if (node.type === 'folder' && fs.isInside(parent.id, node.id)) throw new ShellError(t('mv.intoItself', { path }));
       const clash = fs.children(parent.id).find(n => n.id !== node.id && n.name.toLowerCase() === name.toLowerCase());
       if (clash) {
         if (opts.n) continue;
-        if (clash.type === 'folder' && node.type !== 'folder') throw new ShellError(`impossibile sovrascrivere la cartella «${name}» con un file`);
-        if (clash.type === 'folder' && fs.children(clash.id).length) throw new ShellError(`impossibile spostare «${path}» su «${name}»: la cartella non è vuota`);
+        if (clash.type === 'folder' && node.type !== 'folder') throw new ShellError(t('files.overwriteFolder', { name }));
+        if (clash.type === 'folder' && fs.children(clash.id).length) throw new ShellError(t('mv.notEmpty', { path, name }));
         fs.trash([clash.id]);
       }
       if (node.parent !== parent.id) fs.move(node.id, parent.id);
       if (fs.get(node.id).name !== name) fs.rename(node.id, name);
-      if (opts.v) await ctx.out(`rinominato «${path}» -> «${fs.path(node.id)}»\n`);
+      if (opts.v) await ctx.out(`${t('mv.verbose', { from: path, to: fs.path(node.id) })}\n`);
     } catch (err) {
       await ctx.error(err.message);
       status = 1;
@@ -296,24 +296,24 @@ async function mv(ctx) {
 
 async function rm(ctx) {
   const { opts, args } = options(ctx, { flags: 'rRfvdi', long: { recursive: 'r', force: 'f', verbose: 'v', dir: 'd', purge: 'P' } });
-  if (!args.length && !opts.f) throw new ShellError('manca l’operando', 2);
+  if (!args.length && !opts.f) throw new ShellError(t('err.missingOperand'), 2);
   let status = 0;
   for (const path of args) {
     const node = ctx.resolve(path);
     if (!node) {
-      if (!opts.f) { await ctx.error(`impossibile rimuovere «${path}»: file o cartella inesistente`); status = 1; }
+      if (!opts.f) { await ctx.error(t('files.cannotRemove', { path, reason: t('reason.noSuchFile') })); status = 1; }
       continue;
     }
     try {
-      if (node.id === fs.root) throw new ShellError(`è pericoloso agire su «${path}»: è la home`);
+      if (node.id === fs.root) throw new ShellError(t('rm.home', { path }));
       if (node.type === 'folder' && !(opts.r || opts.R)) {
-        if (!opts.d) throw new ShellError(`impossibile rimuovere «${path}»: è una cartella`);
-        if (fs.children(node.id).length) throw new ShellError(`impossibile rimuovere «${path}»: la cartella non è vuota`);
+        if (!opts.d) throw new ShellError(t('files.cannotRemove', { path, reason: t('reason.isADirectory') }));
+        if (fs.children(node.id).length) throw new ShellError(t('files.cannotRemove', { path, reason: t('reason.notEmpty') }));
       }
-      if (node.system) throw new ShellError(`impossibile rimuovere «${path}»: è una cartella di sistema`);
+      if (node.system) throw new ShellError(t('files.cannotRemove', { path, reason: t('reason.system') }));
       if (opts.P) fs.remove(node.id);
-      else if (!fs.trash([node.id]).length) throw new ShellError(`impossibile rimuovere «${path}»: contiene cartelle di sistema`);
-      if (opts.v) await ctx.out(opts.P ? `eliminato definitivamente «${path}»\n` : `spostato nel cestino «${path}»\n`);
+      else if (!fs.trash([node.id]).length) throw new ShellError(t('files.cannotRemove', { path, reason: t('reason.containsSystem') }));
+      if (opts.v) await ctx.out(`${opts.P ? t('rm.purged', { path }) : t('rm.trashed', { path })}\n`);
     } catch (err) {
       await ctx.error(err.message);
       status = 1;
@@ -324,30 +324,30 @@ async function rm(ctx) {
 
 async function rmdir(ctx) {
   const { opts, args } = options(ctx, { flags: 'pv', long: { parents: 'p', verbose: 'v' } });
-  if (!args.length) throw new ShellError('manca l’operando', 2);
+  if (!args.length) throw new ShellError(t('err.missingOperand'), 2);
   let status = 0;
   for (const path of args) {
     const chain = opts.p ? segments(ctx.cwd, path).map((_, i, all) => '~/' + all.slice(0, all.length - i).join('/')) : [path];
     for (const p of chain) {
       const node = ctx.resolve(p);
-      const fail = async msg => { await ctx.error(`impossibile rimuovere «${p}»: ${msg}`); status = 1; };
-      if (!node) { await fail('file o cartella inesistente'); break; }
-      if (node.type !== 'folder') { await fail('non è una cartella'); break; }
-      if (fs.children(node.id).length) { await fail('la cartella non è vuota'); break; }
-      if (node.system || node.id === fs.root) { await fail('è una cartella di sistema'); break; }
+      const fail = async reason => { await ctx.error(t('files.cannotRemove', { path: p, reason })); status = 1; };
+      if (!node) { await fail(t('reason.noSuchFile')); break; }
+      if (node.type !== 'folder') { await fail(t('reason.notADirectory')); break; }
+      if (fs.children(node.id).length) { await fail(t('reason.notEmpty')); break; }
+      if (node.system || node.id === fs.root) { await fail(t('reason.system')); break; }
       fs.trash([node.id]);
-      if (opts.v) await ctx.out(`rimossa la cartella «${p}»\n`);
+      if (opts.v) await ctx.out(`${t('rmdir.removed', { path: p })}\n`);
     }
   }
   return status;
 }
 
-const fullDate = ms => new Date(ms).toLocaleString('it-IT', { dateStyle: 'medium', timeStyle: 'medium' });
-const typeName = n => (n.type === 'folder' ? 'cartella' : n.type === 'app' ? `collegamento all’app ${n.app}` : n.size ? 'file' : 'file vuoto');
+const fullDate = ms => i18n.date(ms, { dateStyle: 'medium', timeStyle: 'medium' });
+const typeName = n => (n.type === 'folder' ? t('stat.folder') : n.type === 'app' ? t('stat.appLink', { app: n.app }) : n.size ? t('stat.file') : t('stat.emptyFile'));
 
 async function stat(ctx) {
   const { opts, args } = options(ctx, { values: 'c', long: { format: 'c' } });
-  if (!args.length) throw new ShellError('manca l’operando', 2);
+  if (!args.length) throw new ShellError(t('err.missingOperand'), 2);
   let status = 0;
   for (const path of args) {
     const node = ctx.resolve(path);
@@ -360,13 +360,13 @@ async function stat(ctx) {
     const tagNames = (node.tags ?? []).map(id => tags.get(id)?.name).filter(Boolean);
     await ctx.out([
       `  File: ${path}`,
-      `  Tipo: ${typeName(node)}`,
-      `  Percorso: ${fs.path(node.id)}`,
-      node.type === 'folder' ? `  Elementi: ${fs.children(node.id).length} (${fs.count(node.id)} in tutto)` : node.type === 'file' ? `  Dimensione: ${node.size ?? 0} byte (${human(node.size ?? 0)})` : null,
-      `  Creato: ${fullDate(node.created)}`,
-      `  Modificato: ${fullDate(node.modified)}`,
-      tagNames.length ? `  Tag: ${tagNames.join(', ')}` : null,
-      node.system ? '  Cartella di sistema' : null,
+      `  ${t('stat.type', { type: typeName(node) })}`,
+      `  ${t('stat.path', { path: fs.path(node.id) })}`,
+      node.type === 'folder' ? `  ${t('stat.items', { n: fs.children(node.id).length, total: fs.count(node.id) })}` : node.type === 'file' ? `  ${t('stat.size', { size: node.size ?? 0, human: human(node.size ?? 0) })}` : null,
+      `  ${t('stat.created', { date: fullDate(node.created) })}`,
+      `  ${t('stat.modified', { date: fullDate(node.modified) })}`,
+      tagNames.length ? `  ${t('stat.tags', { tags: tagNames.join(', ') })}` : null,
+      node.system ? `  ${t('stat.system')}` : null,
       `  Id: ${node.id}`,
     ].filter(Boolean).join('\n') + '\n');
   }
@@ -399,28 +399,28 @@ function parseFind(ctx, tokens) {
     return primary();
   };
   const arg = name => {
-    if (i >= tokens.length) throw new ShellError(`manca l’argomento di «${name}»`);
+    if (i >= tokens.length) throw new ShellError(t('find.missingArgument', { name }));
     return tokens[i++];
   };
   const primary = () => {
-    const t = tokens[i++];
-    switch (t) {
-      case '(': { const e = or(); if (tokens[i++] !== ')') throw new ShellError('manca «)»'); return e; }
-      case '-name': { const p = arg(t); return n => matchPattern(p, n.node.name); }
-      case '-iname': { const p = arg(t); return n => matchPattern(p, n.node.name, { ignoreCase: true }); }
-      case '-path': case '-wholename': { const p = arg(t); return n => matchPattern(p, n.path); }
-      case '-ipath': { const p = arg(t); return n => matchPattern(p, n.path, { ignoreCase: true }); }
+    const tok = tokens[i++];
+    switch (tok) {
+      case '(': { const e = or(); if (tokens[i++] !== ')') throw new ShellError(t('err.missingParen')); return e; }
+      case '-name': { const p = arg(tok); return n => matchPattern(p, n.node.name); }
+      case '-iname': { const p = arg(tok); return n => matchPattern(p, n.node.name, { ignoreCase: true }); }
+      case '-path': case '-wholename': { const p = arg(tok); return n => matchPattern(p, n.path); }
+      case '-ipath': { const p = arg(tok); return n => matchPattern(p, n.path, { ignoreCase: true }); }
       case '-type': {
-        const k = arg(t);
+        const k = arg(tok);
         const want = { f: 'file', d: 'folder', l: 'app' }[k];
-        if (!want) throw new ShellError(`tipo sconosciuto per -type: «${k}» (f, d o l)`);
+        if (!want) throw new ShellError(t('find.badType', { type: k }));
         return n => n.node.type === want;
       }
       case '-empty': return n => (n.node.type === 'folder' ? !fs.children(n.node.id).length : n.node.type === 'file' && !n.node.size);
       case '-size': {
-        const v = arg(t);
+        const v = arg(tok);
         const m = /^([+-]?)(\d+)([ckMG]?)$/.exec(v);
-        if (!m) throw new ShellError(`dimensione non valida: «${v}»`);
+        if (!m) throw new ShellError(t('find.badSize', { value: v }));
         const unit = { c: 1, k: 1024, M: 1024 ** 2, G: 1024 ** 3, '': 512 }[m[3]];
         const size = Number(m[2]);
         return n => {
@@ -430,22 +430,22 @@ function parseFind(ctx, tokens) {
         };
       }
       case '-mtime': case '-mmin': {
-        const v = arg(t);
+        const v = arg(tok);
         const m = /^([+-]?)(\d+)$/.exec(v);
-        if (!m) throw new ShellError(`valore non valido per ${t}: «${v}»`);
-        const unit = t === '-mtime' ? 86400e3 : 60e3;
+        if (!m) throw new ShellError(t('find.badValue', { option: tok, value: v }));
+        const unit = tok === '-mtime' ? 86400e3 : 60e3;
         return n => {
           const age = Math.floor((Date.now() - n.node.modified) / unit);
           return m[1] === '+' ? age > +m[2] : m[1] === '-' ? age < +m[2] : age === +m[2];
         };
       }
       case '-newer': {
-        const ref = ctx.resolve(arg(t));
-        if (!ref) throw new ShellError(`impossibile trovare «${tokens[i - 1]}»`);
+        const ref = ctx.resolve(arg(tok));
+        if (!ref) throw new ShellError(t('find.cannotFind', { path: tokens[i - 1] }));
         return n => n.node.modified > ref.modified;
       }
-      case '-maxdepth': global.maxdepth = int(arg(t)); return () => true;
-      case '-mindepth': global.mindepth = int(arg(t)); return () => true;
+      case '-maxdepth': global.maxdepth = int(arg(tok)); return () => true;
+      case '-mindepth': global.mindepth = int(arg(tok)); return () => true;
       case '-true': return () => true;
       case '-false': return () => false;
       case '-print': global.printed = true; return n => (n.out.push(n.path), true);
@@ -455,9 +455,9 @@ function parseFind(ctx, tokens) {
         const cmd = [];
         while (i < tokens.length && tokens[i] !== ';' && tokens[i] !== '+') cmd.push(tokens[i++]);
         const plus = tokens[i] === '+';
-        if (i >= tokens.length) throw new ShellError('manca la fine di «-exec» («;» o «+»)');
+        if (i >= tokens.length) throw new ShellError(t('find.execEnd'));
         i++;
-        if (!cmd.length) throw new ShellError('manca il comando di «-exec»');
+        if (!cmd.length) throw new ShellError(t('find.execCommand'));
         global.printed = true;
         const ex = { cmd, plus, batch: [] };
         execs.push(ex);
@@ -468,10 +468,10 @@ function parseFind(ctx, tokens) {
         };
       }
     }
-    throw new ShellError(`predicato sconosciuto: «${t}»`);
+    throw new ShellError(t('find.unknownPredicate', { name: tok }));
   };
   const expr = tokens.length ? or() : () => true;
-  if (i < tokens.length) throw new ShellError(`argomento inatteso: «${tokens[i]}»`);
+  if (i < tokens.length) throw new ShellError(t('find.unexpected', { arg: tokens[i] }));
   return { expr, global, execs };
 }
 
@@ -490,7 +490,7 @@ async function find(ctx) {
   };
   for (const start of starts) {
     const root = ctx.resolve(start);
-    if (!root) { await ctx.error(`«${start}»: file o cartella inesistente`); status = 1; continue; }
+    if (!root) { await ctx.error(t('files.quotedNoSuchFile', { path: start })); status = 1; continue; }
     const walk = async (node, path, depth) => {
       await ctx.tick();
       if (depth >= global.mindepth) {
@@ -522,7 +522,7 @@ async function tree(ctx) {
   let folders = 0, files = 0, status = 0;
   for (const start of args.length ? args : ['.']) {
     const root = ctx.resolve(start);
-    if (!root) { await ctx.error(`«${start}»: file o cartella inesistente`); status = 1; continue; }
+    if (!root) { await ctx.error(t('files.quotedNoSuchFile', { path: start })); status = 1; continue; }
     await ctx.out(colored(ctx, root, start) + '\n');
     const walk = async (node, prefix, depth) => {
       if (depth > max) return;
@@ -541,13 +541,13 @@ async function tree(ctx) {
     };
     await walk(root, '', 1);
   }
-  await ctx.out(`\n${folders} ${folders === 1 ? 'cartella' : 'cartelle'}${opts.d ? '' : `, ${files} file`}\n`);
+  await ctx.out(`\n${t('tree.folders', { n: folders })}${opts.d ? '' : `, ${t('tree.files', { n: files })}`}\n`);
   return status;
 }
 
 async function basename(ctx) {
   const { opts, args } = options(ctx, { flags: 'az', values: 's', long: { multiple: 'a', suffix: 's' } });
-  if (!args.length) throw new ShellError('manca l’operando', 2);
+  if (!args.length) throw new ShellError(t('err.missingOperand'), 2);
   const names = opts.a || opts.s != null ? args : [args[0]];
   const suffix = opts.s ?? (opts.a ? null : args[1]);
   for (const path of names) {
@@ -558,7 +558,7 @@ async function basename(ctx) {
 }
 
 async function dirname(ctx) {
-  if (!ctx.args.length) throw new ShellError('manca l’operando', 2);
+  if (!ctx.args.length) throw new ShellError(t('err.missingOperand'), 2);
   for (const path of ctx.args) {
     const trimmed = path.replace(/\/+$/, '');
     const i = trimmed.lastIndexOf('/');
@@ -573,32 +573,32 @@ async function realpath(ctx) {
     const node = ctx.resolve(path);
     if (node) { await ctx.out(fs.path(node.id) + '\n'); continue; }
     if (opts.m) { await ctx.out([fs.home, ...segments(ctx.cwd, path)].join('/') + '\n'); continue; }
-    if (!opts.q) await ctx.error(`${path}: file o cartella inesistente`);
+    if (!opts.q) await ctx.error(t('err.noSuchFile', { path }));
     status = 1;
   }
   return status;
 }
 
 export const fileCommands = [
-  { name: 'ls', usage: 'ls [-laAh1trSdRF] [percorso…]', summary: 'Elenca il contenuto delle cartelle.', run: ls,
-    help: '-l  dettagli (tipo, dimensione, data, tag)\n-a  anche i nomi che iniziano con «.»\n-h  dimensioni leggibili (1,2K)\n-t  per data, -S per dimensione, -r al contrario\n-1  uno per riga\n-d  la cartella stessa, non il contenuto\n-R  anche le sottocartelle\n-F  / dopo le cartelle, @ dopo i collegamenti, * dopo gli script' },
-  { name: 'cat', usage: 'cat [-nbsE] [file…]', summary: 'Mostra il contenuto dei file (o dell’input), uno dopo l’altro.', run: cat,
-    help: '-n  numera le righe\n-b  numera solo quelle non vuote\n-s  una sola riga vuota di fila\n-E  $ alla fine di ogni riga' },
-  { name: 'mkdir', usage: 'mkdir [-pv] cartella…', summary: 'Crea delle cartelle.', run: mkdir, help: '-p  crea anche le cartelle intermedie; nessun errore se esiste già' },
-  { name: 'touch', usage: 'touch [-c] file…', summary: 'Crea dei file vuoti, o aggiorna la data di modifica di quelli che esistono.', run: touch },
-  { name: 'cp', usage: 'cp [-rnv] origine… destinazione', summary: 'Copia file e cartelle.', run: cp,
-    help: '-r  copia anche le cartelle, con il loro contenuto\n-n  non sovrascrive i file che esistono\n-v  dice cosa copia' },
-  { name: 'mv', usage: 'mv [-nv] origine… destinazione', summary: 'Sposta o rinomina file e cartelle.', run: mv,
-    help: 'Se la destinazione è una cartella, ci sposta dentro; altrimenti rinomina. Un file sovrascritto va nel cestino.\n-n  non sovrascrive\n-v  dice cosa sposta' },
-  { name: 'rm', usage: 'rm [-rfvd] [--purge] percorso…', summary: 'Sposta file e cartelle nel cestino (con --purge li elimina per sempre).', run: rm,
-    help: '-r  anche le cartelle, con il loro contenuto\n-d  le cartelle vuote\n-f  nessun errore per ciò che non esiste\n--purge  elimina definitivamente, senza cestino\nCiò che va nel cestino si rimette a posto con «trash restore».' },
-  { name: 'rmdir', usage: 'rmdir [-p] cartella…', summary: 'Rimuove cartelle vuote (nel cestino).', run: rmdir },
-  { name: 'stat', usage: 'stat [-c formato] percorso…', summary: 'Mostra i dettagli di file e cartelle.', run: stat,
-    help: '-c  formato: %n nome, %s dimensione, %F tipo, %y data di modifica, %Y in secondi, %w %W creazione, %i id' },
-  { name: 'find', usage: 'find [percorso…] [espressione]', summary: 'Cerca file e cartelle.', run: find,
-    help: 'Test: -name modello, -iname, -path, -type f|d|l, -empty, -size [+-]n[ckMG], -mtime [+-]giorni, -mmin, -newer file\nAzioni: -print, -print0, -delete (nel cestino), -exec comando {} \\; oppure +\nOpzioni: -maxdepth n, -mindepth n. Insieme: ! (negazione), -o (o), ( … )\nEsempio: find . -name "*.txt" -size +1k' },
-  { name: 'tree', usage: 'tree [-adf] [-L livelli] [cartella…]', summary: 'Mostra le cartelle ad albero.', run: tree },
-  { name: 'basename', usage: 'basename percorso [suffisso]', summary: 'L’ultima parte di un percorso (senza il suffisso).', run: basename },
-  { name: 'dirname', usage: 'dirname percorso…', summary: 'Il percorso senza l’ultima parte.', run: dirname },
-  { name: 'realpath', usage: 'realpath [-m] percorso…', summary: 'Il percorso completo.', run: realpath },
+  { name: 'ls', get usage() { return t('help.ls.usage'); }, get summary() { return t('help.ls.summary'); }, run: ls,
+    get help() { return t('help.ls.text'); } },
+  { name: 'cat', usage: 'cat [-nbsE] [file…]', get summary() { return t('help.cat.summary'); }, run: cat,
+    get help() { return t('help.cat.text'); } },
+  { name: 'mkdir', get usage() { return t('help.mkdir.usage'); }, get summary() { return t('help.mkdir.summary'); }, run: mkdir, get help() { return t('help.mkdir.text'); } },
+  { name: 'touch', usage: 'touch [-c] file…', get summary() { return t('help.touch.summary'); }, run: touch },
+  { name: 'cp', get usage() { return t('help.cp.usage'); }, get summary() { return t('help.cp.summary'); }, run: cp,
+    get help() { return t('help.cp.text'); } },
+  { name: 'mv', get usage() { return t('help.mv.usage'); }, get summary() { return t('help.mv.summary'); }, run: mv,
+    get help() { return t('help.mv.text'); } },
+  { name: 'rm', get usage() { return t('help.rm.usage'); }, get summary() { return t('help.rm.summary'); }, run: rm,
+    get help() { return t('help.rm.text'); } },
+  { name: 'rmdir', get usage() { return t('help.rmdir.usage'); }, get summary() { return t('help.rmdir.summary'); }, run: rmdir },
+  { name: 'stat', get usage() { return t('help.stat.usage'); }, get summary() { return t('help.stat.summary'); }, run: stat,
+    get help() { return t('help.stat.text'); } },
+  { name: 'find', get usage() { return t('help.find.usage'); }, get summary() { return t('help.find.summary'); }, run: find,
+    get help() { return t('help.find.text'); } },
+  { name: 'tree', get usage() { return t('help.tree.usage'); }, get summary() { return t('help.tree.summary'); }, run: tree },
+  { name: 'basename', get usage() { return t('help.basename.usage'); }, get summary() { return t('help.basename.summary'); }, run: basename },
+  { name: 'dirname', get usage() { return t('help.dirname.usage'); }, get summary() { return t('help.dirname.summary'); }, run: dirname },
+  { name: 'realpath', get usage() { return t('help.realpath.usage'); }, get summary() { return t('help.realpath.summary'); }, run: realpath },
 ];

@@ -2,6 +2,7 @@ import { h, fs, segmented, selectField, slider, toggle, actionButton } from '@li
 import { pickFile } from '@lilos/system';
 import { glyph } from './glyphs.js';
 import { FORMATS, supported } from './image.js';
+import { t } from './i18n.js';
 
 /**
  * A small dialog over the app (inside its window, which stays usable only through it): title,
@@ -24,7 +25,7 @@ function openSheet(host, { title, symbol, rows, okLabel, collect, focus }) {
       h('div', { class: 'ph-dialog-head' }, glyph(symbol), h('span', {}, title)),
       h('div', { class: 'ph-dialog-body' }, rows),
       h('div', { class: 'ph-dialog-foot' },
-        actionButton({ label: 'Annulla', onClick: () => done(null) }),
+        actionButton({ label: t('action.cancel'), onClick: () => done(null) }),
         actionButton({ label: okLabel, primary: true, onClick: ok })));
     const scrim = h('div', { class: 'ph-scrim' }, dialog);
     scrim.addEventListener('keydown', e => {
@@ -51,10 +52,10 @@ const number = (value, label) => h('input', { class: 'ph-number', type: 'number'
 /** Width and height of the image: pixels or percent, proportions locked or not. Resolves { width, height, quality } or null. */
 export function resizeDialog(host, { width, height }) {
   let unit = 'px', locked = true;
-  const w = number(width, 'Larghezza'), hgt = number(height, 'Altezza');
+  const w = number(width, t('resize.width')), hgt = number(height, t('resize.height'));
   const unitW = h('span', { class: 'ph-unit' }, 'px'), unitH = h('span', { class: 'ph-unit' }, 'px');
   const result = h('div', { class: 'ph-hint' });
-  const lock = h('button', { class: 'ph-lock', type: 'button', 'aria-pressed': 'true', title: 'Mantieni le proporzioni', 'aria-label': 'Mantieni le proporzioni', onclick: () => {
+  const lock = h('button', { class: 'ph-lock', type: 'button', 'aria-pressed': 'true', title: t('resize.keepRatio'), 'aria-label': t('resize.keepRatio'), onclick: () => {
     locked = !locked;
     lock.setAttribute('aria-pressed', String(locked));
     if (locked) sync('w');
@@ -66,7 +67,7 @@ export function resizeDialog(host, { width, height }) {
   };
   const show = () => {
     const [tw, th] = target();
-    result.textContent = tw > 0 && th > 0 ? `Ora ${width} × ${height} px, poi ${tw} × ${th} px` : 'Scrivi una larghezza e un’altezza';
+    result.textContent = tw > 0 && th > 0 ? t('resize.result', { width, height, newWidth: tw, newHeight: th }) : t('resize.missing');
   };
   const sync = from => {
     if (locked) {
@@ -79,7 +80,7 @@ export function resizeDialog(host, { width, height }) {
   w.addEventListener('input', () => sync('w'));
   hgt.addEventListener('input', () => sync('h'));
   const units = segmented({
-    value: 'px', label: 'Unità', options: [{ value: 'px', label: 'Pixel' }, { value: '%', label: 'Percentuale' }],
+    value: 'px', label: t('resize.unit'), options: [{ value: 'px', label: t('resize.pixels') }, { value: '%', label: t('resize.percent') }],
     onChange: v => {
       const [tw, th] = target();
       unit = v;
@@ -91,17 +92,17 @@ export function resizeDialog(host, { width, height }) {
   });
   show();
   return openSheet(host, {
-    title: 'Ridimensiona l’immagine', symbol: 'resize', okLabel: 'Ridimensiona', focus: w,
+    title: t('resize.title'), symbol: 'resize', okLabel: t('resize.ok'), focus: w,
     rows: [
-      row('Unità', units),
-      h('div', { class: 'ph-row' }, h('span', { class: 'ph-row-label' }, 'Dimensioni'),
+      row(t('resize.unit'), units),
+      h('div', { class: 'ph-row' }, h('span', { class: 'ph-row-label' }, t('resize.size')),
         h('div', { class: 'ph-size' },
           h('label', { class: 'ph-size-field' }, w, unitW),
           lock,
           h('label', { class: 'ph-size-field' }, hgt, unitH))),
-      row('Qualità', selectField({
-        value: quality, label: 'Qualità',
-        options: [{ value: 'high', label: 'Alta' }, { value: 'medium', label: 'Media, più veloce' }, { value: 'pixel', label: 'Pixel netti' }],
+      row(t('resize.quality'), selectField({
+        value: quality, label: t('resize.quality'),
+        options: [{ value: 'high', label: t('resize.quality.high') }, { value: 'medium', label: t('resize.quality.medium') }, { value: 'pixel', label: t('resize.quality.pixel') }],
         onChange: v => { quality = v; },
       })),
       result,
@@ -109,7 +110,7 @@ export function resizeDialog(host, { width, height }) {
     collect: () => {
       const [tw, th] = target();
       if (!(tw > 0 && th > 0) || tw > 16384 || th > 16384) {
-        result.textContent = 'Larghezza e altezza vanno da 1 a 16384 pixel';
+        result.textContent = t('resize.outOfRange');
         return undefined;
       }
       return tw === width && th === height ? null : { width: tw, height: th, quality };
@@ -121,41 +122,41 @@ export function resizeDialog(host, { width, height }) {
  * A copy in another format: format, quality, name, folder. Resolves
  * { format, quality, name, folder, open } or null.
  */
-export function convertDialog(host, openWindow, { name, folder, format: initial = 'png', title = 'Converti e salva una copia', okLabel = 'Salva' }) {
+export function convertDialog(host, openWindow, { name, folder, format: initial = 'png', title = t('convert.title'), okLabel = t('action.save') }) {
   const formats = FORMATS.filter(supported);
   let format = formats.find(f => f.id === initial) ?? formats[0];
   let folderId = folder;
   let quality = 90;
   let open = true;
-  const base = name.replace(/\.[^.]+$/, '') || 'Immagine';
-  const nameField = h('input', { class: 'ph-text', type: 'text', spellcheck: 'false', 'aria-label': 'Nome del file' });
+  const base = name.replace(/\.[^.]+$/, '') || t('file.defaultName');
+  const nameField = h('input', { class: 'ph-text', type: 'text', spellcheck: 'false', 'aria-label': t('convert.fileName') });
   nameField.value = `${base}.${format.ext}`;
   const note = h('div', { class: 'ph-hint' });
-  const qualityRow = row('Qualità', slider({ value: quality, min: 10, max: 100, unit: '%', label: 'Qualità', onChange: v => { quality = v; } }));
+  const qualityRow = row(t('convert.quality'), slider({ value: quality, min: 10, max: 100, unit: '%', label: t('convert.quality'), onChange: v => { quality = v; } }));
   const qualityInput = qualityRow.querySelector('input');
   qualityInput.addEventListener('input', () => { quality = Number(qualityInput.value); });
   const folderLabel = h('span', { class: 'ph-folder-name' });
   const folderButton = h('button', { class: 'ph-folder', type: 'button', onclick: async () => {
-    const node = await pickFile(openWindow, { kind: 'folder', title: 'Scegli la cartella', text: 'La copia viene salvata in questa cartella.' });
+    const node = await pickFile(openWindow, { kind: 'folder', title: t('convert.pickFolder.title'), text: t('convert.pickFolder.text') });
     if (node) { folderId = node.id; showFolder(); }
   } }, glyph('folder'), folderLabel);
   const showFolder = () => {
     const node = fs.get(folderId);
-    folderLabel.textContent = node ? (folderId === fs.root ? 'Home' : node.name) : 'Scegli…';
+    folderLabel.textContent = node ? (folderId === fs.root ? t('folder.home') : node.name) : t('convert.chooseFolder');
     folderButton.title = node ? fs.path(folderId) : '';
   };
   const showFormat = () => {
     qualityRow.classList.toggle('off', !format.lossy);
     qualityInput.disabled = !format.lossy;
-    note.textContent = `${format.label}: ${format.note.charAt(0).toLowerCase()}${format.note.slice(1)}`;
+    note.textContent = format.note;
   };
   showFolder();
   showFormat();
   return openSheet(host, {
     title, symbol: 'convert', okLabel, focus: nameField,
     rows: [
-      row('Formato', segmented({
-        value: format.id, label: 'Formato', options: formats.map(f => ({ value: f.id, label: f.label })),
+      row(t('convert.format'), segmented({
+        value: format.id, label: t('convert.format'), options: formats.map(f => ({ value: f.id, label: f.label })),
         onChange: v => {
           format = formats.find(f => f.id === v);
           nameField.value = `${nameField.value.replace(/\.[^.]+$/, '') || base}.${format.ext}`;
@@ -163,16 +164,16 @@ export function convertDialog(host, openWindow, { name, folder, format: initial 
         },
       })),
       qualityRow,
-      row('Nome', nameField),
-      h('div', { class: 'ph-row' }, h('span', { class: 'ph-row-label' }, 'Cartella'), folderButton),
-      h('div', { class: 'ph-row' }, h('span', { class: 'ph-row-label' }, 'Poi aprila'), toggle({ value: open, label: 'Apri la copia dopo il salvataggio', onChange: v => { open = v; } })),
+      row(t('convert.name'), nameField),
+      h('div', { class: 'ph-row' }, h('span', { class: 'ph-row-label' }, t('convert.folder')), folderButton),
+      h('div', { class: 'ph-row' }, h('span', { class: 'ph-row-label' }, t('convert.openAfter')), toggle({ value: open, label: t('convert.openAfterLabel'), onChange: v => { open = v; } })),
       note,
     ],
     collect: () => {
       const node = fs.get(folderId);
       const fileName = nameField.value.trim();
-      if (!node || node.type !== 'folder') { note.textContent = 'Scegli una cartella'; return undefined; }
-      if (!fileName || fileName.includes('/')) { note.textContent = 'Scrivi un nome valido, senza «/»'; nameField.focus(); return undefined; }
+      if (!node || node.type !== 'folder') { note.textContent = t('convert.noFolder'); return undefined; }
+      if (!fileName || fileName.includes('/')) { note.textContent = t('convert.badName'); nameField.focus(); return undefined; }
       return { format, quality: quality / 100, name: fileName, folder: folderId, open };
     },
   });

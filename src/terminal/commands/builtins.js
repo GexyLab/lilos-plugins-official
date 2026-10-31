@@ -5,6 +5,7 @@ import { parse } from '../shell/parser.js';
 import {
   BreakSignal, ContinueSignal, ReturnSignal, ExitSignal, ShellError, ParseError, Incomplete,
 } from '../shell/signals.js';
+import { t } from '../i18n.js';
 
 /**
  * Commands that change or read the state of the shell: they need ctx.shell. `builtin: true`
@@ -43,12 +44,12 @@ export function format(fmt, args) {
   const num = v => {
     if (v == null || v === '') return 0;
     if (/^['"]./.test(v)) return v.codePointAt(1);
-    const t = v.trim();
-    if (/^[+-]?(0[xX][0-9a-fA-F]+|\d+)$/.test(t)) return Number(t.startsWith('-') ? -Number(t.slice(1)) : Number(t.replace(/^\+/, '')));
-    if (/^[+-]?0[0-7]+$/.test(t)) return parseInt(t, 8);
-    const f = Number(t);
+    const s = v.trim();
+    if (/^[+-]?(0[xX][0-9a-fA-F]+|\d+)$/.test(s)) return Number(s.startsWith('-') ? -Number(s.slice(1)) : Number(s.replace(/^\+/, '')));
+    if (/^[+-]?0[0-7]+$/.test(s)) return parseInt(s, 8);
+    const f = Number(s);
     if (Number.isFinite(f)) return f;
-    errors.push(`${v}: è richiesto un numero`);
+    errors.push(t('printf.badNumber', { value: v }));
     return 0;
   };
   do {
@@ -132,11 +133,11 @@ function test(shell, a) {
     return primary();
   };
   const primary = () => {
-    if (i >= a.length) throw new ShellError('manca un argomento', 2);
+    if (i >= a.length) throw new ShellError(t('test.argumentExpected'), 2);
     if (a[i] === '(' && i + 2 < a.length) {
       i++;
       const v = or();
-      if (a[i] !== ')') throw new ShellError('manca «)»', 2);
+      if (a[i] !== ')') throw new ShellError(t('err.missingParen'), 2);
       i++;
       return v;
     }
@@ -154,7 +155,7 @@ function test(shell, a) {
   };
   if (!a.length) return false;
   const v = or();
-  if (i < a.length) throw new ShellError(`${a[i]}: argomento inatteso`, 2);
+  if (i < a.length) throw new ShellError(t('test.unexpectedArgument', { arg: a[i] }), 2);
   return v;
 }
 
@@ -190,7 +191,7 @@ async function declare(ctx, { local = false, exported, readonly = false, flags =
   let status = 0;
   for (const arg of args) {
     const m = /^([A-Za-z_]\w*)(?:\[([^\]]*)\])?(\+?)(?:=(.*))?$/s.exec(arg);
-    if (!m) { await ctx.error(`«${arg}»: identificatore non valido`); status = 1; continue; }
+    if (!m) { await ctx.error(t('err.badIdentifier', { name: arg })); status = 1; continue; }
     const [, name, index, append, value] = m;
     const exp = opts.n ? false : opts.x || exported ? true : undefined;
     if (value === undefined) {
@@ -215,37 +216,37 @@ async function declare(ctx, { local = false, exported, readonly = false, flags =
 
 const exitCode = (ctx, value, fallback) => {
   if (value == null) return fallback;
-  if (!/^-?\d+$/.test(value)) throw new ShellError(`${value}: è richiesto un argomento numerico`, 2);
+  if (!/^-?\d+$/.test(value)) throw new ShellError(t('err.numericArgument', { value }), 2);
   return ((Number(value) % 256) + 256) % 256;
 };
 
 export const builtins = [
   {
-    name: 'cd', usage: 'cd [cartella]', summary: 'Cambia la cartella di lavoro.',
-    help: 'Senza argomenti va nella home ($HOME). «cd -» torna alla cartella precedente ($OLDPWD).',
+    name: 'cd', get usage() { return t('help.cd.usage'); }, get summary() { return t('help.cd.summary'); },
+    get help() { return t('help.cd.text'); },
     async run(ctx) {
       const shell = ctx.shell;
       const { args } = options(ctx, { flags: 'LPe' });
       let target = args[0] ?? shell.getVar('HOME') ?? '~';
-      if (args.length > 1) throw new ShellError('troppi argomenti');
+      if (args.length > 1) throw new ShellError(t('err.tooManyArguments'));
       if (target === '-') {
         target = shell.getVar('OLDPWD');
-        if (target == null) throw new ShellError('OLDPWD non impostata');
+        if (target == null) throw new ShellError(t('cd.oldpwdNotSet'));
         await ctx.out(target + '\n');
       }
       const node = ctx.resolve(target);
-      if (!node) throw new ShellError(`${target}: file o cartella inesistente`);
-      if (node.type !== 'folder') throw new ShellError(`${target}: non è una cartella`);
+      if (!node) throw new ShellError(t('err.noSuchFile', { path: target }));
+      if (node.type !== 'folder') throw new ShellError(t('err.notADirectory', { path: target }));
       shell.cwd = node.id;
     },
   },
   {
-    name: 'pwd', usage: 'pwd', summary: 'Mostra la cartella di lavoro.',
+    name: 'pwd', usage: 'pwd', get summary() { return t('help.pwd.summary'); },
     async run(ctx) { await ctx.out(fs.path(ctx.cwd) + '\n'); },
   },
   {
-    name: 'echo', ownHelp: true, usage: 'echo [-neE] [testo…]', summary: 'Scrive gli argomenti, separati da uno spazio.',
-    help: '-n  senza a capo finale\n-e  interpreta \\n, \\t, \\\\, \\e… \n-E  non le interpreta (predefinito)',
+    name: 'echo', ownHelp: true, get usage() { return t('help.echo.usage'); }, get summary() { return t('help.echo.summary'); },
+    get help() { return t('help.echo.text'); },
     async run(ctx) {
       let args = ctx.args, newline = true, escapes = false;
       while (args.length && /^-[neE]+$/.test(args[0])) {
@@ -265,13 +266,13 @@ export const builtins = [
     },
   },
   {
-    name: 'printf', ownHelp: true, usage: 'printf [-v var] formato [argomenti…]', summary: 'Scrive gli argomenti secondo un formato (%s, %d, %5.2f, %x, %b, %q…).',
-    help: 'Il formato si riapplica finché restano argomenti. -v salva il risultato in una variabile.',
+    name: 'printf', ownHelp: true, get usage() { return t('help.printf.usage'); }, get summary() { return t('help.printf.summary'); },
+    get help() { return t('help.printf.text'); },
     async run(ctx) {
       let args = ctx.args, target = null;
       if (args[0] === '-v') { target = args[1]; args = args.slice(2); }
       if (args[0] === '--') args = args.slice(1);
-      if (!args.length) throw new ShellError(`uso: ${this.usage}`, 2);
+      if (!args.length) throw new ShellError(t('help.usageShort', { usage: this.usage }), 2);
       const { text, errors } = format(args[0], args.slice(1));
       for (const e of errors) await ctx.error(e);
       if (target) ctx.shell.setVar(target, text);
@@ -280,42 +281,42 @@ export const builtins = [
     },
   },
   {
-    name: 'export', usage: 'export [-n] [nome[=valore]…]', summary: 'Rende le variabili visibili ai comandi e agli script avviati.',
-    help: 'Senza argomenti elenca le variabili esportate. -n toglie l’esportazione.',
+    name: 'export', get usage() { return t('help.export.usage'); }, get summary() { return t('help.export.summary'); },
+    get help() { return t('help.export.text'); },
     run: ctx => declare(ctx, { exported: true, flags: 'npf' }),
   },
   {
-    name: 'readonly', usage: 'readonly [nome[=valore]…]', summary: 'Rende le variabili di sola lettura.',
+    name: 'readonly', get usage() { return t('help.readonly.usage'); }, get summary() { return t('help.readonly.summary'); },
     run: ctx => declare(ctx, { readonly: true, flags: 'ap' }),
   },
   {
-    name: 'local', usage: 'local [-arx] nome[=valore]…', summary: 'Variabili visibili solo dentro la funzione.',
+    name: 'local', get usage() { return t('help.local.usage'); }, get summary() { return t('help.local.summary'); },
     run(ctx) {
-      if (!ctx.shell.funcDepth) throw new ShellError('si può usare solo in una funzione');
+      if (!ctx.shell.funcDepth) throw new ShellError(t('local.onlyInFunction'));
       return declare(ctx, { local: true, flags: 'axrin' });
     },
   },
   {
-    name: 'declare', usage: 'declare [-aprxifF] [nome[=valore]…]', summary: 'Dichiara variabili e ne mostra gli attributi.',
-    help: '-a array, -x esportata, -r sola lettura, -i intero (il valore si calcola), -p mostra, -f mostra le funzioni, -g globale dentro una funzione.',
+    name: 'declare', get usage() { return t('help.declare.usage'); }, get summary() { return t('help.declare.summary'); },
+    get help() { return t('help.declare.text'); },
     run: ctx => declare(ctx),
   },
-  { name: 'typeset', usage: 'typeset [-aprxifF] [nome[=valore]…]', summary: 'Come declare.', run: ctx => declare(ctx) },
+  { name: 'typeset', get usage() { return t('help.typeset.usage'); }, get summary() { return t('help.typeset.summary'); }, run: ctx => declare(ctx) },
   {
-    name: 'unset', usage: 'unset [-fv] nome…', summary: 'Elimina variabili (o funzioni con -f).',
+    name: 'unset', get usage() { return t('help.unset.usage'); }, get summary() { return t('help.unset.summary'); },
     async run(ctx) {
       const { opts, args } = options(ctx, { flags: 'fv' });
       for (const arg of args) {
         if (opts.f) { ctx.shell.functions.delete(arg); continue; }
         const m = /^([A-Za-z_]\w*)(?:\[(.*)\])?$/.exec(arg);
-        if (!m) throw new ShellError(`«${arg}»: identificatore non valido`);
+        if (!m) throw new ShellError(t('err.badIdentifier', { name: arg }));
         if (m[2] == null && !opts.v && !ctx.shell.isSet(m[1]) && ctx.shell.functions.has(m[1])) ctx.shell.functions.delete(m[1]);
         else ctx.shell.unsetVar(m[1], m[2] == null ? null : ctx.shell.arrayIndex(m[2]));
       }
     },
   },
   {
-    name: 'env', usage: 'env [nome=valore…] [comando [argomenti…]]', summary: 'Mostra le variabili esportate, o avvia un comando con variabili in più.',
+    name: 'env', get usage() { return t('help.env.usage'); }, get summary() { return t('help.env.summary'); },
     async run(ctx) {
       const args = [...ctx.args];
       const extra = new Map();
@@ -337,7 +338,7 @@ export const builtins = [
     },
   },
   {
-    name: 'printenv', usage: 'printenv [nome…]', summary: 'Mostra le variabili esportate (o il valore di quelle indicate).',
+    name: 'printenv', get usage() { return t('help.printenv.usage'); }, get summary() { return t('help.printenv.summary'); },
     async run(ctx) {
       const env = ctx.shell.environment();
       if (!ctx.args.length) {
@@ -353,8 +354,8 @@ export const builtins = [
     },
   },
   {
-    name: 'set', ownHelp: true, usage: 'set [-euxf] [-o opzione] [--] [argomenti…]', summary: 'Imposta le opzioni della shell e i parametri posizionali ($1, $2…).',
-    help: '-e  esce al primo comando che fallisce\n-u  errore se si usa una variabile non impostata\n-x  mostra i comandi prima di eseguirli\n-f  niente espansione di * e ?\n-o pipefail  una pipe fallisce se fallisce uno dei suoi comandi\n+e, +u… le disattivano. Senza argomenti mostra tutte le variabili.',
+    name: 'set', ownHelp: true, get usage() { return t('help.set.usage'); }, get summary() { return t('help.set.summary'); },
+    get help() { return t('help.set.text'); },
     async run(ctx) {
       const shell = ctx.shell;
       const args = ctx.args;
@@ -371,7 +372,7 @@ export const builtins = [
             for (const [o] of Object.entries(OPTION_NAMES)) await ctx.out(`${o.padEnd(15)}${shell.options[o] ? 'on' : 'off'}\n`);
             continue;
           }
-          if (!(name in OPTION_NAMES)) throw new ShellError(`${name}: nome di opzione non valido`, 2);
+          if (!(name in OPTION_NAMES)) throw new ShellError(t('set.badOptionName', { name }), 2);
           shell.options[name] = a[0] === '-';
           continue;
         }
@@ -382,7 +383,7 @@ export const builtins = [
           }
           continue;
         }
-        if (/^[-+]/.test(a) && a.length > 1) throw new ShellError(`${a}: opzione non valida`, 2);
+        if (/^[-+]/.test(a) && a.length > 1) throw new ShellError(t('set.badOption', { option: a }), 2);
         shell.positional = args.slice(i);
         return 0;
       }
@@ -390,7 +391,7 @@ export const builtins = [
     },
   },
   {
-    name: 'shift', usage: 'shift [n]', summary: 'Sposta i parametri posizionali: $2 diventa $1…',
+    name: 'shift', usage: 'shift [n]', get summary() { return t('help.shift.summary'); },
     run(ctx) {
       const n = ctx.args[0] == null ? 1 : int(ctx.args[0]);
       if (n > ctx.shell.positional.length) return 1;
@@ -398,62 +399,62 @@ export const builtins = [
       return 0;
     },
   },
-  { name: 'true', ownHelp: true, usage: 'true', summary: 'Non fa niente, con successo (stato 0).', run: () => 0 },
-  { name: 'false', ownHelp: true, usage: 'false', summary: 'Non fa niente, senza successo (stato 1).', run: () => 1 },
-  { name: ':', ownHelp: true, usage: ': [argomenti…]', summary: 'Non fa niente (stato 0); gli argomenti vengono comunque espansi.', run: () => 0 },
+  { name: 'true', ownHelp: true, usage: 'true', get summary() { return t('help.true.summary'); }, run: () => 0 },
+  { name: 'false', ownHelp: true, usage: 'false', get summary() { return t('help.false.summary'); }, run: () => 1 },
+  { name: ':', ownHelp: true, get usage() { return t('help.colon.usage'); }, get summary() { return t('help.colon.summary'); }, run: () => 0 },
   {
-    name: 'test', ownHelp: true, usage: 'test espressione', summary: 'Valuta un’espressione: stato 0 se vera, 1 se falsa.',
-    help: 'File: -e esiste, -f è un file, -d è una cartella, -s non è vuoto\nTesto: -z vuoto, -n non vuoto, a = b, a != b\nNumeri: -eq -ne -lt -le -gt -ge\nInsieme: ! negazione, -a e, -o o, ( … )',
+    name: 'test', ownHelp: true, get usage() { return t('help.test.usage'); }, get summary() { return t('help.test.summary'); },
+    get help() { return t('help.test.text'); },
     run: ctx => (test(ctx.shell, ctx.args) ? 0 : 1),
   },
   {
-    name: '[', ownHelp: true, usage: '[ espressione ]', summary: 'Come test, con una «]» finale.',
+    name: '[', ownHelp: true, get usage() { return t('help.bracket.usage'); }, get summary() { return t('help.bracket.summary'); },
     run(ctx) {
-      if (ctx.args.at(-1) !== ']') throw new ShellError('manca «]»', 2);
+      if (ctx.args.at(-1) !== ']') throw new ShellError(t('test.missingBracket'), 2);
       return test(ctx.shell, ctx.args.slice(0, -1)) ? 0 : 1;
     },
   },
   {
-    name: 'let', ownHelp: true, usage: 'let espressione…', summary: 'Calcola espressioni aritmetiche (stato 1 se l’ultima vale 0).',
+    name: 'let', ownHelp: true, get usage() { return t('help.let.usage'); }, get summary() { return t('help.let.summary'); },
     run(ctx) {
-      if (!ctx.args.length) throw new ShellError('manca l’espressione', 2);
+      if (!ctx.args.length) throw new ShellError(t('let.noExpression'), 2);
       let v = 0n;
       for (const e of ctx.args) v = ctx.shell.arith(e);
       return v !== 0n ? 0 : 1;
     },
   },
   {
-    name: 'exit', usage: 'exit [stato]', summary: 'Chiude il terminale (o esce dallo script) con uno stato.',
+    name: 'exit', get usage() { return t('help.exit.usage'); }, get summary() { return t('help.exit.summary'); },
     run(ctx) { throw new ExitSignal(exitCode(ctx, ctx.args[0], ctx.shell.status)); },
   },
   {
-    name: 'return', usage: 'return [stato]', summary: 'Esce dalla funzione (o dallo script letto con source).',
+    name: 'return', get usage() { return t('help.return.usage'); }, get summary() { return t('help.return.summary'); },
     run(ctx) {
-      if (!ctx.shell.funcDepth && !ctx.shell.sourceDepth) throw new ShellError('si può usare solo in una funzione o in uno script letto con source');
+      if (!ctx.shell.funcDepth && !ctx.shell.sourceDepth) throw new ShellError(t('return.onlyInFunction'));
       throw new ReturnSignal(exitCode(ctx, ctx.args[0], ctx.shell.status));
     },
   },
   {
-    name: 'break', usage: 'break [n]', summary: 'Esce dal ciclo (o da n cicli).',
+    name: 'break', usage: 'break [n]', get summary() { return t('help.break.summary'); },
     async run(ctx) {
-      if (!ctx.shell.loopDepth) { await ctx.error('ha senso solo in un ciclo for, while o until'); return 0; }
+      if (!ctx.shell.loopDepth) { await ctx.error(t('loop.onlyInLoop')); return 0; }
       const n = ctx.args[0] == null ? 1 : int(ctx.args[0]);
-      if (n < 1) throw new ShellError(`${n}: numero di cicli non valido`);
+      if (n < 1) throw new ShellError(t('loop.badCount', { n }));
       throw new BreakSignal(Math.min(n, ctx.shell.loopDepth));
     },
   },
   {
-    name: 'continue', usage: 'continue [n]', summary: 'Passa al giro successivo del ciclo (o dell’n-esimo ciclo esterno).',
+    name: 'continue', usage: 'continue [n]', get summary() { return t('help.continue.summary'); },
     async run(ctx) {
-      if (!ctx.shell.loopDepth) { await ctx.error('ha senso solo in un ciclo for, while o until'); return 0; }
+      if (!ctx.shell.loopDepth) { await ctx.error(t('loop.onlyInLoop')); return 0; }
       const n = ctx.args[0] == null ? 1 : int(ctx.args[0]);
-      if (n < 1) throw new ShellError(`${n}: numero di cicli non valido`);
+      if (n < 1) throw new ShellError(t('loop.badCount', { n }));
       throw new ContinueSignal(Math.min(n, ctx.shell.loopDepth));
     },
   },
   {
-    name: 'read', usage: 'read [-rs] [-p prompt] [-a array] [-d delim] [nome…]', summary: 'Legge una riga e la divide nelle variabili indicate ($REPLY senza nomi).',
-    help: '-r  le barre rovesciate restano come sono\n-p  mostra un prompt\n-a  mette le parole in un array\n-d  legge fino a questo carattere invece che fino all’a capo\n-s  non mostra ciò che si scrive (per le password)\nStato 1 alla fine dell’input.',
+    name: 'read', get usage() { return t('help.read.usage'); }, get summary() { return t('help.read.summary'); },
+    get help() { return t('help.read.text'); },
     async run(ctx) {
       const shell = ctx.shell;
       const { opts, args } = options(ctx, { flags: 'rs', values: 'pad' });
@@ -500,24 +501,24 @@ export const builtins = [
     },
   },
   {
-    name: 'source', usage: 'source file [argomenti…]', summary: 'Esegue i comandi di un file in questa shell (variabili, funzioni e alias restano).',
+    name: 'source', get usage() { return t('help.source.usage'); }, get summary() { return t('help.source.summary'); },
     run: ctx => source(ctx),
   },
-  { name: '.', usage: '. file [argomenti…]', summary: 'Come source.', run: ctx => source(ctx) },
+  { name: '.', get usage() { return t('help.dot.usage'); }, get summary() { return t('help.dot.summary'); }, run: ctx => source(ctx) },
   {
-    name: 'eval', ownHelp: true, usage: 'eval [argomenti…]', summary: 'Esegue gli argomenti, uniti da spazi, come un comando.',
+    name: 'eval', ownHelp: true, get usage() { return t('help.eval.usage'); }, get summary() { return t('help.eval.summary'); },
     async run(ctx) {
       try {
         return await ctx.shell.run(ctx.args.join(' '), ctx.io);
       } catch (err) {
-        if (err instanceof ParseError || err instanceof Incomplete) throw new ShellError(err.message || 'errore di sintassi: fine del testo inattesa', 2);
+        if (err instanceof ParseError || err instanceof Incomplete) throw new ShellError(err.message || t('parse.unexpectedEnd'), 2);
         throw err;
       }
     },
   },
   {
-    name: 'alias', usage: 'alias [nome[=valore]…]', summary: 'Definisce o mostra gli alias (nomi brevi per comandi).',
-    help: 'Esempio: alias ll=\'ls -l\'. Gli alias valgono dalla riga successiva a quella che li definisce.',
+    name: 'alias', get usage() { return t('help.alias.usage'); }, get summary() { return t('help.alias.summary'); },
+    get help() { return t('help.alias.text'); },
     async run(ctx) {
       const aliases = ctx.shell.aliases;
       const { args } = options(ctx, { flags: 'p' });
@@ -530,34 +531,34 @@ export const builtins = [
         const eq = arg.indexOf('=');
         if (eq > 0) {
           const name = arg.slice(0, eq);
-          if (/[\s/$`=|&;<>()'"\\]/.test(name)) { await ctx.error(`«${name}»: nome di alias non valido`); status = 1; continue; }
+          if (/[\s/$`=|&;<>()'"\\]/.test(name)) { await ctx.error(t('alias.badName', { name })); status = 1; continue; }
           aliases.set(name, arg.slice(eq + 1));
         } else if (aliases.has(arg)) await ctx.out(`alias ${arg}=${quote(aliases.get(arg))}\n`);
-        else { await ctx.error(`${arg}: non trovato`); status = 1; }
+        else { await ctx.error(t('err.notFound', { name: arg })); status = 1; }
       }
       return status;
     },
   },
   {
-    name: 'unalias', usage: 'unalias [-a] nome…', summary: 'Elimina degli alias (tutti con -a).',
+    name: 'unalias', get usage() { return t('help.unalias.usage'); }, get summary() { return t('help.unalias.summary'); },
     async run(ctx) {
       const { opts, args } = options(ctx, { flags: 'a' });
       if (opts.a) { ctx.shell.aliases.clear(); return 0; }
       let status = 0;
       for (const name of args) {
-        if (!ctx.shell.aliases.delete(name)) { await ctx.error(`${name}: non trovato`); status = 1; }
+        if (!ctx.shell.aliases.delete(name)) { await ctx.error(t('err.notFound', { name })); status = 1; }
       }
       return status;
     },
   },
   {
-    name: 'type', usage: 'type [-t] nome…', summary: 'Dice cos’è un nome: alias, parola chiave, funzione, comando.',
+    name: 'type', get usage() { return t('help.type.usage'); }, get summary() { return t('help.type.summary'); },
     async run(ctx) {
       const { opts, args } = options(ctx, { flags: 'ta' });
       let status = 0;
       for (const name of args) {
         const what = describe(ctx.shell, name);
-        if (!what) { if (!opts.t) await ctx.error(`${name}: non trovato`); status = 1; continue; }
+        if (!what) { if (!opts.t) await ctx.error(t('err.notFound', { name })); status = 1; continue; }
         if (opts.t) { await ctx.out(what.kind + '\n'); continue; }
         await ctx.out(what.text + '\n');
       }
@@ -565,7 +566,7 @@ export const builtins = [
     },
   },
   {
-    name: 'command', usage: 'command [-v] nome [argomenti…]', summary: 'Avvia un comando ignorando le funzioni con lo stesso nome; con -v dice cosa avvierebbe.',
+    name: 'command', get usage() { return t('help.command.usage'); }, get summary() { return t('help.command.summary'); },
     async run(ctx) {
       const { opts, args } = options(ctx, { flags: 'vVp', stopAtArg: true });
       if (!args.length) return 0;
@@ -582,19 +583,19 @@ export const builtins = [
     },
   },
   {
-    name: 'which', usage: 'which nome…', summary: 'Dice dove si trova un comando.',
+    name: 'which', get usage() { return t('help.which.usage'); }, get summary() { return t('help.which.summary'); },
     async run(ctx) {
       let status = 0;
       for (const name of ctx.args) {
         const what = describe(ctx.shell, name);
         if (!what || what.kind === 'alias' || what.kind === 'keyword' || what.kind === 'function') { status = 1; continue; }
-        await ctx.out((what.path ?? `${name}: comando integrato nel Terminale`) + '\n');
+        await ctx.out((what.path ?? t('which.builtIn', { name })) + '\n');
       }
       return status;
     },
   },
   {
-    name: 'history', usage: 'history [-c] [n]', summary: 'Mostra i comandi dati (gli ultimi n); -c cancella la cronologia.',
+    name: 'history', usage: 'history [-c] [n]', get summary() { return t('help.history.summary'); },
     async run(ctx) {
       const { opts, args } = options(ctx, { flags: 'c' });
       const history = ctx.shell.host.history;
@@ -607,7 +608,7 @@ export const builtins = [
     },
   },
   {
-    name: 'help', usage: 'help [comando]', summary: 'Elenca i comandi, o spiega quello indicato.',
+    name: 'help', get usage() { return t('help.help.usage'); }, get summary() { return t('help.help.summary'); },
     async run(ctx) {
       const commands = ctx.shell.commands;
       if (ctx.args.length) {
@@ -615,36 +616,36 @@ export const builtins = [
         for (const name of ctx.args) {
           const cmd = commands.get(name);
           if (cmd) await ctx.out(helpText(cmd));
-          else if (SYNTAX[name]) await ctx.out(SYNTAX[name].trim() + '\n');
-          else { await ctx.error(`nessun aiuto per «${name}»`); status = 1; }
+          else if (findTopic(name)) await ctx.out(SYNTAX[findTopic(name)]().trim() + '\n');
+          else { await ctx.error(t('help.noHelp', { name })); status = 1; }
         }
         return status;
       }
       const all = [...commands.values()].filter((c, i, list) => list.indexOf(c) === i && !c.hidden).sort((a, b) => a.name.localeCompare(b.name));
       const width = Math.max(...all.map(c => c.name.length)) + 2;
-      await ctx.out('Terminale di lilOS: una shell come bash sui file di lilOS.\n«help comando» o «comando --help» spiega un comando; «help if», «help for», «help case»… la sintassi.\n\n');
+      await ctx.out(`${t('help.intro')}\n\n`);
       for (const c of all) await ctx.out(`  ${c.name.padEnd(width)}${c.summary ?? ''}${c.app ? ` (${c.app})` : ''}\n`);
-      await ctx.out(`\nSintassi: ${Object.keys(SYNTAX).join(', ')}\n`);
+      await ctx.out(`\n${t('help.syntaxList', { list: Object.keys(SYNTAX).map(topicName).join(', ') })}\n`);
     },
   },
   {
-    name: 'clear', usage: 'clear', summary: 'Pulisce lo schermo (anche Ctrl L).',
+    name: 'clear', usage: 'clear', get summary() { return t('help.clear.summary'); },
     async run(ctx) { if (ctx.stdout === ctx.shell.host.stdout) ctx.shell.host.clear?.(); else await ctx.out('\x1b[2J\x1b[H'); },
   },
   {
-    name: 'jobs', usage: 'jobs [-lp]', summary: 'Elenca i comandi avviati in background con &.',
+    name: 'jobs', usage: 'jobs [-lp]', get summary() { return t('help.jobs.summary'); },
     async run(ctx) {
       const { opts } = options(ctx, { flags: 'lp' });
       const list = ctx.shell.jobs.list;
       for (const j of list) {
         const mark = j === list.at(-1) ? '+' : j === list.at(-2) ? '-' : ' ';
         if (opts.p) await ctx.out(`${j.pid}\n`);
-        else await ctx.out(`[${j.id}]${mark} ${opts.l ? `${j.pid} ` : ''}${j.state === 'done' ? (j.code === 0 ? 'Fatto' : `Uscita ${j.code}`) : 'In esecuzione'}\t\t${j.text}\n`);
+        else await ctx.out(`[${j.id}]${mark} ${opts.l ? `${j.pid} ` : ''}${j.state === 'done' ? (j.code === 0 ? t('jobs.done') : t('jobs.exit', { code: j.code })) : t('jobs.running')}\t\t${j.text}\n`);
       }
     },
   },
   {
-    name: 'wait', usage: 'wait [%job | pid…]', summary: 'Aspetta che finiscano i comandi in background (tutti, o quelli indicati).',
+    name: 'wait', usage: 'wait [%job | pid…]', get summary() { return t('help.wait.summary'); },
     async run(ctx) {
       const shell = ctx.shell;
       if (!ctx.args.length) {
@@ -655,18 +656,18 @@ export const builtins = [
       let status = 0;
       for (const spec of ctx.args) {
         const job = shell.findJob(spec);
-        if (!job) { await ctx.error(`${spec}: non è un job di questa shell`); status = 127; continue; }
+        if (!job) { await ctx.error(t('wait.notAJob', { spec })); status = 127; continue; }
         status = await shell.waitJob(job);
       }
       return status;
     },
   },
   {
-    name: 'fg', usage: 'fg [%job]', summary: 'Porta in primo piano un comando in background: lo si aspetta e Ctrl C lo interrompe.',
+    name: 'fg', usage: 'fg [%job]', get summary() { return t('help.fg.summary'); },
     async run(ctx) {
       const shell = ctx.shell;
       const job = shell.findJob(ctx.args[0]);
-      if (!job) throw new ShellError(`${ctx.args[0] ?? 'attuale'}: job inesistente`);
+      if (!job) throw new ShellError(t('fg.noSuchJob', { job: ctx.args[0] ?? t('fg.current') }));
       await ctx.out(job.text + '\n');
       const code = await shell.waitJob(job, { forward: true });
       shell.jobs.list = shell.jobs.list.filter(j => j !== job);
@@ -674,47 +675,47 @@ export const builtins = [
     },
   },
   {
-    name: 'kill', usage: 'kill [-segnale] %job | pid…', summary: 'Interrompe dei comandi in background.',
+    name: 'kill', get usage() { return t('help.kill.usage'); }, get summary() { return t('help.kill.summary'); },
     async run(ctx) {
       let args = ctx.args;
       if (args[0] === '-l') { await ctx.out('HUP INT QUIT KILL TERM\n'); return 0; }
       if (args[0] === '-s' || args[0] === '-n') args = args.slice(2);
       else if (/^-\w+$/.test(args[0] ?? '')) args = args.slice(1);
-      if (!args.length) throw new ShellError(`uso: ${this.usage}`, 2);
+      if (!args.length) throw new ShellError(t('help.usageShort', { usage: this.usage }), 2);
       let status = 0;
       for (const spec of args) {
         const job = ctx.shell.findJob(spec);
-        if (!job) { await ctx.error(`${spec}: job o processo inesistente`); status = 1; continue; }
+        if (!job) { await ctx.error(t('kill.noSuchJob', { spec })); status = 1; continue; }
         job.token.abort();
       }
       return status;
     },
   },
   {
-    name: 'sleep', usage: 'sleep durata…', summary: 'Aspetta: 5 (secondi), 0.5, 2m, 1h.',
+    name: 'sleep', get usage() { return t('help.sleep.usage'); }, get summary() { return t('help.sleep.summary'); },
     async run(ctx) {
-      if (!ctx.args.length) throw new ShellError('manca la durata', 2);
+      if (!ctx.args.length) throw new ShellError(t('sleep.missing'), 2);
       let ms = 0;
       for (const a of ctx.args) {
         const m = /^(\d+(?:\.\d*)?|\.\d+)([smhd]?)$/.exec(a);
-        if (!m) throw new ShellError(`durata non valida: «${a}»`, 2);
+        if (!m) throw new ShellError(t('sleep.badDuration', { value: a }), 2);
         ms += Number(m[1]) * { '': 1, s: 1, m: 60, h: 3600, d: 86400 }[m[2]] * 1000;
       }
       await ctx.shell.sleep(ms);
     },
   },
   {
-    name: 'bash', usage: 'bash [-c comandi | script] [argomenti…]', summary: 'Esegue uno script o dei comandi in una nuova shell.',
-    help: '«bash script.sh a b» esegue lo script con $1=a, $2=b; «bash -c \'echo $1\' nome x» esegue il testo; «cat script.sh | bash» legge lo script dall’input.',
+    name: 'bash', get usage() { return t('help.bash.usage'); }, get summary() { return t('help.bash.summary'); },
+    get help() { return t('help.bash.text'); },
     run: ctx => runBash(ctx),
   },
-  { name: 'sh', usage: 'sh [-c comandi | script] [argomenti…]', summary: 'Come bash.', run: ctx => runBash(ctx) },
+  { name: 'sh', get usage() { return t('help.sh.usage'); }, get summary() { return t('help.sh.summary'); }, run: ctx => runBash(ctx) },
 ];
 
 async function source(ctx) {
   const shell = ctx.shell;
   const [file, ...args] = ctx.args;
-  if (!file) throw new ShellError('manca il nome del file', 2);
+  if (!file) throw new ShellError(t('source.noFile'), 2);
   let path = file;
   if (!file.includes('/') && !ctx.resolve(file)) {
     const dir = (shell.getVar('PATH') ?? '').split(':').find(d => d && ctx.resolve(`${d}/${file}`)?.type === 'file');
@@ -724,7 +725,7 @@ async function source(ctx) {
   try {
     parse(text, { aliases: shell.aliases });
   } catch (err) {
-    if (err instanceof ParseError || err instanceof Incomplete) throw new ShellError(`${file}: ${err.message || 'errore di sintassi: fine del file inattesa'}`, 2);
+    if (err instanceof ParseError || err instanceof Incomplete) throw new ShellError(`${file}: ${err.message || t('parse.unexpectedEndOfFile')}`, 2);
     throw err;
   }
   const saved = shell.positional;
@@ -752,7 +753,7 @@ async function runBash(ctx) {
       else flags[f] = true;
     }
   }
-  if (command == null && args[0] === '-c') throw new ShellError('-c: manca il testo dei comandi', 2);
+  if (command == null && args[0] === '-c') throw new ShellError(t('bash.noCommand'), 2);
   const sub = shell.subshell({ script: true });
   Object.assign(sub.options, { errexit: flags.e, xtrace: flags.x, nounset: flags.u });
   if (command != null) {
@@ -773,7 +774,7 @@ async function runBash(ctx) {
     return sub.runSource(text, ctx.io, args[0]);
   }
   if (ctx.stdin === shell.host.stdin) {
-    await ctx.err('Sei già in bash: per uno script scrivi «bash file.sh» o «source file.sh».\n');
+    await ctx.err(`${t('bash.already')}\n`);
     return 0;
   }
   return sub.runSource(await ctx.stdin.readAll(), ctx.io, 'bash');
@@ -781,52 +782,39 @@ async function runBash(ctx) {
 
 /** { kind, text, path? } for type, command -v and which; null if unknown. */
 export function describe(shell, name) {
-  if (shell.aliases.has(name)) return { kind: 'alias', text: `${name} è un alias di «${shell.aliases.get(name)}»` };
-  if (KEYWORDS.includes(name)) return { kind: 'keyword', text: `${name} è una parola chiave della shell` };
-  if (shell.functions.has(name)) return { kind: 'function', text: `${name} è una funzione\n${shell.functions.get(name).text}` };
+  if (shell.aliases.has(name)) return { kind: 'alias', text: t('type.alias', { name, value: shell.aliases.get(name) }) };
+  if (KEYWORDS.includes(name)) return { kind: 'keyword', text: t('type.keyword', { name }) };
+  if (shell.functions.has(name)) return { kind: 'function', text: `${t('type.function', { name })}\n${shell.functions.get(name).text}` };
   const cmd = shell.commands.get(name);
-  if (cmd?.builtin) return { kind: 'builtin', text: `${name} è un comando interno della shell` };
-  if (cmd?.app) return { kind: 'file', text: `${name} è un comando dell’app ${cmd.app}` };
-  if (cmd) return { kind: 'file', text: `${name} è un comando del Terminale` };
+  if (cmd?.builtin) return { kind: 'builtin', text: t('type.builtin', { name }) };
+  if (cmd?.app) return { kind: 'file', text: t('type.appCommand', { name, app: cmd.app }) };
+  if (cmd) return { kind: 'file', text: t('type.command', { name }) };
   for (const dir of (shell.getVar('PATH') ?? '').split(':').filter(Boolean)) {
     for (const file of [name, `${name}.sh`]) {
       const node = shell.resolve(`${dir}/${file}`);
-      if (node?.type === 'file') return { kind: 'file', text: `${name} è ${fs.path(node.id)}`, path: fs.path(node.id) };
+      if (node?.type === 'file') return { kind: 'file', text: t('type.file', { name, path: fs.path(node.id) }), path: fs.path(node.id) };
     }
   }
-  if (name.includes('/') && shell.resolve(name)?.type === 'file') return { kind: 'file', text: `${name} è ${name}`, path: name };
+  if (name.includes('/') && shell.resolve(name)?.type === 'file') return { kind: 'file', text: t('type.file', { name, path: name }), path: name };
   return null;
 }
 
 const escapeClass = s => s.replace(/[\]\\^-]/g, '\\$&');
 
+/** `help if`, `help for`…: the syntax, in the language of the moment. */
 const SYNTAX = {
-  if: `if comandi; then comandi; [elif comandi; then comandi;] [else comandi;] fi
-Esegue il ramo del primo «if»/«elif» i cui comandi riescono (stato 0).
-  if [ -f note.txt ]; then echo c’è; else echo manca; fi`,
-  for: `for nome in parole…; do comandi; done
-for (( inizio; condizione; passo )); do comandi; done
-  for f in *.txt; do wc -l "$f"; done
-  for ((i = 1; i <= 3; i++)); do echo $i; done`,
-  while: `while comandi; do comandi; done   (until: finché i comandi NON riescono)
-  n=0; while [ $n -lt 3 ]; do echo $n; n=$((n + 1)); done
-  ls | while read -r nome; do echo "- $nome"; done`,
-  until: 'until comandi; do comandi; done: ripete finché i comandi non riescono.',
-  case: `case parola in modello|modello) comandi;; … esac
-I modelli usano * ? [ ]. «;&» prosegue nel ramo dopo, «;;&» prova anche i modelli successivi.
-  case "$f" in *.txt) echo testo;; *.png|*.jpg) echo immagine;; *) echo altro;; esac`,
-  function: `nome() { comandi; }   oppure   function nome { comandi; }
-Gli argomenti sono $1, $2…, $@; «local» crea variabili della funzione, «return n» esce.
-  saluta() { echo "Ciao, $1"; }; saluta Eugenio`,
-  '[[': `[[ espressione ]]: test senza divisione in parole né espansione di *.
-  [[ $nome == *.txt ]]      confronto con un modello
-  [[ $s =~ ^[0-9]+$ ]]      espressione regolare (gruppi in BASH_REMATCH)
-  [[ -d dir && ! -e file ]] -e -f -d -s -z -n, && || ! ( )`,
-  '((': `(( espressione )): aritmetica intera; stato 0 se il risultato non è 0.
-  (( n++ )); (( n > 3 )) && echo grande; echo $(( 2 ** 10 ))`,
-  variabili: `nome=valore (senza spazi), $nome o \${nome}. Array: a=(x y z), \${a[0]}, \${a[@]}, \${#a[@]}.
-\${v:-predefinito} \${v:=predefinito} \${v:+alt} \${#v} \${v#prefisso} \${v%suffisso} \${v/da/a} \${v//da/a} \${v:inizio:lunghezza} \${v^^} \${v,,}
-Speciali: $? stato dell’ultimo comando, $$ la shell, $! l’ultimo comando in background, $# $@ $* gli argomenti.`,
-  redirezioni: `> file (sovrascrive), >> file (aggiunge), < file (legge), 2> errori, 2>&1, &> file, <<EOF … EOF, <<< testo, | pipe.
-/dev/null scarta tutto.`,
+  if: () => t('syntax.if'),
+  for: () => t('syntax.for'),
+  while: () => t('syntax.while'),
+  until: () => t('syntax.until'),
+  case: () => t('syntax.case'),
+  function: () => t('syntax.function'),
+  '[[': () => t('syntax.cond'),
+  '((': () => t('syntax.arith'),
+  variables: () => t('syntax.variables'),
+  redirections: () => t('syntax.redirections'),
 };
+
+/** The name of a topic as shown and typed: `help variabili` in Italian. */
+const topicName = topic => ({ variables: t('syntax.topic.variables'), redirections: t('syntax.topic.redirections') })[topic] ?? topic;
+const findTopic = name => Object.keys(SYNTAX).find(topic => topic === name || topicName(topic) === name);

@@ -17,7 +17,7 @@ export class SidePanel {
   open;
   width;          // the width the user chose; the one shown can be less (see show)
 
-  constructor({ key, title, label, width, open = false, room, onLayout, signal }) {
+  constructor({ key, title, resizeLabel, closeLabel, width, open = false, room, onLayout, signal }) {
     this.key = key;
     this.defaultWidth = width;
     this.room = room;
@@ -28,14 +28,14 @@ export class SidePanel {
 
     this.split = h('div', {
       class: 'fm-split', role: 'separator', tabindex: '0', 'aria-orientation': 'vertical',
-      'aria-label': `Larghezza del pannello ${label}`, 'aria-valuemin': MIN_WIDTH,
+      'aria-label': resizeLabel, 'aria-valuemin': MIN_WIDTH,
     });
     this.body = h('div', { class: 'fm-panel-body' });
     this.el = h('aside', { class: `fm-panel fm-panel-${key}`, 'aria-label': title, hidden: !this.open },
       this.split,
       h('div', { class: 'fm-panel-head' },
         h('span', { class: 'fm-panel-title' }, title),
-        h('button', { class: 'fm-btn', type: 'button', title: `Chiudi il pannello ${label}`, 'aria-label': `Chiudi il pannello ${label}`, onclick: () => this.setOpen(false) }, icon('x'))),
+        h('button', { class: 'fm-btn', type: 'button', title: closeLabel, 'aria-label': closeLabel, onclick: () => this.setOpen(false) }, icon('x'))),
       this.body);
     this.#bind(signal);
   }

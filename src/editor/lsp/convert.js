@@ -1,4 +1,5 @@
 import { rankItems } from '../complete.js';
+import { t } from '../i18n.js';
 
 /** LSP positions are { line, character } (UTF-16 units, like JavaScript strings). */
 export function positionAt(text, offset) {
@@ -40,11 +41,15 @@ const KINDS = {
   1: 'abc', 2: 'fn', 3: 'fn', 4: 'fn', 5: 'pr', 6: 'abc', 7: 'ty', 8: 'ty', 9: 'ty', 10: 'pr', 11: 'val', 12: 'val',
   13: 'val', 14: 'kw', 15: 'snip', 16: 'val', 17: 'abc', 18: 'abc', 19: 'abc', 20: 'val', 21: 'val', 22: 'ty', 23: 'fn', 24: 'kw', 25: 'ty',
 };
-const KIND_NAMES = {
-  1: 'testo', 2: 'metodo', 3: 'funzione', 4: 'costruttore', 5: 'campo', 6: 'variabile', 7: 'classe', 8: 'interfaccia', 9: 'modulo',
-  10: 'proprietà', 11: 'unità', 12: 'valore', 13: 'enumerazione', 14: 'parola chiave', 15: 'snippet', 16: 'colore', 17: 'file',
-  18: 'riferimento', 19: 'cartella', 20: 'valore', 21: 'costante', 22: 'struttura', 23: 'evento', 24: 'operatore', 25: 'tipo',
-};
+const kindNames = () => ({
+  1: t('completion.kind.text'), 2: t('completion.kind.method'), 3: t('completion.kind.function'), 4: t('completion.kind.constructor'),
+  5: t('completion.kind.field'), 6: t('completion.kind.variable'), 7: t('completion.kind.class'), 8: t('completion.kind.interface'),
+  9: t('completion.kind.module'), 10: t('completion.kind.property'), 11: t('completion.kind.unit'), 12: t('completion.kind.value'),
+  13: t('completion.kind.enum'), 14: t('completion.kind.keyword'), 15: t('completion.kind.snippet'), 16: t('completion.kind.color'),
+  17: t('completion.kind.file'), 18: t('completion.kind.reference'), 19: t('completion.kind.folder'), 20: t('completion.kind.value'),
+  21: t('completion.kind.constant'), 22: t('completion.kind.struct'), 23: t('completion.kind.event'), 24: t('completion.kind.operator'),
+  25: t('completion.kind.type'),
+});
 
 const wordStart = (text, caret) => {
   let i = caret;
@@ -59,6 +64,7 @@ const wordStart = (text, caret) => {
 export function fromServer(items, text, caret) {
   if (!items.length) return null;
   const fallbackFrom = wordStart(text, caret);
+  const names = kindNames();
   const mapped = items.map(it => {
     const edit = it.textEdit;
     const range = edit?.range ?? edit?.insert ?? null;
@@ -69,7 +75,7 @@ export function fromServer(items, text, caret) {
     return {
       label: it.label, insert, caret: at, from, to,
       kind: KINDS[it.kind] ?? 'abc',
-      detail: it.detail || KIND_NAMES[it.kind] || '',
+      detail: it.detail || names[it.kind] || '',
       filter: it.filterText ?? it.label,
       sort: it.sortText ?? it.label,
     };

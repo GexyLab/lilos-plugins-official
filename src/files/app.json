@@ -1,9 +1,9 @@
 {
   "id": "files",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "kind": "local",
   "name": "File Manager",
-  "description": "Sfoglia, cerca e organizza file e cartelle: tag, collegamenti, cestino, informazioni e anteprima.",
+  "description": "Browse, search and organize files and folders: tags, links, trash, info and preview.",
   "category": "system",
   "icon": { "glyph": "folder", "color": "#3b6ef5" },
   "publisher": { "id": "lilos", "name": "lilOS" },
@@ -11,14 +11,14 @@
   "system": true,
   "required": true,
   "entrypoints": { "main": { "kind": "window", "params": {
-    "folder": {"type": "folder", "label": "Cartella", "description": "La cartella che mostra all’apertura"}
+    "folder": {"type": "folder", "label": "Folder", "description": "The folder it shows when it opens"}
   } } },
   "permissions": ["fs.write:~", "fs.workspaces", "tags.write", "desktop.items", "ui.shortcuts"],
   "contributes": {
     "window": { "width": 1000, "height": 520 },
     "commands": [
-      { "id": "files.info", "label": "Mostra o nascondi le informazioni", "keys": ["Alt+I"] },
-      { "id": "files.preview", "label": "Mostra o nascondi l’anteprima", "keys": ["Alt+P"] }
+      { "id": "files.info", "label": "Show or hide the info panel", "keys": ["Alt+I"] },
+      { "id": "files.preview", "label": "Show or hide the preview", "keys": ["Alt+P"] }
     ]
   }
 }

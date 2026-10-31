@@ -3,6 +3,7 @@ import { escapeGlob, hasGlob, matchPattern, patternSource, unescapeGlob } from '
 import { glob } from './paths.js';
 import { parseArithWord } from './parser.js';
 import { ShellError } from './signals.js';
+import { t } from '../i18n.js';
 
 /**
  * Word expansion, in bash's order: braces, tilde, parameters / command substitution /
@@ -103,7 +104,7 @@ export function braceExpand(parts) {
 }
 
 function expandAtoms(atoms, out) {
-  if (out.length > MAX_BRACES) throw new ShellError('espansione delle graffe troppo grande');
+  if (out.length > MAX_BRACES) throw new ShellError(t('expand.braceTooLarge'));
   for (let i = 0; i < atoms.length; i++) {
     if (atoms[i].c !== '{') continue;
     let depth = 0, j = i;
@@ -137,7 +138,7 @@ function sequence(text) {
     const [a, b] = [Number(m[1]), Number(m[2])];
     const step = Math.abs(Number(m[3] ?? 1)) || 1;
     const width = /^-?0\d/.test(m[1]) || /^-?0\d/.test(m[2]) ? Math.max(m[1].length, m[2].length) : 0;
-    if (Math.abs(b - a) / step > MAX_BRACES) throw new ShellError('espansione delle graffe troppo grande');
+    if (Math.abs(b - a) / step > MAX_BRACES) throw new ShellError(t('expand.braceTooLarge'));
     const out = [];
     for (let v = a; a <= b ? v <= b : v >= b; v += a <= b ? step : -step) {
       const s = String(Math.abs(v)).padStart(width - (v < 0 ? 1 : 0), '0');
@@ -246,7 +247,7 @@ async function paramValues(shell, part) {
   if (part.indirect) {
     const target = lookup(shell, name, index).values[0] ?? '';
     const m = /^([A-Za-z_]\w*|[0-9]+|[@*#?$!-])(?:\[(.*)\])?$/.exec(target);
-    if (!m) throw new ShellError(`${target}: sostituzione errata`);
+    if (!m) throw new ShellError(t('expand.badSubstitution', { name: target }));
     [, name, index = null] = m;
   }
   let { values, set, multi, star } = lookup(shell, name, index);
@@ -256,7 +257,7 @@ async function paramValues(shell, part) {
   }
   const op = part.op;
   if (!op) {
-    if (!set && shell.options.nounset && !(multi || star)) throw new ShellError(`${name}: variabile non impostata`);
+    if (!set && shell.options.nounset && !(multi || star)) throw new ShellError(t('expand.unbound', { name }));
     return { values, multi, star };
   }
   const empty = !set || (values.length === 0 || (values.length === 1 && values[0] === '' && !(multi || star)));
@@ -266,12 +267,12 @@ async function paramValues(shell, part) {
       return missing ? { values: [await expandString(shell, part.arg)] } : { values, multi, star };
     case '=': case ':=':
       if (!missing) return { values, multi, star };
-      if (!/^[A-Za-z_]\w*$/.test(name)) throw new ShellError(`${name}: impossibile assegnare in questo modo`);
+      if (!/^[A-Za-z_]\w*$/.test(name)) throw new ShellError(t('expand.cannotAssign', { name }));
       shell.setVar(name, await expandString(shell, part.arg), index);
       return { values: [shell.getVar(name, index) ?? ''] };
     case '?': case ':?':
       if (!missing) return { values, multi, star };
-      throw new ShellError(`${name}: ${(await expandString(shell, part.arg)) || 'parametro nullo o non impostato'}`);
+      throw new ShellError(`${name}: ${(await expandString(shell, part.arg)) || t('expand.nullOrNotSet')}`);
     case '+': case ':+':
       return missing ? { values: [] } : { values: [await expandString(shell, part.arg)] };
   }
@@ -298,7 +299,7 @@ async function paramValues(shell, part) {
         const start = offset < 0 ? Math.max(0, list.length + offset) : Math.min(offset, list.length);
         if (count == null) return list.slice(start);
         if (count < 0) {
-          if (multi || star) throw new ShellError(`${count}: espressione di sottostringa < 0`);
+          if (multi || star) throw new ShellError(t('expand.negativeSubstring', { count }));
           return list.slice(start, Math.max(start, list.length + count));
         }
         return list.slice(start, start + count);
@@ -311,7 +312,7 @@ async function paramValues(shell, part) {
       return { values: [cut([...(values[0] ?? '')]).join('')] };
     }
   }
-  throw new ShellError(`${name}: sostituzione errata`);
+  throw new ShellError(t('expand.badSubstitution', { name }));
 }
 
 /** { values, set, multi, star } of a name (and subscript). */

@@ -1,4 +1,5 @@
 import { JS_KEYWORDS, PY_KEYWORDS, tokenize } from './highlight.js';
+import { t } from './i18n.js';
 
 /**
  * Completion suggestions for the editor, by language and by context (what is before the caret).
@@ -77,7 +78,7 @@ function documentWords(text, re, skipFrom, skipTo, min = 3) {
     seen.add(m[0]);
     if (seen.size > 2000) break;
   }
-  return [...seen].map(w => item(w, 'abc', 'dal testo'));
+  return [...seen].map(w => item(w, 'abc', t('completion.detail.fromText')));
 }
 
 /** Token class at the caret (string, comment…), looking at the text before it. */
@@ -106,12 +107,12 @@ function completeCode(text, caret, lang, manual) {
   const words = documentWords(text, re, from, caret);
   if (lang === 'python') {
     return { from, items: member
-      ? [...items(PY_MEMBERS, 'fn', 'metodo'), ...words]
-      : [...items([...PY_KEYWORDS], 'kw', 'parola chiave'), ...items(PY_BUILTINS, 'fn', 'predefinita'), ...words], allowEmpty: member };
+      ? [...items(PY_MEMBERS, 'fn', t('completion.kind.method')), ...words]
+      : [...items([...PY_KEYWORDS], 'kw', t('completion.kind.keyword')), ...items(PY_BUILTINS, 'fn', t('completion.detail.builtin')), ...words], allowEmpty: member };
   }
   return { from, items: member
-    ? [...items(JS_MEMBERS, 'fn', 'proprietà o metodo'), ...words]
-    : [...items(JS_KEYWORDS, 'kw', 'parola chiave'), ...items(JS_GLOBALS, 'fn', 'globale'), ...words], allowEmpty: member };
+    ? [...items(JS_MEMBERS, 'fn', t('completion.detail.member')), ...words]
+    : [...items(JS_KEYWORDS, 'kw', t('completion.kind.keyword')), ...items(JS_GLOBALS, 'fn', t('completion.detail.global')), ...words], allowEmpty: member };
 }
 
 function completeCss(text, caret, manual) {
@@ -121,18 +122,18 @@ function completeCss(text, caret, manual) {
   const open = text.lastIndexOf('{', from), close = text.lastIndexOf('}', from);
   const statementStart = Math.max(open, close, text.lastIndexOf(';', from - 1)) + 1;
   const statement = text.slice(statementStart, from);
-  if (text.slice(from, caret).startsWith('@')) return { from, items: items(CSS_AT_RULES, 'kw', 'regola') };
+  if (text.slice(from, caret).startsWith('@')) return { from, items: items(CSS_AT_RULES, 'kw', t('completion.detail.rule')) };
   if (open > close) {
     const colon = statement.lastIndexOf(':');
     if (colon !== -1) {
       const prop = statement.slice(0, colon).trim();
       const vars = documentWords(text, /--[\w-]+/g, from, caret, 3).map(w => ({ ...w, label: `var(${w.label})`, insert: `var(${w.label})`, kind: 'val' }));
-      return { from, items: [...items(CSS_VALUES[prop] ?? [], 'val', prop), ...items(CSS_GENERIC_VALUES, 'val', 'valore'), ...vars], allowEmpty: true };
+      return { from, items: [...items(CSS_VALUES[prop] ?? [], 'val', prop), ...items(CSS_GENERIC_VALUES, 'val', t('completion.kind.value')), ...vars], allowEmpty: true };
     }
-    return { from, items: CSS_PROPERTIES.map(p => item(p, 'pr', 'proprietà', `${p}: |;`)) };
+    return { from, items: CSS_PROPERTIES.map(p => item(p, 'pr', t('completion.kind.property'), `${p}: |;`)) };
   }
   // Outside rules: selectors
-  return { from, items: [...items(HTML_TAGS, 'tag', 'elemento'), ...items(CSS_AT_RULES, 'kw', 'regola'), ...documentWords(text, /[.#][\w-]+/g, from, caret, 2)] };
+  return { from, items: [...items(HTML_TAGS, 'tag', t('completion.detail.element')), ...items(CSS_AT_RULES, 'kw', t('completion.detail.rule')), ...documentWords(text, /[.#][\w-]+/g, from, caret, 2)] };
 }
 
 function completeHtml(text, caret) {
@@ -140,7 +141,7 @@ function completeHtml(text, caret) {
   // Entities in text content
   const amp = text.lastIndexOf('&', caret - 1);
   if (amp > gt && amp > lt && !/\s/.test(text.slice(amp, caret))) {
-    return { from: amp, items: items(HTML_ENTITIES, 'val', 'carattere') };
+    return { from: amp, items: items(HTML_ENTITIES, 'val', t('completion.detail.character')) };
   }
   if (lt <= gt) return null;
   const tagText = text.slice(lt + 1, caret);
@@ -149,16 +150,16 @@ function completeHtml(text, caret) {
     if (tagText.startsWith('/')) {
       // Closing tag: the nearest one still open first
       const open = openTags(text.slice(0, lt));
-      return { from: lt + 2, items: [...new Set([...open.reverse(), ...HTML_TAGS])].map(t => item(t, 'tag', open.includes(t) ? 'da chiudere' : 'elemento', `${t}>`)), allowEmpty: true };
+      return { from: lt + 2, items: [...new Set([...open.reverse(), ...HTML_TAGS])].map(name => item(name, 'tag', open.includes(name) ? t('completion.detail.toClose') : t('completion.detail.element'), `${name}>`)), allowEmpty: true };
     }
     if (tagText.startsWith('!')) return null;
-    return { from: lt + 1, items: HTML_TAGS.map(t => item(t, 'tag', 'elemento', HTML_VOID.has(t) ? `${t}|>` : `${t}>|</${t}>`)), allowEmpty: true };
+    return { from: lt + 1, items: HTML_TAGS.map(name => item(name, 'tag', t('completion.detail.element'), HTML_VOID.has(name) ? `${name}|>` : `${name}>|</${name}>`)), allowEmpty: true };
   }
   const tag = tagText.match(/^[\w-]+/)?.[0]?.toLowerCase() ?? '';
   const from = prefixStart(text, caret, /[\w:-]/);
   const used = new Set([...tagText.matchAll(/\s([\w:-]+)(?==)/g)].map(m => m[1]));
   const attrs = [...(HTML_ATTRS[tag] ?? []), ...HTML_GLOBAL_ATTRS].filter(a => !used.has(a));
-  return { from, items: attrs.map(a => item(a, 'attr', tag ? `attributo di <${tag}>` : 'attributo', BOOLEAN_ATTRS.has(a) ? a : a === 'data-' ? 'data-|=""' : `${a}="|"`)), allowEmpty: /\s$/.test(tagText) };
+  return { from, items: attrs.map(a => item(a, 'attr', tag ? t('completion.detail.attributeOf', { tag }) : t('completion.detail.attribute'), BOOLEAN_ATTRS.has(a) ? a : a === 'data-' ? 'data-|=""' : `${a}="|"`)), allowEmpty: /\s$/.test(tagText) };
 }
 
 /** Tags opened and not closed in the text (in order). */
@@ -176,9 +177,9 @@ function completeJson(text, caret) {
   const from = prefixStart(text, caret, /[\w$-]/);
   const keys = [...new Set([...text.matchAll(/"((?:\\.|[^"\\\n])+)"(?=\s*:)/g)].map(m => m[1]))]
     .filter(k => text.slice(from, caret) !== k)
-    .map(k => item(k, 'pr', 'chiave'));
+    .map(k => item(k, 'pr', t('completion.detail.key')));
   const inString = text.slice(text.lastIndexOf('\n', from - 1) + 1, from).split('"').length % 2 === 0;
-  return { from, items: inString ? keys : [...items(['true', 'false', 'null'], 'kw', 'valore'), ...keys] };
+  return { from, items: inString ? keys : [...items(['true', 'false', 'null'], 'kw', t('completion.kind.value')), ...keys] };
 }
 
 function completeMarkdown(text, caret, manual) {
@@ -187,7 +188,7 @@ function completeMarkdown(text, caret, manual) {
   const fence = line.match(/^\s*```(\w*)$/);
   // Only on the line that opens a block: the closing ``` is followed by Enter, which would accept a language
   const opening = (text.slice(0, lineStart).match(/^\s*```/gm) ?? []).length % 2 === 0;
-  if (fence && opening) return { from: caret - fence[1].length, items: items(FENCE_LANGUAGES, 'kw', 'linguaggio del blocco'), allowEmpty: true };
+  if (fence && opening) return { from: caret - fence[1].length, items: items(FENCE_LANGUAGES, 'kw', t('completion.detail.blockLanguage')), allowEmpty: true };
   return completeText(text, caret, manual);
 }
 

@@ -1,9 +1,9 @@
 {
   "id": "photo",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "kind": "local",
   "name": "Photo",
-  "description": "Guarda le immagini e le ritocca: disegno, testo, ritaglio, ridimensionamento e conversione in PNG, JPEG o WebP.",
+  "description": "View and touch up images: drawing, text, cropping, resizing and conversion to PNG, JPEG or WebP.",
   "category": "media",
   "icon": {
     "glyph": "image",
@@ -21,8 +21,8 @@
       "params": {
         "file": {
           "type": "file",
-          "label": "Immagine",
-          "description": "L’immagine da aprire"
+          "label": "Image",
+          "description": "The image to open"
         }
       }
     }
@@ -50,14 +50,14 @@
     "commands": [
       {
         "id": "photo.save",
-        "label": "Salva",
+        "label": "Save",
         "keys": [
           "Ctrl+S"
         ]
       },
       {
         "id": "photo.open",
-        "label": "Apri un’immagine",
+        "label": "Open an image",
         "keys": [
           "Ctrl+O"
         ]
@@ -68,8 +68,10 @@
   "styles": [
     "dist/index-DqF2jp_v.css"
   ],
+  "locales": "locales.json",
   "files": {
     "dist/index-DqF2jp_v.css": "sha256-oS0F1fKhzl/FkJd+jrJN0LQYEA6u+UPHsDthL9/3zmE=",
-    "dist/index.js": "sha256-PcegCFPeZ7ZY8StDby3N61NaR5+o0XV7QKfXHVfsTSU="
+    "dist/index.js": "sha256-L9WMVvrQNZLziWRydcSTBwfSU6Tf1slID07+qvpgBsA=",
+    "locales.json": "sha256-xtWlGSZ0dT3ejyKYqRDraVukts0s3tT0OnpEjO45IWQ="
   }
 }

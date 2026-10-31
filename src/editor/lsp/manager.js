@@ -1,6 +1,7 @@
 import { Emitter, fs } from '@lilos/sdk';
 import { editorConfig, isSchemaUrl } from '../lang/config.js';
 import { LanguageClient, workerTransport, socketTransport } from './client.js';
+import { t } from '../i18n.js';
 
 /**
  * Which language server serves which language, shared by all Editor windows:
@@ -27,9 +28,9 @@ export const fileUri = id => 'file:///lilos' + fs.path(id).split('/').map(encode
 
 function serverKey(lang) {
   const external = editorConfig.get('external').find(s => s.lang === lang.id);
-  if (external) return { key: `ws:${external.url}`, label: `Server esterno (${external.url})`, make: () => socketTransport(external.url) };
+  if (external) return { key: `ws:${external.url}`, label: t('server.external', { url: external.url }), make: () => socketTransport(external.url) };
   if (lang.server && editorConfig.get('builtin')[lang.server]) {
-    return { key: `builtin:${lang.server}`, label: `Server ${lang.server.toUpperCase()} (nel browser)`, make: () => workerTransport(BUILTIN_WORKERS[lang.server]()) };
+    return { key: `builtin:${lang.server}`, label: t('server.builtin', { lang: lang.server.toUpperCase() }), make: () => workerTransport(BUILTIN_WORKERS[lang.server]()) };
   }
   return null;
 }
@@ -70,13 +71,13 @@ async function schemaContent(uri) {
   if (uri.startsWith('file:///lilos/')) {
     const path = decodeURIComponent(uri.slice('file:///lilos'.length));
     const node = fs.resolve(path);
-    if (!node || node.type !== 'file') throw new Error(`Schema non trovato: ${path}`);
+    if (!node || node.type !== 'file') throw new Error(t('schema.notFound', { path }));
     return fs.read(node.id);
   }
-  if (!isSchemaUrl(uri)) throw new Error(`Indirizzo dello schema non valido: ${uri}`);
+  if (!isSchemaUrl(uri)) throw new Error(t('schema.invalidUrl', { url: uri }));
   // No cookies to other sites; the server must allow cross-origin requests (CORS)
   const res = await fetch(uri, { credentials: 'omit' });
-  if (!res.ok) throw new Error(`Impossibile scaricare lo schema (${res.status})`);
+  if (!res.ok) throw new Error(t('schema.downloadFailed', { status: res.status }));
   return res.text();
 }
 

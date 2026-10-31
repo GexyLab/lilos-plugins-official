@@ -7,6 +7,7 @@ import { sedCommands } from './sed.js';
 import { diffCommands } from './diff.js';
 import { lilosCommands } from './lilos.js';
 import { ShellError } from '../shell/signals.js';
+import { t } from '../i18n.js';
 
 /**
  * Every command the terminal knows: its own, plus the ones installed apps add in their manifest
@@ -20,7 +21,8 @@ import { ShellError } from '../shell/signals.js';
  */
 const NAME = /^[a-z][\w.-]{0,39}$/;
 const own = new Map();
-for (const cmd of builtins) own.set(cmd.name, { ...cmd, builtin: true });
+// Marked in place: a copy would read the texts (getters, in the language of the moment) only once
+for (const cmd of builtins) own.set(cmd.name, Object.assign(cmd, { builtin: true }));
 for (const cmd of [...fileCommands, ...textCommands, ...sedCommands, ...diffCommands, ...lilosCommands]) own.set(cmd.name, cmd);
 
 function appCommands() {
@@ -33,8 +35,8 @@ function appCommands() {
       found.set(c.name, {
         name: c.name,
         app: app.name,
-        summary: typeof c.summary === 'string' ? c.summary.slice(0, 120) : `Comando dell’app ${app.name}.`,
-        usage: typeof c.usage === 'string' ? c.usage.slice(0, 200) : `${c.name} [argomenti…]`,
+        summary: typeof c.summary === 'string' ? c.summary.slice(0, 120) : t('appCmd.summary', { app: app.name }),
+        usage: typeof c.usage === 'string' ? c.usage.slice(0, 200) : t('appCmd.usage', { name: c.name }),
         ownHelp: c.help === true,
         run: ctx => runApp(ctx, app.id, c.entry),
       });

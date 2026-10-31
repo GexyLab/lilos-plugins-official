@@ -5,8 +5,15 @@
  * with only `lilos` (see the kernel's apps/serviceApi.js).
  *
  * Calls: { op: 'check' } checks now; anything else returns the last result { at, updates }.
+ * Texts: lilos.locale gives the app's strings (locales.json) in the user's language; a kernel
+ * older than translations has none, so then the Italian ones here.
  */
+const ITALIAN = {
+  'notify.updates': ({ n, names }) => (n === 1 ? `Aggiornamento disponibile: ${names}. Apri l’AppStore.` : `${n} aggiornamenti disponibili: ${names}. Apri l’AppStore.`),
+};
+
 export async function updates({ lilos, args }) {
+  const t = lilos.locale?.i18n.t ?? ((key, params) => ITALIAN[key]?.(params ?? {}) ?? key);
   const hours = Math.min(168, Math.max(1, Number(args.ore) || 24));
   let last = null;
 
@@ -17,7 +24,7 @@ export async function updates({ lilos, args }) {
       const fresh = found.filter(u => told[u.id] !== u.latest);
       if (fresh.length) {
         const names = fresh.slice(0, 3).map(u => `${u.name} ${u.latest}`).join(', ') + (fresh.length > 3 ? '…' : '');
-        await lilos.ui.notify(fresh.length === 1 ? `Aggiornamento disponibile: ${names}. Apri l’AppStore.` : `${fresh.length} aggiornamenti disponibili: ${names}. Apri l’AppStore.`);
+        await lilos.ui.notify(t('notify.updates', { n: fresh.length, names }));
         for (const u of fresh) told[u.id] = u.latest;
         await lilos.storage.set('updates.told', told);
       }

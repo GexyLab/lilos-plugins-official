@@ -4,6 +4,7 @@ import { compile } from './regex.js';
 import { ShellError } from '../shell/signals.js';
 import { EmptyReader } from '../shell/streams.js';
 import { byName } from '../shell/paths.js';
+import { t } from '../i18n.js';
 
 /** Text tools for pipes: head, tail, wc, grep, sort, uniq, tee, cut, tr, rev, nl, seq, yes, xargs. */
 const toTerminal = ctx => ctx.stdout === ctx.shell.host.stdout;
@@ -89,7 +90,7 @@ async function wc(ctx) {
       L: Math.max(0, ...text.split('\n').map(l => l.length)),
     });
   }
-  if (rows.length > 1) rows.push({ name: 'totale', ...Object.fromEntries(['l', 'w', 'c', 'm'].map(k => [k, rows.reduce((s, r) => s + r[k], 0)])), L: Math.max(...rows.map(r => r.L)) });
+  if (rows.length > 1) rows.push({ name: t('wc.total'), ...Object.fromEntries(['l', 'w', 'c', 'm'].map(k => [k, rows.reduce((s, r) => s + r[k], 0)])), L: Math.max(...rows.map(r => r.L)) });
   const keys = ['l', 'w', 'm', 'c', 'L'].filter(k => show[k]);
   const width = keys.length === 1 && rows.length === 1 ? 0 : Math.max(...rows.flatMap(r => keys.map(k => String(r[k]).length)));
   for (const r of rows) await ctx.out(keys.map(k => String(r[k]).padStart(width)).join(' ') + (r.name ? ` ${r.name}` : '') + '\n');
@@ -110,11 +111,11 @@ async function grep(ctx) {
   let patterns = opts.e ?? [];
   for (const f of opts.f ?? []) {
     const node = ctx.resolve(f);
-    if (node?.type !== 'file') throw new ShellError(`${f}: file o cartella inesistente`, 2);
+    if (node?.type !== 'file') throw new ShellError(t('err.noSuchFile', { path: f }), 2);
     patterns.push(...(await fs.read(node.id)).split('\n').filter(Boolean));
   }
   if (!patterns.length) {
-    if (!rest.length) throw new ShellError('manca il modello da cercare\nUso: grep [opzioni] modello [file…]', 2);
+    if (!rest.length) throw new ShellError(t('grep.noPattern'), 2);
     patterns = [rest.shift()];
   }
   const settings = { extended: opts.E || opts.P, fixed: opts.F, ignoreCase: opts.i, word: opts.w, line: opts.x };
@@ -131,7 +132,7 @@ async function grep(ctx) {
   if (recursive) {
     for (const p of rest.length ? rest : ['.']) {
       const node = ctx.resolve(p);
-      if (!node) { if (!opts.s) await ctx.error(`${p}: file o cartella inesistente`); ctx.failed = true; continue; }
+      if (!node) { if (!opts.s) await ctx.error(t('err.noSuchFile', { path: p })); ctx.failed = true; continue; }
       walk(node, p);
     }
   } else targets.push(...rest);
@@ -176,8 +177,8 @@ async function grep(ctx) {
     if (target === '-') text = await ctx.stdin.readAll();
     else {
       const node = ctx.resolve(target);
-      if (!node) { if (!opts.s) await ctx.error(`${target}: file o cartella inesistente`); ctx.failed = true; continue; }
-      if (node.type === 'folder') { if (!opts.s) await ctx.error(`${target}: è una cartella`); continue; }
+      if (!node) { if (!opts.s) await ctx.error(t('err.noSuchFile', { path: target })); ctx.failed = true; continue; }
+      if (node.type === 'folder') { if (!opts.s) await ctx.error(t('err.isADirectory', { path: target })); continue; }
       if (node.type !== 'file') continue;
       text = await fs.read(node.id);
     }
@@ -212,7 +213,7 @@ async function sort(ctx) {
   let key = null;
   if (opts.k) {
     const m = /^(\d+)(?:\.\d+)?[a-zA-Z]*(?:,(\d+)(?:\.\d+)?[a-zA-Z]*)?$/.exec(opts.k);
-    if (!m) throw new ShellError(`chiave non valida: «${opts.k}»`, 2);
+    if (!m) throw new ShellError(t('sort.badKey', { key: opts.k }), 2);
     key = { start: Number(m[1]), end: m[2] ? Number(m[2]) : null };
     if (/n/.test(opts.k)) opts.n = true;
     if (/r/.test(opts.k)) opts.r = true;
@@ -235,7 +236,7 @@ async function sort(ctx) {
   };
   if (opts.c) {
     for (let i = 1; i < lines.length; i++) {
-      if (cmp(lines[i - 1], lines[i]) > 0) { await ctx.error(`-:${i + 1}: disordine: ${lines[i]}`); return 1; }
+      if (cmp(lines[i - 1], lines[i]) > 0) { await ctx.error(t('sort.disorder', { n: i + 1, line: lines[i] })); return 1; }
     }
     return 0;
   }
@@ -291,7 +292,7 @@ async function tee(ctx) {
 function ranges(spec) {
   const parts = String(spec).split(',').map(p => {
     const m = /^(\d*)(-?)(\d*)$/.exec(p);
-    if (!m || (!m[1] && !m[3])) throw new ShellError(`elenco non valido: «${spec}»`, 2);
+    if (!m || (!m[1] && !m[3])) throw new ShellError(t('cut.badList', { spec }), 2);
     const a = m[1] ? Number(m[1]) : 1, b = m[2] ? (m[3] ? Number(m[3]) : Infinity) : a;
     return [a, b];
   });
@@ -300,9 +301,9 @@ function ranges(spec) {
 
 async function cut(ctx) {
   const { opts, args } = options(ctx, { flags: 's', values: 'dfcb', long: { delimiter: 'd', fields: 'f', characters: 'c', bytes: 'b', 'only-delimited': 's', 'output-delimiter': 'O' } });
-  if (!opts.f && !opts.c && !opts.b) throw new ShellError('indicare un elenco di campi (-f) o di caratteri (-c)', 2);
+  if (!opts.f && !opts.c && !opts.b) throw new ShellError(t('cut.noList'), 2);
   const sep = opts.d ?? '\t';
-  if (sep.length !== 1) throw new ShellError('il delimitatore deve essere un solo carattere', 2);
+  if (sep.length !== 1) throw new ShellError(t('cut.badDelimiter'), 2);
   const outSep = opts.O ?? sep;
   let out = '';
   for await (const { text } of ctx.inputs(args)) {
@@ -353,7 +354,7 @@ function trSet(spec) {
   for (let i = 0; i < chars.length; i++) {
     if (chars[i + 1]?.c === '-' && chars[i + 2] && !chars[i].cls && !chars[i + 1].cls) {
       const a = chars[i].c.codePointAt(0), b = chars[i + 2].c.codePointAt(0);
-      if (a > b) throw new ShellError(`intervallo al contrario: «${chars[i].c}-${chars[i + 2].c}»`);
+      if (a > b) throw new ShellError(t('tr.reverseRange', { range: `${chars[i].c}-${chars[i + 2].c}` }));
       for (let x = a; x <= b; x++) out.push(String.fromCodePoint(x));
       i += 2;
     } else out.push(chars[i].c);
@@ -363,10 +364,10 @@ function trSet(spec) {
 
 async function tr(ctx) {
   const { opts, args } = options(ctx, { flags: 'dscC', long: { delete: 'd', 'squeeze-repeats': 's', complement: 'c' } });
-  if (!args.length) throw new ShellError('manca l’operando', 2);
+  if (!args.length) throw new ShellError(t('err.missingOperand'), 2);
   const set1 = trSet(args[0]);
   const set2 = args[1] != null ? trSet(args[1]) : null;
-  if (!opts.d && !opts.s && !set2) throw new ShellError(`manca il secondo insieme dopo «${args[0]}»`, 2);
+  if (!opts.d && !opts.s && !set2) throw new ShellError(t('tr.missingSet2', { set: args[0] }), 2);
   const complement = opts.c || opts.C;
   const in1 = complement ? c => !set1.includes(c) : c => set1.includes(c);
   const text = await ctx.stdin.readAll();
@@ -413,12 +414,12 @@ async function nl(ctx) {
 async function seq(ctx) {
   const { opts, args } = options(ctx, { flags: 'w', values: 'sf', long: { separator: 's', 'equal-width': 'w', format: 'f' } });
   const nums = args.map(a => {
-    if (!/^[+-]?(\d+\.?\d*|\.\d+)$/.test(a)) throw new ShellError(`argomento non valido: «${a}»`, 2);
+    if (!/^[+-]?(\d+\.?\d*|\.\d+)$/.test(a)) throw new ShellError(t('seq.badArgument', { value: a }), 2);
     return Number(a);
   });
-  if (!nums.length || nums.length > 3) throw new ShellError('uso: seq [primo [passo]] ultimo', 2);
+  if (!nums.length || nums.length > 3) throw new ShellError(t('help.usageShort', { usage: t('help.seq.usage') }), 2);
   const [first, step, last] = nums.length === 1 ? [1, 1, nums[0]] : nums.length === 2 ? [nums[0], 1, nums[1]] : nums;
-  if (step === 0) throw new ShellError('il passo non può essere 0', 2);
+  if (step === 0) throw new ShellError(t('seq.zeroStep'), 2);
   const decimals = Math.max(...args.map(a => (a.split('.')[1] ?? '').length));
   const sep = opts.s ?? '\n';
   const fmt = v => {
@@ -466,7 +467,7 @@ function xargsWords(text) {
     cur += c;
     has = true;
   }
-  if (quote) throw new ShellError(`virgolette ${quote === '"' ? 'doppie' : 'singole'} non chiuse`);
+  if (quote) throw new ShellError(quote === '"' ? t('xargs.unmatchedDouble') : t('xargs.unmatchedSingle'));
   if (has) words.push(cur);
   return words;
 }
@@ -485,7 +486,7 @@ async function xargs(ctx) {
   if (opts.I != null) for (const item of items) runs.push(command.map(a => a.replaceAll(opts.I, item)));
   else {
     const size = opts.n != null ? int(opts.n) : opts.L != null ? int(opts.L) : Infinity;
-    if (size < 1) throw new ShellError('il numero di argomenti deve essere almeno 1', 2);
+    if (size < 1) throw new ShellError(t('xargs.badCount'), 2);
     for (let i = 0; i < items.length; i += size === Infinity ? items.length : size) {
       const group = opts.L != null ? items.slice(i, i + size).flatMap(xargsWords) : items.slice(i, i + (size === Infinity ? items.length : size));
       runs.push([...command, ...group]);
@@ -503,21 +504,21 @@ async function xargs(ctx) {
 }
 
 export const textCommands = [
-  { name: 'head', usage: 'head [-n righe] [-c byte] [file…]', summary: 'Le prime righe (10 se non indicato).', run: head, help: '-n N  le prime N righe (-n -N: tutte tranne le ultime N)\n-c N  i primi N caratteri\n-5 è come -n 5' },
-  { name: 'tail', usage: 'tail [-n righe] [-c byte] [file…]', summary: 'Le ultime righe (10 se non indicato).', run: tail, help: '-n N  le ultime N righe (-n +N: dalla riga N in poi)\n-c N  gli ultimi N caratteri' },
-  { name: 'wc', usage: 'wc [-lwcmL] [file…]', summary: 'Conta righe, parole e byte.', run: wc, help: '-l righe, -w parole, -c byte, -m caratteri, -L la riga più lunga' },
-  { name: 'grep', usage: 'grep [-ivnclrwxEFoqH] [-e modello] modello [file…]', summary: 'Cerca le righe che contengono un modello (espressione regolare).', run: grep,
-    help: '-i  senza distinguere maiuscole e minuscole\n-v  le righe che NON corrispondono\n-n  con il numero di riga\n-c  conta le righe\n-l  solo i nomi dei file\n-r  cerca nelle cartelle\n-w  parole intere, -x righe intere\n-E  espressioni regolari estese (| + ? () senza barra)\n-F  testo semplice, non espressione regolare\n-o  solo la parte che corrisponde\n-q  nessun risultato, solo lo stato\n-A N, -B N, -C N  righe di contesto dopo, prima, intorno\nStato: 0 trovato, 1 non trovato, 2 errore.' },
-  { name: 'sort', usage: 'sort [-rnufhV] [-k campo] [-t separatore] [file…]', summary: 'Ordina le righe.', run: sort,
-    help: '-r  al contrario\n-n  per numero\n-h  per dimensione leggibile (2K, 1M)\n-u  senza doppioni\n-f  senza distinguere maiuscole e minuscole\n-k N[,M]  per il campo N (fino a M)\n-t C  campi separati da C\n-V  numeri dentro il testo (file2 prima di file10)\n-o file  scrive nel file' },
-  { name: 'uniq', usage: 'uniq [-cdui] [input [output]]', summary: 'Toglie le righe ripetute una dopo l’altra (di solito dopo sort).', run: uniq, help: '-c  con il numero di ripetizioni\n-d  solo le righe ripetute\n-u  solo quelle uniche\n-i  senza distinguere maiuscole e minuscole' },
-  { name: 'tee', usage: 'tee [-a] [file…]', summary: 'Copia l’input sia sull’output sia nei file.', run: tee, help: '-a  aggiunge in fondo invece di sovrascrivere' },
-  { name: 'cut', usage: 'cut -f campi [-d separatore] | -c caratteri [file…]', summary: 'Estrae colonne da ogni riga.', run: cut, help: '-f 1,3  i campi 1 e 3 (separati da tab o da -d)\n-d ,  il separatore\n-c 1-5  i caratteri da 1 a 5\n-s  solo le righe con il separatore' },
-  { name: 'tr', usage: 'tr [-dsc] insieme1 [insieme2]', summary: 'Sostituisce o elimina caratteri.', run: tr, help: 'tr a-z A-Z  in maiuscolo\ntr -d \'\\r\'  elimina i ritorni a capo di Windows\ntr -s \' \'  un solo spazio di fila\nClassi: [:upper:] [:lower:] [:digit:] [:alpha:] [:alnum:] [:space:] [:punct:]' },
-  { name: 'rev', usage: 'rev [file…]', summary: 'Scrive ogni riga al contrario.', run: rev },
-  { name: 'nl', usage: 'nl [-b a] [file…]', summary: 'Numera le righe (non vuote, o tutte con -b a).', run: nl },
-  { name: 'seq', usage: 'seq [primo [passo]] ultimo', summary: 'Scrive una sequenza di numeri.', run: seq, help: '-s S  separatore (a capo se non indicato)\n-w  stessa larghezza, con zeri davanti' },
-  { name: 'yes', usage: 'yes [testo]', summary: 'Ripete una riga all’infinito (y se non indicata): utile in una pipe.', run: yes },
-  { name: 'xargs', usage: 'xargs [-n N] [-I {}] [-0] [-t] [comando [argomenti…]]', summary: 'Avvia un comando con le parole dell’input come argomenti.', run: xargs,
-    help: '-n N  al massimo N argomenti per volta\n-I {}  un comando per riga, con {} sostituito dalla riga\n-0  parole separate dal carattere nullo (find -print0)\n-d C  parole separate da C\n-t  mostra i comandi prima di avviarli\n-r  non avvia niente se l’input è vuoto\nEsempio: find . -name "*.tmp" | xargs rm' },
+  { name: 'head', get usage() { return t('help.head.usage'); }, get summary() { return t('help.head.summary'); }, run: head, get help() { return t('help.head.text'); } },
+  { name: 'tail', get usage() { return t('help.tail.usage'); }, get summary() { return t('help.tail.summary'); }, run: tail, get help() { return t('help.tail.text'); } },
+  { name: 'wc', usage: 'wc [-lwcmL] [file…]', get summary() { return t('help.wc.summary'); }, run: wc, get help() { return t('help.wc.text'); } },
+  { name: 'grep', get usage() { return t('help.grep.usage'); }, get summary() { return t('help.grep.summary'); }, run: grep,
+    get help() { return t('help.grep.text'); } },
+  { name: 'sort', get usage() { return t('help.sort.usage'); }, get summary() { return t('help.sort.summary'); }, run: sort,
+    get help() { return t('help.sort.text'); } },
+  { name: 'uniq', usage: 'uniq [-cdui] [input [output]]', get summary() { return t('help.uniq.summary'); }, run: uniq, get help() { return t('help.uniq.text'); } },
+  { name: 'tee', usage: 'tee [-a] [file…]', get summary() { return t('help.tee.summary'); }, run: tee, get help() { return t('help.tee.text'); } },
+  { name: 'cut', get usage() { return t('help.cut.usage'); }, get summary() { return t('help.cut.summary'); }, run: cut, get help() { return t('help.cut.text'); } },
+  { name: 'tr', get usage() { return t('help.tr.usage'); }, get summary() { return t('help.tr.summary'); }, run: tr, get help() { return t('help.tr.text'); } },
+  { name: 'rev', usage: 'rev [file…]', get summary() { return t('help.rev.summary'); }, run: rev },
+  { name: 'nl', usage: 'nl [-b a] [file…]', get summary() { return t('help.nl.summary'); }, run: nl },
+  { name: 'seq', get usage() { return t('help.seq.usage'); }, get summary() { return t('help.seq.summary'); }, run: seq, get help() { return t('help.seq.text'); } },
+  { name: 'yes', get usage() { return t('help.yes.usage'); }, get summary() { return t('help.yes.summary'); }, run: yes },
+  { name: 'xargs', get usage() { return t('help.xargs.usage'); }, get summary() { return t('help.xargs.summary'); }, run: xargs,
+    get help() { return t('help.xargs.text'); } },
 ];

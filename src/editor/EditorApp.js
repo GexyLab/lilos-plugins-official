@@ -11,17 +11,24 @@ import { clientFor, fileUri, servers } from './lsp/manager.js';
 import { positionAt, offsetAt, fromServer } from './lsp/convert.js';
 import { openEditorSettings } from './EditorSettings.js';
 import { FileTree } from './FileTree.js';
+import { t } from './i18n.js';
 import './editor.css';
 
 const INDENT = '  ';
 const HIGHLIGHT_LIMIT = 300_000;   // characters: above this the text is shown plain, to stay responsive
 const TEXTMATE_LIMIT = 100_000;    // TextMate re-tokenizes everything: above this the simple engine is used
-const UNTITLED = 'Senza titolo.txt';
+const untitled = () => t('document.untitledFile');
 /** Short badges for the kinds of suggestion (complete.js, lsp/convert.js). */
 const KIND_BADGES = { kw: 'kw', fn: 'ƒ', pr: 'pr', val: 'val', tag: '<>', attr: '=', abc: 'abc', ty: 'T', snip: '{}' };
 /** languageId sent to language servers when it differs from ours. */
 const LSP_IDS = { shell: 'shellscript' };
-const SEVERITY = { 1: 'errore', 2: 'avviso', 3: 'informazione', 4: 'suggerimento' };
+/** The diagnostic under the caret, by severity. */
+const diagnosticText = (severity, message) => {
+  if (severity === 2) return t('diagnostic.warning', { message });
+  if (severity === 3) return t('diagnostic.info', { message });
+  if (severity === 4) return t('diagnostic.hint', { message });
+  return t('diagnostic.error', { message });
+};
 
 // TextMate grammars added by the user, read once (the settings reload them)
 const grammarsReady = loadCustomGrammars();
@@ -33,7 +40,7 @@ const grammarsReady = loadCustomGrammars();
  * (FileTree.js), where its content is managed; the last folder opened comes back in new windows.
  */
 export default function createEditor({ args, openWindow } = {}) {
-  const win = new Window({ title: 'Senza titolo', subtitle: 'Editor', icon: 'code', width: 780, height: 520, minWidth: 460, minHeight: 280 });
+  const win = new Window({ title: t('document.untitled'), subtitle: 'Editor', icon: 'code', width: 780, height: 520, minWidth: 460, minHeight: 280 });
   const editor = new TextEditor(win, openWindow);
   // args.folder: null means "no folder" (a window restored as it was), missing means the last one
   const folder = args && 'folder' in args ? args.folder : FileTree.savedRoot();
@@ -74,7 +81,7 @@ const withTimeout = (promise, ms) => Promise.race([promise, new Promise((_, reje
 
 class TextEditor {
   fileId = null;
-  name = UNTITLED;
+  name = untitled();
   #saved = '';            // text as last saved (or loaded)
   #lost = null;           // { id, saved } of the file while it is removed: it comes back if restored
   #lang = 'text';
@@ -103,9 +110,9 @@ class TextEditor {
     const { signal } = win;
 
     const tool = (glyph, label, onclick) => h('button', { class: 'ed-btn', type: 'button', title: label, 'aria-label': label, onclick }, icon(glyph));
-    this.revealBtn = tool('folder', 'Mostra nella cartella', () => this.reveal());
+    this.revealBtn = tool('folder', t('toolbar.reveal'), () => this.reveal());
     this.schemaBtn = h('button', { class: 'ed-schema', type: 'button', onclick: () => this.#schemaMenu() });
-    this.langSelect = selectField({ value: 'text', label: 'Linguaggio', options: [], onChange: v => this.#setLanguage(v, true) });
+    this.langSelect = selectField({ value: 'text', label: t('toolbar.language'), options: [], onChange: v => this.#setLanguage(v, true) });
     this.langSelect.classList.add('ed-lang');
     this.#fillLanguages();
     this.banner = h('div', { class: 'ed-banner', role: 'alertdialog', hidden: true });
@@ -115,10 +122,10 @@ class TextEditor {
     this.code = h('pre', { class: 'ed-hl', 'aria-hidden': 'true' });
     this.squiggles = h('div', { class: 'ed-diags', 'aria-hidden': 'true' });
     this.input = h('textarea', {
-      class: 'ed-input', wrap: 'soft', spellcheck: 'false', autocapitalize: 'off', autocomplete: 'off', 'aria-label': 'Testo del documento',
+      class: 'ed-input', wrap: 'soft', spellcheck: 'false', autocapitalize: 'off', autocomplete: 'off', 'aria-label': t('document.text'),
       'aria-autocomplete': 'list', 'aria-expanded': 'false',
     });
-    this.suggestions = h('div', { class: 'ed-complete', role: 'listbox', id: `ed-complete-${uid()}`, 'aria-label': 'Suggerimenti', hidden: true });
+    this.suggestions = h('div', { class: 'ed-complete', role: 'listbox', id: `ed-complete-${uid()}`, 'aria-label': t('completion.label'), hidden: true });
     this.input.setAttribute('aria-controls', this.suggestions.id);
     // Clicking a suggestion must not take the focus away from the text
     this.suggestions.addEventListener('pointerdown', e => {
@@ -131,26 +138,26 @@ class TextEditor {
       if (opt && this.#completion && Number(opt.dataset.index) !== this.#completion.index) this.#selectCompletion(Number(opt.dataset.index));
     }, { signal });
     this.position = h('span');
-    this.info = h('button', { class: 'ed-info', type: 'button', title: 'Impostazioni dell’Editor', onclick: () => openEditorSettings(this.openWindow) });
+    this.info = h('button', { class: 'ed-info', type: 'button', title: t('toolbar.settings'), onclick: () => openEditorSettings(this.openWindow) });
     this.state = h('span', { class: 'ed-state' });
 
     this.tree = new FileTree({ win, openWindow: this.openWindow });
     this.tree.on('open', id => this.open(id));
     this.tree.on('root', () => this.#renderSidebarButton());
     this.tree.on('layout', () => this.#renderSidebarButton());
-    this.sidebarBtn = tool('sidebar', 'Mostra la cartella', () => this.toggleSidebar());
+    this.sidebarBtn = tool('sidebar', t('toolbar.showFolder'), () => this.toggleSidebar());
 
     win.body.append(
       h('div', { class: 'ed-toolbar' },
-        tool('filePlus', 'Nuovo documento', () => this.newDocument()),
-        tool('open', 'Apri un file…', () => this.openFile()),
-        tool('folderOpen', 'Apri una cartella…', () => this.openFolder()),
-        tool('save', 'Salva', () => this.save()),
+        tool('filePlus', t('toolbar.newDocument'), () => this.newDocument()),
+        tool('open', t('toolbar.openFile'), () => this.openFile()),
+        tool('folderOpen', t('toolbar.openFolder'), () => this.openFolder()),
+        tool('save', t('toolbar.save'), () => this.save()),
         this.revealBtn,
         h('span', { class: 'ed-grow' }),
         this.schemaBtn,
         this.langSelect,
-        tool('gear', 'Impostazioni dell’Editor', () => openEditorSettings(this.openWindow)),
+        tool('gear', t('toolbar.settings'), () => openEditorSettings(this.openWindow)),
         this.sidebarBtn),
       this.banner,
       h('div', { class: 'ed-main' },
@@ -222,7 +229,7 @@ class TextEditor {
     if (id === this.fileId) return;
     const node = fs.get(id);
     if (!node || node.type !== 'file') return;
-    if (!(await this.confirmDiscard(`prima di aprire «${node.name}»`))) return;
+    if (!(await this.confirmDiscard(node.name))) return;
     const [text] = await Promise.all([fs.read(id), grammarsReady]);
     this.#load(id, node.name, text);
   }
@@ -230,19 +237,19 @@ class TextEditor {
   async newDocument() {
     if (!(await this.confirmDiscard())) return;
     this.#untitled = uid();
-    this.#load(null, UNTITLED, '');
+    this.#load(null, untitled(), '');
   }
 
   /** Chooses a file of lilOS and opens it. */
   async openFile() {
-    const node = await pickFile(this.openWindow, { title: 'Apri un file' });
+    const node = await pickFile(this.openWindow, { title: t('picker.openFile.title') });
     if (node) this.open(node.id);
   }
 
   /** Chooses a folder: it opens in the panel on the right, as the root of what is managed there. */
   async openFolder() {
     const node = await pickFile(this.openWindow, {
-      kind: 'folder', title: 'Apri una cartella', text: 'La cartella compare a destra: lì puoi creare, rinominare, spostare ed eliminare file e cartelle.',
+      kind: 'folder', title: t('picker.openFolder.title'), text: t('picker.openFolder.text'),
     });
     if (node) {
       this.tree.setRoot(node.id);
@@ -265,7 +272,7 @@ class TextEditor {
       const node = fs.create(docs.id, { type: 'file', name: this.name });
       this.fileId = node.id;
       this.name = node.name;
-      this.#message = `Salvato in ${fs.path(node.id)}`;
+      this.#message = t('status.savedIn', { path: fs.path(node.id) });
     } else {
       this.#message = '';
     }
@@ -285,10 +292,10 @@ class TextEditor {
   }
 
   /**
-   * With unsaved changes, asks in a bar above the text: Salva / Non salvare / Annulla.
-   * Resolves true when it is fine to go on.
+   * With unsaved changes, asks in a bar above the text: Save / Don't save / Cancel (`opening`:
+   * the name of the file about to be opened). Resolves true when it is fine to go on.
    */
-  confirmDiscard(context = '') {
+  confirmDiscard(opening = '') {
     if (!this.dirty) return Promise.resolve(true);
     return new Promise(resolve => {
       const done = async choice => {
@@ -299,10 +306,12 @@ class TextEditor {
       };
       this.#openBanner([
         icon('help'),
-        h('span', { class: 'ed-banner-text' }, `Le modifiche a «${this.#displayName()}» non sono salvate${context ? ` (${context})` : ''}.`),
-        actionButton({ label: 'Salva', primary: true, onClick: () => done('save') }),
-        actionButton({ label: 'Non salvare', danger: true, onClick: () => done('discard') }),
-        actionButton({ label: 'Annulla', onClick: () => done('cancel') }),
+        h('span', { class: 'ed-banner-text' }, opening
+          ? t('dialog.unsaved.textBeforeOpen', { name: this.#displayName(), file: opening })
+          : t('dialog.unsaved.text', { name: this.#displayName() })),
+        actionButton({ label: t('dialog.unsaved.save'), primary: true, onClick: () => done('save') }),
+        actionButton({ label: t('dialog.unsaved.discard'), danger: true, onClick: () => done('discard') }),
+        actionButton({ label: t('dialog.cancel'), onClick: () => done('cancel') }),
       ], () => done('cancel'));
     });
   }
@@ -316,14 +325,14 @@ class TextEditor {
     this.langSelect.value = this.#lang;
     this.#renderSchemaButton();
     this.#status = this.#message
-      || (this.dirty ? 'Modificato' : node ? `Salvato · ${fs.path(node.id)}` : 'Nuovo documento');
+      || (this.dirty ? t('status.modified') : node ? t('status.saved', { path: fs.path(node.id) }) : t('status.newDocument'));
     this.state.classList.toggle('dirty', this.dirty);
     this.#paint();
     this.#renderInfo();
   }
 
   #renderSidebarButton() {
-    const label = !this.tree.root ? 'Apri una cartella…' : this.tree.collapsed ? 'Mostra la cartella' : 'Nascondi la cartella';
+    const label = !this.tree.root ? t('toolbar.openFolder') : this.tree.collapsed ? t('toolbar.showFolder') : t('toolbar.hideFolder');
     this.sidebarBtn.title = label;
     this.sidebarBtn.setAttribute('aria-label', label);
     this.sidebarBtn.setAttribute('aria-pressed', String(!!this.tree.root && !this.tree.collapsed));
@@ -411,11 +420,13 @@ class TextEditor {
     const engine = this.#hl?.engine ?? 'simple';
     const errors = this.#diagnostics.filter(d => (d.severity ?? 1) === 1).length;
     const warnings = this.#diagnostics.filter(d => d.severity === 2).length;
-    const parts = [ENGINE_LABELS[engine] + (engineFor(lang) !== engine ? ` (${ENGINE_LABELS[engineFor(lang)]} in caricamento)` : '')];
+    const parts = [engineFor(lang) !== engine ? t('info.engineLoading', { engine: ENGINE_LABELS[engine], loading: ENGINE_LABELS[engineFor(lang)] }) : ENGINE_LABELS[engine]];
     if (this.#serverNote) parts.push(this.#serverNote);
-    if (errors || warnings) parts.push([errors && `${errors} ${errors === 1 ? 'errore' : 'errori'}`, warnings && `${warnings} ${warnings === 1 ? 'avviso' : 'avvisi'}`].filter(Boolean).join(', '));
+    if (errors && warnings) parts.push(t('info.problems', { errors: t('info.errors', { n: errors }), warnings: t('info.warnings', { n: warnings }) }));
+    else if (errors) parts.push(t('info.errors', { n: errors }));
+    else if (warnings) parts.push(t('info.warnings', { n: warnings }));
     this.info.textContent = parts.join(' · ');
-    this.info.title = [this.#engineNote, 'Impostazioni dell’Editor'].filter(Boolean).join('\n');
+    this.info.title = [this.#engineNote, t('toolbar.settings')].filter(Boolean).join('\n');
     this.info.classList.toggle('has-errors', errors > 0);
   }
 
@@ -426,8 +437,8 @@ class TextEditor {
     const col = pos - text.lastIndexOf('\n', pos - 1);
     // The diagnostic under the caret, if any, is shown next to the position
     const here = this.#diagnosticAt(text, pos);
-    this.position.textContent = `Riga ${line}, colonna ${col} · ${this.#lines} ${this.#lines === 1 ? 'riga' : 'righe'}`;
-    this.state.textContent = here ? `${SEVERITY[here.severity ?? 1]}: ${here.message}` : this.#status;
+    this.position.textContent = t('status.position', { line, col, n: this.#lines });
+    this.state.textContent = here ? diagnosticText(here.severity ?? 1, here.message) : this.#status;
     this.state.title = this.state.textContent;
     this.state.classList.toggle('diag', !!here);
     this.gutter.querySelector('.on')?.classList.remove('on');
@@ -481,7 +492,7 @@ class TextEditor {
     if (engine === 'simple') return;
     highlighter(lang, engine)
       .then(hl => { if (this.#hlKey === key) { this.#hl = hl; this.#paint(); this.#renderInfo(); } })
-      .catch(err => { if (this.#hlKey === key) { this.#engineNote = `${ENGINE_LABELS[engine]} non disponibile: ${err.message}`; this.#renderInfo(); } });
+      .catch(err => { if (this.#hlKey === key) { this.#engineNote = t('info.engineUnavailable', { engine: ENGINE_LABELS[engine], error: err.message }); this.#renderInfo(); } });
   }
 
   // ---------- Language server ----------
@@ -492,12 +503,12 @@ class TextEditor {
     const pending = clientFor(lang);
     if (!pending) { this.#serverNote = ''; return this.#renderInfo(); }
     const token = this.#connectToken = {};
-    this.#serverNote = 'Avvio del server…';
+    this.#serverNote = t('server.starting');
     this.#renderInfo();
     const client = await pending;
     if (this.#connectToken !== token) return;
     if (!client.ready) {
-      this.#serverNote = `Server non disponibile: ${client.error ?? 'errore'}`;
+      this.#serverNote = t('server.unavailable', { error: client.error ?? t('server.unknownError') });
       return this.#renderInfo();
     }
     const uri = this.fileId && fs.exists(this.fileId) ? fileUri(this.fileId) : `untitled:${this.#untitled}`;
@@ -514,7 +525,7 @@ class TextEditor {
         if (client.ready || this.#client !== client) return;
         this.#client = null;
         this.#diagnostics = [];
-        this.#serverNote = `Server non disponibile: ${client.error ?? 'chiuso'}`;
+        this.#serverNote = t('server.unavailable', { error: client.error ?? t('server.closedShort') });
         this.#renderDiagnostics();
         this.#renderInfo();
       }),
@@ -599,12 +610,12 @@ class TextEditor {
     this.schemaBtn.hidden = !isJson;
     if (!isJson) return;
     const source = this.fileId ? editorConfig.get('schemas')[this.fileId] : null;
-    let label = 'nessuno';
-    if (source?.type === 'file') label = fs.get(source.id)?.name ?? 'file eliminato';
+    let label = t('schema.none');
+    if (source?.type === 'file') label = fs.get(source.id)?.name ?? t('schema.fileDeleted');
     else if (source?.type === 'url') { try { label = new URL(source.url).host; } catch { label = source.url; } }
-    this.schemaBtn.replaceChildren(icon('file'), h('span', {}, `Schema: ${label}`));
+    this.schemaBtn.replaceChildren(icon('file'), h('span', {}, t('schema.button', { name: label })));
     this.schemaBtn.disabled = !this.fileId;
-    this.schemaBtn.title = this.fileId ? (source?.type === 'url' ? source.url : 'Schema JSON del file') : 'Salva il file per associargli uno schema';
+    this.schemaBtn.title = this.fileId ? (source?.type === 'url' ? source.url : t('schema.tooltip')) : t('schema.saveFirst');
   }
 
   #schemaMenu() {
@@ -613,24 +624,24 @@ class TextEditor {
     const r = this.schemaBtn.getBoundingClientRect();
     const source = editorConfig.get('schemas')[fileId];
     openMenu(r.left, r.bottom + 2, [
-      { label: 'Nessuno schema', icon: source ? 'x' : 'check', action: () => editorConfig.setEntry('schemas', fileId, undefined) },
-      { label: 'Scegli un file di lilOS…', icon: 'file', action: async () => {
-        const node = await pickFile(this.openWindow, { title: 'Scegli lo schema JSON', exts: ['json'], text: `Lo schema descrive le chiavi e i valori ammessi in «${this.name}».` });
+      { label: t('schema.menu.none'), icon: source ? 'x' : 'check', action: () => editorConfig.setEntry('schemas', fileId, undefined) },
+      { label: t('schema.menu.file'), icon: 'file', action: async () => {
+        const node = await pickFile(this.openWindow, { title: t('schema.picker.title'), exts: ['json'], text: t('schema.picker.text', { name: this.name }) });
         if (node && node.id !== fileId) editorConfig.setEntry('schemas', fileId, { type: 'file', id: node.id });
       } },
-      { label: 'Indirizzo web…', icon: 'globe', action: () => this.#askSchemaUrl(fileId, source?.type === 'url' ? source.url : '') },
+      { label: t('schema.menu.url'), icon: 'globe', action: () => this.#askSchemaUrl(fileId, source?.type === 'url' ? source.url : '') },
       '-',
-      { label: 'Vale anche "$schema" scritto nel file', icon: 'info', disabled: true },
+      { label: t('schema.menu.inFile'), icon: 'info', disabled: true },
     ]);
   }
 
   #askSchemaUrl(fileId, value) {
-    const input = h('input', { class: 'ctl-text ed-banner-input', type: 'url', placeholder: 'https://json.schemastore.org/package.json', spellcheck: 'false', 'aria-label': 'Indirizzo dello schema' });
+    const input = h('input', { class: 'ctl-text ed-banner-input', type: 'url', placeholder: 'https://json.schemastore.org/package.json', spellcheck: 'false', 'aria-label': t('schema.url.label') });
     input.value = value;
-    const note = h('span', { class: 'ed-banner-text' }, 'Indirizzo dello schema JSON:');
+    const note = h('span', { class: 'ed-banner-text' }, t('schema.url.prompt'));
     const apply = () => {
       const url = input.value.trim();
-      if (!isSchemaUrl(url)) { note.textContent = 'Serve un indirizzo http:// o https://'; input.focus(); return; }
+      if (!isSchemaUrl(url)) { note.textContent = t('schema.url.invalid'); input.focus(); return; }
       editorConfig.setEntry('schemas', fileId, { type: 'url', url });
       this.#closeBanner();
       this.input.focus();
@@ -638,8 +649,8 @@ class TextEditor {
     input.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); apply(); } });
     this.#openBanner([
       icon('globe'), note, input,
-      actionButton({ label: 'Usa', primary: true, onClick: apply }),
-      actionButton({ label: 'Annulla', onClick: () => { this.#closeBanner(); this.input.focus(); } }),
+      actionButton({ label: t('schema.url.use'), primary: true, onClick: apply }),
+      actionButton({ label: t('dialog.cancel'), onClick: () => { this.#closeBanner(); this.input.focus(); } }),
     ], () => { this.#closeBanner(); this.input.focus(); });
     input.focus();
     input.select();
@@ -795,7 +806,7 @@ class TextEditor {
   }
 
   #displayName() {
-    return this.fileId ? this.name : 'Senza titolo';
+    return this.fileId ? this.name : t('document.untitled');
   }
 
   #changed() {
@@ -859,7 +870,7 @@ class TextEditor {
       this.#saved = this.#lost.saved;
       this.#lost = null;
       this.name = e.node.name;
-      this.#message = 'Il file è stato ripristinato';
+      this.#message = t('status.restored');
       this.tree.setCurrent(this.fileId);
       this.#connect();
       this.render();
@@ -871,8 +882,8 @@ class TextEditor {
       this.fileId = null;
       this.#saved = '';   // nothing on disk any more: everything counts as unsaved
       this.#message = e.trashed
-        ? 'Il file è nel cestino: il testo resta qui finché non lo salvi o lo ripristini'
-        : 'Il file è stato eliminato: il testo resta qui finché non lo salvi';
+        ? t('status.trashed')
+        : t('status.deleted');
       this.tree.setCurrent(null);
       this.#connect();
       this.render();

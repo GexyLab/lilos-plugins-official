@@ -8,6 +8,7 @@ import { pipe, StringReader, StringWriter, EmptyReader, NullWriter, Writer } fro
 import {
   BreakSignal, ContinueSignal, ReturnSignal, ExitSignal, Interrupt, BrokenPipe, ShellError, ParseError, Incomplete, Token,
 } from './signals.js';
+import { t } from '../i18n.js';
 
 /**
  * The interpreter: variables (scalars and indexed arrays, function-local scopes), functions,
@@ -44,7 +45,7 @@ export class Shell {
     this.jobs = { list: [], next: 1 };
     this.pid = nextPid++;
     this.started = Date.now();
-    const user = session.user?.username || 'utente';
+    const user = session.user?.username || t('shell.defaultUser');
     const vars = {
       HOME: fs.home, USER: user, LOGNAME: user, HOSTNAME: 'lilos', SHELL: '/bin/bash', TERM: 'lilos',
       PATH: `${fs.home}/bin`, PS1: '\\u@\\h:\\w\\$ ', PS2: '> ', 0: 'bash', BASH_VERSION: '5.2-lilos',
@@ -102,7 +103,7 @@ export class Shell {
 
   setVar(name, value, index = null, { local = false, exported, readonly } = {}) {
     let v = local ? this.scopes.at(-1).get(name) : this.#find(name);
-    if (v?.readonly) throw new ShellError(`${name}: variabile in sola lettura`);
+    if (v?.readonly) throw new ShellError(t('shell.readonly', { name }));
     if (!v) {
       v = { value: null, exported: false };
       (local ? this.scopes.at(-1) : this.scopes[0]).set(name, v);
@@ -124,7 +125,7 @@ export class Shell {
     for (let i = this.scopes.length - 1; i >= 0; i--) {
       const v = this.scopes[i].get(name);
       if (!v) continue;
-      if (v.readonly) throw new ShellError(`${name}: impossibile eliminare: variabile in sola lettura`);
+      if (v.readonly) throw new ShellError(t('shell.cannotUnset', { name }));
       if (index != null && Array.isArray(v.value)) delete v.value[index];
       else this.scopes[i].delete(name);
       return;
@@ -164,7 +165,7 @@ export class Shell {
   arrayIndex(text) {
     const expanded = String(text).replace(/\$\{?([A-Za-z_]\w*|[0-9#?])\}?/g, (_, n) => (/^\d$/.test(n) ? this.positional[n - 1] : n === '#' ? this.positional.length : n === '?' ? this.status : this.getVar(n)) ?? '');
     const i = Number(this.arith(expanded));
-    if (i < 0) throw new ShellError(`${text}: indice dell’array non valido`);
+    if (i < 0) throw new ShellError(t('shell.badSubscript', { index: text }));
     return i;
   }
 
@@ -396,7 +397,7 @@ export class Shell {
           return 2;
         }
     }
-    throw new ShellError(`costrutto sconosciuto: ${node.type}`);
+    throw new ShellError(t('shell.unknownConstruct', { type: node.type }));
   }
 
   async condition(list, io) {
@@ -452,7 +453,7 @@ export class Shell {
         try {
           re = new RegExp(await expandRegex(this, e.right));
         } catch {
-          throw new ShellError('espressione regolare non valida');
+          throw new ShellError(t('shell.badRegex'));
         }
         const m = re.exec(left);
         this.setVar('BASH_REMATCH', m ? [...m].map(s => s ?? '') : []);
@@ -479,12 +480,12 @@ export class Shell {
       case '-L': case '-h': return node()?.type === 'app';
       case '-t': return arg === '0' || arg === '1' || arg === '2';
     }
-    throw new ShellError(`${flag}: operatore unario atteso`);
+    throw new ShellError(t('shell.unaryExpected', { op: flag }));
   }
 
   binaryTest(op, a, b) {
     const int = v => {
-      if (!/^\s*-?\d+\s*$/.test(v)) throw new ShellError(`${v}: è attesa un’espressione intera`);
+      if (!/^\s*-?\d+\s*$/.test(v)) throw new ShellError(t('shell.integerExpected', { value: v }));
       return BigInt(v.trim());
     };
     switch (op) {
@@ -502,7 +503,7 @@ export class Shell {
       case '-ot': return (this.resolve(a)?.modified ?? Infinity) < (this.resolve(b)?.modified ?? Infinity);
       case '-ef': { const x = this.resolve(a), y = this.resolve(b); return !!x && x.id === y?.id; }
     }
-    throw new ShellError(`${op}: operatore binario atteso`);
+    throw new ShellError(t('shell.binaryExpected', { op }));
   }
 
   // ---------- Simple commands ----------
@@ -580,7 +581,7 @@ export class Shell {
         if (this.resolve(`${dir}/${file}`)?.type === 'file') return this.runScript(`${dir}/${file}`, argv.slice(1), io);
       }
     }
-    await io.stderr.write(`bash: ${name}: comando non trovato\n`);
+    await io.stderr.write(`bash: ${t('shell.commandNotFound', { name })}\n`);
     return 127;
   }
 
@@ -602,7 +603,7 @@ export class Shell {
       }
       if (err instanceof BreakSignal || err instanceof ContinueSignal || err instanceof ReturnSignal || err instanceof ExitSignal || err instanceof Interrupt) throw err;
       if (err instanceof Incomplete || err instanceof ParseError) {
-        await report(err.message || 'errore di sintassi: fine del testo inattesa');
+        await report(err.message || t('parse.unexpectedEnd'));
         return 2;
       }
       await report(err?.message ?? String(err));
@@ -611,7 +612,7 @@ export class Shell {
   }
 
   async callFunction(name, argv, io) {
-    if (this.funcDepth >= MAX_DEPTH) throw new ShellError(`${name}: troppi livelli di ricorsione`);
+    if (this.funcDepth >= MAX_DEPTH) throw new ShellError(t('shell.tooDeep', { name }));
     const fn = this.functions.get(name);
     const saved = this.positional;
     const scope = new Map();
@@ -633,9 +634,9 @@ export class Shell {
   /** Text of a script file. Throws ShellError if it cannot be read. */
   async readScript(path) {
     const node = this.resolve(path);
-    if (!node) throw new ShellError(`${path}: file o cartella inesistente`, 127);
-    if (node.type === 'folder') throw new ShellError(`${path}: è una cartella`, 126);
-    if (node.type !== 'file') throw new ShellError(`${path}: non è un file`, 126);
+    if (!node) throw new ShellError(t('err.noSuchFile', { path }), 127);
+    if (node.type === 'folder') throw new ShellError(t('err.isADirectory', { path }), 126);
+    if (node.type !== 'file') throw new ShellError(t('err.notAFile', { path }), 126);
     return fs.read(node.id);
   }
 
@@ -661,7 +662,7 @@ export class Shell {
       parse(text, { aliases: this.aliases });
     } catch (err) {
       if (!(err instanceof ParseError || err instanceof Incomplete)) throw err;
-      await io.stderr.write(`${label}: ${err.message || 'errore di sintassi: fine del file inattesa'}\n`);
+      await io.stderr.write(`${label}: ${err.message || t('parse.unexpectedEndOfFile')}\n`);
       return 2;
     }
     return this.runSubshell({ type: 'script', source: text }, io);
@@ -704,16 +705,16 @@ export class Shell {
             break;
           }
           case '>&': case '<&': {
-            const t = await this.redirTarget(r);
-            if (t === '-') fds[fd] = r.op === '>&' ? new NullWriter() : new EmptyReader();
-            else if (/^\d+$/.test(t)) {
-              if (!fds[t]) throw new ShellError(`${t}: descrittore di file errato`);
-              fds[fd] = fds[t];
+            const target = await this.redirTarget(r);
+            if (target === '-') fds[fd] = r.op === '>&' ? new NullWriter() : new EmptyReader();
+            else if (/^\d+$/.test(target)) {
+              if (!fds[target]) throw new ShellError(t('shell.badFd', { fd: target }));
+              fds[fd] = fds[target];
             } else if (r.op === '>&' && r.fd == null) {
-              const w = await this.openWrite(t, false, io);
+              const w = await this.openWrite(target, false, io);
               opened.push(w);
               fds[1] = fds[2] = w;
-            } else throw new ShellError(`${t}: è richiesto un descrittore di file`);
+            } else throw new ShellError(t('shell.fdExpected', { target }));
             break;
           }
           case '<<': case '<<-':
@@ -745,7 +746,7 @@ export class Shell {
 
   async redirTarget(r) {
     const fields = await expandWord(this, r.target);
-    if (fields.length !== 1) throw new ShellError(`${await expandString(this, r.target)}: redirezione ambigua`);
+    if (fields.length !== 1) throw new ShellError(t('shell.ambiguousRedirect', { target: await expandString(this, r.target) }));
     return fields[0];
   }
 
@@ -753,9 +754,9 @@ export class Shell {
     if (path === '/dev/null') return new EmptyReader();
     if (path === '/dev/stdin') return io.stdin;
     const node = this.resolve(path);
-    if (!node) throw new ShellError(`${path}: file o cartella inesistente`);
-    if (node.type === 'folder') throw new ShellError(`${path}: è una cartella`);
-    if (node.type !== 'file') throw new ShellError(`${path}: non è un file`);
+    if (!node) throw new ShellError(t('err.noSuchFile', { path }));
+    if (node.type === 'folder') throw new ShellError(t('err.isADirectory', { path }));
+    if (node.type !== 'file') throw new ShellError(t('err.notAFile', { path }));
     return new StringReader(await fs.read(node.id));
   }
 
@@ -773,11 +774,11 @@ export class Shell {
   /** The file at a path, created if missing. Throws ShellError for folders and missing folders. */
   fileFor(path) {
     const node = this.resolve(path);
-    if (node?.type === 'folder') throw new ShellError(`${path}: è una cartella`);
-    if (node?.type === 'app') throw new ShellError(`${path}: è un collegamento a un’app`);
+    if (node?.type === 'folder') throw new ShellError(t('err.isADirectory', { path }));
+    if (node?.type === 'app') throw new ShellError(t('shell.isAppLink', { path }));
     if (node) return node;
     const { parent, name } = this.locate(path);
-    if (parent?.type !== 'folder' || !name) throw new ShellError(`${path}: file o cartella inesistente`);
+    if (parent?.type !== 'folder' || !name) throw new ShellError(t('err.noSuchFile', { path }));
     return fs.create(parent.id, { type: 'file', name });
   }
 
@@ -813,7 +814,7 @@ export class Shell {
     const done = this.jobs.list.filter(j => j.state === 'done');
     this.jobs.list = this.jobs.list.filter(j => j.state !== 'done');
     if (!this.jobs.list.length) this.jobs.next = 1;
-    return done.map(j => `[${j.id}]  ${j.code === 0 ? 'Fatto' : j.code === 130 ? 'Interrotto' : `Uscita ${j.code}`}\t\t${j.text}\n`);
+    return done.map(j => `[${j.id}]  ${j.code === 0 ? t('jobs.done') : j.code === 130 ? t('jobs.interrupted') : t('jobs.exit', { code: j.code })}\t\t${j.text}\n`);
   }
 
   /** Waits for a job, unless Ctrl+C interrupts the wait (`fg` passes the interrupt on). */
@@ -864,9 +865,9 @@ export class Context {
     for (const file of files) {
       if (file === '-') { yield { name: '-', text: await this.stdin.readAll() }; continue; }
       const node = this.resolve(file);
-      if (!node) { await this.error(`${file}: file o cartella inesistente`); this.failed = true; continue; }
-      if (node.type === 'folder') { await this.error(`${file}: è una cartella`); this.failed = true; continue; }
-      if (node.type !== 'file') { await this.error(`${file}: non è un file`); this.failed = true; continue; }
+      if (!node) { await this.error(t('err.noSuchFile', { path: file })); this.failed = true; continue; }
+      if (node.type === 'folder') { await this.error(t('err.isADirectory', { path: file })); this.failed = true; continue; }
+      if (node.type !== 'file') { await this.error(t('err.notAFile', { path: file })); this.failed = true; continue; }
       yield { name: file, node, text: await fs.read(node.id) };
       await this.tick();
     }
@@ -895,5 +896,5 @@ const keepOpen = w => ({ write: t => w.write(t), close: async () => {} });
 export const quote = s => (s === '' ? "''" : /^[\w@%+=:,./~-]+$/.test(s) ? s : `'${s.replace(/'/g, `'\\''`)}'`);
 
 export function helpText(cmd) {
-  return `${cmd.usage ? `Uso: ${cmd.usage}\n` : ''}${cmd.summary ?? ''}\n${cmd.help ? `\n${cmd.help.trim()}\n` : ''}`;
+  return `${cmd.usage ? `${t('help.usageLine', { usage: cmd.usage })}\n` : ''}${cmd.summary ?? ''}\n${cmd.help ? `\n${cmd.help.trim()}\n` : ''}`;
 }

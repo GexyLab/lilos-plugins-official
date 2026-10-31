@@ -3,29 +3,31 @@ import { launch, handleCommand, pickFile } from '@lilos/system';
 import { glyph } from './glyphs.js';
 import { OPENS, extOf, labelOf, formatOf, decode, encode, resample, cropped, copyOf, formatBytes, FORMATS } from './image.js';
 import { resizeDialog, convertDialog } from './dialogs.js';
+import { t } from './i18n.js';
 import './photo.css';
 
-const COLORS = [
-  { value: '#ffffff', label: 'Bianco' }, { value: '#1f2328', label: 'Nero' }, { value: '#e5484d', label: 'Rosso' },
-  { value: '#f2994a', label: 'Arancione' }, { value: '#f2c94c', label: 'Giallo' }, { value: '#30a46c', label: 'Verde' },
-  { value: '#3b6ef5', label: 'Blu' }, { value: '#7c5cdb', label: 'Viola' },
+// Labels come from functions, so they are in the system's language when they are drawn
+const colors = () => [
+  { value: '#ffffff', label: t('color.white') }, { value: '#1f2328', label: t('color.black') }, { value: '#e5484d', label: t('color.red') },
+  { value: '#f2994a', label: t('color.orange') }, { value: '#f2c94c', label: t('color.yellow') }, { value: '#30a46c', label: t('color.green') },
+  { value: '#3b6ef5', label: t('color.blue') }, { value: '#7c5cdb', label: t('color.purple') },
 ];
 const FONTS = [
-  { value: 'sans', label: 'Sans', css: 'system-ui, "Segoe UI", Roboto, sans-serif' },
-  { value: 'serif', label: 'Serif', css: 'Georgia, "Times New Roman", serif' },
-  { value: 'mono', label: 'Mono', css: 'ui-monospace, Consolas, "Courier New", monospace' },
-  { value: 'hand', label: 'Manoscritto', css: '"Segoe Print", "Bradley Hand", "Comic Sans MS", cursive' },
+  { value: 'sans', label: () => t('font.sans'), css: 'system-ui, "Segoe UI", Roboto, sans-serif' },
+  { value: 'serif', label: () => t('font.serif'), css: 'Georgia, "Times New Roman", serif' },
+  { value: 'mono', label: () => t('font.mono'), css: 'ui-monospace, Consolas, "Courier New", monospace' },
+  { value: 'hand', label: () => t('font.hand'), css: '"Segoe Print", "Bradley Hand", "Comic Sans MS", cursive' },
 ];
-const RATIOS = [
-  { value: 'free', label: 'Libere' }, { value: 'image', label: 'Come l’immagine' }, { value: '1', label: 'Quadrato 1:1' },
+const ratios = () => [
+  { value: 'free', label: t('ratio.free') }, { value: 'image', label: t('ratio.image') }, { value: '1', label: t('ratio.square') },
   { value: '4/3', label: '4:3' }, { value: '3/4', label: '3:4' }, { value: '3/2', label: '3:2' }, { value: '2/3', label: '2:3' },
   { value: '16/9', label: '16:9' }, { value: '9/16', label: '9:16' },
 ];
 const TOOLS = [
-  { id: 'view', label: 'Guarda e sposta', key: 'V', glyph: 'hand' },
-  { id: 'brush', label: 'Disegna', key: 'B', glyph: 'brush' },
-  { id: 'text', label: 'Testo', key: 'T', glyph: 'text' },
-  { id: 'crop', label: 'Ritaglia', key: 'C', glyph: 'crop' },
+  { id: 'view', label: () => t('tool.view'), key: 'V', glyph: 'hand' },
+  { id: 'brush', label: () => t('tool.brush'), key: 'B', glyph: 'brush' },
+  { id: 'text', label: () => t('tool.text'), key: 'T', glyph: 'text' },
+  { id: 'crop', label: () => t('tool.crop'), key: 'C', glyph: 'crop' },
 ];
 const ZOOMS = [0.05, 0.1, 1 / 6, 0.25, 1 / 3, 0.5, 2 / 3, 1, 1.5, 2, 3, 4, 6, 8, 12, 16];
 const LINE = 1.2;          // line height of the text tool, in font sizes
@@ -80,19 +82,19 @@ class Photo {
     const { signal } = win;
 
     const tool = (symbol, label, onclick) => h('button', { class: 'ph-btn', type: 'button', title: label, 'aria-label': label, onclick }, glyph(symbol));
-    this.undoBtn = tool('undo', 'Annulla (Ctrl Z)', () => this.stack.undo());
-    this.redoBtn = tool('redo', 'Ripeti (Ctrl Y)', () => this.stack.redo());
-    this.saveBtn = tool('save', 'Salva (Ctrl S)', () => this.save());
-    this.downloadBtn = tool('download', 'Scarica sul computer', () => this.download());
-    this.revealBtn = tool('folder', 'Mostra nella cartella', () => this.reveal());
-    this.toolBtns = TOOLS.map(t => {
-      const b = tool(t.glyph, `${t.label} (${t.key})`, () => this.setTool(t.id));
-      b.dataset.tool = t.id;
+    this.undoBtn = tool('undo', t('toolbar.undo'), () => this.stack.undo());
+    this.redoBtn = tool('redo', t('toolbar.redo'), () => this.stack.redo());
+    this.saveBtn = tool('save', t('toolbar.save'), () => this.save());
+    this.downloadBtn = tool('download', t('toolbar.download'), () => this.download());
+    this.revealBtn = tool('folder', t('toolbar.reveal'), () => this.reveal());
+    this.toolBtns = TOOLS.map(x => {
+      const b = tool(x.glyph, t('toolbar.tool', { label: x.label(), key: x.key }), () => this.setTool(x.id));
+      b.dataset.tool = x.id;
       return b;
     });
     const labelled = (symbol, label, title, onclick) => h('button', { class: 'ph-btn ph-labelled', type: 'button', title, onclick }, glyph(symbol), h('span', {}, label));
-    this.resizeBtn = labelled('resize', 'Ridimensiona', 'Ridimensiona l’immagine…', () => this.resize());
-    this.convertBtn = labelled('convert', 'Converti', 'Converti e salva una copia…', () => this.convert());
+    this.resizeBtn = labelled('resize', t('toolbar.resize'), t('toolbar.resize.title'), () => this.resize());
+    this.convertBtn = labelled('convert', t('toolbar.convert'), t('toolbar.convert.title'), () => this.convert());
     this.fileInput = h('input', { type: 'file', accept: 'image/*,.svg', multiple: true, hidden: true });
     this.fileInput.addEventListener('change', () => {
       const files = [...this.fileInput.files];
@@ -109,30 +111,30 @@ class Photo {
       ...['nw', 'n', 'ne', 'e', 'se', 's', 'sw', 'w'].map(d => h('span', { class: 'ph-handle', dataset: { handle: d } })),
       this.cropSize = h('span', { class: 'ph-crop-size' }));
     this.paper = h('div', { class: 'ph-paper' }, this.overlay, this.cropFrame);
-    this.stage = h('div', { class: 'ph-stage', tabindex: '0', 'aria-label': 'Immagine' }, this.paper);
-    this.prevBtn = h('button', { class: 'ph-nav ph-prev', type: 'button', title: 'Immagine precedente (←)', 'aria-label': 'Immagine precedente', onclick: () => this.step(-1) }, icon('arrowLeft'));
-    this.nextBtn = h('button', { class: 'ph-nav ph-next', type: 'button', title: 'Immagine successiva (→)', 'aria-label': 'Immagine successiva', onclick: () => this.step(1) }, icon('arrowRight'));
+    this.stage = h('div', { class: 'ph-stage', tabindex: '0', 'aria-label': t('stage.label') }, this.paper);
+    this.prevBtn = h('button', { class: 'ph-nav ph-prev', type: 'button', title: t('nav.previous.title'), 'aria-label': t('nav.previous'), onclick: () => this.step(-1) }, icon('arrowLeft'));
+    this.nextBtn = h('button', { class: 'ph-nav ph-next', type: 'button', title: t('nav.next.title'), 'aria-label': t('nav.next'), onclick: () => this.step(1) }, icon('arrowRight'));
     this.empty = h('div', { class: 'ph-empty' });
-    this.dropHint = h('div', { class: 'ph-drop', hidden: true }, glyph('upload'), h('span', {}, 'Rilascia per importare in lilOS'));
+    this.dropHint = h('div', { class: 'ph-drop', hidden: true }, glyph('upload'), h('span', {}, t('drop.hint')));
     this.main = h('div', { class: 'ph-main' }, this.stage, this.prevBtn, this.nextBtn, this.empty, this.dropHint);
 
     this.dims = h('span', { class: 'ph-mono' });
     this.info = h('span');
     this.position = h('span');
     this.state = h('span', { class: 'ph-state' });
-    this.zoomLabel = h('button', { class: 'ph-zoom-value', type: 'button', title: 'Adatta alla finestra', onclick: () => this.fitToWindow() });
+    this.zoomLabel = h('button', { class: 'ph-zoom-value', type: 'button', title: t('zoom.fitToWindow'), onclick: () => this.fitToWindow() });
     const zoomBtn = (symbol, label, onclick) => h('button', { class: 'ph-zoom-btn', type: 'button', title: label, 'aria-label': label, onclick }, glyph(symbol));
 
     win.body.classList.add('ph');
     win.body.append(
       h('div', { class: 'ph-toolbar' },
-        tool('open', 'Apri un’immagine… (Ctrl O)', () => this.openFile()),
-        tool('upload', 'Importa dal computer…', () => this.fileInput.click()),
+        tool('open', t('toolbar.open'), () => this.openFile()),
+        tool('upload', t('toolbar.import'), () => this.fileInput.click()),
         this.saveBtn, this.downloadBtn,
         h('span', { class: 'ph-sep' }),
         this.undoBtn, this.redoBtn,
         h('span', { class: 'ph-sep' }),
-        h('span', { class: 'ph-tools', role: 'group', 'aria-label': 'Strumenti' }, this.toolBtns),
+        h('span', { class: 'ph-tools', role: 'group', 'aria-label': t('toolbar.tools') }, this.toolBtns),
         h('span', { class: 'ph-sep' }),
         this.resizeBtn, this.convertBtn,
         h('span', { class: 'ph-grow' }),
@@ -143,11 +145,11 @@ class Photo {
       h('div', { class: 'ph-status' },
         this.dims, this.info, this.position, this.state,
         h('span', { class: 'ph-grow' }),
-        zoomBtn('minus', 'Riduci lo zoom (−)', () => this.zoomStep(-1)),
+        zoomBtn('minus', t('zoom.out'), () => this.zoomStep(-1)),
         this.zoomLabel,
-        zoomBtn('plus', 'Aumenta lo zoom (+)', () => this.zoomStep(1)),
-        zoomBtn('fit', 'Adatta alla finestra (0)', () => this.fitToWindow()),
-        zoomBtn('actual', 'Dimensione reale (1)', () => this.zoomTo(1))));
+        zoomBtn('plus', t('zoom.in'), () => this.zoomStep(1)),
+        zoomBtn('fit', t('zoom.fit'), () => this.fitToWindow()),
+        zoomBtn('actual', t('zoom.actual'), () => this.zoomTo(1))));
 
     this.paper.addEventListener('pointerdown', e => this.#onPaperDown(e), { signal });
     this.stage.addEventListener('pointerdown', e => this.#onStageDown(e), { signal });
@@ -181,18 +183,18 @@ class Photo {
     const node = fs.get(id);
     if (!node || node.type !== 'file') return;
     if (id === this.fileId && this.canvas && !this.#error) return;
-    if (!(await this.confirmDiscard(`prima di aprire «${node.name}»`))) return;
+    if (!(await this.confirmDiscard(t('confirm.unsaved.beforeOpen', { name: this.name, other: node.name })))) return;
     this.#cancelText();
     const seq = ++this.#loading;
-    this.#message = 'Apertura…';
+    this.#message = t('status.opening');
     this.render();
     let canvas = null, error = '';
     try {
       canvas = await decode(await fs.readBlob(id));
     } catch (err) {
       error = err?.name === 'EncodingError' || err instanceof DOMException
-        ? `«${node.name}» non si può aprire: il formato non è supportato o il file è danneggiato.`
-        : `«${node.name}» non si può leggere: ${err?.message ?? err}`;
+        ? t('error.unsupported', { name: node.name })
+        : t('error.unreadable', { name: node.name, error: err?.message ?? err });
     }
     if (seq !== this.#loading) return;   // another image was asked for meanwhile
     this.#message = '';
@@ -211,31 +213,31 @@ class Photo {
   }
 
   async openFile() {
-    const node = await pickFile(this.openWindow, { title: 'Apri un’immagine', exts: OPENS });
+    const node = await pickFile(this.openWindow, { title: t('pick.open.title'), exts: OPENS });
     if (node) this.open(node.id);
   }
 
   /** Images of the computer → files of lilOS (next to the open one, or in Immagini); opens the first. */
   async importFiles(files) {
     const images = files.filter(f => isImage(f.name) || f.type.startsWith('image/'));
-    if (files.length && !images.length) return toast(files.length === 1 ? `«${files[0].name}» non è un’immagine` : 'Nessuna di queste è un’immagine');
+    if (files.length && !images.length) return toast(files.length === 1 ? t('import.notImage', { name: files[0].name }) : t('import.noImages'));
     if (!images.length) return;
     const here = this.node && fs.get(this.node.parent);
     const folder = here?.type === 'folder' ? here : fs.resolve('/Immagini') ?? fs.get(fs.root);
     let first = null;
     for (const file of images) {
-      const name = isImage(file.name) ? file.name : `${file.name || 'Immagine'}.${file.type.split('/')[1] ?? 'png'}`;
+      const name = isImage(file.name) ? file.name : `${file.name || t('file.defaultName')}.${file.type.split('/')[1] ?? 'png'}`;
       const node = fs.create(folder.id, { type: 'file', name });
       try {
         await fs.write(node.id, file);
         first ??= node;
       } catch (err) {
         fs.remove(node.id);
-        toast(`«${file.name}» non è stata importata: ${err?.message ?? err}`);
+        toast(t('import.failed', { name: file.name, error: err?.message ?? err }));
       }
     }
     if (!first) return;
-    toast(images.length === 1 ? `Importata in ${folder.id === fs.root ? 'Home' : folder.name}` : `${images.length} immagini importate in ${folder.name}`);
+    toast(t('import.done', { n: images.length, folder: folder.id === fs.root ? t('folder.home') : folder.name }));
     this.open(first.id);
   }
 
@@ -250,8 +252,8 @@ class Photo {
     const format = node && formatOf(node.name);
     if (!format) {
       return this.convert({
-        title: node ? `${labelOf(node.name)} non si può salvare: salva una copia` : 'Il file non c’è più: salva una copia',
-        okLabel: 'Salva la copia', open: true,
+        title: node ? t('save.cannotWrite', { format: labelOf(node.name) }) : t('save.fileGone'),
+        okLabel: t('save.saveCopy'), open: true,
       });
     }
     try {
@@ -261,9 +263,9 @@ class Photo {
       return false;
     }
     this.#savedRev = this.#rev;
-    this.#message = 'Salvata';
+    const saved = this.#message = t('status.saved');
     this.render();
-    setTimeout(() => { if (this.#message === 'Salvata') { this.#message = ''; this.render(); } }, 2000);
+    setTimeout(() => { if (this.#message === saved) { this.#message = ''; this.render(); } }, 2000);
     return true;
   }
 
@@ -275,7 +277,7 @@ class Photo {
     const folder = node && fs.get(node.parent)?.type === 'folder' ? node.parent : (fs.resolve('/Immagini') ?? fs.get(fs.root)).id;
     const current = node && formatOf(node.name);
     const choice = await convertDialog(this.win.body, this.openWindow, {
-      name: this.name || 'Immagine.png', folder, format: current?.id === 'png' ? 'jpeg' : 'png', title, okLabel,
+      name: this.name || `${t('file.defaultName')}.png`, folder, format: current?.id === 'png' ? 'jpeg' : 'png', title, okLabel,
     });
     if (!choice) return false;
     if (open !== undefined) choice.open = open;
@@ -299,7 +301,7 @@ class Photo {
       this.#savedRev = this.#rev;
       await this.open(copy.id);
     } else {
-      toast(`Salvata «${copy.name}» (${formatBytes(blob.size)})`);
+      toast(t('convert.saved', { name: copy.name, size: formatBytes(blob.size) }));
     }
     return true;
   }
@@ -309,7 +311,7 @@ class Photo {
     this.#commitText();
     if (!this.canvas) return;
     const node = this.node;
-    let blob, name = this.name || 'Immagine.png';
+    let blob, name = this.name || `${t('file.defaultName')}.png`;
     try {
       if (node && !this.dirty) blob = await fs.readBlob(node.id);
       else {
@@ -318,7 +320,7 @@ class Photo {
         blob = await encode(this.canvas, format);
       }
     } catch (err) {
-      return toast(`Non scaricata: ${err?.message ?? err}`);
+      return toast(t('error.notDownloaded', { error: err?.message ?? err }));
     }
     const url = URL.createObjectURL(blob);
     h('a', { href: url, download: name }).click();
@@ -346,9 +348,9 @@ class Photo {
 
   /**
    * With unsaved changes, asks in a bar above the image: Salva / Non salvare / Annulla.
-   * Resolves true when it is fine to go on.
+   * message: what the bar says (by default, that the changes are not saved). Resolves true when it is fine to go on.
    */
-  confirmDiscard(context = '') {
+  confirmDiscard(message) {
     this.#commitText();
     if (!this.dirty) return Promise.resolve(true);
     return new Promise(resolve => {
@@ -359,13 +361,13 @@ class Photo {
         else resolve(choice === 'discard');
         if (choice === 'cancel') this.stage.focus();
       };
-      const save = actionButton({ label: 'Salva', primary: true, onClick: () => done('save') });
+      const save = actionButton({ label: t('action.save'), primary: true, onClick: () => done('save') });
       this.banner.replaceChildren(
         icon('help'),
-        h('span', { class: 'ph-banner-text' }, `Le modifiche a «${this.name}» non sono salvate${context ? ` (${context})` : ''}.`),
+        h('span', { class: 'ph-banner-text' }, message ?? t('confirm.unsaved', { name: this.name })),
         save,
-        actionButton({ label: 'Non salvare', danger: true, onClick: () => done('discard') }),
-        actionButton({ label: 'Annulla', onClick: () => done('cancel') }));
+        actionButton({ label: t('confirm.discard'), danger: true, onClick: () => done('discard') }),
+        actionButton({ label: t('action.cancel'), onClick: () => done('cancel') }));
       this.banner.onkeydown = e => { if (e.key === 'Escape') { e.stopPropagation(); done('cancel'); } };
       this.banner.hidden = false;
       save.focus();
@@ -375,7 +377,7 @@ class Photo {
   #onFsChange({ type, node, ids }) {
     if (!this.fileId) return this.render();
     if ((type === 'rename' || type === 'update') && node?.id === this.fileId) this.name = node.name;
-    if (type === 'remove' && ids?.includes(this.fileId)) this.#message = 'Il file non c’è più';
+    if (type === 'remove' && ids?.includes(this.fileId)) this.#message = t('status.fileGone');
     this.render();
   }
 
@@ -424,7 +426,7 @@ class Photo {
     this.#commitText();
     if (!this.canvas) return;
     const choice = await resizeDialog(this.win.body, { width: this.canvas.width, height: this.canvas.height });
-    if (choice) this.#replace('Ridimensiona', resample(this.canvas, choice.width, choice.height, choice.quality));
+    if (choice) this.#replace(t('history.resize'), resample(this.canvas, choice.width, choice.height, choice.quality));
   }
 
   /** Sizes of brush and text that suit the image, until the user picks their own. */
@@ -533,7 +535,7 @@ class Photo {
         main.restore();
         ctx.clearRect(0, 0, this.overlay.width, this.overlay.height);
       }
-      this.#record(erase ? 'Cancella' : 'Disegna', before);
+      this.#record(erase ? t('history.erase') : t('history.draw'), before);
       this.render();
     };
     this.paper.setPointerCapture(e.pointerId);
@@ -549,7 +551,7 @@ class Photo {
 
   /** A box where the user writes, over the image at (x, y); Invio puts the text on the image. */
   #startText({ x, y }) {
-    const box = h('div', { class: 'ph-textbox', role: 'textbox', 'aria-label': 'Testo da scrivere sull’immagine', 'aria-multiline': 'true', spellcheck: 'false' });
+    const box = h('div', { class: 'ph-textbox', role: 'textbox', 'aria-label': t('text.box'), 'aria-multiline': 'true', spellcheck: 'false' });
     box.contentEditable = 'plaintext-only';
     if (box.contentEditable !== 'plaintext-only') box.contentEditable = 'true';
     // The click is where the first line starts: the box goes up by half a line
@@ -592,7 +594,7 @@ class Photo {
     // Same place as in the box: each line box is LINE sizes tall, the glyphs' em box in its middle
     lines.forEach((line, i) => ctx.fillText(line, x, y + size * (LINE - 1) / 2 + i * size * LINE));
     ctx.restore();
-    this.#record('Testo', before);
+    this.#record(t('history.text'), before);
     this.render();
   }
 
@@ -672,7 +674,7 @@ class Photo {
     const x = Math.round(c.x), y = Math.round(c.y);
     const width = clamp(Math.round(c.width), 1, this.canvas.width - x), height = clamp(Math.round(c.height), 1, this.canvas.height - y);
     if (width === this.canvas.width && height === this.canvas.height) return;
-    this.#replace('Ritaglia', cropped(this.canvas, { x, y, width, height }));
+    this.#replace(t('history.crop'), cropped(this.canvas, { x, y, width, height }));
   }
 
   // ---------- Zoom ----------
@@ -737,7 +739,7 @@ class Photo {
     if (e.defaultPrevented || isEditing() || e.target.closest?.('.ph-banner, .ph-scrim, select, input')) return;
     if (e.ctrlKey || e.metaKey || e.altKey) return;
     const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
-    const tool = TOOLS.find(t => t.key.toLowerCase() === key);
+    const tool = TOOLS.find(x => x.key.toLowerCase() === key);
     let done = true;
     if (tool) this.setTool(tool.id);
     else if (key === '+' || key === '=') this.zoomStep(1);
@@ -768,21 +770,22 @@ class Photo {
       e.preventDefault();
       depth = 0;
       this.dropHint.hidden = true;
-      this.confirmDiscard('prima di importare').then(ok => { if (ok) this.importFiles([...e.dataTransfer.files]); });
+      this.confirmDiscard(t('confirm.unsaved.beforeImport', { name: this.name })).then(ok => { if (ok) this.importFiles([...e.dataTransfer.files]); });
     }, { signal });
   }
 
   // ---------- Tool options ----------
 
   #swatches() {
-    const custom = h('input', { type: 'color', class: 'ph-swatch ph-custom', title: 'Altro colore…', 'aria-label': 'Altro colore' });
-    const buttons = COLORS.map(c => h('button', {
+    const custom = h('input', { type: 'color', class: 'ph-swatch ph-custom', title: t('color.custom.title'), 'aria-label': t('color.custom') });
+    const list = colors();
+    const buttons = list.map(c => h('button', {
       class: 'ph-swatch', type: 'button', title: c.label, 'aria-label': c.label, style: { background: c.value },
       onclick: () => this.#setColor(c.value),
     }));
-    buttons.forEach((b, i) => { b.dataset.color = COLORS[i].value; });
+    buttons.forEach((b, i) => { b.dataset.color = list[i].value; });
     custom.addEventListener('input', () => this.#setColor(custom.value));
-    return h('span', { class: 'ph-swatches', role: 'group', 'aria-label': 'Colore' }, buttons, custom);
+    return h('span', { class: 'ph-swatches', role: 'group', 'aria-label': t('option.color') }, buttons, custom);
   }
 
   #setColor(color) {
@@ -802,48 +805,48 @@ class Photo {
   }
 
   #brushOptions() {
-    this.brushSize = this.#slider({ value: this.#brush.size, min: 1, max: 200, unit: ' px', label: 'Spessore', onInput: v => { this.#brush.size = v; this.#brush.chosen = true; } });
-    this.brushOpacity = this.#slider({ value: 100, min: 5, max: 100, unit: '%', label: 'Opacità', onInput: v => { this.#brush.opacity = v; } });
-    this.opacityGroup = h('span', { class: 'ph-option' }, h('span', { class: 'ph-label' }, 'Opacità'), this.brushOpacity);
+    this.brushSize = this.#slider({ value: this.#brush.size, min: 1, max: 200, unit: ' px', label: t('brush.size'), onInput: v => { this.#brush.size = v; this.#brush.chosen = true; } });
+    this.brushOpacity = this.#slider({ value: 100, min: 5, max: 100, unit: '%', label: t('brush.opacity'), onInput: v => { this.#brush.opacity = v; } });
+    this.opacityGroup = h('span', { class: 'ph-option' }, h('span', { class: 'ph-label' }, t('brush.opacity')), this.brushOpacity);
     return h('div', { class: 'ph-options', hidden: true },
-      h('span', { class: 'ph-option' }, h('span', { class: 'ph-label' }, 'Colore'), this.#swatches()),
-      h('span', { class: 'ph-option' }, h('span', { class: 'ph-label' }, 'Spessore'), this.brushSize),
+      h('span', { class: 'ph-option' }, h('span', { class: 'ph-label' }, t('option.color')), this.#swatches()),
+      h('span', { class: 'ph-option' }, h('span', { class: 'ph-label' }, t('brush.size')), this.brushSize),
       this.opacityGroup,
       segmented({
-        value: 'pen', label: 'Pennello o gomma', options: [{ value: 'pen', label: 'Pennello' }, { value: 'eraser', label: 'Gomma' }],
+        value: 'pen', label: t('brush.mode'), options: [{ value: 'pen', label: t('brush.pen') }, { value: 'eraser', label: t('brush.eraser') }],
         onChange: v => { this.#brush.mode = v; this.#syncOptions(); },
       }));
   }
 
   #textOptions() {
-    this.textSize = this.#slider({ value: this.#text.size, min: 8, max: 400, unit: ' px', label: 'Dimensione', onInput: v => { this.#text.size = v; this.#text.chosen = true; this.#styleText(); } });
-    this.boldBtn = h('button', { class: 'ph-btn ph-bold', type: 'button', title: 'Grassetto', 'aria-label': 'Grassetto', 'aria-pressed': 'true', onclick: () => {
+    this.textSize = this.#slider({ value: this.#text.size, min: 8, max: 400, unit: ' px', label: t('text.size'), onInput: v => { this.#text.size = v; this.#text.chosen = true; this.#styleText(); } });
+    this.boldBtn = h('button', { class: 'ph-btn ph-bold', type: 'button', title: t('text.bold'), 'aria-label': t('text.bold'), 'aria-pressed': 'true', onclick: () => {
       this.#text.bold = !this.#text.bold;
       this.#syncOptions();
       this.#styleText();
       this.#typing?.box.focus();
-    } }, 'G');
+    } }, t('text.bold.letter'));
     return h('div', { class: 'ph-options', hidden: true },
-      h('span', { class: 'ph-option' }, h('span', { class: 'ph-label' }, 'Colore'), this.#swatches()),
-      h('span', { class: 'ph-option' }, h('span', { class: 'ph-label' }, 'Carattere'), selectField({
-        value: this.#text.font, label: 'Carattere', options: FONTS,
+      h('span', { class: 'ph-option' }, h('span', { class: 'ph-label' }, t('option.color')), this.#swatches()),
+      h('span', { class: 'ph-option' }, h('span', { class: 'ph-label' }, t('text.font')), selectField({
+        value: this.#text.font, label: t('text.font'), options: FONTS.map(f => ({ value: f.value, label: f.label() })),
         onChange: v => { this.#text.font = v; this.#styleText(); this.#typing?.box.focus(); },
       })),
-      h('span', { class: 'ph-option' }, h('span', { class: 'ph-label' }, 'Dimensione'), this.textSize),
+      h('span', { class: 'ph-option' }, h('span', { class: 'ph-label' }, t('text.size')), this.textSize),
       this.boldBtn,
-      h('span', { class: 'ph-hint' }, 'Clic per scrivere · Invio conferma, Maiusc Invio va a capo'));
+      h('span', { class: 'ph-hint' }, t('text.hint')));
   }
 
   #cropOptions() {
-    this.applyCropBtn = actionButton({ label: 'Ritaglia', primary: true, onClick: () => this.applyCrop() });
+    this.applyCropBtn = actionButton({ label: t('crop.apply'), primary: true, onClick: () => this.applyCrop() });
     return h('div', { class: 'ph-options', hidden: true },
-      h('span', { class: 'ph-option' }, h('span', { class: 'ph-label' }, 'Proporzioni'), selectField({
-        value: this.#ratio, label: 'Proporzioni', options: RATIOS,
+      h('span', { class: 'ph-option' }, h('span', { class: 'ph-label' }, t('crop.ratio')), selectField({
+        value: this.#ratio, label: t('crop.ratio'), options: ratios(),
         onChange: v => { this.#ratio = v; this.#resetCrop(); },
       })),
-      h('span', { class: 'ph-hint' }, 'Trascina il riquadro o i suoi bordi · Invio per ritagliare'),
+      h('span', { class: 'ph-hint' }, t('crop.hint')),
       h('span', { class: 'ph-grow' }),
-      actionButton({ label: 'Tutta l’immagine', onClick: () => this.#resetCrop() }),
+      actionButton({ label: t('crop.whole'), onClick: () => this.#resetCrop() }),
       this.applyCropBtn);
   }
 
@@ -851,7 +854,7 @@ class Photo {
     for (const b of this.win.body.querySelectorAll('.ph-swatch[data-color]')) b.setAttribute('aria-pressed', String(b.dataset.color === this.#color));
     for (const c of this.win.body.querySelectorAll('.ph-custom')) {
       c.value = this.#color;
-      c.classList.toggle('on', !COLORS.some(x => x.value === this.#color));
+      c.classList.toggle('on', !colors().some(x => x.value === this.#color));
     }
     this.brushSize?.set(this.#brush.size);
     this.textSize?.set(this.#text.size);
@@ -872,18 +875,21 @@ class Photo {
     this.revealBtn.disabled = !node;
     this.undoBtn.disabled = !this.stack.canUndo;
     this.redoBtn.disabled = !this.stack.canRedo;
-    this.undoBtn.title = this.stack.undoLabel ? `Annulla «${this.stack.undoLabel}» (Ctrl Z)` : 'Annulla (Ctrl Z)';
-    this.redoBtn.title = this.stack.redoLabel ? `Ripeti «${this.stack.redoLabel}» (Ctrl Y)` : 'Ripeti (Ctrl Y)';
+    this.undoBtn.title = this.stack.undoLabel ? t('toolbar.undo.named', { label: this.stack.undoLabel }) : t('toolbar.undo');
+    this.redoBtn.title = this.stack.redoLabel ? t('toolbar.redo.named', { label: this.stack.redoLabel }) : t('toolbar.redo');
 
     const list = this.#siblings();
     const i = list.findIndex(n => n.id === this.fileId);
     this.prevBtn.hidden = !has || i <= 0;
     this.nextBtn.hidden = !has || i === -1 || i >= list.length - 1;
-    this.dims.textContent = has ? `${this.canvas.width} × ${this.canvas.height} px` : '';
+    this.dims.textContent = has ? t('status.size', { width: this.canvas.width, height: this.canvas.height }) : '';
     this.info.textContent = has && this.name ? [labelOf(this.name), node && formatBytes(node.size ?? 0)].filter(Boolean).join(' · ') : '';
     const folder = node && fs.get(node.parent);
-    this.position.textContent = i !== -1 && list.length > 1 ? `${i + 1} di ${list.length}${folder ? ` in ${node.parent === fs.root ? 'Home' : folder.name}` : ''}` : '';
-    this.state.textContent = this.#message || (this.dirty ? 'Modificata' : '');
+    const index = i + 1, count = list.length;
+    this.position.textContent = i === -1 || count <= 1 ? ''
+      : folder ? t('status.positionIn', { index, count, folder: node.parent === fs.root ? t('folder.home') : folder.name })
+      : t('status.position', { index, count });
+    this.state.textContent = this.#message || (this.dirty ? t('status.modified') : '');
     this.state.classList.toggle('dirty', !this.#message && this.dirty);
     this.zoomLabel.hidden = !has;
     for (const b of this.win.body.querySelectorAll('.ph-zoom-btn')) b.disabled = !has;
@@ -893,11 +899,11 @@ class Photo {
     const action = (symbol, label, onclick) => h('button', { class: 'ctl-btn', type: 'button', onclick }, glyph(symbol), h('span', {}, label));
     this.empty.replaceChildren(
       h('div', { class: 'ph-empty-icon' }, icon('image')),
-      h('div', { class: 'ph-empty-title' }, this.#loading && this.#message ? 'Apertura…' : this.#error ? 'Immagine non disponibile' : 'Nessuna immagine'),
-      h('p', {}, this.#error || 'Apri un’immagine di lilOS o importala dal computer. Puoi anche trascinarla qui.'),
+      h('div', { class: 'ph-empty-title' }, this.#loading && this.#message ? t('status.opening') : this.#error ? t('empty.unavailable') : t('empty.title')),
+      h('p', {}, this.#error || t('empty.text')),
       h('div', { class: 'ph-empty-actions' },
-        action('open', 'Apri…', () => this.openFile()),
-        action('upload', 'Importa dal computer…', () => this.fileInput.click())));
+        action('open', t('empty.open'), () => this.openFile()),
+        action('upload', t('toolbar.import'), () => this.fileInput.click())));
   }
 }
 

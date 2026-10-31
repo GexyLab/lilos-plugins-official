@@ -1,24 +1,24 @@
 {
   "id": "photo",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "kind": "local",
   "name": "Photo",
-  "description": "Guarda le immagini e le ritocca: disegno, testo, ritaglio, ridimensionamento e conversione in PNG, JPEG o WebP.",
+  "description": "View and touch up images: drawing, text, cropping, resizing and conversion to PNG, JPEG or WebP.",
   "category": "media",
   "icon": { "glyph": "image", "color": "#e5734d" },
   "publisher": { "id": "lilos", "name": "lilOS" },
   "sdk": "1",
   "system": true,
   "entrypoints": { "main": { "kind": "window", "params": {
-    "file": {"type": "file", "label": "Immagine", "description": "L’immagine da aprire"}
+    "file": {"type": "file", "label": "Image", "description": "The image to open"}
   } } },
   "permissions": ["fs.write:~", "ui.shortcuts"],
   "contributes": {
     "window": { "width": 900, "height": 620 },
     "fileTypes": ["png", "jpg", "jpeg", "gif", "webp", "bmp", "avif", "ico", "svg"],
     "commands": [
-      { "id": "photo.save", "label": "Salva", "keys": ["Ctrl+S"] },
-      { "id": "photo.open", "label": "Apri un’immagine", "keys": ["Ctrl+O"] }
+      { "id": "photo.save", "label": "Save", "keys": ["Ctrl+S"] },
+      { "id": "photo.open", "label": "Open an image", "keys": ["Ctrl+O"] }
     ]
   }
 }

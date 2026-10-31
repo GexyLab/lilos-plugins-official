@@ -1,6 +1,7 @@
 import { h, icon, appIcon, fs, settings, toggle, selectField, textField, actionButton, openMenu, toast } from '@lilos/sdk';
 import { apps, startup, pickFile } from '@lilos/system';
 import { servicesOptionRow } from './services.js';
+import { t } from './i18n.js';
 
 /**
  * Sistema → Avvio: what starts by itself (lilOS's apps/startup.js, and the kernel's services).
@@ -11,21 +12,21 @@ import { servicesOptionRow } from './services.js';
 export function startupOptionsSections({ rerender }) {
   return [
     {
-      title: 'Avvio automatico',
+      title: t('startup.auto.title'),
       rows: [servicesOptionRow(rerender), {
-        label: 'Apri le app quando entri',
-        description: 'Si aprono le app scelte in App, con i loro parametri. Solo nella prima scheda di lilOS di questo browser: le altre si aprono vuote.',
-        keywords: 'avvio automatico accesso login esecuzione automatica',
-        control: toggle({ value: settings.get('startupApps'), label: 'Apri le app quando entri', onChange: v => settings.set('startupApps', v) }),
+        label: t('startup.openApps.label'),
+        description: t('startup.openApps.description'),
+        keywords: t('startup.openApps.keywords'),
+        control: toggle({ value: settings.get('startupApps'), label: t('startup.openApps.label'), onChange: v => settings.set('startupApps', v) }),
       }],
     },
     {
-      title: 'Se qualcosa non va',
+      title: t('startup.trouble.title'),
       rows: [{
-        label: 'Avvio senza app',
-        description: 'Per una volta sola: apri lilOS con ?avvio=no in fondo all’indirizzo. Le scelte salvate restano.',
-        keywords: 'avvio sicuro avvio=no',
-        control: startup.skipped ? 'Attivo ora' : '',
+        label: t('startup.safe.label'),
+        description: t('startup.safe.description'),
+        keywords: t('startup.safe.keywords'),
+        control: startup.skipped ? t('startup.safe.active') : '',
       }],
     },
   ];
@@ -35,10 +36,10 @@ export function startupOptionsSections({ rerender }) {
 export function startupAppsSections(ctx) {
   const list = startup.apps().filter(item => apps.some(a => a.id === item.app));
   return [{
-    title: 'Si aprono quando entri',
+    title: t('startup.apps.title'),
     content: () => h('div', { class: 'su-apps' },
-      h('p', { class: 'su-hint' }, 'Nel workspace in cui si apre lilOS, nell’ordine dell’elenco. Togli tutti i punti d’ingresso di un’app e l’app esce dall’elenco.'),
-      list.length ? list.map(item => appCard(item, ctx)) : h('p', { class: 'su-empty' }, 'Nessuna app si apre da sola.'),
+      h('p', { class: 'su-hint' }, t('startup.apps.hint')),
+      list.length ? list.map(item => appCard(item, ctx)) : h('p', { class: 'su-empty' }, t('startup.apps.none')),
       addRow(list, ctx)),
   }];
 }
@@ -51,8 +52,8 @@ function appCard(item, ctx) {
   const head = h('div', { class: 'st-row su-head' },
     appIcon(app, 'su-icon'),
     h('div', { class: 'st-label' }, h('b', {}, app.name),
-      h('small', {}, windows.length === 1 ? '1 punto d’ingresso' : `${on} di ${windows.length} punti d’ingresso`)),
-    actionButton({ label: 'Rimuovi dall’avvio', onClick: () => { startup.removeApp(app.id); ctx.rerender(); } }));
+      h('small', {}, windows.length === 1 ? t('startup.apps.oneEntry') : t('startup.apps.entries', { on, n: windows.length }))),
+    actionButton({ label: t('startup.apps.remove'), onClick: () => { startup.removeApp(app.id); ctx.rerender(); } }));
   const rows = windows.flatMap(w => {
     const active = enabled.has(w.entry);
     const row = h('div', { class: 'st-row su-entry' },
@@ -71,17 +72,17 @@ function appCard(item, ctx) {
 
 /** The params of one enabled entry point: a form when it declares them, a JSON field when not. Saved on each change. */
 function paramsForm(app, w, saved, { openWindow }) {
-  const label = `${w.label} di ${app.name}`;
+  const label = t('startup.params.of', { entry: w.label, app: app.name });
   if (!w.params) {
-    const hint = 'Questo punto d’ingresso non descrive i suoi parametri: arrivano all’app così come sono, come args.';
+    const hint = t('startup.params.undescribed');
     const note = h('span', { class: 'su-note' }, hint);
-    const area = h('textarea', { class: 'su-json', spellcheck: 'false', placeholder: '{ }', 'aria-label': `Parametri (JSON) di ${label}` });
+    const area = h('textarea', { class: 'su-json', spellcheck: 'false', placeholder: '{ }', 'aria-label': t('startup.params.jsonOf', { name: label }) });
     area.value = Object.keys(saved).length ? JSON.stringify(saved) : '';
     area.addEventListener('change', () => {
       const text = area.value.trim();
       try {
         let value;
-        try { value = text ? JSON.parse(text) : {}; } catch { throw new Error('Non è JSON valido'); }
+        try { value = text ? JSON.parse(text) : {}; } catch { throw new Error(t('startup.params.invalidJson')); }
         startup.setParams(app.id, w.entry, value);
         area.removeAttribute('aria-invalid');
         note.classList.remove('bad');
@@ -89,10 +90,10 @@ function paramsForm(app, w, saved, { openWindow }) {
       } catch (err) {
         area.setAttribute('aria-invalid', 'true');
         note.classList.add('bad');
-        note.textContent = `Non salvati: ${err.message}`;
+        note.textContent = t('startup.params.notSaved', { error: err.message });
       }
     });
-    return h('div', { class: 'su-params' }, h('span', { class: 'su-plabel' }, 'Parametri (JSON)'), h('span'), area, note);
+    return h('div', { class: 'su-params' }, h('span', { class: 'su-plabel' }, t('startup.params.json')), h('span'), area, note);
   }
 
   let values = { ...saved };
@@ -141,30 +142,30 @@ function paramsForm(app, w, saved, { openWindow }) {
 /** A file or folder chosen with lilOS's picker: its path, "Scegli…" and a button to clear it. */
 function pathField(p, id, label, onChange, openWindow) {
   const folder = p.type === 'folder';
-  const shown = h('input', { class: 'ctl-text', type: 'text', readonly: true, placeholder: folder ? 'Nessuna cartella' : 'Nessun file', 'aria-label': label });
+  const shown = h('input', { class: 'ctl-text', type: 'text', readonly: true, placeholder: folder ? t('startup.path.noFolder') : t('startup.path.noFile'), 'aria-label': label });
   const show = nodeId => {
-    shown.value = !nodeId ? '' : fs.exists(nodeId) ? fs.path(nodeId) : '(non c’è più)';
+    shown.value = !nodeId ? '' : fs.exists(nodeId) ? fs.path(nodeId) : t('startup.path.gone');
   };
   show(id);
   const choose = actionButton({
-    label: 'Scegli…',
+    label: t('common.choose'),
     onClick: async () => {
       const node = await pickFile(openWindow, { kind: folder ? 'folder' : 'file', title: p.label });
       if (node && onChange(node.id)) show(node.id);
     },
   });
-  const clear = h('button', { class: 'ctl-btn su-clear', type: 'button', title: 'Togli', 'aria-label': `Togli ${p.label}` }, icon('x'));
+  const clear = h('button', { class: 'ctl-btn su-clear', type: 'button', title: t('common.remove'), 'aria-label': t('startup.path.clear', { name: p.label }) }, icon('x'));
   clear.addEventListener('click', () => { if (onChange(null)) show(null); });
   return h('div', { class: 'su-path' }, shown, choose, clear);
 }
 
 function addRow(list, { rerender }) {
   const button = actionButton({
-    label: 'Aggiungi…',
+    label: t('common.addMore'),
     onClick: () => {
       const candidates = apps.filter(a => a.load && !list.some(x => x.app === a.id) && startup.windowEntries(a.id).length)
         .sort((a, b) => a.name.localeCompare(b.name));
-      if (!candidates.length) return toast('Tutte le app sono già all’avvio');
+      if (!candidates.length) return toast(t('startup.apps.allAdded'));
       const r = button.getBoundingClientRect();
       openMenu(r.left, r.bottom + 4, candidates.map(a => ({
         label: a.name, icon: a.glyph,
@@ -177,7 +178,7 @@ function addRow(list, { rerender }) {
   });
   return h('div', { class: 'st-row su-add' },
     h('span', { class: 'su-plus' }, icon('plus')),
-    h('div', { class: 'st-label' }, h('b', {}, 'Aggiungi un’app all’avvio'),
-      h('small', {}, 'Si apre la sua finestra principale; poi scegli altri punti d’ingresso e parametri')),
+    h('div', { class: 'st-label' }, h('b', {}, t('startup.apps.add')),
+      h('small', {}, t('startup.apps.addDescription'))),
     button);
 }

@@ -1,6 +1,7 @@
 import { h, icon, fs, menus, selectField, textField, actionButton } from '@lilos/sdk';
 import { apps } from '@lilos/system';
 import { pickFile } from '@lilos/system';
+import { t } from './i18n.js';
 
 /**
  * Sections of Settings → Usabilità → Menu contestuale for one menu of the registry: the entries
@@ -13,17 +14,21 @@ export function menuSections(menuId, { openWindow, rerender, confirmButton }) {
 
   // ---------- Entries ----------
   const describe = e => {
-    if (e.type === 'separator') return { label: '— Separatore —', description: '' };
-    if (e.type === 'submenu') return { label: e.label, description: `Sottomenu · ${e.items.length} ${e.items.length === 1 ? 'voce' : 'voci'}` };
+    if (e.type === 'separator') return { label: t('menu.separator'), description: '' };
+    if (e.type === 'submenu') return { label: e.label, description: t('menu.submenu', { n: e.items.length }) };
     const a = menus.action(e.action);
     const label = e.label ?? a?.label ?? e.action;
     if (e.action === 'desktop.create') {
-      const what = e.params.kind === 'folder' ? 'Crea la cartella' : 'Crea il file';
-      const from = e.params.template ? ` dal modello ${fs.exists(e.params.template) ? fs.path(e.params.template) : '(file eliminato)'}` : e.params.content ? ' con un contenuto iniziale' : '';
-      return { label, description: `${what} «${e.params.name}»${from}` };
+      const name = e.params.name;
+      if (e.params.kind === 'folder') return { label, description: t('menu.create.folder', { name }) };
+      if (e.params.template) {
+        const template = fs.exists(e.params.template) ? fs.path(e.params.template) : t('menu.create.deletedTemplate');
+        return { label, description: t('menu.create.fileFromTemplate', { name, template }) };
+      }
+      return { label, description: e.params.content ? t('menu.create.fileWithContent', { name }) : t('menu.create.file', { name }) };
     }
-    if (e.action === 'app.launch') return { label, description: `Apre l’app ${apps.find(x => x.id === e.params.app)?.name ?? e.params.app}` };
-    return { label, description: 'Azione' };
+    if (e.action === 'app.launch') return { label, description: t('menu.launch', { name: apps.find(x => x.id === e.params.app)?.name ?? e.params.app }) };
+    return { label, description: t('menu.action') };
   };
 
   /** Copy of the layout with fn applied to the list holding the entry at path [i] or [i, j]. */
@@ -48,11 +53,11 @@ export function menuSections(menuId, { openWindow, rerender, confirmButton }) {
     return {
       label: path.length === 2 ? `↳ ${label}` : label,
       description,
-      keywords: 'menu contestuale voce separatore nuovo',
+      keywords: t('menu.keywords'),
       control: h('div', { class: 'mm-ctl' },
-        btn('arrowUp', 'Sposta su', () => move(path, -1), i === 0),
-        btn('arrowDown', 'Sposta giù', () => move(path, 1), i === count - 1),
-        btn('x', 'Togli', () => remove(path))),
+        btn('arrowUp', t('menu.moveUp'), () => move(path, -1), i === 0),
+        btn('arrowDown', t('menu.moveDown'), () => move(path, 1), i === count - 1),
+        btn('x', t('common.remove'), () => remove(path))),
     };
   };
   const rows = [];
@@ -63,35 +68,35 @@ export function menuSections(menuId, { openWindow, rerender, confirmButton }) {
 
   // ---------- Adding ----------
   const submenus = layout.map((e, i) => [e, i]).filter(([e]) => e.type === 'submenu');
-  const targetOptions = [{ value: 'root', label: 'Menu principale' }, ...submenus.map(([e, i]) => ({ value: String(i), label: `Dentro «${e.label}»` }))];
+  const targetOptions = [{ value: 'root', label: t('menu.target.root') }, ...submenus.map(([e, i]) => ({ value: String(i), label: t('menu.target.inside', { name: e.label }) }))];
   const addTo = (target, entry) => save(withList(target === 'root' ? [0] : [Number(target), 0], list => list.push(entry)));
 
   const simple = menus.actions(menuId).filter(a => a.id !== 'desktop.create' && a.id !== 'app.launch');
   const actionSelect = selectField({
-    value: simple[0]?.id, label: 'Voce da aggiungere',
-    options: [...simple.map(a => ({ value: a.id, label: a.label })), ...apps.filter(a => a.load).map(a => ({ value: `app:${a.id}`, label: `Apri ${a.name}` }))],
+    value: simple[0]?.id, label: t('menu.item.field'),
+    options: [...simple.map(a => ({ value: a.id, label: a.label })), ...apps.filter(a => a.load).map(a => ({ value: `app:${a.id}`, label: t('menu.item.open', { name: a.name }) }))],
   });
-  const actionTarget = selectField({ value: 'root', options: targetOptions, label: 'Dove' });
-  const sepTarget = selectField({ value: 'root', options: targetOptions, label: 'Dove' });
+  const actionTarget = selectField({ value: 'root', options: targetOptions, label: t('menu.target.label') });
+  const sepTarget = selectField({ value: 'root', options: targetOptions, label: t('menu.target.label') });
 
   const newTarget = submenus[0];
-  const newLabel = textField({ placeholder: 'Etichetta (es. Foglio di stile)', label: 'Etichetta' });
-  const newName = textField({ placeholder: 'Nome (es. stile.css)', label: 'Nome del file o della cartella' });
-  const newKind = selectField({ value: 'file', options: [{ value: 'file', label: 'File' }, { value: 'folder', label: 'Cartella' }], label: 'Tipo' });
+  const newLabel = textField({ placeholder: t('menu.new.labelPlaceholder'), label: t('menu.new.labelField') });
+  const newName = textField({ placeholder: t('menu.new.namePlaceholder'), label: t('menu.new.nameField') });
+  const newKind = selectField({ value: 'file', options: [{ value: 'file', label: t('menu.new.kindFile') }, { value: 'folder', label: t('menu.new.kindFolder') }], label: t('menu.new.kind') });
   let template = null;
   const templateBtn = actionButton({
-    label: 'Modello…', onClick: async () => {
-      const node = await pickFile(openWindow, { title: 'Scegli il file modello', text: 'Il nuovo file partirà con il contenuto di questo file.' });
+    label: t('menu.template.button'), onClick: async () => {
+      const node = await pickFile(openWindow, { title: t('menu.template.title'), text: t('menu.template.text') });
       if (!node) return;
       template = node.id;
-      templateBtn.textContent = `Modello: ${node.name}`;
+      templateBtn.textContent = t('menu.template.chosen', { name: node.name });
     },
   });
   const note = h('small', { class: 'mm-note' });
   const addNew = () => {
     const label = newLabel.value.trim();
     const name = newName.value.trim();
-    if (!label || !name) { note.textContent = 'Servono l’etichetta e il nome'; return; }
+    if (!label || !name) { note.textContent = t('menu.new.missing'); return; }
     const params = { kind: newKind.value, name, ...(template && newKind.value === 'file' && { template }) };
     addTo(String(newTarget[1]), { type: 'action', action: 'desktop.create', label, icon: params.kind === 'folder' ? 'folderPlus' : 'filePlus', params });
   };
@@ -99,32 +104,32 @@ export function menuSections(menuId, { openWindow, rerender, confirmButton }) {
   return [
     { title: menus.list().find(m => m.id === menuId)?.label ?? menuId, rows },
     {
-      title: 'Aggiungi',
+      title: t('common.add'),
       rows: [
         {
-          label: 'Voce', description: 'Un’azione o l’apertura di un’app',
+          label: t('menu.item.label'), description: t('menu.item.description'),
           control: h('div', { class: 'mm-add' }, actionSelect, actionTarget, actionButton({
-            label: 'Aggiungi', onClick: () => {
+            label: t('common.add'), onClick: () => {
               const v = actionSelect.value;
               const entry = v.startsWith('app:')
-                ? { type: 'action', action: 'app.launch', label: `Apri ${apps.find(a => a.id === v.slice(4))?.name}`, params: { app: v.slice(4) } }
+                ? { type: 'action', action: 'app.launch', label: t('menu.item.open', { name: apps.find(a => a.id === v.slice(4))?.name }), params: { app: v.slice(4) } }
                 : { type: 'action', action: v };
               addTo(actionTarget.value, entry);
             },
           })),
         },
         {
-          label: 'Separatore', description: 'Una linea per raggruppare le voci',
-          control: h('div', { class: 'mm-add' }, sepTarget, actionButton({ label: 'Aggiungi', onClick: () => addTo(sepTarget.value, { type: 'separator' }) })),
+          label: t('menu.separatorRow.label'), description: t('menu.separatorRow.description'),
+          control: h('div', { class: 'mm-add' }, sepTarget, actionButton({ label: t('common.add'), onClick: () => addTo(sepTarget.value, { type: 'separator' }) })),
         },
         ...(newTarget ? [{
-          label: `Nuovo elemento in «${newTarget[0].label}»`,
-          description: 'Crea un file o una cartella con questo nome; un file può partire dal contenuto di un modello',
-          control: h('div', { class: 'mm-add' }, newLabel, newName, newKind, templateBtn, actionButton({ label: 'Aggiungi', primary: true, onClick: addNew }), note),
+          label: t('menu.new.label', { name: newTarget[0].label }),
+          description: t('menu.new.description'),
+          control: h('div', { class: 'mm-add' }, newLabel, newName, newKind, templateBtn, actionButton({ label: t('common.add'), primary: true, onClick: addNew }), note),
         }] : []),
         {
-          label: 'Voci predefinite', description: menus.isCustom(menuId) ? 'Il menu è stato personalizzato' : 'Il menu è quello predefinito',
-          control: confirmButton('Ripristina', 'Conferma', () => { menus.reset(menuId); rerender(); }),
+          label: t('menu.defaults.label'), description: menus.isCustom(menuId) ? t('menu.defaults.custom') : t('menu.defaults.default'),
+          control: confirmButton(t('common.reset'), t('common.confirm'), () => { menus.reset(menuId); rerender(); }),
         },
       ],
     },

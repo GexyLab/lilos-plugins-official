@@ -11,9 +11,10 @@ import { SYSTEM_FOLDERS, DESK_NAME } from '@lilos/system';
 import { onWorkspacesChange } from '@lilos/system';
 import { tagDots, tagSubmenu, setTag } from '@lilos/system';
 import { showProperties } from '@lilos/system';
-import { typeLabel, folderName, locationLabel, originLabel, ownerLabel, ownerNode, sizeLabel, retentionLabel, dateLabel } from './format.js';
+import { num, typeLabel, folderName, locationLabel, originLabel, ownerLabel, ownerNode, sizeLabel, retentionLabel, dateLabel } from './format.js';
 import { SidePanel, MIN_WIDTH } from './SidePanel.js';
 import { infoView, Preview, readable, contentKey } from './details.js';
+import { t } from './i18n.js';
 import './files.css';
 
 /** Narrowest the list gets before the panels on the right give up some of their width. */
@@ -22,28 +23,29 @@ const MAIN_MIN = 260;
 const VIEW_KEY = 'files-view';
 /** The trash is shown like a folder, with this id (not a node: fs.get() does not see it). */
 const TRASH = fs.trashRoot;
-const COLUMNS = [
-  { key: 'name', label: 'Nome' },
-  { key: 'modified', label: 'Modificato' },
-  { key: 'size', label: 'Dimensione', num: true },
-  { key: 'type', label: 'Tipo' },
-  { key: 'workspace', label: 'Workspace' },
+/** Columns of the list (functions: their labels are in the language of now). */
+const COLUMNS = () => [
+  { key: 'name', label: t('column.name') },
+  { key: 'modified', label: t('column.modified') },
+  { key: 'size', label: t('column.size'), num: true },
+  { key: 'type', label: t('column.type') },
+  { key: 'workspace', label: t('column.workspace') },
 ];
-const TRASH_COLUMNS = [
-  { key: 'name', label: 'Nome' },
-  { key: 'deleted', label: 'Eliminato' },
-  { key: 'size', label: 'Dimensione', num: true },
-  { key: 'type', label: 'Tipo' },
-  { key: 'origin', label: 'Posizione originale' },
+const TRASH_COLUMNS = () => [
+  { key: 'name', label: t('column.name') },
+  { key: 'deleted', label: t('column.deleted') },
+  { key: 'size', label: t('column.size'), num: true },
+  { key: 'type', label: t('column.type') },
+  { key: 'origin', label: t('column.origin') },
 ];
 
 /** Everything with a tag, wherever it is, is shown like a folder with the id 'tag:<tag id>'. */
 const TAG_VIEW = 'tag:';
-const TAG_COLUMNS = [
-  { key: 'name', label: 'Nome' },
-  { key: 'location', label: 'Posizione' },
-  { key: 'type', label: 'Tipo' },
-  { key: 'workspace', label: 'Workspace' },
+const TAG_COLUMNS = () => [
+  { key: 'name', label: t('column.name') },
+  { key: 'location', label: t('column.location') },
+  { key: 'type', label: t('column.type') },
+  { key: 'workspace', label: t('column.workspace') },
 ];
 /** The tag a view id shows (null if it is not a tag view, or the tag is gone). */
 const viewTag = id => (typeof id === 'string' && id.startsWith(TAG_VIEW) ? tags.get(id.slice(TAG_VIEW.length)) : null);
@@ -58,7 +60,7 @@ function startFolder(a) {
 
 /** File Manager: browse the folders of the file system. One window, opened on args.folder (or the trash, or a tag). */
 export default function createFiles({ args } = {}) {
-  const win = new Window({ title: 'File Manager', icon: 'folder', width: 1000, height: 520, minWidth: 520, minHeight: 300 });
+  const win = new Window({ title: t('@name'), icon: 'folder', width: 1000, height: 520, minWidth: 520, minHeight: 300 });
   const browser = new FileBrowser(win);
   browser.go(startFolder(args) ?? fs.root, false);
   // Launched again (e.g. a folder opened from the desk): show that folder in this window
@@ -92,35 +94,35 @@ class FileBrowser {
     this.win = win;
     const tool = (glyph, label, onclick) => h('button', { class: 'fm-btn', type: 'button', title: label, 'aria-label': label, onclick }, icon(glyph));
 
-    this.backBtn = tool('arrowLeft', 'Indietro (Alt ←)', () => this.back());
-    this.forwardBtn = tool('arrowRight', 'Avanti (Alt →)', () => this.forward());
-    this.upBtn = tool('arrowUp', 'Cartella superiore (Alt ↑)', () => this.up());
-    this.crumbs = h('nav', { class: 'fm-path', 'aria-label': 'Percorso' });
-    this.newBtn = tool('folderPlus', 'Nuova cartella', () => this.create('folder'));
-    this.listBtn = tool('list', 'Vista elenco', () => this.setView('list'));
-    this.gridBtn = tool('grid', 'Vista a icone', () => this.setView('grid'));
+    this.backBtn = tool('arrowLeft', t('toolbar.back'), () => this.back());
+    this.forwardBtn = tool('arrowRight', t('toolbar.forward'), () => this.forward());
+    this.upBtn = tool('arrowUp', t('toolbar.up'), () => this.up());
+    this.crumbs = h('nav', { class: 'fm-path', 'aria-label': t('toolbar.path') });
+    this.newBtn = tool('folderPlus', t('menu.newFolder'), () => this.create('folder'));
+    this.listBtn = tool('list', t('view.list'), () => this.setView('list'));
+    this.gridBtn = tool('grid', t('view.grid'), () => this.setView('grid'));
     this.previewBtn = tool('sidebar', '', () => this.preview.toggle());
     this.infoBtn = tool('info', '', () => this.info.toggle());
-    this.search = h('input', { type: 'text', spellcheck: 'false', 'aria-label': 'Cerca nella cartella' });
+    this.search = h('input', { type: 'text', spellcheck: 'false', 'aria-label': t('toolbar.search') });
     this.search.addEventListener('input', () => { this.#query = fold(this.search.value.trim()); this.render(); });
     this.search.addEventListener('keydown', e => {
       if (e.key === 'Escape' && this.search.value) { e.stopPropagation(); this.search.value = ''; this.#query = ''; this.render(); }
       if (e.key === 'ArrowDown') { e.preventDefault(); this.list.focus(); }
     });
 
-    this.side = h('aside', { class: 'fm-side', 'aria-label': 'Risorse' });
-    this.list = h('div', { class: 'fm-list', role: 'listbox', tabindex: '0', 'aria-multiselectable': 'true', 'aria-label': 'Contenuto della cartella' });
+    this.side = h('aside', { class: 'fm-side', 'aria-label': t('side.label') });
+    this.list = h('div', { class: 'fm-list', role: 'listbox', tabindex: '0', 'aria-multiselectable': 'true', 'aria-label': t('list.label') });
     this.statusLeft = h('span');
     this.statusRight = h('span', { class: 'fm-status-right' });
 
     // Panels on the right: the preview next to the list, the information at the edge
-    const panel = (key, title, label, width, open) => new SidePanel({
-      key, title, label, width, open, signal: win.signal,
+    const panel = (key, texts, width, open) => new SidePanel({
+      key, ...texts, width, open, signal: win.signal,
       room: () => this.#room() - (key === 'info' ? this.preview : this.info).shown,
       onLayout: () => { this.#fit(); this.#renderPanels(); },
     });
-    this.preview = panel('preview', 'Anteprima', 'dell’anteprima', 300, false);
-    this.info = panel('info', 'Informazioni', 'delle informazioni', 260, true);
+    this.preview = panel('preview', { title: t('panel.preview.title'), resizeLabel: t('panel.preview.resize'), closeLabel: t('panel.preview.close') }, 300, false);
+    this.info = panel('info', { title: t('panel.info.title'), resizeLabel: t('panel.info.resize'), closeLabel: t('panel.info.close') }, 260, true);
     this.previewView = new Preview(this.preview.body, { text: n => this.#read(n), open: n => this.open(n) });
 
     this.main = h('div', { class: 'fm' },
@@ -216,7 +218,7 @@ class FileBrowser {
     const node = fs.get(id);
     if (!node) return;
     this.go(node.parent);
-    if (fs.isHidden(id)) this.#say(`«${node.name}» è nascosto da un tag invisibile`);
+    if (fs.isHidden(id)) this.#say(t('message.hiddenByTag', { name: node.name }));
     else this.#select([id], id);
   }
 
@@ -244,7 +246,7 @@ class FileBrowser {
 
   openSelected() {
     // Trashed items do not open: restore them first
-    if (this.inTrash) return this.#say('Per aprirlo, ripristinalo (clic destro → Ripristina)');
+    if (this.inTrash) return this.#say(t('message.restoreToOpen'));
     const nodes = this.#items.filter(n => this.#selection.has(n.id));
     const folder = nodes.find(n => n.type === 'folder');
     nodes.filter(n => n.type !== 'folder').forEach(n => this.open(n));
@@ -254,7 +256,7 @@ class FileBrowser {
   create(type) {
     if (this.inTrash || this.inTag) return;
     if (this.#query) { this.search.value = ''; this.#query = ''; }
-    const node = fs.create(this.folder, { type, name: type === 'folder' ? 'Nuova cartella' : 'Nuovo file.txt' });
+    const node = fs.create(this.folder, { type, name: type === 'folder' ? t('create.folderName') : t('create.fileName') });
     this.#select([node.id]);
     this.rename(node.id, true);
   }
@@ -294,7 +296,7 @@ class FileBrowser {
   remove(ids) {
     if (this.inTrash) return this.purge(ids);
     const removable = ids.filter(id => !fs.get(id)?.system);
-    if (!removable.length) return this.#say('Le cartelle di sistema non si possono eliminare');
+    if (!removable.length) return this.#say(t('message.systemFolders'));
     const { x, y } = this.#menuPoint(removable[0]);
     confirmRemove(removable, x, y, this.history);
   }
@@ -305,20 +307,22 @@ class FileBrowser {
   restore(ids) {
     const restored = restoreNodes(this.history, ids);
     if (!restored.length) return;
-    const places = [...new Set(restored.map(r => (r.parent === fs.root ? 'Home' : fs.path(r.parent))))];
-    const what = restored.length === 1 ? `«${fs.get(restored[0].id).name}»` : `${restored.length} elementi`;
-    toast(`Ripristinat${restored.length === 1 ? 'o' : 'i'} ${what} in ${places.length === 1 ? places[0] : `${places.length} cartelle`}`);
+    const places = [...new Set(restored.map(r => (r.parent === fs.root ? t('place.home') : fs.path(r.parent))))];
+    const count = num(restored.length);
+    toast(restored.length === 1 ? t('toast.restored', { name: fs.get(restored[0].id).name, place: places[0] })
+      : places.length === 1 ? t('toast.restoredMany', { count, place: places[0] })
+      : t('toast.restoredManyPlaces', { count, folders: num(places.length) }));
   }
 
   /** Deletes trashed items for good, always asking first (it cannot be undone). */
   purge(ids) {
     const nodes = this.#items.filter(n => ids.includes(n.id));
     if (!nodes.length) return;
-    const what = nodes.length === 1 ? `«${nodes[0].name}»` : `${nodes.length} elementi`;
+    const label = nodes.length === 1 ? t('confirm.purge', { name: nodes[0].name }) : t('confirm.purgeMany', { count: num(nodes.length) });
     const { x, y } = this.#menuPoint(nodes[0].id);
     openMenu(x, y, [
-      { label: `Elimina definitivamente ${what}`, icon: 'trash', danger: true, action: () => fs.purge(nodes.map(n => n.id)) },
-      { label: 'Annulla', icon: 'x', action: () => {} },
+      { label, icon: 'trash', danger: true, action: () => fs.purge(nodes.map(n => n.id)) },
+      { label: t('confirm.cancel'), icon: 'x', action: () => {} },
     ]);
   }
 
@@ -327,8 +331,8 @@ class FileBrowser {
     const n = fs.trashed().length;
     if (!n) return;
     openMenu(x, y, [
-      { label: `Elimina definitivamente ${n === 1 ? 'l’elemento' : `tutti i ${n} elementi`} nel cestino`, icon: 'trash', danger: true, action: () => fs.purgeTrash() },
-      { label: 'Annulla', icon: 'x', action: () => {} },
+      { label: t('confirm.emptyTrash', { n, count: num(n) }), icon: 'trash', danger: true, action: () => fs.purgeTrash() },
+      { label: t('confirm.cancel'), icon: 'x', action: () => {} },
     ]);
   }
 
@@ -336,11 +340,11 @@ class FileBrowser {
 
   render() {
     const tag = this.inTag;
-    const folder = this.inTrash ? { id: TRASH, name: 'Cestino', parent: null }
-      : tag ? { id: this.folder, name: `Tag «${tag.name}»`, parent: null }
+    const folder = this.inTrash ? { id: TRASH, name: t('place.trash'), parent: null }
+      : tag ? { id: this.folder, name: t('place.tag', { name: tag.name }), parent: null }
       : fs.get(this.folder);
     if (!folder) return;
-    this.win.setTitle(folderName(folder), 'File Manager');
+    this.win.setTitle(folderName(folder), t('@name'));
     this.#renderToolbar(folder);
     this.#renderSide();
 
@@ -354,10 +358,10 @@ class FileBrowser {
     this.list.classList.toggle('grid', this.#view === 'grid');
     if (!this.#items.length) {
       this.list.replaceChildren(h('div', { class: 'fm-empty' },
-        this.#query ? `Nessun elemento corrisponde a «${this.search.value.trim()}»`
-          : this.inTrash ? 'Il cestino è vuoto'
-          : tag ? 'Nessun elemento ha questo tag. Si assegna dal menu del tasto destro → Tag.'
-          : 'Questa cartella è vuota'));
+        this.#query ? t('empty.noMatch', { query: this.search.value.trim() })
+          : this.inTrash ? t('empty.trash')
+          : tag ? t('empty.tag')
+          : t('empty.folder')));
     } else if (this.#view === 'list') {
       this.list.replaceChildren(this.#header(), ...this.#items.map(n => this.#row(n)));
     } else {
@@ -368,9 +372,9 @@ class FileBrowser {
 
     const n = all.length;
     const sel = this.#selection.size;
-    this.statusLeft.textContent = (n === 1 ? '1 elemento' : `${n} elementi`) + (sel ? ` · ${sel} selezionat${sel === 1 ? 'o' : 'i'}` : '');
+    this.statusLeft.textContent = t('status.items', { n, count: num(n) }) + (sel ? ` · ${t('status.selected', { n: sel, count: num(sel) })}` : '');
     this.statusRight.textContent = this.#message || (this.inTrash ? retentionLabel()
-      : tag ? (tag.visible ? 'Tutti gli elementi con questo tag' : 'Tag invisibile: questi elementi sono nascosti altrove')
+      : tag ? (tag.visible ? t('status.tag') : t('status.tagHidden'))
       : fs.path(this.folder));
     this.statusRight.classList.toggle('msg', !!this.#message);
     this.#renderPanels();
@@ -380,9 +384,13 @@ class FileBrowser {
 
   /** Information and preview of the selection (the information of the folder shown, with none). */
   #renderPanels() {
-    for (const [btn, panel, label, id] of [[this.previewBtn, this.preview, 'l’anteprima', 'files.preview'], [this.infoBtn, this.info, 'le informazioni', 'files.info']]) {
+    const toggles = [
+      [this.previewBtn, this.preview, 'files.preview', t('panel.preview.show'), t('panel.preview.hide')],
+      [this.infoBtn, this.info, 'files.info', t('panel.info.show'), t('panel.info.hide')],
+    ];
+    for (const [btn, panel, id, show, hide] of toggles) {
       const keys = shortcuts.label(id);
-      const title = `${panel.open ? 'Nascondi' : 'Mostra'} ${label}${keys ? ` (${keys})` : ''}`;
+      const title = `${panel.open ? hide : show}${keys ? ` (${keys})` : ''}`;
       btn.title = title;
       btn.setAttribute('aria-label', title);
       btn.setAttribute('aria-pressed', String(panel.open));
@@ -404,7 +412,7 @@ class FileBrowser {
 
   /** Content of a file for the panels: read once while it does not change. */
   #read(n) {
-    if (!readable(n)) return Promise.reject(new Error('Non è un file'));
+    if (!readable(n)) return Promise.reject(new Error(t('error.notFile')));
     const key = contentKey(n);
     if (this.#content.key !== key) this.#content = { key, text: fs.read(n.id) };
     return this.#content.text;
@@ -433,7 +441,7 @@ class FileBrowser {
     this.gridBtn.classList.toggle('on', this.#view === 'grid');
     this.listBtn.setAttribute('aria-pressed', String(this.#view === 'list'));
     this.gridBtn.setAttribute('aria-pressed', String(this.#view === 'grid'));
-    this.search.placeholder = `Cerca in ${folderName(folder)}`;
+    this.search.placeholder = t('toolbar.searchIn', { name: folderName(folder) });
 
     const trail = this.inTrash || this.inTag ? [folder] : fs.ancestors(this.folder);
     this.crumbs.replaceChildren(...trail.flatMap((n, i) => {
@@ -456,7 +464,7 @@ class FileBrowser {
     const roots = fs.children(fs.root);
     const trail = new Set(fs.ancestors(this.folder).map(n => n.id));
     const places = [
-      { key: 'root', id: fs.root, name: 'Home', glyph: 'home' },
+      { key: 'root', id: fs.root, name: t('place.home'), glyph: 'home' },
       ...SYSTEM_FOLDERS.map(f => ({ ...f, id: roots.find(n => n.name === f.name && n.system)?.id, glyph: f.icon }))
         .filter(p => p.id).map(p => ({ ...p, key: p.name === DESK_NAME ? 'desk' : p.id })),
     ];
@@ -467,14 +475,14 @@ class FileBrowser {
       'aria-current': p.id === active ? 'true' : null, onclick: () => this.go(p.id),
     }, icon(p.glyph), h('span', {}, p.name));
     // Tags: everything that has one, wherever it is (invisible ones included: that is where their items are)
-    const tagPlace = t => {
-      const id = TAG_VIEW + t.id;
+    const tagPlace = tag => {
+      const id = TAG_VIEW + tag.id;
       return h('button', {
         class: id === active ? 'fm-place fm-tag on' : 'fm-place fm-tag', type: 'button',
-        'aria-current': id === active ? 'true' : null, title: t.visible ? t.name : `${t.name}: tag invisibile, i suoi elementi sono nascosti altrove`,
+        'aria-current': id === active ? 'true' : null, title: tag.visible ? tag.name : t('side.tagHidden', { name: tag.name }),
         onclick: () => this.go(id),
-      }, h('span', { class: 'tag-dot', style: { background: t.color }, 'aria-hidden': 'true' }), h('span', {}, t.name),
-      t.visible ? null : icon('eyeOff'));
+      }, h('span', { class: 'tag-dot', style: { background: tag.color }, 'aria-hidden': 'true' }), h('span', {}, tag.name),
+      tag.visible ? null : icon('eyeOff'));
     };
     const list = tags.list();
     const defaults = places.map(p => p.key);
@@ -493,15 +501,15 @@ class FileBrowser {
       const unlink = () => this.#unlink(n);
       const btn = h('button', {
         class: on ? 'fm-place fm-link on' : 'fm-place fm-link', type: 'button', 'aria-current': on ? 'true' : null,
-        title: n.parent === fs.root ? `Home › ${n.name}` : `${fs.path(n.parent)} › ${n.name}`, onclick: () => this.open(n),
+        title: `${locationLabel(n)} › ${n.name}`, onclick: () => this.open(n),
       }, h('span', { class: 'fm-link-icon' }, itemIcon(n)), h('span', {}, n.name));
       btn.addEventListener('contextmenu', e => {
         e.preventDefault();
         openMenu(e.clientX, e.clientY, [
-          { label: 'Apri', icon: 'open', action: () => this.open(n) },
-          { label: 'Mostra nella cartella', icon: 'folderOpen', action: () => this.reveal(n.id) },
+          { label: t('menu.open'), icon: 'open', action: () => this.open(n) },
+          { label: t('menu.reveal'), icon: 'folderOpen', action: () => this.reveal(n.id) },
           '-',
-          { label: 'Elimina il collegamento', icon: 'x', action: unlink },
+          { label: t('menu.unlink'), icon: 'x', action: unlink },
         ]);
       });
       // Canc on the link deletes the link, never the files selected in the list
@@ -512,8 +520,8 @@ class FileBrowser {
         unlink();
       });
       const x = h('button', {
-        class: 'fm-link-x', type: 'button', title: 'Elimina il collegamento (il file resta)',
-        'aria-label': `Elimina il collegamento a «${n.name}»`, onclick: unlink,
+        class: 'fm-link-x', type: 'button', title: t('side.unlinkTitle'),
+        'aria-label': t('link.remove', { name: n.name }), onclick: unlink,
       }, icon('x'));
       return entry(n.id, h('div', { class: 'fm-link-row' }, btn, x), { node: n.id, folder: n.type === 'folder' ? n.id : null });
     };
@@ -523,11 +531,11 @@ class FileBrowser {
       const n = fs.get(key);
       return n ? link(n) : [];
     };
-    const trash = place({ id: TRASH, name: 'Cestino', glyph: 'trash' });
+    const trash = place({ id: TRASH, name: t('place.trash'), glyph: 'trash' });
     trash.dataset.trash = '';
     this.side.replaceChildren(
-      h('section', { class: 'fm-side-links', 'aria-label': 'Collegamenti' }, h('h6', {}, 'Collegamenti'), ...links.arrange(defaults).flatMap(show)),
-      ...(list.length ? [h('h6', {}, 'Tag'), ...list.map(tagPlace)] : []),
+      h('section', { class: 'fm-side-links', 'aria-label': t('side.links') }, h('h6', {}, t('side.links')), ...links.arrange(defaults).flatMap(show)),
+      ...(list.length ? [h('h6', {}, t('side.tags')), ...list.map(tagPlace)] : []),
       h('hr', { class: 'fm-side-sep' }),
       trash,
       this.gap);
@@ -540,11 +548,11 @@ class FileBrowser {
     if (index < 0) return;
     links.remove(n.id);
     this.history.push({
-      label: `Elimina il collegamento a «${n.name}»`,
+      label: t('link.remove', { name: n.name }),
       undo: () => links.place([n.id], index, defaults),
       redo: () => links.remove(n.id),
     });
-    toast(`Collegamento a «${n.name}» eliminato`);
+    toast(t('toast.unlinked', { name: n.name }));
     this.list.focus();
   }
 
@@ -592,7 +600,7 @@ class FileBrowser {
       el: this.gap,
       run: () => {
         const n = links.place(moving, index, defaults);
-        if (n) toast(n === 1 ? 'Collegamento aggiunto' : `${n} collegamenti aggiunti`);
+        if (n) toast(t('toast.linksAdded', { n, count: num(n) }));
       },
     };
   }
@@ -601,11 +609,11 @@ class FileBrowser {
   #trashDropped(ids, stack) {
     const n = ids.filter(id => !fs.get(id)?.system).length;
     removeNodes(stack, ids);
-    toast(n === 1 ? 'Spostato nel cestino' : `${n} elementi spostati nel cestino`);
+    toast(t('toast.trashed', { n, count: num(n) }));
   }
 
   #header() {
-    const columns = this.inTrash ? TRASH_COLUMNS : this.inTag ? TAG_COLUMNS : COLUMNS;
+    const columns = (this.inTrash ? TRASH_COLUMNS : this.inTag ? TAG_COLUMNS : COLUMNS)();
     return h('div', { class: this.inTag ? 'fm-head tagged' : 'fm-head', role: 'presentation' }, columns.map(c => {
       const on = this.#sort.key === c.key;
       return h('button', {
@@ -624,7 +632,7 @@ class FileBrowser {
         h('span', {}, dateLabel(n.trashed.at)),
         h('span', { class: 'num' }, sizeLabel(n)),
         h('span', {}, typeLabel(n)),
-        h('span', { title: `Ripristinando torna in ${origin}` }, origin));
+        h('span', { title: t('trash.restoresTo', { place: origin }) }, origin));
     }
     const name = h('span', { class: 'fm-name' }, h('span', { class: 'fm-icon' }, itemIcon(n)), this.#nameNode(n), tagDots(n));
     if (this.inTag) {
@@ -645,14 +653,19 @@ class FileBrowser {
   #tile(n) {
     const tile = this.#option(n, 'fm-tile', h('span', { class: 'fm-tile-icon' }, itemIcon(n), tagDots(n, 'fm-tile-tags')), this.#nameNode(n));
     const tagNames = (n.tags ?? []).map(id => tags.get(id)?.name).filter(Boolean);
-    tile.title = n.trashed
-      ? `${n.name}\nEliminato: ${dateLabel(n.trashed.at)}\nPosizione originale: ${originLabel(n)}`
-      : `${n.name}${this.inTag ? `\nPosizione: ${locationLabel(n)}` : ''}\nWorkspace: ${ownerLabel(n)}${tagNames.length ? `\nTag: ${tagNames.join(', ')}` : ''}`;
+    const lines = n.trashed
+      ? [t('tile.deleted', { date: dateLabel(n.trashed.at) }), t('tile.origin', { place: originLabel(n) })]
+      : [
+        this.inTag && t('tile.location', { place: locationLabel(n) }),
+        t('owner.label', { name: ownerLabel(n) }),
+        tagNames.length && t('tile.tags', { names: tagNames.join(', ') }),
+      ];
+    tile.title = [n.name, ...lines.filter(Boolean)].join('\n');
     return tile;
   }
 
   #nameNode(n) {
-    if (this.#editing === n.id) return h('input', { class: 'fm-rename', type: 'text', value: n.name, spellcheck: 'false', 'aria-label': 'Nuovo nome' });
+    if (this.#editing === n.id) return h('input', { class: 'fm-rename', type: 'text', value: n.name, spellcheck: 'false', 'aria-label': t('rename.label') });
     return h('span', { class: 'fm-label', title: n.name }, n.name);
   }
 
@@ -779,26 +792,26 @@ class FileBrowser {
   }
 
   #backgroundMenu(e) {
-    const toggleView = { label: this.#view === 'list' ? 'Vista a icone' : 'Vista elenco', icon: this.#view === 'list' ? 'grid' : 'list', action: () => this.setView(this.#view === 'list' ? 'grid' : 'list') };
+    const toggleView = { label: this.#view === 'list' ? t('view.grid') : t('view.list'), icon: this.#view === 'list' ? 'grid' : 'list', action: () => this.setView(this.#view === 'list' ? 'grid' : 'list') };
     if (this.inTrash) {
       const empty = !this.#items.length;
       return openMenu(e.clientX, e.clientY, [
-        { label: 'Ripristina tutto', icon: 'undo', disabled: empty, action: () => this.restore(fs.trashed().map(n => n.id)) },
-        { label: 'Svuota il cestino…', icon: 'trash', danger: true, disabled: empty, action: () => this.empty(e.clientX, e.clientY) },
+        { label: t('menu.restoreAll'), icon: 'undo', disabled: empty, action: () => this.restore(fs.trashed().map(n => n.id)) },
+        { label: t('menu.emptyTrash'), icon: 'trash', danger: true, disabled: empty, action: () => this.empty(e.clientX, e.clientY) },
         '-',
         toggleView,
       ]);
     }
     if (this.inTag) {
       return openMenu(e.clientX, e.clientY, [
-        { label: 'Gestisci i tag…', icon: 'gear', action: () => launch('settings', { tab: 'tags' }) },
+        { label: t('menu.manageTags'), icon: 'gear', action: () => launch('settings', { tab: 'tags' }) },
         '-',
         toggleView,
       ]);
     }
     openMenu(e.clientX, e.clientY, [
-      { label: 'Nuova cartella', icon: 'folderPlus', action: () => this.create('folder') },
-      { label: 'Nuovo file di testo', icon: 'filePlus', action: () => this.create('file') },
+      { label: t('menu.newFolder'), icon: 'folderPlus', action: () => this.create('folder') },
+      { label: t('menu.newTextFile'), icon: 'filePlus', action: () => this.create('file') },
       '-',
       toggleView,
     ]);
@@ -807,32 +820,33 @@ class FileBrowser {
   #itemMenu(e) {
     const nodes = this.#items.filter(n => this.#selection.has(n.id));
     const many = nodes.length > 1;
+    const count = num(nodes.length);
     if (this.inTrash) {
       const ids = nodes.map(n => n.id);
       return openMenu(e.clientX, e.clientY, [
-        { label: many ? `Ripristina ${nodes.length} elementi` : 'Ripristina', icon: 'undo', action: () => this.restore(ids) },
-        { label: 'Informazioni', icon: 'info', shortcut: shortcuts.label('files.info'), action: () => this.info.setOpen(true) },
+        { label: many ? t('menu.restoreMany', { count }) : t('menu.restore'), icon: 'undo', action: () => this.restore(ids) },
+        { label: t('menu.info'), icon: 'info', shortcut: shortcuts.label('files.info'), action: () => this.info.setOpen(true) },
         '-',
-        { label: 'Elimina definitivamente…', icon: 'trash', shortcut: shortcuts.label('items.delete'), danger: true, action: () => this.purge(ids) },
+        { label: t('menu.purge'), icon: 'trash', shortcut: shortcuts.label('items.delete'), danger: true, action: () => this.purge(ids) },
       ]);
     }
     const system = nodes.some(n => n.system);
     const ids = nodes.map(n => n.id);
     const tag = this.inTag;
     openMenu(e.clientX, e.clientY, [
-      { label: many ? `Apri ${nodes.length} elementi` : 'Apri', icon: 'open', shortcut: shortcuts.label('items.open'), action: () => this.openSelected() },
-      !many && nodes[0].type === 'file' && { label: 'Apri con…', icon: 'open', action: () => openFile(nodes[0], { choose: true }) },
-      !many && nodes[0].type === 'folder' && { label: 'Apri nell’Editor', icon: 'code', action: () => launch('editor', { folder: nodes[0].id }) },
+      { label: many ? t('menu.openMany', { count }) : t('menu.open'), icon: 'open', shortcut: shortcuts.label('items.open'), action: () => this.openSelected() },
+      !many && nodes[0].type === 'file' && { label: t('menu.openWith'), icon: 'open', action: () => openFile(nodes[0], { choose: true }) },
+      !many && nodes[0].type === 'folder' && { label: t('menu.openInEditor'), icon: 'code', action: () => launch('editor', { folder: nodes[0].id }) },
       // In a tag's view items come from everywhere: show one where it is
-      tag && !many && { label: 'Mostra nella cartella', icon: 'folderOpen', action: () => this.reveal(nodes[0].id) },
-      { label: 'Rinomina', icon: 'pencil', shortcut: shortcuts.label('items.rename'), disabled: many || system, action: () => this.rename(nodes[0].id) },
+      tag && !many && { label: t('menu.reveal'), icon: 'folderOpen', action: () => this.reveal(nodes[0].id) },
+      { label: t('menu.rename'), icon: 'pencil', shortcut: shortcuts.label('items.rename'), disabled: many || system, action: () => this.rename(nodes[0].id) },
       tagSubmenu(ids),
-      tag && { label: `Togli il tag «${tag.name}»`, icon: 'x', action: () => setTag(ids, tag.id, false) },
+      tag && { label: t('menu.untag', { name: tag.name }), icon: 'x', action: () => setTag(ids, tag.id, false) },
       linkEntry(ids),
-      { label: 'Informazioni', icon: 'info', shortcut: shortcuts.label('files.info'), action: () => this.info.setOpen(true) },
-      !many && { label: 'Proprietà…', icon: 'info', action: () => showProperties(nodes[0].id) },
+      { label: t('menu.info'), icon: 'info', shortcut: shortcuts.label('files.info'), action: () => this.info.setOpen(true) },
+      !many && { label: t('menu.properties'), icon: 'info', action: () => showProperties(nodes[0].id) },
       '-',
-      { label: many ? `Elimina ${nodes.length} elementi` : 'Elimina', icon: 'trash', shortcut: shortcuts.label('items.delete'), danger: true, disabled: system, action: () => this.remove(nodes.map(n => n.id)) },
+      { label: many ? t('menu.deleteMany', { count }) : t('menu.delete'), icon: 'trash', shortcut: shortcuts.label('items.delete'), danger: true, disabled: system, action: () => this.remove(nodes.map(n => n.id)) },
     ].filter(Boolean));
   }
 

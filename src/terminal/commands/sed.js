@@ -2,6 +2,7 @@ import { fs } from '@lilos/sdk';
 import { options } from './options.js';
 import { compile } from './regex.js';
 import { ShellError } from '../shell/signals.js';
+import { t } from '../i18n.js';
 
 /**
  * sed, the stream editor: addresses (n, $, /re/, a,b, a,+n, !), blocks { }, and the commands
@@ -14,13 +15,13 @@ function parseScript(text, extended) {
   let pos = 0;
   const ch = () => text[pos];
   const skip = () => { while (pos < text.length && /[ \t]/.test(text[pos])) pos++; };
-  const fail = msg => { throw new ShellError(`-e espressione #1, carattere ${pos}: ${msg}`); };
+  const fail = msg => { throw new ShellError(t('sed.at', { pos, message: msg })); };
 
   /** Text up to an unescaped delimiter; \delim becomes delim, \n a newline (in regexes it stays \n). */
   const until = (delim, regex) => {
     let out = '';
     for (;;) {
-      if (pos >= text.length) fail(`comando «s» non terminato`);
+      if (pos >= text.length) fail(t('sed.unterminated'));
       const c = text[pos++];
       if (c === delim) return out;
       if (c === '\\') {
@@ -89,29 +90,29 @@ function parseScript(text, extended) {
         if (ch() === '+') {
           pos++;
           const m = /^\d+/.exec(text.slice(pos));
-          if (!m) fail('indirizzo non valido');
+          if (!m) fail(t('sed.badAddress'));
           pos += m[0].length;
           cmd.a2 = { plus: Number(m[0]) };
         } else {
           cmd.a2 = address();
-          if (!cmd.a2) fail('manca il secondo indirizzo');
+          if (!cmd.a2) fail(t('sed.missingAddress'));
         }
       }
     }
     skip();
     while (ch() === '!') { cmd.neg = !cmd.neg; pos++; skip(); }
     const c = text[pos++];
-    if (c == null) fail('manca il comando');
+    if (c == null) fail(t('sed.missingCommand'));
     cmd.type = c;
     switch (c) {
       case '{': stack.push(cmds.length); break;
       case '}':
-        if (!stack.length) fail('«}» inatteso');
+        if (!stack.length) fail(t('sed.unexpectedBrace'));
         cmds[stack.pop()].end = cmds.length;
         break;
       case 's': {
         const delim = text[pos++];
-        if (!delim || delim === '\n' || delim === '\\') fail('delimitatore non valido per «s»');
+        if (!delim || delim === '\n' || delim === '\\') fail(t('sed.badDelimiter'));
         cmd.re = until(delim, true);
         cmd.rep = until(delim, false);
         const m = /^[gGiIpPe0-9mM]*/.exec(text.slice(pos));
@@ -125,24 +126,24 @@ function parseScript(text, extended) {
       case 'y': {
         const delim = text[pos++];
         const from = [...until(delim, false)], to = [...until(delim, false)];
-        if (from.length !== to.length) fail('le stringhe di «y» hanno lunghezze diverse');
+        if (from.length !== to.length) fail(t('sed.yLengths'));
         cmd.map = new Map(from.map((f, i) => [f, to[i]]));
         break;
       }
       case 'a': case 'i': case 'c': cmd.text = textArg(); break;
-      case ':': cmd.label = label(); if (!cmd.label) fail('«:» senza etichetta'); break;
+      case ':': cmd.label = label(); if (!cmd.label) fail(t('sed.noLabel')); break;
       case 'b': case 't': case 'T': cmd.label = label(); break;
       case 'q': case 'Q': { skip(); const m = /^\d+/.exec(text.slice(pos)); cmd.code = m ? Number(m[0]) : 0; if (m) pos += m[0].length; break; }
       case 'r': case 'w': cmd.file = textArg(); break;
       case 'd': case 'D': case 'p': case 'P': case '=': case 'n': case 'N': case 'h': case 'H': case 'g': case 'G': case 'x': case 'l': case 'z': break;
-      default: fail(`comando sconosciuto: «${c}»`);
+      default: fail(t('sed.unknownCommand', { cmd: c }));
     }
     cmds.push(cmd);
   }
-  if (stack.length) fail('manca «}»');
+  if (stack.length) fail(t('sed.unmatchedBrace'));
   const labels = new Map(cmds.map((c, i) => [c, i]).filter(([c]) => c.type === ':').map(([c, i]) => [c.label, i]));
   for (const c of cmds) {
-    if ((c.type === 'b' || c.type === 't' || c.type === 'T') && c.label && !labels.has(c.label)) throw new ShellError(`etichetta inesistente per un salto: «${c.label}»`);
+    if ((c.type === 'b' || c.type === 't' || c.type === 'T') && c.label && !labels.has(c.label)) throw new ShellError(t('sed.noSuchLabel', { label: c.label }));
     for (const a of [c.a1, c.a2]) if (a?.re != null) a.compiled = a.re === '' ? null : compile(a.re, { extended, ignoreCase: a.ignoreCase });
     if (c.type === 's') c.compiled = c.re === '' ? null : compile(c.re, { extended, ignoreCase: c.ignoreCase, global: true });
   }
@@ -178,7 +179,7 @@ async function run(ctx, program, lines, { quiet, write }) {
     if (a.last) return last();
     if (a.step) return a.step[1] > 0 ? n >= a.step[0] && (n - a.step[0]) % a.step[1] === 0 : n === a.step[0];
     const re = a.compiled ?? lastRe;
-    if (!re) throw new ShellError('nessuna espressione regolare precedente');
+    if (!re) throw new ShellError(t('sed.noPreviousRegex'));
     lastRe = re;
     return re.test(ps);
   };
@@ -215,7 +216,7 @@ async function run(ctx, program, lines, { quiet, write }) {
           case '{': break;
           case 's': {
             const re = c.compiled ?? lastRe;
-            if (!re) throw new ShellError('nessuna espressione regolare precedente');
+            if (!re) throw new ShellError(t('sed.noPreviousRegex'));
             lastRe = re;
             let count = 0, done = false;
             const out = ps.replace(new RegExp(re.source, re.flags.includes('g') ? re.flags : re.flags + 'g'), (...args) => {
@@ -309,11 +310,11 @@ async function sed(ctx) {
   const scripts = [...(opts.e ?? [])];
   for (const f of opts.f ?? []) {
     const node = ctx.resolve(f);
-    if (node?.type !== 'file') throw new ShellError(`impossibile leggere ${f}: file o cartella inesistente`);
+    if (node?.type !== 'file') throw new ShellError(t('sed.cannotRead', { path: f }));
     scripts.push(await fs.read(node.id));
   }
   if (!scripts.length) {
-    if (!rest.length) throw new ShellError('manca lo script\nUso: sed [-n] [-E] [-i] script [file…]', 1);
+    if (!rest.length) throw new ShellError(t('sed.noScript'), 1);
     scripts.push(rest.shift());
   }
   const program = parseScript(scripts.join('\n'), opts.E || opts.r);
@@ -321,10 +322,10 @@ async function sed(ctx) {
   const write = (file, text) => writes.set(file, (writes.get(file) ?? '') + text);
   let code = 0;
   if (opts.i || opts.I != null) {
-    if (!rest.length) throw new ShellError('nessun file da modificare con -i');
+    if (!rest.length) throw new ShellError(t('sed.noFiles'));
     for (const file of rest) {
       const node = ctx.resolve(file);
-      if (node?.type !== 'file') { await ctx.error(`impossibile leggere ${file}: file o cartella inesistente`); code = 2; continue; }
+      if (node?.type !== 'file') { await ctx.error(t('sed.cannotRead', { path: file })); code = 2; continue; }
       const text = await fs.read(node.id);
       const { lines, ended } = split(text);
       let out = '';
@@ -359,13 +360,7 @@ function split(text) {
 
 export const sedCommands = [
   {
-    name: 'sed', usage: 'sed [-nEi] [-e script] [script] [file…]', summary: 'Modifica il testo riga per riga (sostituzioni, cancellazioni…).', run: sed,
-    help: `s/vecchio/nuovo/g  sostituisce (g: tutte le volte, i: senza maiuscole, p: stampa)
-3d, /re/d, 2,5d  elimina righe     -n …p  stampa solo quelle scelte
-y/abc/xyz/  traslittera     a testo, i testo, c testo  aggiunge, inserisce, cambia
-=  numero di riga   q  esce   h H g G x  spazio di riserva   b t :etichetta  salti
-Indirizzi: n, $, /re/, a,b, a,+n, ! per negare, { … } per raggruppare.
--n  non stampa le righe da sola    -E  espressioni regolari estese    -i  modifica i file
-Esempi: sed 's/rosso/blu/g' note.txt    sed -n '1,5p' file    sed -i '/^#/d' conf.txt`,
+    name: 'sed', usage: 'sed [-nEi] [-e script] [script] [file…]', get summary() { return t('help.sed.summary'); }, run: sed,
+    get help() { return t('help.sed.text'); },
   },
 ];
