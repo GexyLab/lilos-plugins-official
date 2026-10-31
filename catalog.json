@@ -6,7 +6,8 @@
     "apps/settings",
     "apps/appstore",
     "apps/photo",
-    "apps/terminal"
+    "apps/terminal",
+    "apps/filecrypt"
   ],
   "modules": [
     "modules/users-basic",

@@ -187,8 +187,8 @@ async function touch(ctx) {
   for (const path of args) {
     const node = ctx.resolve(path);
     if (node) {
-      // Writing the same content again moves the modification date
-      if (node.type === 'file') await fs.write(node.id, await fs.readBlob(node.id));
+      // Writing the same content again moves the modification date (as it is stored: an encrypted file stays so)
+      if (node.type === 'file') await (fs.copyContent ? fs.copyContent(node.id, node.id) : fs.write(node.id, await fs.readBlob(node.id)));
       continue;
     }
     if (opts.c) continue;
@@ -214,11 +214,18 @@ async function copyNode(ctx, node, parentId, name, opts) {
     if (opts.n) return;
     if (existing.type === 'folder') throw new ShellError(t('files.overwriteFolder', { name }));
     if (existing.type === 'file' && node.type === 'file') {
-      await fs.write(existing.id, await fs.readBlob(node.id));
+      // The content as it is stored, with the apps' data on it: a copy of an encrypted file stays encrypted
+      await (fs.copyContent ? fs.copyContent(node.id, existing.id) : fs.write(existing.id, await fs.readBlob(node.id)));
       if (opts.v) await ctx.out(`${t('cp.verbose', { from: fs.path(node.id), to: fs.path(existing.id) })}\n`);
       return;
     }
     fs.trash([existing.id]);
+  }
+  if (node.type === 'file' && fs.copy) {
+    const copy = await fs.copy(node.id, parentId, { name });
+    if (opts.v) await ctx.out(`${t('cp.verbose', { from: fs.path(node.id), to: fs.path(copy.id) })}
+`);
+    return;
   }
   const copy = fs.create(parentId, { type: node.type, name, app: node.app });
   if (node.type === 'file') await fs.write(copy.id, await fs.readBlob(node.id));

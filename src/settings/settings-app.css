@@ -52,3 +52,6 @@
 .su-line span { color: var(--faint); }
 .su-line.warn { color: var(--warning); }
 .su-line.error { color: var(--danger); }
+
+/* App → Pipe: moving a handler in its chain */
+.pipes-move { display: inline-flex; gap: 6px; }

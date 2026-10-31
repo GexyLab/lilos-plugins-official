@@ -9,6 +9,8 @@ import { markItem, dropZone, dragItems, movableInto, moveInto } from '@lilos/sys
 import { links, linkEntry } from '@lilos/system';
 import { SYSTEM_FOLDERS, DESK_NAME } from '@lilos/system';
 import { onWorkspacesChange } from '@lilos/system';
+// What a newer lilOS adds (entries of installed apps in the menu): read from the module, so an older lilOS still runs the app
+import * as system from '@lilos/system';
 import { tagDots, tagSubmenu, setTag } from '@lilos/system';
 import { showProperties } from '@lilos/system';
 import { num, typeLabel, folderName, locationLabel, originLabel, ownerLabel, ownerNode, sizeLabel, retentionLabel, dateLabel } from './format.js';
@@ -939,6 +941,7 @@ class FileBrowser {
       linkEntry(ids),
       { label: t('menu.info'), icon: 'info', shortcut: shortcuts.label('files.info'), action: () => this.info.setOpen(true) },
       !many && { label: t('menu.properties'), icon: 'info', action: () => showProperties(nodes[0].id) },
+      ...(system.appActionEntries?.(ids, { separator: true }) ?? []),
       '-',
       { label: many ? t('menu.deleteMany', { count }) : t('menu.delete'), icon: 'trash', shortcut: shortcuts.label('items.delete'), danger: true, disabled: system, action: () => this.remove(nodes.map(n => n.id)) },
     ].filter(Boolean));

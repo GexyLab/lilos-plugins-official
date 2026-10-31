@@ -20,6 +20,7 @@ const APPS = [
   { id: 'appstore', entry: 'AppStoreApp.js' },
   { id: 'photo', entry: 'PhotoApp.js' },
   { id: 'terminal', entry: 'TerminalApp.js' },
+  { id: 'filecrypt', entry: 'FileCryptApp.js' },
 ];
 
 /** Every language without `extends` has every key of English, and none that English lacks. */

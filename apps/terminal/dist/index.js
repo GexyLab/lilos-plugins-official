@@ -3923,7 +3923,7 @@ async function Qt(e) {
 	for (let a of n) {
 		let n = e.resolve(a);
 		if (n) {
-			n.type === "file" && await r.write(n.id, await r.readBlob(n.id));
+			n.type === "file" && await (r.copyContent ? r.copyContent(n.id, n.id) : r.write(n.id, await r.readBlob(n.id)));
 			continue;
 		}
 		if (t.c) continue;
@@ -3953,13 +3953,22 @@ async function $t(e, t, n, i, a) {
 		if (a.n) return;
 		if (o.type === "folder") throw new b(w("files.overwriteFolder", { name: i }));
 		if (o.type === "file" && t.type === "file") {
-			await r.write(o.id, await r.readBlob(t.id)), a.v && await e.out(`${w("cp.verbose", {
+			await (r.copyContent ? r.copyContent(t.id, o.id) : r.write(o.id, await r.readBlob(t.id))), a.v && await e.out(`${w("cp.verbose", {
 				from: r.path(t.id),
 				to: r.path(o.id)
 			})}\n`);
 			return;
 		}
 		r.trash([o.id]);
+	}
+	if (t.type === "file" && r.copy) {
+		let o = await r.copy(t.id, n, { name: i });
+		a.v && await e.out(`${w("cp.verbose", {
+			from: r.path(t.id),
+			to: r.path(o.id)
+		})}
+`);
+		return;
 	}
 	let s = r.create(n, {
 		type: t.type,

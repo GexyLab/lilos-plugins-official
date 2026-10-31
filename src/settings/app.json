@@ -1,6 +1,6 @@
 {
   "id": "settings",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "kind": "local",
   "name": "System",
   "description": "Appearance, language, workspaces, tags, shortcuts, file types, startup services and apps, storage.",

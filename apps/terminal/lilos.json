@@ -1,6 +1,6 @@
 {
   "id": "terminal",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "kind": "local",
   "name": "Terminal",
   "description": "A bash-like shell over the files of lilOS: commands, pipes, redirections, variables, loops, functions and scripts.",
@@ -44,7 +44,7 @@
   "locales": "locales.json",
   "files": {
     "dist/index-cS4PAZr0.css": "sha256-daR1N0U/TT0z8XFY0XTTGR7kLV0idwTdyhg2tGpAqb0=",
-    "dist/index.js": "sha256-ANBhP9SnmFrquaJXAghFu0LjmJ23TWNbv8PeA1y8BSA=",
+    "dist/index.js": "sha256-V0EKxtW6aO4BvNxkmwJGeYaLWA3eYxZ12qCOAHH5pcg=",
     "locales.json": "sha256-UeIHKrUlapGIVKjV77MH0qjy8CVxem1yxqvKYjLtu9Q="
   }
 }

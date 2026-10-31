@@ -12,6 +12,7 @@ import { WORKSPACE_LIMITS } from '@lilos/system';
 import { menuSections } from './menuEditor.js';
 import { startupOptionsSections, startupAppsSections } from './startup.js';
 import { servicesSections, watchServices } from './services.js';
+import { pipeSections, watchPipes } from './pipes.js';
 import { t, i18n } from './i18n.js';
 import './settings-app.css';
 
@@ -641,6 +642,7 @@ export default function createSettings({ openWindow, args } = {}) {
         get description() { return t('apps.description'); },
         subtabs: [
           { id: 'security', get label() { return t('apps.security.label'); }, sections: appSecuritySections },
+          { id: 'pipes', get label() { return t('pipes.label'); }, sections: () => pipeSections({ rerender: () => view?.render() }) },
         ],
       },
       {
@@ -727,7 +729,7 @@ export default function createSettings({ openWindow, args } = {}) {
   const offWorkspaces = [workspaceManager()?.on('change', refresh), workspaceManager()?.on('switch', refresh)];
   const offTrash = fs.on('trash', () => win.view.render());
   const offTags = tags.on('change', () => win.view.render());
-  const offApps = [packages.on('change', () => win.view.render()), packages.on('security', () => win.view.render()), watchServices(() => win.view.render())];
+  const offApps = [packages.on('change', () => win.view.render()), packages.on('security', () => win.view.render()), watchServices(() => win.view.render()), watchPipes(() => win.view.render())];
   // Fixed desk items turned off from the desk's menu meanwhile (older lilOS: one choice for every desk)
   const offDesk = settings.on('change:deskHidden', () => win.view.render());
   // The language changed (here or elsewhere): every text again in the new one. The title too,

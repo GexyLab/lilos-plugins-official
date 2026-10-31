@@ -1784,6 +1784,7 @@ var $ = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase(),
 				icon: "info",
 				action: () => _e(t[0].id)
 			},
+			...i.appActionEntries?.(a, { separator: !0 }) ?? [],
 			"-",
 			{
 				label: n ? w("menu.deleteMany", { count: r }) : w("menu.delete"),

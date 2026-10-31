@@ -1,6 +1,6 @@
 {
   "id": "settings",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "kind": "local",
   "name": "System",
   "description": "Appearance, language, workspaces, tags, shortcuts, file types, startup services and apps, storage.",
@@ -77,12 +77,12 @@
   ],
   "entry": "dist/index.js",
   "styles": [
-    "dist/index-DMCTzBuQ.css"
+    "dist/index-lpW-Bb_W.css"
   ],
   "locales": "locales.json",
   "files": {
-    "dist/index-DMCTzBuQ.css": "sha256-jpgkcQaE+tYi8g4te2u8bfwR9lai1Ix6V4dxsufm0gw=",
-    "dist/index.js": "sha256-y92WgV/c7glvoXTuirmfK1+7rjh1Ws2x7lxf4Fkr+p0=",
-    "locales.json": "sha256-DrFwSXFy9CdCegjOcYW3gbfnvsNZQC2WgcEeWGFXvMk="
+    "dist/index-lpW-Bb_W.css": "sha256-Aypn8r0a7Yh3VmZoi210TFh8yck6YW3VMTm1Np++zYw=",
+    "dist/index.js": "sha256-5zeIHHvT/LqauT66XvO3v/HoqnqKCCwyLpK2H5hPPb4=",
+    "locales.json": "sha256-w1odCrpQXSD/ORGi48BChiHcM0KqYSkef4vHLMBRJ+c="
   }
 }

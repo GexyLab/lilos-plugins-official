@@ -1,6 +1,6 @@
 {
   "id": "terminal",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "kind": "local",
   "name": "Terminal",
   "description": "A bash-like shell over the files of lilOS: commands, pipes, redirections, variables, loops, functions and scripts.",
