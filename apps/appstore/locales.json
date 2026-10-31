@@ -52,6 +52,7 @@
       "done.moduleRemovedDataKept": "{name} removed (its data is kept): restart the kernel",
       "done.appReinstalled": "{name} reinstalled",
       "done.kernelRestarted": "Kernel restarted",
+      "restart.kernelReason": "The kernel started again with other modules",
       "done.repoRemoved": "{name} removed",
       "done.repoAdded": "{name} added",
 
@@ -190,6 +191,7 @@
       "done.moduleRemovedDataKept": "{name} rimosso (i suoi dati restano): riavvia il kernel",
       "done.appReinstalled": "{name} reinstallata",
       "done.kernelRestarted": "Kernel riavviato",
+      "restart.kernelReason": "Il kernel è ripartito con moduli diversi",
       "done.repoRemoved": "{name} rimosso",
       "done.repoAdded": "{name} aggiunto",
 

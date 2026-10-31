@@ -159,6 +159,7 @@ var { t: T } = w("appstore", {
 		"done.moduleRemovedDataKept": "{name} removed (its data is kept): restart the kernel",
 		"done.appReinstalled": "{name} reinstalled",
 		"done.kernelRestarted": "Kernel restarted",
+		"restart.kernelReason": "The kernel started again with other modules",
 		"done.repoRemoved": "{name} removed",
 		"done.repoAdded": "{name} added",
 		"updates.atStart": "Check for updates at startup",
@@ -310,6 +311,7 @@ var { t: T } = w("appstore", {
 		"done.moduleRemovedDataKept": "{name} rimosso (i suoi dati restano): riavvia il kernel",
 		"done.appReinstalled": "{name} reinstallata",
 		"done.kernelRestarted": "Kernel riavviato",
+		"restart.kernelReason": "Il kernel è ripartito con moduli diversi",
 		"done.repoRemoved": "{name} rimosso",
 		"done.repoAdded": "{name} aggiunto",
 		"updates.atStart": "Controlla gli aggiornamenti all’avvio",
@@ -457,11 +459,11 @@ var { t: T } = w("appstore", {
 	color: "#5f6673"
 };
 d.define({ "appstore.showUnofficial": !0 });
-var D = (e, t) => {
+var ae = (e, t) => {
 	let n = e.split(".").map(Number), r = t.split(".").map(Number);
 	return (n[0] - r[0] || n[1] - r[1] || n[2] - r[2]) > 0;
-}, O = (e) => e.replace(/\.git$/i, "").replace(/\/+$/, ""), k = (e, t) => !!e?.url && O(e.url).toLowerCase() === O(t.url).toLowerCase(), A = (e) => O(e.url).split(/[/\\]/).pop() || e.name, j = (e) => (e ?? []).filter((e) => !E.has(e.split(":")[0]));
-function M({ openWindow: _ }) {
+}, D = (e) => e.replace(/\.git$/i, "").replace(/\/+$/, ""), O = (e, t) => !!e?.url && D(e.url).toLowerCase() === D(t.url).toLowerCase(), k = (e) => D(e.url).split(/[/\\]/).pop() || e.name, A = (e) => (e ?? []).filter((e) => !E.has(e.split(":")[0]));
+function j({ openWindow: _ }) {
 	let v = c.user?.role === "admin", y = {
 		repos: [],
 		catalogs: /* @__PURE__ */ new Map(),
@@ -492,8 +494,8 @@ function M({ openWindow: _ }) {
 		if (!y.busy) {
 			y.busy = e, $();
 			try {
-				let e = await t();
-				n && p(typeof n == "function" ? n(e) : n, { timeout: 5e3 }), await E({ quiet: !0 });
+				let e = await t(), r = typeof n == "function" ? n(e) : n;
+				r && p(r, { timeout: 5e3 }), await E({ quiet: !0 });
 			} catch (e) {
 				p(e.message, { timeout: 7e3 });
 			} finally {
@@ -528,9 +530,9 @@ function M({ openWindow: _ }) {
 		}
 		y.loading = !1, $();
 	}
-	let O = () => y.repos.filter((e) => e.official || d.get("appstore.showUnofficial"));
-	function M(t, n, r) {
-		let i = n?.manifest ?? r.manifest, a = (n ? n.locales && e.locale?.manifest(n.manifest, n.locales) : e.locale?.manifest(r.manifest)) || i, o = n?.manifest.version ?? null, s = !!r && (!n || k(r.source, t));
+	let D = () => y.repos.filter((e) => e.official || d.get("appstore.showUnofficial"));
+	function j(t, n, r) {
+		let i = n?.manifest ?? r.manifest, a = (n ? n.locales && e.locale?.manifest(n.manifest, n.locales) : e.locale?.manifest(r.manifest)) || i, o = n?.manifest.version ?? null, s = !!r && (!n || O(r.source, t));
 		return {
 			key: `app:${t?.id ?? "-"}:${i.id}`,
 			kind: "app",
@@ -550,13 +552,13 @@ function M({ openWindow: _ }) {
 			installed: r?.version ?? null,
 			here: s,
 			elsewhere: !!r && !s,
-			update: s && o && D(o, r.version) ? o : null,
+			update: s && o && ae(o, r.version) ? o : null,
 			required: !!i.required,
 			verified: !!r?.signed || !!t?.official
 		};
 	}
-	function N(e, t, n) {
-		let r = t?.module ?? n, i = t?.module.version ?? null, a = !!n && (!t || k(n.source, e));
+	function M(e, t, n) {
+		let r = t?.module ?? n, i = t?.module.version ?? null, a = !!n && (!t || O(n.source, e));
 		return {
 			key: `module:${e?.id ?? "-"}:${r.name}`,
 			kind: "module",
@@ -576,23 +578,23 @@ function M({ openWindow: _ }) {
 			installed: n ? n.enabled ?? n.running : null,
 			here: a,
 			elsewhere: !!n && !a,
-			update: a && n.enabled && i && D(i, n.enabled) ? i : null,
+			update: a && n.enabled && i && ae(i, n.enabled) ? i : null,
 			provides: r.provides ?? [],
 			verified: !!e?.official
 		};
 	}
-	function ae() {
+	function oe() {
 		let e = i.list(), t = y.modules.filter((e) => e.enabled || e.running), n = [];
-		for (let r of O()) {
+		for (let r of D()) {
 			let i = y.catalogs.get(r.id);
-			for (let t of i?.apps ?? []) t.manifest && n.push(M(r, t, e.find((e) => e.id === t.manifest.id)));
-			if (v) for (let e of i?.modules ?? []) e.module && n.push(N(r, e, t.find((t) => t.name === e.module.name)));
+			for (let t of i?.apps ?? []) t.manifest && n.push(j(r, t, e.find((e) => e.id === t.manifest.id)));
+			if (v) for (let e of i?.modules ?? []) e.module && n.push(M(r, e, t.find((t) => t.name === e.module.name)));
 		}
-		for (let t of e) n.some((e) => e.kind === "app" && e.here && e.id === t.id) || n.push(M(y.repos.find((e) => k(t.source, e)) ?? null, null, t));
-		for (let e of t) n.some((t) => t.kind === "module" && t.here && t.id === e.name) || n.push(N(y.repos.find((t) => k(e.source, t)) ?? null, null, e));
+		for (let t of e) n.some((e) => e.kind === "app" && e.here && e.id === t.id) || n.push(j(y.repos.find((e) => O(t.source, e)) ?? null, null, t));
+		for (let e of t) n.some((t) => t.kind === "module" && t.here && t.id === e.name) || n.push(M(y.repos.find((t) => O(e.source, t)) ?? null, null, e));
 		return n;
 	}
-	function oe(e) {
+	function se(e) {
 		let t = new Set(e.map((e) => e.category));
 		return [
 			{
@@ -613,16 +615,16 @@ function M({ openWindow: _ }) {
 			}))
 		];
 	}
-	let se = (e, t) => !t || [
+	let ce = (e, t) => !t || [
 		e.name,
 		e.id,
 		e.description,
 		e.publisher,
-		e.repo ? A(e.repo) : ""
-	].some((e) => e.toLowerCase().includes(t)), ce = () => v && y.modules.some((e) => (e.enabled ?? null) !== (e.running ?? null));
-	function P({ title: e, name: r, permissions: i = [], official: a, kernelModule: s = !1 }) {
+		e.repo ? k(e.repo) : ""
+	].some((e) => e.toLowerCase().includes(t)), le = () => v && y.modules.some((e) => (e.enabled ?? null) !== (e.running ?? null));
+	function N({ title: e, name: r, permissions: i = [], official: a, kernelModule: s = !1 }) {
 		return new Promise((c) => {
-			let l = j(i), u = new t({
+			let l = A(i), u = new t({
 				title: e,
 				icon: "download",
 				width: 440,
@@ -646,7 +648,7 @@ function M({ openWindow: _ }) {
 			})))), _(u);
 		});
 	}
-	async function F(e) {
+	async function ue(e) {
 		let { repo: t, entry: n } = e, r = {
 			type: "git",
 			url: t.url,
@@ -654,7 +656,7 @@ function M({ openWindow: _ }) {
 			ref: y.catalogs.get(t.id)?.ref
 		};
 		if (e.kind === "module") {
-			let n = await P({
+			let n = await N({
 				title: T("confirm.installTitle", { name: e.name }),
 				name: e.name,
 				official: t.official,
@@ -663,7 +665,7 @@ function M({ openWindow: _ }) {
 			n && x("install", () => l.install(r, { allowUnsigned: n.allowUnsigned }), T("done.moduleInstalled", { name: e.name }));
 			return;
 		}
-		let a = await P({
+		let a = await N({
 			title: T("confirm.installTitle", { name: e.name }),
 			name: e.name,
 			permissions: e.manifest.permissions,
@@ -671,58 +673,98 @@ function M({ openWindow: _ }) {
 		});
 		a && x("install", () => i.install(r, a), T("done.appInstalled", { name: e.name }));
 	}
-	async function I(e) {
+	async function P(e) {
 		let t = !!e.repo?.official;
-		if (e.kind === "module") return t || await P({
+		if (e.kind === "module") return t || await N({
 			title: T("confirm.updateTitle", { name: e.name }),
 			name: e.name,
 			official: t,
 			kernelModule: !0
 		}) ? { allowUnsigned: !t } : null;
-		let n = j(e.entry?.manifest.permissions).filter((t) => !e.have.granted.includes(t));
+		let n = A(e.entry?.manifest.permissions).filter((t) => !e.have.granted.includes(t));
 		return !n.length && t ? {
 			grant: [],
 			allowUnsigned: !1
-		} : P({
+		} : N({
 			title: T("confirm.updateTitle", { name: e.name }),
 			name: e.name,
 			permissions: n,
 			official: t
 		});
 	}
-	let L = (e, t) => e.kind === "module" ? l.update(e.id, t) : i.update(e.id, t);
-	async function R(e) {
-		let t = await I(e);
-		if (!t) return;
-		let n = e.kind === "module", r = e.name;
-		x("update", () => L(e, t), (e) => e.unchanged ? T(n ? "done.moduleUpToDate" : "done.appUpToDate", { name: r }) : T(n ? "done.moduleUpdated" : "done.appUpdated", {
-			name: r,
-			version: e.version
+	let F = (e, t) => e.kind === "module" ? l.update(e.id, t) : i.update(e.id, t);
+	async function I(e, { reinstall: t = !1 } = {}) {
+		if (!h.updateApps) {
+			let t = [];
+			for (let n of e) t.push(await n.run().then((e) => ({
+				item: n.item,
+				result: e
+			}), (e) => ({
+				item: n.item,
+				error: e
+			})));
+			return t;
+		}
+		let n = await h.updateApps(e.map(({ item: e, run: t }) => ({
+			id: e.id,
+			run: t,
+			restartOnUpdate: e.entry?.manifest.restartOnUpdate
+		})), {
+			from: "appstore",
+			reinstall: t
+		});
+		return n && n.map((t, n) => ({
+			...t,
+			item: e[n].item
 		}));
 	}
-	function le(e) {
+	async function L(e, t, n) {
+		let [r] = await I([{
+			item: e,
+			run: t
+		}], n) ?? [null];
+		if (r?.error) throw r.error;
+		return r ? r.result : null;
+	}
+	async function R(e) {
+		let t = await P(e);
+		if (!t) return;
+		let n = e.kind === "module", r = e.name;
+		x("update", () => n ? F(e, t) : L(e, () => F(e, t)), (e) => e ? e.unchanged ? T(n ? "done.moduleUpToDate" : "done.appUpToDate", { name: r }) : T(n ? "done.moduleUpdated" : "done.appUpdated", {
+			name: r,
+			version: e.version
+		}) : null);
+	}
+	function de(e) {
 		x("update", async () => {
-			let t = 0;
-			for (let n of e) {
-				let e = await I(n);
-				if (e) try {
-					await L(n, e), t++;
-				} catch (e) {
-					p(`${n.name}: ${e.message}`, { timeout: 7e3 });
+			let t = 0, n = [];
+			for (let r of e) {
+				let e = await P(r);
+				if (e) {
+					if (r.kind !== "module") n.push({
+						item: r,
+						run: () => F(r, e)
+					});
+					else try {
+						await F(r, e), t++;
+					} catch (e) {
+						p(`${r.name}: ${e.message}`, { timeout: 7e3 });
+					}
 				}
 			}
+			for (let e of n.length && await I(n) || []) e.error ? p(`${e.item.name}: ${e.error.message}`, { timeout: 7e3 }) : t++;
 			return t;
 		}, (e) => T("done.updatedCount", { n: e }));
 	}
-	function ue(e) {
+	function fe(e) {
 		let t = e.name;
 		e.kind === "module" ? x("remove", () => l.remove(e.id), (e) => e.kept.length ? T("done.moduleRemovedDataKept", { name: t }) : T("done.moduleRemoved", { name: t })) : x("remove", () => i.uninstall(e.id), T("done.appRemoved", { name: t }));
 	}
-	let de = (e) => x("reinstall", () => i.update(e.id, {
+	let pe = (e) => x("reinstall", () => L(e, () => i.update(e.id, {
 		reinstall: !0,
 		allowUnsigned: !e.verified
-	}), T("done.appReinstalled", { name: e.name }));
-	async function fe(e, t) {
+	}), { reinstall: !0 }), (t) => t ? T("done.appReinstalled", { name: e.name }) : null);
+	async function me(e, t) {
 		t.disabled = !0, t.setAttribute("aria-busy", "true");
 		try {
 			let t = await u.readme(e.repo.id, e.entry.path), n = a.children(a.root).find((e) => e.type === "folder" && e.system && e.name === "Download");
@@ -738,8 +780,8 @@ function M({ openWindow: _ }) {
 			t.disabled = !1, t.removeAttribute("aria-busy");
 		}
 	}
-	let pe = () => x("restart", async () => {
-		await l.restart(), await new Promise((e) => setTimeout(e, 2500));
+	let he = () => x("restart", async () => {
+		await l.restart(), await new Promise((e) => setTimeout(e, 2500)), h.requestRestart?.(T("restart.kernelReason"), "kernel-modules");
 	}, T("done.kernelRestarted")), z = (e, t, { key: r = "", ...i } = {}) => {
 		let a = `${e}|${r}`, o = n({
 			label: e,
@@ -750,40 +792,40 @@ function M({ openWindow: _ }) {
 	}, B = (e, t = !1) => o("span", { class: "as-state" }, t ? s("check") : null, e), V = (e) => e.repo ? o("span", {
 		class: "as-repo",
 		title: e.repo.url
-	}, s("link"), o("span", {}, A(e.repo))) : o("span", { class: "as-repo" }, s("folder"), o("span", {}, e.kind === "module" ? T("repo.manual") : T("repo.localFolder"))), me = (e) => e.repo && !e.repo.official ? o("span", { class: "as-unofficial" }, T("repo.unofficial")) : null, H = (e) => e.kind === "module" ? T("status.installedModule") : T("status.installedApp"), U = (e, ...t) => o("div", { class: "as-section-title" }, e, ...t), W = (e, t) => o("div", { class: "as-fact" }, o("b", {}, e), String(t)), G = (e) => o("button", {
+	}, s("link"), o("span", {}, k(e.repo))) : o("span", { class: "as-repo" }, s("folder"), o("span", {}, e.kind === "module" ? T("repo.manual") : T("repo.localFolder"))), ge = (e) => e.repo && !e.repo.official ? o("span", { class: "as-unofficial" }, T("repo.unofficial")) : null, H = (e) => e.kind === "module" ? T("status.installedModule") : T("status.installedApp"), U = (e, ...t) => o("div", { class: "as-section-title" }, e, ...t), W = (e, t) => o("div", { class: "as-fact" }, o("b", {}, e), String(t)), G = (e) => o("button", {
 		class: "as-back",
 		onclick: () => Q("list")
 	}, s("arrowLeft"), e);
-	function he(e) {
+	function _e(e) {
 		return e.update ? v ? z(T("action.update"), () => R(e), {
 			primary: !0,
 			key: e.key
-		}) : B(T("status.updateAvailable", { version: e.update })) : e.here ? B(e.kind === "module" && !e.have.enabled ? T("status.removed") : H(e), !0) : e.elsewhere ? B(T("status.otherRepo")) : v ? z(T("action.install"), () => F(e), { key: e.key }) : B(T("status.available"));
+		}) : B(T("status.updateAvailable", { version: e.update })) : e.here ? B(e.kind === "module" && !e.have.enabled ? T("status.removed") : H(e), !0) : e.elsewhere ? B(T("status.otherRepo")) : v ? z(T("action.install"), () => ue(e), { key: e.key }) : B(T("status.available"));
 	}
-	function ge(e) {
+	function ve(e) {
 		let t = e.update ? `${e.installed} → ${e.update}` : e.here ? e.installed : e.offered;
 		return o("div", { class: "as-card" }, o("div", { class: "as-card-top" }, r(e.icon), o("div", { class: "as-card-head" }, o("button", {
 			class: "as-card-open",
 			onclick: () => Q("detail", e.key)
-		}, e.name, o("span", { class: "as-ver" }, t)), o("div", { class: "as-card-desc" }, e.description))), o("div", { class: "as-card-foot" }, V(e), me(e), o("span", { class: "as-spacer" }), he(e)));
+		}, e.name, o("span", { class: "as-ver" }, t)), o("div", { class: "as-card-desc" }, e.description))), o("div", { class: "as-card-foot" }, V(e), ge(e), o("span", { class: "as-spacer" }), _e(e)));
 	}
-	let K = (e) => o("div", { class: "as-grid" }, ...e.map(ge));
+	let K = (e) => o("div", { class: "as-grid" }, ...e.map(ve));
 	function q() {
 		let e = [];
-		ce() && [
+		le() && [
 			"installed",
 			"updates",
 			"kernel"
-		].includes(y.tab) && e.push(o("div", { class: "as-banner" }, s("info"), o("span", {}, T("banner.restartNeeded")), z(T("action.restartKernel"), pe, { primary: !0 })));
-		let t = O().filter((e) => y.errors.has(e.id));
-		return t.length && e.push(o("div", { class: "as-banner" }, s("info"), o("span", {}, t.length === 1 ? T("banner.repoUnreachable", { name: A(t[0]) }) : T("banner.reposUnreachable", { n: t.length })), o("button", {
+		].includes(y.tab) && e.push(o("div", { class: "as-banner" }, s("info"), o("span", {}, T("banner.restartNeeded")), z(T("action.restartKernel"), he, { primary: !0 })));
+		let t = D().filter((e) => y.errors.has(e.id));
+		return t.length && e.push(o("div", { class: "as-banner" }, s("info"), o("span", {}, t.length === 1 ? T("banner.repoUnreachable", { name: k(t[0]) }) : T("banner.reposUnreachable", { n: t.length })), o("button", {
 			class: "as-link",
 			onclick: () => Q("options")
 		}, T("action.details")))), e;
 	}
-	function _e(e, t) {
-		let n = (y.query[t.id] ?? "").trim().toLowerCase(), r = e.filter(t.filter).filter((e) => se(e, n));
-		if (Z.textContent = y.loading ? T("list.reading") : `${T("list.items", { n: r.length })} · ${T("list.repos", { n: O().length })}`, !r.length) {
+	function ye(e, t) {
+		let n = (y.query[t.id] ?? "").trim().toLowerCase(), r = e.filter(t.filter).filter((e) => ce(e, n));
+		if (Z.textContent = y.loading ? T("list.reading") : `${T("list.items", { n: r.length })} · ${T("list.repos", { n: D().length })}`, !r.length) {
 			let e = y.loading && t.id !== "installed" ? T("list.reading") : n ? T("list.noResults", {
 				query: n,
 				tab: t.label
@@ -800,36 +842,36 @@ function M({ openWindow: _ }) {
 		}
 		if (t.id === "updates") return [
 			...q(),
-			U(T("list.updates", { n: r.length }), v && r.length > 1 ? o("span", { class: "as-bulk" }, z(T("action.updateAll"), () => le(r), { primary: !0 })) : null),
+			U(T("list.updates", { n: r.length }), v && r.length > 1 ? o("span", { class: "as-bulk" }, z(T("action.updateAll"), () => de(r), { primary: !0 })) : null),
 			K(r)
 		];
 		let i = (e) => Number(e.here || e.elsewhere);
 		return [...q(), K([...r].sort((e, t) => i(e) - i(t) || e.name.localeCompare(t.name)))];
 	}
-	function ve(e, t) {
+	function be(e, t) {
 		let n = e.kind === "module", i = [];
 		e.here && !n && i.push(z(T("action.open"), () => ee(e.id), { primary: !e.update || !v })), v && (e.update && i.push(z(T("action.updateTo", { version: e.update }), () => R(e), {
 			primary: !0,
 			key: e.key
-		})), e.here && (!n || e.have.enabled) && (!e.update && e.have.source && i.push(z(T("action.checkUpdates"), () => R(e), { key: e.key })), n || i.push(z(T("action.reinstall"), () => de(e), { key: e.key })), e.required || i.push(z(T("action.remove"), () => ue(e), {
+		})), e.here && (!n || e.have.enabled) && (!e.update && e.have.source && i.push(z(T("action.checkUpdates"), () => R(e), { key: e.key })), n || i.push(z(T("action.reinstall"), () => pe(e), { key: e.key })), e.required || i.push(z(T("action.remove"), () => fe(e), {
 			danger: !0,
 			key: e.key
-		}))), !e.here && !e.elsewhere && e.entry && i.push(z(e.repo.official ? T("action.install") : T("action.installAnyway"), () => F(e), {
+		}))), !e.here && !e.elsewhere && e.entry && i.push(z(e.repo.official ? T("action.install") : T("action.installAnyway"), () => ue(e), {
 			primary: !0,
 			danger: !e.repo.official,
 			key: e.key
 		})));
-		let a = n && e.have ? e.have.enabled ? e.have.running === e.have.enabled ? T("moduleState.inUse") : e.have.running ? T("moduleState.oldUntilRestart", { version: e.have.running }) : T("moduleState.nextStart") : T("moduleState.removed") : null, c = j(e.manifest?.permissions);
+		let a = n && e.have ? e.have.enabled ? e.have.running === e.have.enabled ? T("moduleState.inUse") : e.have.running ? T("moduleState.oldUntilRestart", { version: e.have.running }) : T("moduleState.nextStart") : T("moduleState.removed") : null, c = A(e.manifest?.permissions);
 		return Z.textContent = `${e.name} ${e.offered ?? e.installed}`, o("div", { class: "as-detail" }, G(t.label), o("div", { class: "as-detail-head" }, r(e.icon), o("div", { class: "as-detail-title" }, o("h1", {}, e.name), o("div", { class: "as-sub" }, [
 			e.publisher,
 			T(n ? "detail.kindModule" : "detail.kindApp"),
 			te().find((t) => t.id === e.category)?.label
-		].filter(Boolean).join(" · ")), o("div", { class: "as-meta" }, V(e), e.verified ? o("span", { class: "as-state" }, s("shield"), T("detail.verified")) : e.repo ? o("span", { class: "as-unofficial" }, T("detail.unverified")) : null, e.required ? o("span", { class: "as-state" }, T("detail.required")) : null, e.elsewhere ? o("span", { class: "as-state" }, T(n ? "status.installedElsewhereModule" : "status.installedElsewhereApp")) : null), i.length ? o("div", { class: "as-detail-actions" }, ...i) : null)), e.repo && !e.repo.official && !e.here ? o("div", { class: "as-banner" }, s("info"), o("span", {}, T("detail.unofficialWarning"))) : null, o("div", { class: "as-facts" }, W(T("detail.version"), e.offered ?? e.installed), W(H(e), e.installed ?? "—"), W(T("detail.repository"), e.repo ? A(e.repo) : "—"), n ? W(T("detail.provides"), e.provides.join(", ") || "—") : W(T("detail.id"), e.id), a ? W(T("detail.state"), a) : null), n ? o("div", { class: "as-perm" }, o("h3", {}, s("info"), T("detail.warning")), o("p", {}, T("detail.moduleWarning"))) : o("div", { class: "as-perm" }, o("h3", {}, s("shield"), T("detail.mayDo")), c.length ? o("ul", {}, ...c.map((e) => o("li", {}, s("check"), g(e)))) : o("p", { class: "as-muted" }, T("permissions.none"))), o("div", { class: "as-readme-title" }, s("file"), "README.md"), e.readme ? o("article", { class: "as-readme" }, ...C(e.readme)) : null, e.readme && e.readmeTruncated ? o("p", { class: "as-readme-cut" }, T("readme.truncated"), " ", o("button", {
+		].filter(Boolean).join(" · ")), o("div", { class: "as-meta" }, V(e), e.verified ? o("span", { class: "as-state" }, s("shield"), T("detail.verified")) : e.repo ? o("span", { class: "as-unofficial" }, T("detail.unverified")) : null, e.required ? o("span", { class: "as-state" }, T("detail.required")) : null, e.elsewhere ? o("span", { class: "as-state" }, T(n ? "status.installedElsewhereModule" : "status.installedElsewhereApp")) : null), i.length ? o("div", { class: "as-detail-actions" }, ...i) : null)), e.repo && !e.repo.official && !e.here ? o("div", { class: "as-banner" }, s("info"), o("span", {}, T("detail.unofficialWarning"))) : null, o("div", { class: "as-facts" }, W(T("detail.version"), e.offered ?? e.installed), W(H(e), e.installed ?? "—"), W(T("detail.repository"), e.repo ? k(e.repo) : "—"), n ? W(T("detail.provides"), e.provides.join(", ") || "—") : W(T("detail.id"), e.id), a ? W(T("detail.state"), a) : null), n ? o("div", { class: "as-perm" }, o("h3", {}, s("info"), T("detail.warning")), o("p", {}, T("detail.moduleWarning"))) : o("div", { class: "as-perm" }, o("h3", {}, s("shield"), T("detail.mayDo")), c.length ? o("ul", {}, ...c.map((e) => o("li", {}, s("check"), g(e)))) : o("p", { class: "as-muted" }, T("permissions.none"))), o("div", { class: "as-readme-title" }, s("file"), "README.md"), e.readme ? o("article", { class: "as-readme" }, ...C(e.readme)) : null, e.readme && e.readmeTruncated ? o("p", { class: "as-readme-cut" }, T("readme.truncated"), " ", o("button", {
 			class: "as-link",
-			onclick: (t) => fe(e, t.currentTarget)
+			onclick: (t) => me(e, t.currentTarget)
 		}, s("download"), T("readme.download"))) : null, e.readme ? null : o("p", { class: "as-muted" }, e.repo ? T("readme.none") : T("readme.notFromRepo")));
 	}
-	function ye() {
+	function xe() {
 		let e = y.updates, t = !e || e.system && !e.canControl, n = e ? e.system ? T("updates.bySystem") : T("updates.description") : T("updates.needsEngine"), r = m({
 			value: !!e && e.startup !== "none",
 			label: T("updates.atStart"),
@@ -837,13 +879,13 @@ function M({ openWindow: _ }) {
 		});
 		return r.disabled = t, o("div", { class: "as-row" }, o("div", { class: "as-row-text" }, o("b", {}, T("updates.atStart")), o("span", {}, n)), r);
 	}
-	function be(e) {
+	function Se(e) {
 		let t = y.newRepo;
 		return Z.textContent = T("options.title"), o("div", { class: "as-options" }, G(e.label), o("h2", {}, T("options.title")), o("p", { class: "as-lead" }, T("options.lead")), U("AppStore"), o("div", { class: "as-group" }, o("div", { class: "as-row" }, o("div", { class: "as-row-text" }, o("b", {}, T("options.showUnofficial")), o("span", {}, T("options.showUnofficialHint"))), m({
 			value: d.get("appstore.showUnofficial"),
 			label: T("options.showUnofficial"),
 			onChange: (e) => d.set("appstore.showUnofficial", e)
-		})), ye()), U(T("options.repositories"), o("span", { class: "as-bulk" }, z(T("action.reload"), () => E()))), o("div", { class: "as-group" }, ...y.repos.map((e) => {
+		})), xe()), U(T("options.repositories"), o("span", { class: "as-bulk" }, z(T("action.reload"), () => E()))), o("div", { class: "as-group" }, ...y.repos.map((e) => {
 			let t = y.catalogs.get(e.id), n = (e) => (e ?? []).filter((e) => !e.error).length, i = [...t?.apps ?? [], ...t?.modules ?? []].filter((e) => e.error), a = y.errors.has(e.id) ? T("options.unreachable", { error: y.errors.get(e.id) }) : t ? [
 				T("options.apps", { n: n(t.apps) }),
 				T("options.modules", { n: n(t.modules) }),
@@ -855,10 +897,10 @@ function M({ openWindow: _ }) {
 			} : {
 				glyph: "link",
 				color: "#8a909b"
-			}), o("div", { class: "as-row-text" }, o("b", {}, A(e), o("span", { class: "as-muted" }, ` · ${e.name}`)), o("span", {}, e.url), o("span", {
+			}), o("div", { class: "as-row-text" }, o("b", {}, k(e), o("span", { class: "as-muted" }, ` · ${e.name}`)), o("span", {}, e.url), o("span", {
 				class: y.errors.has(e.id) ? "as-error" : null,
 				title: i.map((e) => `${e.path}: ${e.error}`).join("\n") || null
-			}, a)), e.official ? o("span", { class: "as-muted" }, T("options.alwaysThere")) : v ? z(T("action.remove"), () => x("repo", () => u.remove(e.id), T("done.repoRemoved", { name: A(e) })), {
+			}, a)), e.official ? o("span", { class: "as-muted" }, T("options.alwaysThere")) : v ? z(T("action.remove"), () => x("repo", () => u.remove(e.id), T("done.repoRemoved", { name: k(e) })), {
 				danger: !0,
 				key: e.id
 			}) : null);
@@ -882,7 +924,7 @@ function M({ openWindow: _ }) {
 				url: "",
 				name: ""
 			}, e;
-		}, (e) => T("done.repoAdded", { name: A(e) })), { primary: !0 }))) : o("p", { class: "as-muted" }, T("options.adminOnly")));
+		}, (e) => T("done.repoAdded", { name: k(e) })), { primary: !0 }))) : o("p", { class: "as-muted" }, T("options.adminOnly")));
 	}
 	let J = o("input", {
 		type: "search",
@@ -900,7 +942,7 @@ function M({ openWindow: _ }) {
 	function Q(e, t = null) {
 		y.view = e, y.key = t, $(), X.scrollTop = 0;
 	}
-	function xe(e) {
+	function Ce(e) {
 		y.tab = e, Q("list");
 	}
 	J.addEventListener("input", () => {
@@ -913,7 +955,7 @@ function M({ openWindow: _ }) {
 		t[(t.indexOf(document.activeElement) + (e.key === "ArrowRight" ? 1 : -1) + t.length) % t.length].click(), Y.querySelector("[tabindex=\"0\"]")?.focus();
 	});
 	function $() {
-		let e = ae(), t = oe(e);
+		let e = oe(), t = se(e);
 		t.some((e) => e.id === y.tab) || (y.tab = "installed");
 		let n = t.find((e) => e.id === y.tab), r = e.filter((e) => e.update).length;
 		Y.replaceChildren(...t.flatMap((e, n) => [e.category && !t[n - 1].category ? o("span", { class: "as-tab-sep" }) : null, o("button", {
@@ -921,11 +963,11 @@ function M({ openWindow: _ }) {
 			role: "tab",
 			"aria-selected": String(y.view === "list" && e.id === y.tab),
 			tabindex: e.id === y.tab ? "0" : "-1",
-			onclick: () => xe(e.id)
+			onclick: () => Ce(e.id)
 		}, e.label, e.badge && r ? o("span", { class: "as-count" }, String(r)) : null)].filter(Boolean))), J.placeholder = T("search.placeholder", { tab: n.label }), J.value !== (y.query[y.tab] ?? "") && (J.value = y.query[y.tab] ?? "");
 		let i = y.view === "detail" ? e.find((e) => e.key === y.key) : null;
 		y.view === "detail" && !i && (y.view = "list");
-		let a = y.view === "options" ? be(n) : i ? ve(i, n) : _e(e, n);
+		let a = y.view === "options" ? Se(n) : i ? be(i, n) : ye(e, n);
 		X.replaceChildren(...[a].flat(3).filter(Boolean));
 	}
 	b.on("launch", (e) => {
@@ -933,13 +975,13 @@ function M({ openWindow: _ }) {
 			apps: "installed",
 			modules: "kernel"
 		}[e?.tab] ?? e?.tab;
-		t === "repos" || t === "options" ? Q("options") : typeof t == "string" && xe(t);
+		t === "repos" || t === "options" ? Q("options") : typeof t == "string" && Ce(t);
 	});
-	let Se = i.on("change", () => $()), Ce = d.on("change:appstore.showUnofficial", () => $()), we = h.services?.on("change", (e) => {
+	let we = i.on("change", () => $()), Te = d.on("change:appstore.showUnofficial", () => $()), Ee = h.services?.on("change", (e) => {
 		e.app === "appstore" && S().then($);
 	});
 	return b.on("destroy", () => {
-		Se(), Ce(), we?.();
+		we(), Te(), Ee?.();
 	}), $(), E(), b;
 }
-export { M as default };
+export { j as default };

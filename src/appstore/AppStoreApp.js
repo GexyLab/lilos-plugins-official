@@ -59,7 +59,8 @@ export default function AppStore({ openWindow }) {
     render();
     try {
       const result = await fn();
-      if (done) toast(typeof done === 'function' ? done(result) : done, { timeout: 5000 });
+      const text = typeof done === 'function' ? done(result) : done;
+      if (text) toast(text, { timeout: 5000 });
       await load({ quiet: true });
     } catch (err) {
       toast(err.message, { timeout: 7000 });
@@ -232,26 +233,58 @@ export default function AppStore({ openWindow }) {
 
   const runUpdate = (item, answer) => (item.kind === 'module' ? kernelModules.update(item.id, answer) : apps.update(item.id, answer));
 
+  /**
+   * Updates apps through lilOS (updateApps): it says what will close, lets the windows save, puts
+   * the new version in place and asks to restart when needed. The AppStore closes too when it is
+   * among them, and opens again. An older lilOS: straight to the kernel.
+   * jobs: [{ item, run }] → [{ item, result } | { item, error }], or null when the user went back.
+   */
+  async function updateThroughSystem(jobs, { reinstall = false } = {}) {
+    if (!system.updateApps) {
+      const out = [];
+      for (const job of jobs) out.push(await job.run().then(result => ({ item: job.item, result }), error => ({ item: job.item, error })));
+      return out;
+    }
+    const out = await system.updateApps(jobs.map(({ item, run }) => ({ id: item.id, run, restartOnUpdate: item.entry?.manifest.restartOnUpdate })), { from: 'appstore', reinstall });
+    return out && out.map((r, i) => ({ ...r, item: jobs[i].item }));
+  }
+
+  /** One app through lilOS: its result (null when the user went back), or its error thrown. */
+  async function updateOne(item, run, options) {
+    const [out] = await updateThroughSystem([{ item, run }], options) ?? [null];
+    if (out?.error) throw out.error;
+    return out ? out.result : null;
+  }
+
   async function update(item) {
     const answer = await askUpdate(item);
     if (!answer) return;
     const isModule = item.kind === 'module', name = item.name;
-    act('update', () => runUpdate(item, answer), r => (r.unchanged ? (isModule ? t('done.moduleUpToDate', { name }) : t('done.appUpToDate', { name }))
+    act('update', () => (isModule ? runUpdate(item, answer) : updateOne(item, () => runUpdate(item, answer))), r => (!r ? null : r.unchanged ? (isModule ? t('done.moduleUpToDate', { name }) : t('done.appUpToDate', { name }))
       : isModule ? t('done.moduleUpdated', { name, version: r.version }) : t('done.appUpdated', { name, version: r.version })));
   }
 
   function updateAll(items) {
     act('update', async () => {
       let done = 0;
+      const jobs = [];
       for (const item of items) {
         const answer = await askUpdate(item);
         if (!answer) continue;
+        if (item.kind !== 'module') {
+          jobs.push({ item, run: () => runUpdate(item, answer) });
+          continue;
+        }
         try {
           await runUpdate(item, answer);
           done++;
         } catch (err) {
           toast(`${item.name}: ${err.message}`, { timeout: 7000 });
         }
+      }
+      for (const r of (jobs.length && await updateThroughSystem(jobs)) || []) {
+        if (r.error) toast(`${r.item.name}: ${r.error.message}`, { timeout: 7000 });
+        else done++;
       }
       return done;
     }, done => t('done.updatedCount', { n: done }));
@@ -263,7 +296,8 @@ export default function AppStore({ openWindow }) {
     else act('remove', () => apps.uninstall(item.id), t('done.appRemoved', { name }));
   }
 
-  const reinstall = item => act('reinstall', () => apps.update(item.id, { reinstall: true, allowUnsigned: !item.verified }), t('done.appReinstalled', { name: item.name }));
+  const reinstall = item => act('reinstall', () => updateOne(item, () => apps.update(item.id, { reinstall: true, allowUnsigned: !item.verified }), { reinstall: true }),
+    r => (r ? t('done.appReinstalled', { name: item.name }) : null));
 
   /** Saves the whole README of a package in the Download folder. */
   async function downloadReadme(item, link) {
@@ -287,6 +321,8 @@ export default function AppStore({ openWindow }) {
   const restartKernel = () => act('restart', async () => {
     await kernelModules.restart();
     await new Promise(r => setTimeout(r, 2500));
+    // lilOS too, so that it is coherent with the kernel's new modules (it asks the user: not awaited)
+    system.requestRestart?.(t('restart.kernelReason'), 'kernel-modules');
   }, t('done.kernelRestarted'));
 
   // ---------- Views ----------
