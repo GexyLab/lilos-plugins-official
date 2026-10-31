@@ -1,9 +1,9 @@
 {
   "id": "settings",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "kind": "local",
   "name": "System",
-  "description": "Appearance, language, workspaces, tags, shortcuts, file types, startup services and apps, storage.",
+  "description": "Appearance, language, desk, user page, workspaces, tags, shortcuts, file types, startup services and apps, storage.",
   "category": "system",
   "icon": { "glyph": "gear", "color": "#5f6673" },
   "publisher": { "id": "lilos", "name": "lilOS" },
@@ -11,7 +11,7 @@
   "system": true,
   "required": true,
   "entrypoints": { "main": { "kind": "window", "params": {
-    "tab": {"type": "choice", "label": "Section", "options": [{"value": "appearance", "label": "Appearance"}, {"value": "language", "label": "Language"}, {"value": "desk", "label": "Desk"}, {"value": "workspaces", "label": "Workspaces"}, {"value": "tags", "label": "Tags"}, {"value": "usability", "label": "Usability"}, {"value": "apps", "label": "Apps"}, {"value": "startup", "label": "Startup"}, {"value": "storage", "label": "Storage"}, {"value": "about", "label": "About"}]}
+    "tab": {"type": "choice", "label": "Section", "options": [{"value": "appearance", "label": "Appearance"}, {"value": "language", "label": "Language"}, {"value": "desk", "label": "Desk"}, {"value": "userpage", "label": "User page"}, {"value": "workspaces", "label": "Workspaces"}, {"value": "tags", "label": "Tags"}, {"value": "usability", "label": "Usability"}, {"value": "apps", "label": "Apps"}, {"value": "startup", "label": "Startup"}, {"value": "storage", "label": "Storage"}, {"value": "about", "label": "About"}]}
   } } },
   "permissions": ["settings.system", "workspaces.manage", "tags.write", "ui.shortcuts"]
 }

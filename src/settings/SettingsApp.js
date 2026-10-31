@@ -255,6 +255,37 @@ function deskFixedSections() {
 
 const settingToggle = key => () => toggle({ value: settings.get(key), onChange: v => settings.set(key, v) });
 
+/** Groups and items of the user page whose names and descriptions are in locales.json (userPage.…). */
+const TRANSLATED_USER_PAGE = {
+  groups: ['header', 'actions', 'account', 'session', 'footer'],
+  items: ['details', 'lock', 'logout', 'restart', 'photo', 'theme', 'language', 'settings', 'workspace', 'windows', 'startup', 'storage', 'about'],
+};
+
+/**
+ * What the page opened from the user's name shows (lilOS's lists: none in older versions), one
+ * switch per item, a section per group. Items Sistema does not know keep lilOS's Italian texts.
+ */
+function userPageSections() {
+  const items = system.USER_PAGE_ITEMS ?? [];
+  const groupName = g => (TRANSLATED_USER_PAGE.groups.includes(g.key) ? t(`userPage.group.${g.key}`) : g.name);
+  const texts = i => (TRANSLATED_USER_PAGE.items.includes(i.key)
+    ? { name: t(`userPage.item.${i.key}.name`), description: t(`userPage.item.${i.key}.description`) }
+    : i);
+  return [
+    { title: t('userPage.title'), rows: [{ label: t('userPage.open.label'), description: t('userPage.open.description') }] },
+    ...(system.USER_PAGE_GROUPS ?? []).map(g => ({
+      title: groupName(g),
+      rows: items.filter(i => i.group === g.key).map(i => {
+        const { name, description } = texts(i);
+        return {
+          label: name, description, keywords: t('userPage.keywords', { name }),
+          control: () => toggle({ value: system.isUserPageShown(i.key), label: t('userPage.toggle', { name }), onChange: v => system.setUserPageShown(i.key, v) }),
+        };
+      }),
+    })).filter(section => section.rows.length),
+  ];
+}
+
 const GROUP_ORDER = ['Generale', 'Scrivania', 'Elementi', 'Finestre'];
 
 /** One section per type group (Testo, Codice…), one row per extension, with the app that opens it. */
@@ -613,6 +644,12 @@ export default function createSettings({ openWindow, args } = {}) {
           },
         ],
       },
+      (system.USER_PAGE_ITEMS ?? []).length && {
+        id: 'userpage', icon: 'user',
+        get label() { return t('userPage.label'); },
+        get description() { return t('userPage.description'); },
+        sections: userPageSections,
+      },
       {
         id: 'workspaces', icon: 'workspace',
         get label() { return t('workspaces.label'); },
@@ -674,7 +711,7 @@ export default function createSettings({ openWindow, args } = {}) {
               {
                 label: t('storage.defaults.label'), description: t('storage.defaults.description'),
                 control: confirmButton(t('common.reset'), t('common.confirm'), () => {
-                  ['accent', 'theme', 'motion', 'snap', 'minimap', 'lasso', 'deleteConfirm', 'deletePermanent', 'trashRetention', 'startupApps', ...(sdk.locale ? ['language'] : [])].forEach(k => settings.reset(k));
+                  ['accent', 'theme', 'motion', 'snap', 'minimap', 'lasso', 'deleteConfirm', 'deletePermanent', 'trashRetention', 'startupApps', ...(sdk.locale ? ['language'] : []), ...(system.USER_PAGE_ITEMS ? ['userPageHidden'] : [])].forEach(k => settings.reset(k));
                   shortcuts.resetAll();
                   resetAppsFor();
                   menus.list().forEach(m => menus.reset(m.id));
