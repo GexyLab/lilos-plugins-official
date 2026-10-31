@@ -1,4 +1,4 @@
-import { Window, h, icon, fs, tags, session, storage, openMenu, shortcuts, toast, UndoStack, history } from '@lilos/sdk';
+import { Window, h, icon, fs, tags, session, storage, openMenu, shortcuts, toast, UndoStack, history, trackDrag } from '@lilos/sdk';
 import { launch, handleCommand } from '@lilos/system';
 import { openFile } from '@lilos/system';
 import { itemIcon } from '@lilos/system';
@@ -14,6 +14,7 @@ import { showProperties } from '@lilos/system';
 import { num, typeLabel, folderName, locationLabel, originLabel, ownerLabel, ownerNode, sizeLabel, retentionLabel, dateLabel } from './format.js';
 import { SidePanel, MIN_WIDTH } from './SidePanel.js';
 import { infoView, Preview, readable, contentKey } from './details.js';
+import { Columns, MIN_COL } from './columns.js';
 import { t } from './i18n.js';
 import './files.css';
 
@@ -78,6 +79,7 @@ class FileBrowser {
   #forward = [];
   #view = storage.get(VIEW_KEY) === 'grid' ? 'grid' : 'list';
   #sort = { key: 'name', dir: 1 };
+  #columns = new Columns();   // widths and visibility of the list view's columns
   #query = '';
   #items = [];          // nodes shown, in order
   #selection = new Set();
@@ -363,6 +365,7 @@ class FileBrowser {
           : tag ? t('empty.tag')
           : t('empty.folder')));
     } else if (this.#view === 'list') {
+      this.#layoutColumns();
       this.list.replaceChildren(this.#header(), ...this.#items.map(n => this.#row(n)));
     } else {
       this.list.replaceChildren(...this.#items.map(n => this.#tile(n)));
@@ -612,42 +615,128 @@ class FileBrowser {
     toast(t('toast.trashed', { n, count: num(n) }));
   }
 
+  // ---------- Columns of the list view ----------
+
+  /** All the columns of the view shown (hidden ones too). */
+  #viewColumns() {
+    return (this.inTrash ? TRASH_COLUMNS : this.inTag ? TAG_COLUMNS : COLUMNS)();
+  }
+
+  /** Puts the widths of the columns shown on the list: header and rows follow them. measuring: a column sized by its content. */
+  #layoutColumns(measuring = null) {
+    const { template, min } = this.#columns.layout(this.#columns.shown(this.#viewColumns()), measuring);
+    this.list.style.setProperty('--fm-cols', template);
+    this.list.style.setProperty('--fm-min', min);
+  }
+
+  /** Makes a column as wide as its widest cell, header included. */
+  #fitColumn(key) {
+    const cells = this.list.querySelectorAll(`[data-col="${key}"]`);
+    if (!cells.length) return;   // empty folder, or the icon view: nothing to measure
+    this.#layoutColumns(key);
+    let widest = MIN_COL;
+    for (const cell of cells) widest = Math.max(widest, cell.offsetWidth + 1);
+    this.#columns.resize(key, widest);
+    this.#layoutColumns();
+  }
+
+  #showColumn(key, show) {
+    this.#columns.setHidden(key, !show);
+    // Sorted by a column that is no longer there: by name
+    if (!show && this.#sort.key === key) this.#sort = { key: 'name', dir: 1 };
+    this.render();
+  }
+
+  /** Menu entries of the columns: each one shown or not (the name always is), fit them all, defaults. */
+  #columnItems() {
+    const columns = this.#viewColumns();
+    return [
+      ...columns.map(c => {
+        const shown = c.key === 'name' || !this.#columns.hidden.has(c.key);
+        return { label: c.label, icon: shown ? 'check' : null, disabled: c.key === 'name', action: () => this.#showColumn(c.key, !shown) };
+      }),
+      '-',
+      { label: t('columns.fitAll'), icon: 'fit', action: () => this.#columns.shown(columns).forEach(c => this.#fitColumn(c.key)) },
+      { label: t('columns.reset'), icon: 'undo', action: () => { this.#columns.reset(); this.render(); } },
+    ];
+  }
+
+  /**
+   * The right edge of a column's header: dragged, it resizes the column (← → when it has the
+   * focus); double click: as wide as its content.
+   */
+  #grip(c) {
+    const grip = h('span', {
+      class: 'fm-grip', role: 'separator', tabindex: '-1', 'aria-orientation': 'vertical',
+      'aria-label': t('column.resize', { name: c.label }), title: t('column.resizeTitle'),
+    });
+    const width = () => grip.parentElement.offsetWidth;
+    grip.addEventListener('pointerdown', e => {
+      if (e.button !== 0) return;
+      e.preventDefault();
+      const start = width();
+      this.list.classList.add('resizing');
+      trackDrag(e, {
+        threshold: 0,
+        onMove: dx => { this.#columns.resize(c.key, start + dx, false); this.#layoutColumns(); },
+        onEnd: moved => { this.list.classList.remove('resizing'); if (moved) this.#columns.save(); },
+      });
+    });
+    grip.addEventListener('dblclick', () => this.#fitColumn(c.key));
+    grip.addEventListener('keydown', e => {
+      const step = e.shiftKey ? 48 : 16;
+      const by = { ArrowLeft: -step, ArrowRight: step }[e.key];
+      if (by === undefined) return;
+      e.preventDefault();
+      this.#columns.resize(c.key, width() + by);
+      this.#layoutColumns();
+    });
+    return grip;
+  }
+
   #header() {
-    const columns = (this.inTrash ? TRASH_COLUMNS : this.inTag ? TAG_COLUMNS : COLUMNS)();
-    return h('div', { class: this.inTag ? 'fm-head tagged' : 'fm-head', role: 'presentation' }, columns.map(c => {
+    const columns = this.#columns.shown(this.#viewColumns());
+    return h('div', { class: 'fm-head', role: 'presentation' }, columns.map(c => {
       const on = this.#sort.key === c.key;
-      return h('button', {
+      const sort = h('button', {
         class: ['fm-col', c.num && 'num', on && 'on'].filter(Boolean).join(' '), type: 'button', tabindex: '-1',
         'aria-sort': on ? (this.#sort.dir > 0 ? 'ascending' : 'descending') : null,
         onclick: () => { this.#sort = { key: c.key, dir: on ? -this.#sort.dir : 1 }; this.render(); },
       }, c.label, on ? h('span', { class: 'fm-arrow', 'aria-hidden': 'true' }, this.#sort.dir > 0 ? '▲' : '▼') : null);
+      return h('div', { class: 'fm-th', dataset: { col: c.key } }, sort, this.#grip(c));
     }));
   }
 
   #row(n) {
+    const cells = this.#cells(n);
+    return this.#option(n, 'fm-row', ...this.#columns.shown(this.#viewColumns()).map(c => {
+      const cell = cells[c.key] ?? h('span');
+      cell.dataset.col = c.key;
+      return cell;
+    }));
+  }
+
+  /** The cells of an item's row, by column key. */
+  #cells(n) {
     if (n.trashed) {
       const origin = originLabel(n);
-      return this.#option(n, 'fm-row',
-        h('span', { class: 'fm-name' }, h('span', { class: 'fm-icon' }, itemIcon(n)), this.#nameNode(n)),
-        h('span', {}, dateLabel(n.trashed.at)),
-        h('span', { class: 'num' }, sizeLabel(n)),
-        h('span', {}, typeLabel(n)),
-        h('span', { title: t('trash.restoresTo', { place: origin }) }, origin));
+      return {
+        name: h('span', { class: 'fm-name' }, h('span', { class: 'fm-icon' }, itemIcon(n)), this.#nameNode(n)),
+        deleted: h('span', {}, dateLabel(n.trashed.at)),
+        size: h('span', { class: 'num' }, sizeLabel(n)),
+        type: h('span', {}, typeLabel(n)),
+        origin: h('span', { title: t('trash.restoresTo', { place: origin }) }, origin),
+      };
     }
-    const name = h('span', { class: 'fm-name' }, h('span', { class: 'fm-icon' }, itemIcon(n)), this.#nameNode(n), tagDots(n));
-    if (this.inTag) {
-      const where = locationLabel(n);
-      return this.#option(n, 'fm-row tagged', name,
-        h('span', { title: where }, where),
-        h('span', {}, typeLabel(n)),
-        ownerNode(n));
-    }
-    return this.#option(n, 'fm-row',
-      name,
-      h('span', {}, dateLabel(n.modified)),
-      h('span', { class: 'num' }, sizeLabel(n)),
-      h('span', {}, typeLabel(n)),
-      ownerNode(n));
+    const where = this.inTag ? locationLabel(n) : '';
+    return {
+      name: h('span', { class: 'fm-name' }, h('span', { class: 'fm-icon' }, itemIcon(n)), this.#nameNode(n), tagDots(n)),
+      modified: h('span', {}, dateLabel(n.modified)),
+      size: h('span', { class: 'num' }, sizeLabel(n)),
+      type: h('span', {}, typeLabel(n)),
+      workspace: ownerNode(n),
+      location: h('span', { title: where }, where),
+    };
   }
 
   #tile(n) {
@@ -748,6 +837,7 @@ class FileBrowser {
 
     this.list.addEventListener('contextmenu', e => {
       e.preventDefault();
+      if (e.target.closest('.fm-head')) return openMenu(e.clientX, e.clientY, this.#columnItems());
       const opt = optionOf(e);
       if (!opt) return this.#backgroundMenu(e);
       if (!this.#selection.has(opt.dataset.id)) this.#select([opt.dataset.id], opt.dataset.id);
@@ -793,6 +883,7 @@ class FileBrowser {
 
   #backgroundMenu(e) {
     const toggleView = { label: this.#view === 'list' ? t('view.grid') : t('view.list'), icon: this.#view === 'list' ? 'grid' : 'list', action: () => this.setView(this.#view === 'list' ? 'grid' : 'list') };
+    const columns = this.#view === 'list' && { label: t('columns.menu'), icon: 'list', items: this.#columnItems() };
     if (this.inTrash) {
       const empty = !this.#items.length;
       return openMenu(e.clientX, e.clientY, [
@@ -800,21 +891,24 @@ class FileBrowser {
         { label: t('menu.emptyTrash'), icon: 'trash', danger: true, disabled: empty, action: () => this.empty(e.clientX, e.clientY) },
         '-',
         toggleView,
-      ]);
+        columns,
+      ].filter(Boolean));
     }
     if (this.inTag) {
       return openMenu(e.clientX, e.clientY, [
         { label: t('menu.manageTags'), icon: 'gear', action: () => launch('settings', { tab: 'tags' }) },
         '-',
         toggleView,
-      ]);
+        columns,
+      ].filter(Boolean));
     }
     openMenu(e.clientX, e.clientY, [
       { label: t('menu.newFolder'), icon: 'folderPlus', action: () => this.create('folder') },
       { label: t('menu.newTextFile'), icon: 'filePlus', action: () => this.create('file') },
       '-',
       toggleView,
-    ]);
+      columns,
+    ].filter(Boolean));
   }
 
   #itemMenu(e) {

@@ -51,6 +51,11 @@
       "column.workspace": "Workspace",
       "column.origin": "Original location",
       "column.location": "Location",
+      "column.resize": "Width of the “{name}” column",
+      "column.resizeTitle": "Drag to resize, double-click to fit the content",
+      "columns.menu": "Columns",
+      "columns.fitAll": "Fit all columns to their content",
+      "columns.reset": "Default columns",
 
       "tile.deleted": "Deleted: {date}",
       "tile.origin": "Original location: {place}",
@@ -236,6 +241,11 @@
       "column.workspace": "Workspace",
       "column.origin": "Posizione originale",
       "column.location": "Posizione",
+      "column.resize": "Larghezza della colonna «{name}»",
+      "column.resizeTitle": "Trascina per ridimensionare, doppio clic per adattare al contenuto",
+      "columns.menu": "Colonne",
+      "columns.fitAll": "Adatta tutte le colonne al contenuto",
+      "columns.reset": "Ripristina le colonne",
 
       "tile.deleted": "Eliminato: {date}",
       "tile.origin": "Posizione originale: {place}",
