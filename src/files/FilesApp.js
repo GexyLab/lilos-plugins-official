@@ -84,6 +84,8 @@ class FileBrowser {
   #columns = new Columns();   // widths and visibility of the list view's columns
   #query = '';
   #items = [];          // nodes shown, in order
+  #expanded = new Set();  // folders opened in place in the list view (a tree), by id
+  #depth = new Map();     // id → how deep an item of the list is in that tree (0: in the folder shown)
   #selection = new Set();
   #anchor = null;       // id where a Shift range starts
   #cursor = null;       // id with the keyboard focus
@@ -193,6 +195,9 @@ class FileBrowser {
   /** The tag whose items are shown (everything with it, wherever it is), or null. */
   get inTag() { return viewTag(this.folder); }
 
+  /** True when folders open in place, as a tree: the list view (not in the trash, whose folders cannot be opened). */
+  get tree() { return this.#view === 'list' && !this.inTrash; }
+
   // ---------- Navigation ----------
 
   go(id, record = true) {
@@ -297,6 +302,23 @@ class FileBrowser {
     input.addEventListener('blur', () => finish(true));
   }
 
+  /**
+   * Opens or closes a folder in place (list view). deep: its subfolders too, at any depth.
+   * Closed, what was selected inside it gives the selection to the folder.
+   */
+  setOpen(id, open, deep = false) {
+    const folders = [id];
+    if (deep) for (let i = 0; i < folders.length; i++) folders.push(...fs.children(folders[i]).filter(n => n.type === 'folder').map(n => n.id));
+    folders.forEach(f => (open ? this.#expanded.add(f) : this.#expanded.delete(f)));
+    if (!open) {
+      const inside = x => x != null && x !== id && fs.isInside(x, id);
+      if (inside(this.#cursor)) this.#cursor = id;
+      if (inside(this.#anchor)) this.#anchor = id;
+      if ([...this.#selection].some(inside)) this.#selection = new Set([...this.#selection].filter(x => !inside(x)).concat(id));
+    }
+    this.render();
+  }
+
   remove(ids) {
     if (this.inTrash) return this.purge(ids);
     const removable = ids.filter(id => !fs.get(id)?.system);
@@ -353,13 +375,16 @@ class FileBrowser {
     this.#renderSide();
 
     const all = this.inTrash ? fs.trashed() : tag ? fs.tagged(tag.id) : fs.children(this.folder);
-    this.#items = this.#sorted(this.#query ? all.filter(n => fold(n.name).includes(this.#query)) : all);
+    this.#depth.clear();
+    this.#items = this.#flatten(all);
     const ids = new Set(this.#items.map(n => n.id));
     this.#selection = new Set([...this.#selection].filter(id => ids.has(id)));
     if (!ids.has(this.#cursor)) this.#cursor = this.#items[0]?.id ?? null;
 
     const scroll = this.list.scrollTop;
     this.list.classList.toggle('grid', this.#view === 'grid');
+    this.list.classList.toggle('tree', this.tree);
+    this.list.setAttribute('role', this.tree ? 'tree' : 'listbox');
     if (!this.#items.length) {
       this.list.replaceChildren(h('div', { class: 'fm-empty' },
         this.#query ? t('empty.noMatch', { query: this.search.value.trim() })
@@ -711,11 +736,46 @@ class FileBrowser {
 
   #row(n) {
     const cells = this.#cells(n);
+    if (this.tree) {
+      cells.name.prepend(this.#twisty(n));
+      cells.name.style.setProperty('--fm-depth', this.#depth.get(n.id) ?? 0);
+    }
     return this.#option(n, 'fm-row', ...this.#columns.shown(this.#viewColumns()).map(c => {
       const cell = cells[c.key] ?? h('span');
       cell.dataset.col = c.key;
       return cell;
     }));
+  }
+
+  /** The triangle that opens a folder in place; an empty one as wide for the rest, so the icons line up. */
+  #twisty(n) {
+    if (n.type !== 'folder') return h('span', { class: 'fm-twisty', 'aria-hidden': 'true' });
+    const open = this.#expanded.has(n.id);
+    return h('span', {
+      class: open ? 'fm-twisty open' : 'fm-twisty', dataset: { twisty: n.id }, 'aria-hidden': 'true',
+      title: open ? t('tree.collapseTitle') : t('tree.expandTitle'),
+    });
+  }
+
+  /**
+   * The items in the order they are shown: each one, and after an open folder what is in it (sorted
+   * the same way, one level deeper in #depth). Searching, an item that does not match stays only if
+   * something inside it does.
+   */
+  #flatten(nodes, depth = 0, out = []) {
+    for (const n of this.#sorted(nodes)) {
+      const at = out.length;
+      out.push(n);
+      this.#depth.set(n.id, depth);
+      if (this.#isOpen(n)) this.#flatten(fs.children(n.id), depth + 1, out);
+      if (this.#query && out.length === at + 1 && !fold(n.name).includes(this.#query)) out.pop();
+    }
+    return out;
+  }
+
+  /** True if a folder of the list shows its content under it. */
+  #isOpen(n) {
+    return this.tree && n.type === 'folder' && this.#expanded.has(n.id);
   }
 
   /** The cells of an item's row, by column key. */
@@ -762,9 +822,12 @@ class FileBrowser {
 
   #option(n, cls, ...children) {
     const selected = this.#selection.has(n.id);
+    const tree = this.tree && cls === 'fm-row';
     const el = h('div', {
       class: [cls, selected && 'selected', n.id === this.#cursor && 'cursor'].filter(Boolean).join(' '),
-      id: `fm-${n.id}`, role: 'option', 'aria-selected': String(selected), dataset: { id: n.id },
+      id: `fm-${n.id}`, role: tree ? 'treeitem' : 'option', 'aria-selected': String(selected), dataset: { id: n.id },
+      'aria-level': tree ? String((this.#depth.get(n.id) ?? 0) + 1) : null,
+      'aria-expanded': tree && n.type === 'folder' ? String(this.#expanded.has(n.id)) : null,
     }, ...children);
     return n.trashed ? el : markItem(el, n);
   }
@@ -797,10 +860,18 @@ class FileBrowser {
 
   #bindList() {
     const { signal } = this.win;
-    const optionOf = e => e.target.closest?.('[role="option"]');
+    const optionOf = e => e.target.closest?.('[role="option"], [role="treeitem"]');
 
     this.list.addEventListener('pointerdown', e => {
       if (e.button !== 0 || e.target.closest('.fm-rename, .fm-head')) return;
+      // The triangle of a folder: opens or closes it in place (with Alt, its subfolders too)
+      const twisty = e.target.closest('[data-twisty]');
+      if (twisty) {
+        e.preventDefault();
+        this.list.focus();
+        this.setOpen(twisty.dataset.twisty, !this.#expanded.has(twisty.dataset.twisty), e.altKey);
+        return;
+      }
       const opt = optionOf(e);
       if (!opt) { if (!e.ctrlKey && !e.metaKey && !e.shiftKey) this.#select([]); return; }
       const id = opt.dataset.id;
@@ -831,7 +902,7 @@ class FileBrowser {
 
     this.list.addEventListener('dblclick', e => {
       const opt = optionOf(e);
-      if (!opt || e.target.closest('.fm-rename')) return;
+      if (!opt || e.target.closest('.fm-rename, [data-twisty]')) return;
       if (this.inTrash) return this.openSelected();
       const node = fs.get(opt.dataset.id);
       if (node) this.open(node);
@@ -855,6 +926,11 @@ class FileBrowser {
         return;
       }
       if (e.key === 'Backspace') { e.preventDefault(); this.up(); return; }
+      if (this.tree && (e.key === 'ArrowRight' || e.key === 'ArrowLeft') && !e.shiftKey && !e.ctrlKey && !e.metaKey) {
+        e.preventDefault();
+        this.#treeKey(e.key === 'ArrowRight');
+        return;
+      }
       const step = this.#step(e.key);
       if (step == null || !this.#items.length) return;
       e.preventDefault();
@@ -866,12 +942,34 @@ class FileBrowser {
         if (!this.#anchor) this.#anchor = this.#cursor ?? id;
         const [a, b] = [order.indexOf(this.#anchor), j].sort((x, y) => x - y);
         this.#select(order.slice(a, b + 1), id);
-      } else {
-        this.#anchor = id;
-        this.#select([id], id);
-      }
-      this.list.querySelector(`#fm-${CSS.escape(id)}`)?.scrollIntoView({ block: 'nearest' });
+      } else this.#moveTo(id);
     }, { signal });
+  }
+
+  /**
+   * → and ← in the tree: → opens the folder with the cursor, or goes to the first item in it if it is
+   * open; ← closes it, or goes to the folder the item is in.
+   */
+  #treeKey(right) {
+    const i = this.#items.findIndex(n => n.id === this.#cursor);
+    const node = this.#items[i];
+    if (!node) return;
+    const open = this.#isOpen(node);
+    const depth = this.#depth.get(node.id);
+    if (right) {
+      if (node.type !== 'folder') return;
+      if (!open) return this.setOpen(node.id, true);
+      const next = this.#items[i + 1];
+      if (next && this.#depth.get(next.id) > depth) this.#moveTo(next.id);
+    } else if (open) this.setOpen(node.id, false);
+    else if (depth > 0) this.#moveTo(node.parent);
+  }
+
+  /** Selects only one item and brings it into view. */
+  #moveTo(id) {
+    this.#anchor = id;
+    this.#select([id], id);
+    this.list.querySelector(`#fm-${CSS.escape(id)}`)?.scrollIntoView({ block: 'nearest' });
   }
 
   /** How many items an arrow key moves by (grid: a row is as many tiles as fit). */
@@ -886,6 +984,7 @@ class FileBrowser {
   #backgroundMenu(e) {
     const toggleView = { label: this.#view === 'list' ? t('view.grid') : t('view.list'), icon: this.#view === 'list' ? 'grid' : 'list', action: () => this.setView(this.#view === 'list' ? 'grid' : 'list') };
     const columns = this.#view === 'list' && { label: t('columns.menu'), icon: 'list', items: this.#columnItems() };
+    const collapse = this.#items.some(n => this.#isOpen(n)) && { label: t('tree.collapseAll'), icon: 'minus', action: () => { this.#expanded.clear(); this.render(); } };
     if (this.inTrash) {
       const empty = !this.#items.length;
       return openMenu(e.clientX, e.clientY, [
@@ -902,6 +1001,7 @@ class FileBrowser {
         '-',
         toggleView,
         columns,
+        collapse,
       ].filter(Boolean));
     }
     openMenu(e.clientX, e.clientY, [
@@ -910,6 +1010,7 @@ class FileBrowser {
       '-',
       toggleView,
       columns,
+      collapse,
     ].filter(Boolean));
   }
 
@@ -929,8 +1030,12 @@ class FileBrowser {
     const system = nodes.some(n => n.system);
     const ids = nodes.map(n => n.id);
     const tag = this.inTag;
+    const folder = !many && this.tree && nodes[0].type === 'folder' && nodes[0];
+    const open = folder && this.#expanded.has(folder.id);
     openMenu(e.clientX, e.clientY, [
       { label: many ? t('menu.openMany', { count }) : t('menu.open'), icon: 'open', shortcut: shortcuts.label('items.open'), action: () => this.openSelected() },
+      folder && { label: open ? t('tree.collapse') : t('tree.expand'), icon: open ? 'minus' : 'plus', action: () => this.setOpen(folder.id, !open) },
+      folder && { label: t('tree.expandAll'), icon: 'plus', action: () => this.setOpen(folder.id, true, true) },
       !many && nodes[0].type === 'file' && { label: t('menu.openWith'), icon: 'open', action: () => openFile(nodes[0], { choose: true }) },
       !many && nodes[0].type === 'folder' && { label: t('menu.openInEditor'), icon: 'code', action: () => launch('editor', { folder: nodes[0].id }) },
       // In a tag's view items come from everywhere: show one where it is
@@ -983,9 +1088,11 @@ class FileBrowser {
       // The open folder is gone: go to the closest folder that still exists
       return this.go(e.parent && fs.exists(e.parent) ? e.parent : fs.root, false);
     }
-    const inFolder = e.parent === this.folder || e.from === this.folder;
+    // The folder shown and the folders open in it (the tree of the list view)
+    const shown = id => id === this.folder || this.#expanded.has(id);
+    const inFolder = shown(e.parent) || shown(e.from);
     const onTrail = e.type !== 'remove' && fs.isInside(this.folder, e.node.id);      // renamed ancestor: title, path
-    const inChild = [e.parent, e.from].some(p => p && fs.exists(p) && fs.get(p).parent === this.folder);  // item counts of subfolders
+    const inChild = [e.parent, e.from].some(p => p && fs.exists(p) && shown(fs.get(p).parent));  // item counts of subfolders
     if (!inFolder && !onTrail && !inChild && !linked) return;
     if (inFolder && e.type !== 'rename') this.#message = '';
     this.render();

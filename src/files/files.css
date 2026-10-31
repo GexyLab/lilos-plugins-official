@@ -89,6 +89,18 @@ button.fm-crumb:hover { background: var(--hover); color: var(--text); }
 .fm-icon .app-icon { width: 16px; height: 16px; border-radius: 4px; }
 .fm-label { overflow: hidden; text-overflow: ellipsis; }
 
+/* Tree: open folders show their content under them, one step (--fm-depth, set by FileBrowser#row) further in */
+.fm-list.tree .fm-row > .fm-name { padding-left: calc(2px + var(--fm-depth, 0) * 16px); }
+.fm-twisty { width: 16px; height: 16px; flex: none; margin-right: -4px; border-radius: 3px; display: grid; place-items: center; color: var(--dim); }
+.fm-twisty[data-twisty]:hover { background: var(--hover); color: var(--text); }
+.fm-twisty[data-twisty]::before {
+  content: ''; width: 5px; height: 5px; margin-left: -2px; border-right: 1.5px solid; border-bottom: 1.5px solid;
+  transform: rotate(-45deg); transition: transform .12s;
+}
+.fm-twisty.open::before { margin: -2px 0 0; transform: rotate(45deg); }
+.fm-row.selected .fm-twisty { color: #fff; }
+.fm-row.selected .fm-twisty[data-twisty]:hover { background: rgb(255 255 255 / .2); }
+
 /* Grid view */
 .fm-list.grid { display: flex; flex-wrap: wrap; align-content: flex-start; gap: 4px; padding: 8px; }
 .fm-tile { width: 88px; padding: 6px 2px 5px; border-radius: 5px; display: flex; flex-direction: column; align-items: center; gap: 5px; }
