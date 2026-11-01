@@ -187,12 +187,24 @@ function tagSections() {
   ];
 }
 
+/** Fixed items whose name and description are in locales.json (desk.fixed.item.<key>.…). */
+const TRANSLATED_FIXED = ['home', 'documents', 'images', 'files', 'downloads', 'trash'];
+
+/**
+ * A fixed item with its name and description in the system's language. lilOS gives them in
+ * Italian; one Sistema does not know keeps those.
+ */
+function translatedFixed(f) {
+  if (!TRANSLATED_FIXED.includes(f.key)) return f;
+  return { ...f, name: t(`desk.fixed.item.${f.key}.name`), description: t(`desk.fixed.item.${f.key}.description`) };
+}
+
 /**
  * The fixed items of the desks (lilOS's list: none in older versions), with what `row(item)` adds
  * to each one's row (control, description).
  */
 function fixedItemsSections(description, row) {
-  const fixed = system.DESK_FIXED_ITEMS ?? [];
+  const fixed = (system.DESK_FIXED_ITEMS ?? []).map(translatedFixed);
   if (!fixed.length) return [];
   return [{
     title: t('desk.fixed.title'),

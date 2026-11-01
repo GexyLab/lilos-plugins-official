@@ -1,9 +1,9 @@
 import * as e from "/host/sdk.js";
 import { SDK_VERSION as t, SettingsWindow as n, TAG_COLORS as r, Window as i, actionButton as a, appIcon as o, apps as s, fileTypeList as c, fs as l, h as u, icon as d, kernel as f, menus as p, openMenu as m, segmented as h, selectField as g, session as _, settings as v, shortcutField as y, shortcuts as b, storage as x, swatches as S, tags as C, textField as w, toast as T, toggle as E } from "/host/sdk.js";
 import * as D from "/host/system.js";
-import { ACCENTS as O, LASSO_OPTIONS as k, RETENTION_OPTIONS as A, WORKSPACE_LIMITS as j, appFor as M, apps as N, canChangeExecution as ee, defaultAppFor as te, executionMode as ne, fileApps as re, knownExtensions as ie, launch as P, pickFile as F, resetAppsFor as I, setAppFor as ae, setTag as oe, showAppSecurity as se, startup as L, version as ce, workspaceManager as R } from "/host/system.js";
+import { ACCENTS as O, LASSO_OPTIONS as k, RETENTION_OPTIONS as A, WORKSPACE_LIMITS as j, appFor as M, apps as N, canChangeExecution as ee, defaultAppFor as te, executionMode as ne, fileApps as re, knownExtensions as ie, launch as ae, pickFile as P, resetAppsFor as F, setAppFor as oe, setTag as se, showAppSecurity as ce, startup as I, version as le, workspaceManager as L } from "/host/system.js";
 // src/shared/i18n.js
-function le(t, n) {
+function ue(t, n) {
 	if (e.locale) return e.locale.forApp(t).i18n;
 	let r = {
 		...n.en.strings,
@@ -23,46 +23,46 @@ function le(t, n) {
 	};
 }
 // src/settings/i18n.js
-var z = le("settings", {
-	en: /* @__PURE__ */ JSON.parse("{\"strings\":{\"window.title\":\"Control Panel\",\"group.system\":\"System\",\"group.data\":\"Data\",\"common.name\":\"Name\",\"common.color\":\"Color\",\"common.items\":\"Items\",\"common.create\":\"Create\",\"common.add\":\"Add\",\"common.addMore\":\"Add…\",\"common.choose\":\"Choose…\",\"common.remove\":\"Remove\",\"common.delete\":\"Delete…\",\"common.deleteNow\":\"Delete\",\"common.reset\":\"Reset\",\"common.confirm\":\"Confirm\",\"common.loading\":\"Loading…\",\"common.unavailable\":\"Not available\",\"common.yes\":\"Yes\",\"common.no\":\"No\",\"appearance.label\":\"Appearance\",\"appearance.description\":\"Colors and motion of the interface.\",\"appearance.colors.label\":\"Colors\",\"appearance.theme.label\":\"Theme\",\"appearance.theme.description\":\"Light or dark: desk, taskbar, menus and windows\",\"appearance.theme.keywords\":\"theme light dark night mode\",\"appearance.theme.light\":\"Light\",\"appearance.theme.dark\":\"Dark\",\"appearance.accent.title\":\"Accent color\",\"appearance.accent.description\":\"Selection, buttons, active tabs and logo\",\"appearance.accent.keywords\":\"accent theme highlight\",\"appearance.motion.label\":\"Motion\",\"appearance.animations.label\":\"Animations\",\"appearance.animations.description\":\"View movements, menus and transitions. If the operating system asks for reduced motion, they stay reduced.\",\"appearance.animations.keywords\":\"motion movement transitions\",\"language.label\":\"Language\",\"language.description\":\"The language of apps: their texts, dates and numbers.\",\"language.title\":\"System language\",\"language.row.description\":\"Apps without this language use English. lilOS’s own texts are still in Italian.\",\"language.keywords\":\"language translation locale english italian dates numbers\",\"language.auto\":\"Automatic: {name}\",\"desk.label\":\"Desk\",\"desk.description\":\"How the infinite desk behaves.\",\"desk.fixed.title\":\"Fixed items\",\"desk.fixed.label\":\"On the desk\",\"desk.fixed.descriptionSwitchable\":\"The ones turned on are on the desk of every workspace. They open and move like other items, but cannot be renamed or deleted: you remove them here.\",\"desk.fixed.description\":\"They are on the desk of every workspace. They open and move like other items, but cannot be renamed or deleted.\",\"desk.fixed.keywords\":\"fixed items desk show hide delete {name}\",\"desk.fixed.toggle\":\"{name} on the desk\",\"desk.fixed.toggleIn\":\"{name} on the desk of {workspace}\",\"desk.fixed.always\":\"Fixed\",\"desk.fixed.descriptionWorkspace\":\"The ones turned on are on this workspace's desk. They open and move like other items, but cannot be renamed or deleted: you remove them here.\",\"desk.fixed.descriptionAll\":\"Turn one on or off in every workspace at once; new workspaces get the same. Each workspace can then change it in its own tab.\",\"desk.fixed.some\":\"On in {on} of {n} workspaces\",\"desk.fixed.toggleAll\":\"{name} on every desk\",\"desk.fixed.moved.label\":\"Each workspace has its own\",\"desk.fixed.moved.description\":\"Choose them in Workspaces: in each workspace's tab, or in All for every desk.\",\"desk.fixed.moved.keywords\":\"fixed items desk home documents trash workspace\",\"desk.fixed.moved.open\":\"Open\",\"desk.placement.title\":\"Placement\",\"desk.snap.label\":\"Snap to grid\",\"desk.snap.description\":\"Dragged items line up on an invisible grid\",\"desk.snap.keywords\":\"icons snap grid align\",\"desk.overview.label\":\"Overview\",\"desk.overview.title\":\"Bottom-right panel\",\"desk.minimap.label\":\"Show the minimap\",\"desk.minimap.keywords\":\"map minimap thumbnail\",\"workspaces.label\":\"Workspaces\",\"workspaces.description\":\"Separate desks, each with its own items, windows and apps. Files outside the desk belong to everyone.\",\"workspaces.current.label\":\"This workspace\",\"workspaces.current.title\":\"Workspace\",\"workspaces.all.label\":\"All\",\"workspaces.name.keywords\":\"rename workspace name\",\"workspaces.name.field\":\"Workspace name\",\"workspaces.color.description\":\"The dot in the taskbar and next to its files in the File Manager\",\"workspaces.color.keywords\":\"workspace color\",\"workspaces.owned.label\":\"Files, folders and shortcuts\",\"workspaces.owned.description\":\"Created in this workspace, on the desk and in shared folders\",\"workspaces.apps.title\":\"Apps\",\"workspaces.apps.system\":\"System app: it is in every workspace\",\"workspaces.apps.installed\":\"Installed in lilOS: you can hide it here\",\"workspaces.apps.keywords\":\"app hide show {name}\",\"workspaces.apps.alwaysVisible\":\"Always visible\",\"workspaces.apps.toggle\":\"{name} visible in this workspace\",\"workspaces.apps.toggleIn\":\"{name} visible in {workspace}\",\"workspaces.list.current\":\"{name} (current)\",\"workspaces.list.owned\":{\"one\":\"{n} item created\",\"other\":\"{n} items created\"},\"workspaces.list.apps\":{\"one\":\"{n} app\",\"other\":\"{n} apps\"},\"workspaces.list.keywords\":\"workspace switch delete\",\"workspaces.list.switch\":\"Switch to it\",\"workspaces.switch.label\":\"Go to this workspace\",\"workspaces.new.label\":\"New workspace\",\"workspaces.new.description\":\"With an empty desk and every app visible\",\"workspaces.deleting.title\":\"Deleting a workspace\",\"workspaces.deleting.files.label\":\"Files stay\",\"workspaces.deleting.files.description\":\"Its desk becomes the folder Documenti/Scrivania di <name> (if it is not empty); files created elsewhere stay where they are, marked as its own.\",\"workspaces.deleting.windows.label\":\"Windows stay\",\"workspaces.deleting.windows.description\":\"Its open windows move to the current workspace, with their unsaved changes. Workareas, view and hidden apps are lost.\",\"tags.label\":\"Tags\",\"tags.description\":\"Colored labels to find files and folders wherever they are. A hidden tag hides its items.\",\"tags.new.title\":\"New tag\",\"tags.new.pending\":{\"one\":\"The new tag will go on {n} selected item\",\"other\":\"The new tag will go on {n} selected items\"},\"tags.new.description\":\"Then assign it from the right-click menu → Tag, on the desk and in the File Manager\",\"tags.new.keywords\":\"new tag create label\",\"tags.new.placeholder\":\"For example: Urgent\",\"tags.new.field\":\"Name of the new tag\",\"tags.name.keywords\":\"rename tag\",\"tags.name.field\":\"Name of the tag {name}\",\"tags.color.keywords\":\"tag color\",\"tags.visible.label\":\"Visible\",\"tags.visible.on\":\"Items with this tag are shown everywhere\",\"tags.visible.off\":\"Items with this tag are hidden everywhere: you find them in File Manager → Tags\",\"tags.visible.keywords\":\"hide show hidden invisible tag\",\"tags.visible.toggle\":\"Tag {name} visible\",\"tags.items.description\":{\"one\":\"{n} item in this workspace and in shared folders\",\"other\":\"{n} items in this workspace and in shared folders\"},\"tags.items.show\":\"Show in File Manager\",\"tags.items.delete\":\"Delete the tag\",\"usability.label\":\"Usability\",\"usability.description\":\"Keyboard, mouse, apps that open files, context menus and trash.\",\"shortcuts.label\":\"Shortcuts\",\"shortcuts.title\":\"Keyboard shortcuts\",\"shortcuts.all.label\":\"All shortcuts\",\"shortcuts.all.description\":\"Changes apply right away. To record a combination press +, then the keys; Esc cancels.\",\"shortcuts.all.reset\":\"Reset all\",\"shortcuts.keywords\":\"shortcut keys {keys}\",\"shortcuts.mouse.title\":\"Mouse\",\"shortcuts.lasso.label\":\"Freehand selection\",\"shortcuts.lasso.description\":\"Draw a closed path: the items inside it are selected\",\"shortcuts.lasso.keywords\":\"lasso freehand path selection alt\",\"shortcuts.rectangle.label\":\"Rectangle selection\",\"shortcuts.rectangle.control\":\"Drag on the background\",\"shortcuts.addToSelection.label\":\"Add to the selection\",\"shortcuts.addToSelection.control\":\"Ctrl or Shift + click or drag\",\"shortcuts.pan.label\":\"Move around the desk\",\"shortcuts.pan.control\":\"Space + drag, or middle button\",\"shortcuts.fixed.title\":\"Fixed keys\",\"shortcuts.navigate.label\":\"Move through menus, lists and tabs\",\"shortcuts.navigate.control\":\"Arrows, Enter, Esc\",\"shortcuts.rename.label\":\"Confirm or cancel renaming\",\"shortcuts.rename.control\":\"Enter, Esc\",\"fileTypes.label\":\"File types\",\"fileTypes.title\":\"Apps by file type\",\"fileTypes.all.label\":\"All file types\",\"fileTypes.all.description\":\"When you open a file, lilOS uses the app chosen here. With “Ask every time” the Open with window appears.\",\"fileTypes.all.reset\":\"Reset all\",\"fileTypes.noExtension\":\"No extension\",\"fileTypes.default\":\"Default: {app}\",\"fileTypes.noDefault\":\"No default app\",\"fileTypes.keywords\":\"file type extension open with {ext}\",\"fileTypes.field\":\"App for .{ext}\",\"fileTypes.fieldNoExtension\":\"App for files without an extension\",\"fileTypes.ask\":\"Ask every time\",\"fileTypes.others\":\"Others\",\"menu.label\":\"Context menu\",\"menu.separator\":\"— Separator —\",\"menu.submenu\":{\"one\":\"Submenu · {n} item\",\"other\":\"Submenu · {n} items\"},\"menu.create.folder\":\"Creates the folder “{name}”\",\"menu.create.file\":\"Creates the file “{name}”\",\"menu.create.fileFromTemplate\":\"Creates the file “{name}” from the template {template}\",\"menu.create.fileWithContent\":\"Creates the file “{name}” with initial content\",\"menu.create.deletedTemplate\":\"(deleted file)\",\"menu.launch\":\"Opens the app {name}\",\"menu.action\":\"Action\",\"menu.keywords\":\"context menu item separator new\",\"menu.moveUp\":\"Move up\",\"menu.moveDown\":\"Move down\",\"menu.target.root\":\"Main menu\",\"menu.target.inside\":\"Inside “{name}”\",\"menu.target.label\":\"Where\",\"menu.item.label\":\"Item\",\"menu.item.description\":\"An action or opening an app\",\"menu.item.field\":\"Item to add\",\"menu.item.open\":\"Open {name}\",\"menu.separatorRow.label\":\"Separator\",\"menu.separatorRow.description\":\"A line to group items\",\"menu.new.label\":\"New item in “{name}”\",\"menu.new.description\":\"Creates a file or a folder with this name; a file can start from the contents of a template\",\"menu.new.labelField\":\"Label\",\"menu.new.labelPlaceholder\":\"Label (e.g. Style sheet)\",\"menu.new.nameField\":\"Name of the file or folder\",\"menu.new.namePlaceholder\":\"Name (e.g. style.css)\",\"menu.new.kind\":\"Type\",\"menu.new.kindFile\":\"File\",\"menu.new.kindFolder\":\"Folder\",\"menu.new.missing\":\"A label and a name are needed\",\"menu.template.button\":\"Template…\",\"menu.template.chosen\":\"Template: {name}\",\"menu.template.title\":\"Choose the template file\",\"menu.template.text\":\"The new file will start with the contents of this file.\",\"menu.defaults.label\":\"Default items\",\"menu.defaults.custom\":\"The menu has been customized\",\"menu.defaults.default\":\"The menu is the default one\",\"trash.label\":\"Trash\",\"trash.deleting.title\":\"Deleting\",\"trash.confirm.label\":\"Ask for confirmation\",\"trash.confirm.description\":\"Before deleting files and folders, a small menu asks you to confirm\",\"trash.confirm.keywords\":\"confirm delete remove ask\",\"trash.permanent.label\":\"Delete permanently\",\"trash.permanent.description\":\"Deleted items skip the trash: they can be recovered only with Ctrl Z, while the page stays open\",\"trash.permanent.keywords\":\"trash permanent immediately delete skip\",\"trash.retention.label\":\"Keep items for\",\"trash.retention.description\":\"After this time, what is in the trash is deleted permanently\",\"trash.retention.keywords\":\"retention duration days automatic cleanup empty\",\"trash.retention.field\":\"Keep items in the trash for\",\"trash.retention.days\":{\"one\":\"{n} day\",\"other\":\"{n} days\"},\"trash.retention.forever\":\"Forever\",\"trash.contents.label\":\"Contents\",\"trash.contents.description\":{\"one\":\"{n} item · {size}\",\"other\":\"{n} items · {size}\"},\"trash.contents.empty\":\"The trash is empty\",\"trash.contents.keywords\":\"open trash restore\",\"trash.contents.open\":\"Open the trash\",\"trash.empty.label\":\"Empty the trash\",\"trash.empty.description\":\"Permanently deletes everything in it\",\"trash.empty.keywords\":\"empty trash\",\"trash.empty.button\":\"Empty…\",\"trash.empty.confirm\":\"Empty\",\"trash.empty.none\":\"Empty\",\"apps.label\":\"Apps\",\"apps.description\":\"How installed apps run.\",\"apps.security.label\":\"Security\",\"apps.execution.title\":\"Running apps\",\"apps.isolated.label\":\"Run apps isolated\",\"apps.isolated.description\":\"Each app runs in a sandbox and sees only what its permissions allow. If you turn this off, apps run in lilOS’s page and in a Web Worker: faster, but they can do everything you can do. Applies from the next time each app opens.\",\"apps.isolated.adminOnly\":\"Only an administrator can change it.\",\"apps.isolated.keywords\":\"security isolation sandbox iframe worker\",\"apps.isolated.failed\":\"Not changed: {error}\",\"apps.system.label\":\"System apps\",\"apps.system.description\":\"File Manager, Editor, Control Panel and AppStore are part of lilOS and always run inside lilOS.\",\"apps.installed.title\":\"Installed apps\",\"apps.installed.keywords\":\"security isolation\",\"apps.installed.shared\":\"Like the other apps\",\"apps.installed.own\":\"Chosen for this app\",\"apps.installed.properties\":\"Properties…\",\"apps.installed.none\":\"No apps installed besides the system ones\",\"apps.mode.isolated\":\"Isolated\",\"apps.mode.open\":\"Not isolated\",\"apps.mode.system\":\"Inside lilOS\",\"apps.mode.remote\":\"Isolated, on its own site\",\"startup.label\":\"Startup\",\"startup.description\":\"Services and apps that start by themselves when lilOS starts and when you sign in.\",\"startup.options.label\":\"Options\",\"startup.services.label\":\"Services\",\"startup.apps.label\":\"Apps\",\"startup.auto.title\":\"Automatic startup\",\"startup.openApps.label\":\"Open apps when you sign in\",\"startup.openApps.description\":\"The apps chosen in Apps open, with their parameters. Only in the first lilOS tab of this browser: the others open empty.\",\"startup.openApps.keywords\":\"startup automatic sign-in login autorun\",\"startup.trouble.title\":\"If something goes wrong\",\"startup.safe.label\":\"Start without apps\",\"startup.safe.description\":\"Just once: open lilOS with ?avvio=no at the end of the address. Saved choices are kept.\",\"startup.safe.keywords\":\"safe start startup no apps avvio=no\",\"startup.safe.active\":\"Active now\",\"startup.apps.title\":\"Open when you sign in\",\"startup.apps.hint\":\"In the workspace lilOS opens in, in the order of the list. Turn off every entry point of an app and the app leaves the list.\",\"startup.apps.none\":\"No app opens by itself.\",\"startup.apps.oneEntry\":\"1 entry point\",\"startup.apps.entries\":{\"one\":\"{on} of {n} entry point\",\"other\":\"{on} of {n} entry points\"},\"startup.apps.remove\":\"Remove from startup\",\"startup.apps.allAdded\":\"All apps are already in startup\",\"startup.apps.add\":\"Add an app to startup\",\"startup.apps.addDescription\":\"Its main window opens; then choose other entry points and parameters\",\"startup.params.of\":\"{entry} of {app}\",\"startup.params.undescribed\":\"This entry point does not describe its parameters: they reach the app as they are, as args.\",\"startup.params.json\":\"Parameters (JSON)\",\"startup.params.jsonOf\":\"Parameters (JSON) of {name}\",\"startup.params.invalidJson\":\"Not valid JSON\",\"startup.params.notSaved\":\"Not saved: {error}\",\"startup.path.noFolder\":\"No folder\",\"startup.path.noFile\":\"No file\",\"startup.path.gone\":\"(no longer exists)\",\"startup.path.clear\":\"Remove {name}\",\"services.unsupported\":\"This version of lilOS has no app services\",\"services.status.off\":\"Off\",\"services.status.starting\":\"Starting…\",\"services.status.error\":\"Stopped: {error}\",\"services.status.unknownError\":\"error\",\"services.status.restarting\":\"Restarting… (it had stopped: {error})\",\"services.status.onNow\":\"On for less than a minute\",\"services.status.onMinutes\":{\"one\":\"On for {n} minute\",\"other\":\"On for {n} minutes\"},\"services.status.onHours\":{\"one\":\"On for {n} hour\",\"other\":\"On for {n} hours\"},\"services.status.onSince\":\"On since {date}\",\"services.auto.label\":\"Start services automatically\",\"services.auto.noEngine\":\"The kernel has no services engine (services-isolate module)\",\"services.auto.description\":\"When you sign in, your services chosen in Services start. The ones an administrator chose for everyone start anyway.\",\"services.auto.keywords\":\"services startup automatic background kernel\",\"services.title\":\"Installed services\",\"services.noEngine\":\"The kernel has no services engine: it needs the services-isolate module (AppStore → Kernel).\",\"services.none\":\"No installed app has services.\",\"services.hint\":\"The parts of apps that work in the kernel, without a window, even with lilOS closed. “At system startup” applies to every user and is chosen by an administrator; “At sign-in” only to you.\",\"services.startup.none\":\"Never\",\"services.startup.login\":\"At sign-in\",\"services.startup.system\":\"At system startup\",\"services.startup.field\":\"Startup of {name}\",\"services.restart\":\"Restart\",\"services.restartOf\":\"Restart {name}\",\"services.stop\":\"Stop\",\"services.start\":\"Start\",\"services.byAdmin\":\"chosen by an administrator\",\"services.log.label\":\"Log\",\"services.log.title\":\"Log of {name}\",\"services.log.empty\":\"No lines: the service has not started yet.\",\"storage.label\":\"Storage\",\"storage.description.kernel\":\"lilOS data saved in your user folder.\",\"storage.description.browser\":\"lilOS data saved in this browser.\",\"storage.space.title\":\"Space\",\"storage.used.label\":\"Space used\",\"storage.used.description\":\"Positions, view and settings\",\"storage.contents.label\":\"File contents\",\"storage.contents.description\":\"Text saved in files\",\"storage.reset.title\":\"Reset\",\"storage.defaults.label\":\"Default settings\",\"storage.defaults.description\":\"Resets settings, shortcuts, file type apps and menus to their initial values\",\"storage.initial.label\":\"Initial desk and files\",\"storage.initial.description\":\"Deletes all the folders and files created, the workspaces, the tags, the saved positions and view, then reloads lilOS\",\"storage.initial.keywords\":\"reset factory desktop desk workspace tag\",\"storage.initial.button\":\"Reset…\",\"storage.initial.confirm\":\"Delete and reload\",\"about.label\":\"About\",\"about.description\":\"Version and environment.\",\"about.version\":\"Version\",\"about.sdkVersion\":\"SDK version\",\"about.language\":\"Language\",\"about.browser\":\"Browser\",\"about.unknownBrowser\":\"Unknown\",\"userPage.label\":\"User page\",\"userPage.description\":\"What the page opened from your name shows\",\"userPage.title\":\"User page\",\"userPage.open.label\":\"Opened from your name\",\"userPage.open.description\":\"Click your name in the taskbar or at the bottom of the menu. Your name and photo are always there: choose here what else it shows.\",\"userPage.keywords\":\"user page profile account photo lock sign out restart {name}\",\"userPage.toggle\":\"{name} on the user page\",\"userPage.group.header\":\"Header\",\"userPage.group.actions\":\"Actions\",\"userPage.group.account\":\"Account\",\"userPage.group.session\":\"This session\",\"userPage.group.footer\":\"Footer\",\"userPage.item.details.name\":\"Username and role\",\"userPage.item.details.description\":\"Under your name: the name you sign in with and whether you are an administrator\",\"userPage.item.lock.name\":\"Lock\",\"userPage.item.lock.description\":\"Covers the screen until you enter your password again; apps stay open\",\"userPage.item.logout.name\":\"Sign out\",\"userPage.item.logout.description\":\"Saves, closes the apps and goes back to the sign-in screen\",\"userPage.item.restart.name\":\"Restart the system\",\"userPage.item.restart.description\":\"Restarts the lilOS kernel for every user; administrators only\",\"userPage.item.photo.name\":\"Profile photo\",\"userPage.item.photo.description\":\"Choose, change or remove your photo\",\"userPage.item.theme.name\":\"Theme\",\"userPage.item.theme.description\":\"Light or dark\",\"userPage.item.language.name\":\"Language\",\"userPage.item.language.description\":\"The language of apps\",\"userPage.item.settings.name\":\"All settings\",\"userPage.item.settings.description\":\"Opens Control Panel\",\"userPage.item.workspace.name\":\"Workspace\",\"userPage.item.workspace.description\":\"The one you are in and how many there are\",\"userPage.item.windows.name\":\"Open windows\",\"userPage.item.windows.description\":\"How many windows are open and how many apps work in the background\",\"userPage.item.startup.name\":\"At startup\",\"userPage.item.startup.description\":\"How many apps open when you come in\",\"userPage.item.storage.name\":\"Space used\",\"userPage.item.storage.description\":\"How much your files take up\",\"userPage.item.about.name\":\"lilOS version\",\"userPage.item.about.description\":\"The lilOS version and the address you are connected to\",\"@name\":\"Control Panel\",\"@description\":\"Appearance, language, desk, user page, workspaces, tags, shortcuts, file types, startup services and apps, storage.\",\"@entrypoints.main.params.tab.label\":\"Section\",\"@entrypoints.main.params.tab.options.appearance.label\":\"Appearance\",\"@entrypoints.main.params.tab.options.language.label\":\"Language\",\"@entrypoints.main.params.tab.options.desk.label\":\"Desk\",\"@entrypoints.main.params.tab.options.userpage.label\":\"User page\",\"@entrypoints.main.params.tab.options.workspaces.label\":\"Workspaces\",\"@entrypoints.main.params.tab.options.tags.label\":\"Tags\",\"@entrypoints.main.params.tab.options.usability.label\":\"Usability\",\"@entrypoints.main.params.tab.options.apps.label\":\"Apps\",\"@entrypoints.main.params.tab.options.startup.label\":\"Startup\",\"@entrypoints.main.params.tab.options.storage.label\":\"Storage\",\"@entrypoints.main.params.tab.options.about.label\":\"About\",\"pipes.label\":\"Pipes\",\"pipes.title\":\"Pipes on events\",\"pipes.keywords\":\"pipes events handlers order chain\",\"pipes.intro.label\":\"What apps do when something happens\",\"pipes.intro.description\":\"Apps can step in when a file is opened, read or saved, or look at what happens in the system. Below, each event with its handlers in the order they run ({count} events in all). The after stage runs in the reverse order of before.\",\"pipes.unsupported\":\"This version of lilOS has no pipes\",\"pipes.lilos\":\"lilOS\",\"pipes.up\":\"Up\",\"pipes.down\":\"Down\",\"pipes.stage.before\":\"Before\",\"pipes.stage.after\":\"After\",\"pipes.band.first\":\"among the first\",\"pipes.band.middle\":\"in the middle\",\"pipes.band.last\":\"among the last\",\"pipes.where.all\":\"every item\",\"pipes.where.system\":\"chosen by lilOS\",\"pipes.where.own\":\"the files it marked\",\"pipes.where.ext\":\"files {list}\",\"pipes.where.type.file\":\"files\",\"pipes.where.type.folder\":\"folders\",\"pipes.where.type.app\":\"app shortcuts\",\"pipes.where.app\":\"apps {list}\",\"pipes.reset.label\":\"Order of the handlers\",\"pipes.reset.description\":\"You changed it: go back to the order of installation\",\"pipes.idle.title\":\"Events without handlers\",\"pipes.idle.description\":\"{count} events: no app handles them now\",\"pipes.idle.none\":\"Every event has a handler\",\"pipes.event.file.open\":\"Opening a file\",\"pipes.event.file.read\":\"Reading a file\",\"pipes.event.file.write\":\"Saving a file\",\"pipes.event.app.launch\":\"Starting an app\",\"pipes.event.file.create\":\"Creating an item\",\"pipes.event.file.rename\":\"Renaming\",\"pipes.event.file.move\":\"Moving\",\"pipes.event.file.copy\":\"Copying a file\",\"pipes.event.file.remove\":\"Deleting for good\",\"pipes.event.trash.put\":\"Moving to the Trash\",\"pipes.event.trash.restore\":\"Restoring from the Trash\",\"pipes.event.trash.purge\":\"Emptying the Trash\",\"pipes.event.tags.assign\":\"Tags of an item\",\"pipes.event.window.open\":\"Opening a window\",\"pipes.event.window.close\":\"Closing a window\",\"pipes.event.workspace.switch\":\"Changing workspace\",\"pipes.event.settings.change\":\"Changing a setting\",\"pipes.event.system.ready\":\"System ready\",\"pipes.event.session.login\":\"User signed in\",\"pipes.event.session.logout\":\"Signing out\",\"pipes.event.apps.install\":\"Installing an app\",\"pipes.event.apps.update\":\"Updating an app\",\"pipes.event.apps.remove\":\"Removing an app\",\"pipes.event.permissions.change\":\"Permissions of an app\",\"pipes.event.settings.system\":\"System settings\",\"pipes.event.pipes.change\":\"Subscriptions to pipes\"}}"),
-	it: /* @__PURE__ */ JSON.parse("{\"strings\":{\"window.title\":\"Pannello di controllo\",\"group.system\":\"Sistema\",\"group.data\":\"Dati\",\"common.name\":\"Nome\",\"common.color\":\"Colore\",\"common.items\":\"Elementi\",\"common.create\":\"Crea\",\"common.add\":\"Aggiungi\",\"common.addMore\":\"Aggiungi…\",\"common.choose\":\"Scegli…\",\"common.remove\":\"Togli\",\"common.delete\":\"Elimina…\",\"common.deleteNow\":\"Elimina\",\"common.reset\":\"Ripristina\",\"common.confirm\":\"Conferma\",\"common.loading\":\"Lettura…\",\"common.unavailable\":\"Non disponibile\",\"common.yes\":\"Sì\",\"common.no\":\"No\",\"appearance.label\":\"Aspetto\",\"appearance.description\":\"Colori e movimento dell’interfaccia.\",\"appearance.colors.label\":\"Colori\",\"appearance.theme.label\":\"Tema\",\"appearance.theme.description\":\"Chiaro o scuro: scrivania, barra, menu e finestre\",\"appearance.theme.keywords\":\"tema chiaro scuro dark light notte\",\"appearance.theme.light\":\"Chiaro\",\"appearance.theme.dark\":\"Scuro\",\"appearance.accent.title\":\"Colore principale\",\"appearance.accent.description\":\"Selezione, pulsanti, tab attivi e logo\",\"appearance.accent.keywords\":\"accento tema\",\"appearance.motion.label\":\"Movimento\",\"appearance.animations.label\":\"Animazioni\",\"appearance.animations.description\":\"Spostamenti della vista, menu e transizioni. Se il sistema operativo chiede movimento ridotto, restano ridotte.\",\"appearance.animations.keywords\":\"movimento transizioni\",\"language.label\":\"Lingua\",\"language.description\":\"La lingua delle app: i loro testi, le date e i numeri.\",\"language.title\":\"Lingua del sistema\",\"language.row.description\":\"Le app che non hanno questa lingua usano l’inglese. I testi di lilOS sono ancora in italiano.\",\"language.keywords\":\"lingua traduzione inglese italiano date numeri language locale\",\"language.auto\":\"Automatica: {name}\",\"desk.label\":\"Scrivania\",\"desk.description\":\"Comportamento della scrivania infinita.\",\"desk.fixed.title\":\"Elementi fissi\",\"desk.fixed.label\":\"Sulla scrivania\",\"desk.fixed.descriptionSwitchable\":\"Quelli attivi ci sono sulla scrivania di ogni workspace. Si aprono e si spostano come gli altri, ma non si rinominano e non si eliminano: si tolgono da qui.\",\"desk.fixed.description\":\"Ci sono sulla scrivania di ogni workspace. Si aprono e si spostano come gli altri, ma non si rinominano e non si eliminano.\",\"desk.fixed.keywords\":\"elementi fissi scrivania mostra nascondi elimina {name}\",\"desk.fixed.toggle\":\"{name} sulla scrivania\",\"desk.fixed.toggleIn\":\"{name} sulla scrivania di {workspace}\",\"desk.fixed.always\":\"Fisso\",\"desk.fixed.descriptionWorkspace\":\"Quelli attivi ci sono sulla scrivania di questo workspace. Si aprono e si spostano come gli altri, ma non si rinominano e non si eliminano: si tolgono da qui.\",\"desk.fixed.descriptionAll\":\"Accendi o spegni un elemento in tutti i workspace insieme; i workspace nuovi lo hanno uguale. Ogni workspace poi lo può cambiare nel suo tab.\",\"desk.fixed.some\":\"Acceso in {on} workspace su {n}\",\"desk.fixed.toggleAll\":\"{name} su tutte le scrivanie\",\"desk.fixed.moved.label\":\"Ogni workspace ha i suoi\",\"desk.fixed.moved.description\":\"Si scelgono in Workspace: nel tab di ogni workspace, o in Tutti per tutte le scrivanie.\",\"desk.fixed.moved.keywords\":\"elementi fissi scrivania home documenti cestino workspace\",\"desk.fixed.moved.open\":\"Apri\",\"desk.placement.title\":\"Posizionamento\",\"desk.snap.label\":\"Allinea alla griglia\",\"desk.snap.description\":\"Gli elementi trascinati si allineano a una griglia invisibile\",\"desk.snap.keywords\":\"icone snap\",\"desk.overview.label\":\"Panoramica\",\"desk.overview.title\":\"Pannello in basso a destra\",\"desk.minimap.label\":\"Mostra la minimappa\",\"desk.minimap.keywords\":\"mappa miniatura\",\"workspaces.label\":\"Workspace\",\"workspaces.description\":\"Scrivanie separate, ognuna con i suoi elementi, finestre e app. I file fuori dalla scrivania sono di tutti.\",\"workspaces.current.label\":\"Questo workspace\",\"workspaces.current.title\":\"Workspace\",\"workspaces.all.label\":\"Tutti\",\"workspaces.name.keywords\":\"rinomina workspace\",\"workspaces.name.field\":\"Nome del workspace\",\"workspaces.color.description\":\"Il pallino nella barra in basso e accanto ai suoi file nel File Manager\",\"workspaces.color.keywords\":\"colore workspace\",\"workspaces.owned.label\":\"File, cartelle e collegamenti\",\"workspaces.owned.description\":\"Creati in questo workspace, sulla scrivania e nelle cartelle condivise\",\"workspaces.apps.title\":\"App\",\"workspaces.apps.system\":\"App di sistema: c’è in ogni workspace\",\"workspaces.apps.installed\":\"Installata in lilOS: qui la puoi nascondere\",\"workspaces.apps.keywords\":\"app nascondi mostra {name}\",\"workspaces.apps.alwaysVisible\":\"Sempre visibile\",\"workspaces.apps.toggle\":\"{name} visibile in questo workspace\",\"workspaces.apps.toggleIn\":\"{name} visibile in {workspace}\",\"workspaces.list.current\":\"{name} (attuale)\",\"workspaces.list.owned\":{\"one\":\"{n} elemento creato\",\"other\":\"{n} elementi creati\"},\"workspaces.list.apps\":{\"one\":\"{n} app\",\"other\":\"{n} app\"},\"workspaces.list.keywords\":\"workspace passa elimina\",\"workspaces.list.switch\":\"Passa a questo\",\"workspaces.switch.label\":\"Vai a questo workspace\",\"workspaces.new.label\":\"Nuovo workspace\",\"workspaces.new.description\":\"Con la scrivania vuota e tutte le app visibili\",\"workspaces.deleting.title\":\"Eliminare un workspace\",\"workspaces.deleting.files.label\":\"I file restano\",\"workspaces.deleting.files.description\":\"La sua scrivania diventa la cartella Documenti/Scrivania di <nome> (se non è vuota); i file creati altrove restano dove sono, segnati come suoi.\",\"workspaces.deleting.windows.label\":\"Le finestre restano\",\"workspaces.deleting.windows.description\":\"Le sue finestre aperte passano nel workspace attuale, con le modifiche non salvate. Workarea, vista e app nascoste si perdono.\",\"tags.label\":\"Tag\",\"tags.description\":\"Etichette colorate per ritrovare file e cartelle ovunque siano. Un tag invisibile nasconde i suoi elementi.\",\"tags.new.title\":\"Nuovo tag\",\"tags.new.pending\":{\"one\":\"Il nuovo tag andrà su {n} elemento selezionato\",\"other\":\"Il nuovo tag andrà su {n} elementi selezionati\"},\"tags.new.description\":\"Poi si assegna dal menu del tasto destro → Tag, sulla scrivania e nel File Manager\",\"tags.new.keywords\":\"nuovo tag crea etichetta\",\"tags.new.placeholder\":\"Per esempio: Urgente\",\"tags.new.field\":\"Nome del nuovo tag\",\"tags.name.keywords\":\"rinomina tag\",\"tags.name.field\":\"Nome del tag {name}\",\"tags.color.keywords\":\"colore tag\",\"tags.visible.label\":\"Visibile\",\"tags.visible.on\":\"Gli elementi con questo tag si vedono ovunque\",\"tags.visible.off\":\"Gli elementi con questo tag sono nascosti ovunque: si ritrovano nel File Manager → Tag\",\"tags.visible.keywords\":\"nascondi mostra invisibile tag\",\"tags.visible.toggle\":\"Tag {name} visibile\",\"tags.items.description\":{\"one\":\"{n} elemento in questo workspace e nelle cartelle condivise\",\"other\":\"{n} elementi in questo workspace e nelle cartelle condivise\"},\"tags.items.show\":\"Mostra nel File Manager\",\"tags.items.delete\":\"Elimina il tag\",\"usability.label\":\"Usabilità\",\"usability.description\":\"Tastiera, mouse, app che aprono i file, menu contestuali e cestino.\",\"shortcuts.label\":\"Scorciatoie\",\"shortcuts.title\":\"Scorciatoie da tastiera\",\"shortcuts.all.label\":\"Tutte le scorciatoie\",\"shortcuts.all.description\":\"Le modifiche valgono subito. Per registrare una combinazione premi +, poi i tasti; Esc annulla.\",\"shortcuts.all.reset\":\"Ripristina tutte\",\"shortcuts.keywords\":\"scorciatoia tasti {keys}\",\"shortcuts.mouse.title\":\"Mouse\",\"shortcuts.lasso.label\":\"Selezione a mano libera\",\"shortcuts.lasso.description\":\"Disegna un percorso chiuso: si selezionano gli elementi che contiene\",\"shortcuts.lasso.keywords\":\"lazo lasso percorso selezione alt\",\"shortcuts.rectangle.label\":\"Selezione a rettangolo\",\"shortcuts.rectangle.control\":\"Trascina sullo sfondo\",\"shortcuts.addToSelection.label\":\"Aggiungere alla selezione\",\"shortcuts.addToSelection.control\":\"Ctrl o Shift + clic o trascinamento\",\"shortcuts.pan.label\":\"Spostarsi sulla scrivania\",\"shortcuts.pan.control\":\"Spazio + trascina, o tasto centrale\",\"shortcuts.fixed.title\":\"Tasti fissi\",\"shortcuts.navigate.label\":\"Muoversi nei menu, nelle liste e nei tab\",\"shortcuts.navigate.control\":\"Frecce, Invio, Esc\",\"shortcuts.rename.label\":\"Confermare o annullare la rinomina\",\"shortcuts.rename.control\":\"Invio, Esc\",\"fileTypes.label\":\"Tipi di file\",\"fileTypes.title\":\"App per tipo di file\",\"fileTypes.all.label\":\"Tutti i tipi di file\",\"fileTypes.all.description\":\"Aprendo un file, lilOS usa l’app scelta qui. Con «Chiedi ogni volta» compare la finestra Apri con.\",\"fileTypes.all.reset\":\"Ripristina tutti\",\"fileTypes.noExtension\":\"Senza estensione\",\"fileTypes.default\":\"Predefinita: {app}\",\"fileTypes.noDefault\":\"Nessuna app predefinita\",\"fileTypes.keywords\":\"tipo file estensione apri con {ext}\",\"fileTypes.field\":\"App per .{ext}\",\"fileTypes.fieldNoExtension\":\"App per i file senza estensione\",\"fileTypes.ask\":\"Chiedi ogni volta\",\"fileTypes.others\":\"Altri\",\"menu.label\":\"Menu contestuale\",\"menu.separator\":\"— Separatore —\",\"menu.submenu\":{\"one\":\"Sottomenu · {n} voce\",\"other\":\"Sottomenu · {n} voci\"},\"menu.create.folder\":\"Crea la cartella «{name}»\",\"menu.create.file\":\"Crea il file «{name}»\",\"menu.create.fileFromTemplate\":\"Crea il file «{name}» dal modello {template}\",\"menu.create.fileWithContent\":\"Crea il file «{name}» con un contenuto iniziale\",\"menu.create.deletedTemplate\":\"(file eliminato)\",\"menu.launch\":\"Apre l’app {name}\",\"menu.action\":\"Azione\",\"menu.keywords\":\"menu contestuale voce separatore nuovo\",\"menu.moveUp\":\"Sposta su\",\"menu.moveDown\":\"Sposta giù\",\"menu.target.root\":\"Menu principale\",\"menu.target.inside\":\"Dentro «{name}»\",\"menu.target.label\":\"Dove\",\"menu.item.label\":\"Voce\",\"menu.item.description\":\"Un’azione o l’apertura di un’app\",\"menu.item.field\":\"Voce da aggiungere\",\"menu.item.open\":\"Apri {name}\",\"menu.separatorRow.label\":\"Separatore\",\"menu.separatorRow.description\":\"Una linea per raggruppare le voci\",\"menu.new.label\":\"Nuovo elemento in «{name}»\",\"menu.new.description\":\"Crea un file o una cartella con questo nome; un file può partire dal contenuto di un modello\",\"menu.new.labelField\":\"Etichetta\",\"menu.new.labelPlaceholder\":\"Etichetta (es. Foglio di stile)\",\"menu.new.nameField\":\"Nome del file o della cartella\",\"menu.new.namePlaceholder\":\"Nome (es. stile.css)\",\"menu.new.kind\":\"Tipo\",\"menu.new.kindFile\":\"File\",\"menu.new.kindFolder\":\"Cartella\",\"menu.new.missing\":\"Servono l’etichetta e il nome\",\"menu.template.button\":\"Modello…\",\"menu.template.chosen\":\"Modello: {name}\",\"menu.template.title\":\"Scegli il file modello\",\"menu.template.text\":\"Il nuovo file partirà con il contenuto di questo file.\",\"menu.defaults.label\":\"Voci predefinite\",\"menu.defaults.custom\":\"Il menu è stato personalizzato\",\"menu.defaults.default\":\"Il menu è quello predefinito\",\"trash.label\":\"Cestino\",\"trash.deleting.title\":\"Eliminazione\",\"trash.confirm.label\":\"Chiedi conferma\",\"trash.confirm.description\":\"Prima di eliminare file e cartelle, un piccolo menu chiede di confermare\",\"trash.confirm.keywords\":\"conferma elimina cancella domanda\",\"trash.permanent.label\":\"Elimina definitivamente\",\"trash.permanent.description\":\"Gli elementi eliminati non passano dal cestino: si recuperano solo con Ctrl Z, finché la pagina resta aperta\",\"trash.permanent.keywords\":\"cestino definitivo subito cancella salta\",\"trash.retention.label\":\"Conserva gli elementi per\",\"trash.retention.description\":\"Passato questo tempo, quello che è nel cestino viene eliminato definitivamente\",\"trash.retention.keywords\":\"retention durata giorni pulizia automatica svuota\",\"trash.retention.field\":\"Conserva gli elementi nel cestino per\",\"trash.retention.days\":{\"one\":\"{n} giorno\",\"other\":\"{n} giorni\"},\"trash.retention.forever\":\"Per sempre\",\"trash.contents.label\":\"Contenuto\",\"trash.contents.description\":{\"one\":\"{n} elemento · {size}\",\"other\":\"{n} elementi · {size}\"},\"trash.contents.empty\":\"Il cestino è vuoto\",\"trash.contents.keywords\":\"apri cestino ripristina\",\"trash.contents.open\":\"Apri il cestino\",\"trash.empty.label\":\"Svuota il cestino\",\"trash.empty.description\":\"Elimina definitivamente tutto quello che contiene\",\"trash.empty.keywords\":\"svuota cestino\",\"trash.empty.button\":\"Svuota…\",\"trash.empty.confirm\":\"Svuota\",\"trash.empty.none\":\"Vuoto\",\"apps.label\":\"App\",\"apps.description\":\"Come girano le app installate.\",\"apps.security.label\":\"Sicurezza\",\"apps.execution.title\":\"Esecuzione delle app\",\"apps.isolated.label\":\"Esegui le app isolate\",\"apps.isolated.description\":\"Ogni app gira in una sandbox e vede solo quello che i suoi permessi le concedono. Se lo togli, le app girano nella pagina di lilOS e in un Web Worker: più veloci, ma possono fare tutto quello che puoi fare tu. Vale dalla prossima apertura di ogni app.\",\"apps.isolated.adminOnly\":\"Solo un amministratore la cambia.\",\"apps.isolated.keywords\":\"sicurezza isolamento sandbox iframe worker\",\"apps.isolated.failed\":\"Non cambiata: {error}\",\"apps.system.label\":\"App di sistema\",\"apps.system.description\":\"File Manager, Editor, Pannello di controllo e AppStore fanno parte di lilOS e girano sempre dentro lilOS.\",\"apps.installed.title\":\"App installate\",\"apps.installed.keywords\":\"sicurezza isolamento\",\"apps.installed.shared\":\"Come le altre app\",\"apps.installed.own\":\"Scelta per questa app\",\"apps.installed.properties\":\"Proprietà…\",\"apps.installed.none\":\"Nessuna app installata oltre a quelle di sistema\",\"apps.mode.isolated\":\"Isolata\",\"apps.mode.open\":\"Non isolata\",\"apps.mode.system\":\"Dentro lilOS\",\"apps.mode.remote\":\"Isolata, nel suo sito\",\"startup.label\":\"Avvio\",\"startup.description\":\"Servizi e app che partono da soli all’avvio di lilOS e quando entri.\",\"startup.options.label\":\"Opzioni\",\"startup.services.label\":\"Servizi\",\"startup.apps.label\":\"App\",\"startup.auto.title\":\"Avvio automatico\",\"startup.openApps.label\":\"Apri le app quando entri\",\"startup.openApps.description\":\"Si aprono le app scelte in App, con i loro parametri. Solo nella prima scheda di lilOS di questo browser: le altre si aprono vuote.\",\"startup.openApps.keywords\":\"avvio automatico accesso login esecuzione automatica\",\"startup.trouble.title\":\"Se qualcosa non va\",\"startup.safe.label\":\"Avvio senza app\",\"startup.safe.description\":\"Per una volta sola: apri lilOS con ?avvio=no in fondo all’indirizzo. Le scelte salvate restano.\",\"startup.safe.keywords\":\"avvio sicuro avvio=no\",\"startup.safe.active\":\"Attivo ora\",\"startup.apps.title\":\"Si aprono quando entri\",\"startup.apps.hint\":\"Nel workspace in cui si apre lilOS, nell’ordine dell’elenco. Togli tutti i punti d’ingresso di un’app e l’app esce dall’elenco.\",\"startup.apps.none\":\"Nessuna app si apre da sola.\",\"startup.apps.oneEntry\":\"1 punto d’ingresso\",\"startup.apps.entries\":{\"one\":\"{on} di {n} punto d’ingresso\",\"other\":\"{on} di {n} punti d’ingresso\"},\"startup.apps.remove\":\"Rimuovi dall’avvio\",\"startup.apps.allAdded\":\"Tutte le app sono già all’avvio\",\"startup.apps.add\":\"Aggiungi un’app all’avvio\",\"startup.apps.addDescription\":\"Si apre la sua finestra principale; poi scegli altri punti d’ingresso e parametri\",\"startup.params.of\":\"{entry} di {app}\",\"startup.params.undescribed\":\"Questo punto d’ingresso non descrive i suoi parametri: arrivano all’app così come sono, come args.\",\"startup.params.json\":\"Parametri (JSON)\",\"startup.params.jsonOf\":\"Parametri (JSON) di {name}\",\"startup.params.invalidJson\":\"Non è JSON valido\",\"startup.params.notSaved\":\"Non salvati: {error}\",\"startup.path.noFolder\":\"Nessuna cartella\",\"startup.path.noFile\":\"Nessun file\",\"startup.path.gone\":\"(non c’è più)\",\"startup.path.clear\":\"Togli {name}\",\"services.unsupported\":\"Questa versione di lilOS non ha i servizi delle app\",\"services.status.off\":\"Spento\",\"services.status.starting\":\"Si avvia…\",\"services.status.error\":\"Fermo: {error}\",\"services.status.unknownError\":\"errore\",\"services.status.restarting\":\"Riparte… (si era fermato: {error})\",\"services.status.onNow\":\"Acceso da meno di un minuto\",\"services.status.onMinutes\":{\"one\":\"Acceso da {n} minuto\",\"other\":\"Acceso da {n} minuti\"},\"services.status.onHours\":{\"one\":\"Acceso da {n} ora\",\"other\":\"Acceso da {n} ore\"},\"services.status.onSince\":\"Acceso dal {date}\",\"services.auto.label\":\"Avvia i servizi automaticamente\",\"services.auto.noEngine\":\"Il kernel non ha il motore dei servizi (modulo services-isolate)\",\"services.auto.description\":\"Quando entri partono i tuoi servizi scelti in Servizi. Quelli scelti da un amministratore per tutti partono comunque.\",\"services.auto.keywords\":\"servizi avvio automatico background kernel\",\"services.title\":\"Servizi installati\",\"services.noEngine\":\"Il kernel non ha il motore dei servizi: serve il modulo services-isolate (AppStore → Kernel).\",\"services.none\":\"Nessuna app installata ha servizi.\",\"services.hint\":\"Le parti delle app che lavorano nel kernel, senza finestra, anche con lilOS chiuso. «All’avvio del sistema» vale per tutti gli utenti e lo sceglie un amministratore; «All’accesso» solo per te.\",\"services.startup.none\":\"Non si avvia\",\"services.startup.login\":\"All’accesso\",\"services.startup.system\":\"All’avvio del sistema\",\"services.startup.field\":\"Avvio di {name}\",\"services.restart\":\"Riavvia\",\"services.restartOf\":\"Riavvia {name}\",\"services.stop\":\"Spegni\",\"services.start\":\"Accendi\",\"services.byAdmin\":\"scelto da un amministratore\",\"services.log.label\":\"Registro\",\"services.log.title\":\"Registro di {name}\",\"services.log.empty\":\"Nessuna riga: il servizio non è ancora partito.\",\"storage.label\":\"Archiviazione\",\"storage.description.kernel\":\"Dati di lilOS salvati nella tua cartella utente.\",\"storage.description.browser\":\"Dati di lilOS salvati in questo browser.\",\"storage.space.title\":\"Spazio\",\"storage.used.label\":\"Spazio usato\",\"storage.used.description\":\"Posizioni, vista e impostazioni\",\"storage.contents.label\":\"Contenuto dei file\",\"storage.contents.description\":\"Testo salvato nei file\",\"storage.reset.title\":\"Ripristino\",\"storage.defaults.label\":\"Impostazioni predefinite\",\"storage.defaults.description\":\"Riporta impostazioni, scorciatoie, app dei tipi di file e menu ai valori iniziali\",\"storage.initial.label\":\"Scrivania e file iniziali\",\"storage.initial.description\":\"Elimina tutte le cartelle e i file creati, i workspace, i tag, le posizioni e la vista salvate, poi ricarica lilOS\",\"storage.initial.keywords\":\"reset desktop workspace tag\",\"storage.initial.button\":\"Ripristina…\",\"storage.initial.confirm\":\"Elimina e ricarica\",\"about.label\":\"Informazioni\",\"about.description\":\"Versione e ambiente.\",\"about.version\":\"Versione\",\"about.sdkVersion\":\"Versione dell’SDK\",\"about.language\":\"Lingua\",\"about.browser\":\"Browser\",\"about.unknownBrowser\":\"Sconosciuto\",\"userPage.label\":\"Pagina utente\",\"userPage.description\":\"Cosa mostra la pagina che si apre dal tuo nome\",\"userPage.title\":\"Pagina utente\",\"userPage.open.label\":\"Si apre dal tuo nome\",\"userPage.open.description\":\"Clicca il tuo nome nella barra in basso o in fondo al menu. Nome e foto ci sono sempre: qui scegli cos’altro mostra.\",\"userPage.keywords\":\"pagina utente profilo account foto blocca chiudi sessione esci riavvia {name}\",\"userPage.toggle\":\"{name} nella pagina utente\",\"userPage.group.header\":\"Intestazione\",\"userPage.group.actions\":\"Azioni\",\"userPage.group.account\":\"Account\",\"userPage.group.session\":\"Questa sessione\",\"userPage.group.footer\":\"Piè di pagina\",\"userPage.item.details.name\":\"Nome utente e ruolo\",\"userPage.item.details.description\":\"Sotto il nome: il nome con cui accedi e se sei amministratore\",\"userPage.item.lock.name\":\"Blocca\",\"userPage.item.lock.description\":\"Copre lo schermo finché non inserisci di nuovo la password; le app restano aperte\",\"userPage.item.logout.name\":\"Chiudi sessione\",\"userPage.item.logout.description\":\"Salva, chiude le app e torna alla schermata di accesso\",\"userPage.item.restart.name\":\"Riavvia il sistema\",\"userPage.item.restart.description\":\"Riavvia il kernel di lilOS per tutti gli utenti; solo per gli amministratori\",\"userPage.item.photo.name\":\"Foto profilo\",\"userPage.item.photo.description\":\"Scegliere, cambiare o togliere la foto\",\"userPage.item.theme.name\":\"Tema\",\"userPage.item.theme.description\":\"Chiaro o scuro\",\"userPage.item.language.name\":\"Lingua\",\"userPage.item.language.description\":\"La lingua delle app\",\"userPage.item.settings.name\":\"Tutte le impostazioni\",\"userPage.item.settings.description\":\"Apre il Pannello di controllo\",\"userPage.item.workspace.name\":\"Workspace\",\"userPage.item.workspace.description\":\"Quello in cui sei e quanti ce ne sono\",\"userPage.item.windows.name\":\"Finestre aperte\",\"userPage.item.windows.description\":\"Quante finestre sono aperte e quante app lavorano in background\",\"userPage.item.startup.name\":\"All’avvio\",\"userPage.item.startup.description\":\"Quante app si aprono quando entri\",\"userPage.item.storage.name\":\"Spazio usato\",\"userPage.item.storage.description\":\"Quanto occupano i tuoi file\",\"userPage.item.about.name\":\"Versione di lilOS\",\"userPage.item.about.description\":\"La versione di lilOS e l’indirizzo a cui sei collegato\",\"@name\":\"Pannello di controllo\",\"@description\":\"Aspetto, lingua, scrivania, pagina utente, workspace, tag, scorciatoie, tipi di file, servizi e app all’avvio, archiviazione.\",\"@entrypoints.main.params.tab.label\":\"Sezione\",\"@entrypoints.main.params.tab.options.appearance.label\":\"Aspetto\",\"@entrypoints.main.params.tab.options.language.label\":\"Lingua\",\"@entrypoints.main.params.tab.options.desk.label\":\"Scrivania\",\"@entrypoints.main.params.tab.options.userpage.label\":\"Pagina utente\",\"@entrypoints.main.params.tab.options.workspaces.label\":\"Workspace\",\"@entrypoints.main.params.tab.options.tags.label\":\"Tag\",\"@entrypoints.main.params.tab.options.usability.label\":\"Usabilità\",\"@entrypoints.main.params.tab.options.apps.label\":\"App\",\"@entrypoints.main.params.tab.options.startup.label\":\"Avvio\",\"@entrypoints.main.params.tab.options.storage.label\":\"Archiviazione\",\"@entrypoints.main.params.tab.options.about.label\":\"Informazioni\",\"pipes.label\":\"Pipe\",\"pipes.title\":\"Pipe sugli eventi\",\"pipes.keywords\":\"pipe eventi handler ordine catena\",\"pipes.intro.label\":\"Cosa fanno le app quando succede qualcosa\",\"pipes.intro.description\":\"Le app possono intervenire quando un file si apre, si legge o si salva, oppure guardare cosa succede nel sistema. Qui sotto, ogni evento con i suoi handler nell’ordine in cui partono ({count} eventi in tutto). La fase dopo scorre in ordine inverso rispetto a prima.\",\"pipes.unsupported\":\"Questa versione di lilOS non ha le pipe\",\"pipes.lilos\":\"lilOS\",\"pipes.up\":\"Su\",\"pipes.down\":\"Giù\",\"pipes.stage.before\":\"Prima\",\"pipes.stage.after\":\"Dopo\",\"pipes.band.first\":\"tra i primi\",\"pipes.band.middle\":\"in mezzo\",\"pipes.band.last\":\"tra gli ultimi\",\"pipes.where.all\":\"ogni elemento\",\"pipes.where.system\":\"scelti da lilOS\",\"pipes.where.own\":\"i file che ha segnato\",\"pipes.where.ext\":\"file {list}\",\"pipes.where.type.file\":\"file\",\"pipes.where.type.folder\":\"cartelle\",\"pipes.where.type.app\":\"collegamenti alle app\",\"pipes.where.app\":\"app {list}\",\"pipes.reset.label\":\"Ordine degli handler\",\"pipes.reset.description\":\"L’hai cambiato: torna all’ordine di installazione\",\"pipes.idle.title\":\"Eventi senza handler\",\"pipes.idle.description\":\"{count} eventi: per ora nessuna app li gestisce\",\"pipes.idle.none\":\"Ogni evento ha un handler\",\"pipes.event.file.open\":\"Apertura di un file\",\"pipes.event.file.read\":\"Lettura di un file\",\"pipes.event.file.write\":\"Salvataggio di un file\",\"pipes.event.app.launch\":\"Avvio di un’app\",\"pipes.event.file.create\":\"Creazione di un elemento\",\"pipes.event.file.rename\":\"Cambio di nome\",\"pipes.event.file.move\":\"Spostamento\",\"pipes.event.file.copy\":\"Copia di un file\",\"pipes.event.file.remove\":\"Eliminazione definitiva\",\"pipes.event.trash.put\":\"Spostamento nel Cestino\",\"pipes.event.trash.restore\":\"Ripristino dal Cestino\",\"pipes.event.trash.purge\":\"Svuotamento del Cestino\",\"pipes.event.tags.assign\":\"Tag di un elemento\",\"pipes.event.window.open\":\"Apertura di una finestra\",\"pipes.event.window.close\":\"Chiusura di una finestra\",\"pipes.event.workspace.switch\":\"Cambio di workspace\",\"pipes.event.settings.change\":\"Cambio di un’impostazione\",\"pipes.event.system.ready\":\"Sistema pronto\",\"pipes.event.session.login\":\"Utente entrato\",\"pipes.event.session.logout\":\"Uscita dall’account\",\"pipes.event.apps.install\":\"Installazione di un’app\",\"pipes.event.apps.update\":\"Aggiornamento di un’app\",\"pipes.event.apps.remove\":\"Rimozione di un’app\",\"pipes.event.permissions.change\":\"Permessi di un’app\",\"pipes.event.settings.system\":\"Impostazioni di sistema\",\"pipes.event.pipes.change\":\"Iscrizioni alle pipe\"}}")
-}), { t: B } = z;
+var R = ue("settings", {
+	en: /* @__PURE__ */ JSON.parse("{\"strings\":{\"window.title\":\"Control Panel\",\"group.system\":\"System\",\"group.data\":\"Data\",\"common.name\":\"Name\",\"common.color\":\"Color\",\"common.items\":\"Items\",\"common.create\":\"Create\",\"common.add\":\"Add\",\"common.addMore\":\"Add…\",\"common.choose\":\"Choose…\",\"common.remove\":\"Remove\",\"common.delete\":\"Delete…\",\"common.deleteNow\":\"Delete\",\"common.reset\":\"Reset\",\"common.confirm\":\"Confirm\",\"common.loading\":\"Loading…\",\"common.unavailable\":\"Not available\",\"common.yes\":\"Yes\",\"common.no\":\"No\",\"appearance.label\":\"Appearance\",\"appearance.description\":\"Colors and motion of the interface.\",\"appearance.colors.label\":\"Colors\",\"appearance.theme.label\":\"Theme\",\"appearance.theme.description\":\"Light or dark: desk, taskbar, menus and windows\",\"appearance.theme.keywords\":\"theme light dark night mode\",\"appearance.theme.light\":\"Light\",\"appearance.theme.dark\":\"Dark\",\"appearance.accent.title\":\"Accent color\",\"appearance.accent.description\":\"Selection, buttons, active tabs and logo\",\"appearance.accent.keywords\":\"accent theme highlight\",\"appearance.motion.label\":\"Motion\",\"appearance.animations.label\":\"Animations\",\"appearance.animations.description\":\"View movements, menus and transitions. If the operating system asks for reduced motion, they stay reduced.\",\"appearance.animations.keywords\":\"motion movement transitions\",\"language.label\":\"Language\",\"language.description\":\"The language of apps: their texts, dates and numbers.\",\"language.title\":\"System language\",\"language.row.description\":\"Apps without this language use English. lilOS’s own texts are still in Italian.\",\"language.keywords\":\"language translation locale english italian dates numbers\",\"language.auto\":\"Automatic: {name}\",\"desk.label\":\"Desk\",\"desk.description\":\"How the infinite desk behaves.\",\"desk.fixed.title\":\"Fixed items\",\"desk.fixed.label\":\"On the desk\",\"desk.fixed.descriptionSwitchable\":\"The ones turned on are on the desk of every workspace. They open and move like other items, but cannot be renamed or deleted: you remove them here.\",\"desk.fixed.description\":\"They are on the desk of every workspace. They open and move like other items, but cannot be renamed or deleted.\",\"desk.fixed.keywords\":\"fixed items desk show hide delete {name}\",\"desk.fixed.toggle\":\"{name} on the desk\",\"desk.fixed.toggleIn\":\"{name} on the desk of {workspace}\",\"desk.fixed.always\":\"Fixed\",\"desk.fixed.item.home.name\":\"Home\",\"desk.fixed.item.home.description\":\"The main folder, with all the others\",\"desk.fixed.item.documents.name\":\"Documenti\",\"desk.fixed.item.documents.description\":\"The Documenti folder, shared by every workspace\",\"desk.fixed.item.images.name\":\"Immagini\",\"desk.fixed.item.images.description\":\"The Immagini folder, shared by every workspace\",\"desk.fixed.item.files.name\":\"File Manager\",\"desk.fixed.item.files.description\":\"Opens the File Manager\",\"desk.fixed.item.downloads.name\":\"Download\",\"desk.fixed.item.downloads.description\":\"The Download folder, shared by every workspace\",\"desk.fixed.item.trash.name\":\"Trash\",\"desk.fixed.item.trash.description\":\"Opens the trash; files and folders can be dragged onto it\",\"desk.fixed.descriptionWorkspace\":\"The ones turned on are on this workspace's desk. They open and move like other items, but cannot be renamed or deleted: you remove them here.\",\"desk.fixed.descriptionAll\":\"Turn one on or off in every workspace at once; new workspaces get the same. Each workspace can then change it in its own tab.\",\"desk.fixed.some\":\"On in {on} of {n} workspaces\",\"desk.fixed.toggleAll\":\"{name} on every desk\",\"desk.fixed.moved.label\":\"Each workspace has its own\",\"desk.fixed.moved.description\":\"Choose them in Workspaces: in each workspace's tab, or in All for every desk.\",\"desk.fixed.moved.keywords\":\"fixed items desk home documents trash workspace\",\"desk.fixed.moved.open\":\"Open\",\"desk.placement.title\":\"Placement\",\"desk.snap.label\":\"Snap to grid\",\"desk.snap.description\":\"Dragged items line up on an invisible grid\",\"desk.snap.keywords\":\"icons snap grid align\",\"desk.overview.label\":\"Overview\",\"desk.overview.title\":\"Bottom-right panel\",\"desk.minimap.label\":\"Show the minimap\",\"desk.minimap.keywords\":\"map minimap thumbnail\",\"workspaces.label\":\"Workspaces\",\"workspaces.description\":\"Separate desks, each with its own items, windows and apps. Files outside the desk belong to everyone.\",\"workspaces.current.label\":\"This workspace\",\"workspaces.current.title\":\"Workspace\",\"workspaces.all.label\":\"All\",\"workspaces.name.keywords\":\"rename workspace name\",\"workspaces.name.field\":\"Workspace name\",\"workspaces.color.description\":\"The dot in the taskbar and next to its files in the File Manager\",\"workspaces.color.keywords\":\"workspace color\",\"workspaces.owned.label\":\"Files, folders and shortcuts\",\"workspaces.owned.description\":\"Created in this workspace, on the desk and in shared folders\",\"workspaces.apps.title\":\"Apps\",\"workspaces.apps.system\":\"System app: it is in every workspace\",\"workspaces.apps.installed\":\"Installed in lilOS: you can hide it here\",\"workspaces.apps.keywords\":\"app hide show {name}\",\"workspaces.apps.alwaysVisible\":\"Always visible\",\"workspaces.apps.toggle\":\"{name} visible in this workspace\",\"workspaces.apps.toggleIn\":\"{name} visible in {workspace}\",\"workspaces.list.current\":\"{name} (current)\",\"workspaces.list.owned\":{\"one\":\"{n} item created\",\"other\":\"{n} items created\"},\"workspaces.list.apps\":{\"one\":\"{n} app\",\"other\":\"{n} apps\"},\"workspaces.list.keywords\":\"workspace switch delete\",\"workspaces.list.switch\":\"Switch to it\",\"workspaces.switch.label\":\"Go to this workspace\",\"workspaces.new.label\":\"New workspace\",\"workspaces.new.description\":\"With an empty desk and every app visible\",\"workspaces.deleting.title\":\"Deleting a workspace\",\"workspaces.deleting.files.label\":\"Files stay\",\"workspaces.deleting.files.description\":\"Its desk becomes the folder Documenti/Scrivania di <name> (if it is not empty); files created elsewhere stay where they are, marked as its own.\",\"workspaces.deleting.windows.label\":\"Windows stay\",\"workspaces.deleting.windows.description\":\"Its open windows move to the current workspace, with their unsaved changes. Workareas, view and hidden apps are lost.\",\"tags.label\":\"Tags\",\"tags.description\":\"Colored labels to find files and folders wherever they are. A hidden tag hides its items.\",\"tags.new.title\":\"New tag\",\"tags.new.pending\":{\"one\":\"The new tag will go on {n} selected item\",\"other\":\"The new tag will go on {n} selected items\"},\"tags.new.description\":\"Then assign it from the right-click menu → Tag, on the desk and in the File Manager\",\"tags.new.keywords\":\"new tag create label\",\"tags.new.placeholder\":\"For example: Urgent\",\"tags.new.field\":\"Name of the new tag\",\"tags.name.keywords\":\"rename tag\",\"tags.name.field\":\"Name of the tag {name}\",\"tags.color.keywords\":\"tag color\",\"tags.visible.label\":\"Visible\",\"tags.visible.on\":\"Items with this tag are shown everywhere\",\"tags.visible.off\":\"Items with this tag are hidden everywhere: you find them in File Manager → Tags\",\"tags.visible.keywords\":\"hide show hidden invisible tag\",\"tags.visible.toggle\":\"Tag {name} visible\",\"tags.items.description\":{\"one\":\"{n} item in this workspace and in shared folders\",\"other\":\"{n} items in this workspace and in shared folders\"},\"tags.items.show\":\"Show in File Manager\",\"tags.items.delete\":\"Delete the tag\",\"usability.label\":\"Usability\",\"usability.description\":\"Keyboard, mouse, apps that open files, context menus and trash.\",\"shortcuts.label\":\"Shortcuts\",\"shortcuts.title\":\"Keyboard shortcuts\",\"shortcuts.all.label\":\"All shortcuts\",\"shortcuts.all.description\":\"Changes apply right away. To record a combination press +, then the keys; Esc cancels.\",\"shortcuts.all.reset\":\"Reset all\",\"shortcuts.keywords\":\"shortcut keys {keys}\",\"shortcuts.mouse.title\":\"Mouse\",\"shortcuts.lasso.label\":\"Freehand selection\",\"shortcuts.lasso.description\":\"Draw a closed path: the items inside it are selected\",\"shortcuts.lasso.keywords\":\"lasso freehand path selection alt\",\"shortcuts.rectangle.label\":\"Rectangle selection\",\"shortcuts.rectangle.control\":\"Drag on the background\",\"shortcuts.addToSelection.label\":\"Add to the selection\",\"shortcuts.addToSelection.control\":\"Ctrl or Shift + click or drag\",\"shortcuts.pan.label\":\"Move around the desk\",\"shortcuts.pan.control\":\"Space + drag, or middle button\",\"shortcuts.fixed.title\":\"Fixed keys\",\"shortcuts.navigate.label\":\"Move through menus, lists and tabs\",\"shortcuts.navigate.control\":\"Arrows, Enter, Esc\",\"shortcuts.rename.label\":\"Confirm or cancel renaming\",\"shortcuts.rename.control\":\"Enter, Esc\",\"fileTypes.label\":\"File types\",\"fileTypes.title\":\"Apps by file type\",\"fileTypes.all.label\":\"All file types\",\"fileTypes.all.description\":\"When you open a file, lilOS uses the app chosen here. With “Ask every time” the Open with window appears.\",\"fileTypes.all.reset\":\"Reset all\",\"fileTypes.noExtension\":\"No extension\",\"fileTypes.default\":\"Default: {app}\",\"fileTypes.noDefault\":\"No default app\",\"fileTypes.keywords\":\"file type extension open with {ext}\",\"fileTypes.field\":\"App for .{ext}\",\"fileTypes.fieldNoExtension\":\"App for files without an extension\",\"fileTypes.ask\":\"Ask every time\",\"fileTypes.others\":\"Others\",\"menu.label\":\"Context menu\",\"menu.separator\":\"— Separator —\",\"menu.submenu\":{\"one\":\"Submenu · {n} item\",\"other\":\"Submenu · {n} items\"},\"menu.create.folder\":\"Creates the folder “{name}”\",\"menu.create.file\":\"Creates the file “{name}”\",\"menu.create.fileFromTemplate\":\"Creates the file “{name}” from the template {template}\",\"menu.create.fileWithContent\":\"Creates the file “{name}” with initial content\",\"menu.create.deletedTemplate\":\"(deleted file)\",\"menu.launch\":\"Opens the app {name}\",\"menu.action\":\"Action\",\"menu.keywords\":\"context menu item separator new\",\"menu.moveUp\":\"Move up\",\"menu.moveDown\":\"Move down\",\"menu.target.root\":\"Main menu\",\"menu.target.inside\":\"Inside “{name}”\",\"menu.target.label\":\"Where\",\"menu.item.label\":\"Item\",\"menu.item.description\":\"An action or opening an app\",\"menu.item.field\":\"Item to add\",\"menu.item.open\":\"Open {name}\",\"menu.separatorRow.label\":\"Separator\",\"menu.separatorRow.description\":\"A line to group items\",\"menu.new.label\":\"New item in “{name}”\",\"menu.new.description\":\"Creates a file or a folder with this name; a file can start from the contents of a template\",\"menu.new.labelField\":\"Label\",\"menu.new.labelPlaceholder\":\"Label (e.g. Style sheet)\",\"menu.new.nameField\":\"Name of the file or folder\",\"menu.new.namePlaceholder\":\"Name (e.g. style.css)\",\"menu.new.kind\":\"Type\",\"menu.new.kindFile\":\"File\",\"menu.new.kindFolder\":\"Folder\",\"menu.new.missing\":\"A label and a name are needed\",\"menu.template.button\":\"Template…\",\"menu.template.chosen\":\"Template: {name}\",\"menu.template.title\":\"Choose the template file\",\"menu.template.text\":\"The new file will start with the contents of this file.\",\"menu.defaults.label\":\"Default items\",\"menu.defaults.custom\":\"The menu has been customized\",\"menu.defaults.default\":\"The menu is the default one\",\"trash.label\":\"Trash\",\"trash.deleting.title\":\"Deleting\",\"trash.confirm.label\":\"Ask for confirmation\",\"trash.confirm.description\":\"Before deleting files and folders, a small menu asks you to confirm\",\"trash.confirm.keywords\":\"confirm delete remove ask\",\"trash.permanent.label\":\"Delete permanently\",\"trash.permanent.description\":\"Deleted items skip the trash: they can be recovered only with Ctrl Z, while the page stays open\",\"trash.permanent.keywords\":\"trash permanent immediately delete skip\",\"trash.retention.label\":\"Keep items for\",\"trash.retention.description\":\"After this time, what is in the trash is deleted permanently\",\"trash.retention.keywords\":\"retention duration days automatic cleanup empty\",\"trash.retention.field\":\"Keep items in the trash for\",\"trash.retention.days\":{\"one\":\"{n} day\",\"other\":\"{n} days\"},\"trash.retention.forever\":\"Forever\",\"trash.contents.label\":\"Contents\",\"trash.contents.description\":{\"one\":\"{n} item · {size}\",\"other\":\"{n} items · {size}\"},\"trash.contents.empty\":\"The trash is empty\",\"trash.contents.keywords\":\"open trash restore\",\"trash.contents.open\":\"Open the trash\",\"trash.empty.label\":\"Empty the trash\",\"trash.empty.description\":\"Permanently deletes everything in it\",\"trash.empty.keywords\":\"empty trash\",\"trash.empty.button\":\"Empty…\",\"trash.empty.confirm\":\"Empty\",\"trash.empty.none\":\"Empty\",\"apps.label\":\"Apps\",\"apps.description\":\"How installed apps run.\",\"apps.security.label\":\"Security\",\"apps.execution.title\":\"Running apps\",\"apps.isolated.label\":\"Run apps isolated\",\"apps.isolated.description\":\"Each app runs in a sandbox and sees only what its permissions allow. If you turn this off, apps run in lilOS’s page and in a Web Worker: faster, but they can do everything you can do. Applies from the next time each app opens.\",\"apps.isolated.adminOnly\":\"Only an administrator can change it.\",\"apps.isolated.keywords\":\"security isolation sandbox iframe worker\",\"apps.isolated.failed\":\"Not changed: {error}\",\"apps.system.label\":\"System apps\",\"apps.system.description\":\"File Manager, Editor, Control Panel and AppStore are part of lilOS and always run inside lilOS.\",\"apps.installed.title\":\"Installed apps\",\"apps.installed.keywords\":\"security isolation\",\"apps.installed.shared\":\"Like the other apps\",\"apps.installed.own\":\"Chosen for this app\",\"apps.installed.properties\":\"Properties…\",\"apps.installed.none\":\"No apps installed besides the system ones\",\"apps.mode.isolated\":\"Isolated\",\"apps.mode.open\":\"Not isolated\",\"apps.mode.system\":\"Inside lilOS\",\"apps.mode.remote\":\"Isolated, on its own site\",\"startup.label\":\"Startup\",\"startup.description\":\"Services and apps that start by themselves when lilOS starts and when you sign in.\",\"startup.options.label\":\"Options\",\"startup.services.label\":\"Services\",\"startup.apps.label\":\"Apps\",\"startup.auto.title\":\"Automatic startup\",\"startup.openApps.label\":\"Open apps when you sign in\",\"startup.openApps.description\":\"The apps chosen in Apps open, with their parameters. Only in the first lilOS tab of this browser: the others open empty.\",\"startup.openApps.keywords\":\"startup automatic sign-in login autorun\",\"startup.trouble.title\":\"If something goes wrong\",\"startup.safe.label\":\"Start without apps\",\"startup.safe.description\":\"Just once: open lilOS with ?avvio=no at the end of the address. Saved choices are kept.\",\"startup.safe.keywords\":\"safe start startup no apps avvio=no\",\"startup.safe.active\":\"Active now\",\"startup.apps.title\":\"Open when you sign in\",\"startup.apps.hint\":\"In the workspace lilOS opens in, in the order of the list. Turn off every entry point of an app and the app leaves the list.\",\"startup.apps.none\":\"No app opens by itself.\",\"startup.apps.oneEntry\":\"1 entry point\",\"startup.apps.entries\":{\"one\":\"{on} of {n} entry point\",\"other\":\"{on} of {n} entry points\"},\"startup.apps.remove\":\"Remove from startup\",\"startup.apps.allAdded\":\"All apps are already in startup\",\"startup.apps.add\":\"Add an app to startup\",\"startup.apps.addDescription\":\"Its main window opens; then choose other entry points and parameters\",\"startup.params.of\":\"{entry} of {app}\",\"startup.params.undescribed\":\"This entry point does not describe its parameters: they reach the app as they are, as args.\",\"startup.params.json\":\"Parameters (JSON)\",\"startup.params.jsonOf\":\"Parameters (JSON) of {name}\",\"startup.params.invalidJson\":\"Not valid JSON\",\"startup.params.notSaved\":\"Not saved: {error}\",\"startup.path.noFolder\":\"No folder\",\"startup.path.noFile\":\"No file\",\"startup.path.gone\":\"(no longer exists)\",\"startup.path.clear\":\"Remove {name}\",\"services.unsupported\":\"This version of lilOS has no app services\",\"services.status.off\":\"Off\",\"services.status.starting\":\"Starting…\",\"services.status.error\":\"Stopped: {error}\",\"services.status.unknownError\":\"error\",\"services.status.restarting\":\"Restarting… (it had stopped: {error})\",\"services.status.onNow\":\"On for less than a minute\",\"services.status.onMinutes\":{\"one\":\"On for {n} minute\",\"other\":\"On for {n} minutes\"},\"services.status.onHours\":{\"one\":\"On for {n} hour\",\"other\":\"On for {n} hours\"},\"services.status.onSince\":\"On since {date}\",\"services.auto.label\":\"Start services automatically\",\"services.auto.noEngine\":\"The kernel has no services engine (services-isolate module)\",\"services.auto.description\":\"When you sign in, your services chosen in Services start. The ones an administrator chose for everyone start anyway.\",\"services.auto.keywords\":\"services startup automatic background kernel\",\"services.title\":\"Installed services\",\"services.noEngine\":\"The kernel has no services engine: it needs the services-isolate module (AppStore → Kernel).\",\"services.none\":\"No installed app has services.\",\"services.hint\":\"The parts of apps that work in the kernel, without a window, even with lilOS closed. “At system startup” applies to every user and is chosen by an administrator; “At sign-in” only to you.\",\"services.startup.none\":\"Never\",\"services.startup.login\":\"At sign-in\",\"services.startup.system\":\"At system startup\",\"services.startup.field\":\"Startup of {name}\",\"services.restart\":\"Restart\",\"services.restartOf\":\"Restart {name}\",\"services.stop\":\"Stop\",\"services.start\":\"Start\",\"services.byAdmin\":\"chosen by an administrator\",\"services.log.label\":\"Log\",\"services.log.title\":\"Log of {name}\",\"services.log.empty\":\"No lines: the service has not started yet.\",\"storage.label\":\"Storage\",\"storage.description.kernel\":\"lilOS data saved in your user folder.\",\"storage.description.browser\":\"lilOS data saved in this browser.\",\"storage.space.title\":\"Space\",\"storage.used.label\":\"Space used\",\"storage.used.description\":\"Positions, view and settings\",\"storage.contents.label\":\"File contents\",\"storage.contents.description\":\"Text saved in files\",\"storage.reset.title\":\"Reset\",\"storage.defaults.label\":\"Default settings\",\"storage.defaults.description\":\"Resets settings, shortcuts, file type apps and menus to their initial values\",\"storage.initial.label\":\"Initial desk and files\",\"storage.initial.description\":\"Deletes all the folders and files created, the workspaces, the tags, the saved positions and view, then reloads lilOS\",\"storage.initial.keywords\":\"reset factory desktop desk workspace tag\",\"storage.initial.button\":\"Reset…\",\"storage.initial.confirm\":\"Delete and reload\",\"about.label\":\"About\",\"about.description\":\"Version and environment.\",\"about.version\":\"Version\",\"about.sdkVersion\":\"SDK version\",\"about.language\":\"Language\",\"about.browser\":\"Browser\",\"about.unknownBrowser\":\"Unknown\",\"userPage.label\":\"User page\",\"userPage.description\":\"What the page opened from your name shows\",\"userPage.title\":\"User page\",\"userPage.open.label\":\"Opened from your name\",\"userPage.open.description\":\"Click your name in the taskbar or at the bottom of the menu. Your name and photo are always there: choose here what else it shows.\",\"userPage.keywords\":\"user page profile account photo lock sign out restart {name}\",\"userPage.toggle\":\"{name} on the user page\",\"userPage.group.header\":\"Header\",\"userPage.group.actions\":\"Actions\",\"userPage.group.account\":\"Account\",\"userPage.group.session\":\"This session\",\"userPage.group.footer\":\"Footer\",\"userPage.item.details.name\":\"Username and role\",\"userPage.item.details.description\":\"Under your name: the name you sign in with and whether you are an administrator\",\"userPage.item.lock.name\":\"Lock\",\"userPage.item.lock.description\":\"Covers the screen until you enter your password again; apps stay open\",\"userPage.item.logout.name\":\"Sign out\",\"userPage.item.logout.description\":\"Saves, closes the apps and goes back to the sign-in screen\",\"userPage.item.restart.name\":\"Restart the system\",\"userPage.item.restart.description\":\"Restarts the lilOS kernel for every user; administrators only\",\"userPage.item.photo.name\":\"Profile photo\",\"userPage.item.photo.description\":\"Choose, change or remove your photo\",\"userPage.item.theme.name\":\"Theme\",\"userPage.item.theme.description\":\"Light or dark\",\"userPage.item.language.name\":\"Language\",\"userPage.item.language.description\":\"The language of apps\",\"userPage.item.settings.name\":\"All settings\",\"userPage.item.settings.description\":\"Opens Control Panel\",\"userPage.item.workspace.name\":\"Workspace\",\"userPage.item.workspace.description\":\"The one you are in and how many there are\",\"userPage.item.windows.name\":\"Open windows\",\"userPage.item.windows.description\":\"How many windows are open and how many apps work in the background\",\"userPage.item.startup.name\":\"At startup\",\"userPage.item.startup.description\":\"How many apps open when you come in\",\"userPage.item.storage.name\":\"Space used\",\"userPage.item.storage.description\":\"How much your files take up\",\"userPage.item.about.name\":\"lilOS version\",\"userPage.item.about.description\":\"The lilOS version and the address you are connected to\",\"@name\":\"Control Panel\",\"@description\":\"Appearance, language, desk, user page, workspaces, tags, shortcuts, file types, startup services and apps, storage.\",\"@entrypoints.main.params.tab.label\":\"Section\",\"@entrypoints.main.params.tab.options.appearance.label\":\"Appearance\",\"@entrypoints.main.params.tab.options.language.label\":\"Language\",\"@entrypoints.main.params.tab.options.desk.label\":\"Desk\",\"@entrypoints.main.params.tab.options.userpage.label\":\"User page\",\"@entrypoints.main.params.tab.options.workspaces.label\":\"Workspaces\",\"@entrypoints.main.params.tab.options.tags.label\":\"Tags\",\"@entrypoints.main.params.tab.options.usability.label\":\"Usability\",\"@entrypoints.main.params.tab.options.apps.label\":\"Apps\",\"@entrypoints.main.params.tab.options.startup.label\":\"Startup\",\"@entrypoints.main.params.tab.options.storage.label\":\"Storage\",\"@entrypoints.main.params.tab.options.about.label\":\"About\",\"pipes.label\":\"Pipes\",\"pipes.title\":\"Pipes on events\",\"pipes.keywords\":\"pipes events handlers order chain\",\"pipes.intro.label\":\"What apps do when something happens\",\"pipes.intro.description\":\"Apps can step in when a file is opened, read or saved, or look at what happens in the system. Below, each event with its handlers in the order they run ({count} events in all). The after stage runs in the reverse order of before.\",\"pipes.unsupported\":\"This version of lilOS has no pipes\",\"pipes.lilos\":\"lilOS\",\"pipes.up\":\"Up\",\"pipes.down\":\"Down\",\"pipes.stage.before\":\"Before\",\"pipes.stage.after\":\"After\",\"pipes.band.first\":\"among the first\",\"pipes.band.middle\":\"in the middle\",\"pipes.band.last\":\"among the last\",\"pipes.where.all\":\"every item\",\"pipes.where.system\":\"chosen by lilOS\",\"pipes.where.own\":\"the files it marked\",\"pipes.where.ext\":\"files {list}\",\"pipes.where.type.file\":\"files\",\"pipes.where.type.folder\":\"folders\",\"pipes.where.type.app\":\"app shortcuts\",\"pipes.where.app\":\"apps {list}\",\"pipes.reset.label\":\"Order of the handlers\",\"pipes.reset.description\":\"You changed it: go back to the order of installation\",\"pipes.idle.title\":\"Events without handlers\",\"pipes.idle.description\":\"{count} events: no app handles them now\",\"pipes.idle.none\":\"Every event has a handler\",\"pipes.event.file.open\":\"Opening a file\",\"pipes.event.file.read\":\"Reading a file\",\"pipes.event.file.write\":\"Saving a file\",\"pipes.event.app.launch\":\"Starting an app\",\"pipes.event.file.create\":\"Creating an item\",\"pipes.event.file.rename\":\"Renaming\",\"pipes.event.file.move\":\"Moving\",\"pipes.event.file.copy\":\"Copying a file\",\"pipes.event.file.remove\":\"Deleting for good\",\"pipes.event.trash.put\":\"Moving to the Trash\",\"pipes.event.trash.restore\":\"Restoring from the Trash\",\"pipes.event.trash.purge\":\"Emptying the Trash\",\"pipes.event.tags.assign\":\"Tags of an item\",\"pipes.event.window.open\":\"Opening a window\",\"pipes.event.window.close\":\"Closing a window\",\"pipes.event.workspace.switch\":\"Changing workspace\",\"pipes.event.settings.change\":\"Changing a setting\",\"pipes.event.system.ready\":\"System ready\",\"pipes.event.session.login\":\"User signed in\",\"pipes.event.session.logout\":\"Signing out\",\"pipes.event.apps.install\":\"Installing an app\",\"pipes.event.apps.update\":\"Updating an app\",\"pipes.event.apps.remove\":\"Removing an app\",\"pipes.event.permissions.change\":\"Permissions of an app\",\"pipes.event.settings.system\":\"System settings\",\"pipes.event.pipes.change\":\"Subscriptions to pipes\"}}"),
+	it: /* @__PURE__ */ JSON.parse("{\"strings\":{\"window.title\":\"Pannello di controllo\",\"group.system\":\"Sistema\",\"group.data\":\"Dati\",\"common.name\":\"Nome\",\"common.color\":\"Colore\",\"common.items\":\"Elementi\",\"common.create\":\"Crea\",\"common.add\":\"Aggiungi\",\"common.addMore\":\"Aggiungi…\",\"common.choose\":\"Scegli…\",\"common.remove\":\"Togli\",\"common.delete\":\"Elimina…\",\"common.deleteNow\":\"Elimina\",\"common.reset\":\"Ripristina\",\"common.confirm\":\"Conferma\",\"common.loading\":\"Lettura…\",\"common.unavailable\":\"Non disponibile\",\"common.yes\":\"Sì\",\"common.no\":\"No\",\"appearance.label\":\"Aspetto\",\"appearance.description\":\"Colori e movimento dell’interfaccia.\",\"appearance.colors.label\":\"Colori\",\"appearance.theme.label\":\"Tema\",\"appearance.theme.description\":\"Chiaro o scuro: scrivania, barra, menu e finestre\",\"appearance.theme.keywords\":\"tema chiaro scuro dark light notte\",\"appearance.theme.light\":\"Chiaro\",\"appearance.theme.dark\":\"Scuro\",\"appearance.accent.title\":\"Colore principale\",\"appearance.accent.description\":\"Selezione, pulsanti, tab attivi e logo\",\"appearance.accent.keywords\":\"accento tema\",\"appearance.motion.label\":\"Movimento\",\"appearance.animations.label\":\"Animazioni\",\"appearance.animations.description\":\"Spostamenti della vista, menu e transizioni. Se il sistema operativo chiede movimento ridotto, restano ridotte.\",\"appearance.animations.keywords\":\"movimento transizioni\",\"language.label\":\"Lingua\",\"language.description\":\"La lingua delle app: i loro testi, le date e i numeri.\",\"language.title\":\"Lingua del sistema\",\"language.row.description\":\"Le app che non hanno questa lingua usano l’inglese. I testi di lilOS sono ancora in italiano.\",\"language.keywords\":\"lingua traduzione inglese italiano date numeri language locale\",\"language.auto\":\"Automatica: {name}\",\"desk.label\":\"Scrivania\",\"desk.description\":\"Comportamento della scrivania infinita.\",\"desk.fixed.title\":\"Elementi fissi\",\"desk.fixed.label\":\"Sulla scrivania\",\"desk.fixed.descriptionSwitchable\":\"Quelli attivi ci sono sulla scrivania di ogni workspace. Si aprono e si spostano come gli altri, ma non si rinominano e non si eliminano: si tolgono da qui.\",\"desk.fixed.description\":\"Ci sono sulla scrivania di ogni workspace. Si aprono e si spostano come gli altri, ma non si rinominano e non si eliminano.\",\"desk.fixed.keywords\":\"elementi fissi scrivania mostra nascondi elimina {name}\",\"desk.fixed.toggle\":\"{name} sulla scrivania\",\"desk.fixed.toggleIn\":\"{name} sulla scrivania di {workspace}\",\"desk.fixed.always\":\"Fisso\",\"desk.fixed.item.home.name\":\"Home\",\"desk.fixed.item.home.description\":\"La cartella principale, con tutte le altre\",\"desk.fixed.item.documents.name\":\"Documenti\",\"desk.fixed.item.documents.description\":\"La cartella Documenti, condivisa da tutti i workspace\",\"desk.fixed.item.images.name\":\"Immagini\",\"desk.fixed.item.images.description\":\"La cartella Immagini, condivisa da tutti i workspace\",\"desk.fixed.item.files.name\":\"File Manager\",\"desk.fixed.item.files.description\":\"Apre il File Manager\",\"desk.fixed.item.downloads.name\":\"Download\",\"desk.fixed.item.downloads.description\":\"La cartella Download, condivisa da tutti i workspace\",\"desk.fixed.item.trash.name\":\"Cestino\",\"desk.fixed.item.trash.description\":\"Apre il cestino; ci si possono trascinare file e cartelle\",\"desk.fixed.descriptionWorkspace\":\"Quelli attivi ci sono sulla scrivania di questo workspace. Si aprono e si spostano come gli altri, ma non si rinominano e non si eliminano: si tolgono da qui.\",\"desk.fixed.descriptionAll\":\"Accendi o spegni un elemento in tutti i workspace insieme; i workspace nuovi lo hanno uguale. Ogni workspace poi lo può cambiare nel suo tab.\",\"desk.fixed.some\":\"Acceso in {on} workspace su {n}\",\"desk.fixed.toggleAll\":\"{name} su tutte le scrivanie\",\"desk.fixed.moved.label\":\"Ogni workspace ha i suoi\",\"desk.fixed.moved.description\":\"Si scelgono in Workspace: nel tab di ogni workspace, o in Tutti per tutte le scrivanie.\",\"desk.fixed.moved.keywords\":\"elementi fissi scrivania home documenti cestino workspace\",\"desk.fixed.moved.open\":\"Apri\",\"desk.placement.title\":\"Posizionamento\",\"desk.snap.label\":\"Allinea alla griglia\",\"desk.snap.description\":\"Gli elementi trascinati si allineano a una griglia invisibile\",\"desk.snap.keywords\":\"icone snap\",\"desk.overview.label\":\"Panoramica\",\"desk.overview.title\":\"Pannello in basso a destra\",\"desk.minimap.label\":\"Mostra la minimappa\",\"desk.minimap.keywords\":\"mappa miniatura\",\"workspaces.label\":\"Workspace\",\"workspaces.description\":\"Scrivanie separate, ognuna con i suoi elementi, finestre e app. I file fuori dalla scrivania sono di tutti.\",\"workspaces.current.label\":\"Questo workspace\",\"workspaces.current.title\":\"Workspace\",\"workspaces.all.label\":\"Tutti\",\"workspaces.name.keywords\":\"rinomina workspace\",\"workspaces.name.field\":\"Nome del workspace\",\"workspaces.color.description\":\"Il pallino nella barra in basso e accanto ai suoi file nel File Manager\",\"workspaces.color.keywords\":\"colore workspace\",\"workspaces.owned.label\":\"File, cartelle e collegamenti\",\"workspaces.owned.description\":\"Creati in questo workspace, sulla scrivania e nelle cartelle condivise\",\"workspaces.apps.title\":\"App\",\"workspaces.apps.system\":\"App di sistema: c’è in ogni workspace\",\"workspaces.apps.installed\":\"Installata in lilOS: qui la puoi nascondere\",\"workspaces.apps.keywords\":\"app nascondi mostra {name}\",\"workspaces.apps.alwaysVisible\":\"Sempre visibile\",\"workspaces.apps.toggle\":\"{name} visibile in questo workspace\",\"workspaces.apps.toggleIn\":\"{name} visibile in {workspace}\",\"workspaces.list.current\":\"{name} (attuale)\",\"workspaces.list.owned\":{\"one\":\"{n} elemento creato\",\"other\":\"{n} elementi creati\"},\"workspaces.list.apps\":{\"one\":\"{n} app\",\"other\":\"{n} app\"},\"workspaces.list.keywords\":\"workspace passa elimina\",\"workspaces.list.switch\":\"Passa a questo\",\"workspaces.switch.label\":\"Vai a questo workspace\",\"workspaces.new.label\":\"Nuovo workspace\",\"workspaces.new.description\":\"Con la scrivania vuota e tutte le app visibili\",\"workspaces.deleting.title\":\"Eliminare un workspace\",\"workspaces.deleting.files.label\":\"I file restano\",\"workspaces.deleting.files.description\":\"La sua scrivania diventa la cartella Documenti/Scrivania di <nome> (se non è vuota); i file creati altrove restano dove sono, segnati come suoi.\",\"workspaces.deleting.windows.label\":\"Le finestre restano\",\"workspaces.deleting.windows.description\":\"Le sue finestre aperte passano nel workspace attuale, con le modifiche non salvate. Workarea, vista e app nascoste si perdono.\",\"tags.label\":\"Tag\",\"tags.description\":\"Etichette colorate per ritrovare file e cartelle ovunque siano. Un tag invisibile nasconde i suoi elementi.\",\"tags.new.title\":\"Nuovo tag\",\"tags.new.pending\":{\"one\":\"Il nuovo tag andrà su {n} elemento selezionato\",\"other\":\"Il nuovo tag andrà su {n} elementi selezionati\"},\"tags.new.description\":\"Poi si assegna dal menu del tasto destro → Tag, sulla scrivania e nel File Manager\",\"tags.new.keywords\":\"nuovo tag crea etichetta\",\"tags.new.placeholder\":\"Per esempio: Urgente\",\"tags.new.field\":\"Nome del nuovo tag\",\"tags.name.keywords\":\"rinomina tag\",\"tags.name.field\":\"Nome del tag {name}\",\"tags.color.keywords\":\"colore tag\",\"tags.visible.label\":\"Visibile\",\"tags.visible.on\":\"Gli elementi con questo tag si vedono ovunque\",\"tags.visible.off\":\"Gli elementi con questo tag sono nascosti ovunque: si ritrovano nel File Manager → Tag\",\"tags.visible.keywords\":\"nascondi mostra invisibile tag\",\"tags.visible.toggle\":\"Tag {name} visibile\",\"tags.items.description\":{\"one\":\"{n} elemento in questo workspace e nelle cartelle condivise\",\"other\":\"{n} elementi in questo workspace e nelle cartelle condivise\"},\"tags.items.show\":\"Mostra nel File Manager\",\"tags.items.delete\":\"Elimina il tag\",\"usability.label\":\"Usabilità\",\"usability.description\":\"Tastiera, mouse, app che aprono i file, menu contestuali e cestino.\",\"shortcuts.label\":\"Scorciatoie\",\"shortcuts.title\":\"Scorciatoie da tastiera\",\"shortcuts.all.label\":\"Tutte le scorciatoie\",\"shortcuts.all.description\":\"Le modifiche valgono subito. Per registrare una combinazione premi +, poi i tasti; Esc annulla.\",\"shortcuts.all.reset\":\"Ripristina tutte\",\"shortcuts.keywords\":\"scorciatoia tasti {keys}\",\"shortcuts.mouse.title\":\"Mouse\",\"shortcuts.lasso.label\":\"Selezione a mano libera\",\"shortcuts.lasso.description\":\"Disegna un percorso chiuso: si selezionano gli elementi che contiene\",\"shortcuts.lasso.keywords\":\"lazo lasso percorso selezione alt\",\"shortcuts.rectangle.label\":\"Selezione a rettangolo\",\"shortcuts.rectangle.control\":\"Trascina sullo sfondo\",\"shortcuts.addToSelection.label\":\"Aggiungere alla selezione\",\"shortcuts.addToSelection.control\":\"Ctrl o Shift + clic o trascinamento\",\"shortcuts.pan.label\":\"Spostarsi sulla scrivania\",\"shortcuts.pan.control\":\"Spazio + trascina, o tasto centrale\",\"shortcuts.fixed.title\":\"Tasti fissi\",\"shortcuts.navigate.label\":\"Muoversi nei menu, nelle liste e nei tab\",\"shortcuts.navigate.control\":\"Frecce, Invio, Esc\",\"shortcuts.rename.label\":\"Confermare o annullare la rinomina\",\"shortcuts.rename.control\":\"Invio, Esc\",\"fileTypes.label\":\"Tipi di file\",\"fileTypes.title\":\"App per tipo di file\",\"fileTypes.all.label\":\"Tutti i tipi di file\",\"fileTypes.all.description\":\"Aprendo un file, lilOS usa l’app scelta qui. Con «Chiedi ogni volta» compare la finestra Apri con.\",\"fileTypes.all.reset\":\"Ripristina tutti\",\"fileTypes.noExtension\":\"Senza estensione\",\"fileTypes.default\":\"Predefinita: {app}\",\"fileTypes.noDefault\":\"Nessuna app predefinita\",\"fileTypes.keywords\":\"tipo file estensione apri con {ext}\",\"fileTypes.field\":\"App per .{ext}\",\"fileTypes.fieldNoExtension\":\"App per i file senza estensione\",\"fileTypes.ask\":\"Chiedi ogni volta\",\"fileTypes.others\":\"Altri\",\"menu.label\":\"Menu contestuale\",\"menu.separator\":\"— Separatore —\",\"menu.submenu\":{\"one\":\"Sottomenu · {n} voce\",\"other\":\"Sottomenu · {n} voci\"},\"menu.create.folder\":\"Crea la cartella «{name}»\",\"menu.create.file\":\"Crea il file «{name}»\",\"menu.create.fileFromTemplate\":\"Crea il file «{name}» dal modello {template}\",\"menu.create.fileWithContent\":\"Crea il file «{name}» con un contenuto iniziale\",\"menu.create.deletedTemplate\":\"(file eliminato)\",\"menu.launch\":\"Apre l’app {name}\",\"menu.action\":\"Azione\",\"menu.keywords\":\"menu contestuale voce separatore nuovo\",\"menu.moveUp\":\"Sposta su\",\"menu.moveDown\":\"Sposta giù\",\"menu.target.root\":\"Menu principale\",\"menu.target.inside\":\"Dentro «{name}»\",\"menu.target.label\":\"Dove\",\"menu.item.label\":\"Voce\",\"menu.item.description\":\"Un’azione o l’apertura di un’app\",\"menu.item.field\":\"Voce da aggiungere\",\"menu.item.open\":\"Apri {name}\",\"menu.separatorRow.label\":\"Separatore\",\"menu.separatorRow.description\":\"Una linea per raggruppare le voci\",\"menu.new.label\":\"Nuovo elemento in «{name}»\",\"menu.new.description\":\"Crea un file o una cartella con questo nome; un file può partire dal contenuto di un modello\",\"menu.new.labelField\":\"Etichetta\",\"menu.new.labelPlaceholder\":\"Etichetta (es. Foglio di stile)\",\"menu.new.nameField\":\"Nome del file o della cartella\",\"menu.new.namePlaceholder\":\"Nome (es. stile.css)\",\"menu.new.kind\":\"Tipo\",\"menu.new.kindFile\":\"File\",\"menu.new.kindFolder\":\"Cartella\",\"menu.new.missing\":\"Servono l’etichetta e il nome\",\"menu.template.button\":\"Modello…\",\"menu.template.chosen\":\"Modello: {name}\",\"menu.template.title\":\"Scegli il file modello\",\"menu.template.text\":\"Il nuovo file partirà con il contenuto di questo file.\",\"menu.defaults.label\":\"Voci predefinite\",\"menu.defaults.custom\":\"Il menu è stato personalizzato\",\"menu.defaults.default\":\"Il menu è quello predefinito\",\"trash.label\":\"Cestino\",\"trash.deleting.title\":\"Eliminazione\",\"trash.confirm.label\":\"Chiedi conferma\",\"trash.confirm.description\":\"Prima di eliminare file e cartelle, un piccolo menu chiede di confermare\",\"trash.confirm.keywords\":\"conferma elimina cancella domanda\",\"trash.permanent.label\":\"Elimina definitivamente\",\"trash.permanent.description\":\"Gli elementi eliminati non passano dal cestino: si recuperano solo con Ctrl Z, finché la pagina resta aperta\",\"trash.permanent.keywords\":\"cestino definitivo subito cancella salta\",\"trash.retention.label\":\"Conserva gli elementi per\",\"trash.retention.description\":\"Passato questo tempo, quello che è nel cestino viene eliminato definitivamente\",\"trash.retention.keywords\":\"retention durata giorni pulizia automatica svuota\",\"trash.retention.field\":\"Conserva gli elementi nel cestino per\",\"trash.retention.days\":{\"one\":\"{n} giorno\",\"other\":\"{n} giorni\"},\"trash.retention.forever\":\"Per sempre\",\"trash.contents.label\":\"Contenuto\",\"trash.contents.description\":{\"one\":\"{n} elemento · {size}\",\"other\":\"{n} elementi · {size}\"},\"trash.contents.empty\":\"Il cestino è vuoto\",\"trash.contents.keywords\":\"apri cestino ripristina\",\"trash.contents.open\":\"Apri il cestino\",\"trash.empty.label\":\"Svuota il cestino\",\"trash.empty.description\":\"Elimina definitivamente tutto quello che contiene\",\"trash.empty.keywords\":\"svuota cestino\",\"trash.empty.button\":\"Svuota…\",\"trash.empty.confirm\":\"Svuota\",\"trash.empty.none\":\"Vuoto\",\"apps.label\":\"App\",\"apps.description\":\"Come girano le app installate.\",\"apps.security.label\":\"Sicurezza\",\"apps.execution.title\":\"Esecuzione delle app\",\"apps.isolated.label\":\"Esegui le app isolate\",\"apps.isolated.description\":\"Ogni app gira in una sandbox e vede solo quello che i suoi permessi le concedono. Se lo togli, le app girano nella pagina di lilOS e in un Web Worker: più veloci, ma possono fare tutto quello che puoi fare tu. Vale dalla prossima apertura di ogni app.\",\"apps.isolated.adminOnly\":\"Solo un amministratore la cambia.\",\"apps.isolated.keywords\":\"sicurezza isolamento sandbox iframe worker\",\"apps.isolated.failed\":\"Non cambiata: {error}\",\"apps.system.label\":\"App di sistema\",\"apps.system.description\":\"File Manager, Editor, Pannello di controllo e AppStore fanno parte di lilOS e girano sempre dentro lilOS.\",\"apps.installed.title\":\"App installate\",\"apps.installed.keywords\":\"sicurezza isolamento\",\"apps.installed.shared\":\"Come le altre app\",\"apps.installed.own\":\"Scelta per questa app\",\"apps.installed.properties\":\"Proprietà…\",\"apps.installed.none\":\"Nessuna app installata oltre a quelle di sistema\",\"apps.mode.isolated\":\"Isolata\",\"apps.mode.open\":\"Non isolata\",\"apps.mode.system\":\"Dentro lilOS\",\"apps.mode.remote\":\"Isolata, nel suo sito\",\"startup.label\":\"Avvio\",\"startup.description\":\"Servizi e app che partono da soli all’avvio di lilOS e quando entri.\",\"startup.options.label\":\"Opzioni\",\"startup.services.label\":\"Servizi\",\"startup.apps.label\":\"App\",\"startup.auto.title\":\"Avvio automatico\",\"startup.openApps.label\":\"Apri le app quando entri\",\"startup.openApps.description\":\"Si aprono le app scelte in App, con i loro parametri. Solo nella prima scheda di lilOS di questo browser: le altre si aprono vuote.\",\"startup.openApps.keywords\":\"avvio automatico accesso login esecuzione automatica\",\"startup.trouble.title\":\"Se qualcosa non va\",\"startup.safe.label\":\"Avvio senza app\",\"startup.safe.description\":\"Per una volta sola: apri lilOS con ?avvio=no in fondo all’indirizzo. Le scelte salvate restano.\",\"startup.safe.keywords\":\"avvio sicuro avvio=no\",\"startup.safe.active\":\"Attivo ora\",\"startup.apps.title\":\"Si aprono quando entri\",\"startup.apps.hint\":\"Nel workspace in cui si apre lilOS, nell’ordine dell’elenco. Togli tutti i punti d’ingresso di un’app e l’app esce dall’elenco.\",\"startup.apps.none\":\"Nessuna app si apre da sola.\",\"startup.apps.oneEntry\":\"1 punto d’ingresso\",\"startup.apps.entries\":{\"one\":\"{on} di {n} punto d’ingresso\",\"other\":\"{on} di {n} punti d’ingresso\"},\"startup.apps.remove\":\"Rimuovi dall’avvio\",\"startup.apps.allAdded\":\"Tutte le app sono già all’avvio\",\"startup.apps.add\":\"Aggiungi un’app all’avvio\",\"startup.apps.addDescription\":\"Si apre la sua finestra principale; poi scegli altri punti d’ingresso e parametri\",\"startup.params.of\":\"{entry} di {app}\",\"startup.params.undescribed\":\"Questo punto d’ingresso non descrive i suoi parametri: arrivano all’app così come sono, come args.\",\"startup.params.json\":\"Parametri (JSON)\",\"startup.params.jsonOf\":\"Parametri (JSON) di {name}\",\"startup.params.invalidJson\":\"Non è JSON valido\",\"startup.params.notSaved\":\"Non salvati: {error}\",\"startup.path.noFolder\":\"Nessuna cartella\",\"startup.path.noFile\":\"Nessun file\",\"startup.path.gone\":\"(non c’è più)\",\"startup.path.clear\":\"Togli {name}\",\"services.unsupported\":\"Questa versione di lilOS non ha i servizi delle app\",\"services.status.off\":\"Spento\",\"services.status.starting\":\"Si avvia…\",\"services.status.error\":\"Fermo: {error}\",\"services.status.unknownError\":\"errore\",\"services.status.restarting\":\"Riparte… (si era fermato: {error})\",\"services.status.onNow\":\"Acceso da meno di un minuto\",\"services.status.onMinutes\":{\"one\":\"Acceso da {n} minuto\",\"other\":\"Acceso da {n} minuti\"},\"services.status.onHours\":{\"one\":\"Acceso da {n} ora\",\"other\":\"Acceso da {n} ore\"},\"services.status.onSince\":\"Acceso dal {date}\",\"services.auto.label\":\"Avvia i servizi automaticamente\",\"services.auto.noEngine\":\"Il kernel non ha il motore dei servizi (modulo services-isolate)\",\"services.auto.description\":\"Quando entri partono i tuoi servizi scelti in Servizi. Quelli scelti da un amministratore per tutti partono comunque.\",\"services.auto.keywords\":\"servizi avvio automatico background kernel\",\"services.title\":\"Servizi installati\",\"services.noEngine\":\"Il kernel non ha il motore dei servizi: serve il modulo services-isolate (AppStore → Kernel).\",\"services.none\":\"Nessuna app installata ha servizi.\",\"services.hint\":\"Le parti delle app che lavorano nel kernel, senza finestra, anche con lilOS chiuso. «All’avvio del sistema» vale per tutti gli utenti e lo sceglie un amministratore; «All’accesso» solo per te.\",\"services.startup.none\":\"Non si avvia\",\"services.startup.login\":\"All’accesso\",\"services.startup.system\":\"All’avvio del sistema\",\"services.startup.field\":\"Avvio di {name}\",\"services.restart\":\"Riavvia\",\"services.restartOf\":\"Riavvia {name}\",\"services.stop\":\"Spegni\",\"services.start\":\"Accendi\",\"services.byAdmin\":\"scelto da un amministratore\",\"services.log.label\":\"Registro\",\"services.log.title\":\"Registro di {name}\",\"services.log.empty\":\"Nessuna riga: il servizio non è ancora partito.\",\"storage.label\":\"Archiviazione\",\"storage.description.kernel\":\"Dati di lilOS salvati nella tua cartella utente.\",\"storage.description.browser\":\"Dati di lilOS salvati in questo browser.\",\"storage.space.title\":\"Spazio\",\"storage.used.label\":\"Spazio usato\",\"storage.used.description\":\"Posizioni, vista e impostazioni\",\"storage.contents.label\":\"Contenuto dei file\",\"storage.contents.description\":\"Testo salvato nei file\",\"storage.reset.title\":\"Ripristino\",\"storage.defaults.label\":\"Impostazioni predefinite\",\"storage.defaults.description\":\"Riporta impostazioni, scorciatoie, app dei tipi di file e menu ai valori iniziali\",\"storage.initial.label\":\"Scrivania e file iniziali\",\"storage.initial.description\":\"Elimina tutte le cartelle e i file creati, i workspace, i tag, le posizioni e la vista salvate, poi ricarica lilOS\",\"storage.initial.keywords\":\"reset desktop workspace tag\",\"storage.initial.button\":\"Ripristina…\",\"storage.initial.confirm\":\"Elimina e ricarica\",\"about.label\":\"Informazioni\",\"about.description\":\"Versione e ambiente.\",\"about.version\":\"Versione\",\"about.sdkVersion\":\"Versione dell’SDK\",\"about.language\":\"Lingua\",\"about.browser\":\"Browser\",\"about.unknownBrowser\":\"Sconosciuto\",\"userPage.label\":\"Pagina utente\",\"userPage.description\":\"Cosa mostra la pagina che si apre dal tuo nome\",\"userPage.title\":\"Pagina utente\",\"userPage.open.label\":\"Si apre dal tuo nome\",\"userPage.open.description\":\"Clicca il tuo nome nella barra in basso o in fondo al menu. Nome e foto ci sono sempre: qui scegli cos’altro mostra.\",\"userPage.keywords\":\"pagina utente profilo account foto blocca chiudi sessione esci riavvia {name}\",\"userPage.toggle\":\"{name} nella pagina utente\",\"userPage.group.header\":\"Intestazione\",\"userPage.group.actions\":\"Azioni\",\"userPage.group.account\":\"Account\",\"userPage.group.session\":\"Questa sessione\",\"userPage.group.footer\":\"Piè di pagina\",\"userPage.item.details.name\":\"Nome utente e ruolo\",\"userPage.item.details.description\":\"Sotto il nome: il nome con cui accedi e se sei amministratore\",\"userPage.item.lock.name\":\"Blocca\",\"userPage.item.lock.description\":\"Copre lo schermo finché non inserisci di nuovo la password; le app restano aperte\",\"userPage.item.logout.name\":\"Chiudi sessione\",\"userPage.item.logout.description\":\"Salva, chiude le app e torna alla schermata di accesso\",\"userPage.item.restart.name\":\"Riavvia il sistema\",\"userPage.item.restart.description\":\"Riavvia il kernel di lilOS per tutti gli utenti; solo per gli amministratori\",\"userPage.item.photo.name\":\"Foto profilo\",\"userPage.item.photo.description\":\"Scegliere, cambiare o togliere la foto\",\"userPage.item.theme.name\":\"Tema\",\"userPage.item.theme.description\":\"Chiaro o scuro\",\"userPage.item.language.name\":\"Lingua\",\"userPage.item.language.description\":\"La lingua delle app\",\"userPage.item.settings.name\":\"Tutte le impostazioni\",\"userPage.item.settings.description\":\"Apre il Pannello di controllo\",\"userPage.item.workspace.name\":\"Workspace\",\"userPage.item.workspace.description\":\"Quello in cui sei e quanti ce ne sono\",\"userPage.item.windows.name\":\"Finestre aperte\",\"userPage.item.windows.description\":\"Quante finestre sono aperte e quante app lavorano in background\",\"userPage.item.startup.name\":\"All’avvio\",\"userPage.item.startup.description\":\"Quante app si aprono quando entri\",\"userPage.item.storage.name\":\"Spazio usato\",\"userPage.item.storage.description\":\"Quanto occupano i tuoi file\",\"userPage.item.about.name\":\"Versione di lilOS\",\"userPage.item.about.description\":\"La versione di lilOS e l’indirizzo a cui sei collegato\",\"@name\":\"Pannello di controllo\",\"@description\":\"Aspetto, lingua, scrivania, pagina utente, workspace, tag, scorciatoie, tipi di file, servizi e app all’avvio, archiviazione.\",\"@entrypoints.main.params.tab.label\":\"Sezione\",\"@entrypoints.main.params.tab.options.appearance.label\":\"Aspetto\",\"@entrypoints.main.params.tab.options.language.label\":\"Lingua\",\"@entrypoints.main.params.tab.options.desk.label\":\"Scrivania\",\"@entrypoints.main.params.tab.options.userpage.label\":\"Pagina utente\",\"@entrypoints.main.params.tab.options.workspaces.label\":\"Workspace\",\"@entrypoints.main.params.tab.options.tags.label\":\"Tag\",\"@entrypoints.main.params.tab.options.usability.label\":\"Usabilità\",\"@entrypoints.main.params.tab.options.apps.label\":\"App\",\"@entrypoints.main.params.tab.options.startup.label\":\"Avvio\",\"@entrypoints.main.params.tab.options.storage.label\":\"Archiviazione\",\"@entrypoints.main.params.tab.options.about.label\":\"Informazioni\",\"pipes.label\":\"Pipe\",\"pipes.title\":\"Pipe sugli eventi\",\"pipes.keywords\":\"pipe eventi handler ordine catena\",\"pipes.intro.label\":\"Cosa fanno le app quando succede qualcosa\",\"pipes.intro.description\":\"Le app possono intervenire quando un file si apre, si legge o si salva, oppure guardare cosa succede nel sistema. Qui sotto, ogni evento con i suoi handler nell’ordine in cui partono ({count} eventi in tutto). La fase dopo scorre in ordine inverso rispetto a prima.\",\"pipes.unsupported\":\"Questa versione di lilOS non ha le pipe\",\"pipes.lilos\":\"lilOS\",\"pipes.up\":\"Su\",\"pipes.down\":\"Giù\",\"pipes.stage.before\":\"Prima\",\"pipes.stage.after\":\"Dopo\",\"pipes.band.first\":\"tra i primi\",\"pipes.band.middle\":\"in mezzo\",\"pipes.band.last\":\"tra gli ultimi\",\"pipes.where.all\":\"ogni elemento\",\"pipes.where.system\":\"scelti da lilOS\",\"pipes.where.own\":\"i file che ha segnato\",\"pipes.where.ext\":\"file {list}\",\"pipes.where.type.file\":\"file\",\"pipes.where.type.folder\":\"cartelle\",\"pipes.where.type.app\":\"collegamenti alle app\",\"pipes.where.app\":\"app {list}\",\"pipes.reset.label\":\"Ordine degli handler\",\"pipes.reset.description\":\"L’hai cambiato: torna all’ordine di installazione\",\"pipes.idle.title\":\"Eventi senza handler\",\"pipes.idle.description\":\"{count} eventi: per ora nessuna app li gestisce\",\"pipes.idle.none\":\"Ogni evento ha un handler\",\"pipes.event.file.open\":\"Apertura di un file\",\"pipes.event.file.read\":\"Lettura di un file\",\"pipes.event.file.write\":\"Salvataggio di un file\",\"pipes.event.app.launch\":\"Avvio di un’app\",\"pipes.event.file.create\":\"Creazione di un elemento\",\"pipes.event.file.rename\":\"Cambio di nome\",\"pipes.event.file.move\":\"Spostamento\",\"pipes.event.file.copy\":\"Copia di un file\",\"pipes.event.file.remove\":\"Eliminazione definitiva\",\"pipes.event.trash.put\":\"Spostamento nel Cestino\",\"pipes.event.trash.restore\":\"Ripristino dal Cestino\",\"pipes.event.trash.purge\":\"Svuotamento del Cestino\",\"pipes.event.tags.assign\":\"Tag di un elemento\",\"pipes.event.window.open\":\"Apertura di una finestra\",\"pipes.event.window.close\":\"Chiusura di una finestra\",\"pipes.event.workspace.switch\":\"Cambio di workspace\",\"pipes.event.settings.change\":\"Cambio di un’impostazione\",\"pipes.event.system.ready\":\"Sistema pronto\",\"pipes.event.session.login\":\"Utente entrato\",\"pipes.event.session.logout\":\"Uscita dall’account\",\"pipes.event.apps.install\":\"Installazione di un’app\",\"pipes.event.apps.update\":\"Aggiornamento di un’app\",\"pipes.event.apps.remove\":\"Rimozione di un’app\",\"pipes.event.permissions.change\":\"Permessi di un’app\",\"pipes.event.settings.system\":\"Impostazioni di sistema\",\"pipes.event.pipes.change\":\"Iscrizioni alle pipe\"}}")
+}), { t: z } = R;
 // src/settings/menuEditor.js
-function ue(e, { openWindow: t, rerender: n, confirmButton: r }) {
+function de(e, { openWindow: t, rerender: n, confirmButton: r }) {
 	let i = p.layout(e), o = (t) => {
 		p.setLayout(e, t), n();
 	}, s = (e) => {
 		if (e.type === "separator") return {
-			label: B("menu.separator"),
+			label: z("menu.separator"),
 			description: ""
 		};
 		if (e.type === "submenu") return {
 			label: e.label,
-			description: B("menu.submenu", { n: e.items.length })
+			description: z("menu.submenu", { n: e.items.length })
 		};
 		let t = p.action(e.action), n = e.label ?? t?.label ?? e.action;
 		if (e.action === "desktop.create") {
 			let t = e.params.name;
 			return e.params.kind === "folder" ? {
 				label: n,
-				description: B("menu.create.folder", { name: t })
+				description: z("menu.create.folder", { name: t })
 			} : e.params.template ? {
 				label: n,
-				description: B("menu.create.fileFromTemplate", {
+				description: z("menu.create.fileFromTemplate", {
 					name: t,
-					template: l.exists(e.params.template) ? l.path(e.params.template) : B("menu.create.deletedTemplate")
+					template: l.exists(e.params.template) ? l.path(e.params.template) : z("menu.create.deletedTemplate")
 				})
 			} : {
 				label: n,
-				description: e.params.content ? B("menu.create.fileWithContent", { name: t }) : B("menu.create.file", { name: t })
+				description: e.params.content ? z("menu.create.fileWithContent", { name: t }) : z("menu.create.file", { name: t })
 			};
 		}
 		return e.action === "app.launch" ? {
 			label: n,
-			description: B("menu.launch", { name: N.find((t) => t.id === e.params.app)?.name ?? e.params.app })
+			description: z("menu.launch", { name: N.find((t) => t.id === e.params.app)?.name ?? e.params.app })
 		} : {
 			label: n,
-			description: B("menu.action")
+			description: z("menu.action")
 		};
 	}, c = (e, t) => {
 		let n = structuredClone(i);
@@ -82,8 +82,8 @@ function ue(e, { openWindow: t, rerender: n, confirmButton: r }) {
 		return {
 			label: t.length === 2 ? `↳ ${r}` : r,
 			description: i,
-			keywords: B("menu.keywords"),
-			control: u("div", { class: "mm-ctl" }, o("arrowUp", B("menu.moveUp"), () => f(t, -1), a === 0), o("arrowDown", B("menu.moveDown"), () => f(t, 1), a === n - 1), o("x", B("common.remove"), () => m(t)))
+			keywords: z("menu.keywords"),
+			control: u("div", { class: "mm-ctl" }, o("arrowUp", z("menu.moveUp"), () => f(t, -1), a === 0), o("arrowDown", z("menu.moveDown"), () => f(t, 1), a === n - 1), o("x", z("common.remove"), () => m(t)))
 		};
 	}, _ = [];
 	i.forEach((e, t) => {
@@ -91,70 +91,70 @@ function ue(e, { openWindow: t, rerender: n, confirmButton: r }) {
 	});
 	let v = i.map((e, t) => [e, t]).filter(([e]) => e.type === "submenu"), y = [{
 		value: "root",
-		label: B("menu.target.root")
+		label: z("menu.target.root")
 	}, ...v.map(([e, t]) => ({
 		value: String(t),
-		label: B("menu.target.inside", { name: e.label })
+		label: z("menu.target.inside", { name: e.label })
 	}))], b = (e, t) => o(c(e === "root" ? [0] : [Number(e), 0], (e) => e.push(t))), x = p.actions(e).filter((e) => e.id !== "desktop.create" && e.id !== "app.launch"), S = g({
 		value: x[0]?.id,
-		label: B("menu.item.field"),
+		label: z("menu.item.field"),
 		options: [...x.map((e) => ({
 			value: e.id,
 			label: e.label
 		})), ...N.filter((e) => e.load).map((e) => ({
 			value: `app:${e.id}`,
-			label: B("menu.item.open", { name: e.name })
+			label: z("menu.item.open", { name: e.name })
 		}))]
 	}), C = g({
 		value: "root",
 		options: y,
-		label: B("menu.target.label")
+		label: z("menu.target.label")
 	}), T = g({
 		value: "root",
 		options: y,
-		label: B("menu.target.label")
+		label: z("menu.target.label")
 	}), E = v[0], D = w({
-		placeholder: B("menu.new.labelPlaceholder"),
-		label: B("menu.new.labelField")
+		placeholder: z("menu.new.labelPlaceholder"),
+		label: z("menu.new.labelField")
 	}), O = w({
-		placeholder: B("menu.new.namePlaceholder"),
-		label: B("menu.new.nameField")
+		placeholder: z("menu.new.namePlaceholder"),
+		label: z("menu.new.nameField")
 	}), k = g({
 		value: "file",
 		options: [{
 			value: "file",
-			label: B("menu.new.kindFile")
+			label: z("menu.new.kindFile")
 		}, {
 			value: "folder",
-			label: B("menu.new.kindFolder")
+			label: z("menu.new.kindFolder")
 		}],
-		label: B("menu.new.kind")
+		label: z("menu.new.kind")
 	}), A = null, j = a({
-		label: B("menu.template.button"),
+		label: z("menu.template.button"),
 		onClick: async () => {
-			let e = await F(t, {
-				title: B("menu.template.title"),
-				text: B("menu.template.text")
+			let e = await P(t, {
+				title: z("menu.template.title"),
+				text: z("menu.template.text")
 			});
-			e && (A = e.id, j.textContent = B("menu.template.chosen", { name: e.name }));
+			e && (A = e.id, j.textContent = z("menu.template.chosen", { name: e.name }));
 		}
 	}), M = u("small", { class: "mm-note" });
 	return [{
 		title: p.list().find((t) => t.id === e)?.label ?? e,
 		rows: _
 	}, {
-		title: B("common.add"),
+		title: z("common.add"),
 		rows: [
 			{
-				label: B("menu.item.label"),
-				description: B("menu.item.description"),
+				label: z("menu.item.label"),
+				description: z("menu.item.description"),
 				control: u("div", { class: "mm-add" }, S, C, a({
-					label: B("common.add"),
+					label: z("common.add"),
 					onClick: () => {
 						let e = S.value, t = e.startsWith("app:") ? {
 							type: "action",
 							action: "app.launch",
-							label: B("menu.item.open", { name: N.find((t) => t.id === e.slice(4))?.name }),
+							label: z("menu.item.open", { name: N.find((t) => t.id === e.slice(4))?.name }),
 							params: { app: e.slice(4) }
 						} : {
 							type: "action",
@@ -165,23 +165,23 @@ function ue(e, { openWindow: t, rerender: n, confirmButton: r }) {
 				}))
 			},
 			{
-				label: B("menu.separatorRow.label"),
-				description: B("menu.separatorRow.description"),
+				label: z("menu.separatorRow.label"),
+				description: z("menu.separatorRow.description"),
 				control: u("div", { class: "mm-add" }, T, a({
-					label: B("common.add"),
+					label: z("common.add"),
 					onClick: () => b(T.value, { type: "separator" })
 				}))
 			},
 			...E ? [{
-				label: B("menu.new.label", { name: E[0].label }),
-				description: B("menu.new.description"),
+				label: z("menu.new.label", { name: E[0].label }),
+				description: z("menu.new.description"),
 				control: u("div", { class: "mm-add" }, D, O, k, j, a({
-					label: B("common.add"),
+					label: z("common.add"),
 					primary: !0,
 					onClick: () => {
 						let e = D.value.trim(), t = O.value.trim();
 						if (!e || !t) {
-							M.textContent = B("menu.new.missing");
+							M.textContent = z("menu.new.missing");
 							return;
 						}
 						let n = {
@@ -200,9 +200,9 @@ function ue(e, { openWindow: t, rerender: n, confirmButton: r }) {
 				}), M)
 			}] : [],
 			{
-				label: B("menu.defaults.label"),
-				description: p.isCustom(e) ? B("menu.defaults.custom") : B("menu.defaults.default"),
-				control: r(B("common.reset"), B("common.confirm"), () => {
+				label: z("menu.defaults.label"),
+				description: p.isCustom(e) ? z("menu.defaults.custom") : z("menu.defaults.default"),
+				control: r(z("common.reset"), z("common.confirm"), () => {
 					p.reset(e), n();
 				})
 			}
@@ -210,110 +210,110 @@ function ue(e, { openWindow: t, rerender: n, confirmButton: r }) {
 	}];
 }
 // src/settings/services.js
-var V = null, H = null;
-function U(e) {
-	D.services ? H ??= D.services.list().then((e) => {
-		V = e;
+var B = null, V = null;
+function H(e) {
+	D.services ? V ??= D.services.list().then((e) => {
+		B = e;
 	}, (e) => {
-		V = { error: e.message };
+		B = { error: e.message };
 	}).finally(() => {
-		H = null, e();
-	}) : V = { get error() {
-		return B("services.unsupported");
+		V = null, e();
+	}) : B = { get error() {
+		return z("services.unsupported");
 	} };
 }
-function de(e) {
-	return D.services?.on("change", () => U(e)) ?? null;
-}
 function fe(e) {
-	let t = Math.round((Date.now() - e) / 6e4);
-	if (t < 1) return B("services.status.onNow");
-	if (t < 60) return B("services.status.onMinutes", { n: t });
-	let n = Math.round(t / 60);
-	return n < 48 ? B("services.status.onHours", { n }) : B("services.status.onSince", { date: z.date(e) });
+	return D.services?.on("change", () => H(e)) ?? null;
 }
 function pe(e) {
-	return e.status === "on" ? fe(e.since) : e.status === "starting" && e.error ? B("services.status.restarting", { error: e.error }) : e.status === "error" ? B("services.status.error", { error: e.error ?? B("services.status.unknownError") }) : e.status === "off" ? B("services.status.off") : e.status === "starting" ? B("services.status.starting") : e.status;
+	let t = Math.round((Date.now() - e) / 6e4);
+	if (t < 1) return z("services.status.onNow");
+	if (t < 60) return z("services.status.onMinutes", { n: t });
+	let n = Math.round(t / 60);
+	return n < 48 ? z("services.status.onHours", { n }) : z("services.status.onSince", { date: R.date(e) });
 }
-var W = async (e, t) => {
+function me(e) {
+	return e.status === "on" ? pe(e.since) : e.status === "starting" && e.error ? z("services.status.restarting", { error: e.error }) : e.status === "error" ? z("services.status.error", { error: e.error ?? z("services.status.unknownError") }) : e.status === "off" ? z("services.status.off") : e.status === "starting" ? z("services.status.starting") : e.status;
+}
+var U = async (e, t) => {
 	try {
 		await e();
 	} catch (e) {
 		T(e.message, { timeout: 7e3 });
 	}
-	U(t);
+	H(t);
 };
-function me(e) {
-	V || U(e);
-	let t = V && !V.error && V.available, n = E({
-		value: t ? V.enabled : !1,
-		label: B("services.auto.label"),
-		onChange: (t) => W(() => D.services.setEnabled(t), e)
+function he(e) {
+	B || H(e);
+	let t = B && !B.error && B.available, n = E({
+		value: t ? B.enabled : !1,
+		label: z("services.auto.label"),
+		onChange: (t) => U(() => D.services.setEnabled(t), e)
 	});
 	return n.disabled = !t, {
-		label: B("services.auto.label"),
-		description: V ? V.error ? V.error : V.available ? B("services.auto.description") : B("services.auto.noEngine") : B("common.loading"),
-		keywords: B("services.auto.keywords"),
+		label: z("services.auto.label"),
+		description: B ? B.error ? B.error : B.available ? z("services.auto.description") : z("services.auto.noEngine") : z("common.loading"),
+		keywords: z("services.auto.keywords"),
 		control: n
 	};
 }
-function he(e) {
-	V || U(e.rerender);
+function ge(e) {
+	B || H(e.rerender);
 	let t = (e) => [{
-		title: B("services.title"),
+		title: z("services.title"),
 		rows: [{ label: e }]
 	}];
-	return V ? V.error ? t(V.error) : V.available ? V.services.length ? [{
-		title: B("services.title"),
-		content: () => u("div", { class: "su-apps" }, u("p", { class: "su-hint" }, B("services.hint")), u("div", { class: "st-card su-app" }, V.services.flatMap((t) => ge(t, e))))
-	}] : t(B("services.none")) : t(B("services.noEngine")) : t(B("common.loading"));
+	return B ? B.error ? t(B.error) : B.available ? B.services.length ? [{
+		title: z("services.title"),
+		content: () => u("div", { class: "su-apps" }, u("p", { class: "su-hint" }, z("services.hint")), u("div", { class: "st-card su-app" }, B.services.flatMap((t) => _e(t, e))))
+	}] : t(z("services.none")) : t(z("services.noEngine")) : t(z("common.loading"));
 }
-function ge(e, t) {
+function _e(e, t) {
 	let { rerender: n } = t, r = `${e.name} · ${e.label}`, i = [
 		{
 			value: "none",
-			label: B("services.startup.none")
+			label: z("services.startup.none")
 		},
 		{
 			value: "login",
-			label: B("services.startup.login")
+			label: z("services.startup.login")
 		},
-		...V.admin || e.startup === "system" ? [{
+		...B.admin || e.startup === "system" ? [{
 			value: "system",
-			label: B("services.startup.system")
+			label: z("services.startup.system")
 		}] : []
 	], s = g({
 		value: e.startup,
 		options: i,
-		label: B("services.startup.field", { name: r }),
-		onChange: (t) => W(() => D.services.setStartup(e.app, e.entry, t), n)
+		label: z("services.startup.field", { name: r }),
+		onChange: (t) => U(() => D.services.setStartup(e.app, e.entry, t), n)
 	});
-	s.disabled = e.system && !V.admin;
+	s.disabled = e.system && !B.admin;
 	let c = e.status === "on" || e.status === "starting", l = u("button", {
 		class: "ctl-btn su-clear",
 		type: "button",
-		title: B("services.restart"),
-		"aria-label": B("services.restartOf", { name: r })
+		title: z("services.restart"),
+		"aria-label": z("services.restartOf", { name: r })
 	}, d("redo"));
-	l.disabled = !e.canControl || !c, l.addEventListener("click", () => W(() => D.services.restart(e.app, e.entry), n));
+	l.disabled = !e.canControl || !c, l.addEventListener("click", () => U(() => D.services.restart(e.app, e.entry), n));
 	let f = a({
-		label: B(c ? "services.stop" : "services.start"),
+		label: z(c ? "services.stop" : "services.start"),
 		spinner: !0,
-		onClick: () => W(() => D.services[c ? "stop" : "start"](e.app, e.entry), n)
+		onClick: () => U(() => D.services[c ? "stop" : "start"](e.app, e.entry), n)
 	});
 	f.disabled = !e.canControl, f.classList.add("su-power");
 	let p = a({
-		label: B("services.log.label"),
-		onClick: () => ve(e, t)
+		label: z("services.log.label"),
+		onClick: () => ye(e, t)
 	});
-	p.disabled = e.system && !V.admin;
-	let m = u("div", { class: "st-row su-service" }, o(e, "su-icon"), u("div", { class: "st-label" }, u("b", {}, r), u("small", {}, u("span", { class: `su-state ${e.status}` }, pe(e)), " · ", u("code", {}, e.entry), e.system && !V.admin ? ` · ${B("services.byAdmin")}` : "")), s, l, f, p);
-	return e.params && e.startup !== "none" ? [m, _e(e, t)] : [m];
+	p.disabled = e.system && !B.admin;
+	let m = u("div", { class: "st-row su-service" }, o(e, "su-icon"), u("div", { class: "st-label" }, u("b", {}, r), u("small", {}, u("span", { class: `su-state ${e.status}` }, me(e)), " · ", u("code", {}, e.entry), e.system && !B.admin ? ` · ${z("services.byAdmin")}` : "")), s, l, f, p);
+	return e.params && e.startup !== "none" ? [m, ve(e, t)] : [m];
 }
-function _e(e, { openWindow: t, rerender: n }) {
-	let r = e.system && !V.admin, i = { ...e.values }, o = (t, r) => {
+function ve(e, { openWindow: t, rerender: n }) {
+	let r = e.system && !B.admin, i = { ...e.values }, o = (t, r) => {
 		let a = { ...i };
-		r === "" || r == null ? delete a[t] : a[t] = r, i = a, W(() => D.services.setStartup(e.app, e.entry, e.startup, a), n);
+		r === "" || r == null ? delete a[t] : a[t] = r, i = a, U(() => D.services.setStartup(e.app, e.entry, e.startup, a), n);
 	}, s = Object.entries(e.params).flatMap(([n, s]) => {
 		let c = Object.hasOwn(i, n) ? i[n] : s.default, d = `${s.label} (${e.name} · ${e.label})`, f;
 		if (s.type === "boolean") f = E({
@@ -347,9 +347,9 @@ function _e(e, { openWindow: t, rerender: n }) {
 				placeholder: "~/…",
 				onChange: (e) => o(n, e.trim())
 			}), i = a({
-				label: B("common.choose"),
+				label: z("common.choose"),
 				onClick: async () => {
-					let r = await F(t, {
+					let r = await P(t, {
 						kind: s.type,
 						title: s.label
 					});
@@ -373,7 +373,7 @@ function _e(e, { openWindow: t, rerender: n }) {
 	});
 	return u("div", { class: "su-params" }, s);
 }
-async function ve(e, { openWindow: t }) {
+async function ye(e, { openWindow: t }) {
 	let n;
 	try {
 		n = await D.services.log(e.app, e.entry);
@@ -381,7 +381,7 @@ async function ve(e, { openWindow: t }) {
 		return T(e.message, { timeout: 7e3 });
 	}
 	let r = new i({
-		title: B("services.log.title", { name: `${e.name} · ${e.label}` }),
+		title: z("services.log.title", { name: `${e.name} · ${e.label}` }),
 		icon: "list",
 		width: 620,
 		height: 380
@@ -389,48 +389,48 @@ async function ve(e, { openWindow: t }) {
 	r.body.append(u("div", {
 		class: "su-log",
 		tabindex: "0",
-		"aria-label": B("services.log.label")
-	}, n.length ? n.map((e) => u("div", { class: `su-line ${e.level}` }, u("span", {}, a(e.at)), ` ${e.text}`)) : u("p", { class: "su-empty" }, B("services.log.empty")))), t(r);
+		"aria-label": z("services.log.label")
+	}, n.length ? n.map((e) => u("div", { class: `su-line ${e.level}` }, u("span", {}, a(e.at)), ` ${e.text}`)) : u("p", { class: "su-empty" }, z("services.log.empty")))), t(r);
 }
 // src/settings/startup.js
-function ye({ rerender: e }) {
+function be({ rerender: e }) {
 	return [{
-		title: B("startup.auto.title"),
-		rows: [me(e), {
-			label: B("startup.openApps.label"),
-			description: B("startup.openApps.description"),
-			keywords: B("startup.openApps.keywords"),
+		title: z("startup.auto.title"),
+		rows: [he(e), {
+			label: z("startup.openApps.label"),
+			description: z("startup.openApps.description"),
+			keywords: z("startup.openApps.keywords"),
 			control: E({
 				value: v.get("startupApps"),
-				label: B("startup.openApps.label"),
+				label: z("startup.openApps.label"),
 				onChange: (e) => v.set("startupApps", e)
 			})
 		}]
 	}, {
-		title: B("startup.trouble.title"),
+		title: z("startup.trouble.title"),
 		rows: [{
-			label: B("startup.safe.label"),
-			description: B("startup.safe.description"),
-			keywords: B("startup.safe.keywords"),
-			control: L.skipped ? B("startup.safe.active") : ""
+			label: z("startup.safe.label"),
+			description: z("startup.safe.description"),
+			keywords: z("startup.safe.keywords"),
+			control: I.skipped ? z("startup.safe.active") : ""
 		}]
 	}];
 }
-function be(e) {
-	let t = L.apps().filter((e) => N.some((t) => t.id === e.app));
+function xe(e) {
+	let t = I.apps().filter((e) => N.some((t) => t.id === e.app));
 	return [{
-		title: B("startup.apps.title"),
-		content: () => u("div", { class: "su-apps" }, u("p", { class: "su-hint" }, B("startup.apps.hint")), t.length ? t.map((t) => xe(t, e)) : u("p", { class: "su-empty" }, B("startup.apps.none")), we(t, e))
+		title: z("startup.apps.title"),
+		content: () => u("div", { class: "su-apps" }, u("p", { class: "su-hint" }, z("startup.apps.hint")), t.length ? t.map((t) => Se(t, e)) : u("p", { class: "su-empty" }, z("startup.apps.none")), Te(t, e))
 	}];
 }
-function xe(e, t) {
-	let n = N.find((t) => t.id === e.app), r = L.windowEntries(n.id), i = new Map(e.entries.map((e) => [e.entry, e.params])), s = r.filter((e) => i.has(e.entry)).length, c = u("div", { class: "st-row su-head" }, o(n, "su-icon"), u("div", { class: "st-label" }, u("b", {}, n.name), u("small", {}, r.length === 1 ? B("startup.apps.oneEntry") : B("startup.apps.entries", {
+function Se(e, t) {
+	let n = N.find((t) => t.id === e.app), r = I.windowEntries(n.id), i = new Map(e.entries.map((e) => [e.entry, e.params])), s = r.filter((e) => i.has(e.entry)).length, c = u("div", { class: "st-row su-head" }, o(n, "su-icon"), u("div", { class: "st-label" }, u("b", {}, n.name), u("small", {}, r.length === 1 ? z("startup.apps.oneEntry") : z("startup.apps.entries", {
 		on: s,
 		n: r.length
 	}))), a({
-		label: B("startup.apps.remove"),
+		label: z("startup.apps.remove"),
 		onClick: () => {
-			L.removeApp(n.id), t.rerender();
+			I.removeApp(n.id), t.rerender();
 		}
 	})), l = r.flatMap((e) => {
 		let r = i.has(e.entry), a = u("div", { class: "st-row su-entry" }, E({
@@ -438,28 +438,28 @@ function xe(e, t) {
 			label: `${n.name}: ${e.label}`,
 			onChange: (r) => {
 				try {
-					L.setEntry(n.id, e.entry, r);
+					I.setEntry(n.id, e.entry, r);
 				} catch (e) {
 					T(e.message);
 				}
 				t.rerender();
 			}
 		}), u("div", { class: "st-label" }, u("b", {}, e.label), u("small", {}, u("code", {}, e.entry))));
-		return r ? [a, Se(n, e, i.get(e.entry), t)] : [a];
+		return r ? [a, Ce(n, e, i.get(e.entry), t)] : [a];
 	});
 	return u("div", { class: "st-card su-app" }, c, l);
 }
-function Se(e, t, n, { openWindow: r }) {
-	let i = B("startup.params.of", {
+function Ce(e, t, n, { openWindow: r }) {
+	let i = z("startup.params.of", {
 		entry: t.label,
 		app: e.name
 	});
 	if (!t.params) {
-		let r = B("startup.params.undescribed"), a = u("span", { class: "su-note" }, r), o = u("textarea", {
+		let r = z("startup.params.undescribed"), a = u("span", { class: "su-note" }, r), o = u("textarea", {
 			class: "su-json",
 			spellcheck: "false",
 			placeholder: "{ }",
-			"aria-label": B("startup.params.jsonOf", { name: i })
+			"aria-label": z("startup.params.jsonOf", { name: i })
 		});
 		return o.value = Object.keys(n).length ? JSON.stringify(n) : "", o.addEventListener("change", () => {
 			let n = o.value.trim();
@@ -468,19 +468,19 @@ function Se(e, t, n, { openWindow: r }) {
 				try {
 					i = n ? JSON.parse(n) : {};
 				} catch {
-					throw Error(B("startup.params.invalidJson"));
+					throw Error(z("startup.params.invalidJson"));
 				}
-				L.setParams(e.id, t.entry, i), o.removeAttribute("aria-invalid"), a.classList.remove("bad"), a.textContent = r;
+				I.setParams(e.id, t.entry, i), o.removeAttribute("aria-invalid"), a.classList.remove("bad"), a.textContent = r;
 			} catch (e) {
-				o.setAttribute("aria-invalid", "true"), a.classList.add("bad"), a.textContent = B("startup.params.notSaved", { error: e.message });
+				o.setAttribute("aria-invalid", "true"), a.classList.add("bad"), a.textContent = z("startup.params.notSaved", { error: e.message });
 			}
-		}), u("div", { class: "su-params" }, u("span", { class: "su-plabel" }, B("startup.params.json")), u("span"), o, a);
+		}), u("div", { class: "su-params" }, u("span", { class: "su-plabel" }, z("startup.params.json")), u("span"), o, a);
 	}
 	let a = { ...n }, o = (n, r) => {
 		let i = { ...a };
 		r === "" || r == null ? delete i[n] : i[n] = r;
 		try {
-			return L.setParams(e.id, t.entry, i), a = i, !0;
+			return I.setParams(e.id, t.entry, i), a = i, !0;
 		} catch (e) {
 			return T(e.message, { timeout: 6e3 }), !1;
 		}
@@ -513,7 +513,7 @@ function Se(e, t, n, { openWindow: r }) {
 			"aria-label": s
 		}), c.value = n ?? "", c.addEventListener("change", () => {
 			o(e, c.value === "" ? null : Number(c.value)) || (c.value = a[e] ?? "");
-		})) : t.type === "file" || t.type === "folder" ? c = Ce(t, n, s, (t) => o(e, t), r) : (c = w({
+		})) : t.type === "file" || t.type === "folder" ? c = we(t, n, s, (t) => o(e, t), r) : (c = w({
 			value: n ?? "",
 			label: s,
 			onChange: (t) => {
@@ -527,21 +527,21 @@ function Se(e, t, n, { openWindow: r }) {
 	});
 	return u("div", { class: "su-params" }, s);
 }
-function Ce(e, t, n, r, i) {
+function we(e, t, n, r, i) {
 	let o = e.type === "folder", s = u("input", {
 		class: "ctl-text",
 		type: "text",
 		readonly: !0,
-		placeholder: B(o ? "startup.path.noFolder" : "startup.path.noFile"),
+		placeholder: z(o ? "startup.path.noFolder" : "startup.path.noFile"),
 		"aria-label": n
 	}), c = (e) => {
-		s.value = e ? l.exists(e) ? l.path(e) : B("startup.path.gone") : "";
+		s.value = e ? l.exists(e) ? l.path(e) : z("startup.path.gone") : "";
 	};
 	c(t);
 	let f = a({
-		label: B("common.choose"),
+		label: z("common.choose"),
 		onClick: async () => {
-			let t = await F(i, {
+			let t = await P(i, {
 				kind: o ? "folder" : "file",
 				title: e.label
 			});
@@ -550,26 +550,26 @@ function Ce(e, t, n, r, i) {
 	}), p = u("button", {
 		class: "ctl-btn su-clear",
 		type: "button",
-		title: B("common.remove"),
-		"aria-label": B("startup.path.clear", { name: e.label })
+		title: z("common.remove"),
+		"aria-label": z("startup.path.clear", { name: e.label })
 	}, d("x"));
 	return p.addEventListener("click", () => {
 		r(null) && c(null);
 	}), u("div", { class: "su-path" }, s, f, p);
 }
-function we(e, { rerender: t }) {
+function Te(e, { rerender: t }) {
 	let n = a({
-		label: B("common.addMore"),
+		label: z("common.addMore"),
 		onClick: () => {
-			let r = N.filter((t) => t.load && !e.some((e) => e.app === t.id) && L.windowEntries(t.id).length).sort((e, t) => e.name.localeCompare(t.name));
-			if (!r.length) return T(B("startup.apps.allAdded"));
+			let r = N.filter((t) => t.load && !e.some((e) => e.app === t.id) && I.windowEntries(t.id).length).sort((e, t) => e.name.localeCompare(t.name));
+			if (!r.length) return T(z("startup.apps.allAdded"));
 			let i = n.getBoundingClientRect();
 			m(i.left, i.bottom + 4, r.map((e) => ({
 				label: e.name,
 				icon: e.glyph,
 				action: () => {
 					try {
-						L.addApp(e.id);
+						I.addApp(e.id);
 					} catch (e) {
 						T(e.message);
 					}
@@ -578,20 +578,20 @@ function we(e, { rerender: t }) {
 			})));
 		}
 	});
-	return u("div", { class: "st-row su-add" }, u("span", { class: "su-plus" }, d("plus")), u("div", { class: "st-label" }, u("b", {}, B("startup.apps.add")), u("small", {}, B("startup.apps.addDescription"))), n);
+	return u("div", { class: "st-row su-add" }, u("span", { class: "su-plus" }, d("plus")), u("div", { class: "st-label" }, u("b", {}, z("startup.apps.add")), u("small", {}, z("startup.apps.addDescription"))), n);
 }
 // src/settings/pipes.js
-var G = ["before", "after"], Te = (e) => {
-	let t = `pipes.event.${e.name}`, n = B(t);
+var W = ["before", "after"], Ee = (e) => {
+	let t = `pipes.event.${e.name}`, n = z(t);
 	return n === t ? e.label : n;
 };
-function Ee(e) {
-	if (!e) return B("pipes.where.all");
-	if (typeof e == "string") return B("pipes.where.system");
+function De(e) {
+	if (!e) return z("pipes.where.all");
+	if (typeof e == "string") return z("pipes.where.system");
 	let t = [];
-	return e.meta === "own" && t.push(B("pipes.where.own")), e.ext && t.push(B("pipes.where.ext", { list: e.ext.map((e) => `.${e}`).join(" ") })), e.type && t.push(B(`pipes.where.type.${e.type}`)), e.app && t.push(B("pipes.where.app", { list: e.app.join(", ") })), t.join(" · ");
+	return e.meta === "own" && t.push(z("pipes.where.own")), e.ext && t.push(z("pipes.where.ext", { list: e.ext.map((e) => `.${e}`).join(" ") })), e.type && t.push(z(`pipes.where.type.${e.type}`)), e.app && t.push(z("pipes.where.app", { list: e.app.join(", ") })), t.join(" · ");
 }
-function De(e, t, n, r) {
+function Oe(e, t, n, r) {
 	let i = e.chain(t.name, n);
 	if (!i.length) return [];
 	let o = n === "after" ? [...i].reverse() : i, s = (a, o) => {
@@ -599,83 +599,83 @@ function De(e, t, n, r) {
 		[s[c], s[l]] = [s[l], s[c]], e.setOrder(t.name, n, s), r();
 	};
 	return o.map((e, t) => {
-		let r = e.position, i = (e) => !!e?.app && e.position === r, c = !!e.app && i(o[t - 1]), l = !!e.app && i(o[t + 1]), d = e.app ? e.entry && e.entry !== "main" ? `${e.name} · ${e.entry}` : e.name : B("pipes.lilos"), f = a({
-			label: B("pipes.up"),
+		let r = e.position, i = (e) => !!e?.app && e.position === r, c = !!e.app && i(o[t - 1]), l = !!e.app && i(o[t + 1]), d = e.app ? e.entry && e.entry !== "main" ? `${e.name} · ${e.entry}` : e.name : z("pipes.lilos"), f = a({
+			label: z("pipes.up"),
 			onClick: () => s(t, -1)
 		}), p = a({
-			label: B("pipes.down"),
+			label: z("pipes.down"),
 			onClick: () => s(t, 1)
 		});
 		return f.disabled = !c, p.disabled = !l, {
 			label: `${t + 1}. ${d}`,
-			description: `${B(`pipes.stage.${n}`)} · ${B(`pipes.band.${r}`)} · ${Ee(e.where)}`,
-			keywords: B("pipes.keywords"),
+			description: `${z(`pipes.stage.${n}`)} · ${z(`pipes.band.${r}`)} · ${De(e.where)}`,
+			keywords: z("pipes.keywords"),
 			control: c || l ? u("span", { class: "pipes-move" }, f, p) : null
 		};
 	});
 }
-function Oe({ rerender: t }) {
+function ke({ rerender: t }) {
 	let n = e.pipes;
 	if (!n) return [{
-		title: B("pipes.title"),
-		rows: [{ label: B("pipes.unsupported") }]
+		title: z("pipes.title"),
+		rows: [{ label: z("pipes.unsupported") }]
 	}];
-	let r = n.catalog(), i = r.filter((e) => G.some((t) => n.chain(e.name, t).length)), o = [{
-		title: B("pipes.title"),
+	let r = n.catalog(), i = r.filter((e) => W.some((t) => n.chain(e.name, t).length)), o = [{
+		title: z("pipes.title"),
 		rows: [{
-			label: B("pipes.intro.label"),
-			description: B("pipes.intro.description", { count: r.length }),
-			keywords: B("pipes.keywords")
+			label: z("pipes.intro.label"),
+			description: z("pipes.intro.description", { count: r.length }),
+			keywords: z("pipes.keywords")
 		}]
 	}];
 	for (let e of i) {
-		let r = G.flatMap((r) => De(n, e, r, t));
-		G.some((t) => n.isCustomOrder(e.name, t)) && r.push({
-			label: B("pipes.reset.label"),
-			description: B("pipes.reset.description"),
+		let r = W.flatMap((r) => Oe(n, e, r, t));
+		W.some((t) => n.isCustomOrder(e.name, t)) && r.push({
+			label: z("pipes.reset.label"),
+			description: z("pipes.reset.description"),
 			control: a({
-				label: B("common.reset"),
+				label: z("common.reset"),
 				onClick: () => {
-					G.forEach((t) => n.setOrder(e.name, t, null)), t();
+					W.forEach((t) => n.setOrder(e.name, t, null)), t();
 				}
 			})
 		}), o.push({
-			title: `${Te(e)} · ${e.name}`,
+			title: `${Ee(e)} · ${e.name}`,
 			rows: r
 		});
 	}
 	let s = r.filter((e) => !i.includes(e));
 	return o.push({
-		title: B("pipes.idle.title"),
+		title: z("pipes.idle.title"),
 		rows: s.length ? [{
-			label: s.map(Te).join(", "),
-			description: B("pipes.idle.description", { count: s.length })
-		}] : [{ label: B("pipes.idle.none") }]
+			label: s.map(Ee).join(", "),
+			description: z("pipes.idle.description", { count: s.length })
+		}] : [{ label: z("pipes.idle.none") }]
 	}), o;
 }
-var ke = (t) => e.pipes?.on("change", t) ?? null, K = null;
-function Ae(e) {
-	let t = R(), n = t?.list().find((t) => t.id === e);
+var Ae = (t) => e.pipes?.on("change", t) ?? null, G = null;
+function je(e) {
+	let t = L(), n = t?.list().find((t) => t.id === e);
 	return n ? [
 		{
-			title: B("workspaces.current.title"),
+			title: z("workspaces.current.title"),
 			rows: [
 				{
-					label: B("common.name"),
-					keywords: B("workspaces.name.keywords"),
+					label: z("common.name"),
+					keywords: z("workspaces.name.keywords"),
 					control: () => {
 						let e = w({
 							value: n.name,
-							label: B("workspaces.name.field"),
+							label: z("workspaces.name.field"),
 							onChange: (e) => t.rename(n.id, e)
 						});
 						return e.maxLength = j.MAX_NAME, e;
 					}
 				},
 				{
-					label: B("common.color"),
-					description: B("workspaces.color.description"),
-					keywords: B("workspaces.color.keywords"),
+					label: z("common.color"),
+					description: z("workspaces.color.description"),
+					keywords: z("workspaces.color.keywords"),
 					control: () => S({
 						value: n.color,
 						colors: O,
@@ -683,29 +683,29 @@ function Ae(e) {
 					})
 				},
 				{
-					label: B("workspaces.owned.label"),
-					description: B("workspaces.owned.description"),
+					label: z("workspaces.owned.label"),
+					description: z("workspaces.owned.description"),
 					control: String(t.ownedCount(n.id))
 				},
 				e !== t.currentId && {
-					label: B("workspaces.switch.label"),
-					keywords: B("workspaces.list.keywords"),
+					label: z("workspaces.switch.label"),
+					keywords: z("workspaces.list.keywords"),
 					control: () => a({
-						label: B("workspaces.list.switch"),
+						label: z("workspaces.list.switch"),
 						onClick: () => t.switchTo(e)
 					})
 				}
 			].filter(Boolean)
 		},
 		{
-			title: B("workspaces.apps.title"),
+			title: z("workspaces.apps.title"),
 			rows: N.map((r) => ({
 				label: r.name,
-				description: r.system ? B("workspaces.apps.system") : B("workspaces.apps.installed"),
-				keywords: B("workspaces.apps.keywords", { name: r.name }),
-				control: r.system ? B("workspaces.apps.alwaysVisible") : () => E({
+				description: r.system ? z("workspaces.apps.system") : z("workspaces.apps.installed"),
+				keywords: z("workspaces.apps.keywords", { name: r.name }),
+				control: r.system ? z("workspaces.apps.alwaysVisible") : () => E({
 					value: t.isInstalled(r.id, e),
-					label: e === t.currentId ? B("workspaces.apps.toggle", { name: r.name }) : B("workspaces.apps.toggleIn", {
+					label: e === t.currentId ? z("workspaces.apps.toggle", { name: r.name }) : z("workspaces.apps.toggleIn", {
 						name: r.name,
 						workspace: n.name
 					}),
@@ -713,59 +713,59 @@ function Ae(e) {
 				})
 			}))
 		},
-		...Le(e)
+		...Be(e)
 	] : [];
 }
-var je = {
+var Me = {
 	id: "current",
 	get label() {
-		return B("workspaces.current.label");
+		return z("workspaces.current.label");
 	},
-	sections: () => Ae(R()?.currentId)
-}, Me = {
+	sections: () => je(L()?.currentId)
+}, Ne = {
 	id: "all",
 	get label() {
-		return B("workspaces.all.label");
+		return z("workspaces.all.label");
 	},
-	sections: Pe
-}, q = /* @__PURE__ */ new Map();
-function Ne() {
-	let e = R();
+	sections: Fe
+}, K = /* @__PURE__ */ new Map();
+function Pe() {
+	let e = L();
 	return [
-		je,
-		...(e?.list() ?? []).filter((t) => t.id !== e.currentId).map((e) => (q.has(e.id) || q.set(e.id, {
+		Me,
+		...(e?.list() ?? []).filter((t) => t.id !== e.currentId).map((e) => (K.has(e.id) || K.set(e.id, {
 			id: `ws-${e.id}`,
 			get label() {
-				return R()?.describe(e.id)?.name ?? "";
+				return L()?.describe(e.id)?.name ?? "";
 			},
-			sections: () => Ae(e.id)
-		}), q.get(e.id))),
-		Me
+			sections: () => je(e.id)
+		}), K.get(e.id))),
+		Ne
 	];
 }
-function Pe() {
-	let e = R();
+function Fe() {
+	let e = L();
 	if (!e) return [];
 	let t = e.list();
 	return [
 		{
-			title: B("workspaces.label"),
+			title: z("workspaces.label"),
 			rows: [...t.map((n) => {
 				let r = n.id === e.currentId, i = N.filter((t) => e.isInstalled(t.id, n.id)).length;
 				return {
-					label: r ? B("workspaces.list.current", { name: n.name }) : n.name,
-					description: `${B("workspaces.list.owned", { n: e.ownedCount(n.id) })} · ${B("workspaces.list.apps", { n: i })}`,
-					keywords: B("workspaces.list.keywords"),
+					label: r ? z("workspaces.list.current", { name: n.name }) : n.name,
+					description: `${z("workspaces.list.owned", { n: e.ownedCount(n.id) })} · ${z("workspaces.list.apps", { n: i })}`,
+					keywords: z("workspaces.list.keywords"),
 					control: () => u("div", { class: "ws-settings-actions" }, r ? null : a({
-						label: B("workspaces.list.switch"),
+						label: z("workspaces.list.switch"),
 						onClick: () => e.switchTo(n.id)
-					}), t.length > 1 ? Q(B("common.delete"), B("common.deleteNow"), () => e.remove(n.id)) : null)
+					}), t.length > 1 ? Q(z("common.delete"), z("common.deleteNow"), () => e.remove(n.id)) : null)
 				};
 			}), {
-				label: B("workspaces.new.label"),
-				description: B("workspaces.new.description"),
+				label: z("workspaces.new.label"),
+				description: z("workspaces.new.description"),
 				control: a({
-					label: B("common.create"),
+					label: z("common.create"),
 					onClick: () => {
 						let t = e.create();
 						t && e.switchTo(t);
@@ -773,44 +773,44 @@ function Pe() {
 				})
 			}]
 		},
-		...Re(),
+		...Ve(),
 		{
-			title: B("workspaces.deleting.title"),
+			title: z("workspaces.deleting.title"),
 			rows: [{
-				label: B("workspaces.deleting.files.label"),
-				description: B("workspaces.deleting.files.description")
+				label: z("workspaces.deleting.files.label"),
+				description: z("workspaces.deleting.files.description")
 			}, {
-				label: B("workspaces.deleting.windows.label"),
-				description: B("workspaces.deleting.windows.description")
+				label: z("workspaces.deleting.windows.label"),
+				description: z("workspaces.deleting.windows.description")
 			}]
 		}
 	];
 }
-var J = [];
-function Fe() {
+var q = [];
+function Ie() {
 	let e = (e) => {
 		try {
 			let t = C.create({ name: e.value });
-			J.length && oe(J, t.id, !0), J = [];
+			q.length && se(q, t.id, !0), q = [];
 		} catch (t) {
 			T(t.message), e.focus();
 		}
-	}, t = J.filter((e) => l.exists(e)).length;
+	}, t = q.filter((e) => l.exists(e)).length;
 	return [{
-		title: B("tags.new.title"),
+		title: z("tags.new.title"),
 		rows: [{
-			label: B("common.name"),
-			description: t ? B("tags.new.pending", { n: t }) : B("tags.new.description"),
-			keywords: B("tags.new.keywords"),
+			label: z("common.name"),
+			description: t ? z("tags.new.pending", { n: t }) : z("tags.new.description"),
+			keywords: z("tags.new.keywords"),
 			control: () => {
 				let t = w({
-					placeholder: B("tags.new.placeholder"),
-					label: B("tags.new.field")
+					placeholder: z("tags.new.placeholder"),
+					label: z("tags.new.field")
 				});
 				return t.maxLength = 30, t.classList.add("tag-new-name"), t.addEventListener("keydown", (n) => {
 					n.key === "Enter" && (n.preventDefault(), e(t));
 				}), u("div", { class: "tag-settings-actions" }, t, a({
-					label: B("common.create"),
+					label: z("common.create"),
 					primary: !0,
 					onClick: () => e(t)
 				}));
@@ -820,12 +820,12 @@ function Fe() {
 		title: e.name,
 		rows: [
 			{
-				label: B("common.name"),
-				keywords: B("tags.name.keywords"),
+				label: z("common.name"),
+				keywords: z("tags.name.keywords"),
 				control: () => {
 					let t = w({
 						value: e.name,
-						label: B("tags.name.field", { name: e.name }),
+						label: z("tags.name.field", { name: e.name }),
 						onChange: (n) => {
 							try {
 								C.rename(e.id, n);
@@ -838,8 +838,8 @@ function Fe() {
 				}
 			},
 			{
-				label: B("common.color"),
-				keywords: B("tags.color.keywords"),
+				label: z("common.color"),
+				keywords: z("tags.color.keywords"),
 				control: () => S({
 					value: e.color,
 					colors: r,
@@ -847,98 +847,113 @@ function Fe() {
 				})
 			},
 			{
-				label: B("tags.visible.label"),
-				description: e.visible ? B("tags.visible.on") : B("tags.visible.off"),
-				keywords: B("tags.visible.keywords"),
+				label: z("tags.visible.label"),
+				description: e.visible ? z("tags.visible.on") : z("tags.visible.off"),
+				keywords: z("tags.visible.keywords"),
 				control: () => E({
 					value: e.visible,
-					label: B("tags.visible.toggle", { name: e.name }),
+					label: z("tags.visible.toggle", { name: e.name }),
 					onChange: (t) => C.setVisible(e.id, t)
 				})
 			},
 			{
-				label: B("common.items"),
-				description: B("tags.items.description", { n: l.tagged(e.id).length }),
+				label: z("common.items"),
+				description: z("tags.items.description", { n: l.tagged(e.id).length }),
 				control: () => u("div", { class: "tag-settings-actions" }, a({
-					label: B("tags.items.show"),
-					onClick: () => P("files", { tag: e.id })
-				}), Q(B("common.delete"), B("tags.items.delete"), () => C.remove(e.id)))
+					label: z("tags.items.show"),
+					onClick: () => ae("files", { tag: e.id })
+				}), Q(z("common.delete"), z("tags.items.delete"), () => C.remove(e.id)))
 			}
 		]
 	}))];
 }
-function Y(e, t) {
-	let n = D.DESK_FIXED_ITEMS ?? [];
+var Le = [
+	"home",
+	"documents",
+	"images",
+	"files",
+	"downloads",
+	"trash"
+];
+function Re(e) {
+	return Le.includes(e.key) ? {
+		...e,
+		name: z(`desk.fixed.item.${e.key}.name`),
+		description: z(`desk.fixed.item.${e.key}.description`)
+	} : e;
+}
+function J(e, t) {
+	let n = (D.DESK_FIXED_ITEMS ?? []).map(Re);
 	return n.length ? [{
-		title: B("desk.fixed.title"),
+		title: z("desk.fixed.title"),
 		rows: [{
-			label: B("desk.fixed.label"),
+			label: z("desk.fixed.label"),
 			description: e
 		}, ...n.map((e) => ({
 			label: e.name,
 			description: e.description,
-			keywords: B("desk.fixed.keywords", { name: e.name }),
+			keywords: z("desk.fixed.keywords", { name: e.name }),
 			...t(e)
 		}))]
 	}] : [];
 }
-var Ie = () => typeof D.setFixedShownEverywhere == "function";
-function Le(e) {
-	if (!Ie()) return [];
-	let t = R(), n = (n) => e === t?.currentId ? B("desk.fixed.toggle", { name: n }) : B("desk.fixed.toggleIn", {
+var ze = () => typeof D.setFixedShownEverywhere == "function";
+function Be(e) {
+	if (!ze()) return [];
+	let t = L(), n = (n) => e === t?.currentId ? z("desk.fixed.toggle", { name: n }) : z("desk.fixed.toggleIn", {
 		name: n,
 		workspace: t?.describe(e)?.name ?? ""
 	});
-	return Y(B("desk.fixed.descriptionWorkspace"), (t) => ({ control: () => E({
+	return J(z("desk.fixed.descriptionWorkspace"), (t) => ({ control: () => E({
 		value: D.isFixedShown(t.key, e),
 		label: n(t.name),
 		onChange: (n) => D.setFixedShown(t.key, n, e)
 	}) }));
 }
-function Re() {
-	let e = R();
-	if (Ie() && e) {
+function Ve() {
+	let e = L();
+	if (ze() && e) {
 		let t = e.list();
-		return Y(B("desk.fixed.descriptionAll"), (e) => {
+		return J(z("desk.fixed.descriptionAll"), (e) => {
 			let n = t.filter((t) => D.isFixedShown(e.key, t.id)).length;
 			return {
-				description: n && n < t.length ? B("desk.fixed.some", {
+				description: n && n < t.length ? z("desk.fixed.some", {
 					on: n,
 					n: t.length
 				}) : e.description,
 				control: () => E({
 					value: n === t.length,
-					label: B("desk.fixed.toggleAll", { name: e.name }),
+					label: z("desk.fixed.toggleAll", { name: e.name }),
 					onChange: (t) => D.setFixedShownEverywhere(e.key, t)
 				})
 			};
 		});
 	}
 	let t = typeof D.setFixedShown == "function";
-	return Y(B(t ? "desk.fixed.descriptionSwitchable" : "desk.fixed.description"), (e) => ({ control: t ? () => E({
+	return J(z(t ? "desk.fixed.descriptionSwitchable" : "desk.fixed.description"), (e) => ({ control: t ? () => E({
 		value: D.isFixedShown(e.key),
-		label: B("desk.fixed.toggle", { name: e.name }),
+		label: z("desk.fixed.toggle", { name: e.name }),
 		onChange: (t) => D.setFixedShown(e.key, t)
-	}) : B("desk.fixed.always") }));
+	}) : z("desk.fixed.always") }));
 }
-function ze() {
+function He() {
 	return (D.DESK_FIXED_ITEMS ?? []).length ? [{
-		title: B("desk.fixed.title"),
+		title: z("desk.fixed.title"),
 		rows: [{
-			label: B("desk.fixed.moved.label"),
-			description: B("desk.fixed.moved.description"),
-			keywords: B("desk.fixed.moved.keywords"),
+			label: z("desk.fixed.moved.label"),
+			description: z("desk.fixed.moved.description"),
+			keywords: z("desk.fixed.moved.keywords"),
 			control: () => a({
-				label: B("desk.fixed.moved.open"),
-				onClick: () => K?.select("workspaces", "current")
+				label: z("desk.fixed.moved.open"),
+				onClick: () => G?.select("workspaces", "current")
 			})
 		}]
 	}] : [];
 }
-var X = (e) => () => E({
+var Y = (e) => () => E({
 	value: v.get(e),
 	onChange: (t) => v.set(e, t)
-}), Be = {
+}), Ue = {
 	groups: [
 		"header",
 		"actions",
@@ -962,16 +977,16 @@ var X = (e) => () => E({
 		"about"
 	]
 };
-function Ve() {
-	let e = D.USER_PAGE_ITEMS ?? [], t = (e) => Be.groups.includes(e.key) ? B(`userPage.group.${e.key}`) : e.name, n = (e) => Be.items.includes(e.key) ? {
-		name: B(`userPage.item.${e.key}.name`),
-		description: B(`userPage.item.${e.key}.description`)
+function We() {
+	let e = D.USER_PAGE_ITEMS ?? [], t = (e) => Ue.groups.includes(e.key) ? z(`userPage.group.${e.key}`) : e.name, n = (e) => Ue.items.includes(e.key) ? {
+		name: z(`userPage.item.${e.key}.name`),
+		description: z(`userPage.item.${e.key}.description`)
 	} : e;
 	return [{
-		title: B("userPage.title"),
+		title: z("userPage.title"),
 		rows: [{
-			label: B("userPage.open.label"),
-			description: B("userPage.open.description")
+			label: z("userPage.open.label"),
+			description: z("userPage.open.description")
 		}]
 	}, ...(D.USER_PAGE_GROUPS ?? []).map((r) => ({
 		title: t(r),
@@ -980,41 +995,41 @@ function Ve() {
 			return {
 				label: t,
 				description: r,
-				keywords: B("userPage.keywords", { name: t }),
+				keywords: z("userPage.keywords", { name: t }),
 				control: () => E({
 					value: D.isUserPageShown(e.key),
-					label: B("userPage.toggle", { name: t }),
+					label: z("userPage.toggle", { name: t }),
 					onChange: (t) => D.setUserPageShown(e.key, t)
 				})
 			};
 		})
 	})).filter((e) => e.rows.length)];
 }
-var Z = [
+var X = [
 	"Generale",
 	"Scrivania",
 	"Elementi",
 	"Finestre"
 ];
-function He() {
+function Ge() {
 	let e = new Set(ie()), t = /* @__PURE__ */ new Set(), n = (e) => {
 		t.add(e);
 		let n = te(e);
 		return {
-			label: e ? `.${e}` : B("fileTypes.noExtension"),
-			description: n ? B("fileTypes.default", { app: n.name }) : B("fileTypes.noDefault"),
-			keywords: B("fileTypes.keywords", { ext: e }),
+			label: e ? `.${e}` : z("fileTypes.noExtension"),
+			description: n ? z("fileTypes.default", { app: n.name }) : z("fileTypes.noDefault"),
+			keywords: z("fileTypes.keywords", { ext: e }),
 			control: () => g({
 				value: M(e)?.id ?? "ask",
-				label: e ? B("fileTypes.field", { ext: e }) : B("fileTypes.fieldNoExtension"),
+				label: e ? z("fileTypes.field", { ext: e }) : z("fileTypes.fieldNoExtension"),
 				options: [{
 					value: "ask",
-					label: B("fileTypes.ask")
+					label: z("fileTypes.ask")
 				}, ...re().map((e) => ({
 					value: e.id,
 					label: e.name
 				}))],
-				onChange: (t) => ae(e, t)
+				onChange: (t) => oe(e, t)
 			})
 		};
 	}, r = c().map((t) => ({
@@ -1023,109 +1038,109 @@ function He() {
 	})).filter((e) => e.rows.length), i = [...e].filter((e) => !t.has(e)).sort((e, t) => e === "" ? -1 : t === "" ? 1 : e.localeCompare(t));
 	return [
 		{
-			title: B("fileTypes.title"),
+			title: z("fileTypes.title"),
 			rows: [{
-				label: B("fileTypes.all.label"),
-				description: B("fileTypes.all.description"),
-				control: Q(B("fileTypes.all.reset"), B("common.confirm"), () => {
-					I(), K?.render();
+				label: z("fileTypes.all.label"),
+				description: z("fileTypes.all.description"),
+				control: Q(z("fileTypes.all.reset"), z("common.confirm"), () => {
+					F(), G?.render();
 				})
 			}]
 		},
 		...r,
 		...i.length ? [{
-			title: B("fileTypes.others"),
+			title: z("fileTypes.others"),
 			rows: i.map(n)
 		}] : []
 	];
 }
-function Ue() {
+function Ke() {
 	let e = l.trashed(), t = e.reduce((e, t) => e + t.bytes, 0);
 	return [{
-		title: B("trash.deleting.title"),
+		title: z("trash.deleting.title"),
 		rows: [{
-			label: B("trash.confirm.label"),
-			description: B("trash.confirm.description"),
-			keywords: B("trash.confirm.keywords"),
-			control: X("deleteConfirm")
+			label: z("trash.confirm.label"),
+			description: z("trash.confirm.description"),
+			keywords: z("trash.confirm.keywords"),
+			control: Y("deleteConfirm")
 		}, {
-			label: B("trash.permanent.label"),
-			description: B("trash.permanent.description"),
-			keywords: B("trash.permanent.keywords"),
-			control: X("deletePermanent")
+			label: z("trash.permanent.label"),
+			description: z("trash.permanent.description"),
+			keywords: z("trash.permanent.keywords"),
+			control: Y("deletePermanent")
 		}]
 	}, {
-		title: B("trash.label"),
+		title: z("trash.label"),
 		rows: [
 			{
-				label: B("trash.retention.label"),
-				description: B("trash.retention.description"),
-				keywords: B("trash.retention.keywords"),
+				label: z("trash.retention.label"),
+				description: z("trash.retention.description"),
+				keywords: z("trash.retention.keywords"),
 				control: () => {
 					let e = v.get("trashRetention"), t = A.some((t) => t.value === e) ? A : [...A, {
 						value: e,
-						label: e > 0 ? B("trash.retention.days", { n: e }) : B("trash.retention.forever")
+						label: e > 0 ? z("trash.retention.days", { n: e }) : z("trash.retention.forever")
 					}];
 					return g({
 						value: e,
-						label: B("trash.retention.field"),
+						label: z("trash.retention.field"),
 						options: t,
 						onChange: (e) => v.set("trashRetention", Number(e))
 					});
 				}
 			},
 			{
-				label: B("trash.contents.label"),
-				description: e.length ? B("trash.contents.description", {
+				label: z("trash.contents.label"),
+				description: e.length ? z("trash.contents.description", {
 					n: e.length,
 					size: $(t)
-				}) : B("trash.contents.empty"),
-				keywords: B("trash.contents.keywords"),
+				}) : z("trash.contents.empty"),
+				keywords: z("trash.contents.keywords"),
 				control: a({
-					label: B("trash.contents.open"),
-					onClick: () => P("files", { trash: !0 })
+					label: z("trash.contents.open"),
+					onClick: () => ae("files", { trash: !0 })
 				})
 			},
 			{
-				label: B("trash.empty.label"),
-				description: B("trash.empty.description"),
-				keywords: B("trash.empty.keywords"),
-				control: e.length ? Q(B("trash.empty.button"), B("trash.empty.confirm"), () => l.purgeTrash()) : B("trash.empty.none")
+				label: z("trash.empty.label"),
+				description: z("trash.empty.description"),
+				keywords: z("trash.empty.keywords"),
+				control: e.length ? Q(z("trash.empty.button"), z("trash.empty.confirm"), () => l.purgeTrash()) : z("trash.empty.none")
 			}
 		]
 	}];
 }
-function We(e = l.root) {
-	return l.children(e).reduce((e, t) => e + (t.type === "folder" ? We(t.id) : t.size ?? 0), 0);
+function Z(e = l.root) {
+	return l.children(e).reduce((e, t) => e + (t.type === "folder" ? Z(t.id) : t.size ?? 0), 0);
 }
-function Ge() {
+function qe() {
 	let e = /* @__PURE__ */ new Map();
 	for (let t of b.list()) e.has(t.group) || e.set(t.group, []), e.get(t.group).push(t);
-	let t = (e) => Z.includes(e) ? Z.indexOf(e) : Z.length;
+	let t = (e) => X.includes(e) ? X.indexOf(e) : X.length;
 	return [
 		{
-			title: B("shortcuts.title"),
+			title: z("shortcuts.title"),
 			rows: [{
-				label: B("shortcuts.all.label"),
-				description: B("shortcuts.all.description"),
-				control: Q(B("shortcuts.all.reset"), B("common.confirm"), () => b.resetAll())
+				label: z("shortcuts.all.label"),
+				description: z("shortcuts.all.description"),
+				control: Q(z("shortcuts.all.reset"), z("common.confirm"), () => b.resetAll())
 			}]
 		},
 		...[...e].sort(([e], [n]) => t(e) - t(n)).map(([e, t]) => ({
 			title: e,
 			rows: t.map((e) => ({
 				label: e.label,
-				keywords: B("shortcuts.keywords", { keys: e.keys.map((e) => b.format(e)).join(" ") }),
+				keywords: z("shortcuts.keywords", { keys: e.keys.map((e) => b.format(e)).join(" ") }),
 				control: y(e.id)
 			}))
 		})),
 		{
-			title: B("shortcuts.mouse.title"),
+			title: z("shortcuts.mouse.title"),
 			rows: [
 				{
-					label: B("shortcuts.lasso.label"),
-					description: B("shortcuts.lasso.description"),
-					keywords: B("shortcuts.lasso.keywords"),
+					label: z("shortcuts.lasso.label"),
+					description: z("shortcuts.lasso.description"),
+					keywords: z("shortcuts.lasso.keywords"),
 					control: () => g({
 						value: v.get("lasso"),
 						options: k,
@@ -1133,75 +1148,75 @@ function Ge() {
 					})
 				},
 				{
-					label: B("shortcuts.rectangle.label"),
-					control: B("shortcuts.rectangle.control")
+					label: z("shortcuts.rectangle.label"),
+					control: z("shortcuts.rectangle.control")
 				},
 				{
-					label: B("shortcuts.addToSelection.label"),
-					control: B("shortcuts.addToSelection.control")
+					label: z("shortcuts.addToSelection.label"),
+					control: z("shortcuts.addToSelection.control")
 				},
 				{
-					label: B("shortcuts.pan.label"),
-					control: B("shortcuts.pan.control")
+					label: z("shortcuts.pan.label"),
+					control: z("shortcuts.pan.control")
 				}
 			]
 		},
 		{
-			title: B("shortcuts.fixed.title"),
+			title: z("shortcuts.fixed.title"),
 			rows: [{
-				label: B("shortcuts.navigate.label"),
-				control: B("shortcuts.navigate.control")
+				label: z("shortcuts.navigate.label"),
+				control: z("shortcuts.navigate.control")
 			}, {
-				label: B("shortcuts.rename.label"),
-				control: B("shortcuts.rename.control")
+				label: z("shortcuts.rename.label"),
+				control: z("shortcuts.rename.control")
 			}]
 		}
 	];
 }
-var Ke = () => ({
-	isolated: B("apps.mode.isolated"),
-	open: B("apps.mode.open"),
-	system: B("apps.mode.system"),
-	remote: B("apps.mode.remote")
+var Je = () => ({
+	isolated: z("apps.mode.isolated"),
+	open: z("apps.mode.open"),
+	system: z("apps.mode.system"),
+	remote: z("apps.mode.remote")
 });
-function qe() {
+function Ye() {
 	let e = ee(), { isolated: t } = s.security(), n = N.filter((e) => e.package && !e.package.system);
 	return [{
-		title: B("apps.execution.title"),
+		title: z("apps.execution.title"),
 		rows: [{
-			label: B("apps.isolated.label"),
-			description: B(e ? "apps.isolated.description" : "apps.isolated.adminOnly"),
-			keywords: B("apps.isolated.keywords"),
+			label: z("apps.isolated.label"),
+			description: z(e ? "apps.isolated.description" : "apps.isolated.adminOnly"),
+			keywords: z("apps.isolated.keywords"),
 			control: e ? E({
 				value: t,
-				label: B("apps.isolated.label"),
+				label: z("apps.isolated.label"),
 				onChange: async (e) => {
 					try {
 						await s.setSecurity({ isolated: e });
 					} catch (e) {
-						T(B("apps.isolated.failed", { error: e.message }));
+						T(z("apps.isolated.failed", { error: e.message }));
 					}
-					K?.render();
+					G?.render();
 				}
-			}) : B(t ? "common.yes" : "common.no")
+			}) : z(t ? "common.yes" : "common.no")
 		}, {
-			label: B("apps.system.label"),
-			description: B("apps.system.description")
+			label: z("apps.system.label"),
+			description: z("apps.system.description")
 		}]
 	}, {
-		title: B("apps.installed.title"),
+		title: z("apps.installed.title"),
 		rows: n.length ? n.map((e) => {
-			let t = ne(e.package), n = t.fixed ? t.reason : t.own === null ? B("apps.installed.shared") : B("apps.installed.own");
+			let t = ne(e.package), n = t.fixed ? t.reason : t.own === null ? z("apps.installed.shared") : z("apps.installed.own");
 			return {
 				label: e.name,
-				description: `${Ke()[t.mode]} · ${n}`,
-				keywords: B("apps.installed.keywords"),
+				description: `${Je()[t.mode]} · ${n}`,
+				keywords: z("apps.installed.keywords"),
 				control: a({
-					label: B("apps.installed.properties"),
-					onClick: () => se(e.id)
+					label: z("apps.installed.properties"),
+					onClick: () => ce(e.id)
 				})
 			};
-		}) : [{ label: B("apps.installed.none") }]
+		}) : [{ label: z("apps.installed.none") }]
 	}];
 }
 function Q(e, t, n) {
@@ -1223,51 +1238,51 @@ function Q(e, t, n) {
 	};
 	return i;
 }
-function Je() {
+function Xe() {
 	return x.bytes();
 }
 function $(e) {
-	return e == null ? B("common.unavailable") : e < 1024 ? `${e} B` : `${(e / 1024).toLocaleString(_.locale, { maximumFractionDigits: 1 })} KB`;
+	return e == null ? z("common.unavailable") : e < 1024 ? `${e} B` : `${(e / 1024).toLocaleString(_.locale, { maximumFractionDigits: 1 })} KB`;
 }
-var Ye = [
+var Ze = [
 	[/Edg\/(\d+)/, "Edge"],
 	[/Firefox\/(\d+)/, "Firefox"],
 	[/Chrome\/(\d+)/, "Chrome"],
 	[/Version\/(\d+).*Safari/, "Safari"]
 ];
-function Xe() {
-	for (let [e, t] of Ye) {
+function Qe() {
+	for (let [e, t] of Ze) {
 		let n = navigator.userAgent.match(e);
 		if (n) return `${t} ${n[1]}`;
 	}
-	return B("about.unknownBrowser");
+	return z("about.unknownBrowser");
 }
-function Ze(e, t = e) {
+function $e(e, t = e) {
 	try {
 		return new Intl.DisplayNames([t], { type: "language" }).of(e) ?? e;
 	} catch {
 		return e;
 	}
 }
-function Qe() {
+function et() {
 	let t = v.get("language"), n = [...e.LANGUAGES ?? []];
 	t !== "auto" && !n.includes(t) && n.push(t);
 	let r = (e) => {
-		let t = Ze(e);
+		let t = $e(e);
 		return t.charAt(0).toUpperCase() + t.slice(1);
 	};
 	return [{
-		title: B("language.title"),
+		title: z("language.title"),
 		rows: [{
-			label: B("language.label"),
-			description: B("language.row.description"),
-			keywords: B("language.keywords"),
+			label: z("language.label"),
+			description: z("language.row.description"),
+			keywords: z("language.keywords"),
 			control: () => g({
 				value: t,
-				label: B("language.label"),
+				label: z("language.label"),
 				options: [{
 					value: "auto",
-					label: B("language.auto", { name: Ze(navigator.language || "en", z.lang) })
+					label: z("language.auto", { name: $e(navigator.language || "en", R.lang) })
 				}, ...n.map((e) => ({
 					value: e,
 					label: r(e)
@@ -1277,55 +1292,55 @@ function Qe() {
 		}]
 	}];
 }
-function $e({ openWindow: r, args: i } = {}) {
+function tt({ openWindow: r, args: i } = {}) {
 	let a = new n({
-		title: B("window.title"),
+		title: z("window.title"),
 		icon: "gear",
 		width: 760,
 		height: 500,
 		tabs: [
 			{ get group() {
-				return B("group.system");
+				return z("group.system");
 			} },
 			{
 				id: "appearance",
 				icon: "palette",
 				get label() {
-					return B("appearance.label");
+					return z("appearance.label");
 				},
 				get description() {
-					return B("appearance.description");
+					return z("appearance.description");
 				},
 				subtabs: [{
 					id: "colors",
 					get label() {
-						return B("appearance.colors.label");
+						return z("appearance.colors.label");
 					},
 					sections: () => [{
-						title: B("appearance.theme.label"),
+						title: z("appearance.theme.label"),
 						rows: [{
-							label: B("appearance.theme.label"),
-							description: B("appearance.theme.description"),
-							keywords: B("appearance.theme.keywords"),
+							label: z("appearance.theme.label"),
+							description: z("appearance.theme.description"),
+							keywords: z("appearance.theme.keywords"),
 							control: h({
 								value: v.get("theme"),
-								label: B("appearance.theme.label"),
+								label: z("appearance.theme.label"),
 								options: [{
 									value: "light",
-									label: B("appearance.theme.light")
+									label: z("appearance.theme.light")
 								}, {
 									value: "dark",
-									label: B("appearance.theme.dark")
+									label: z("appearance.theme.dark")
 								}],
 								onChange: (e) => v.set("theme", e)
 							})
 						}]
 					}, {
-						title: B("appearance.accent.title"),
+						title: z("appearance.accent.title"),
 						rows: [{
-							label: B("common.color"),
-							description: B("appearance.accent.description"),
-							keywords: B("appearance.accent.keywords"),
+							label: z("common.color"),
+							description: z("appearance.accent.description"),
+							keywords: z("appearance.accent.keywords"),
 							control: S({
 								value: v.get("accent"),
 								colors: O,
@@ -1336,15 +1351,15 @@ function $e({ openWindow: r, args: i } = {}) {
 				}, {
 					id: "motion",
 					get label() {
-						return B("appearance.motion.label");
+						return z("appearance.motion.label");
 					},
 					sections: () => [{
-						title: B("appearance.animations.label"),
+						title: z("appearance.animations.label"),
 						rows: [{
-							label: B("appearance.animations.label"),
-							description: B("appearance.animations.description"),
-							keywords: B("appearance.animations.keywords"),
-							control: X("motion")
+							label: z("appearance.animations.label"),
+							description: z("appearance.animations.description"),
+							keywords: z("appearance.animations.keywords"),
+							control: Y("motion")
 						}]
 					}]
 				}]
@@ -1353,47 +1368,47 @@ function $e({ openWindow: r, args: i } = {}) {
 				id: "language",
 				icon: "globe",
 				get label() {
-					return B("language.label");
+					return z("language.label");
 				},
 				get description() {
-					return B("language.description");
+					return z("language.description");
 				},
-				sections: Qe
+				sections: et
 			},
 			{
 				id: "desk",
 				icon: "grid",
 				get label() {
-					return B("desk.label");
+					return z("desk.label");
 				},
 				get description() {
-					return B("desk.description");
+					return z("desk.description");
 				},
 				subtabs: [{
 					id: "items",
 					get label() {
-						return B("common.items");
+						return z("common.items");
 					},
-					sections: () => [...ze(), {
-						title: B("desk.placement.title"),
+					sections: () => [...He(), {
+						title: z("desk.placement.title"),
 						rows: [{
-							label: B("desk.snap.label"),
-							description: B("desk.snap.description"),
-							keywords: B("desk.snap.keywords"),
-							control: X("snap")
+							label: z("desk.snap.label"),
+							description: z("desk.snap.description"),
+							keywords: z("desk.snap.keywords"),
+							control: Y("snap")
 						}]
 					}]
 				}, {
 					id: "overview",
 					get label() {
-						return B("desk.overview.label");
+						return z("desk.overview.label");
 					},
 					sections: () => [{
-						title: B("desk.overview.title"),
+						title: z("desk.overview.title"),
 						rows: [{
-							label: B("desk.minimap.label"),
-							keywords: B("desk.minimap.keywords"),
-							control: X("minimap")
+							label: z("desk.minimap.label"),
+							keywords: z("desk.minimap.keywords"),
+							control: Y("minimap")
 						}]
 					}]
 				}]
@@ -1402,78 +1417,78 @@ function $e({ openWindow: r, args: i } = {}) {
 				id: "userpage",
 				icon: "user",
 				get label() {
-					return B("userPage.label");
+					return z("userPage.label");
 				},
 				get description() {
-					return B("userPage.description");
+					return z("userPage.description");
 				},
-				sections: Ve
+				sections: We
 			},
 			{
 				id: "workspaces",
 				icon: "workspace",
 				get label() {
-					return B("workspaces.label");
+					return z("workspaces.label");
 				},
 				get description() {
-					return B("workspaces.description");
+					return z("workspaces.description");
 				},
 				get subtabs() {
-					return Ne();
+					return Pe();
 				}
 			},
 			{
 				id: "tags",
 				icon: "tag",
 				get label() {
-					return B("tags.label");
+					return z("tags.label");
 				},
 				get description() {
-					return B("tags.description");
+					return z("tags.description");
 				},
-				sections: Fe
+				sections: Ie
 			},
 			{
 				id: "usability",
 				icon: "accessibility",
 				get label() {
-					return B("usability.label");
+					return z("usability.label");
 				},
 				get description() {
-					return B("usability.description");
+					return z("usability.description");
 				},
 				subtabs: [
 					{
 						id: "shortcuts",
 						get label() {
-							return B("shortcuts.label");
+							return z("shortcuts.label");
 						},
-						sections: Ge
+						sections: qe
 					},
 					{
 						id: "filetypes",
 						get label() {
-							return B("fileTypes.label");
+							return z("fileTypes.label");
 						},
-						sections: He
+						sections: Ge
 					},
 					{
 						id: "contextmenu",
 						get label() {
-							return B("menu.label");
+							return z("menu.label");
 						},
-						sections: () => ue("desktop.background", {
+						sections: () => de("desktop.background", {
 							openWindow: r,
 							confirmButton: Q,
-							rerender: () => K?.render()
+							rerender: () => G?.render()
 						})
 					},
 					{
 						id: "trash",
 						get label() {
-							return B("trash.label");
+							return z("trash.label");
 						},
-						sections: Ue
+						sections: Ke
 					}
 				]
 			},
@@ -1481,93 +1496,93 @@ function $e({ openWindow: r, args: i } = {}) {
 				id: "apps",
 				icon: "window",
 				get label() {
-					return B("apps.label");
+					return z("apps.label");
 				},
 				get description() {
-					return B("apps.description");
+					return z("apps.description");
 				},
 				subtabs: [{
 					id: "security",
 					get label() {
-						return B("apps.security.label");
+						return z("apps.security.label");
 					},
-					sections: qe
+					sections: Ye
 				}, {
 					id: "pipes",
 					get label() {
-						return B("pipes.label");
+						return z("pipes.label");
 					},
-					sections: () => Oe({ rerender: () => K?.render() })
+					sections: () => ke({ rerender: () => G?.render() })
 				}]
 			},
 			{
 				id: "startup",
 				icon: "power",
 				get label() {
-					return B("startup.label");
+					return z("startup.label");
 				},
 				get description() {
-					return B("startup.description");
+					return z("startup.description");
 				},
 				subtabs: [
 					{
 						id: "options",
 						get label() {
-							return B("startup.options.label");
+							return z("startup.options.label");
 						},
-						sections: () => ye({ rerender: () => K?.render() })
+						sections: () => be({ rerender: () => G?.render() })
 					},
 					{
 						id: "services",
 						get label() {
-							return B("startup.services.label");
+							return z("startup.services.label");
 						},
-						sections: () => he({
+						sections: () => ge({
 							openWindow: r,
-							rerender: () => K?.render()
+							rerender: () => G?.render()
 						})
 					},
 					{
 						id: "apps",
 						get label() {
-							return B("startup.apps.label");
+							return z("startup.apps.label");
 						},
-						sections: () => be({
+						sections: () => xe({
 							openWindow: r,
-							rerender: () => K?.render()
+							rerender: () => G?.render()
 						})
 					}
 				]
 			},
 			{ get group() {
-				return B("group.data");
+				return z("group.data");
 			} },
 			{
 				id: "storage",
 				icon: "disk",
 				get label() {
-					return B("storage.label");
+					return z("storage.label");
 				},
 				get description() {
-					return f.connected ? B("storage.description.kernel") : B("storage.description.browser");
+					return f.connected ? z("storage.description.kernel") : z("storage.description.browser");
 				},
 				sections: () => [{
-					title: B("storage.space.title"),
+					title: z("storage.space.title"),
 					rows: [{
-						label: B("storage.used.label"),
-						description: B("storage.used.description"),
-						control: $(Je())
+						label: z("storage.used.label"),
+						description: z("storage.used.description"),
+						control: $(Xe())
 					}, {
-						label: B("storage.contents.label"),
-						description: B("storage.contents.description"),
-						control: $(We())
+						label: z("storage.contents.label"),
+						description: z("storage.contents.description"),
+						control: $(Z())
 					}]
 				}, {
-					title: B("storage.reset.title"),
+					title: z("storage.reset.title"),
 					rows: [{
-						label: B("storage.defaults.label"),
-						description: B("storage.defaults.description"),
-						control: Q(B("common.reset"), B("common.confirm"), () => {
+						label: z("storage.defaults.label"),
+						description: z("storage.defaults.description"),
+						control: Q(z("common.reset"), z("common.confirm"), () => {
 							[
 								"accent",
 								"theme",
@@ -1581,13 +1596,13 @@ function $e({ openWindow: r, args: i } = {}) {
 								"startupApps",
 								...e.locale ? ["language"] : [],
 								...D.USER_PAGE_ITEMS ? ["userPageHidden"] : []
-							].forEach((e) => v.reset(e)), b.resetAll(), I(), p.list().forEach((e) => p.reset(e.id));
+							].forEach((e) => v.reset(e)), b.resetAll(), F(), p.list().forEach((e) => p.reset(e.id));
 						})
 					}, {
-						label: B("storage.initial.label"),
-						description: B("storage.initial.description"),
-						keywords: B("storage.initial.keywords"),
-						control: Q(B("storage.initial.button"), B("storage.initial.confirm"), async () => {
+						label: z("storage.initial.label"),
+						description: z("storage.initial.description"),
+						keywords: z("storage.initial.keywords"),
+						control: Q(z("storage.initial.button"), z("storage.initial.confirm"), async () => {
 							await l.reset(), [
 								"workspaces",
 								"tags",
@@ -1608,52 +1623,52 @@ function $e({ openWindow: r, args: i } = {}) {
 				id: "about",
 				icon: "info",
 				get label() {
-					return B("about.label");
+					return z("about.label");
 				},
 				get description() {
-					return B("about.description");
+					return z("about.description");
 				},
 				sections: () => [{
 					title: "lilOS",
 					rows: [
 						{
-							label: B("about.version"),
-							control: ce
+							label: z("about.version"),
+							control: le
 						},
 						{
-							label: B("about.sdkVersion"),
+							label: z("about.sdkVersion"),
 							control: t
 						},
 						{
-							label: B("about.language"),
+							label: z("about.language"),
 							control: _.locale
 						},
 						{
-							label: B("about.browser"),
-							control: Xe()
+							label: z("about.browser"),
+							control: Qe()
 						}
 					]
 				}]
 			}
 		].filter(Boolean)
 	});
-	K = a.view;
+	G = a.view;
 	let o = (e) => {
-		Array.isArray(e?.tagFor) && (J = e.tagFor.filter((e) => typeof e == "string" && l.exists(e))), typeof e?.tab == "string" && a.view.select(e.tab, typeof e.subtab == "string" ? e.subtab : void 0), e?.tab === "tags" && a.view.panel.querySelector(".tag-new-name")?.focus();
+		Array.isArray(e?.tagFor) && (q = e.tagFor.filter((e) => typeof e == "string" && l.exists(e))), typeof e?.tab == "string" && a.view.select(e.tab, typeof e.subtab == "string" ? e.subtab : void 0), e?.tab === "tags" && a.view.panel.querySelector(".tag-new-name")?.focus();
 	};
 	o(i), a.on("launch", o);
-	let c = () => a.view.tab?.subtabs?.length && !a.view.subtab ? a.view.select(a.view.tab.id) : a.view.render(), u = [R()?.on("change", c), R()?.on("switch", c)], d = l.on("trash", () => a.view.render()), m = C.on("change", () => a.view.render()), g = [
+	let c = () => a.view.tab?.subtabs?.length && !a.view.subtab ? a.view.select(a.view.tab.id) : a.view.render(), u = [L()?.on("change", c), L()?.on("switch", c)], d = l.on("trash", () => a.view.render()), m = C.on("change", () => a.view.render()), g = [
 		s.on("change", () => a.view.render()),
 		s.on("security", () => a.view.render()),
-		de(() => a.view.render()),
-		ke(() => a.view.render())
-	], y = v.on("change:deskHidden", () => a.view.render()), w = () => a.setTitle(B("window.title"), a.view.tab?.label ?? "");
+		fe(() => a.view.render()),
+		Ae(() => a.view.render())
+	], y = v.on("change:deskHidden", () => a.view.render()), w = () => a.setTitle(z("window.title"), a.view.tab?.label ?? "");
 	a.view.on("select", w);
 	let T = e.locale?.on("change", () => {
 		a.view.render(), w();
 	});
 	return a.on("destroy", () => {
-		u.forEach((e) => e?.()), d(), m(), y(), T?.(), g.forEach((e) => e?.()), K === a.view && (K = null);
+		u.forEach((e) => e?.()), d(), m(), y(), T?.(), g.forEach((e) => e?.()), G === a.view && (G = null);
 	}), a;
 }
-export { $e as default };
+export { tt as default };
