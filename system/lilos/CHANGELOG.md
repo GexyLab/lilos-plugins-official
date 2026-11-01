@@ -1,5 +1,14 @@
 # Changelog di lilOS
 
+## 1.10.0 — 2026-11-01
+
+- Nuova cartella **Rete**: ogni server a cui ti colleghi (FTP, FTPS, SFTP, WebDAV, SMB) diventa una cartella in Home → Rete e si usa come le altre. Si aggiunge dal File Manager (sezione Rete → +, «Connetti a un server»): si sceglie il protocollo da un elenco e compaiono i campi che servono
+- Le password restano nel kernel, cifrate, e partono solo verso il server per cui sono state date, dopo averlo verificato: la prima volta lilOS mostra l'impronta della chiave o del certificato e chiede di confermarla; se cambia, lo dice chiaramente
+- Trascinare file tra la Home e una cartella di rete li copia: lo fa il kernel, anche a File Manager o pagina chiusi, e dopo un riavvio riprende da dove era. Se dura più di 5 secondi si apre **Trasferimento dati**: quanto è stato inviato e ricevuto, il file in corso, la coda di ogni destinazione; si annulla tutto, una destinazione, una cartella o un file. Alla fine arriva una notifica
+- Le cartelle SMB si aggiornano da sole quando qualcuno cambia i file sul server; le altre si rileggono quando le apri
+- Eliminare su un server è definitivo (niente Cestino) e lilOS chiede sempre conferma
+- I protocolli sono moduli del kernel da installare o aggiornare dall'AppStore: netfs-sftp, netfs-ftp, netfs-webdav, netfs-smb, e fs-postgres 1.1.0 (i file grandi a pezzi); la sezione Rete è nel File Manager 1.10.0
+
 ## 1.9.7 — 2026-11-01
 
 - Installando lilOS con `--from` (i dati di un'altra copia), i moduli del kernel che sono quelli ufficiali (stessa versione e stesso codice) diventano ufficiali: l'AppStore li mostra una sola volta, invece che due («Installato a mano» e «Da un altro repository»), e li aggiorna. I loro dati restano. Gli altri moduli restano installati a mano e l'installazione lo dice

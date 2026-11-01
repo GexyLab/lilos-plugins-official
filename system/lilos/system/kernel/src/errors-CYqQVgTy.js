@@ -1,1 +1,0 @@
-var e={invalid:400,unauthorized:401,invalid_credentials:401,forbidden:403,not_found:404,conflict:409,too_large:413,rate_limited:429,unavailable:503},t=class extends Error{constructor(t,n,{retryAfter:r}={}){super(n),this.code=e[t]?t:`invalid`,this.retryAfter=r}get status(){return e[this.code]}},n=(e,n,r)=>{throw new t(e,n,r)};export{n,t};
