@@ -7,6 +7,7 @@ import { Emitter, storage } from '@lilos/sdk';
  *   external: [{ lang, url }]                                      language servers over WebSocket
  *   schemas:  { fileId: { type: 'file', id } | { type: 'url', url } }   JSON schema per file
  *   grammars: [fileId]                                              TextMate grammars added by the user
+ *   tabs:     { reopen: boolean }                                   closing keeps the tabs and changes (EditorApp.js)
  *
  * Events: 'change' (section name)
  */
@@ -34,7 +35,8 @@ function sanitize(raw) {
     else if (s.type === 'url' && isSchemaUrl(s.url)) schemas[fileId] = { type: 'url', url: s.url };
   }
   const grammars = [...new Set((Array.isArray(v.grammars) ? v.grammars : []).filter(id => typeof id === 'string' && ID.test(id)))];
-  return { engines, builtin, external, schemas, grammars };
+  const tabs = { reopen: typeof v.tabs?.reopen === 'boolean' ? v.tabs.reopen : true };
+  return { engines, builtin, external, schemas, grammars, tabs };
 }
 
 class EditorConfig extends Emitter {

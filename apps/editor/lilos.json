@@ -1,9 +1,9 @@
 {
   "id": "editor",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "kind": "local",
   "name": "Editor",
-  "description": "Text and code editor with syntax highlighting, suggestions and checking of JSON, CSS and HTML.",
+  "description": "Text and code editor with tabs, syntax highlighting, suggestions and checking of JSON, CSS and HTML.",
   "category": "development",
   "icon": {
     "glyph": "code",
@@ -109,12 +109,40 @@
         "keys": [
           "Ctrl+Space"
         ]
+      },
+      {
+        "id": "editor.closeTab",
+        "label": "Close tab",
+        "keys": [
+          "Ctrl+Alt+W"
+        ]
+      },
+      {
+        "id": "editor.nextTab",
+        "label": "Next tab",
+        "keys": [
+          "Ctrl+Alt+PageDown"
+        ]
+      },
+      {
+        "id": "editor.previousTab",
+        "label": "Previous tab",
+        "keys": [
+          "Ctrl+Alt+PageUp"
+        ]
+      },
+      {
+        "id": "editor.reopenTab",
+        "label": "Reopen closed tab",
+        "keys": [
+          "Ctrl+Alt+T"
+        ]
       }
     ]
   },
   "entry": "dist/index.js",
   "styles": [
-    "dist/index-C5_d6Wid.css"
+    "dist/index-D0UqtePr.css"
   ],
   "locales": "locales.json",
   "files": {
@@ -127,8 +155,8 @@
     "dist/github-light-BNubH2n_.js": "sha256-jXyVGTRpCh8/Pl+L8HcUIb1rpKmw0LQMRjQ8ht59XI4=",
     "dist/html-B15Ssl5e.js": "sha256-PJMtOy7kJUfJFSHO8t7GbBYoT2yH+aK8FYcA23r21Rk=",
     "dist/html.worker-X9Fc__8d.js": "sha256-jFf7ptUItSrts9eQ7N//iO01MztcEqg6xqw6BMaDFJk=",
-    "dist/index-C5_d6Wid.css": "sha256-+UDiPFWyKaAfeyUJzxCNw66r3f40gHCWERaS+eOjRms=",
-    "dist/index.js": "sha256-SAkeDYRHit48jH42+P/F0Prd91HZaBUQ2kLBx+Qzizw=",
+    "dist/index-D0UqtePr.css": "sha256-aiPg9w5XMIhRRWW14UYhhRootYbBsB+X567JrjFL/xc=",
+    "dist/index.js": "sha256-wdUpIKdimZGleYU70Ak9A9WRj4B2oRAGSIGNjwx2D6Q=",
     "dist/javascript-BSjxD7Ei.js": "sha256-s8CfycJSC1caXhuX6szihKZYWf7x7I2GYsoIuFpm4IQ=",
     "dist/json-CWJmcBQn.js": "sha256-dVtXsP0tUNXlIISVsZ7QnwwXlVjM7mKTz5hRYVuq03M=",
     "dist/json.worker-B3saI9fz.js": "sha256-BGs4zSqxY8hdyWDK4v0jTG79BA3Qp8G00azIsfKM83g=",
@@ -158,6 +186,6 @@
     "dist/web-tree-sitter-DoPK4l5c.js": "sha256-7K+bnFwHSgKdzQhkdorj73593h2Z49ADsQn+h3d8/fY=",
     "dist/xml-D0f8rgW-.js": "sha256-cm+7flrmzmSI3f440/y68CAeYL14EsA77y9rz+kOPG8=",
     "dist/yaml-CcAIbj8h.js": "sha256-YJayirpdTRH4e3BlU6cu0ocMhodswcZ5fS6iV20/Xtc=",
-    "locales.json": "sha256-GydB+A/AdIvyCdxj8J3+YQsZWtz/a+nxRCPj6trRWnI="
+    "locales.json": "sha256-AEuaXPTvPMtRhejdL0UT7yZGHnBpf9bBMiFpS/YigjA="
   }
 }

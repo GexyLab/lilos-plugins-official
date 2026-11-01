@@ -1,9 +1,9 @@
 {
   "id": "editor",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "kind": "local",
   "name": "Editor",
-  "description": "Text and code editor with syntax highlighting, suggestions and checking of JSON, CSS and HTML.",
+  "description": "Text and code editor with tabs, syntax highlighting, suggestions and checking of JSON, CSS and HTML.",
   "category": "development",
   "icon": { "glyph": "code", "color": "#7c5cdb" },
   "publisher": { "id": "lilos", "name": "lilOS" },
@@ -23,7 +23,11 @@
       { "id": "editor.openFile", "label": "Open file", "keys": ["Ctrl+O"] },
       { "id": "editor.openFolder", "label": "Open folder", "keys": ["Ctrl+Alt+O"] },
       { "id": "editor.sidebar", "label": "Show or hide folder", "keys": ["Ctrl+B"] },
-      { "id": "editor.complete", "label": "Show suggestions", "keys": ["Ctrl+Space"] }
+      { "id": "editor.complete", "label": "Show suggestions", "keys": ["Ctrl+Space"] },
+      { "id": "editor.closeTab", "label": "Close tab", "keys": ["Ctrl+Alt+W"] },
+      { "id": "editor.nextTab", "label": "Next tab", "keys": ["Ctrl+Alt+PageDown"] },
+      { "id": "editor.previousTab", "label": "Previous tab", "keys": ["Ctrl+Alt+PageUp"] },
+      { "id": "editor.reopenTab", "label": "Reopen closed tab", "keys": ["Ctrl+Alt+T"] }
     ]
   }
 }

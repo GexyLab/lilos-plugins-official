@@ -9,7 +9,7 @@ import { t } from './i18n.js';
 const KEY = 'editor-settings';
 let current = null;
 
-/** Settings of the Editor (one window): highlighting engines, TextMate grammars, language servers, JSON schemas. */
+/** Settings of the Editor (one window): tabs, highlighting engines, TextMate grammars, language servers, JSON schemas. */
 export function openEditorSettings(openWindow) {
   if (current?.el.isConnected) return openWindow(current, KEY);
   let problems = [];
@@ -120,9 +120,18 @@ export function openEditorSettings(openWindow) {
     }];
   };
 
+  const general = () => [{
+    title: t('settings.tabs.title'),
+    rows: [{
+      label: t('settings.tabs.reopen'), description: t('settings.tabs.reopenDescription'), keywords: t('settings.tabs.keywords'),
+      control: toggle({ value: editorConfig.get('tabs').reopen, onChange: v => editorConfig.setEntry('tabs', 'reopen', v) }),
+    }],
+  }];
+
   const win = new SettingsWindow({
     title: t('settings.title'), icon: 'code', width: 720, height: 520,
     tabs: [
+      { id: 'general', label: t('settings.tab.general'), icon: 'gear', description: t('settings.tab.general.description'), sections: general },
       { id: 'highlight', label: t('settings.tab.highlight'), icon: 'palette', description: t('settings.tab.highlight.description'), sections: highlighting },
       { id: 'servers', label: t('settings.tab.servers'), icon: 'code', description: t('settings.tab.servers.description'), sections: servers },
       { id: 'schemas', label: t('settings.tab.schemas'), icon: 'file', description: t('settings.tab.schemas.description'), sections: schemas },

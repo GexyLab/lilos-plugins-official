@@ -1,4 +1,4 @@
-import { Window, h, icon, fs, uid, settings, selectField, actionButton, openMenu, history } from '@lilos/sdk';
+import { Window, h, icon, fs, uid, settings, selectField, actionButton, openMenu, history, shortcuts, toast, PipeStopped } from '@lilos/sdk';
 import { launch } from '@lilos/system';
 import { handleCommand } from '@lilos/system';
 import { pickFile } from '@lilos/system';
@@ -11,12 +11,16 @@ import { clientFor, fileUri, servers } from './lsp/manager.js';
 import { positionAt, offsetAt, fromServer } from './lsp/convert.js';
 import { openEditorSettings } from './EditorSettings.js';
 import { FileTree } from './FileTree.js';
+import { TabBar } from './TabBar.js';
+import { readSession, writeSession, removeSession, takeClosed, addClosed, readDraft, writeDraft, removeDraft, hash, CLOSED, DRAFT_LIMIT } from './sessions.js';
 import { t } from './i18n.js';
 import './editor.css';
 
 const INDENT = '  ';
 const HIGHLIGHT_LIMIT = 300_000;   // characters: above this the text is shown plain, to stay responsive
 const TEXTMATE_LIMIT = 100_000;    // TextMate re-tokenizes everything: above this the simple engine is used
+const DRAFT_DELAY = 1000;          // ms after the last change before the unsaved text is kept
+const CLOSED_TABS = 20;            // tabs that Ctrl+Alt+T can open again
 const untitled = () => t('document.untitledFile');
 /** Short badges for the kinds of suggestion (complete.js, lsp/convert.js). */
 const KIND_BADGES = { kw: 'kw', fn: 'ƒ', pr: 'pr', val: 'val', tag: '<>', attr: '=', abc: 'abc', ty: 'T', snip: '{}' };
@@ -29,15 +33,23 @@ const diagnosticText = (severity, message) => {
   if (severity === 4) return t('diagnostic.hint', { message });
   return t('diagnostic.error', { message });
 };
+/** The content of the file is an app's to read (FileCrypt): it is never kept outside the file. */
+const isSecret = id => Object.values(fs.get(id)?.apps ?? {}).some(v => v?.content === true);
 
 // TextMate grammars added by the user, read once (the settings reload them)
 const grammarsReady = loadCustomGrammars();
 
 /**
- * Text editor: one document per window, line numbers, syntax highlighting (Tree-sitter, TextMate or
- * simple), completion and diagnostics from language servers (LSP) or the built-in vocabularies,
- * JSON schemas. args.file opens a file, args.folder opens a folder in the panel on the right
- * (FileTree.js), where its content is managed; the last folder opened comes back in new windows.
+ * Text editor: one tab per open document (TabBar.js), line numbers, syntax highlighting
+ * (Tree-sitter, TextMate or simple), completion and diagnostics from language servers (LSP) or the
+ * built-in vocabularies, JSON schemas. args.file opens a file, args.folder opens a folder in the
+ * panel on the right (FileTree.js), where its content is managed; the last folder opened comes
+ * back in new windows.
+ *
+ * Closing the window does not ask to save: the tabs and their unsaved text are kept (sessions.js)
+ * and come back with the window (args.session, from getState) or, when the user closed it, in the
+ * next new window. Only what cannot be kept is asked about: files whose content is an app's
+ * (encrypted) and very long texts. Without the "reopen" setting the window asks for every change.
  */
 export default function createEditor({ args, openWindow } = {}) {
   const win = new Window({ title: t('document.untitled'), subtitle: 'Editor', icon: 'code', width: 780, height: 520, minWidth: 460, minHeight: 280 });
@@ -45,16 +57,17 @@ export default function createEditor({ args, openWindow } = {}) {
   // args.folder: null means "no folder" (a window restored as it was), missing means the last one
   const folder = args && 'folder' in args ? args.folder : FileTree.savedRoot();
   editor.tree.setRoot(folder && fs.get(folder)?.type === 'folder' ? folder : null);
-  if (args?.file && fs.exists(args.file)) editor.open(args.file);
-  else editor.newDocument();
-  // Launched again (e.g. another file opened from File): open it here, asking first if there are changes
+  editor.start(args);
+  // Launched again (e.g. another file opened from File): it opens here, in a tab
   win.on('launch', a => {
     if (a?.folder && fs.get(a.folder)?.type === 'folder') editor.tree.setRoot(a.folder);
     if (a?.file && fs.exists(a.file)) editor.open(a.file);
   });
-  win.canClose = () => editor.confirmDiscard();
-  // Saved by workareas: the open file and folder (unsaved text is asked about before closing)
-  win.getState = () => ({ file: editor.fileId, folder: editor.tree.root, ...(editor.tree.collapsed && { sidebar: false }) });
+  win.canClose = () => editor.canClose();
+  // A file locked again (FileCrypt): only its tab closes
+  win.closeFiles = ids => editor.closeFiles(ids);
+  // Saved by workareas and workspaces: the session (tabs), the files shown, the folder
+  win.getState = () => editor.windowState();
   if (args?.sidebar === false && editor.tree.root) editor.tree.setCollapsed(true);
   return win;
 }
@@ -79,16 +92,45 @@ const pointIn = (row, ch) => {
 
 const withTimeout = (promise, ms) => Promise.race([promise, new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), ms))]);
 
-class TextEditor {
+/** One open document, shown in a tab. Its own textarea keeps its own undo history. */
+class Doc {
   fileId = null;
-  name = untitled();
-  #saved = '';            // text as last saved (or loaded)
-  #lost = null;           // { id, saved } of the file while it is removed: it comes back if restored
-  #lang = 'text';
-  #langChosen = false;    // the user picked a language: keep it on rename
+  name = '';
+  saved = '';             // text as last saved (or loaded)
+  lost = null;            // { id, saved } of the file while it is removed: it comes back if restored
+  isNew = true;           // never had a file: shown as "Untitled"
+  number = 1;             // "Untitled 2"
+  lang = 'text';
+  langChosen = false;     // the user picked a language: keep it on rename
+  message = '';
+  untitled = uid();       // the document's URI for the language servers while it has no file
+  loaded = true;          // false: the file is not read yet (a tab brought back), or could not be
+  loading = null;
+  draft = null;           // { text, base } brought back, until the file is read
+  conflict = false;       // the file changed after the unsaved text was written
+  draftBase = null;       // while in conflict: what the draft was written on
+  secret = false;         // the content is an app's: never kept as a draft
+  fresh = false;          // opened just now: if the file cannot be read the tab goes
+  discarded = false;      // "Don't save" while the window was closing: no draft until the next change
+  draftTimer = 0;
+  sel = null;             // [start, end] to put back once the file is read
+  top = 0;
+  left = 0;
+
+  constructor(key, input) {
+    this.key = key;
+    this.input = input;
+  }
+}
+
+class TextEditor {
+  /** @type {Doc[]} */
+  tabs = [];
+  /** @type {Doc | null} the tab shown */
+  tab = null;
+  sid = null;             // the session of this window (sessions.js)
   #lines = 0;
   #raf = 0;
-  #message = '';
   #status = '';           // state shown on the right when the caret is not on a diagnostic
   #hl = null;             // { engine, tokenize } in use
   #hlKey = '';
@@ -99,10 +141,13 @@ class TextEditor {
   #serverNote = '';
   #syncTimer = 0;
   #diagnostics = [];
-  #untitled = uid();
   #completion = null;     // { from, items, index, manual } while the suggestion list is open
   #suggestSeq = 0;
   #accepting = false;     // inserting a suggestion: its own input event must not reopen the list
+  #banner = null;         // { kind, leave } of the bar above the text
+  #sessionTimer = 0;
+  #closed = [];           // file ids of the tabs closed, the last at the end
+  #dismissed = false;     // closed by the user: the tabs go to the next new window
 
   constructor(win, openWindow) {
     this.win = win;
@@ -117,16 +162,20 @@ class TextEditor {
     this.#fillLanguages();
     this.banner = h('div', { class: 'ed-banner', role: 'alertdialog', hidden: true });
 
+    this.tabBar = new TabBar({ signal });
+    this.tabBar.on('select', key => this.#activate(this.#find(key)));
+    this.tabBar.on('close', key => this.closeTab(this.#find(key)));
+    this.tabBar.on('new', () => this.newDocument());
+    this.tabBar.on('menu', e => this.#tabMenu(e));
+    this.tabBar.on('move', ({ key, index }) => this.#moveTab(this.#find(key), index));
+
     this.gutter = h('div', { class: 'ed-gutter', 'aria-hidden': 'true' });
     this.current = h('div', { class: 'ed-current', 'aria-hidden': 'true' });
     this.code = h('pre', { class: 'ed-hl', 'aria-hidden': 'true' });
     this.squiggles = h('div', { class: 'ed-diags', 'aria-hidden': 'true' });
-    this.input = h('textarea', {
-      class: 'ed-input', wrap: 'soft', spellcheck: 'false', autocapitalize: 'off', autocomplete: 'off', 'aria-label': t('document.text'),
-      'aria-autocomplete': 'list', 'aria-expanded': 'false',
-    });
     this.suggestions = h('div', { class: 'ed-complete', role: 'listbox', id: `ed-complete-${uid()}`, 'aria-label': t('completion.label'), hidden: true });
-    this.input.setAttribute('aria-controls', this.suggestions.id);
+    // The textareas of the tabs go before the suggestions
+    this.area = h('div', { class: 'ed-area' }, this.current, this.code, this.squiggles, this.suggestions);
     // Clicking a suggestion must not take the focus away from the text
     this.suggestions.addEventListener('pointerdown', e => {
       e.preventDefault();
@@ -159,20 +208,20 @@ class TextEditor {
         this.langSelect,
         tool('gear', t('toolbar.settings'), () => openEditorSettings(this.openWindow)),
         this.sidebarBtn),
+      this.tabBar.el,
       this.banner,
       h('div', { class: 'ed-main' },
-        h('div', { class: 'ed' }, this.gutter, h('div', { class: 'ed-area' }, this.current, this.code, this.squiggles, this.input, this.suggestions)),
+        h('div', { class: 'ed' }, this.gutter, this.area),
         this.tree.el),
       h('div', { class: 'ed-status' }, this.position, this.info, this.state));
 
-    this.input.addEventListener('input', e => this.#onInput(e), { signal });
-    this.input.addEventListener('keydown', e => this.#onKey(e), { signal });
-    this.input.addEventListener('scroll', () => { this.#syncScroll(); this.#hideCompletion(); }, { signal });
-    this.input.addEventListener('blur', () => this.#hideCompletion(), { signal });
-    this.input.addEventListener('pointerdown', () => this.#hideCompletion(), { signal });
-    for (const type of ['keyup', 'pointerup', 'select', 'focus']) this.input.addEventListener(type, () => this.#caret(), { signal });
-    // Leaving with unsaved changes (reload, closing the tab): let the browser ask
-    addEventListener('beforeunload', e => { if (this.dirty) e.preventDefault(); }, { signal });
+    // Leaving (reload, closing the browser tab): the unsaved texts are kept; the browser asks only
+    // for those that cannot be
+    addEventListener('beforeunload', e => {
+      this.#flushDrafts();
+      this.#saveSession();
+      if (this.tabs.some(doc => this.#dirtyOf(doc) && !this.#keepable(doc))) e.preventDefault();
+    }, { signal });
 
     const off = [
       fs.on('change', e => this.#onFsChange(e)),
@@ -187,7 +236,9 @@ class TextEditor {
       settings.on('change:theme', () => this.#paint()),
       languageEvents.on('change', () => {
         this.#fillLanguages();
-        if (!this.#langChosen) this.#setLanguage(languageForName(this.name));
+        for (const doc of this.tabs) if (!doc.langChosen && doc !== this.tab) doc.lang = languageForName(doc.name);
+        if (!this.tab) return;
+        if (!this.tab.langChosen) this.#setLanguage(languageForName(this.name));
         else this.#loadHighlighter();
       }),
       handleCommand('editor.save', { isActive: () => win.active, run: () => this.save() }),
@@ -196,20 +247,31 @@ class TextEditor {
       handleCommand('editor.openFolder', { isActive: () => win.active, run: () => this.openFolder() }),
       handleCommand('editor.sidebar', { isActive: () => win.active, run: () => this.toggleSidebar() }),
       handleCommand('editor.complete', { isActive: () => win.active && document.activeElement === this.input, run: () => this.#suggest(true) }),
+      handleCommand('editor.closeTab', { isActive: () => win.active, run: () => this.closeTab(this.tab) }),
+      handleCommand('editor.nextTab', { isActive: () => win.active && this.tabs.length > 1, run: () => this.#step(1) }),
+      handleCommand('editor.previousTab', { isActive: () => win.active && this.tabs.length > 1, run: () => this.#step(-1) }),
+      handleCommand('editor.reopenTab', { isActive: () => win.active, run: () => this.reopenTab() }),
       // Ctrl Z / Ctrl Y in the text: the textarea's own history (typing, completions, indents)
-      history.attach(this.input, {
+      history.attach(this.area, {
         text: true,
         undo: () => this.#nativeHistory('undo'),
         redo: () => this.#nativeHistory('redo'),
       }),
     ];
-    win.on('destroy', () => { off.forEach(o => o()); this.#disconnect(); cancelAnimationFrame(this.#raf); });
+    win.on('dismiss', () => { this.#dismissed = true; });
+    win.on('destroy', () => {
+      off.forEach(o => o());
+      this.#disconnect();
+      cancelAnimationFrame(this.#raf);
+      clearTimeout(this.#sessionTimer);
+      this.#closeSession();
+    });
     // The panel keeps within 60% of the window
     const fit = new ResizeObserver(() => { if (!this.tree.el.hidden) this.tree.resize(this.tree.width, false); });
     fit.observe(win.body);
     // Another width wraps the lines elsewhere
-    const wrap = new ResizeObserver(() => this.#layout());
-    wrap.observe(this.input);
+    const wrap = new ResizeObserver(() => { if (this.tab) this.#layout(); });
+    wrap.observe(this.area);
     win.on('destroy', () => { fit.disconnect(); wrap.disconnect(); });
   }
 
@@ -220,24 +282,172 @@ class TextEditor {
     return document.execCommand(what) ? '' : null;
   }
 
-  get dirty() { return this.input.value !== this.#saved; }
-  get text() { return this.input.value; }
+  // The tab shown
+  get input() { return this.tab?.input; }
+  get fileId() { return this.tab?.fileId ?? null; }
+  get name() { return this.tab?.name ?? ''; }
+  get dirty() { return !!this.tab && this.#dirtyOf(this.tab); }
+  get text() { return this.input?.value ?? ''; }
+
+  // ---------- Session ----------
+
+  /**
+   * The tabs of the window: those of its session (a window brought back), or those of the windows
+   * closed by the user (a new window), then args.file.
+   */
+  start(args) {
+    const id = typeof args?.session === 'string' && args.session !== CLOSED ? args.session : null;
+    let saved = id ? readSession(id) : null;
+    this.sid = saved ? id : uid();
+    // A file missing here was deleted if the tab was closed in this workspace; otherwise another
+    // workspace hides it, and its tab stays aside for a window there
+    if (!id && editorConfig.get('tabs').reopen) saved = takeClosed(entry => !entry.file || fs.exists(entry.file) || (entry.ws ?? null) === (fs.workspace ?? null));
+    if (saved) this.#restore(saved);
+    if (args?.file && fs.exists(args.file)) this.open(args.file);
+    else if (!this.tabs.length) this.newDocument();
+    this.#saveSession();
+  }
+
+  /** What the window manager saves to recreate the window. */
+  windowState() {
+    return {
+      session: this.sid,
+      file: this.fileId,
+      // The files shown: lilOS closes their tabs when one is locked again
+      files: this.tabs.filter(doc => doc.fileId && (doc.loaded || doc.loading)).map(doc => doc.fileId),
+      folder: this.tree.root,
+      ...(this.tree.collapsed && { sidebar: false }),
+    };
+  }
+
+  #restore({ active, tabs }) {
+    for (const entry of tabs) {
+      const draft = readDraft(entry.key);
+      const node = entry.file ? fs.get(entry.file) : null;
+      if (entry.file && node?.type !== 'file' && !draft) continue;   // the file went and nothing was changed
+      // The same file twice (tabs put aside by two windows): one tab, with the unsaved text if any
+      const twin = entry.file && this.#find(entry.file, 'fileId');
+      if (twin) {
+        if (draft && !twin.draft && !twin.loaded) {
+          twin.draft = draft;
+          twin.input.value = draft.text;
+        }
+        removeDraft(entry.key);
+        continue;
+      }
+      const doc = this.#addTab(entry.key, { after: this.tabs.at(-1) });
+      if (node?.type === 'file') {
+        Object.assign(doc, { fileId: node.id, name: node.name, isNew: false, loaded: false, draft, secret: isSecret(node.id) });
+        if (draft) doc.input.value = draft.text;
+      } else if (entry.file) {
+        // The file went: only its unsaved text stays (and the tab is the file's again if it comes back)
+        Object.assign(doc, { name: entry.name || untitled(), isNew: false, lost: { id: entry.file, saved: '' }, message: t('status.missing') });
+        doc.input.value = draft.text;
+      } else {
+        doc.name = entry.name || untitled();
+        doc.number = this.#freeNumber(doc);
+        doc.input.value = draft?.text ?? '';
+      }
+      if (entry.lang) Object.assign(doc, { lang: getLanguage(entry.lang).id, langChosen: true });
+      else doc.lang = languageForName(doc.name);
+      doc.sel = entry.sel ?? null;
+      doc.top = entry.top ?? 0;
+      if (doc.loaded) this.#putBack(doc);
+    }
+    this.#activate(this.#find(active) ?? this.tabs[0]);
+  }
+
+  #sessionTabs() {
+    return this.tabs.map(doc => ({
+      // A file removed meanwhile keeps its id: put back from the trash, the tab is its again
+      key: doc.key, file: doc.fileId ?? doc.lost?.id ?? null, name: doc.name,
+      ...(doc.langChosen && { lang: doc.lang }),
+      sel: doc.loaded ? [doc.input.selectionStart, doc.input.selectionEnd] : doc.sel ?? undefined,
+      top: doc === this.tab ? doc.input.scrollTop : doc.top,
+    }));
+  }
+
+  #saveSession() {
+    clearTimeout(this.#sessionTimer);
+    if (this.sid) writeSession(this.sid, { active: this.tab?.key, tabs: this.#sessionTabs() });
+  }
+
+  #saveSessionSoon() {
+    clearTimeout(this.#sessionTimer);
+    this.#sessionTimer = setTimeout(() => this.#saveSession(), 300);
+  }
+
+  /**
+   * The window is gone. Closed by lilOS to be recreated (a workarea reduced to an icon, an update):
+   * the session stays. Closed by the user: its tabs wait for the next new window, or with the
+   * "reopen" setting off they go with their unsaved text.
+   */
+  #closeSession() {
+    this.#flushDrafts();
+    if (!this.#dismissed) return this.#saveSession();
+    if (editorConfig.get('tabs').reopen) {
+      const blank = new Set(this.tabs.filter(doc => this.#isBlank(doc)).map(doc => doc.key));
+      const ws = fs.workspace ?? undefined;
+      addClosed({ active: this.tab?.key, tabs: this.#sessionTabs().filter(entry => !blank.has(entry.key)).map(entry => ({ ...entry, ws })) });
+    } else {
+      this.tabs.forEach(doc => removeDraft(doc.key));
+    }
+    removeSession(this.sid);
+  }
+
+  // ---------- Unsaved text ----------
+
+  #dirtyOf(doc) {
+    return doc.loaded ? doc.input.value !== doc.saved : !!doc.draft;
+  }
+
+  /** Its unsaved text can be kept outside the file. */
+  #keepable(doc) {
+    return !doc.secret && doc.input.value.length <= DRAFT_LIMIT;
+  }
+
+  #draftSoon(doc) {
+    clearTimeout(doc.draftTimer);
+    doc.draftTimer = setTimeout(() => this.#writeDraft(doc), DRAFT_DELAY);
+  }
+
+  /** Keeps the unsaved text of a tab, or forgets it when there is none (or it cannot be kept). */
+  #writeDraft(doc) {
+    clearTimeout(doc.draftTimer);
+    doc.draftTimer = 0;
+    if (!doc.loaded || !this.tabs.includes(doc)) return;
+    if (doc.discarded || !this.#dirtyOf(doc) || !this.#keepable(doc)) removeDraft(doc.key);
+    // In conflict the draft keeps saying what it was written on: the question comes back with it
+    else writeDraft(doc.key, doc.input.value, doc.conflict ? doc.draftBase : doc.fileId ? hash(doc.saved) : null);
+  }
+
+  #flushDrafts() {
+    for (const doc of this.tabs) if (doc.draftTimer) this.#writeDraft(doc);
+  }
 
   // ---------- Documents ----------
 
+  /** Opens a file in a tab (its own, if it is open already). */
   async open(id) {
-    if (id === this.fileId) return;
     const node = fs.get(id);
     if (!node || node.type !== 'file') return;
-    if (!(await this.confirmDiscard(node.name))) return;
-    const [text] = await Promise.all([fs.read(id), grammarsReady]);
-    this.#load(id, node.name, text);
+    const open = this.#find(id, 'fileId');
+    if (open) return this.#activate(open);
+    // An empty "Untitled" nobody touched gives its place to the file
+    const blank = this.#isBlank(this.tab) ? this.tab : null;
+    const doc = this.#addTab();
+    Object.assign(doc, { fileId: id, name: node.name, isNew: false, loaded: false, fresh: true, secret: isSecret(id), lang: languageForName(node.name) });
+    this.#activate(doc);
+    if (blank) this.#removeTab(blank);
+    await doc.loading;
   }
 
-  async newDocument() {
-    if (!(await this.confirmDiscard())) return;
-    this.#untitled = uid();
-    this.#load(null, untitled(), '');
+  newDocument() {
+    const number = this.#freeNumber();
+    const doc = this.#addTab();
+    Object.assign(doc, { name: untitled(), number });
+    doc.lang = languageForName(doc.name);
+    this.#activate(doc);
   }
 
   /** Chooses a file of lilOS and opens it. */
@@ -264,51 +474,54 @@ class TextEditor {
     if (!this.tree.collapsed) this.tree.tree.focus();
   }
 
-  /** Saves to the open file; a new document is created in /Documenti (or in the open folder). */
+  /** Saves the tab shown to its file; a new document is created in /Documenti (or in the open folder). */
   async save() {
-    const wasUntitled = !this.fileId || !fs.exists(this.fileId);
+    const doc = this.tab;
+    if (!doc?.loaded) return false;   // the file is not read yet: there is nothing to save over it
+    const wasUntitled = !doc.fileId || !fs.exists(doc.fileId);
     if (wasUntitled) {
       const docs = (this.tree.root && fs.get(this.tree.root)) ?? fs.resolve('/Documenti') ?? fs.get(fs.root);
-      const node = fs.create(docs.id, { type: 'file', name: this.name });
-      this.fileId = node.id;
-      this.name = node.name;
-      this.#message = t('status.savedIn', { path: fs.path(node.id) });
+      const node = fs.create(docs.id, { type: 'file', name: doc.name });
+      Object.assign(doc, { fileId: node.id, name: node.name, isNew: false, lost: null });
+      doc.message = t('status.savedIn', { path: fs.path(node.id) });
     } else {
-      this.#message = '';
+      doc.message = '';
     }
-    const text = this.text;
-    await fs.write(this.fileId, text);
-    this.#saved = text;
-    if (wasUntitled) this.#connect();   // the document has a file URI now
-    this.tree.setCurrent(this.fileId);
+    const text = doc.input.value;
+    await fs.write(doc.fileId, text);
+    doc.saved = text;
+    doc.conflict = false;
+    if (this.#banner?.kind === 'conflict' && this.tab === doc) this.#closeBanner();
+    this.#writeDraft(doc);
+    if (wasUntitled && this.tab === doc) this.#connect();   // the document has a file URI now
+    if (this.tab === doc) this.tree.setCurrent(doc.fileId);
+    this.#saveSessionSoon();
     this.render();
     return true;
   }
 
-  /** Opens File on the folder of the document. */
-  reveal() {
-    const node = this.fileId && fs.get(this.fileId);
+  /** Opens File on the folder of a document (the one shown). */
+  reveal(doc = this.tab) {
+    const node = doc?.fileId && fs.get(doc.fileId);
     if (node) launch('files', { folder: node.parent });
   }
 
   /**
-   * With unsaved changes, asks in a bar above the text: Save / Don't save / Cancel (`opening`:
-   * the name of the file about to be opened). Resolves true when it is fine to go on.
+   * With unsaved changes in the tab shown, asks in a bar above the text: Save / Don't save /
+   * Cancel. Resolves true when it is fine to go on.
    */
-  confirmDiscard(opening = '') {
+  confirmDiscard() {
     if (!this.dirty) return Promise.resolve(true);
     return new Promise(resolve => {
       const done = async choice => {
         this.#closeBanner();
         if (choice === 'save') resolve(await this.save());
         else resolve(choice === 'discard');
-        if (choice === 'cancel') this.input.focus();
+        if (choice === 'cancel') this.input?.focus();
       };
-      this.#openBanner([
+      this.#openBanner('unsaved', [
         icon('help'),
-        h('span', { class: 'ed-banner-text' }, opening
-          ? t('dialog.unsaved.textBeforeOpen', { name: this.#displayName(), file: opening })
-          : t('dialog.unsaved.text', { name: this.#displayName() })),
+        h('span', { class: 'ed-banner-text' }, t('dialog.unsaved.text', { name: this.#displayName() })),
         actionButton({ label: t('dialog.unsaved.save'), primary: true, onClick: () => done('save') }),
         actionButton({ label: t('dialog.unsaved.discard'), danger: true, onClick: () => done('discard') }),
         actionButton({ label: t('dialog.cancel'), onClick: () => done('cancel') }),
@@ -316,19 +529,277 @@ class TextEditor {
     });
   }
 
+  /**
+   * Closing the window: with "reopen" on, only the changes that cannot be kept are asked about,
+   * one tab at a time; otherwise every change. Resolves false if one answer was Cancel.
+   */
+  async canClose() {
+    const reopen = editorConfig.get('tabs').reopen;
+    for (const doc of [...this.tabs]) {
+      if (!this.tabs.includes(doc) || !this.#dirtyOf(doc) || (reopen && this.#keepable(doc))) continue;
+      this.#activate(doc);
+      if (!(await this.confirmDiscard())) return false;
+      if (this.#dirtyOf(doc)) {
+        // "Don't save": the window may come back (a workarea), without this text
+        doc.discarded = true;
+        clearTimeout(doc.draftTimer);
+        removeDraft(doc.key);
+      }
+    }
+    return true;
+  }
+
+  // ---------- Tabs ----------
+
+  /** Closes a tab, asking first if it has changes. Resolves false if the user cancelled. */
+  async closeTab(doc) {
+    if (!doc || !this.tabs.includes(doc)) return true;
+    if (this.#dirtyOf(doc)) {
+      this.#activate(doc);
+      if (!(await this.confirmDiscard())) return false;
+      if (!this.tabs.includes(doc)) return true;
+    }
+    if (doc.fileId) this.#closed = [...this.#closed.filter(id => id !== doc.fileId), doc.fileId].slice(-CLOSED_TABS);
+    this.#removeTab(doc);
+    return true;
+  }
+
+  /** Closes the tabs of these files (they were locked again). */
+  async closeFiles(ids) {
+    for (const doc of this.tabs.filter(d => d.fileId && ids.includes(d.fileId))) {
+      if (!(await this.closeTab(doc))) return;
+    }
+  }
+
+  /** Opens again the last tab closed whose file still exists. */
+  reopenTab() {
+    while (this.#closed.length) {
+      const id = this.#closed.pop();
+      if (fs.get(id)?.type === 'file') return this.open(id);
+    }
+  }
+
+  async #closeMany(docs) {
+    for (const doc of docs) if (!(await this.closeTab(doc))) return;
+  }
+
+  #find(value, field = 'key') {
+    return value ? this.tabs.find(doc => doc[field] === value) ?? null : null;
+  }
+
+  /** An empty "Untitled" nobody touched. */
+  #isBlank(doc) {
+    return !!doc && doc.isNew && !doc.fileId && !doc.lost && doc.loaded && doc.input.value === '' && doc.saved === '';
+  }
+
+  #freeNumber(except = null) {
+    const used = new Set(this.tabs.filter(doc => doc !== except && doc.isNew && !doc.fileId).map(doc => doc.number));
+    let n = 1;
+    while (used.has(n)) n++;
+    return n;
+  }
+
+  /** A new tab, after `after` (the tab shown): its own textarea, hidden until it is shown. */
+  #addTab(key = uid(), { after = this.tab } = {}) {
+    const { signal } = this.win;
+    const input = h('textarea', {
+      class: 'ed-input', wrap: 'soft', spellcheck: 'false', autocapitalize: 'off', autocomplete: 'off', 'aria-label': t('document.text'),
+      'aria-autocomplete': 'list', 'aria-expanded': 'false', 'aria-controls': this.suggestions.id, hidden: true,
+    });
+    input.addEventListener('input', e => this.#onInput(e), { signal });
+    input.addEventListener('keydown', e => this.#onKey(e), { signal });
+    input.addEventListener('scroll', () => { this.#syncScroll(); this.#hideCompletion(); }, { signal });
+    input.addEventListener('blur', () => this.#hideCompletion(), { signal });
+    input.addEventListener('pointerdown', () => this.#hideCompletion(), { signal });
+    for (const type of ['keyup', 'pointerup', 'select', 'focus']) input.addEventListener(type, () => this.#caret(), { signal });
+    this.area.insertBefore(input, this.suggestions);
+    const doc = new Doc(key, input);
+    const i = after ? this.tabs.indexOf(after) : -1;
+    this.tabs.splice(i === -1 ? this.tabs.length : i + 1, 0, doc);
+    return doc;
+  }
+
+  #removeTab(doc) {
+    const i = this.tabs.indexOf(doc);
+    if (i === -1) return;
+    clearTimeout(doc.draftTimer);
+    removeDraft(doc.key);
+    if (this.tab === doc) {
+      this.#hideCompletion();
+      this.#cancelBanner();
+    }
+    this.tabs.splice(i, 1);
+    doc.input.remove();
+    if (this.tab === doc) {
+      this.tab = null;
+      const next = this.tabs[i] ?? this.tabs[i - 1];
+      if (next) this.#activate(next);
+      else this.newDocument();
+    } else {
+      this.#renderTabs();
+    }
+    this.#saveSessionSoon();
+  }
+
+  #moveTab(doc, index) {
+    if (!doc) return;
+    this.tabs.splice(this.tabs.indexOf(doc), 1);
+    this.tabs.splice(Math.max(0, Math.min(index, this.tabs.length)), 0, doc);
+    this.#renderTabs();
+    this.#saveSessionSoon();
+  }
+
+  #step(by) {
+    const i = this.tabs.indexOf(this.tab);
+    this.#activate(this.tabs[(i + by + this.tabs.length) % this.tabs.length]);
+  }
+
+  /** Shows a tab: its textarea, language, server, the folder panel's highlight. */
+  #activate(doc, { focus = true } = {}) {
+    if (!doc) return;
+    const old = this.tab;
+    if (old === doc) { if (focus) doc.input.focus(); return; }
+    if (old) {
+      this.#hideCompletion();
+      this.#cancelBanner();
+      old.top = old.input.scrollTop;
+      old.left = old.input.scrollLeft;
+      old.input.hidden = true;
+      if (old.draftTimer) this.#writeDraft(old);
+    }
+    this.tab = doc;
+    doc.input.hidden = false;
+    doc.input.scrollTop = doc.top;
+    doc.input.scrollLeft = doc.left;
+    this.#lines = -1;   // another gutter
+    this.#loadHighlighter();
+    this.#connect();
+    this.tree.setCurrent(doc.fileId);
+    this.render();
+    if (doc.conflict) this.#askConflict();
+    if (!doc.loaded) this.#loadFile(doc);
+    if (focus) doc.input.focus();
+    this.#saveSessionSoon();
+  }
+
+  /** Reads the file of a tab (once at a time); with a draft, the draft stays as the text. */
+  #loadFile(doc) {
+    if (doc.loading) return doc.loading;
+    doc.message = t('status.loading');
+    doc.input.readOnly = true;
+    if (doc === this.tab) this.render();
+    doc.loading = (async () => {
+      try {
+        const [text] = await Promise.all([fs.read(doc.fileId), grammarsReady]);
+        if (!this.tabs.includes(doc) || !doc.fileId || doc.loaded) return;   // closed, or its file went meanwhile
+        Object.assign(doc, { saved: text, loaded: true, message: '', fresh: false });
+        if (doc.draft) Object.assign(doc, { conflict: doc.draft.base !== hash(text), draftBase: doc.draft.base });
+        else doc.input.value = text;
+        doc.draft = null;
+        doc.input.readOnly = false;
+        this.#putBack(doc);
+        this.#writeDraft(doc);   // a draft equal to the file is not needed any more
+        if (doc !== this.tab) return this.#renderTabs();
+        this.#connect();   // the server gets the text read
+        this.render();
+        if (doc.conflict) this.#askConflict();
+      } catch (err) {
+        if (!this.tabs.includes(doc)) return;
+        if (!(err instanceof PipeStopped && err.silent)) toast(t('status.readFailed', { name: doc.name, error: err.message }), { timeout: 6000 });
+        // Opened now: it goes. Brought back: it stays, and showing it again tries again
+        if (doc.fresh && !doc.draft) return this.#removeTab(doc);
+        doc.message = t('status.readFailed', { name: doc.name, error: err.message });
+        if (doc === this.tab) this.render();
+      } finally {
+        doc.loading = null;
+      }
+    })();
+    return doc.loading;
+  }
+
+  /** The caret and the scroll the tab had (a tab brought back). */
+  #putBack(doc) {
+    if (doc.sel) {
+      const max = doc.input.value.length;
+      doc.input.setSelectionRange(Math.min(doc.sel[0], max), Math.min(doc.sel[1], max));
+      doc.sel = null;
+    }
+    if (doc === this.tab) doc.input.scrollTop = doc.top;
+  }
+
+  /** The file of the tab changed after its unsaved text was written: which one stays? */
+  #askConflict() {
+    const doc = this.tab;
+    const keep = () => { doc.conflict = false; this.#closeBanner(); doc.input.focus(); };
+    this.#openBanner('conflict', [
+      icon('info'),
+      h('span', { class: 'ed-banner-text' }, t('dialog.conflict.text', { name: this.#displayName(doc) })),
+      actionButton({ label: t('dialog.conflict.keep'), primary: true, onClick: keep }),
+      actionButton({ label: t('dialog.conflict.reload'), onClick: () => {
+        doc.conflict = false;
+        this.#closeBanner();
+        doc.input.value = doc.saved;
+        this.#writeDraft(doc);
+        this.#changed();
+        this.#syncLater();
+        doc.input.focus();
+      } }),
+    ], keep, () => {});   // shown again with the tab
+  }
+
+  #tabMenu({ key, x, y }) {
+    const doc = this.#find(key);
+    if (!doc) return;
+    const i = this.tabs.indexOf(doc);
+    openMenu(x, y, [
+      { label: t('tabs.menu.close'), icon: 'x', shortcut: shortcuts.label('editor.closeTab'), action: () => this.closeTab(doc) },
+      { label: t('tabs.menu.closeOthers'), disabled: this.tabs.length < 2, action: () => this.#closeMany(this.tabs.filter(d => d !== doc)) },
+      { label: t('tabs.menu.closeRight'), disabled: i === this.tabs.length - 1, action: () => this.#closeMany(this.tabs.slice(i + 1)) },
+      { label: t('tabs.menu.closeSaved'), disabled: !this.tabs.some(d => !this.#dirtyOf(d)), action: () => this.#closeMany(this.tabs.filter(d => !this.#dirtyOf(d))) },
+      '-',
+      { label: t('tabs.menu.copyPath'), icon: 'link', disabled: !doc.fileId, action: () => this.#copyPath(doc) },
+      { label: t('tabs.menu.reveal'), icon: 'folder', disabled: !doc.fileId, action: () => this.reveal(doc) },
+    ]);
+  }
+
+  async #copyPath(doc) {
+    if (!doc.fileId || !fs.exists(doc.fileId)) return;
+    try {
+      await navigator.clipboard.writeText(fs.path(doc.fileId));
+      toast(t('tabs.pathCopied'));
+    } catch (err) {
+      toast(t('tabs.copyFailed', { error: err.message }));
+    }
+  }
+
+  #renderTabs() {
+    const count = new Map();
+    for (const doc of this.tabs) if (doc.fileId) count.set(doc.name.toLowerCase(), (count.get(doc.name.toLowerCase()) ?? 0) + 1);
+    this.tabBar.render(this.tabs.map(doc => {
+      const node = doc.fileId && fs.get(doc.fileId);
+      const label = this.#displayName(doc);
+      // Two files with the same name: the folder tells them apart
+      const detail = node && count.get(doc.name.toLowerCase()) > 1 ? fs.get(node.parent)?.name ?? '' : '';
+      return { key: doc.key, label, detail, title: node ? fs.path(node.id) : label, dirty: this.#dirtyOf(doc) };
+    }), this.tab?.key);
+  }
+
   // ---------- Rendering ----------
 
   render() {
-    const node = this.fileId && fs.get(this.fileId);
+    const doc = this.tab;
+    if (!doc) return;
+    const node = doc.fileId && fs.get(doc.fileId);
     this.win.setTitle(`${this.#displayName()}${this.dirty ? ' •' : ''}`, 'Editor');
     this.revealBtn.disabled = !node;
-    this.langSelect.value = this.#lang;
+    this.langSelect.value = doc.lang;
     this.#renderSchemaButton();
-    this.#status = this.#message
+    this.#status = doc.message
       || (this.dirty ? t('status.modified') : node ? t('status.saved', { path: fs.path(node.id) }) : t('status.newDocument'));
     this.state.classList.toggle('dirty', this.dirty);
     this.#paint();
     this.#renderInfo();
+    this.#renderTabs();
   }
 
   #renderSidebarButton() {
@@ -340,8 +811,9 @@ class TextEditor {
 
   /** Highlighted copy, line numbers, current line, diagnostics. */
   #paint() {
+    if (!this.tab) return;
     const text = this.text;
-    const lang = getLanguage(this.#lang);
+    const lang = getLanguage(this.tab.lang);
     let hl = this.#hl ?? this.#simple(lang);
     if (hl.engine === 'textmate' && text.length > TEXTMATE_LIMIT) hl = this.#simple(lang);
     let tokens;
@@ -416,7 +888,8 @@ class TextEditor {
   }
 
   #renderInfo() {
-    const lang = getLanguage(this.#lang);
+    if (!this.tab) return;
+    const lang = getLanguage(this.tab.lang);
     const engine = this.#hl?.engine ?? 'simple';
     const errors = this.#diagnostics.filter(d => (d.severity ?? 1) === 1).length;
     const warnings = this.#diagnostics.filter(d => d.severity === 2).length;
@@ -431,6 +904,7 @@ class TextEditor {
   }
 
   #caret() {
+    if (!this.tab) return;
     const text = this.text;
     const pos = this.input.selectionStart;
     const line = lineOf(text, pos);
@@ -451,6 +925,7 @@ class TextEditor {
   }
 
   #syncScroll() {
+    if (!this.tab) return;
     const { scrollTop, scrollLeft } = this.input;
     const t = `translate(${-scrollLeft}px, ${-scrollTop}px)`;
     this.code.style.transform = t;
@@ -462,7 +937,7 @@ class TextEditor {
   // ---------- Languages and highlighting ----------
 
   #fillLanguages() {
-    const value = this.langSelect.value || this.#lang;
+    const value = this.langSelect.value || this.tab?.lang || 'text';
     this.langSelect.replaceChildren(...languages().map(l => h('option', { value: l.id }, l.label)));
     this.langSelect.value = value;
   }
@@ -472,8 +947,12 @@ class TextEditor {
   }
 
   #setLanguage(id, chosen = false) {
-    this.#lang = getLanguage(id).id;
-    if (chosen) this.#langChosen = true;
+    if (!this.tab) return;
+    this.tab.lang = getLanguage(id).id;
+    if (chosen) {
+      this.tab.langChosen = true;
+      this.#saveSessionSoon();
+    }
     this.#hideCompletion();
     this.#loadHighlighter();
     this.#connect();
@@ -482,7 +961,8 @@ class TextEditor {
 
   /** Simple highlighting right away; the chosen engine replaces it once loaded. */
   #loadHighlighter() {
-    const lang = getLanguage(this.#lang);
+    if (!this.tab) return;
+    const lang = getLanguage(this.tab.lang);
     const engine = engineFor(lang);
     const key = `${lang.id}:${engine}`;
     if (key === this.#hlKey && this.#hl?.engine === engine) return;
@@ -499,19 +979,21 @@ class TextEditor {
 
   async #connect() {
     this.#disconnect();
-    const lang = getLanguage(this.#lang);
+    const doc = this.tab;
+    if (!doc) return;
+    const lang = getLanguage(doc.lang);
     const pending = clientFor(lang);
     if (!pending) { this.#serverNote = ''; return this.#renderInfo(); }
     const token = this.#connectToken = {};
     this.#serverNote = t('server.starting');
     this.#renderInfo();
     const client = await pending;
-    if (this.#connectToken !== token) return;
+    if (this.#connectToken !== token || this.tab !== doc) return;
     if (!client.ready) {
       this.#serverNote = t('server.unavailable', { error: client.error ?? t('server.unknownError') });
       return this.#renderInfo();
     }
-    const uri = this.fileId && fs.exists(this.fileId) ? fileUri(this.fileId) : `untitled:${this.#untitled}`;
+    const uri = doc.fileId && fs.exists(doc.fileId) ? fileUri(doc.fileId) : `untitled:${doc.untitled}`;
     this.#client = client;
     this.#doc = { uri, version: 1, off: [
       client.on('diagnostics', p => {
@@ -606,7 +1088,7 @@ class TextEditor {
   // ---------- JSON schema ----------
 
   #renderSchemaButton() {
-    const isJson = getLanguage(this.#lang).id === 'json';
+    const isJson = getLanguage(this.tab.lang).id === 'json';
     this.schemaBtn.hidden = !isJson;
     if (!isJson) return;
     const source = this.fileId ? editorConfig.get('schemas')[this.fileId] : null;
@@ -647,7 +1129,7 @@ class TextEditor {
       this.input.focus();
     };
     input.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); apply(); } });
-    this.#openBanner([
+    this.#openBanner('schema', [
       icon('globe'), note, input,
       actionButton({ label: t('schema.url.use'), primary: true, onClick: apply }),
       actionButton({ label: t('dialog.cancel'), onClick: () => { this.#closeBanner(); this.input.focus(); } }),
@@ -656,16 +1138,30 @@ class TextEditor {
     input.select();
   }
 
-  #openBanner(children, onEscape) {
+  /**
+   * The bar above the text: `cancel` runs on Esc, `leave` when another tab is shown or another bar
+   * opens (by default the same).
+   */
+  #openBanner(kind, children, cancel, leave = cancel) {
+    this.#cancelBanner();
+    this.#banner = { kind, leave };
     this.banner.replaceChildren(...children);
     this.banner.hidden = false;
     this.banner.querySelector('button')?.focus();
-    this.banner.onkeydown = e => { if (e.key === 'Escape') { e.stopPropagation(); onEscape(); } };
+    this.banner.onkeydown = e => { if (e.key === 'Escape') { e.stopPropagation(); cancel(); } };
   }
 
   #closeBanner() {
+    this.#banner = null;
     this.banner.hidden = true;
     this.banner.replaceChildren();
+  }
+
+  #cancelBanner() {
+    const open = this.#banner;
+    if (!open) return;
+    this.#closeBanner();
+    open.leave();
   }
 
   // ---------- Completion ----------
@@ -690,7 +1186,7 @@ class TextEditor {
         if (seq !== this.#suggestSeq) return;
       }
     }
-    result ??= complete(this.text, ta.selectionStart, getLanguage(this.#lang).simple ?? 'text', { manual });
+    result ??= complete(this.text, ta.selectionStart, getLanguage(this.tab.lang).simple ?? 'text', { manual });
     if (!result || ta.selectionStart !== ta.selectionEnd) return this.#hideCompletion();
     this.#completion = { ...result, index: 0, manual };
     const prefix = this.text.slice(result.from, ta.selectionStart);
@@ -713,8 +1209,8 @@ class TextEditor {
     this.#completion = null;
     this.suggestions.hidden = true;
     this.suggestions.replaceChildren();
-    this.input.setAttribute('aria-expanded', 'false');
-    this.input.removeAttribute('aria-activedescendant');
+    this.input?.setAttribute('aria-expanded', 'false');
+    this.input?.removeAttribute('aria-activedescendant');
   }
 
   #selectCompletion(index) {
@@ -750,7 +1246,7 @@ class TextEditor {
     if (mark !== -1) this.input.setSelectionRange(from + mark, from + mark);
     this.#caret();
     // A CSS property is followed by its values right away
-    if (getLanguage(this.#lang).simple === 'css' && it.kind === 'pr') this.#suggest(false, ':');
+    if (getLanguage(this.tab.lang).simple === 'css' && it.kind === 'pr') this.#suggest(false, ':');
   }
 
   /** Puts the list under the word being completed (above it if there is no room below). */
@@ -772,13 +1268,14 @@ class TextEditor {
   }
 
   #onInput(e) {
+    this.tab.discarded = false;
     this.#changed();
     this.#syncLater();
     if (this.#accepting) return;
     const data = typeof e.data === 'string' ? e.data : '';
     const typed = e.inputType === 'insertText' && data.length === 1;
     const triggers = this.#client?.ready ? this.#client.triggerCharacters : [];
-    const lang = getLanguage(this.#lang).simple;
+    const lang = getLanguage(this.tab.lang).simple;
     // Word characters and the server's trigger characters ask; a space inside an HTML tag asks for attributes
     if (typed && (triggers.includes(data) || !/\s/.test(data) || (lang === 'html' && data === ' '))) {
       this.#suggest(this.#completion?.manual ?? false, triggers.includes(data) ? data : null);
@@ -788,29 +1285,14 @@ class TextEditor {
 
   // ---------- Internals ----------
 
-  #load(id, name, text) {
-    this.fileId = id;
-    this.name = name;
-    this.#saved = text;
-    this.#message = '';
-    this.#langChosen = false;
-    this.#hideCompletion();
-    this.#closeBanner();
-    this.input.value = text;
-    this.input.setSelectionRange(0, 0);
-    this.input.scrollTop = 0;
-    this.input.scrollLeft = 0;
-    this.#setLanguage(languageForName(name));
-    this.tree.setCurrent(id);
-    this.input.focus();
-  }
-
-  #displayName() {
-    return this.fileId ? this.name : t('document.untitled');
+  #displayName(doc = this.tab) {
+    if (!doc.isNew || doc.fileId) return doc.name;
+    return doc.number > 1 ? t('document.untitledNumber', { n: doc.number }) : t('document.untitled');
   }
 
   #changed() {
-    this.#message = '';
+    this.tab.message = '';
+    this.#draftSoon(this.tab);
     cancelAnimationFrame(this.#raf);
     this.#raf = requestAnimationFrame(() => { this.#raf = 0; this.render(); });
   }
@@ -839,6 +1321,7 @@ class TextEditor {
       if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); return this.#hideCompletion(); }
       if (['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(e.key)) this.#hideCompletion();
     }
+    if (ta.readOnly) return;
     if (e.key === 'Tab' && !e.ctrlKey && !e.altKey) {
       e.preventDefault();
       if (!e.shiftKey) return this.#insert(INDENT);
@@ -864,41 +1347,61 @@ class TextEditor {
   }
 
   #onFsChange(e) {
-    if (e.type === 'create' && this.#lost?.id === e.node.id && !this.fileId) {
-      // Put back (from the trash, or undo): the window is the file's again
-      this.fileId = e.node.id;
-      this.#saved = this.#lost.saved;
-      this.#lost = null;
-      this.name = e.node.name;
-      this.#message = t('status.restored');
-      this.tree.setCurrent(this.fileId);
+    for (const doc of [...this.tabs]) this.#fsChangeOf(doc, e);
+    this.#renderTabs();
+  }
+
+  /** A change of the file system, for one tab (the one shown also updates what is on screen). */
+  #fsChangeOf(doc, e) {
+    const shown = doc === this.tab;
+    if (e.type === 'create' && doc.lost?.id === e.node.id && !doc.fileId) {
+      // Put back (from the trash, or undo): the tab is the file's again
+      Object.assign(doc, { fileId: e.node.id, saved: doc.lost.saved, lost: null, name: e.node.name, message: t('status.restored') });
+      doc.secret ||= isSecret(doc.fileId);
+      this.#draftSoon(doc);
+      this.#saveSessionSoon();
+      if (!shown) return;
+      this.tree.setCurrent(doc.fileId);
       this.#connect();
       this.render();
       return;
     }
-    if (!this.fileId) return;
-    if (e.type === 'remove' && e.ids.includes(this.fileId)) {
-      this.#lost = { id: this.fileId, saved: this.#saved };
-      this.fileId = null;
-      this.#saved = '';   // nothing on disk any more: everything counts as unsaved
-      this.#message = e.trashed
-        ? t('status.trashed')
-        : t('status.deleted');
+    if (!doc.fileId) return;
+    if (e.type === 'remove' && e.ids.includes(doc.fileId)) {
+      // Not read yet and nothing changed: there is nothing to keep
+      if (!doc.loaded && !doc.draft) return this.#removeTab(doc);
+      if (!doc.loaded) {
+        Object.assign(doc, { loaded: true, draft: null });
+        doc.input.readOnly = false;
+      }
+      doc.lost = { id: doc.fileId, saved: doc.saved };
+      doc.fileId = null;
+      doc.saved = '';   // nothing on disk any more: everything counts as unsaved
+      doc.message = e.trashed ? t('status.trashed') : t('status.deleted');
+      this.#draftSoon(doc);
+      this.#saveSessionSoon();
+      if (!shown) return;
       this.tree.setCurrent(null);
       this.#connect();
       this.render();
-    } else if (e.type === 'move' && e.ids.includes(this.fileId)) {
+    } else if (e.type === 'move' && e.ids.includes(doc.fileId)) {
       // Moved (itself or a folder above it): new path and URI, maybe a new name
-      this.name = fs.get(this.fileId).name;
-      this.#connect();
-      this.render();
-    } else if (e.type === 'rename' && e.node.id === this.fileId) {
-      this.name = e.node.name;
-      if (!this.#langChosen && languageForName(this.name) !== this.#lang) this.#setLanguage(languageForName(this.name));
+      doc.name = fs.get(doc.fileId).name;
+      this.#saveSessionSoon();
+      if (shown) { this.#connect(); this.render(); }
+    } else if (e.type === 'rename' && e.node.id === doc.fileId) {
+      doc.name = e.node.name;
+      this.#saveSessionSoon();
+      const lang = languageForName(doc.name);
+      if (!shown) { if (!doc.langChosen) doc.lang = lang; return; }
+      if (!doc.langChosen && lang !== doc.lang) this.#setLanguage(lang);
       else { this.#connect(); this.render(); }   // the file URI changed
-    } else if (e.type === 'rename' && e.node.type === 'folder' && fs.isInside(this.fileId, e.node.id)) {
-      this.#connect();   // a folder above it: the path and the URI changed
-      this.render();
+    } else if (e.type === 'rename' && e.node.type === 'folder' && fs.isInside(doc.fileId, e.node.id)) {
+      if (shown) { this.#connect(); this.render(); }   // a folder above it: the path and the URI changed
+    } else if (e.type === 'update' && e.node.id === doc.fileId && !doc.secret && isSecret(doc.fileId)) {
+      // Its content became an app's (encrypted): its text is not kept outside the file any more
+      doc.secret = true;
+      removeDraft(doc.key);
     }
   }
 }
