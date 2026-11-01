@@ -59,6 +59,9 @@ const TAG_COLUMNS = () => [
 /** The tag a view id shows (null if it is not a tag view, or the tag is gone). */
 const viewTag = id => (typeof id === 'string' && id.startsWith(TAG_VIEW) ? tags.get(id.slice(TAG_VIEW.length)) : null);
 
+/** True if some of the ids can go into the trash (not system nodes, not already in it). */
+const trashable = ids => ids.some(id => fs.exists(id) && !fs.get(id).system);
+
 /** Folder to show for launch arguments: args.folder, the trash with args.trash, a tag's items with args.tag. */
 function startFolder(a) {
   if (a?.trash || a?.folder === TRASH) return TRASH;
@@ -185,8 +188,9 @@ class FileBrowser {
     fit.observe(this.main);
 
     this.#bindList();
-    // Files and folders dropped on the list (not on one of its folders) go into the folder shown
-    dropZone(this.list, { folder: () => (this.inTrash || this.inTag ? null : this.folder) });
+    // Files and folders dropped on the list (not on one of its folders) go into the folder shown,
+    // or into the trash when it is shown (see #listTarget)
+    dropZone(this.list, { target: (hit, x, y, ids) => this.#listTarget(ids) });
     // On the sidebar: into a folder or the trash, or a link where dropped (see #sideTarget)
     this.gap = h('div', { class: 'fm-gap', 'aria-hidden': 'true' });
     dropZone(this.side, { target: (hit, x, y, ids) => this.#sideTarget(hit, x, y, ids) });
@@ -702,7 +706,7 @@ class FileBrowser {
    */
   #sideTarget(hit, x, y, ids) {
     const trash = hit?.closest?.('[data-trash]');
-    if (trash) return ids.some(id => !fs.get(id)?.system) ? { el: trash, run: (ev, stack) => this.#trashDropped(ids, stack) } : null;
+    if (trash) return trashable(ids) ? { el: trash, run: (ev, stack) => this.#trashDropped(ids, stack) } : null;
     const section = this.side.querySelector('.fm-side-links');
     if (!section?.contains(hit)) return null;
     const entries = [...section.querySelectorAll(':scope > [data-entry]')];
@@ -734,7 +738,15 @@ class FileBrowser {
     };
   }
 
-  /** Dropped on the trash in the sidebar: always into the trash (Ctrl Z in the view it came from). */
+  /** What a drop on the list does: into the folder shown, into the trash shown, nothing on a tag. */
+  #listTarget(ids) {
+    if (this.inTrash) return trashable(ids) ? { el: this.list, run: (ev, stack) => this.#trashDropped(ids, stack) } : null;
+    if (this.inTag) return null;
+    const movable = movableInto(ids, this.folder);
+    return movable && { el: this.list, run: (ev, stack) => moveInto(stack, movable, this.folder) };
+  }
+
+  /** Dropped on the trash (in the sidebar or shown): always into the trash (Ctrl Z in the view it came from). */
   #trashDropped(ids, stack) {
     const n = ids.filter(id => !fs.get(id)?.system).length;
     removeNodes(stack, ids);
@@ -992,8 +1004,9 @@ class FileBrowser {
         if (!this.#selection.has(id)) this.#select([id], id);
         else narrow = this.#selection.size > 1;
       }
-      // Dragging the selection moves it into a folder (here, on the desk, in another window…)
-      if (this.inTrash || !this.#selection.has(id)) return;
+      // Dragging the selection moves it into a folder (here, on the desk, in another window…);
+      // from the trash it is restored there (lilOS without fs.isTrashed cannot)
+      if ((this.inTrash && !fs.isTrashed) || !this.#selection.has(id)) return;
       dragItems(e, {
         ids: [...this.#selection],
         stack: this.history,

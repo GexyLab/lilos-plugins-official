@@ -953,14 +953,14 @@ var Fe = "files-columns", Ie = 1600, Le = 160, q = {
 		key: "workspace",
 		label: w("column.workspace")
 	}
-], Z = (e) => typeof e == "string" && e.startsWith(X) ? m.get(e.slice(4)) : null;
+], Z = (e) => typeof e == "string" && e.startsWith(X) ? m.get(e.slice(4)) : null, qe = (e) => e.some((e) => a.exists(e) && !a.get(e).system);
 function Q(e) {
 	return e?.trash || e?.folder === Y ? Y : typeof e?.tag == "string" && m.get(e.tag) ? X + e.tag : Z(e?.folder) || e?.folder && a.exists(e.folder) ? e.folder : null;
 }
 function $(e) {
 	return Q(e) ? null : typeof e?.tag == "string" || typeof e?.folder == "string" && e.folder.startsWith(X) ? "tag" : e?.folder ? "folder" : null;
 }
-function qe({ args: e } = {}) {
+function Je({ args: e } = {}) {
 	let t = new n({
 		title: w("@name"),
 		icon: "folder",
@@ -968,7 +968,7 @@ function qe({ args: e } = {}) {
 		height: 520,
 		minWidth: 520,
 		minHeight: 300
-	}), r = new Ye(t);
+	}), r = new Xe(t);
 	r.go(Q(e) ?? a.root, !1);
 	let i = $(e);
 	return i && requestAnimationFrame(() => r.notFound(i)), t.on("launch", (e) => {
@@ -976,7 +976,7 @@ function qe({ args: e } = {}) {
 		t ? r.go(t) : $(e) && r.notFound($(e));
 	}), t.getState = () => ({ folder: r.folder }), t;
 }
-var Je = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase(), Ye = class {
+var Ye = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase(), Xe = class {
 	folder = a.root;
 	#e = [];
 	#t = [];
@@ -1036,7 +1036,7 @@ var Je = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 			spellcheck: "false",
 			"aria-label": w("toolbar.search")
 		}), this.search.addEventListener("input", () => {
-			this.#a = Je(this.search.value.trim()), this.render();
+			this.#a = Ye(this.search.value.trim()), this.render();
 		}), this.search.addEventListener("keydown", (e) => {
 			e.key === "Escape" && this.search.value && (e.stopPropagation(), this.search.value = "", this.#a = "", this.render()), e.key === "ArrowDown" && (e.preventDefault(), this.list.focus());
 		}), this.side = o("aside", {
@@ -1073,29 +1073,29 @@ var Je = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 			open: (e) => this.open(e)
 		}), this.main = o("div", { class: "fm" }, this.side, o("div", { class: "fm-main" }, this.list, o("div", { class: "fm-status" }, this.statusLeft, this.statusRight)), this.preview.el, this.info.el), e.body.append(o("div", { class: "fm-toolbar" }, this.backBtn, this.forwardBtn, this.upBtn, this.crumbs, this.address, this.newBtn, o("span", { class: "fm-sep" }), this.listBtn, this.gridBtn, this.thumbsBtn, o("span", { class: "fm-sep" }), this.previewBtn, this.infoBtn, o("label", { class: "fm-search" }, c("search"), this.search)), this.main);
 		let r = new ResizeObserver(() => this.#w());
-		r.observe(this.main), this.#J(), oe(this.list, { folder: () => this.inTrash || this.inTag ? null : this.folder }), this.gap = o("div", {
+		r.observe(this.main), this.#Y(), oe(this.list, { target: (e, t, n, r) => this.#A(r) }), this.gap = o("div", {
 			class: "fm-gap",
 			"aria-hidden": "true"
 		}), oe(this.side, { target: (e, t, n, r) => this.#k(e, t, n, r) });
-		let i = a.on("change", (e) => this.#ae(e)), l = S.on("change", () => {
-			this.#ee(this.folder) && this.render();
+		let i = a.on("change", (e) => this.#oe(e)), l = S.on("change", () => {
+			this.#te(this.folder) && this.render();
 		}), u = a.on("scope", () => {
-			this.#ee(this.folder) && this.render();
+			this.#te(this.folder) && this.render();
 		}), d = ue(() => {
-			this.#ee(this.folder) && this.render();
+			this.#te(this.folder) && this.render();
 		}), f = a.on("trash", () => {
 			this.inTrash && (this.#p = "", this.render());
 		}), p = m.on("change", () => {
 			if (this.folder.startsWith?.(X) && !this.inTag) return this.go(a.root, !1);
-			this.#ee(this.folder) && this.render();
+			this.#te(this.folder) && this.render();
 		}), h = ne({
 			isActive: () => e.active,
 			selectionSize: () => this.#l.size,
 			open: () => this.openSelected(),
 			rename: () => this.rename([...this.#l][0]),
 			remove: () => this.remove([...this.#l]),
-			selectAll: () => this.#q(this.#o.map((e) => e.id)),
-			deselect: () => this.#q([])
+			selectAll: () => this.#J(this.#o.map((e) => e.id)),
+			deselect: () => this.#J([])
 		}), g = s.attach(e.el, this.history), _ = [
 			y("files.info", {
 				isActive: () => e.active,
@@ -1133,13 +1133,13 @@ var Je = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 	}
 	reveal(e) {
 		let t = a.get(e);
-		t && (this.go(t.parent), a.isHidden(e) ? this.#re(w("message.hiddenByTag", { name: t.name })) : this.#q([e], e));
+		t && (this.go(t.parent), a.isHidden(e) ? this.#ie(w("message.hiddenByTag", { name: t.name })) : this.#J([e], e));
 	}
 	back() {
-		this.#ne(this.#e, this.#t);
+		this.#re(this.#e, this.#t);
 	}
 	forward() {
-		this.#ne(this.#t, this.#e);
+		this.#re(this.#t, this.#e);
 	}
 	up() {
 		let e = a.get(this.folder)?.parent;
@@ -1149,17 +1149,17 @@ var Je = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 		this.address.hidden && (this.address.value = this.inTrash || this.inTag ? `${a.home}/` : a.path(this.folder), this.#b(!1), this.crumbs.hidden = !0, this.address.hidden = !1), this.address.focus(), this.address.select();
 	}
 	#v(e) {
-		this.address.hidden || (this.address.hidden = !0, this.crumbs.hidden = !1, this.#p && this.#p === this.#m && this.#re(""), e && this.list.focus());
+		this.address.hidden || (this.address.hidden = !0, this.crumbs.hidden = !1, this.#p && this.#p === this.#m && this.#ie(""), e && this.list.focus());
 	}
 	async #y() {
 		let t = this.address.value.trim().replace(/\\/g, "/"), n = t ? a.resolve(t) : null;
 		if (!n && t && e.messageBox) {
 			this.#b(!0), this.#h = !0;
-			let e = await this.#ie(w("error.pathNotFound"), w("message.noPath", { path: t }), ["retry", "cancel"]);
+			let e = await this.#ae(w("error.pathNotFound"), w("message.noPath", { path: t }), ["retry", "cancel"]);
 			if (this.#h = !1, e !== "retry") return this.#v(!0);
 			this.address.focus(), this.address.setSelectionRange(this.address.value.length, this.address.value.length);
 		} else {
-			if (!n) return this.#b(!0), this.#m = t ? w("message.noPath", { path: t }) : w("message.typePath", { path: a.path(this.inTrash || this.inTag ? a.root : this.folder) }), this.#re(this.#m);
+			if (!n) return this.#b(!0), this.#m = t ? w("message.noPath", { path: t }) : w("message.typePath", { path: a.path(this.inTrash || this.inTag ? a.root : this.folder) }), this.#ie(this.#m);
 			this.#v(!0), n.type === "folder" ? this.go(n.id) : this.reveal(n.id);
 		}
 	}
@@ -1175,7 +1175,7 @@ var Je = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 		de(e);
 	}
 	openSelected() {
-		if (this.inTrash) return this.#re(w("message.restoreToOpen"));
+		if (this.inTrash) return this.#ie(w("message.restoreToOpen"));
 		let e = this.#o.filter((e) => this.#l.has(e.id)), t = e.find((e) => e.type === "folder");
 		e.filter((e) => e.type !== "folder").forEach((e) => this.open(e)), t && this.go(t.id);
 	}
@@ -1189,10 +1189,10 @@ var Je = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 				name: w(e === "folder" ? "create.folderName" : "create.fileName")
 			});
 		} catch (t) {
-			this.#ie(w(e === "folder" ? "error.createFolder" : "error.createFile"), t.message);
+			this.#ae(w(e === "folder" ? "error.createFolder" : "error.createFile"), t.message);
 			return;
 		}
-		this.#q([t.id]), this.rename(t.id, !0);
+		this.#J([t.id]), this.rename(t.id, !0);
 	}
 	rename(e, t = !1) {
 		let n = a.get(e);
@@ -1210,7 +1210,7 @@ var Je = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 			if (i && s && s !== n.name && a.exists(e)) try {
 				me(t ? null : this.history, e, s);
 			} catch (t) {
-				this.#ie(w("error.rename", { name: n.name }), t.message, ["retry", "cancel"]).then((t) => {
+				this.#ae(w("error.rename", { name: n.name }), t.message, ["retry", "cancel"]).then((t) => {
 					t === "retry" && a.exists(e) && this.rename(e);
 				});
 			}
@@ -1232,8 +1232,8 @@ var Je = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 	remove(e) {
 		if (this.inTrash) return this.purge(e);
 		let t = e.filter((e) => !a.get(e)?.system);
-		if (!t.length) return void this.#ie(w("error.delete"), w("message.systemFolders"));
-		let { x: n, y: r } = this.#te(t[0]);
+		if (!t.length) return void this.#ae(w("error.delete"), w("message.systemFolders"));
+		let { x: n, y: r } = this.#ne(t[0]);
 		re(t, n, r, this.history);
 	}
 	restore(e) {
@@ -1254,7 +1254,7 @@ var Je = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 	purge(e) {
 		let t = this.#o.filter((t) => e.includes(t.id));
 		if (!t.length) return;
-		let n = t.length === 1 ? w("confirm.purge", { name: t[0].name }) : w("confirm.purgeMany", { count: T(t.length) }), { x: r, y: i } = this.#te(t[0].id);
+		let n = t.length === 1 ? w("confirm.purge", { name: t[0].name }) : w("confirm.purgeMany", { count: T(t.length) }), { x: r, y: i } = this.#ne(t[0].id);
 		l(r, i, [{
 			label: n,
 			icon: "trash",
@@ -1295,11 +1295,11 @@ var Je = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 		if (!t) return;
 		this.win.setTitle(D(t), w("@name")), this.#T(t), this.#E();
 		let n = this.inTrash ? a.trashed() : e ? a.tagged(e.id) : a.children(this.folder);
-		this.#c.clear(), this.#o = this.#B(n);
+		this.#c.clear(), this.#o = this.#V(n);
 		let r = new Set(this.#o.map((e) => e.id));
 		this.#l = new Set([...this.#l].filter((e) => r.has(e))), r.has(this.#d) || (this.#d = this.#o[0]?.id ?? null);
 		let i = this.list.scrollTop;
-		this.list.classList.toggle("grid", this.#n !== "list"), this.list.classList.toggle("thumbs", this.#n === "thumbs"), this.list.classList.toggle("tree", this.tree), this.list.setAttribute("role", this.tree ? "tree" : "listbox"), this.#o.length ? this.#n === "list" ? (this.#M(), this.list.replaceChildren(this.#L(), ...this.#o.map((e) => this.#R(e)))) : this.list.replaceChildren(...this.#o.map((e) => this.#U(e))) : this.list.replaceChildren(o("div", { class: "fm-empty" }, this.#a ? w("empty.noMatch", { query: this.search.value.trim() }) : this.inTrash ? w("empty.trash") : w(e ? "empty.tag" : "empty.folder"))), this.list.scrollTop = i, this.list.setAttribute("aria-activedescendant", this.#d ? `fm-${this.#d}` : "");
+		this.list.classList.toggle("grid", this.#n !== "list"), this.list.classList.toggle("thumbs", this.#n === "thumbs"), this.list.classList.toggle("tree", this.tree), this.list.setAttribute("role", this.tree ? "tree" : "listbox"), this.#o.length ? this.#n === "list" ? (this.#N(), this.list.replaceChildren(this.#R(), ...this.#o.map((e) => this.#z(e)))) : this.list.replaceChildren(...this.#o.map((e) => this.#W(e))) : this.list.replaceChildren(o("div", { class: "fm-empty" }, this.#a ? w("empty.noMatch", { query: this.search.value.trim() }) : this.inTrash ? w("empty.trash") : w(e ? "empty.tag" : "empty.folder"))), this.list.scrollTop = i, this.list.setAttribute("aria-activedescendant", this.#d ? `fm-${this.#d}` : "");
 		let s = n.length, c = this.#l.size;
 		this.statusLeft.textContent = w("status.items", {
 			n: s,
@@ -1358,7 +1358,7 @@ var Je = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 		e.forEach((e) => e.show(Math.max(180, Math.floor(e.width * n))));
 	}
 	#T(e) {
-		this.backBtn.disabled = !this.#e.some((e) => this.#ee(e)), this.forwardBtn.disabled = !this.#t.some((e) => this.#ee(e)), this.upBtn.disabled = !e.parent, this.newBtn.disabled = this.inTrash || !!this.inTag;
+		this.backBtn.disabled = !this.#e.some((e) => this.#te(e)), this.forwardBtn.disabled = !this.#t.some((e) => this.#te(e)), this.upBtn.disabled = !e.parent, this.newBtn.disabled = this.inTrash || !!this.inTag;
 		for (let [e, t] of [
 			[this.listBtn, "list"],
 			[this.gridBtn, "grid"],
@@ -1494,35 +1494,35 @@ var Je = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 	}
 	#k(e, t, n, r) {
 		let i = e?.closest?.("[data-trash]");
-		if (i) return r.some((e) => !a.get(e)?.system) ? {
+		if (i) return qe(r) ? {
 			el: i,
-			run: (e, t) => this.#A(r, t)
+			run: (e, t) => this.#j(r, t)
 		} : null;
-		let o = this.side.querySelector(".fm-side-links");
-		if (!o?.contains(e)) return null;
-		let s = [...o.querySelectorAll(":scope > [data-entry]")], c = e.closest("[data-entry]");
-		if (c && s.includes(c)) {
-			let e = c.getBoundingClientRect(), t = Math.min(8, e.height / 4), { folder: i } = c.dataset;
+		let a = this.side.querySelector(".fm-side-links");
+		if (!a?.contains(e)) return null;
+		let o = [...a.querySelectorAll(":scope > [data-entry]")], s = e.closest("[data-entry]");
+		if (s && o.includes(s)) {
+			let e = s.getBoundingClientRect(), t = Math.min(8, e.height / 4), { folder: i } = s.dataset;
 			if (i && n > e.top + t && n < e.bottom - t) {
 				let e = ce(r, i);
 				return e && {
-					el: c,
+					el: s,
 					run: (t, n) => le(n, e, i)
 				};
 			}
 		}
-		let l = s.findIndex((e) => {
+		let c = o.findIndex((e) => {
 			let t = e.getBoundingClientRect();
 			return n < t.top + t.height / 2;
 		});
-		l < 0 && (l = s.length);
-		let u = [...new Set(r.map((e) => this.#O(e)).filter(Boolean))], { defaults: d } = this.#g;
-		if (!S.changes(u, l, d)) return null;
-		let f = this.side.getBoundingClientRect(), p = l < s.length ? s[l].getBoundingClientRect().top : s[s.length - 1].getBoundingClientRect().bottom;
-		return this.gap.style.top = `${p - f.top + this.side.scrollTop}px`, {
+		c < 0 && (c = o.length);
+		let l = [...new Set(r.map((e) => this.#O(e)).filter(Boolean))], { defaults: u } = this.#g;
+		if (!S.changes(l, c, u)) return null;
+		let d = this.side.getBoundingClientRect(), f = c < o.length ? o[c].getBoundingClientRect().top : o[o.length - 1].getBoundingClientRect().bottom;
+		return this.gap.style.top = `${f - d.top + this.side.scrollTop}px`, {
 			el: this.gap,
 			run: () => {
-				let e = S.place(u, l, d);
+				let e = S.place(l, c, u);
 				e && h(w("toast.linksAdded", {
 					n: e,
 					count: T(e)
@@ -1530,36 +1530,48 @@ var Je = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 			}
 		};
 	}
-	#A(e, t) {
+	#A(e) {
+		if (this.inTrash) return qe(e) ? {
+			el: this.list,
+			run: (t, n) => this.#j(e, n)
+		} : null;
+		if (this.inTag) return null;
+		let t = ce(e, this.folder);
+		return t && {
+			el: this.list,
+			run: (e, n) => le(n, t, this.folder)
+		};
+	}
+	#j(e, t) {
 		let n = e.filter((e) => !a.get(e)?.system).length;
 		pe(t, e), h(w("toast.trashed", {
 			n,
 			count: T(n)
 		}));
 	}
-	#j() {
+	#M() {
 		return (this.inTrash ? Ge : this.inTag ? Ke : We)();
 	}
-	#M(e = null) {
-		let { template: t, min: n } = this.#i.layout(this.#i.shown(this.#j()), e);
+	#N(e = null) {
+		let { template: t, min: n } = this.#i.layout(this.#i.shown(this.#M()), e);
 		this.list.style.setProperty("--fm-cols", t), this.list.style.setProperty("--fm-min", n);
 	}
-	#N(e) {
+	#P(e) {
 		let t = this.list.querySelectorAll(`[data-col="${e}"]`);
 		if (!t.length) return;
-		this.#M(e);
+		this.#N(e);
 		let n = 48;
 		for (let e of t) n = Math.max(n, e.offsetWidth + 1);
-		this.#i.resize(e, n), this.#M();
+		this.#i.resize(e, n), this.#N();
 	}
-	#P(e, t) {
+	#F(e, t) {
 		this.#i.setHidden(e, !t), !t && this.#r.key === e && (this.#r = {
 			key: "name",
 			dir: 1
 		}), this.render();
 	}
-	#F() {
-		let e = this.#j();
+	#I() {
+		let e = this.#M();
 		return [
 			...e.map((e) => {
 				let t = e.key === "name" || !this.#i.hidden.has(e.key);
@@ -1567,14 +1579,14 @@ var Je = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 					label: e.label,
 					icon: t ? "check" : null,
 					disabled: e.key === "name",
-					action: () => this.#P(e.key, !t)
+					action: () => this.#F(e.key, !t)
 				};
 			}),
 			"-",
 			{
 				label: w("columns.fitAll"),
 				icon: "fit",
-				action: () => this.#i.shown(e).forEach((e) => this.#N(e.key))
+				action: () => this.#i.shown(e).forEach((e) => this.#P(e.key))
 			},
 			{
 				label: w("columns.reset"),
@@ -1585,7 +1597,7 @@ var Je = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 			}
 		];
 	}
-	#I(e) {
+	#L(e) {
 		let t = o("span", {
 			class: "fm-grip",
 			role: "separator",
@@ -1601,22 +1613,22 @@ var Je = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 			this.list.classList.add("resizing"), g(t, {
 				threshold: 0,
 				onMove: (t) => {
-					this.#i.resize(e.key, r + t, !1), this.#M();
+					this.#i.resize(e.key, r + t, !1), this.#N();
 				},
 				onEnd: (e) => {
 					this.list.classList.remove("resizing"), e && this.#i.save();
 				}
 			});
-		}), t.addEventListener("dblclick", () => this.#N(e.key)), t.addEventListener("keydown", (t) => {
+		}), t.addEventListener("dblclick", () => this.#P(e.key)), t.addEventListener("keydown", (t) => {
 			let r = t.shiftKey ? 48 : 16, i = {
 				ArrowLeft: -r,
 				ArrowRight: r
 			}[t.key];
-			i !== void 0 && (t.preventDefault(), this.#i.resize(e.key, n() + i), this.#M());
+			i !== void 0 && (t.preventDefault(), this.#i.resize(e.key, n() + i), this.#N());
 		}), t;
 	}
-	#L() {
-		let e = this.#i.shown(this.#j());
+	#R() {
+		let e = this.#i.shown(this.#M());
 		return o("div", {
 			class: "fm-head",
 			role: "presentation"
@@ -1643,17 +1655,17 @@ var Je = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 			return o("div", {
 				class: "fm-th",
 				dataset: { col: e.key }
-			}, n, this.#I(e));
+			}, n, this.#L(e));
 		}));
 	}
-	#R(e) {
-		let t = this.#H(e);
-		return this.tree && (t.name.prepend(this.#z(e)), t.name.style.setProperty("--fm-depth", this.#c.get(e.id) ?? 0)), this.#G(e, "fm-row", ...this.#i.shown(this.#j()).map((e) => {
+	#z(e) {
+		let t = this.#U(e);
+		return this.tree && (t.name.prepend(this.#B(e)), t.name.style.setProperty("--fm-depth", this.#c.get(e.id) ?? 0)), this.#K(e, "fm-row", ...this.#i.shown(this.#M()).map((e) => {
 			let n = t[e.key] ?? o("span");
 			return n.dataset.col = e.key, n;
 		}));
 	}
-	#z(e) {
+	#B(e) {
 		if (e.type !== "folder") return o("span", {
 			class: "fm-twisty",
 			"aria-hidden": "true"
@@ -1666,21 +1678,21 @@ var Je = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 			title: w(t ? "tree.collapseTitle" : "tree.expandTitle")
 		});
 	}
-	#B(e, t = 0, n = []) {
-		for (let r of this.#K(e)) {
+	#V(e, t = 0, n = []) {
+		for (let r of this.#q(e)) {
 			let e = n.length;
-			n.push(r), this.#c.set(r.id, t), this.#V(r) && this.#B(a.children(r.id), t + 1, n), this.#a && n.length === e + 1 && !Je(r.name).includes(this.#a) && n.pop();
+			n.push(r), this.#c.set(r.id, t), this.#H(r) && this.#V(a.children(r.id), t + 1, n), this.#a && n.length === e + 1 && !Ye(r.name).includes(this.#a) && n.pop();
 		}
 		return n;
 	}
-	#V(e) {
+	#H(e) {
 		return this.tree && e.type === "folder" && this.#s.has(e.id);
 	}
-	#H(e) {
+	#U(e) {
 		if (e.trashed) {
 			let t = k(e);
 			return {
-				name: o("span", { class: "fm-name" }, o("span", { class: "fm-icon" }, b(e)), this.#W(e)),
+				name: o("span", { class: "fm-name" }, o("span", { class: "fm-icon" }, b(e)), this.#G(e)),
 				deleted: o("span", {}, P(e.trashed.at)),
 				size: o("span", { class: "num" }, Se(e)),
 				type: o("span", {}, E(e)),
@@ -1689,7 +1701,7 @@ var Je = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 		}
 		let t = this.inTag ? O(e) : "";
 		return {
-			name: o("span", { class: "fm-name" }, o("span", { class: "fm-icon" }, b(e)), this.#W(e), ve(e)),
+			name: o("span", { class: "fm-name" }, o("span", { class: "fm-icon" }, b(e)), this.#G(e), ve(e)),
 			modified: o("span", {}, P(e.modified)),
 			size: o("span", { class: "num" }, Se(e)),
 			type: o("span", {}, E(e)),
@@ -1697,15 +1709,15 @@ var Je = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 			location: o("span", { title: t }, t)
 		};
 	}
-	#U(e) {
-		let t = b(e, this.#n === "thumbs" && !e.trashed ? { preview: He } : void 0), n = this.#G(e, "fm-tile", o("span", { class: "fm-tile-icon" }, t, ve(e, "fm-tile-tags")), this.#W(e)), r = (e.tags ?? []).map((e) => m.get(e)?.name).filter(Boolean), i = e.trashed ? [w("tile.deleted", { date: P(e.trashed.at) }), w("tile.origin", { place: k(e) })] : [
+	#W(e) {
+		let t = b(e, this.#n === "thumbs" && !e.trashed ? { preview: He } : void 0), n = this.#K(e, "fm-tile", o("span", { class: "fm-tile-icon" }, t, ve(e, "fm-tile-tags")), this.#G(e)), r = (e.tags ?? []).map((e) => m.get(e)?.name).filter(Boolean), i = e.trashed ? [w("tile.deleted", { date: P(e.trashed.at) }), w("tile.origin", { place: k(e) })] : [
 			this.inTag && w("tile.location", { place: O(e) }),
 			w("owner.label", { name: A(e) }),
 			r.length && w("tile.tags", { names: r.join(", ") })
 		];
 		return n.title = [e.name, ...i.filter(Boolean)].join("\n"), n;
 	}
-	#W(e) {
+	#G(e) {
 		return this.#f === e.id ? o("input", {
 			class: "fm-rename",
 			type: "text",
@@ -1717,7 +1729,7 @@ var Je = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 			title: e.name
 		}, e.name);
 	}
-	#G(e, t, ...n) {
+	#K(e, t, ...n) {
 		let r = this.#l.has(e.id), i = this.tree && t === "fm-row", a = o("div", {
 			class: [
 				t,
@@ -1733,7 +1745,7 @@ var Je = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 		}, ...n);
 		return e.trashed ? a : C(a, e);
 	}
-	#K(e) {
+	#q(e) {
 		let { key: t, dir: n } = this.#r, r = (e) => t === "type" ? E(e) : t === "workspace" ? A(e) : t === "size" ? e.type === "folder" ? e.trashed ? e.inside : a.children(e.id).length : e.size ?? 0 : t === "modified" ? e.modified : t === "deleted" ? e.trashed?.at ?? e.modified : t === "origin" && e.trashed ? k(e) : t === "location" ? O(e) : e.name, i = {
 			folder: 0,
 			file: 1,
@@ -1745,10 +1757,10 @@ var Je = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 			return ((typeof a == "number" ? a - o : String(a).localeCompare(String(o), u.locale, { numeric: !0 })) || e.name.localeCompare(t.name, u.locale, { numeric: !0 })) * n;
 		});
 	}
-	#q(e, t = e[e.length - 1] ?? this.#d) {
+	#J(e, t = e[e.length - 1] ?? this.#d) {
 		this.#l = new Set(e), this.#d = t, this.render();
 	}
-	#J() {
+	#Y() {
 		let { signal: e } = this.win, t = (e) => e.target.closest?.("[role=\"option\"], [role=\"treeitem\"]");
 		this.list.addEventListener("pointerdown", (e) => {
 			if (e.button !== 0 || e.target.closest(".fm-rename, .fm-head")) return;
@@ -1759,22 +1771,22 @@ var Je = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 			}
 			let r = t(e);
 			if (!r) {
-				e.ctrlKey || e.metaKey || e.shiftKey || this.#q([]);
+				e.ctrlKey || e.metaKey || e.shiftKey || this.#J([]);
 				return;
 			}
-			let i = r.dataset.id, a = this.#o.map((e) => e.id), o = !1;
-			if (e.shiftKey && this.#u && a.includes(this.#u)) {
-				let [t, n] = [a.indexOf(this.#u), a.indexOf(i)].sort((e, t) => e - t), r = a.slice(t, n + 1);
-				this.#q(e.ctrlKey || e.metaKey ? [.../* @__PURE__ */ new Set([...this.#l, ...r])] : r, i);
+			let i = r.dataset.id, o = this.#o.map((e) => e.id), s = !1;
+			if (e.shiftKey && this.#u && o.includes(this.#u)) {
+				let [t, n] = [o.indexOf(this.#u), o.indexOf(i)].sort((e, t) => e - t), r = o.slice(t, n + 1);
+				this.#J(e.ctrlKey || e.metaKey ? [.../* @__PURE__ */ new Set([...this.#l, ...r])] : r, i);
 			} else if (e.ctrlKey || e.metaKey) {
 				let e = new Set(this.#l);
-				e.has(i) ? e.delete(i) : e.add(i), this.#u = i, this.#q([...e], i);
-			} else this.#u = i, this.#l.has(i) ? o = this.#l.size > 1 : this.#q([i], i);
-			!this.inTrash && this.#l.has(i) && ae(e, {
+				e.has(i) ? e.delete(i) : e.add(i), this.#u = i, this.#J([...e], i);
+			} else this.#u = i, this.#l.has(i) ? s = this.#l.size > 1 : this.#J([i], i);
+			this.inTrash && !a.isTrashed || !this.#l.has(i) || ae(e, {
 				ids: [...this.#l],
 				stack: this.history,
 				onEnd: ({ moved: e }) => {
-					!e && o && this.#q([i], i);
+					!e && s && this.#J([i], i);
 				}
 			});
 		}, { signal: e }), this.list.addEventListener("dblclick", (e) => {
@@ -1784,10 +1796,10 @@ var Je = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 			let r = a.get(n.dataset.id);
 			r && this.open(r);
 		}, { signal: e }), this.list.addEventListener("contextmenu", (e) => {
-			if (e.preventDefault(), e.target.closest(".fm-head")) return l(e.clientX, e.clientY, this.#F());
+			if (e.preventDefault(), e.target.closest(".fm-head")) return l(e.clientX, e.clientY, this.#I());
 			let n = t(e);
-			if (!n) return this.#Q(e);
-			this.#l.has(n.dataset.id) || this.#q([n.dataset.id], n.dataset.id), this.#$(e);
+			if (!n) return this.#$(e);
+			this.#l.has(n.dataset.id) || this.#J([n.dataset.id], n.dataset.id), this.#ee(e);
 		}, { signal: e }), this.list.addEventListener("keydown", (e) => {
 			if (e.target !== this.list) return;
 			if (e.altKey && [
@@ -1807,35 +1819,35 @@ var Je = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 				return;
 			}
 			if (this.tree && (e.key === "ArrowRight" || e.key === "ArrowLeft") && !e.shiftKey && !e.ctrlKey && !e.metaKey) {
-				e.preventDefault(), this.#Y(e.key === "ArrowRight");
+				e.preventDefault(), this.#X(e.key === "ArrowRight");
 				return;
 			}
-			let t = this.#Z(e.key);
+			let t = this.#Q(e.key);
 			if (t == null || !this.#o.length) return;
 			e.preventDefault();
 			let n = this.#o.map((e) => e.id), r = n.indexOf(this.#d), i = t === -Infinity ? 0 : t === Infinity ? n.length - 1 : Math.max(0, Math.min(n.length - 1, (r < 0 ? 0 : r) + t)), a = n[i];
 			if (e.shiftKey) {
 				this.#u ||= this.#d ?? a;
 				let [e, t] = [n.indexOf(this.#u), i].sort((e, t) => e - t);
-				this.#q(n.slice(e, t + 1), a);
-			} else this.#X(a);
+				this.#J(n.slice(e, t + 1), a);
+			} else this.#Z(a);
 		}, { signal: e });
 	}
-	#Y(e) {
+	#X(e) {
 		let t = this.#o.findIndex((e) => e.id === this.#d), n = this.#o[t];
 		if (!n) return;
-		let r = this.#V(n), i = this.#c.get(n.id);
+		let r = this.#H(n), i = this.#c.get(n.id);
 		if (e) {
 			if (n.type !== "folder") return;
 			if (!r) return this.setOpen(n.id, !0);
 			let e = this.#o[t + 1];
-			e && this.#c.get(e.id) > i && this.#X(e.id);
-		} else r ? this.setOpen(n.id, !1) : i > 0 && this.#X(n.parent);
-	}
-	#X(e) {
-		this.#u = e, this.#q([e], e), this.list.querySelector(`#fm-${CSS.escape(e)}`)?.scrollIntoView({ block: "nearest" });
+			e && this.#c.get(e.id) > i && this.#Z(e.id);
+		} else r ? this.setOpen(n.id, !1) : i > 0 && this.#Z(n.parent);
 	}
 	#Z(e) {
+		this.#u = e, this.#J([e], e), this.list.querySelector(`#fm-${CSS.escape(e)}`)?.scrollIntoView({ block: "nearest" });
+	}
+	#Q(e) {
 		let t = this.#n !== "list", n = t ? Math.max(1, Math.floor(this.list.clientWidth / Ue[this.#n])) : 1;
 		return {
 			ArrowDown: n,
@@ -1848,7 +1860,7 @@ var Je = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 			}
 		}[e] ?? null;
 	}
-	#Q(e) {
+	#$(e) {
 		let t = {
 			label: w("view.menu"),
 			icon: "grid",
@@ -1860,8 +1872,8 @@ var Je = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 		}, n = this.#n === "list" && {
 			label: w("columns.menu"),
 			icon: "list",
-			items: this.#F()
-		}, r = this.#o.some((e) => this.#V(e)) && {
+			items: this.#I()
+		}, r = this.#o.some((e) => this.#H(e)) && {
 			label: w("tree.collapseAll"),
 			icon: "minus",
 			action: () => {
@@ -1917,7 +1929,7 @@ var Je = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 			r
 		].filter(Boolean));
 	}
-	#$(e) {
+	#ee(e) {
 		let t = this.#o.filter((e) => this.#l.has(e.id)), n = t.length > 1, r = T(t.length);
 		if (this.inTrash) {
 			let i = t.map((e) => e.id);
@@ -2013,30 +2025,30 @@ var Je = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 			}
 		].filter(Boolean));
 	}
-	#ee(e) {
+	#te(e) {
 		return e === Y || !!Z(e) || a.exists(e);
 	}
-	#te(e) {
+	#ne(e) {
 		let t = this.list.querySelector(`[data-id="${CSS.escape(e)}"]`)?.getBoundingClientRect();
 		return {
 			x: t ? t.left + 40 : innerWidth / 2,
 			y: t ? t.bottom : innerHeight / 2
 		};
 	}
-	#ne(e, t) {
+	#re(e, t) {
 		for (; e.length;) {
 			let n = e.pop();
-			if (this.#ee(n)) {
+			if (this.#te(n)) {
 				t.push(this.folder), this.go(n, !1);
 				return;
 			}
 		}
 	}
-	#re(e) {
+	#ie(e) {
 		this.#p = e, this.render();
 	}
-	async #ie(t, n = "", r = ["ok"]) {
-		if (!e.messageBox) return this.#re(n ? `${t}: ${n}` : t), null;
+	async #ae(t, n = "", r = ["ok"]) {
+		if (!e.messageBox) return this.#ie(n ? `${t}: ${n}` : t), null;
 		let i = await e.messageBox(this.win, {
 			icon: "error",
 			title: t,
@@ -2047,9 +2059,9 @@ var Je = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 	}
 	notFound(e) {
 		let t = w("place.home");
-		this.#ie(w(e === "tag" ? "error.tagNotFound" : "error.folderNotFound"), w(e === "tag" ? "error.tagNotFoundText" : "error.folderNotFoundText", { place: t }));
+		this.#ae(w(e === "tag" ? "error.tagNotFound" : "error.folderNotFound"), w(e === "tag" ? "error.tagNotFoundText" : "error.folderNotFoundText", { place: t }));
 	}
-	#ae(e) {
+	#oe(e) {
 		let t = e.node && S.has(e.node.id);
 		if (this.inTrash) return t ? this.render() : void 0;
 		if (this.inTag) return this.render();
@@ -2058,4 +2070,4 @@ var Je = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 		(r || i || o || t) && (r && e.type !== "rename" && (this.#p = ""), this.render());
 	}
 };
-export { qe as default };
+export { Je as default };
