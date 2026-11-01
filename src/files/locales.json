@@ -200,7 +200,8 @@
       "preview.contentsOf": "Contents of {name}",
       "preview.cut": "Showing the first {shown} of {total} characters: open the file to see all of it",
       "preview.childTitle": "{name} — double-click to open",
-      "preview.appMissing": "App not installed"
+      "preview.appMissing": "App not installed",
+      "preview.byApp": "Preview made by {app}"
     }
   },
   "it": {
@@ -404,7 +405,8 @@
       "preview.contentsOf": "Contenuto di {name}",
       "preview.cut": "Mostrati i primi {shown} caratteri su {total}: apri il file per vederlo tutto",
       "preview.childTitle": "{name} — doppio clic per aprire",
-      "preview.appMissing": "App non installata"
+      "preview.appMissing": "App non installata",
+      "preview.byApp": "Anteprima creata da {app}"
     }
   }
 }

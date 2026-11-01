@@ -1,7 +1,7 @@
 import * as e from "/host/sdk.js";
 import { UndoStack as t, Window as n, appIcon as r, fileType as i, fs as a, h as o, history as s, icon as c, openMenu as l, session as u, settings as d, shortcuts as f, storage as p, tags as m, toast as h, trackDrag as g } from "/host/sdk.js";
 import * as _ from "/host/system.js";
-import { DESK_NAME as ee, SYSTEM_FOLDERS as te, addTarget as ne, confirmRemove as re, describeWorkspace as ie, dragItems as ae, dropZone as oe, getApp as v, handleCommand as y, itemIcon as b, launch as x, linkEntry as se, links as S, markItem as ce, movableInto as le, moveInto as ue, onWorkspacesChange as de, openFile as fe, recordCreated as pe, removeNodes as me, renameNode as he, restoreNodes as ge, setTag as _e, showProperties as ve, tagDots as ye, tagSubmenu as be } from "/host/system.js";
+import { DESK_NAME as ee, SYSTEM_FOLDERS as te, addTarget as ne, confirmRemove as re, describeWorkspace as ie, dragItems as ae, dropZone as oe, getApp as v, handleCommand as se, itemIcon as y, launch as b, linkEntry as ce, links as x, markItem as S, movableInto as le, moveInto as ue, onWorkspacesChange as de, openFile as fe, recordCreated as pe, removeNodes as me, renameNode as he, restoreNodes as ge, setTag as _e, showProperties as ve, tagDots as ye, tagSubmenu as be } from "/host/system.js";
 // src/shared/i18n.js
 function xe(t, n) {
 	if (e.locale) return e.locale.forApp(t).i18n;
@@ -243,7 +243,8 @@ var { t: C } = xe("files", {
 		"preview.contentsOf": "Contents of {name}",
 		"preview.cut": "Showing the first {shown} of {total} characters: open the file to see all of it",
 		"preview.childTitle": "{name} — double-click to open",
-		"preview.appMissing": "App not installed"
+		"preview.appMissing": "App not installed",
+		"preview.byApp": "Preview made by {app}"
 	} },
 	it: { strings: {
 		"@name": "File Manager",
@@ -465,7 +466,8 @@ var { t: C } = xe("files", {
 		"preview.contentsOf": "Contenuto di {name}",
 		"preview.cut": "Mostrati i primi {shown} caratteri su {total}: apri il file per vederlo tutto",
 		"preview.childTitle": "{name} — doppio clic per aprire",
-		"preview.appMissing": "App non installata"
+		"preview.appMissing": "App non installata",
+		"preview.byApp": "Anteprima creata da {app}"
 	} }
 }), w = (e) => e.toLocaleString(u.locale), T = (e) => e.type === "folder" ? C("type.folder") : e.type === "app" ? C("type.app") : i(e.name).label, E = (e) => e.id === a.root ? C("place.home") : e.name, D = (e) => e.parent === a.root ? C("place.home") : a.path(e.parent);
 function O(e) {
@@ -647,8 +649,8 @@ function ke(e, t) {
 		e.system && C("note.system"),
 		e.private && C("note.private"),
 		!e.trashed && a.isHidden(e.id) && C("note.hidden"),
-		!e.trashed && S.has(e.id) && C("note.linked")
-	].filter(Boolean), l = o("div", {}, K(b(e), E(e), T(e)), G(C("info.general"), W(s)), G(C("info.organization"), W([[C("info.workspace"), A(e)], [C("info.tags"), U(e.tags ?? [])]])), c.length ? G(C("info.attributes"), o("ul", { class: "fm-notes" }, c.map((e) => o("li", {}, e)))) : null);
+		!e.trashed && x.has(e.id) && C("note.linked")
+	].filter(Boolean), l = o("div", {}, K(y(e), E(e), T(e)), G(C("info.general"), W(s)), G(C("info.organization"), W([[C("info.workspace"), A(e)], [C("info.tags"), U(e.tags ?? [])]])), c.length ? G(C("info.attributes"), o("ul", { class: "fm-notes" }, c.map((e) => o("li", {}, e)))) : null);
 	if (Ee(e) && (e.size ?? 0) <= we) {
 		let n = o("dd", {}, "…"), r = o("dd", {}, "…"), i = o("dd", {}, "…");
 		l.append(G(C("info.text"), o("dl", { class: "fm-facts" }, o("dt", {}, C("info.lines")), n, o("dt", {}, C("info.words")), r, o("dt", {}, C("info.chars")), i))), t(e).then((e) => {
@@ -675,7 +677,7 @@ function Ae(e) {
 		})
 	].filter(Boolean).join(", "), c = e.reduce((e, t) => e + (t.type === "folder" ? t.trashed ? t.inside : a.count(t.id) : 0), 0), l = /* @__PURE__ */ new Map();
 	for (let t of e) l.set(T(t), (l.get(T(t)) ?? 0) + 1);
-	let u = new Set(e.map((e) => e.parent)), d = e.map((e) => e.modified), f = [...new Set(e.map(k))], p = [...new Set(e.flatMap((e) => e.tags ?? []))], m = p.filter((t) => e.every((e) => e.tags?.includes(t))), h = e.every((e) => e.trashed), g = o("span", { class: "fm-info-stack" }, e.slice(0, 3).map((e) => o("span", {}, b(e))));
+	let u = new Set(e.map((e) => e.parent)), d = e.map((e) => e.modified), f = [...new Set(e.map(k))], p = [...new Set(e.flatMap((e) => e.tags ?? []))], m = p.filter((t) => e.every((e) => e.tags?.includes(t))), h = e.every((e) => e.trashed), g = o("span", { class: "fm-info-stack" }, e.slice(0, 3).map((e) => o("span", {}, y(e))));
 	return o("div", {}, K(g, C("selection.count", { count: w(e.length) }), s), G(C("info.general"), W([
 		[C("info.size"), V(e.reduce((e, t) => e + H(t), 0))],
 		c > 0 && [C("info.contents"), C("info.insideFolders", {
@@ -694,7 +696,7 @@ function Ae(e) {
 		[C("info.workspace"), f.join(", ")],
 		[C("info.tags"), U(p)],
 		p.length > 0 && [C("info.common"), U(m)]
-	])), G(C("info.items"), o("ul", { class: "fm-names" }, e.slice(0, z).map((e) => o("li", { title: e.name }, o("span", { class: "fm-icon" }, b(e)), o("span", {}, e.name))), e.length > z ? o("li", { class: "more" }, C("list.more", { count: w(e.length - z) })) : null)));
+	])), G(C("info.items"), o("ul", { class: "fm-names" }, e.slice(0, z).map((e) => o("li", { title: e.name }, o("span", { class: "fm-icon" }, y(e)), o("span", {}, e.name))), e.length > z ? o("li", { class: "more" }, C("list.more", { count: w(e.length - z) })) : null)));
 }
 function je() {
 	let e = a.trashed(), t = e.reduce((e, t) => e + 1 + t.inside, 0);
@@ -729,23 +731,25 @@ var Ne = class {
 	update(e) {
 		let t = e.length === 1 ? e[0] : null, n = t ? `${De(t)}:${t.name}:${t.type === "folder" && !t.trashed ? a.children(t.id).map((e) => e.id + e.name).join() : ""}` : `${e.length}`;
 		if (n === this.#e) return;
-		if (this.#e = n, this.#s(), !t) return this.#o(e.length ? q("list", C("selection.count", { count: w(e.length) }), C("preview.oneAtATime")) : q("file", C("preview.none"), C("preview.selectFile")));
-		if (t.trashed) return this.#o(this.#n(t), q("trash", C("preview.trashed"), C("preview.restoreToSee")));
-		if (t.type === "folder") return this.#o(this.#n(t), this.#i(t));
-		if (t.type === "app") return this.#o(this.#n(t), this.#a(t));
+		if (this.#e = n, this.#u(), !t) return this.#l(e.length ? q("list", C("selection.count", { count: w(e.length) }), C("preview.oneAtATime")) : q("file", C("preview.none"), C("preview.selectFile")));
+		if (t.trashed) return this.#l(this.#n(t), q("trash", C("preview.trashed"), C("preview.restoreToSee")));
+		if (t.type === "folder") return this.#l(this.#n(t), this.#s(t));
+		if (t.type === "app") return this.#l(this.#n(t), this.#c(t));
 		let r = o("div", { class: "fm-preview-wait" }, C("preview.loading"));
-		this.#o(this.#n(t), r), this.text(t).then((e) => {
-			this.#e === n && r.replaceWith(this.#r(t, e));
-		}, (e) => {
-			this.#e === n && r.replaceWith(q("x", C("preview.readError"), e?.message ?? ""));
-		});
+		this.#l(this.#n(t), r);
+		let i = (e) => {
+			this.#e === n && r.replaceWith(e());
+		};
+		this.#a(t).then((e) => {
+			if (this.#e === n) return e ? i(() => this.#o(t, e)) : this.text(t).then((e) => i(() => this.#r(t, e)));
+		}).catch((e) => i(() => q("x", C("preview.readError"), e?.message ?? "")));
 	}
 	destroy() {
-		this.#s();
+		this.#u();
 	}
 	#n(e) {
 		let t = e.trashed ? null : e.type === "app" ? C("preview.launch") : C("preview.open");
-		return o("div", { class: "fm-preview-head" }, o("span", { class: "fm-icon" }, b(e)), o("span", {
+		return o("div", { class: "fm-preview-head" }, o("span", { class: "fm-icon" }, y(e)), o("span", {
 			class: "fm-preview-name",
 			title: e.name
 		}, E(e)), t && o("button", {
@@ -757,11 +761,12 @@ var Ne = class {
 	#r(e, t) {
 		if (!t) return q("file", C("preview.emptyFile"), "");
 		let { ext: n } = i(e.name);
-		if (n === "svg" && /^\s*(<\?xml[^>]*>\s*)?(<!--[\s\S]*?-->\s*)*<svg[\s>]/i.test(t)) return this.#t = URL.createObjectURL(new Blob([t], { type: "image/svg+xml" })), o("div", { class: "fm-preview-image" }, o("img", {
+		return n === "svg" && /^\s*(<\?xml[^>]*>\s*)?(<!--[\s\S]*?-->\s*)*<svg[\s>]/i.test(t) ? (this.#t = URL.createObjectURL(new Blob([t], { type: "image/svg+xml" })), o("div", { class: "fm-preview-image" }, o("img", {
 			src: this.#t,
 			alt: C("preview.imageAlt", { name: e.name })
-		}));
-		if (t.slice(0, 8e3).includes("\0")) return q("file", C("preview.unavailable"), C("preview.notText"));
+		}))) : t.slice(0, 8e3).includes("\0") ? q("file", C("preview.unavailable"), C("preview.notText")) : this.#i(e, t);
+	}
+	#i(e, t, n = null) {
 		let r = t.length > R;
 		return o("div", { class: "fm-preview-textwrap" }, o("pre", {
 			class: "fm-preview-text",
@@ -770,9 +775,26 @@ var Ne = class {
 		}, r ? t.slice(0, R) : t), r ? o("div", { class: "fm-preview-note" }, C("preview.cut", {
 			shown: w(R),
 			total: w(t.length)
-		})) : null);
+		})) : null, n);
 	}
-	#i(e) {
+	#a(e) {
+		return typeof _.filePreview == "function" ? _.filePreview(e).catch((t) => (console.warn(`[files] anteprima di ${e.name}:`, t), null)) : Promise.resolve(null);
+	}
+	#o(e, t) {
+		let n = o("div", { class: "fm-preview-note" }, [C("preview.byApp", { app: v(t.app)?.name ?? t.app }), t.note].filter(Boolean).join(" · "));
+		if (typeof t.text == "string") return t.text ? this.#i(e, t.text, n) : q("file", C("preview.emptyFile"), "");
+		let r;
+		return t.image instanceof Blob ? (this.#t = URL.createObjectURL(t.image), r = o("div", { class: "fm-preview-image" }, o("img", {
+			src: this.#t,
+			alt: C("preview.imageAlt", { name: e.name })
+		}))) : (r = o("iframe", {
+			class: "fm-preview-frame",
+			sandbox: "",
+			referrerpolicy: "no-referrer",
+			title: C("preview.contentsOf", { name: e.name })
+		}), r.srcdoc = t.html), o("div", { class: "fm-preview-textwrap" }, r, n);
+	}
+	#s(e) {
 		let t = a.children(e.id);
 		if (!t.length) return q("folder", C("preview.emptyFolder"), "");
 		let n = {
@@ -786,16 +808,16 @@ var Ne = class {
 		}, t.slice(0, B).map((e) => o("li", {
 			title: C("preview.childTitle", { name: e.name }),
 			ondblclick: () => this.open(e)
-		}, o("span", { class: "fm-icon" }, b(e)), o("span", { class: "fm-label" }, e.name))), t.length > B ? o("li", { class: "more" }, C("list.more", { count: w(t.length - B) })) : null);
+		}, o("span", { class: "fm-icon" }, y(e)), o("span", { class: "fm-label" }, e.name))), t.length > B ? o("li", { class: "more" }, C("list.more", { count: w(t.length - B) })) : null);
 	}
-	#a(e) {
+	#c(e) {
 		let t = v(e.app);
 		return t ? o("div", { class: "fm-preview-app" }, r(t), o("strong", {}, t.name)) : q("x", C("preview.appMissing"), e.app);
 	}
-	#o(...e) {
+	#l(...e) {
 		this.body.replaceChildren(...e);
 	}
-	#s() {
+	#u() {
 		this.#t && URL.revokeObjectURL(this.#t), this.#t = null;
 	}
 };
@@ -1019,7 +1041,7 @@ var Ge = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 			class: "fm-gap",
 			"aria-hidden": "true"
 		}), oe(this.side, { target: (e, t, n, r) => this.#w(e, t, n, r) });
-		let i = a.on("change", (e) => this.#ee(e)), l = S.on("change", () => {
+		let i = a.on("change", (e) => this.#ee(e)), l = x.on("change", () => {
 			this.#Y(this.folder) && this.render();
 		}), u = a.on("scope", () => {
 			this.#Y(this.folder) && this.render();
@@ -1038,10 +1060,10 @@ var Ge = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 			remove: () => this.remove([...this.#l]),
 			selectAll: () => this.#H(this.#o.map((e) => e.id)),
 			deselect: () => this.#H([])
-		}), g = s.attach(e.el, this.history), _ = [y("files.info", {
+		}), g = s.attach(e.el, this.history), _ = [se("files.info", {
 			isActive: () => e.active,
 			run: () => this.info.toggle()
-		}), y("files.preview", {
+		}), se("files.preview", {
 			isActive: () => e.active,
 			run: () => this.preview.toggle()
 		})];
@@ -1085,7 +1107,7 @@ var Ge = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 	}
 	open(e) {
 		if (e.type === "folder") return this.go(e.id);
-		if (e.type === "app") return x(e.app);
+		if (e.type === "app") return b(e.app);
 		fe(e);
 	}
 	openSelected() {
@@ -1283,7 +1305,7 @@ var Ge = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 				type: "button",
 				onclick: () => this.go(e.id)
 			}, E(e));
-			return a.exists(e.id) && ce(r, e), n ? [o("span", {
+			return a.exists(e.id) && S(r, e), n ? [o("span", {
 				class: "fm-crumb-sep",
 				"aria-hidden": "true"
 			}, "›"), r] : [r];
@@ -1337,7 +1359,7 @@ var Ge = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 				"aria-current": t ? "true" : null,
 				title: `${D(e)} › ${e.name}`,
 				onclick: () => this.open(e)
-			}, o("span", { class: "fm-link-icon" }, b(e)), o("span", {}, e.name));
+			}, o("span", { class: "fm-link-icon" }, y(e)), o("span", {}, e.name));
 			r.addEventListener("contextmenu", (t) => {
 				t.preventDefault(), l(t.clientX, t.clientY, [
 					{
@@ -1387,14 +1409,14 @@ var Ge = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 		g.dataset.trash = "", this.side.replaceChildren(o("section", {
 			class: "fm-side-links",
 			"aria-label": C("side.links")
-		}, o("h6", {}, C("side.links")), ...S.arrange(d).flatMap(h)), ...u.length ? [o("h6", {}, C("side.tags")), ...u.map(s)] : [], o("hr", { class: "fm-side-sep" }), g, this.gap);
+		}, o("h6", {}, C("side.links")), ...x.arrange(d).flatMap(h)), ...u.length ? [o("h6", {}, C("side.tags")), ...u.map(s)] : [], o("hr", { class: "fm-side-sep" }), g, this.gap);
 	}
 	#S(e) {
-		let { defaults: t } = this.#m, n = S.arrange(t).indexOf(e.id);
-		n < 0 || (S.remove(e.id), this.history.push({
+		let { defaults: t } = this.#m, n = x.arrange(t).indexOf(e.id);
+		n < 0 || (x.remove(e.id), this.history.push({
 			label: C("link.remove", { name: e.name }),
-			undo: () => S.place([e.id], n, t),
-			redo: () => S.remove(e.id)
+			undo: () => x.place([e.id], n, t),
+			redo: () => x.remove(e.id)
 		}), h(C("toast.unlinked", { name: e.name })), this.list.focus());
 	}
 	#C(e) {
@@ -1425,12 +1447,12 @@ var Ge = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 		});
 		l < 0 && (l = s.length);
 		let u = [...new Set(r.map((e) => this.#C(e)).filter(Boolean))], { defaults: d } = this.#m;
-		if (!S.changes(u, l, d)) return null;
+		if (!x.changes(u, l, d)) return null;
 		let f = this.side.getBoundingClientRect(), p = l < s.length ? s[l].getBoundingClientRect().top : s[s.length - 1].getBoundingClientRect().bottom;
 		return this.gap.style.top = `${p - f.top + this.side.scrollTop}px`, {
 			el: this.gap,
 			run: () => {
-				let e = S.place(u, l, d);
+				let e = x.place(u, l, d);
 				e && h(C("toast.linksAdded", {
 					n: e,
 					count: w(e)
@@ -1588,7 +1610,7 @@ var Ge = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 		if (e.trashed) {
 			let t = O(e);
 			return {
-				name: o("span", { class: "fm-name" }, o("span", { class: "fm-icon" }, b(e)), this.#z(e)),
+				name: o("span", { class: "fm-name" }, o("span", { class: "fm-icon" }, y(e)), this.#z(e)),
 				deleted: o("span", {}, F(e.trashed.at)),
 				size: o("span", { class: "num" }, N(e)),
 				type: o("span", {}, T(e)),
@@ -1597,7 +1619,7 @@ var Ge = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 		}
 		let t = this.inTag ? D(e) : "";
 		return {
-			name: o("span", { class: "fm-name" }, o("span", { class: "fm-icon" }, b(e)), this.#z(e), ye(e)),
+			name: o("span", { class: "fm-name" }, o("span", { class: "fm-icon" }, y(e)), this.#z(e), ye(e)),
 			modified: o("span", {}, F(e.modified)),
 			size: o("span", { class: "num" }, N(e)),
 			type: o("span", {}, T(e)),
@@ -1606,7 +1628,7 @@ var Ge = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 		};
 	}
 	#R(e) {
-		let t = this.#B(e, "fm-tile", o("span", { class: "fm-tile-icon" }, b(e), ye(e, "fm-tile-tags")), this.#z(e)), n = (e.tags ?? []).map((e) => m.get(e)?.name).filter(Boolean), r = e.trashed ? [C("tile.deleted", { date: F(e.trashed.at) }), C("tile.origin", { place: O(e) })] : [
+		let t = this.#B(e, "fm-tile", o("span", { class: "fm-tile-icon" }, y(e), ye(e, "fm-tile-tags")), this.#z(e)), n = (e.tags ?? []).map((e) => m.get(e)?.name).filter(Boolean), r = e.trashed ? [C("tile.deleted", { date: F(e.trashed.at) }), C("tile.origin", { place: O(e) })] : [
 			this.inTag && C("tile.location", { place: D(e) }),
 			C("owner.label", { name: k(e) }),
 			n.length && C("tile.tags", { names: n.join(", ") })
@@ -1639,7 +1661,7 @@ var Ge = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 			"aria-level": i ? String((this.#c.get(e.id) ?? 0) + 1) : null,
 			"aria-expanded": i && e.type === "folder" ? String(this.#s.has(e.id)) : null
 		}, ...n);
-		return e.trashed ? a : ce(a, e);
+		return e.trashed ? a : S(a, e);
 	}
 	#V(e) {
 		let { key: t, dir: n } = this.#r, r = (e) => t === "type" ? T(e) : t === "workspace" ? k(e) : t === "size" ? e.type === "folder" ? e.trashed ? e.inside : a.children(e.id).length : e.size ?? 0 : t === "modified" ? e.modified : t === "deleted" ? e.trashed?.at ?? e.modified : t === "origin" && e.trashed ? O(e) : t === "location" ? D(e) : e.name, i = {
@@ -1797,7 +1819,7 @@ var Ge = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 			{
 				label: C("menu.manageTags"),
 				icon: "gear",
-				action: () => x("settings", { tab: "tags" })
+				action: () => b("settings", { tab: "tags" })
 			},
 			"-",
 			t,
@@ -1873,7 +1895,7 @@ var Ge = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 			!n && t[0].type === "folder" && {
 				label: C("menu.openInEditor"),
 				icon: "code",
-				action: () => x("editor", { folder: t[0].id })
+				action: () => b("editor", { folder: t[0].id })
 			},
 			o && !n && {
 				label: C("menu.reveal"),
@@ -1893,7 +1915,7 @@ var Ge = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 				icon: "x",
 				action: () => _e(a, o.id, !1)
 			},
-			se(a),
+			ce(a),
 			{
 				label: C("menu.info"),
 				icon: "info",
@@ -1954,7 +1976,7 @@ var Ge = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 		this.#$(C(e === "tag" ? "error.tagNotFound" : "error.folderNotFound"), C(e === "tag" ? "error.tagNotFoundText" : "error.folderNotFoundText", { place: t }));
 	}
 	#ee(e) {
-		let t = e.node && S.has(e.node.id);
+		let t = e.node && x.has(e.node.id);
 		if (this.inTrash) return t ? this.render() : void 0;
 		if (this.inTag) return this.render();
 		if (e.type === "remove" && e.ids.includes(this.folder)) return this.go(e.parent && a.exists(e.parent) ? e.parent : a.root, !1);

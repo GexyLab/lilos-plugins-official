@@ -1,5 +1,6 @@
 import { h, icon, fs, tags, fileType, session, appIcon } from '@lilos/sdk';
 import { itemIcon, getApp, links } from '@lilos/system';
+import * as system from '@lilos/system';   // `filePreview`: missing in older lilOS, so not imported by name
 import { num, typeLabel, folderName, locationLabel, originLabel, ownerLabel, ownerNode, formatBytes, countLabel, retentionLabel, dateLabel } from './format.js';
 import { t } from './i18n.js';
 
@@ -185,6 +186,7 @@ function tagInfo(tag) {
 /**
  * The preview panel: what a file contains (text, an SVG image), what a folder holds, the app
  * of a shortcut. It shows one item; it is rebuilt only when that item or its content changes.
+ * A file whose app has a filePreview entry point gets the preview that app makes.
  */
 export class Preview {
   #key = null;
@@ -212,13 +214,12 @@ export class Preview {
     if (n.type === 'app') return this.#show(this.#title(n), this.#app(n));
     const loading = h('div', { class: 'fm-preview-wait' }, t('preview.loading'));
     this.#show(this.#title(n), loading);
-    this.text(n).then(content => {
+    const shown = view => { if (this.#key === key) loading.replaceWith(view()); };
+    this.#fromApp(n).then(preview => {
       if (this.#key !== key) return;
-      loading.replaceWith(this.#file(n, content));
-    }, err => {
-      if (this.#key !== key) return;
-      loading.replaceWith(empty('x', t('preview.readError'), err?.message ?? ''));
-    });
+      if (preview) return shown(() => this.#appView(n, preview));
+      return this.text(n).then(content => shown(() => this.#file(n, content)));
+    }).catch(err => shown(() => empty('x', t('preview.readError'), err?.message ?? '')));
   }
 
   destroy() { this.#clear(); }
@@ -240,10 +241,43 @@ export class Preview {
       return h('div', { class: 'fm-preview-image' }, h('img', { src: this.#url, alt: t('preview.imageAlt', { name: n.name }) }));
     }
     if (content.slice(0, 8000).includes('\0')) return empty('file', t('preview.unavailable'), t('preview.notText'));
+    return this.#text(n, content);
+  }
+
+  #text(n, content, footer = null) {
     const cut = content.length > PREVIEW_CHARS;
     return h('div', { class: 'fm-preview-textwrap' },
       h('pre', { class: 'fm-preview-text', tabindex: '0', 'aria-label': t('preview.contentsOf', { name: n.name }) }, cut ? content.slice(0, PREVIEW_CHARS) : content),
-      cut ? h('div', { class: 'fm-preview-note' }, t('preview.cut', { shown: num(PREVIEW_CHARS), total: num(content.length) })) : null);
+      cut ? h('div', { class: 'fm-preview-note' }, t('preview.cut', { shown: num(PREVIEW_CHARS), total: num(content.length) })) : null,
+      footer);
+  }
+
+  /**
+   * The preview made by the app that opens the file (its filePreview entry point), or null: the
+   * File Manager shows its own. An app that fails is skipped. Older lilOS has no filePreview.
+   */
+  #fromApp(n) {
+    if (typeof system.filePreview !== 'function') return Promise.resolve(null);
+    return system.filePreview(n).catch(err => {
+      console.warn(`[files] anteprima di ${n.name}:`, err);
+      return null;
+    });
+  }
+
+  /** { app, text | image | html, note }: html is a document for a sandbox with no permissions. */
+  #appView(n, preview) {
+    const footer = h('div', { class: 'fm-preview-note' },
+      [t('preview.byApp', { app: getApp(preview.app)?.name ?? preview.app }), preview.note].filter(Boolean).join(' · '));
+    if (typeof preview.text === 'string') return preview.text ? this.#text(n, preview.text, footer) : empty('file', t('preview.emptyFile'), '');
+    let view;
+    if (preview.image instanceof Blob) {
+      this.#url = URL.createObjectURL(preview.image);
+      view = h('div', { class: 'fm-preview-image' }, h('img', { src: this.#url, alt: t('preview.imageAlt', { name: n.name }) }));
+    } else {
+      view = h('iframe', { class: 'fm-preview-frame', sandbox: '', referrerpolicy: 'no-referrer', title: t('preview.contentsOf', { name: n.name }) });
+      view.srcdoc = preview.html;
+    }
+    return h('div', { class: 'fm-preview-textwrap' }, view, footer);
   }
 
   #folder(n) {
