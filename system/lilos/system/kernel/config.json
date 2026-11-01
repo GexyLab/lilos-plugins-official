@@ -1,0 +1,41 @@
+{
+  "host": "127.0.0.1",
+  "port": 8790,
+  "origins": [],
+  "loopbackOrigins": true,
+  "secureCookies": false,
+  "modules": [
+    {
+      "name": "users-basic",
+      "version": "1.0.0",
+      "config": {
+        "sessionDays": 30,
+        "idleDays": 7
+      }
+    },
+    {
+      "name": "fs-postgres",
+      "version": "1.0.0",
+      "config": {
+        "url": "postgres://lilos:lilos@127.0.0.1:5433/lilos"
+      }
+    },
+    {
+      "name": "services-isolate",
+      "version": "1.0.0",
+      "config": {}
+    },
+    {
+      "name": "notifications-basic",
+      "version": "1.0.0",
+      "config": {
+        "defaultKeep": 20,
+        "perMinute": 10
+      }
+    }
+  ],
+  "apps": {
+    "allowLocalSources": false,
+    "trustedPublishers": {}
+  }
+}

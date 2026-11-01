@@ -16,6 +16,11 @@ import './appstore.css';
  * the items of every repository), cards that open the details with the README, and "Options"
  * (preferences and repositories) at the bottom right. A README the kernel cut (past 64 KB) can be
  * saved whole in the Download folder.
+ *
+ * lilOS itself is an item too (kind 'system', with a lilOS that has sdk.systemReleases): its version,
+ * the newer one in the official repository with README and changelog, the versions kept on disk.
+ * A new version starts with the kernel's restart; a copy of the repository (development) is
+ * updated with git, not here.
  */
 const IMPLICIT = new Set(['fs.app', 'fs.tmp', 'fs.open', 'ui.notify', 'clipboard.write', 'auth.remote']);
 const categories = () => [
@@ -29,6 +34,9 @@ const categories = () => [
 const APP_CATEGORIES = new Set(['system', 'productivity', 'media', 'development', 'other']);
 const MODULE_ICON = { glyph: 'monitor', color: '#5f6673' };
 const APP_ICON = { glyph: 'help', color: '#5f6673' };
+const SYSTEM_ICON = { glyph: 'window', color: '#3b6ef5' };
+/** lilOS's own versions: missing in older lilOS */
+const releases = sdk.systemReleases ?? null;
 
 settings.define({ 'appstore.showUnofficial': true });
 
@@ -45,7 +53,7 @@ const granted = permissions => (permissions ?? []).filter(p => !IMPLICIT.has(p.s
 export default function AppStore({ openWindow }) {
   const isAdmin = kernel.user?.role === 'admin';
   const state = {
-    repos: [], catalogs: new Map(), errors: new Map(), modules: [], loading: true, busy: null, pressed: null,
+    repos: [], catalogs: new Map(), errors: new Map(), modules: [], system: null, loading: true, busy: null, pressed: null,
     tab: 'installed', query: {}, view: 'list', key: null, newRepo: { url: '', name: '' }, updates: null,
   };
 
@@ -102,6 +110,7 @@ export default function AppStore({ openWindow }) {
         }
       }));
       state.modules = isAdmin ? await kernelModules.list().catch(() => []) : [];
+      state.system = releases ? await releases.info().catch(() => null) : null;
       await loadUpdatesService();
       await apps.refresh();
     } catch (err) {
@@ -147,6 +156,26 @@ export default function AppStore({ openWindow }) {
     };
   }
 
+  /** lilOS: what runs (state.system) and what the official repository offers (its catalog's `system`). */
+  function systemItem() {
+    const info = state.system;
+    if (!info) return null;
+    const repo = state.repos.find(r => r.official) ?? null;
+    const entry = repo && state.catalogs.get(repo.id)?.system?.system ? state.catalogs.get(repo.id).system : null;
+    const offered = entry?.system.version ?? null;
+    const installed = info.mode === 'installed';
+    return {
+      key: 'system:lilos', kind: 'system', id: 'lilos', name: 'lilOS', description: t('system.description'),
+      icon: SYSTEM_ICON, publisher: 'lilOS', category: 'system', repo, entry, have: info,
+      readme: entry?.readme ?? null, readmeTruncated: !!entry?.readmeTruncated,
+      changelog: entry?.changelog ?? null, changelogTruncated: !!entry?.changelogTruncated,
+      offered, installed: info.version, here: true, elsewhere: false,
+      // Already put next to this one, waiting for the restart: nothing to update
+      update: installed && offered && newer(offered, info.version) && offered !== info.next ? offered : null,
+      required: true, verified: true,
+    };
+  }
+
   function allItems() {
     const installed = apps.list();
     const modules = state.modules.filter(m => m.enabled || m.running);
@@ -163,7 +192,8 @@ export default function AppStore({ openWindow }) {
     for (const m of modules) {
       if (!out.some(i => i.kind === 'module' && i.here && i.id === m.name)) out.push(moduleItem(state.repos.find(r => sameRepo(m.source, r)) ?? null, null, m));
     }
-    return out;
+    const system = systemItem();
+    return system ? [system, ...out] : out;
   }
 
   function tabs(items) {
@@ -179,6 +209,8 @@ export default function AppStore({ openWindow }) {
     .some(text => text.toLowerCase().includes(query));
 
   const restartNeeded = () => isAdmin && state.modules.some(m => (m.enabled ?? null) !== (m.running ?? null));
+  /** The version of lilOS that starts with the next restart of the kernel, when it is not the one running. */
+  const systemNext = () => (isAdmin ? state.system?.next ?? null : null);
 
   // ---------- Actions ----------
 
@@ -339,11 +371,61 @@ export default function AppStore({ openWindow }) {
     }
   }
 
+  // ---------- lilOS ----------
+
+  /** Puts the newer version of lilOS next to this one: it runs after the restart (or lilOS goes back by itself). */
+  async function updateSystem(item) {
+    const ok = await ask({
+      title: t('system.confirmTitle', { version: item.update }), glyph: 'download', height: 290,
+      body: [
+        h('p', { class: 'as-dialog-lead' }, t('system.confirmLead', { version: item.update, current: item.installed })),
+        h('p', {}, t('system.confirmRestart')),
+        h('p', {}, t('system.confirmRollback', { current: item.installed })),
+      ],
+      confirm: { label: t('action.update'), primary: true, value: true },
+    });
+    if (ok) act('update', () => releases.update(), r => (r.unchanged ? t('system.upToDate') : t('system.ready', { version: r.version })));
+  }
+
+  /** Another version kept on disk: it runs after the restart, on trial as an update. */
+  const useRelease = version => act('system', () => releases.use(version),
+    r => (r.restartRequired ? t('system.ready', { version }) : t('system.nextCancelled')));
+
+  async function removeRelease(version) {
+    const ok = await ask({
+      title: t('system.removeTitle', { version }), glyph: 'trash', height: 210,
+      body: [h('p', { class: 'as-dialog-lead' }, t('system.removeLead', { version }))],
+      confirm: { label: t('action.delete'), danger: true, value: true },
+    });
+    if (ok) act('system', () => releases.remove(version), t('system.removed', { version }));
+  }
+
+  /** Saves the whole changelog of lilOS in the Download folder. */
+  async function downloadChangelog(item, link) {
+    link.disabled = true;
+    link.setAttribute('aria-busy', 'true');
+    try {
+      const text = await repositories.readme(item.repo.id, item.entry.path, 'CHANGELOG.md');
+      const folder = fs.children(fs.root).find(n => n.type === 'folder' && n.system && n.name === 'Download');
+      if (!folder) throw new Error(t('error.noDownloadFolder'));
+      const file = fs.create(folder.id, { type: 'file', name: 'lilOS - CHANGELOG.md' });
+      await fs.write(file.id, text);
+      toast(t('readme.saved', { file: file.name }), { timeout: 6000 });
+    } catch (err) {
+      toast(err.message, { timeout: 7000 });
+    } finally {
+      link.disabled = false;
+      link.removeAttribute('aria-busy');
+    }
+  }
+
   const restartKernel = () => act('restart', async () => {
+    const modules = restartNeeded();
     await kernelModules.restart();
     await new Promise(r => setTimeout(r, 2500));
-    // lilOS too, so that it is coherent with the kernel's new modules (it asks the user: not awaited)
-    system.requestRestart?.(t('restart.kernelReason'), 'kernel-modules');
+    // lilOS too, so that it is coherent with the kernel's new modules (it asks the user: not awaited).
+    // A new version of lilOS: lilOS asks by itself once the kernel is back with it
+    if (modules) system.requestRestart?.(t('restart.kernelReason'), 'kernel-modules');
   }, t('done.kernelRestarted'));
 
   // ---------- Views ----------
@@ -361,12 +443,16 @@ export default function AppStore({ openWindow }) {
     ? h('span', { class: 'as-repo', title: item.repo.url }, icon('link'), h('span', {}, repoName(item.repo)))
     : h('span', { class: 'as-repo' }, icon('folder'), h('span', {}, item.kind === 'module' ? t('repo.manual') : t('repo.localFolder'))));
   const unofficial = item => (item.repo && !item.repo.official ? h('span', { class: 'as-unofficial' }, t('repo.unofficial')) : null);
-  const installedWord = item => (item.kind === 'module' ? t('status.installedModule') : t('status.installedApp'));
+  const installedWord = item => (item.kind === 'system' ? t('system.inUse') : item.kind === 'module' ? t('status.installedModule') : t('status.installedApp'));
   const section = (title, ...extra) => h('div', { class: 'as-section-title' }, title, ...extra);
   const fact = (label, value) => h('div', { class: 'as-fact' }, h('b', {}, label), String(value));
   const backButton = label => h('button', { class: 'as-back', onclick: () => show('list') }, icon('arrowLeft'), label);
 
   function cardControl(item) {
+    if (item.kind === 'system') {
+      if (item.update) return isAdmin ? button(t('action.update'), () => updateSystem(item), { primary: true, key: item.key }) : status(t('status.updateAvailable', { version: item.update }));
+      return systemNext() ? status(t('system.nextShort', { version: systemNext() })) : status(t('system.inUse'), true);
+    }
     if (item.update) return isAdmin ? button(t('action.update'), () => update(item), { primary: true, key: item.key }) : status(t('status.updateAvailable', { version: item.update }));
     if (item.here) return status(item.kind === 'module' && !item.have.enabled ? t('status.removed') : installedWord(item), true);
     if (item.elsewhere) return status(t('status.otherRepo'));
@@ -392,6 +478,9 @@ export default function AppStore({ openWindow }) {
 
   function banners() {
     const out = [];
+    if (systemNext() && ['installed', 'updates', 'system'].includes(state.tab)) {
+      out.push(h('div', { class: 'as-banner' }, icon('info'), h('span', {}, t('banner.systemRestart', { version: systemNext() })), button(t('action.restartKernel'), restartKernel, { primary: true, key: 'system' })));
+    }
     if (restartNeeded() && ['installed', 'updates', 'kernel'].includes(state.tab)) {
       out.push(h('div', { class: 'as-banner' }, icon('info'), h('span', {}, t('banner.restartNeeded')), button(t('action.restartKernel'), restartKernel, { primary: true })));
     }
@@ -416,8 +505,10 @@ export default function AppStore({ openWindow }) {
     }
     if (tab.id === 'installed') {
       const appsHere = list.filter(i => i.kind === 'app'), modulesHere = list.filter(i => i.kind === 'module');
+      const system = list.filter(i => i.kind === 'system');
       return [
         ...banners(),
+        system.length ? [section('lilOS'), grid(system)] : null,
         appsHere.length ? [section(t('list.apps')), grid(appsHere, { uninstall: true })] : null,
         modulesHere.length ? [section(t('list.modules')), grid(modulesHere)] : null,
       ];
@@ -435,7 +526,50 @@ export default function AppStore({ openWindow }) {
     return [...banners(), grid([...list].sort((a, b) => installed(a) - installed(b) || a.name.localeCompare(b.name)))];
   }
 
+  /** lilOS: versions, what changed, what is kept on disk. */
+  function systemDetailView(item, tab) {
+    const info = item.have;
+    const installed = info.mode === 'installed';
+    const next = systemNext();
+    const actions = [];
+    if (isAdmin && item.update) actions.push(button(t('action.updateTo', { version: item.update }), () => updateSystem(item), { primary: true, key: item.key }));
+    const kept = isAdmin && installed ? (info.releases ?? []).filter(v => v !== info.version) : [];
+    const keptRow = v => h('div', { class: 'as-row' },
+      h('div', { class: 'as-row-text' }, h('b', {}, `lilOS ${v}`),
+        h('span', {}, v === next ? t('system.next', { version: v }) : v === info.failed?.version ? t('system.keptFailed') : t('system.keptHint'))),
+      v === next ? button(t('system.cancelNext'), () => useRelease(info.version), { key: v }) : button(t('system.use'), () => useRelease(v), { key: v }),
+      v === next ? null : button(t('action.delete'), () => removeRelease(v), { danger: true, key: v }));
+    footerText.textContent = `lilOS ${info.version}`;
+    return h('div', { class: 'as-detail' },
+      backButton(tab.label),
+      h('div', { class: 'as-detail-head' },
+        appIcon(item.icon),
+        h('div', { class: 'as-detail-title' },
+          h('h1', {}, 'lilOS'),
+          h('div', { class: 'as-sub' }, t('detail.kindSystem')),
+          h('div', { class: 'as-meta' }, repoLabel(item), h('span', { class: 'as-state' }, icon('shield'), t('detail.verified')), h('span', { class: 'as-state' }, t('detail.required'))),
+          actions.length ? h('div', { class: 'as-detail-actions' }, ...actions) : null)),
+      next ? h('div', { class: 'as-banner' }, icon('info'), h('span', {}, t('banner.systemRestart', { version: next })), button(t('action.restartKernel'), restartKernel, { primary: true, key: 'system' })) : null,
+      isAdmin && info.failed ? h('div', { class: 'as-banner' }, icon('warning'), h('span', {}, t('system.failed', { version: info.failed.version, reason: info.failed.reason, current: info.version }))) : null,
+      installed ? null : h('div', { class: 'as-banner' }, icon('info'), h('span', {}, t('system.development'))),
+      h('div', { class: 'as-facts' },
+        fact(t('system.inUse'), info.version),
+        fact(t('detail.version'), item.offered ?? '—'),
+        fact(t('detail.repository'), item.repo ? repoName(item.repo) : '—'),
+        fact(t('detail.state'), next ? t('system.next', { version: next }) : installed ? t('system.installedMode') : t('system.developmentMode'))),
+      kept.length ? [section(t('system.kept')), h('div', { class: 'as-group' }, ...kept.map(keptRow))] : null,
+      h('div', { class: 'as-perm' }, h('h3', {}, icon('info'), t('detail.warning')), h('p', {}, t('system.warning'))),
+      item.changelog ? [h('div', { class: 'as-readme-title' }, icon('file'), 'CHANGELOG.md'), h('article', { class: 'as-readme' }, ...renderMarkdown(item.changelog))] : null,
+      item.changelog && item.changelogTruncated ? h('p', { class: 'as-readme-cut' }, t('readme.truncated'), ' ',
+        h('button', { class: 'as-link', onclick: e => downloadChangelog(item, e.currentTarget) }, icon('download'), t('readme.download'))) : null,
+      h('div', { class: 'as-readme-title' }, icon('file'), 'README.md'),
+      item.readme ? h('article', { class: 'as-readme' }, ...renderMarkdown(item.readme)) : h('p', { class: 'as-muted' }, item.repo ? t('readme.none') : t('readme.notFromRepo')),
+      item.readme && item.readmeTruncated ? h('p', { class: 'as-readme-cut' }, t('readme.truncated'), ' ',
+        h('button', { class: 'as-link', onclick: e => downloadReadme(item, e.currentTarget) }, icon('download'), t('readme.download'))) : null);
+  }
+
   function detailView(item, tab) {
+    if (item.kind === 'system') return systemDetailView(item, tab);
     const isModule = item.kind === 'module';
     const actions = [];
     if (item.here && !isModule) actions.push(button(t('action.open'), () => launch(item.id), { primary: !item.update || !isAdmin }));
