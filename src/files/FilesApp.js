@@ -111,6 +111,8 @@ class FileBrowser {
   #cursor = null;       // id with the keyboard focus
   #editing = null;      // id being renamed
   #message = '';
+  #addressSaid = '';     // the last message about a path written in the address
+  #asking = false;       // a message box about the address is open: it keeps the text written
   #side = { defaults: [], desk: null };   // the sidebar's default places and the desk's id (last render)
   #content = { key: null, text: null };   // the last file read for the panels (one read for both)
   /** Undo history of this window (Ctrl Z while it has the focus): create, rename, delete. */
@@ -124,6 +126,16 @@ class FileBrowser {
     this.forwardBtn = tool('arrowRight', t('toolbar.forward'), () => this.forward());
     this.upBtn = tool('arrowUp', t('toolbar.up'), () => this.up());
     this.crumbs = h('nav', { class: 'fm-path', 'aria-label': t('toolbar.path') });
+    // A click on the path, outside its folders, makes it text to write in (see editAddress)
+    this.crumbs.addEventListener('click', e => { if (!e.target.closest('button')) this.editAddress(); });
+    this.address = h('input', { class: 'fm-path fm-address', type: 'text', spellcheck: 'false', autocomplete: 'off', hidden: true, 'aria-label': t('toolbar.address') });
+    this.address.addEventListener('input', () => this.#badAddress(false));
+    this.address.addEventListener('keydown', e => {
+      e.stopPropagation();
+      if (e.key === 'Enter') { e.preventDefault(); this.#goAddress(); }
+      if (e.key === 'Escape') { e.preventDefault(); this.#closeAddress(true); }
+    });
+    this.address.addEventListener('blur', () => { if (!this.#asking) this.#closeAddress(false); });
     this.newBtn = tool('folderPlus', t('menu.newFolder'), () => this.create('folder'));
     this.listBtn = tool('list', t('view.list'), () => this.setView('list'));
     this.gridBtn = tool('grid', t('view.grid'), () => this.setView('grid'));
@@ -160,7 +172,7 @@ class FileBrowser {
     win.body.append(
       h('div', { class: 'fm-toolbar' },
         this.backBtn, this.forwardBtn, this.upBtn,
-        this.crumbs,
+        this.crumbs, this.address,
         this.newBtn,
         h('span', { class: 'fm-sep' }),
         this.listBtn, this.gridBtn, this.thumbsBtn,
@@ -203,6 +215,7 @@ class FileBrowser {
     const commands = [
       handleCommand('files.info', { isActive: () => win.active, run: () => this.info.toggle() }),
       handleCommand('files.preview', { isActive: () => win.active, run: () => this.preview.toggle() }),
+      handleCommand('files.address', { isActive: () => win.active, run: () => this.editAddress() }),
     ];
     win.on('destroy', () => {
       off(); offLinks(); offScope(); offWorkspaces(); offTrash(); offTags(); removeTarget(); detach();
@@ -258,6 +271,60 @@ class FileBrowser {
   up() {
     const parent = fs.get(this.folder)?.parent;
     if (parent) this.go(parent);
+  }
+
+  /**
+   * The path as text, '/home/eugenio/Documenti/Note', to write another one in (Ctrl L, or a click on
+   * the path outside its folders). Enter goes there (to the folder that holds it, for a file).
+   */
+  editAddress() {
+    if (this.address.hidden) {
+      this.address.value = this.inTrash || this.inTag ? `${fs.home}/` : fs.path(this.folder);
+      this.#badAddress(false);
+      this.crumbs.hidden = true;
+      this.address.hidden = false;
+    }
+    this.address.focus();
+    this.address.select();
+  }
+
+  /** Back to the folders of the path. focus: give the focus back to the list (Enter, Esc). */
+  #closeAddress(focus) {
+    if (this.address.hidden) return;
+    this.address.hidden = true;
+    this.crumbs.hidden = false;
+    // What it said of a path not found goes with it
+    if (this.#message && this.#message === this.#addressSaid) this.#say('');
+    if (focus) this.list.focus();
+  }
+
+  async #goAddress() {
+    const text = this.address.value.trim().replace(/\\/g, '/');
+    const node = text ? fs.resolve(text) : null;
+    if (!node && text && sdk.messageBox) {
+      // Riprova: back to the text written, to correct it; Annulla (Esc): back to the path
+      this.#badAddress(true);
+      this.#asking = true;
+      const answer = await this.#error(t('error.pathNotFound'), t('message.noPath', { path: text }), ['retry', 'cancel']);
+      this.#asking = false;
+      if (answer !== 'retry') return this.#closeAddress(true);
+      this.address.focus();
+      this.address.setSelectionRange(this.address.value.length, this.address.value.length);
+      return;
+    }
+    if (!node) {
+      this.#badAddress(true);
+      this.#addressSaid = text ? t('message.noPath', { path: text }) : t('message.typePath', { path: fs.path(this.inTrash || this.inTag ? fs.root : this.folder) });
+      return this.#say(this.#addressSaid);
+    }
+    this.#closeAddress(true);
+    if (node.type === 'folder') this.go(node.id);
+    else this.reveal(node.id);
+  }
+
+  #badAddress(bad) {
+    this.address.classList.toggle('bad', bad);
+    this.address.setAttribute('aria-invalid', String(bad));
   }
 
   setView(view) {

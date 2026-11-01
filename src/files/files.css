@@ -18,6 +18,13 @@
 button.fm-crumb:hover { background: var(--hover); color: var(--text); }
 .fm-crumb.current { color: var(--text); font-weight: 400; line-height: 20px; flex-shrink: 0; }
 .fm-crumb-sep { color: var(--faint); font-size: 12px; }
+nav.fm-path { cursor: text; }
+nav.fm-path button { cursor: default; }
+.fm-path[hidden] { display: none; }
+/* The path as text to write in (a click on the path outside its folders, or Ctrl L) */
+.fm-address { padding: 0 8px; font-size: 12px; color: var(--text); outline: 0; }
+.fm-address:focus { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft); }
+.fm-address.bad { border-color: var(--danger); box-shadow: 0 0 0 2px color-mix(in srgb, var(--danger) 25%, transparent); }
 
 .fm-search {
   width: 160px; height: 26px; margin-left: 4px; display: flex; align-items: center; gap: 6px; padding: 0 8px;

@@ -1,6 +1,6 @@
 {
   "id": "files",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "kind": "local",
   "name": "File Manager",
   "description": "Browse, search and organize files and folders: tags, links, trash, info and preview.",
@@ -18,7 +18,8 @@
     "window": { "width": 1000, "height": 520 },
     "commands": [
       { "id": "files.info", "label": "Show or hide the info panel", "keys": ["Alt+I"] },
-      { "id": "files.preview", "label": "Show or hide the preview", "keys": ["Alt+P"] }
+      { "id": "files.preview", "label": "Show or hide the preview", "keys": ["Alt+P"] },
+      { "id": "files.address", "label": "Type a path", "keys": ["Ctrl+L"] }
     ]
   }
 }
