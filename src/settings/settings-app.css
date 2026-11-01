@@ -55,3 +55,8 @@
 
 /* App → Pipe: moving a handler in its chain */
 .pipes-move { display: inline-flex; gap: 6px; }
+/* Scrivania → Sfondo: a color of one's own */
+.desk-color-field { width: 44px; height: 26px; padding: 2px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--field-bg); cursor: pointer; }
+/* Dark and light tones: a thin ring, so each one shows on the window too */
+.desk-color-swatches .ctl-swatch { box-shadow: inset 0 0 0 1px rgb(128 128 128 / .45); }
+.desk-color-swatches .ctl-swatch.on { box-shadow: inset 0 0 0 1px rgb(128 128 128 / .45), 0 0 0 2px var(--surface), 0 0 0 3.5px var(--accent); }

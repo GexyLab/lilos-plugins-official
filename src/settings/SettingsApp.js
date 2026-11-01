@@ -274,6 +274,65 @@ function deskFixedSections() {
   }];
 }
 
+/** A color of one's own: the browser's color picker, set when it closes. */
+function colorField(value, onChange) {
+  const input = h('input', { class: 'desk-color-field', type: 'color', 'aria-label': t('desk.background.custom.label') });
+  input.value = /^#[0-9a-f]{6}$/i.test(value) ? value : '#1f2227';
+  input.addEventListener('change', () => onChange(input.value));
+  return input;
+}
+
+/**
+ * Scrivania → Sfondo: the desk's color (lilOS setting deskColor, '' for the theme's) and the image
+ * behind it (lilOS desktop/wallpaper.js: chosen here, or with «Usa come sfondo desktop» in the
+ * menu of an image on the desk). Only a lilOS that has them shows this tab.
+ */
+function deskBackgroundSections(openWindow) {
+  const color = settings.get('deskColor');
+  const image = system.wallpaperInfo();
+  const choose = async () => {
+    const node = await system.pickFile(openWindow, { title: t('desk.background.image.pick'), exts: system.WALLPAPER_EXTS });
+    if (node) await system.setWallpaper(node.id);
+  };
+  return [
+    {
+      title: t('desk.background.color.title'),
+      rows: [
+        {
+          label: t('common.color'), description: t('desk.background.color.description'), keywords: t('desk.background.color.keywords'),
+          control: () => {
+            const el = swatches({ value: color, colors: system.DESK_COLORS, onChange: v => settings.set('deskColor', v) });
+            el.classList.add('desk-color-swatches');
+            return el;
+          },
+        },
+        {
+          label: t('desk.background.custom.label'), description: t('desk.background.custom.description'), keywords: t('desk.background.color.keywords'),
+          control: () => colorField(color, v => settings.set('deskColor', v)),
+        },
+        color && {
+          label: t('desk.background.theme.label'), description: t('desk.background.theme.description'),
+          control: () => actionButton({ label: t('desk.background.theme.button'), onClick: () => settings.set('deskColor', '') }),
+        },
+      ].filter(Boolean),
+    },
+    {
+      title: t('desk.background.image.title'),
+      rows: [
+        {
+          label: t('desk.background.image.label'), keywords: t('desk.background.image.keywords'),
+          description: image ? t('desk.background.image.current', { name: image.name }) : t('desk.background.image.none'),
+          control: () => actionButton({ label: t('desk.background.image.choose'), spinner: true, onClick: choose }),
+        },
+        image && {
+          label: t('desk.background.image.remove.label'), description: t('desk.background.image.remove.description'),
+          control: () => actionButton({ label: t('desk.background.image.remove.button'), onClick: () => system.clearWallpaper() }),
+        },
+      ].filter(Boolean),
+    },
+  ];
+}
+
 const settingToggle = key => () => toggle({ value: settings.get(key), onChange: v => settings.set(key, v) });
 
 /** Groups and items of the user page whose names and descriptions are in locales.json (userPage.…). */
@@ -716,6 +775,11 @@ export default function createSettings({ openWindow, args } = {}) {
               }],
             }].filter(Boolean),
           },
+          // Color and image of the desk (lilOS desktop/wallpaper.js): only a lilOS that has them
+          typeof system.setWallpaper === 'function' && {
+            id: 'background', get label() { return t('desk.background.label'); },
+            sections: () => deskBackgroundSections(openWindow),
+          },
           {
             id: 'overview', get label() { return t('desk.overview.label'); },
             sections: () => [{
@@ -723,7 +787,7 @@ export default function createSettings({ openWindow, args } = {}) {
               rows: [{ label: t('desk.minimap.label'), keywords: t('desk.minimap.keywords'), control: settingToggle('minimap') }],
             }],
           },
-        ],
+        ].filter(Boolean),
       },
       (system.USER_PAGE_ITEMS ?? []).length && {
         id: 'userpage', icon: 'user',
@@ -798,7 +862,7 @@ export default function createSettings({ openWindow, args } = {}) {
               {
                 label: t('storage.defaults.label'), description: t('storage.defaults.description'),
                 control: confirmButton(t('common.reset'), t('common.confirm'), () => {
-                  ['accent', 'theme', 'motion', 'snap', ...(system.fileThumbnail ? ['deskPreviews'] : []), 'minimap', 'lasso', 'deleteConfirm', 'deletePermanent', 'trashRetention', 'startupApps', ...(sdk.locale ? ['language'] : []), ...(system.USER_PAGE_ITEMS ? ['userPageHidden'] : []), ...(sdk.notifications ? ['notifyShown', 'notifySeconds'] : [])].forEach(k => settings.reset(k));
+                  ['accent', 'theme', 'motion', 'snap', ...(system.fileThumbnail ? ['deskPreviews'] : []), 'minimap', 'lasso', 'deleteConfirm', 'deletePermanent', 'trashRetention', 'startupApps', ...(sdk.locale ? ['language'] : []), ...(system.USER_PAGE_ITEMS ? ['userPageHidden'] : []), ...(sdk.notifications ? ['notifyShown', 'notifySeconds'] : []), ...(system.setWallpaper ? ['deskColor', 'wallpaper'] : [])].forEach(k => settings.reset(k));
                   shortcuts.resetAll();
                   resetAppsFor();
                   menus.list().forEach(m => menus.reset(m.id));
@@ -856,11 +920,13 @@ export default function createSettings({ openWindow, args } = {}) {
   const offApps = [packages.on('change', () => win.view.render()), packages.on('security', () => win.view.render()), watchServices(() => win.view.render()), watchPipes(() => win.view.render())];
   // Fixed desk items turned off from the desk's menu meanwhile (older lilOS: one choice for every desk)
   const offDesk = settings.on('change:deskHidden', () => win.view.render());
+  // The desk's color or image changed (here, or from the desk's menu)
+  const offBackground = [settings.on('change:deskColor', () => win.view.render()), system.wallpaper?.on('change', () => win.view.render())];
   // The language changed (here or elsewhere): every text again in the new one. The title too,
   // which SettingsWindow sets on each tab change with the text it was made with
   const retitle = () => win.setTitle(t('window.title'), win.view.tab?.label ?? '');
   win.view.on('select', retitle);
   const offLocale = sdk.locale?.on('change', () => { win.view.render(); retitle(); });
-  win.on('destroy', () => { offWorkspaces.forEach(off => off?.()); offTrash(); offTags(); offDesk(); offLocale?.(); offApps.forEach(off => off?.()); if (view === win.view) view = null; });
+  win.on('destroy', () => { offWorkspaces.forEach(off => off?.()); offTrash(); offTags(); offDesk(); offBackground.forEach(off => off?.()); offLocale?.(); offApps.forEach(off => off?.()); if (view === win.view) view = null; });
   return win;
 }
