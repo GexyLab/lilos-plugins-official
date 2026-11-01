@@ -17,6 +17,9 @@ function manifestKeys(m) {
   if (m.description) keys.push('@description');
   for (const c of m.contributes?.commands ?? []) keys.push(`@commands.${c.id}.label`);
   for (const w of m.contributes?.widgets ?? []) keys.push(`@widgets.${w.id}.name`);
+  for (const a of m.contributes?.actions ?? []) keys.push(`@actions.${a.id}.label`);
+  for (const menu of m.contributes?.menus ?? []) keys.push(`@menus.${menu.id}.label`);
+  if (m.contributes?.badge) keys.push('@badge.label');
   for (const [name, ep] of Object.entries(m.entrypoints ?? {})) {
     if (ep.label) keys.push(`@entrypoints.${name}.label`);
     for (const [p, def] of Object.entries(ep.params ?? {})) {

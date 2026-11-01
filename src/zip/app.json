@@ -1,0 +1,27 @@
+{
+  "id": "zip",
+  "version": "1.0.0",
+  "kind": "local",
+  "name": "Zip",
+  "description": "Compress files and folders into .zip archives and extract them, from the menu of files and folders (Compress → Zip or Unzip).",
+  "category": "productivity",
+  "icon": { "glyph": "archive", "color": "#b07a2a" },
+  "publisher": { "id": "lilos", "name": "lilOS" },
+  "sdk": "2",
+  "entrypoints": {
+    "main": { "kind": "window" },
+    "work": { "kind": "background", "label": "Compress and extract" }
+  },
+  "permissions": ["fs.write:~", "ui.menus"],
+  "contributes": {
+    "window": { "width": 520, "height": 480 },
+    "fileTypes": ["zip"],
+    "menus": [
+      { "id": "zip.compress", "label": "Compress", "glyph": "archive" }
+    ],
+    "actions": [
+      { "id": "zip.zip", "label": "Zip", "entry": "work", "on": "item", "glyph": "archive", "menu": "zip.compress", "when": { "notExt": ["zip"] }, "many": true },
+      { "id": "zip.unzip", "label": "Unzip", "entry": "work", "on": "file", "glyph": "folderOpen", "menu": "zip.compress", "when": { "ext": ["zip"] }, "many": true }
+    ]
+  }
+}

@@ -9,7 +9,8 @@
     "apps/terminal",
     "apps/filecrypt",
     "apps/calculator",
-    "apps/keyboard"
+    "apps/keyboard",
+    "apps/zip"
   ],
   "modules": [
     "modules/users-basic",
