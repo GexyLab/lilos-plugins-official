@@ -1,6 +1,6 @@
 {
   "id": "settings",
-  "version": "1.10.0",
+  "version": "1.11.0",
   "kind": "local",
   "name": "Control Panel",
   "description": "Appearance, language, desk, user page, workspaces, notifications, tags, shortcuts, file types, startup services and apps, storage.",
@@ -90,7 +90,7 @@
   "locales": "locales.json",
   "files": {
     "dist/index-lpW-Bb_W.css": "sha256-Aypn8r0a7Yh3VmZoi210TFh8yck6YW3VMTm1Np++zYw=",
-    "dist/index.js": "sha256-5mqNMzkW5thMiVCjAaknASsyjEEjuwZc4Gd7cnwkWps=",
-    "locales.json": "sha256-+ET83i4E1MCw10PXIMkbG3gw8wsrceGAwnbKNPkiTZU="
+    "dist/index.js": "sha256-4E3l3PIduqJjZX0HWkp6gdqWiOg4BwOksSsoLst0Ldw=",
+    "locales.json": "sha256-8e2lO9suLH+MG92RJttGoXMIwAySE3uE9R0yBL7Ea9c="
   }
 }

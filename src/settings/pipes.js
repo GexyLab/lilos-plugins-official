@@ -1,6 +1,7 @@
 import { actionButton, h } from '@lilos/sdk';
 // Namespace import: lilOS versions without pipes still load Control Panel
 import * as sdk from '@lilos/sdk';
+import { apps } from '@lilos/system';
 import { t } from './i18n.js';
 
 /**
@@ -9,15 +10,22 @@ import { t } from './i18n.js';
  * (first, middle, last) the user moves a handler up or down (pipes.setOrder); "Reset" goes back to
  * the order of installation. The after stage runs in the reverse order of before: the list shows
  * it as it runs, and moving there changes the same order the other way round. lilOS's own handlers
- * stay where they are.
+ * stay where they are. The events of an app (its manifest's contributes.events) say whose they are.
  */
 const STAGES = ['before', 'after'];
 
-/** The label of an event in the language of Control Panel; an app's own event keeps its own. */
+/** The label of an event in the language of Control Panel; an app's own event keeps its own (lilOS translates it). */
 const eventLabel = def => {
   const key = `pipes.event.${def.name}`;
   const text = t(key);
   return text === key ? def.label : text;
+};
+
+/** The label, and for an app's event the app it belongs to. */
+const eventName = def => {
+  if (!def.owner) return eventLabel(def);
+  const app = apps.find(a => a.id === def.owner)?.name ?? def.owner;
+  return t('pipes.owned', { label: eventLabel(def), app });
 };
 
 function whereText(where) {
@@ -82,13 +90,13 @@ export function pipeSections({ rerender }) {
         control: actionButton({ label: t('common.reset'), onClick: () => { STAGES.forEach(stage => pipes.setOrder(def.name, stage, null)); rerender(); } }),
       });
     }
-    sections.push({ title: `${eventLabel(def)} · ${def.name}`, rows });
+    sections.push({ title: `${eventName(def)} · ${def.name}`, rows });
   }
   const idle = events.filter(def => !used.includes(def));
   sections.push({
     title: t('pipes.idle.title'),
     rows: idle.length
-      ? [{ label: idle.map(eventLabel).join(', '), description: t('pipes.idle.description', { count: idle.length }) }]
+      ? [{ label: idle.map(eventName).join(', '),description: t('pipes.idle.description', { count: idle.length }) }]
       : [{ label: t('pipes.idle.none') }],
   });
   return sections;
