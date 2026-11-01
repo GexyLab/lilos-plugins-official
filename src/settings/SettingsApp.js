@@ -35,6 +35,15 @@ function workspaceSections(id) {
             return field;
           },
         },
+        // lilOS before 2026-11-01 has no workspace descriptions
+        ws.setDescription && {
+          label: t('workspaces.description.label'), description: t('workspaces.description.description'), keywords: t('workspaces.description.keywords'),
+          control: () => {
+            const field = textField({ value: cur.description ?? '', placeholder: t('workspaces.description.placeholder'), label: t('workspaces.description.field'), onChange: v => ws.setDescription(cur.id, v) });
+            field.maxLength = WORKSPACE_LIMITS.MAX_DESCRIPTION ?? 200;
+            return field;
+          },
+        },
         {
           label: t('common.color'), description: t('workspaces.color.description'), keywords: t('workspaces.color.keywords'),
           control: () => swatches({ value: cur.color, colors: ACCENTS, onChange: v => ws.setColor(cur.id, v) }),
