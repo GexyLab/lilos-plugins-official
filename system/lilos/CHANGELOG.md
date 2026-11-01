@@ -1,5 +1,9 @@
 # Changelog di lilOS
 
+## 1.9.5 — 2026-11-01
+
+- La pagina utente ha uno sfondo pieno: non lascia più intravedere, sfocato, quello che c'è sotto (come il menu applicazioni dalla 1.9.3)
+
 ## 1.9.4 — 2026-11-01
 
 - L'immagine di sfondo è alta esattamente quanto la scrivania e non si deforma: in altezza si vede sempre tutta; se è più larga dello schermo si taglia ai lati, se è più stretta ai lati si vede il colore della scrivania
