@@ -1,0 +1,1 @@
+export{n as adoptModule,r as checkModule,i as installDependencies,a as writeModule}from"./modulePackage-CMJ8gMQT.js";
