@@ -226,3 +226,52 @@ nav.fm-path button { cursor: default; }
 }
 .fm-preview-empty .ico { width: 28px; height: 28px; margin-bottom: 4px; }
 .fm-preview-empty strong { font-weight: 500; color: var(--dim); }
+
+/* Network (network.js): the Rete section of the sidebar, the bar over the list inside a connection */
+.fm-side-net { padding-bottom: 8px; }
+.fm-side .fm-side-head { display: flex; align-items: center; gap: 4px; padding-right: 2px; }
+.fm-side-title { flex: 1; min-width: 0; text-align: left; font: inherit; color: inherit; text-transform: inherit; letter-spacing: inherit; border-radius: var(--radius-sm); }
+.fm-side-title:hover { color: var(--text); }
+.fm-side-add { width: 18px; height: 18px; display: grid; place-items: center; border-radius: var(--radius-sm); color: var(--dim); flex: none; }
+.fm-side-add:hover { background: var(--hover); color: var(--text); }
+.fm-side-add .ico { width: 12px; height: 12px; }
+.fm-side-none { padding: 2px 6px 4px; font-size: 11px; color: var(--faint); }
+.fm-mount-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fm-dot { width: 7px; height: 7px; border-radius: 50%; flex: none; background: var(--toggle-off); }
+.fm-dot.on { background: var(--success); }
+.fm-dot.connecting { background: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.fm-dot.error { background: var(--danger); }
+.fm-proto { flex: none; font-size: 9px; font-weight: 700; letter-spacing: .03em; padding: 1px 4px; border-radius: 3px; background: var(--hover); color: var(--dim); }
+.fm-mountbar { display: flex; align-items: center; gap: 8px; min-height: 34px; padding: 4px 10px; background: var(--stripe); border-bottom: 1px solid var(--border); font-size: 11.5px; color: var(--dim); }
+.fm-mountbar > .ico { width: 13px; height: 13px; flex: none; }
+.fm-mountbar.on > .ico { color: var(--success); }
+.fm-mountbar.error > .ico { color: var(--danger); }
+.fm-mountbar-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fm-mountbar code { font-family: var(--mono); font-size: 11px; color: var(--text); }
+.fm-mountbar .ctl-btn { height: 24px; font-size: 11.5px; }
+.fm-mountbar .ctl-btn .ico { width: 11px; height: 11px; }
+.fm-sp { flex: 1; }
+
+/* Connetti a un server, and the password of a connection */
+.fm-net-dialog { display: flex; flex-direction: column; height: 100%; min-height: 0; }
+.fm-net-body { flex: 1; overflow: auto; padding: 14px 16px; display: grid; gap: 11px; align-content: start; }
+.fm-net-body > p { margin: 0; color: var(--dim); overflow-wrap: anywhere; }
+.fm-net-fields { display: grid; gap: 11px; }
+.fm-net-row { display: grid; gap: 4px; min-width: 0; }
+.fm-net-row > label { font-size: 11.5px; color: var(--dim); font-weight: 500; }
+.fm-net-row .ctl-text, .fm-net-row .ctl-select { width: 100%; }
+.fm-net-row textarea.ctl-text { height: auto; padding: 6px 8px; resize: vertical; font-family: var(--mono); font-size: 11.5px; }
+.fm-net-row small { font-size: 11px; color: var(--faint); }
+.fm-req { color: var(--danger); }
+.fm-net-pick { display: flex; align-items: center; gap: 6px; min-width: 0; }
+.fm-net-pick .ctl-text { flex: 1; }
+.fm-net-file { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: var(--mono); font-size: 11.5px; color: var(--dim); }
+.fm-net-check { display: flex; align-items: center; gap: 8px; }
+.fm-net-note { border: 1px solid var(--notice-border); background: var(--notice-bg); border-radius: var(--radius-sm); padding: 8px 10px; font-size: 11.5px; display: grid; gap: 4px; }
+.fm-net-note[hidden] { display: none; }
+.fm-net-note b { color: var(--notice-text); }
+.fm-net-note code { font-family: var(--mono); font-size: 10.5px; word-break: break-all; color: var(--text); }
+.fm-net-status { margin: 0; min-height: 16px; font-size: 11.5px; color: var(--dim); overflow-wrap: anywhere; }
+.fm-net-status.bad { color: var(--danger); }
+.fm-net-foot { display: flex; align-items: center; gap: 8px; padding: 10px 16px; border-top: 1px solid var(--border); background: var(--side); }
+.fm-mountbar .ctl-btn { display: inline-flex; align-items: center; gap: 5px; flex: none; }

@@ -19,7 +19,11 @@ import { SidePanel, MIN_WIDTH } from './SidePanel.js';
 import { infoView, Preview, readable, contentKey } from './details.js';
 import { Columns, MIN_COL } from './columns.js';
 import { t } from './i18n.js';
+import { network, mountOf, sideSection, mountMenu, mountBar, readRemote } from './network.js';
 import './files.css';
+
+/** Biggest file of a network connection the panels read to show it. */
+const PREVIEW_NET_MAX = 1 << 20;
 
 /** Narrowest the list gets before the panels on the right give up some of their width. */
 const MAIN_MIN = 260;
@@ -78,9 +82,9 @@ function missing(a) {
 }
 
 /** File Manager: browse the folders of the file system. One window, opened on args.folder (or the trash, or a tag). */
-export default function createFiles({ args } = {}) {
+export default function createFiles({ args, openWindow } = {}) {
   const win = new Window({ title: t('@name'), icon: 'folder', width: 1000, height: 520, minWidth: 520, minHeight: 300 });
-  const browser = new FileBrowser(win);
+  const browser = new FileBrowser(win, openWindow);
   browser.go(startFolder(args) ?? fs.root, false);
   const gone = missing(args);
   // Once the window is on screen (lilOS opens it after this returns)
@@ -121,8 +125,10 @@ class FileBrowser {
   /** Undo history of this window (Ctrl Z while it has the focus): create, rename, delete. */
   history = new UndoStack();
 
-  constructor(win) {
+  constructor(win, openWindow) {
     this.win = win;
+    /** Opens a window of the app (the network's dialogs, the file picker). */
+    this.openWindow = openWindow ?? (() => {});
     const tool = (glyph, label, onclick) => h('button', { class: 'fm-btn', type: 'button', title: label, 'aria-label': label, onclick }, icon(glyph));
 
     this.backBtn = tool('arrowLeft', t('toolbar.back'), () => this.back());
@@ -154,6 +160,8 @@ class FileBrowser {
 
     this.side = h('aside', { class: 'fm-side', 'aria-label': t('side.label') });
     this.list = h('div', { class: 'fm-list', role: 'listbox', tabindex: '0', 'aria-multiselectable': 'true', 'aria-label': t('list.label') });
+    /** Inside a network connection: where it is connected (network.js mountBar). */
+    this.mountSlot = h('div', { class: 'fm-mountslot' });
     this.statusLeft = h('span');
     this.statusRight = h('span', { class: 'fm-status-right' });
 
@@ -169,7 +177,7 @@ class FileBrowser {
 
     this.main = h('div', { class: 'fm' },
       this.side,
-      h('div', { class: 'fm-main' }, this.list, h('div', { class: 'fm-status' }, this.statusLeft, this.statusRight)),
+      h('div', { class: 'fm-main' }, this.mountSlot, this.list, h('div', { class: 'fm-status' }, this.statusLeft, this.statusRight)),
       this.preview.el,
       this.info.el);
     win.body.append(
@@ -201,6 +209,8 @@ class FileBrowser {
     const offScope = fs.on('scope', () => { if (this.#reachable(this.folder)) this.render(); });
     const offWorkspaces = onWorkspacesChange(() => { if (this.#reachable(this.folder)) this.render(); });
     const offTrash = fs.on('trash', () => { if (this.inTrash) { this.#message = ''; this.render(); } });
+    // Connections added, changed, connected or not: the Rete section and the bar over the list
+    const offNet = network() ? sdk.net.on('mounts', () => { if (this.#reachable(this.folder)) this.render(); }) : () => {};
     // Tags renamed, recolored, hidden or deleted: sidebar and dots; a deleted tag's view goes Home
     const offTags = tags.on('change', () => {
       if (this.folder.startsWith?.(TAG_VIEW) && !this.inTag) return this.go(fs.root, false);
@@ -222,7 +232,7 @@ class FileBrowser {
       handleCommand('files.address', { isActive: () => win.active, run: () => this.editAddress() }),
     ];
     win.on('destroy', () => {
-      off(); offLinks(); offScope(); offWorkspaces(); offTrash(); offTags(); removeTarget(); detach();
+      off(); offLinks(); offScope(); offWorkspaces(); offTrash(); offTags(); offNet(); removeTarget(); detach();
       commands.forEach(c => c()); fit.disconnect(); this.previewView.destroy();
     });
   }
@@ -258,6 +268,19 @@ class FileBrowser {
     this.#anchor = this.#cursor;
     this.render();
     this.list.scrollTop = 0;
+    if (fs.isRemote?.(id)) this.#readRemote(id);
+  }
+
+  /** A folder of a network connection: read from the server now (it is opened), saying so meanwhile. */
+  async #readRemote(id) {
+    this.#say(t('net.loading'));
+    const read = await readRemote(this, id);
+    if (this.folder === id && this.#message === t('net.loading')) this.#say(read ? '' : t('net.notRead'));
+  }
+
+  /** An error of the network, in a message box: resolves with the button pressed ('retry' with retry). */
+  netError(err, { retry = false, title = t('net.error.title') } = {}) {
+    return this.#error(title, err?.message ?? String(err), retry ? ['retry', 'cancel'] : ['ok']);
   }
 
   /** Opens the folder that holds a node, with the node selected. */
@@ -412,6 +435,7 @@ class FileBrowser {
     const folders = [id];
     if (deep) for (let i = 0; i < folders.length; i++) folders.push(...fs.children(folders[i]).filter(n => n.type === 'folder').map(n => n.id));
     folders.forEach(f => (open ? this.#expanded.add(f) : this.#expanded.delete(f)));
+    if (open) folders.filter(f => fs.isRemote?.(f)).forEach(f => readRemote(this, f));
     if (!open) {
       const inside = x => x != null && x !== id && fs.isInside(x, id);
       if (inside(this.#cursor)) this.#cursor = id;
@@ -475,6 +499,8 @@ class FileBrowser {
     this.win.setTitle(folderName(folder), t('@name'));
     this.#renderToolbar(folder);
     this.#renderSide();
+    const bar = !this.inTrash && !tag && network() ? mountBar(this, this.folder) : null;
+    this.mountSlot.replaceChildren(...(bar ? [bar] : []));
 
     const all = this.inTrash ? fs.trashed() : tag ? fs.tagged(tag.id) : fs.children(this.folder);
     this.#depth.clear();
@@ -546,6 +572,8 @@ class FileBrowser {
   /** Content of a file for the panels: read once while it does not change. */
   #read(n) {
     if (!readable(n)) return Promise.reject(new Error(t('error.notFile')));
+    // On a server: only small files (the preview would download it)
+    if (n.net && (n.size ?? 0) > PREVIEW_NET_MAX) return Promise.reject(new Error(t('net.preview.big')));
     const key = contentKey(n);
     if (this.#content.key !== key) this.#content = { key, text: fs.read(n.id) };
     return this.#content.text;
@@ -601,8 +629,9 @@ class FileBrowser {
       ...SYSTEM_FOLDERS.map(f => ({ ...f, id: roots.find(n => n.name === f.name && n.system)?.id, glyph: f.icon }))
         .filter(p => p.id).map(p => ({ ...p, key: p.name === DESK_NAME ? 'desk' : p.id })),
     ];
-    // The deepest place that contains the current folder is the active one
-    const active = this.inTrash || this.inTag ? this.folder : [...places].reverse().find(p => trail.has(p.id))?.id;
+    // The deepest place that contains the current folder is the active one (inside a connection: its entry in Rete)
+    const mount = fs.ancestors(this.folder).find(n => n.mount)?.id ?? null;
+    const active = this.inTrash || this.inTag ? this.folder : mount ? null : [...places].reverse().find(p => trail.has(p.id))?.id;
     const place = p => h('button', {
       class: p.id === active ? 'fm-place on' : 'fm-place', type: 'button',
       'aria-current': p.id === active ? 'true' : null, onclick: () => this.go(p.id),
@@ -666,9 +695,11 @@ class FileBrowser {
     };
     const trash = place({ id: TRASH, name: t('place.trash'), glyph: 'trash' });
     trash.dataset.trash = '';
+    const rete = roots.find(n => n.system && n.name === system.NETWORK_NAME)?.id ?? null;
     this.side.replaceChildren(
       h('section', { class: 'fm-side-links', 'aria-label': t('side.links') }, h('h6', {}, t('side.links')), ...links.arrange(defaults).flatMap(show)),
       ...(list.length ? [h('h6', {}, t('side.tags')), ...list.map(tagPlace)] : []),
+      ...sideSection(this, { active: mount, reteFolder: rete }),
       h('hr', { class: 'fm-side-sep' }),
       trash,
       this.gap);
@@ -707,6 +738,11 @@ class FileBrowser {
   #sideTarget(hit, x, y, ids) {
     const trash = hit?.closest?.('[data-trash]');
     if (trash) return trashable(ids) ? { el: trash, run: (ev, stack) => this.#trashDropped(ids, stack) } : null;
+    const mount = hit?.closest?.('.fm-mount');
+    if (mount) {
+      const movable = movableInto(ids, mount.dataset.folder);
+      return movable && { el: mount, run: (ev, stack) => moveInto(stack, movable, mount.dataset.folder) };
+    }
     const section = this.side.querySelector('.fm-side-links');
     if (!section?.contains(hit)) return null;
     const entries = [...section.querySelectorAll(':scope > [data-entry]')];
@@ -1142,7 +1178,13 @@ class FileBrowser {
         { label: t('menu.purge'), icon: 'trash', shortcut: shortcuts.label('items.delete'), danger: true, action: () => this.purge(ids) },
       ]);
     }
+    // A connection's folder (in Rete): the connection's menu
+    if (!many && nodes[0].mount) {
+      const m = mountOf(nodes[0].id);
+      if (m) return mountMenu(this, m, e.clientX, e.clientY);
+    }
     const fixed = nodes.some(n => n.system);   // main folders: no rename, no delete (not `system`: that is the module)
+    const remote = nodes.some(n => n.net);     // on a server: no tags, no links (they would not last)
     const ids = nodes.map(n => n.id);
     const tag = this.inTag;
     const folder = !many && this.tree && nodes[0].type === 'folder' && nodes[0];
@@ -1156,9 +1198,9 @@ class FileBrowser {
       // In a tag's view items come from everywhere: show one where it is
       tag && !many && { label: t('menu.reveal'), icon: 'folderOpen', action: () => this.reveal(nodes[0].id) },
       { label: t('menu.rename'), icon: 'pencil', shortcut: shortcuts.label('items.rename'), disabled: many || fixed, action: () => this.rename(nodes[0].id) },
-      tagSubmenu(ids),
+      !remote && tagSubmenu(ids),
       tag && { label: t('menu.untag', { name: tag.name }), icon: 'x', action: () => setTag(ids, tag.id, false) },
-      linkEntry(ids),
+      !remote && linkEntry(ids),
       { label: t('menu.info'), icon: 'info', shortcut: shortcuts.label('files.info'), action: () => this.info.setOpen(true) },
       !many && { label: t('menu.properties'), icon: 'info', action: () => showProperties(nodes[0].id) },
       ...(system.appActionEntries?.(ids, { separator: true }) ?? []),
