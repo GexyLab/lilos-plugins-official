@@ -1,4 +1,5 @@
 import { Window, h, icon, fs, tags, session, storage, openMenu, shortcuts, toast, UndoStack, history, trackDrag } from '@lilos/sdk';
+import * as sdk from '@lilos/sdk';   // `messageBox`: missing in older lilOS, so not imported by name
 import { launch, handleCommand } from '@lilos/system';
 import { openFile } from '@lilos/system';
 import { itemIcon } from '@lilos/system';
@@ -61,13 +62,27 @@ function startFolder(a) {
   return a?.folder && fs.exists(a.folder) ? a.folder : null;
 }
 
+/** What was asked to open but is not there any more: 'folder', 'tag' or null (nothing missing). */
+function missing(a) {
+  if (startFolder(a)) return null;
+  if (typeof a?.tag === 'string' || (typeof a?.folder === 'string' && a.folder.startsWith(TAG_VIEW))) return 'tag';
+  return a?.folder ? 'folder' : null;
+}
+
 /** File Manager: browse the folders of the file system. One window, opened on args.folder (or the trash, or a tag). */
 export default function createFiles({ args } = {}) {
   const win = new Window({ title: t('@name'), icon: 'folder', width: 1000, height: 520, minWidth: 520, minHeight: 300 });
   const browser = new FileBrowser(win);
   browser.go(startFolder(args) ?? fs.root, false);
+  const gone = missing(args);
+  // Once the window is on screen (lilOS opens it after this returns)
+  if (gone) requestAnimationFrame(() => browser.notFound(gone));
   // Launched again (e.g. a folder opened from the desk): show that folder in this window
-  win.on('launch', a => { const folder = startFolder(a); if (folder) browser.go(folder); });
+  win.on('launch', a => {
+    const folder = startFolder(a);
+    if (folder) browser.go(folder);
+    else if (missing(a)) browser.notFound(missing(a));
+  });
   win.getState = () => ({ folder: browser.folder });
   return win;
 }
@@ -265,7 +280,13 @@ class FileBrowser {
   create(type) {
     if (this.inTrash || this.inTag) return;
     if (this.#query) { this.search.value = ''; this.#query = ''; }
-    const node = fs.create(this.folder, { type, name: type === 'folder' ? t('create.folderName') : t('create.fileName') });
+    let node;
+    try {
+      node = fs.create(this.folder, { type, name: type === 'folder' ? t('create.folderName') : t('create.fileName') });
+    } catch (err) {
+      this.#error(type === 'folder' ? t('error.createFolder') : t('error.createFile'), err.message);
+      return;
+    }
     this.#select([node.id]);
     this.rename(node.id, true);
   }
@@ -288,7 +309,11 @@ class FileBrowser {
       this.#editing = null;
       const name = input.value.replace(/\s+/g, ' ').trim();
       if (commit && name && name !== node.name && fs.exists(id)) {
-        try { renameNode(created ? null : this.history, id, name); } catch (err) { this.#say(err.message); }
+        try { renameNode(created ? null : this.history, id, name); } catch (err) {
+          // Riprova: the name can be changed again
+          this.#error(t('error.rename', { name: node.name }), err.message, ['retry', 'cancel'])
+            .then(answer => { if (answer === 'retry' && fs.exists(id)) this.rename(id); });
+        }
       }
       if (created) recordCreated(this.history, id);
       this.render();
@@ -322,7 +347,7 @@ class FileBrowser {
   remove(ids) {
     if (this.inTrash) return this.purge(ids);
     const removable = ids.filter(id => !fs.get(id)?.system);
-    if (!removable.length) return this.#say(t('message.systemFolders'));
+    if (!removable.length) return void this.#error(t('error.delete'), t('message.systemFolders'));
     const { x, y } = this.#menuPoint(removable[0]);
     confirmRemove(removable, x, y, this.history);
   }
@@ -1078,6 +1103,27 @@ class FileBrowser {
   #say(text) {
     this.#message = text;
     this.render();
+  }
+
+  /**
+   * An error, in a message box over the window: resolves with the button pressed. A lilOS without
+   * message boxes says it in the status bar (and resolves null).
+   */
+  async #error(title, text = '', buttons = ['ok']) {
+    if (!sdk.messageBox) {
+      this.#say(text ? `${title}: ${text}` : title);
+      return null;
+    }
+    const answer = await sdk.messageBox(this.win, { icon: 'error', title, text, buttons });
+    if (this.list.isConnected && !this.win.el.contains(document.activeElement)) this.list.focus();
+    return answer;
+  }
+
+  /** Asked to open a folder or a tag that is not there any more: Home is shown instead. */
+  notFound(what) {
+    const place = t('place.home');
+    this.#error(what === 'tag' ? t('error.tagNotFound') : t('error.folderNotFound'),
+      what === 'tag' ? t('error.tagNotFoundText', { place }) : t('error.folderNotFoundText', { place }));
   }
 
   #onChange(e) {
