@@ -1,5 +1,11 @@
 # Changelog di lilOS
 
+## 1.9.3 — 2026-11-01
+
+- Menu applicazioni con lo sfondo pieno, senza trasparenza
+- Icone di app, cartelle e file nello stile «Ritaglio»: quadrato pieno del loro colore con il simbolo ritagliato
+- La barra delle notifiche resta 10 secondi dopo l'ultima arrivata
+
 ## 1.9.2 — 2026-11-01
 
 - L'immagine di sfondo della scrivania parte sempre dal bordo superiore dello schermo: se è più alta dello schermo si taglia solo in basso (prima era centrata e si tagliava sopra e sotto); una più larga si taglia ancora ai due lati
