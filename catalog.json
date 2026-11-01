@@ -16,7 +16,11 @@
     "modules/users-basic",
     "modules/fs-postgres",
     "modules/services-isolate",
-    "modules/notifications-basic"
+    "modules/notifications-basic",
+    "modules/netfs-sftp",
+    "modules/netfs-ftp",
+    "modules/netfs-webdav",
+    "modules/netfs-smb"
   ],
   "system": "system/lilos"
 }

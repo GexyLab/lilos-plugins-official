@@ -4,6 +4,7 @@ Modulo del kernel che tiene il **file system di lilOS in PostgreSQL**, con il co
 
 - Ogni utente vede solo la propria Home; le app installate e le librerie condivise si leggono e non si modificano.
 - Chi non può leggere un elemento non ne scopre nemmeno l'esistenza.
+- I file grandi (dalla 1.1.0) si salvano e si leggono a pezzi da 1 MB, senza tenerli interi in memoria: servono ai trasferimenti della cartella Rete.
 
 ## Configurazione
 
