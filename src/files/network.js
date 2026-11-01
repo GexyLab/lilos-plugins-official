@@ -121,9 +121,12 @@ export async function readRemote(browser, id) {
 /** Asks the user to confirm a server (its key or certificate), then connects with it. Resolves true if confirmed. */
 async function confirmTrust(browser, mountId, name, trust) {
   if (!trust?.fingerprint || !sdk.messageBox) return false;
+  // A key or certificate other than the one confirmed before: someone may be in between
+  const changed = trust.changed === true;
   const answer = await sdk.messageBox(browser.win, {
-    icon: 'warning', title: t('net.trust.title', { name }),
-    text: t(trust.kind === 'ssh' ? 'net.trust.ssh' : 'net.trust.tls', { fingerprint: trust.text ?? trust.fingerprint }),
+    icon: changed ? 'error' : 'warning',
+    title: t(changed ? 'net.trust.changed.title' : 'net.trust.title', { name }),
+    text: t(changed ? 'net.trust.changed' : trust.kind === 'ssh' ? 'net.trust.ssh' : 'net.trust.tls', { fingerprint: trust.text ?? trust.fingerprint, previous: trust.previous ?? '' }),
     buttons: ['continue', 'cancel'], default: 'cancel',
   });
   if (answer !== 'continue') return false;

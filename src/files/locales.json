@@ -260,7 +260,9 @@
       "net.shares.none": "The server shares nothing you can see",
       "net.password.title": "Password for «{name}»",
       "net.password.text": "lilOS needs the password to connect to {address}.",
-      "net.password.wrong": "The user or the password is not right"
+      "net.password.wrong": "The user or the password is not right",
+      "net.trust.changed.title": "The server of «{name}» CHANGED its key",
+      "net.trust.changed": "The key or certificate of this server is not the one you confirmed. Someone may be pretending to be the server: continue only if you know it was changed on purpose.\n\nBefore: {previous}\nNow: {fingerprint}"
     }
   },
   "it": {
@@ -524,7 +526,9 @@
       "net.shares.none": "Il server non condivide niente che tu possa vedere",
       "net.password.title": "Password di «{name}»",
       "net.password.text": "lilOS ha bisogno della password per connettersi a {address}.",
-      "net.password.wrong": "Utente o password non giusti"
+      "net.password.wrong": "Utente o password non giusti",
+      "net.trust.changed.title": "Il server di «{name}» ha CAMBIATO chiave",
+      "net.trust.changed": "La chiave o il certificato di questo server non è quello che avevi confermato. Qualcuno potrebbe fingersi il server: continua solo se sai che è stato cambiato apposta.\n\nPrima: {previous}\nOra: {fingerprint}"
     }
   }
 }
