@@ -182,11 +182,10 @@ export default function AppStore({ openWindow }) {
 
   // ---------- Actions ----------
 
-  /** Asks before installing: what the package may do and, when it is not official, the warning. */
-  function confirmInstall({ title, name, permissions = [], official, kernelModule = false }) {
+  /** A small dialog with Cancel and one button that confirms: what that button gives, or null. */
+  function ask({ title, glyph, height, body, confirm }) {
     return new Promise(resolve => {
-      const asked = granted(permissions);
-      const dialog = new Window({ title, icon: 'download', width: 440, height: kernelModule || !official ? 340 : 300, minimizable: false, maximizable: false });
+      const dialog = new Window({ title, icon: glyph, width: 440, height, minimizable: false, maximizable: false });
       let answered = false;
       const answer = value => {
         if (answered) return;
@@ -196,17 +195,36 @@ export default function AppStore({ openWindow }) {
       };
       dialog.on('destroy', () => answer(null));
       dialog.body.append(h('div', { class: 'as-dialog' },
-        h('p', { class: 'as-dialog-lead' }, kernelModule ? t('confirm.kernelModule', { name }) : t('confirm.mayDo', { name })),
-        !kernelModule && asked.length ? h('ul', {}, ...asked.map(p => h('li', {}, describePermission(p)))) : null,
-        !kernelModule && !asked.length ? h('p', {}, t('permissions.none')) : null,
-        official ? null : h('p', { class: 'as-warning' }, t('confirm.unverified')),
+        ...body,
         h('div', { class: 'as-dialog-buttons' },
           actionButton({ label: t('action.cancel'), onClick: () => answer(null) }),
-          actionButton({ label: official ? t('action.install') : t('action.installAnyway'), primary: official, danger: !official, onClick: () => answer({ grant: asked, allowUnsigned: !official }) })),
+          actionButton({ label: confirm.label, primary: confirm.primary, danger: confirm.danger, onClick: () => answer(confirm.value) })),
       ));
       openWindow(dialog);
     });
   }
+
+  /** Asks before installing: what the package may do and, when it is not official, the warning. */
+  function confirmInstall({ title, name, permissions = [], official, kernelModule = false }) {
+    const asked = granted(permissions);
+    return ask({
+      title, glyph: 'download', height: kernelModule || !official ? 340 : 300,
+      body: [
+        h('p', { class: 'as-dialog-lead' }, kernelModule ? t('confirm.kernelModule', { name }) : t('confirm.mayDo', { name })),
+        !kernelModule && asked.length ? h('ul', {}, ...asked.map(p => h('li', {}, describePermission(p)))) : null,
+        !kernelModule && !asked.length ? h('p', {}, t('permissions.none')) : null,
+        official ? null : h('p', { class: 'as-warning' }, t('confirm.unverified')),
+      ],
+      confirm: { label: official ? t('action.install') : t('action.installAnyway'), primary: official, danger: !official, value: { grant: asked, allowUnsigned: !official } },
+    });
+  }
+
+  /** Asks before uninstalling an app: it goes for every user, with its settings and data. */
+  const confirmUninstall = item => ask({
+    title: t('confirm.uninstallTitle', { name: item.name }), glyph: 'trash', height: 230,
+    body: [h('p', { class: 'as-dialog-lead' }, t('confirm.uninstall', { name: item.name })), h('p', {}, t('confirm.uninstallFiles'))],
+    confirm: { label: t('action.uninstall'), danger: true, value: true },
+  });
 
   async function install(item) {
     const { repo, entry } = item;
@@ -290,11 +308,14 @@ export default function AppStore({ openWindow }) {
     }, done => t('done.updatedCount', { n: done }));
   }
 
-  function remove(item) {
+  async function remove(item) {
     const name = item.name;
     if (item.kind === 'module') act('remove', () => kernelModules.remove(item.id), r => (r.kept.length ? t('done.moduleRemovedDataKept', { name }) : t('done.moduleRemoved', { name })));
-    else act('remove', () => apps.uninstall(item.id), t('done.appRemoved', { name }));
+    else if (await confirmUninstall(item)) act('remove', () => apps.uninstall(item.id), t('done.appRemoved', { name }));
   }
+
+  /** Apps an administrator can take away: installed from here, and not needed by lilOS. */
+  const canUninstall = item => isAdmin && item.kind === 'app' && item.here && !item.required;
 
   const reinstall = item => act('reinstall', () => updateOne(item, () => apps.update(item.id, { reinstall: true, allowUnsigned: !item.verified }), { reinstall: true }),
     r => (r ? t('done.appReinstalled', { name: item.name }) : null));
@@ -352,18 +373,22 @@ export default function AppStore({ openWindow }) {
     return isAdmin ? button(t('action.install'), () => install(item), { key: item.key }) : status(t('status.available'));
   }
 
-  function card(item) {
+  /** uninstall: the Installed tab, where each app that can go has its own button. */
+  function card(item, { uninstall = false } = {}) {
     const version = item.update ? `${item.installed} → ${item.update}` : item.here ? item.installed : item.offered;
+    const uninstallButton = uninstall && canUninstall(item) ? button(t('action.uninstall'), () => remove(item), { danger: true, key: item.key }) : null;
     return h('div', { class: 'as-card' },
       h('div', { class: 'as-card-top' },
         appIcon(item.icon),
         h('div', { class: 'as-card-head' },
           h('button', { class: 'as-card-open', onclick: () => show('detail', item.key) }, item.name, h('span', { class: 'as-ver' }, version)),
           h('div', { class: 'as-card-desc' }, item.description))),
-      h('div', { class: 'as-card-foot' }, repoLabel(item), unofficial(item), h('span', { class: 'as-spacer' }), cardControl(item)));
+      h('div', { class: 'as-card-foot' }, repoLabel(item), unofficial(item), h('span', { class: 'as-spacer' }),
+        // The button says it is installed: no "Installed" next to it
+        uninstallButton && !item.update ? null : cardControl(item), uninstallButton));
   }
 
-  const grid = list => h('div', { class: 'as-grid' }, ...list.map(card));
+  const grid = (list, options) => h('div', { class: 'as-grid' }, ...list.map(item => card(item, options)));
 
   function banners() {
     const out = [];
@@ -393,7 +418,7 @@ export default function AppStore({ openWindow }) {
       const appsHere = list.filter(i => i.kind === 'app'), modulesHere = list.filter(i => i.kind === 'module');
       return [
         ...banners(),
-        appsHere.length ? [section(t('list.apps')), grid(appsHere)] : null,
+        appsHere.length ? [section(t('list.apps')), grid(appsHere, { uninstall: true })] : null,
         modulesHere.length ? [section(t('list.modules')), grid(modulesHere)] : null,
       ];
     }
@@ -419,7 +444,7 @@ export default function AppStore({ openWindow }) {
       if (item.here && (!isModule || item.have.enabled)) {
         if (!item.update && item.have.source) actions.push(button(t('action.checkUpdates'), () => update(item), { key: item.key }));
         if (!isModule) actions.push(button(t('action.reinstall'), () => reinstall(item), { key: item.key }));
-        if (!item.required) actions.push(button(t('action.remove'), () => remove(item), { danger: true, key: item.key }));
+        if (!item.required) actions.push(button(isModule ? t('action.remove') : t('action.uninstall'), () => remove(item), { danger: true, key: item.key }));
       }
       if (!item.here && !item.elsewhere && item.entry) actions.push(button(item.repo.official ? t('action.install') : t('action.installAnyway'), () => install(item), { primary: true, danger: !item.repo.official, key: item.key }));
     }

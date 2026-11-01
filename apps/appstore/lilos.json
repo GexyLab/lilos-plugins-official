@@ -1,6 +1,6 @@
 {
   "id": "appstore",
-  "version": "1.4.1",
+  "version": "1.5.0",
   "kind": "local",
   "name": "AppStore",
   "description": "Installs, updates and removes apps and kernel modules from repositories; checks for updates even with lilOS closed.",
@@ -49,8 +49,8 @@
   "locales": "locales.json",
   "files": {
     "dist/index-BI4EHm56.css": "sha256-5q2fc19quKv8F4sM3BSZEANdC0p2E426wEejxqxAsqM=",
-    "dist/index.js": "sha256-j/POgHCFGgC5O3z3vuzivC90YOFcWF1hFhwVYqaQtGc=",
+    "dist/index.js": "sha256-r9Bw7fNiUmWusX8cTCFZJ4RDsnmkXKp0JqlVOYrZtd4=",
     "dist/updates.js": "sha256-GKIl6BOOALNK0ObBK/xKkkd4cmy1AmzZTprBpYrOj3o=",
-    "locales.json": "sha256-FYTaLCUk90RwIXb+kVbLigCnkI6d8VzfHHpiw7UJF4M="
+    "locales.json": "sha256-PYzQ1RflmvLjHXRh/Xv8oqTRr4fYN3muqxfblTo0yvY="
   }
 }
