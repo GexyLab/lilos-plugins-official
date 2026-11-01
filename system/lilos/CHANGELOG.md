@@ -1,5 +1,10 @@
 # Changelog di lilOS
 
+## 1.10.1 — 2026-11-02
+
+- Con più utenti, i server della rete locale del computer su cui gira lilOS (per esempio `192.168.…`) non sono più raggiungibili di serie: chi gestisce lilOS li apre tutti (`"net": { "allowPrivate": true }` in `config.json`) o solo quelli che servono, come il NAS (`"net": { "allow": ["192.168.1.50/32"] }`). Con un solo utente non cambia niente
+- SMB (modulo netfs-smb 1.0.1, da aggiornare dall'AppStore): niente più cadute a caso durante le scritture lunghe, e anche i server SMB 2.0.2 (Vista, Server 2008, NAS vecchi)
+
 ## 1.10.0 — 2026-11-01
 
 - Nuova cartella **Rete**: ogni server a cui ti colleghi (FTP, FTPS, SFTP, WebDAV, SMB) diventa una cartella in Home → Rete e si usa come le altre. Si aggiunge dal File Manager (sezione Rete → +, «Connetti a un server»): si sceglie il protocollo da un elenco e compaiono i campi che servono
