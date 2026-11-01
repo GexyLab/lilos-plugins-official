@@ -1,5 +1,11 @@
 # Changelog di lilOS
 
+## 1.9.0 — 2026-11-01
+
+- Immagine di sfondo della scrivania: «Usa come sfondo desktop» nel menu di un file immagine sulla scrivania, oppure Pannello di controllo → Scrivania → Sfondo. Riempie lo schermo mantenendo le proporzioni e non si sposta né si ingrandisce con la scrivania; se il file viene eliminato, lo sfondo si toglie
+- Colore della scrivania a scelta, nello stesso posto: etichette e puntini si adattano al colore chiaro o scuro
+- La scheda Sfondo è nel Pannello di controllo 1.13.0 (da aggiornare dall'AppStore)
+
 ## 1.8.0 — 2026-11-01
 
 Prima versione di lilOS pubblicata nel repository ufficiale.
