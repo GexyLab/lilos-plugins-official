@@ -1,9 +1,9 @@
 {
   "id": "settings",
-  "version": "1.8.1",
+  "version": "1.9.0",
   "kind": "local",
   "name": "Control Panel",
-  "description": "Appearance, language, desk, user page, workspaces, tags, shortcuts, file types, startup services and apps, storage.",
+  "description": "Appearance, language, desk, user page, workspaces, notifications, tags, shortcuts, file types, startup services and apps, storage.",
   "category": "system",
   "icon": {
     "glyph": "gear",
@@ -43,6 +43,10 @@
             {
               "value": "workspaces",
               "label": "Workspaces"
+            },
+            {
+              "value": "notifications",
+              "label": "Notifications"
             },
             {
               "value": "tags",
@@ -86,7 +90,7 @@
   "locales": "locales.json",
   "files": {
     "dist/index-lpW-Bb_W.css": "sha256-Aypn8r0a7Yh3VmZoi210TFh8yck6YW3VMTm1Np++zYw=",
-    "dist/index.js": "sha256-SfrJpXI0bcGOlShgaerw9ACWlmKxNIpRyD4DSbThTug=",
-    "locales.json": "sha256-Q/D0vA2LfVu5xY2dKwN/VwklsiaK9wVJ/4T8aJcudxA="
+    "dist/index.js": "sha256-gQ8Ps7JGl93SRArFQ1xWmwk3hvWkcVKUHSNcIanjn1Q=",
+    "locales.json": "sha256-ZPXZD8EpRreKEvPGOatJYARAqAnqunmV1yv6x/REX/w="
   }
 }

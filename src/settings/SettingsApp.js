@@ -1,5 +1,5 @@
 import { SettingsWindow, settings, shortcuts, shortcutField, storage, session, fs, tags, TAG_COLORS, menus, fileTypeList, toggle, swatches, segmented, selectField, textField, actionButton, toast, h, kernel, SDK_VERSION, apps as packages } from '@lilos/sdk';
-import * as sdk from '@lilos/sdk';   // locale, LANGUAGES: missing in older lilOS, so not imported by name
+import * as sdk from '@lilos/sdk';   // locale, LANGUAGES, notifications: missing in older lilOS, so not imported by name
 import { executionMode, canChangeExecution, showAppSecurity } from '@lilos/system';
 import { setTag } from '@lilos/system';
 import { version } from '@lilos/system';
@@ -577,6 +577,58 @@ function languageSections() {
   }];
 }
 
+const SHOWN_OPTIONS = [1, 2, 3, 4, 5, 6, 7, 8, 10];
+const SECONDS_OPTIONS = [3, 5, 8, 10, 15, 30, 60];
+const KEEP_OPTIONS = [10, 20, 50, 100, 200];
+
+/** A number select: the stored value is listed even when it is not one of the options (set by hand). */
+function numberField({ value, values, label, text = String, onChange }) {
+  const list = values.includes(value) ? values : [...values, value].sort((a, b) => a - b);
+  return selectField({ value, label, options: list.map(v => ({ value: v, label: text(v) })), onChange: v => onChange(Number(v)) });
+}
+
+/**
+ * Notifiche: how the notification bar over the taskbar shows them (lilOS settings notifyShown and
+ * notifySeconds), how many are kept (the kernel's notifications module keeps them for each user)
+ * and a test one, sent by Control Panel.
+ */
+function notificationSections() {
+  const { notifications } = sdk;
+  const failed = err => toast(t('notifications.error', { message: err.message }));
+  return [
+    {
+      title: t('notifications.arrive.title'),
+      rows: [
+        {
+          label: t('notifications.shown.label'), description: t('notifications.shown.description'), keywords: t('notifications.shown.keywords'),
+          control: () => numberField({ value: settings.get('notifyShown'), values: SHOWN_OPTIONS, label: t('notifications.shown.field'), onChange: v => settings.set('notifyShown', v) }),
+        },
+        {
+          label: t('notifications.seconds.label'), description: t('notifications.seconds.description'), keywords: t('notifications.seconds.keywords'),
+          control: () => numberField({
+            value: settings.get('notifySeconds'), values: SECONDS_OPTIONS, label: t('notifications.seconds.field'),
+            text: n => t('notifications.seconds.value', { n }), onChange: v => settings.set('notifySeconds', v),
+          }),
+        },
+      ],
+    },
+    {
+      title: t('notifications.list.title'),
+      rows: [
+        {
+          label: t('notifications.keep.label'), keywords: t('notifications.keep.keywords'),
+          description: notifications.available ? t('notifications.keep.description') : `${t('notifications.keep.description')} ${t('notifications.keep.page')}`,
+          control: () => numberField({ value: notifications.keep, values: KEEP_OPTIONS, label: t('notifications.keep.field'), onChange: v => notifications.setKeep(v).catch(failed) }),
+        },
+        {
+          label: t('notifications.test.label'), description: t('notifications.test.description'),
+          control: actionButton({ label: t('notifications.test.button'), onClick: () => notifications.send({ app: 'settings', text: t('notifications.test.text') }).catch(failed) }),
+        },
+      ],
+    },
+  ];
+}
+
 /**
  * The system Settings app: only settings that actually work. Tabs and secondary tabs give their
  * texts with getters, read on every render: they follow a change of language.
@@ -668,6 +720,12 @@ export default function createSettings({ openWindow, args } = {}) {
         get description() { return t('workspaces.description'); },
         get subtabs() { return workspaceSubtabs(); },
       },
+      sdk.notifications && {
+        id: 'notifications', icon: 'bell',
+        get label() { return t('notifications.label'); },
+        get description() { return t('notifications.description'); },
+        sections: notificationSections,
+      },
       {
         id: 'tags', icon: 'tag',
         get label() { return t('tags.label'); },
@@ -723,7 +781,7 @@ export default function createSettings({ openWindow, args } = {}) {
               {
                 label: t('storage.defaults.label'), description: t('storage.defaults.description'),
                 control: confirmButton(t('common.reset'), t('common.confirm'), () => {
-                  ['accent', 'theme', 'motion', 'snap', 'minimap', 'lasso', 'deleteConfirm', 'deletePermanent', 'trashRetention', 'startupApps', ...(sdk.locale ? ['language'] : []), ...(system.USER_PAGE_ITEMS ? ['userPageHidden'] : [])].forEach(k => settings.reset(k));
+                  ['accent', 'theme', 'motion', 'snap', 'minimap', 'lasso', 'deleteConfirm', 'deletePermanent', 'trashRetention', 'startupApps', ...(sdk.locale ? ['language'] : []), ...(system.USER_PAGE_ITEMS ? ['userPageHidden'] : []), ...(sdk.notifications ? ['notifyShown', 'notifySeconds'] : [])].forEach(k => settings.reset(k));
                   shortcuts.resetAll();
                   resetAppsFor();
                   menus.list().forEach(m => menus.reset(m.id));
