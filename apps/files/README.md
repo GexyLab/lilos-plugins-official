@@ -4,7 +4,7 @@ Sfoglia, cerca e organizza i file e le cartelle di lilOS.
 
 ## Cosa fa
 
-- Mostra le cartelle a icone o a elenco, con la ricerca nella cartella aperta.
+- Mostra le cartelle a elenco, a icone o in **vista anteprime** (riquadri grandi: i file mostrano la miniatura che l'app che li apre ne fa, per esempio Photo per le immagini e l'Editor per il testo; con un lilOS che non le ha restano le icone grandi), con la ricerca nella cartella aperta.
 - Crea, rinomina e sposta file e cartelle, anche trascinandoli.
 - Assegna i **tag** e crea i **collegamenti**.
 - Manda gli elementi nel **cestino**, da cui si ripristinano.

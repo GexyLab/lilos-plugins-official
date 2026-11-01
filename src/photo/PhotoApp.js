@@ -6,6 +6,8 @@ import { resizeDialog, convertDialog } from './dialogs.js';
 import { t } from './i18n.js';
 import './photo.css';
 
+export { filePreview } from './preview.js';
+
 // Labels come from functions, so they are in the system's language when they are drawn
 const colors = () => [
   { value: '#ffffff', label: t('color.white') }, { value: '#1f2328', label: t('color.black') }, { value: '#e5484d', label: t('color.red') },

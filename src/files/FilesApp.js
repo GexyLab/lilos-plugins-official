@@ -25,6 +25,11 @@ import './files.css';
 const MAIN_MIN = 260;
 
 const VIEW_KEY = 'files-view';
+/** The views of the list: rows with columns, small icons, big previews (the thumbnails apps make of files). */
+const VIEWS = ['list', 'grid', 'thumbs'];
+/** Longest side of a thumbnail in the preview view (CSS pixels), and how wide a tile is there with its gap. */
+const THUMB = 112;
+const TILE = { grid: 92, thumbs: 140 };
 /** The trash is shown like a folder, with this id (not a node: fs.get() does not see it). */
 const TRASH = fs.trashRoot;
 /** Columns of the list (functions: their labels are in the language of now). */
@@ -94,7 +99,7 @@ class FileBrowser {
   folder = fs.root;
   #back = [];
   #forward = [];
-  #view = storage.get(VIEW_KEY) === 'grid' ? 'grid' : 'list';
+  #view = VIEWS.includes(storage.get(VIEW_KEY)) ? storage.get(VIEW_KEY) : 'list';
   #sort = { key: 'name', dir: 1 };
   #columns = new Columns();   // widths and visibility of the list view's columns
   #query = '';
@@ -122,6 +127,7 @@ class FileBrowser {
     this.newBtn = tool('folderPlus', t('menu.newFolder'), () => this.create('folder'));
     this.listBtn = tool('list', t('view.list'), () => this.setView('list'));
     this.gridBtn = tool('grid', t('view.grid'), () => this.setView('grid'));
+    this.thumbsBtn = tool('image', t('view.thumbs'), () => this.setView('thumbs'));
     this.previewBtn = tool('sidebar', '', () => this.preview.toggle());
     this.infoBtn = tool('info', '', () => this.info.toggle());
     this.search = h('input', { type: 'text', spellcheck: 'false', 'aria-label': t('toolbar.search') });
@@ -157,7 +163,7 @@ class FileBrowser {
         this.crumbs,
         this.newBtn,
         h('span', { class: 'fm-sep' }),
-        this.listBtn, this.gridBtn,
+        this.listBtn, this.gridBtn, this.thumbsBtn,
         h('span', { class: 'fm-sep' }),
         this.previewBtn, this.infoBtn,
         h('label', { class: 'fm-search' }, icon('search'), this.search)),
@@ -407,7 +413,8 @@ class FileBrowser {
     if (!ids.has(this.#cursor)) this.#cursor = this.#items[0]?.id ?? null;
 
     const scroll = this.list.scrollTop;
-    this.list.classList.toggle('grid', this.#view === 'grid');
+    this.list.classList.toggle('grid', this.#view !== 'list');
+    this.list.classList.toggle('thumbs', this.#view === 'thumbs');
     this.list.classList.toggle('tree', this.tree);
     this.list.setAttribute('role', this.tree ? 'tree' : 'listbox');
     if (!this.#items.length) {
@@ -492,10 +499,10 @@ class FileBrowser {
     this.forwardBtn.disabled = !this.#forward.some(id => this.#reachable(id));
     this.upBtn.disabled = !folder.parent;
     this.newBtn.disabled = this.inTrash || !!this.inTag;
-    this.listBtn.classList.toggle('on', this.#view === 'list');
-    this.gridBtn.classList.toggle('on', this.#view === 'grid');
-    this.listBtn.setAttribute('aria-pressed', String(this.#view === 'list'));
-    this.gridBtn.setAttribute('aria-pressed', String(this.#view === 'grid'));
+    for (const [btn, view] of [[this.listBtn, 'list'], [this.gridBtn, 'grid'], [this.thumbsBtn, 'thumbs']]) {
+      btn.classList.toggle('on', this.#view === view);
+      btn.setAttribute('aria-pressed', String(this.#view === view));
+    }
     this.search.placeholder = t('toolbar.searchIn', { name: folderName(folder) });
 
     const trail = this.inTrash || this.inTag ? [folder] : fs.ancestors(this.folder);
@@ -827,7 +834,9 @@ class FileBrowser {
   }
 
   #tile(n) {
-    const tile = this.#option(n, 'fm-tile', h('span', { class: 'fm-tile-icon' }, itemIcon(n), tagDots(n, 'fm-tile-tags')), this.#nameNode(n));
+    // In the preview view a file shows the thumbnail its app makes (a lilOS without them ignores `preview`)
+    const glyph = itemIcon(n, this.#view === 'thumbs' && !n.trashed ? { preview: THUMB } : undefined);
+    const tile = this.#option(n, 'fm-tile', h('span', { class: 'fm-tile-icon' }, glyph, tagDots(n, 'fm-tile-tags')), this.#nameNode(n));
     const tagNames = (n.tags ?? []).map(id => tags.get(id)?.name).filter(Boolean);
     const lines = n.trashed
       ? [t('tile.deleted', { date: dateLabel(n.trashed.at) }), t('tile.origin', { place: originLabel(n) })]
@@ -997,17 +1006,18 @@ class FileBrowser {
     this.list.querySelector(`#fm-${CSS.escape(id)}`)?.scrollIntoView({ block: 'nearest' });
   }
 
-  /** How many items an arrow key moves by (grid: a row is as many tiles as fit). */
+  /** How many items an arrow key moves by (icons and previews: a row is as many tiles as fit). */
   #step(key) {
-    const perRow = this.#view === 'grid' ? Math.max(1, Math.floor(this.list.clientWidth / 92)) : 1;
+    const tiles = this.#view !== 'list';
+    const perRow = tiles ? Math.max(1, Math.floor(this.list.clientWidth / TILE[this.#view])) : 1;
     return {
       ArrowDown: perRow, ArrowUp: -perRow, Home: -Infinity, End: Infinity,
-      ...(this.#view === 'grid' && { ArrowRight: 1, ArrowLeft: -1 }),
+      ...(tiles && { ArrowRight: 1, ArrowLeft: -1 }),
     }[key] ?? null;
   }
 
   #backgroundMenu(e) {
-    const toggleView = { label: this.#view === 'list' ? t('view.grid') : t('view.list'), icon: this.#view === 'list' ? 'grid' : 'list', action: () => this.setView(this.#view === 'list' ? 'grid' : 'list') };
+    const toggleView = { label: t('view.menu'), icon: 'grid', items: VIEWS.map(view => ({ label: t(`view.${view}`), icon: this.#view === view ? 'check' : null, action: () => this.setView(view) })) };
     const columns = this.#view === 'list' && { label: t('columns.menu'), icon: 'list', items: this.#columnItems() };
     const collapse = this.#items.some(n => this.#isOpen(n)) && { label: t('tree.collapseAll'), icon: 'minus', action: () => { this.#expanded.clear(); this.render(); } };
     if (this.inTrash) {

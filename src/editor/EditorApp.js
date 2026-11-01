@@ -16,6 +16,8 @@ import { readSession, writeSession, removeSession, takeClosed, addClosed, readDr
 import { t } from './i18n.js';
 import './editor.css';
 
+export { filePreview } from './preview.js';
+
 const INDENT = '  ';
 const HIGHLIGHT_LIMIT = 300_000;   // characters: above this the text is shown plain, to stay responsive
 const TEXTMATE_LIMIT = 100_000;    // TextMate re-tokenizes everything: above this the simple engine is used

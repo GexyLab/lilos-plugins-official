@@ -4,6 +4,7 @@ Le preferenze di lilOS in un posto solo.
 
 ## Cosa si cambia
 
+- **Scrivania → Elementi → Icone**: mostrare l'anteprima dei file sulla scrivania (se la versione di lilOS ha le miniature).
 - **Aspetto**: tema, colore principale, selezione sulla scrivania.
 - **Workspace**: quello attuale e tutti gli altri, con nome e colore.
 - **Tag**: nomi, colori e dove si vedono.

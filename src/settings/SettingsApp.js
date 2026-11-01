@@ -706,7 +706,15 @@ export default function createSettings({ openWindow, args } = {}) {
                 label: t('desk.snap.label'), description: t('desk.snap.description'),
                 keywords: t('desk.snap.keywords'), control: settingToggle('snap'),
               }],
-            }],
+            },
+            // Thumbnails made by apps (lilOS apps/thumbnails.js): only a lilOS that has them
+            typeof system.fileThumbnail === 'function' && {
+              title: t('desk.previews.title'),
+              rows: [{
+                label: t('desk.previews.label'), description: t('desk.previews.description'),
+                keywords: t('desk.previews.keywords'), control: settingToggle('deskPreviews'),
+              }],
+            }].filter(Boolean),
           },
           {
             id: 'overview', get label() { return t('desk.overview.label'); },
@@ -790,7 +798,7 @@ export default function createSettings({ openWindow, args } = {}) {
               {
                 label: t('storage.defaults.label'), description: t('storage.defaults.description'),
                 control: confirmButton(t('common.reset'), t('common.confirm'), () => {
-                  ['accent', 'theme', 'motion', 'snap', 'minimap', 'lasso', 'deleteConfirm', 'deletePermanent', 'trashRetention', 'startupApps', ...(sdk.locale ? ['language'] : []), ...(system.USER_PAGE_ITEMS ? ['userPageHidden'] : []), ...(sdk.notifications ? ['notifyShown', 'notifySeconds'] : [])].forEach(k => settings.reset(k));
+                  ['accent', 'theme', 'motion', 'snap', ...(system.fileThumbnail ? ['deskPreviews'] : []), 'minimap', 'lasso', 'deleteConfirm', 'deletePermanent', 'trashRetention', 'startupApps', ...(sdk.locale ? ['language'] : []), ...(system.USER_PAGE_ITEMS ? ['userPageHidden'] : []), ...(sdk.notifications ? ['notifyShown', 'notifySeconds'] : [])].forEach(k => settings.reset(k));
                   shortcuts.resetAll();
                   resetAppsFor();
                   menus.list().forEach(m => menus.reset(m.id));

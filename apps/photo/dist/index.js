@@ -41,6 +41,7 @@ var x = b("photo", {
 		"@commands.photo.open.label": "Open an image",
 		"@entrypoints.main.params.file.label": "Image",
 		"@entrypoints.main.params.file.description": "The image to open",
+		"@entrypoints.filePreview.label": "Image previews",
 		"action.save": "Save",
 		"action.cancel": "Cancel",
 		"toolbar.open": "Open an image… (Ctrl O)",
@@ -189,6 +190,7 @@ var x = b("photo", {
 		"@commands.photo.open.label": "Apri un’immagine",
 		"@entrypoints.main.params.file.label": "Immagine",
 		"@entrypoints.main.params.file.description": "L’immagine da aprire",
+		"@entrypoints.filePreview.label": "Anteprime delle immagini",
 		"action.save": "Salva",
 		"action.cancel": "Annulla",
 		"toolbar.open": "Apri un’immagine… (Ctrl O)",
@@ -654,8 +656,35 @@ function U(e, t, { name: n, folder: r, format: o = "png", title: s = S("convert.
 		}
 	});
 }
+// src/photo/preview.js
+var W = 1024, G = 16, ee = 2048, te = {
+	png: "image/png",
+	jpg: "image/jpeg",
+	jpeg: "image/jpeg",
+	gif: "image/gif",
+	webp: "image/webp",
+	bmp: "image/bmp",
+	avif: "image/avif",
+	ico: "image/x-icon",
+	svg: "image/svg+xml"
+};
+function ne({ lilos: e }) {
+	e.handle(async (t) => {
+		if (typeof t?.file != "string") return null;
+		let n = await e.files.info(t.file), r = D(n.name);
+		if (!w.includes(r) || !n.size) return null;
+		let i = await e.files.read(t.file, { bytes: !0 }), a;
+		try {
+			a = await P(new Blob([i], { type: te[r] }));
+		} catch {
+			return null;
+		}
+		let o = Number.isFinite(t.size) ? Math.min(ee, Math.max(G, Math.round(t.size))) : W, s = Math.min(1, o / Math.max(a.width, a.height)), c = s < 1 ? I(a, a.width * s, a.height * s) : a, l = C.find((e) => e.id === "webp");
+		return { image: await F(c, j(l) ? l : C[0], .85) };
+	});
+}
 // src/photo/PhotoApp.js
-var W = () => [
+var K = () => [
 	{
 		value: "#ffffff",
 		label: S("color.white")
@@ -688,7 +717,7 @@ var W = () => [
 		value: "#7c5cdb",
 		label: S("color.purple")
 	}
-], G = [
+], q = [
 	{
 		value: "sans",
 		label: () => S("font.sans"),
@@ -709,7 +738,7 @@ var W = () => [
 		label: () => S("font.hand"),
 		css: "\"Segoe Print\", \"Bradley Hand\", \"Comic Sans MS\", cursive"
 	}
-], K = () => [
+], re = () => [
 	{
 		value: "free",
 		label: S("ratio.free")
@@ -746,7 +775,7 @@ var W = () => [
 		value: "9/16",
 		label: "9:16"
 	}
-], q = [
+], J = [
 	{
 		id: "view",
 		label: () => S("tool.view"),
@@ -771,7 +800,7 @@ var W = () => [
 		key: "C",
 		glyph: "crop"
 	}
-], J = [
+], Y = [
 	.05,
 	.1,
 	1 / 6,
@@ -788,8 +817,8 @@ var W = () => [
 	8,
 	12,
 	16
-], Y = 1.2, X = 20;
-function ee({ args: e, openWindow: t } = {}) {
+], X = 1.2, ie = 20;
+function ae({ args: e, openWindow: t } = {}) {
 	let r = new n({
 		title: "Photo",
 		icon: "image",
@@ -797,15 +826,15 @@ function ee({ args: e, openWindow: t } = {}) {
 		height: 620,
 		minWidth: 560,
 		minHeight: 360
-	}), a = new ne(r, t);
+	}), a = new se(r, t);
 	return e?.file && i.exists(e.file) ? a.open(e.file) : a.render(), r.on("launch", (e) => {
 		e?.file && i.exists(e.file) && a.open(e.file);
 	}), r.canClose = () => a.confirmDiscard(), r.getState = () => ({ file: a.fileId }), r;
 }
-var Z = (e, t, n) => Math.min(n, Math.max(t, e)), te = (e, t) => e.name.localeCompare(t.name, void 0, {
+var Z = (e, t, n) => Math.min(n, Math.max(t, e)), oe = (e, t) => e.name.localeCompare(t.name, void 0, {
 	numeric: !0,
 	sensitivity: "base"
-}), Q = (e) => w.includes(D(e)), ne = class {
+}), Q = (e) => w.includes(D(e)), se = class {
 	fileId = null;
 	name = "";
 	canvas = null;
@@ -835,7 +864,7 @@ var Z = (e, t, n) => Math.min(n, Math.max(t, e)), te = (e, t) => e.name.localeCo
 	#p = null;
 	#m = "";
 	constructor(e, n) {
-		this.win = e, this.openWindow = n ?? (() => {}), this.stack = new t({ limit: X });
+		this.win = e, this.openWindow = n ?? (() => {}), this.stack = new t({ limit: ie });
 		let { signal: r } = e, c = (e, t, n) => a("button", {
 			class: "ph-btn",
 			type: "button",
@@ -843,7 +872,7 @@ var Z = (e, t, n) => Math.min(n, Math.max(t, e)), te = (e, t) => e.name.localeCo
 			"aria-label": t,
 			onclick: n
 		}, y(e));
-		this.undoBtn = c("undo", S("toolbar.undo"), () => this.stack.undo()), this.redoBtn = c("redo", S("toolbar.redo"), () => this.stack.redo()), this.saveBtn = c("save", S("toolbar.save"), () => this.save()), this.downloadBtn = c("download", S("toolbar.download"), () => this.download()), this.revealBtn = c("folder", S("toolbar.reveal"), () => this.reveal()), this.toolBtns = q.map((e) => {
+		this.undoBtn = c("undo", S("toolbar.undo"), () => this.stack.undo()), this.redoBtn = c("redo", S("toolbar.redo"), () => this.stack.redo()), this.saveBtn = c("save", S("toolbar.save"), () => this.save()), this.downloadBtn = c("download", S("toolbar.download"), () => this.download()), this.revealBtn = c("folder", S("toolbar.reveal"), () => this.reveal()), this.toolBtns = J.map((e) => {
 			let t = c(e.glyph, S("toolbar.tool", {
 				label: e.label(),
 				key: e.key
@@ -1085,7 +1114,7 @@ var Z = (e, t, n) => Math.min(n, Math.max(t, e)), te = (e, t) => e.name.localeCo
 	}
 	#h() {
 		let e = this.node;
-		return e ? i.children(e.parent).filter((e) => e.type === "file" && Q(e.name)).sort(te) : [];
+		return e ? i.children(e.parent).filter((e) => e.type === "file" && Q(e.name)).sort(oe) : [];
 	}
 	step(e) {
 		let t = this.#h(), n = t.findIndex((e) => e.id === this.fileId), r = t[n + e];
@@ -1204,7 +1233,7 @@ var Z = (e, t, n) => Math.min(n, Math.max(t, e)), te = (e, t) => e.name.localeCo
 		this.paper.setPointerCapture(e.pointerId), this.paper.addEventListener("pointermove", c), this.paper.addEventListener("pointerup", l), this.paper.addEventListener("pointercancel", l);
 	}
 	#T(e) {
-		let t = G.find((e) => e.value === this.#u.font) ?? G[0];
+		let t = q.find((e) => e.value === this.#u.font) ?? q[0];
 		return `${this.#u.bold ? 700 : 400} ${e}px ${t.css}`;
 	}
 	#E({ x: e, y: t }) {
@@ -1218,7 +1247,7 @@ var Z = (e, t, n) => Math.min(n, Math.max(t, e)), te = (e, t) => e.name.localeCo
 		n.contentEditable = "plaintext-only", n.contentEditable !== "plaintext-only" && (n.contentEditable = "true"), this.#p = {
 			box: n,
 			x: e,
-			y: t - this.#u.size * Y / 2
+			y: t - this.#u.size * X / 2
 		}, this.#D(), n.addEventListener("keydown", (e) => {
 			e.stopPropagation(), e.key === "Enter" && !e.shiftKey ? (e.preventDefault(), this.#O(), this.stage.focus({ preventScroll: !0 })) : e.key === "Escape" && (e.preventDefault(), this.#k(), this.stage.focus({ preventScroll: !0 }));
 		}), n.addEventListener("paste", (e) => {
@@ -1232,7 +1261,7 @@ var Z = (e, t, n) => Math.min(n, Math.max(t, e)), te = (e, t) => e.name.localeCo
 			left: `${t * r}px`,
 			top: `${n * r}px`,
 			font: this.#T(this.#u.size * r),
-			lineHeight: String(Y),
+			lineHeight: String(X),
 			color: this.#c
 		});
 	}
@@ -1241,7 +1270,7 @@ var Z = (e, t, n) => Math.min(n, Math.max(t, e)), te = (e, t) => e.name.localeCo
 		let { box: e, x: t, y: n } = this.#p, r = e.innerText.replace(/\n+$/, "").split("\n");
 		if (this.#k(), !r.some((e) => e.trim())) return;
 		let i = N(this.canvas), a = this.canvas.getContext("2d"), o = this.#u.size;
-		a.save(), a.font = this.#T(o), a.fillStyle = this.#c, a.textBaseline = "top", r.forEach((e, r) => a.fillText(e, t, n + o * .19999999999999996 / 2 + r * o * Y)), a.restore(), this.#v(S("history.text"), i), this.render();
+		a.save(), a.font = this.#T(o), a.fillStyle = this.#c, a.textBaseline = "top", r.forEach((e, r) => a.fillText(e, t, n + o * .19999999999999996 / 2 + r * o * X)), a.restore(), this.#v(S("history.text"), i), this.render();
 	}
 	#k() {
 		this.#p?.box.remove(), this.#p = null;
@@ -1272,7 +1301,7 @@ var Z = (e, t, n) => Math.min(n, Math.max(t, e)), te = (e, t) => e.name.localeCo
 				...a,
 				x: Z(a.x + c, 0, n - a.width),
 				y: Z(a.y + l, 0, r - a.height)
-			} : t === "new" ? $(i.x, i.y, Z(s.x, 0, n), Z(s.y, 0, r), o, n, r) : re(a, t, c, l, o, n, r), this.#N();
+			} : t === "new" ? $(i.x, i.y, Z(s.x, 0, n), Z(s.y, 0, r), o, n, r) : ce(a, t, c, l, o, n, r), this.#N();
 		}, c = () => {
 			this.paper.removeEventListener("pointermove", s), this.paper.removeEventListener("pointerup", c), this.paper.removeEventListener("pointercancel", c), (this.#f.width < 1 || this.#f.height < 1) && this.#j();
 		};
@@ -1322,12 +1351,12 @@ var Z = (e, t, n) => Math.min(n, Math.max(t, e)), te = (e, t) => e.name.localeCo
 			clientX: t,
 			clientY: n
 		});
-		this.#a = Z(e, J[0], J.at(-1)), this.#o = !1, this.#F();
+		this.#a = Z(e, Y[0], Y.at(-1)), this.#o = !1, this.#F();
 		let a = this.paper.getBoundingClientRect();
 		this.stage.scrollLeft += a.left + i.x * this.#a - t, this.stage.scrollTop += a.top + i.y * this.#a - n;
 	}
 	zoomStep(e, t, n) {
-		let r = this.#a, i = e > 0 ? J.find((e) => e > r * 1.001) : J.findLast((e) => e < r / 1.001);
+		let r = this.#a, i = e > 0 ? Y.find((e) => e > r * 1.001) : Y.findLast((e) => e < r / 1.001);
 		i && this.zoomTo(i, t, n);
 	}
 	fitToWindow() {
@@ -1341,7 +1370,7 @@ var Z = (e, t, n) => Math.min(n, Math.max(t, e)), te = (e, t) => e.name.localeCo
 	}
 	#L(e) {
 		if (e.defaultPrevented || c() || e.target.closest?.(".ph-banner, .ph-scrim, select, input") || e.ctrlKey || e.metaKey || e.altKey) return;
-		let t = e.key.length === 1 ? e.key.toLowerCase() : e.key, n = q.find((e) => e.key.toLowerCase() === t), r = !0;
+		let t = e.key.length === 1 ? e.key.toLowerCase() : e.key, n = J.find((e) => e.key.toLowerCase() === t), r = !0;
 		n ? this.setTool(n.id) : t === "+" || t === "=" ? this.zoomStep(1) : t === "-" ? this.zoomStep(-1) : t === "0" ? this.fitToWindow() : t === "1" ? this.zoomTo(1) : t === "ArrowLeft" && e.target.closest(".ph-main, .ph-toolbar") !== null ? this.step(-1) : t === "ArrowRight" && e.target.closest(".ph-main, .ph-toolbar") !== null ? this.step(1) : t === "Enter" && this.#s === "crop" && !e.target.closest("button") ? this.applyCrop() : t === "Escape" && this.#s === "crop" ? this.#j() : r = !1, r && e.preventDefault();
 	}
 	#R(e) {
@@ -1364,7 +1393,7 @@ var Z = (e, t, n) => Math.min(n, Math.max(t, e)), te = (e, t) => e.name.localeCo
 			class: "ph-swatch ph-custom",
 			title: S("color.custom.title"),
 			"aria-label": S("color.custom")
-		}), t = W(), n = t.map((e) => a("button", {
+		}), t = K(), n = t.map((e) => a("button", {
 			class: "ph-swatch",
 			type: "button",
 			title: e.label,
@@ -1457,7 +1486,7 @@ var Z = (e, t, n) => Math.min(n, Math.max(t, e)), te = (e, t) => e.name.localeCo
 		}, a("span", { class: "ph-option" }, a("span", { class: "ph-label" }, S("option.color")), this.#z()), a("span", { class: "ph-option" }, a("span", { class: "ph-label" }, S("text.font")), u({
 			value: this.#u.font,
 			label: S("text.font"),
-			options: G.map((e) => ({
+			options: q.map((e) => ({
 				value: e.value,
 				label: e.label()
 			})),
@@ -1477,7 +1506,7 @@ var Z = (e, t, n) => Math.min(n, Math.max(t, e)), te = (e, t) => e.name.localeCo
 		}, a("span", { class: "ph-option" }, a("span", { class: "ph-label" }, S("crop.ratio")), u({
 			value: this.#d,
 			label: S("crop.ratio"),
-			options: K(),
+			options: re(),
 			onChange: (e) => {
 				this.#d = e, this.#j();
 			}
@@ -1488,7 +1517,7 @@ var Z = (e, t, n) => Math.min(n, Math.max(t, e)), te = (e, t) => e.name.localeCo
 	}
 	#G() {
 		for (let e of this.win.body.querySelectorAll(".ph-swatch[data-color]")) e.setAttribute("aria-pressed", String(e.dataset.color === this.#c));
-		for (let e of this.win.body.querySelectorAll(".ph-custom")) e.value = this.#c, e.classList.toggle("on", !W().some((e) => e.value === this.#c));
+		for (let e of this.win.body.querySelectorAll(".ph-custom")) e.value = this.#c, e.classList.toggle("on", !K().some((e) => e.value === this.#c));
 		this.brushSize?.set(this.#l.size), this.textSize?.set(this.#u.size), this.opacityGroup && (this.opacityGroup.hidden = this.#l.mode === "eraser"), this.boldBtn?.setAttribute("aria-pressed", String(this.#u.bold));
 	}
 	render() {
@@ -1540,7 +1569,7 @@ function $(e, t, n, r, i, a, o) {
 		height: u
 	};
 }
-function re(e, t, n, r, i, a, o) {
+function ce(e, t, n, r, i, a, o) {
 	let s = e.x, c = e.y, l = e.x + e.width, u = e.y + e.height;
 	if (t.includes("w") && (s = Z(s + n, 0, l - 1)), t.includes("e") && (l = Z(l + n, s + 1, a)), t.includes("n") && (c = Z(c + r, 0, u - 1)), t.includes("s") && (u = Z(u + r, c + 1, o)), !i) return {
 		x: s,
@@ -1567,4 +1596,4 @@ function re(e, t, n, r, i, a, o) {
 		height: p
 	};
 }
-export { ee as default };
+export { ae as default, ne as filePreview };

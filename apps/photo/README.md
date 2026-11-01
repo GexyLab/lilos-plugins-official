@@ -10,6 +10,7 @@ Guarda le immagini e le ritocca.
 - **Converte** in PNG, JPEG o WebP, con la qualità che scegli.
 - Importa le immagini dal computer (anche trascinandole nella finestra) e le scarica.
 - Annulla e ripete le ultime 20 modifiche.
+- Prepara le **anteprime** delle immagini (punto d'ingresso `filePreview`): l'immagine rimpicciolita, per il pannello Anteprima e le miniature del File Manager e della scrivania.
 
 Si apre facendo doppio clic su un'immagine, oppure dal menu Start.
 Vuole una versione di lilOS che salva i file binari (con `fs.readBlob`).

@@ -1,6 +1,6 @@
 {
   "id": "photo",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "kind": "local",
   "name": "Photo",
   "description": "View and touch up images: drawing, text, cropping, resizing and conversion to PNG, JPEG or WebP.",
@@ -13,7 +13,7 @@
     "id": "lilos",
     "name": "lilOS"
   },
-  "sdk": "1",
+  "sdk": "2",
   "system": true,
   "entrypoints": {
     "main": {
@@ -25,6 +25,10 @@
           "description": "The image to open"
         }
       }
+    },
+    "filePreview": {
+      "kind": "background",
+      "label": "Image previews"
     }
   },
   "permissions": [
@@ -71,7 +75,7 @@
   "locales": "locales.json",
   "files": {
     "dist/index-DqF2jp_v.css": "sha256-oS0F1fKhzl/FkJd+jrJN0LQYEA6u+UPHsDthL9/3zmE=",
-    "dist/index.js": "sha256-L9WMVvrQNZLziWRydcSTBwfSU6Tf1slID07+qvpgBsA=",
-    "locales.json": "sha256-xtWlGSZ0dT3ejyKYqRDraVukts0s3tT0OnpEjO45IWQ="
+    "dist/index.js": "sha256-O311g3cyqqJXKxPzxaxvCxl5Z+qxiCmxbf0ga88O8rs=",
+    "locales.json": "sha256-Lg2IUA0PCTiOFdjr3O9/4yjU1YNOQzpT8YWHal6ZqQ0="
   }
 }

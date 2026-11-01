@@ -7,6 +7,7 @@
       "@commands.photo.open.label": "Open an image",
       "@entrypoints.main.params.file.label": "Image",
       "@entrypoints.main.params.file.description": "The image to open",
+      "@entrypoints.filePreview.label": "Image previews",
 
       "action.save": "Save",
       "action.cancel": "Cancel",
@@ -171,6 +172,7 @@
       "@commands.photo.open.label": "Apri un’immagine",
       "@entrypoints.main.params.file.label": "Immagine",
       "@entrypoints.main.params.file.description": "L’immagine da aprire",
+      "@entrypoints.filePreview.label": "Anteprime delle immagini",
 
       "action.save": "Salva",
       "action.cancel": "Annulla",
