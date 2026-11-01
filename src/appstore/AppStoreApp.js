@@ -314,11 +314,14 @@ export default function AppStore({ openWindow }) {
       : isModule ? t('done.moduleUpdated', { name, version: r.version }) : t('done.appUpdated', { name, version: r.version })));
   }
 
+  /** lilOS goes last, with its own question: it is not an app (no manifest) and starts after the restart. */
   function updateAll(items) {
     act('update', async () => {
       let done = 0;
       const jobs = [];
+      const lilos = items.find(i => i.kind === 'system');
       for (const item of items) {
+        if (item === lilos) continue;
         const answer = await askUpdate(item);
         if (!answer) continue;
         if (item.kind !== 'module') {
@@ -335,6 +338,13 @@ export default function AppStore({ openWindow }) {
       for (const r of (jobs.length && await updateThroughSystem(jobs)) || []) {
         if (r.error) toast(`${r.item.name}: ${r.error.message}`, { timeout: 7000 });
         else done++;
+      }
+      if (lilos && await confirmSystemUpdate(lilos)) {
+        try {
+          if (!(await releases.update()).unchanged) done++;
+        } catch (err) {
+          toast(`${lilos.name}: ${err.message}`, { timeout: 7000 });
+        }
       }
       return done;
     }, done => t('done.updatedCount', { n: done }));
@@ -373,18 +383,20 @@ export default function AppStore({ openWindow }) {
 
   // ---------- lilOS ----------
 
+  /** Asks before updating lilOS: it starts after the restart, and goes back by itself if it does not. */
+  const confirmSystemUpdate = item => ask({
+    title: t('system.confirmTitle', { version: item.update }), glyph: 'download', height: 290,
+    body: [
+      h('p', { class: 'as-dialog-lead' }, t('system.confirmLead', { version: item.update, current: item.installed })),
+      h('p', {}, t('system.confirmRestart')),
+      h('p', {}, t('system.confirmRollback', { current: item.installed })),
+    ],
+    confirm: { label: t('action.update'), primary: true, value: true },
+  });
+
   /** Puts the newer version of lilOS next to this one: it runs after the restart (or lilOS goes back by itself). */
   async function updateSystem(item) {
-    const ok = await ask({
-      title: t('system.confirmTitle', { version: item.update }), glyph: 'download', height: 290,
-      body: [
-        h('p', { class: 'as-dialog-lead' }, t('system.confirmLead', { version: item.update, current: item.installed })),
-        h('p', {}, t('system.confirmRestart')),
-        h('p', {}, t('system.confirmRollback', { current: item.installed })),
-      ],
-      confirm: { label: t('action.update'), primary: true, value: true },
-    });
-    if (ok) act('update', () => releases.update(), r => (r.unchanged ? t('system.upToDate') : t('system.ready', { version: r.version })));
+    if (await confirmSystemUpdate(item)) act('update', () => releases.update(), r => (r.unchanged ? t('system.upToDate') : t('system.ready', { version: r.version })));
   }
 
   /** Another version kept on disk: it runs after the restart, on trial as an update. */
