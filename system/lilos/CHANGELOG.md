@@ -1,5 +1,9 @@
 # Changelog di lilOS
 
+## 1.9.2 — 2026-11-01
+
+- L'immagine di sfondo della scrivania parte sempre dal bordo superiore dello schermo: se è più alta dello schermo si taglia solo in basso (prima era centrata e si tagliava sopra e sotto); una più larga si taglia ancora ai due lati
+
 ## 1.9.1 — 2026-11-01
 
 - Il kernel nella release è impacchettato e minificato: nel repository ufficiale non c'è più il suo codice leggibile. Nessun cambiamento per chi usa lilOS
