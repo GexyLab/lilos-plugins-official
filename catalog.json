@@ -8,7 +8,8 @@
     "apps/photo",
     "apps/terminal",
     "apps/filecrypt",
-    "apps/calculator"
+    "apps/calculator",
+    "apps/keyboard"
   ],
   "modules": [
     "modules/users-basic",
