@@ -8,8 +8,11 @@ import './automata.css';
  *   recorder   the recorder, above the other windows (recorder.js)
  *   run        an automation running (run.js)
  *   cli        the Terminal's `automata` command (cli.js)
+ *   triggers   in the background: the triggers at a time of older Automata become operations of
+ *              Pianificazione (plans.js); lilOS starts it at sign-in when some are left
  */
 export default createEditor;
 export { createRecorder as recorder } from './recorder.js';
 export { createRun as run } from './run.js';
 export { cli } from './cli.js';
+export { triggers } from './plans.js';

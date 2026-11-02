@@ -107,12 +107,12 @@ export function createMain({ args = {}, openWindow } = {}) {
   function drawTools() {
     const sel = state.tasks.find(x => x.id === state.selected);
     const tab = (id, glyph, label) => h('button', { type: 'button', 'aria-pressed': String(state.tab === id), onclick: () => { state.tab = id; load(); } }, icon(glyph), label);
-    const search = h('input', { class: 'sc-search', type: 'search', placeholder: t('tools.search'), value: state.search, 'aria-label': t('tools.search') });
+    const search = h('input', { class: 'ctl-text sc-search', type: 'search', placeholder: t('tools.search'), value: state.search, 'aria-label': t('tools.search') });
     search.addEventListener('input', () => { state.search = search.value; drawList(); });
     fill(toolbar, 
-      h('button', { class: 'sc-btn vio', type: 'button', onclick: () => openEditor(openWindow, {}) }, icon('plus'), t('tools.new')),
-      h('button', { class: 'sc-btn', type: 'button', disabled: !sel, onclick: () => runNow(sel) }, icon('play'), t('tools.run')),
-      h('button', { class: 'sc-btn', type: 'button', disabled: !sel, onclick: () => toggle(sel) }, icon(sel?.enabled === false ? 'play' : 'pause'), sel?.enabled === false ? t('tools.resume') : t('tools.pause')),
+      h('button', { class: 'ctl-btn vio', type: 'button', onclick: () => openEditor(openWindow, {}) }, icon('plus'), t('tools.new')),
+      h('button', { class: 'ctl-btn', type: 'button', disabled: !sel, onclick: () => runNow(sel) }, icon('play'), t('tools.run')),
+      h('button', { class: 'ctl-btn', type: 'button', disabled: !sel, onclick: () => toggle(sel) }, icon(sel?.enabled === false ? 'play' : 'pause'), sel?.enabled === false ? t('tools.resume') : t('tools.pause')),
       h('span', { class: 'sc-grow' }),
       h('div', { class: 'sc-tabs', role: 'group' }, tab('list', 'list', t('tabs.list')), tab('history', 'restart', t('tabs.history'))),
       state.tab === 'list' ? search : null);
@@ -191,15 +191,15 @@ export function createMain({ args = {}, openWindow } = {}) {
     } else rows.push(...list.map(row));
     fill(main, head, h('div', { class: 'sc-rows', role: 'rowgroup' }, rows.length ? rows : h('div', { class: 'sc-empty' },
       state.tasks.length ? t('list.noneHere') : h('div', { class: 'sc-welcome' }, icon('clock'), h('h2', {}, t('welcome.title')), h('p', {}, t('welcome.text')),
-        h('button', { class: 'sc-btn vio', type: 'button', onclick: () => openEditor(openWindow, {}) }, icon('plus'), t('tools.new'))))));
+        h('button', { class: 'ctl-btn vio', type: 'button', onclick: () => openEditor(openWindow, {}) }, icon('plus'), t('tools.new'))))));
   }
 
   function drawHistory() {
-    const taskSel = h('select', { class: 'sc-select', 'aria-label': t('history.task') },
+    const taskSel = h('select', { class: 'ctl-select', 'aria-label': t('history.task') },
       h('option', { value: '' }, t('history.allTasks')),
       state.tasks.map(x => h('option', { value: x.id, selected: x.id === state.runFilter.task }, x.name)));
     taskSel.addEventListener('change', () => { state.runFilter.task = taskSel.value; load(); });
-    const stateSel = h('select', { class: 'sc-select', 'aria-label': t('history.state') },
+    const stateSel = h('select', { class: 'ctl-select', 'aria-label': t('history.state') },
       h('option', { value: '' }, t('history.allStates')),
       ['ok', 'error', 'skipped', 'waiting', 'cancelled'].map(s => h('option', { value: s, selected: s === state.runFilter.state }, t(`state.${s}`))));
     stateSel.addEventListener('change', () => { state.runFilter.state = stateSel.value; load(); });
@@ -248,12 +248,12 @@ export function createMain({ args = {}, openWindow } = {}) {
         h('div', { class: 'sc-dots' }, runs.slice().reverse().map(r => h('i', { class: `d-${r.state}`, title: `${when(r.at ?? r.due)} · ${t(`state.${r.state}`)}` }))),
         runs[0] ? h('p', { class: 'sc-hint' }, `${when(runs[0].at ?? runs[0].due)} · ${runs[0].text || t(`state.${runs[0].state}`)}`) : null),
       h('div', { class: 'sc-acts' },
-        h('button', { class: 'sc-btn', type: 'button', onclick: () => runNow(task) }, icon('play'), t('tools.run')),
-        h('button', { class: 'sc-btn', type: 'button', disabled: !editable, onclick: () => openEditor(openWindow, { id: task.id }) }, icon('pencil'), t('detail.edit')),
-        h('button', { class: 'sc-btn', type: 'button', onclick: () => toggle(task) }, icon(task.enabled ? 'pause' : 'play'), task.enabled ? t('tools.pause') : t('tools.resume')),
-        h('button', { class: 'sc-btn', type: 'button', onclick: () => openEditor(openWindow, { copy: task.id }) }, icon('filePlus'), t('detail.duplicate')),
-        h('button', { class: 'sc-btn danger', type: 'button', onclick: () => remove(task) }, icon('trash'), t('detail.delete')),
-        h('button', { class: 'sc-btn', type: 'button', onclick: () => { state.tab = 'history'; state.runFilter.task = task.id; load(); } }, icon('restart'), t('tabs.history'))),
+        h('button', { class: 'ctl-btn', type: 'button', onclick: () => runNow(task) }, icon('play'), t('tools.run')),
+        h('button', { class: 'ctl-btn', type: 'button', disabled: !editable, onclick: () => openEditor(openWindow, { id: task.id }) }, icon('pencil'), t('detail.edit')),
+        h('button', { class: 'ctl-btn', type: 'button', onclick: () => toggle(task) }, icon(task.enabled ? 'pause' : 'play'), task.enabled ? t('tools.pause') : t('tools.resume')),
+        h('button', { class: 'ctl-btn', type: 'button', onclick: () => openEditor(openWindow, { copy: task.id }) }, icon('filePlus'), t('detail.duplicate')),
+        h('button', { class: 'ctl-btn danger', type: 'button', onclick: () => remove(task) }, icon('trash'), t('detail.delete')),
+        h('button', { class: 'ctl-btn', type: 'button', onclick: () => { state.tab = 'history'; state.runFilter.task = task.id; load(); } }, icon('restart'), t('tabs.history'))),
       task.owner !== me() && task.owner !== '*' ? h('p', { class: 'sc-warn' }, icon('lock'), t('detail.othersNote', { who: ownerName(task.owner) })) : null);
   }
 
