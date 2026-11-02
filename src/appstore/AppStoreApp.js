@@ -84,6 +84,51 @@ export default function AppStore({ openWindow }) {
     state.updates = list?.available ? list.services.find(s => s.app === 'appstore' && s.entry === 'updates') ?? null : null;
   }
 
+  // ---------- «Controlla aggiornamenti» as an operation of the scheduler (lilOS ≥ 1.17.0) ----------
+
+  const planner = sdk.schedule?.available && typeof sdk.schedule.forApp === 'function' ? sdk.schedule.forApp('appstore') : null;
+  const UPDATE_WHEN = {
+    daily: () => ({ every: { n: 1, unit: 'day' }, times: ['09:00'] }),
+    weekly: () => ({ every: { n: 1, unit: 'week' }, days: [1], times: ['09:00'] }),
+  };
+  const today = () => { const d = new Date(); const p = x => String(x).padStart(2, '0'); return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}T09:00`; };
+  const zone = () => Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+
+  /** The AppStore's operation, if there is one (state.updateTask), and the old start-up choice moved into it. */
+  async function loadUpdateTask() {
+    if (!planner) return;
+    state.updateTask = (await planner.list().catch(() => [])).find(task => task.what?.type === 'service' && task.what.app === 'appstore' && task.what.entry === 'updates') ?? null;
+    // Before: «at start-up» (the service at sign-in). Now an operation, every day: the choice carries over once
+    if (!state.updateTask && state.updates?.startup === 'login') {
+      state.updateTask = await saveUpdateTask({ on: true, every: 'daily' }).catch(() => null);
+      await system.services.setStartup('appstore', 'updates', 'none').catch(() => {});
+      await loadUpdatesService();
+    }
+  }
+
+  async function saveUpdateTask({ on, every }) {
+    const old = state.updateTask;
+    const kind = every ?? updateEvery(old) ?? 'daily';
+    const task = {
+      name: t('updates.taskName'), enabled: on,
+      when: old && !every ? old.when : { ...UPDATE_WHEN[kind](), start: old?.when?.start ?? today(), tz: old?.when?.tz ?? zone() },
+      what: { type: 'service', app: 'appstore', entry: 'updates', params: {} },
+      options: { ...(old?.options ?? {}), notify: 'error' },
+    };
+    return old ? planner.update(old.id, task) : planner.create(task);
+  }
+
+  const updateEvery = task => (!task?.when?.every ? null : task.when.every.unit === 'week' ? 'weekly' : task.when.every.unit === 'day' ? 'daily' : 'other');
+
+  async function changeUpdateTask(change) {
+    try {
+      state.updateTask = await saveUpdateTask({ on: state.updateTask?.enabled ?? false, ...change });
+    } catch (err) {
+      toast(err.message, { timeout: 7000 });
+    }
+    render();
+  }
+
   async function setUpdatesAtStart(on) {
     try {
       await system.services.setStartup('appstore', 'updates', on ? 'login' : 'none');
@@ -112,6 +157,7 @@ export default function AppStore({ openWindow }) {
       state.modules = isAdmin ? await kernelModules.list().catch(() => []) : [];
       state.system = releases ? await releases.info().catch(() => null) : null;
       await loadUpdatesService();
+      await loadUpdateTask();
       await apps.refresh();
     } catch (err) {
       toast(err.message, { timeout: 7000 });
@@ -153,6 +199,8 @@ export default function AppStore({ openWindow }) {
       offered, installed: have ? have.enabled ?? have.running : null, here, elsewhere: !!have && !here,
       update: here && have.enabled && offered && newer(offered, have.enabled) ? offered : null,
       provides: module.provides ?? [], verified: !!repo?.official,
+      // A module lilOS cannot do without (the scheduler): updated, never removed
+      required: !!have?.required || !!entry?.module?.required,
     };
   }
 
@@ -631,8 +679,24 @@ export default function AppStore({ openWindow }) {
         : h('p', { class: 'as-muted' }, item.repo ? t('readme.none') : t('readme.notFromRepo')));
   }
 
+  /** «Controlla gli aggiornamenti»: the AppStore's operation in the scheduler (with lilOS ≥ 1.17.0). */
+  function updatesTaskRow() {
+    const task = state.updateTask;
+    const every = updateEvery(task) ?? 'daily';
+    const control = toggle({ value: !!task?.enabled, label: t('updates.check'), onChange: on => changeUpdateTask({ on }) });
+    const options = [{ value: 'daily', label: t('updates.daily') }, { value: 'weekly', label: t('updates.weekly') }, ...(every === 'other' ? [{ value: 'other', label: t('updates.other') }] : [])];
+    const select = h('select', { class: 'ctl-select', 'aria-label': t('updates.when') }, options.map(o => h('option', { value: o.value, selected: o.value === every }, o.label)));
+    select.disabled = !task?.enabled;
+    select.addEventListener('change', () => { if (select.value !== 'other') changeUpdateTask({ every: select.value }); });
+    const edit = h('button', { class: 'as-link', type: 'button', style: 'background:none;border:0;padding:0;cursor:pointer;width:max-content', onclick: () => launch('scheduler', { task: task?.id }, 'main') }, t('updates.inScheduler'));
+    return h('div', { class: 'as-row' },
+      h('div', { class: 'as-row-text' }, h('b', {}, t('updates.check')), h('span', {}, t('updates.taskHint')), task ? edit : null),
+      select, control);
+  }
+
   /** "Check for updates at startup": the AppStore's service, started when the user comes in. */
   function updatesRow() {
+    if (planner && state.updates) return updatesTaskRow();
     const svc = state.updates;
     const locked = !svc || (svc.system && !svc.canControl);
     const text = !svc ? t('updates.needsEngine')

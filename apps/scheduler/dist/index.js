@@ -176,14 +176,14 @@ function T(e = 0) {
 	return `${t.getFullYear()}-${n(t.getMonth() + 1)}-${n(t.getDate())}T${n(t.getHours())}:${n(t.getMinutes())}`;
 }
 // src/scheduler/editor.js
-var E = [
+var E = (e, ...t) => e.replaceChildren(...t.flat(Infinity).filter((e) => e != null && e !== !1)), D = [
 	"minute",
 	"hour",
 	"day",
 	"week",
 	"month",
 	"year"
-], D = [
+], O = [
 	1,
 	2,
 	3,
@@ -191,15 +191,15 @@ var E = [
 	5,
 	6,
 	7
-], O = (e) => !!e && typeof e == "object" && !Array.isArray(e), k = (e) => JSON.parse(JSON.stringify(e));
-function A(e, t = {}) {
-	e(I(t, e));
+], k = (e) => !!e && typeof e == "object" && !Array.isArray(e), A = (e) => JSON.parse(JSON.stringify(e));
+function j(e, t = {}) {
+	e(L(t, e));
 }
-function j({ args: e = {}, openWindow: t } = {}) {
-	let n = O(e) ? e : {};
-	return typeof n.id == "string" ? I({ id: n.id }, t) : I({ prefill: M(n) }, t);
+function M({ args: e = {}, openWindow: t } = {}) {
+	let n = k(e) ? e : {};
+	return typeof n.id == "string" ? L({ id: n.id }, t) : L({ prefill: N(n) }, t);
 }
-function M(e) {
+function N(e) {
 	let t = Array.isArray(e.files) && e.files.length ? n.get(e.files[0]) : null, r = {};
 	if (t) {
 		let n = g(t.id);
@@ -235,9 +235,9 @@ function M(e) {
 			label: n
 		}, r.name = t.name;
 	}
-	return O(e.what) && (r.what = e.what), typeof e.name == "string" && (r.name = e.name), O(e.when) && (r.when = e.when), r;
+	return k(e.what) && (r.what = e.what), typeof e.name == "string" && (r.name = e.name), k(e.when) && (r.when = e.when), r;
 }
-var N = (e) => ({
+var P = (e) => ({
 	notify: {
 		type: e,
 		text: "",
@@ -292,7 +292,7 @@ var N = (e) => ({
 		label: ""
 	}
 })[e];
-function P(e) {
+function F(e) {
 	let t = {
 		mode: "repeat",
 		tz: e?.tz ?? h(),
@@ -351,7 +351,7 @@ function P(e) {
 		day: e.monthly.day
 	}), e.month && (t.month = e.month), t)) : t;
 }
-function F(e) {
+function I(e) {
 	if (e.mode === "once") return {
 		once: e.once,
 		tz: e.tz
@@ -377,7 +377,7 @@ function F(e) {
 	}
 	return n === "year" && (t.month = Number(e.month)), t;
 }
-function I({ id: e = null, copy: l = null, prefill: m = {} }, v) {
+function L({ id: e = null, copy: l = null, prefill: m = {} }, v) {
 	let b = typeof e == "string", S = new t({
 		title: d(b ? "editor.titleEdit" : "editor.titleNew"),
 		icon: "clock",
@@ -390,10 +390,10 @@ function I({ id: e = null, copy: l = null, prefill: m = {} }, v) {
 		enabled: !0,
 		owner: null,
 		what: m.what ? {
-			...N(m.what.type),
-			...k(m.what)
-		} : N("notify"),
-		form: P(m.when ? m.when.tz ? m.when : {
+			...P(m.what.type),
+			...A(m.what)
+		} : P("notify"),
+		form: F(m.when ? m.when.tz ? m.when : {
 			...m.when,
 			tz: h()
 		} : null),
@@ -413,41 +413,41 @@ function I({ id: e = null, copy: l = null, prefill: m = {} }, v) {
 		hosts: [],
 		users: [],
 		runtime: !1
-	}, O = !1, A = !b && !l, j = "", M = r("div", {
+	}, k = !1, j = !b && !l, M = "", N = r("div", {
 		class: "ed-steps",
 		role: "tablist"
-	}), I = r("div", { class: "ed-main" }), L = r("aside", {
+	}), L = r("div", { class: "ed-main" }), R = r("aside", {
 		class: "ed-side",
 		"aria-live": "polite"
-	}), R = r("p", {
+	}), z = r("p", {
 		class: "ed-error",
 		role: "alert"
-	}), z = r("div", { class: "ed-foot" });
-	S.body.append(r("div", { class: "ed" }, M, r("div", { class: "ed-body" }, I, L), R, z)), (async () => {
+	}), B = r("div", { class: "ed-foot" });
+	S.body.append(r("div", { class: "ed" }, N, r("div", { class: "ed-body" }, L, R), z, B)), (async () => {
 		try {
 			let [t, n] = await Promise.all([o.catalog(), o.overview()]);
-			T = t, O = n.admin;
+			T = t, k = n.admin;
 			let r = b ? e : l;
 			if (r) {
 				let e = await o.get(r);
-				C.name = l ? d("editor.copyOf", { name: e.name }) : e.name, C.enabled = e.enabled, C.owner = e.owner, C.what = k(e.what), C.form = P(e.when), C.options = {
+				C.name = l ? d("editor.copyOf", { name: e.name }) : e.name, C.enabled = e.enabled, C.owner = e.owner, C.what = A(e.what), C.form = F(e.when), C.options = {
 					...C.options,
 					...e.options
 				}, C.app = e.app;
 			}
 		} catch (e) {
-			j = e.message;
+			M = e.message;
 		}
-		A = !0, q();
+		j = !0, J();
 	})();
-	let B = (e, t, n) => r("label", { class: "ed-field" }, r("span", { class: "ed-label" }, e), t, n ? r("small", { class: "ed-hint" }, n) : null), V = (e, t, n = {}) => {
+	let V = (e, t, n) => r("label", { class: "ed-field" }, r("span", { class: "ed-label" }, e), t, n ? r("small", { class: "ed-hint" }, n) : null), H = (e, t, n = {}) => {
 		let i = r("input", {
 			class: "ed-input",
 			value: e ?? "",
 			...n
 		});
 		return i.addEventListener(n.type === "checkbox" ? "change" : "input", () => t(n.type === "checkbox" ? i.checked : i.value)), n.type === "checkbox" && (i.checked = !!e), i;
-	}, H = (e, t, n, i) => {
+	}, U = (e, t, n, i) => {
 		let a = r("select", {
 			class: "ed-input",
 			"aria-label": i
@@ -457,7 +457,7 @@ function I({ id: e = null, copy: l = null, prefill: m = {} }, v) {
 			disabled: !!t.disabled
 		}, t.label)));
 		return a.addEventListener("change", () => n(a.value)), a;
-	}, U = (e, t, n) => r("div", {
+	}, W = (e, t, n) => r("div", {
 		class: "ed-seg",
 		role: "group"
 	}, t.map((t) => r("button", {
@@ -465,7 +465,7 @@ function I({ id: e = null, copy: l = null, prefill: m = {} }, v) {
 		"aria-pressed": String(t.value === e),
 		disabled: !!t.disabled,
 		onclick: () => n(t.value)
-	}, t.label))), W = (e, t, n, i) => r("div", {
+	}, t.label))), G = (e, t, n, i) => r("div", {
 		class: "ed-radios",
 		role: "radiogroup"
 	}, n.map((n) => {
@@ -478,67 +478,67 @@ function I({ id: e = null, copy: l = null, prefill: m = {} }, v) {
 		return a.addEventListener("change", () => {
 			a.checked && i(n.value);
 		}), r("label", { class: "ed-radio" }, a, r("span", {}, n.label));
-	})), G = async (e, t, n = null) => c.pickFile(v, {
+	})), K = async (e, t, n = null) => c.pickFile(v, {
 		kind: e,
 		title: t,
 		...n && { exts: n }
-	}), K = (e, t, n) => r("div", { class: "ed-place" }, r("span", { class: "ed-input ed-path" }, i(e?.mount ? "globe" : "folder"), e?.label || r("span", { class: "ed-ph" }, d("editor.choose"))), r("button", {
+	}), q = (e, t, n) => r("div", { class: "ed-place" }, r("span", { class: "ed-input ed-path" }, i(e?.mount ? "globe" : "folder"), e?.label || r("span", { class: "ed-ph" }, d("editor.choose"))), r("button", {
 		class: "sc-btn",
 		type: "button",
 		onclick: async () => {
-			let e = await G("folder", t);
+			let e = await K("folder", t);
 			e && n(_(e.id));
 		}
 	}, d("editor.choose")));
-	function q() {
+	function J() {
 		let e = [
 			d("step.what"),
 			d("step.when"),
 			d("step.options")
 		];
-		if (M.replaceChildren(...e.map((e, t) => r("button", {
+		if (E(N, ...e.map((e, t) => r("button", {
 			type: "button",
 			role: "tab",
 			"aria-selected": String(t === w),
 			class: t < w ? "done" : "",
 			onclick: () => {
-				w = t, q();
+				w = t, J();
 			}
-		}, r("i", {}, t < w ? "✓" : String(t + 1)), e))), !A) {
-			I.replaceChildren(r("p", { class: "ed-hint" }, d("editor.loading")));
+		}, r("i", {}, t < w ? "✓" : String(t + 1)), e))), !j) {
+			E(L, r("p", { class: "ed-hint" }, d("editor.loading")));
 			return;
 		}
-		I.replaceChildren(...[
+		E(L, ...[
 			ee,
 			re,
 			ie
-		][w]()), $(), R.textContent = j;
+		][w]()), oe(), z.textContent = M;
 		let t = r("button", {
 			class: "sc-btn",
 			type: "button",
 			disabled: w === 0,
 			onclick: () => {
-				w--, q();
+				w--, J();
 			}
 		}, d("editor.back")), n = w < 2 ? r("button", {
 			class: "sc-btn vio",
 			type: "button",
 			onclick: () => {
-				w === 0 && !C.name.trim() && (C.name = X()), w++, q();
+				w === 0 && !C.name.trim() && (C.name = Z()), w++, J();
 			}
 		}, d("editor.next")) : r("button", {
 			class: "sc-btn vio",
 			type: "button",
-			onclick: se
+			onclick: ce
 		}, i("check"), d(b ? "editor.save" : "editor.create"));
-		z.replaceChildren(t, r("span", { class: "sc-grow" }), r("button", {
+		E(B, t, r("span", { class: "sc-grow" }), r("button", {
 			class: "sc-btn",
 			type: "button",
 			onclick: () => S.emit("close")
 		}, d("editor.cancel")), n);
 	}
-	let J = () => q(), Y = () => $();
-	function X() {
+	let Y = () => J(), X = () => oe();
+	function Z() {
 		let e = C.what;
 		return e.type === "notify" && e.text ? e.text.slice(0, 60) : e.type === "copy" && e.from?.label ? d("editor.suggest.copy", { from: e.from.label.split("/").pop() || e.from.label }) : y(e, T).slice(0, 60) || d(`kind.${e.type}.name`);
 	}
@@ -560,7 +560,7 @@ function I({ id: e = null, copy: l = null, prefill: m = {} }, v) {
 				"aria-checked": String(C.what.type === t.type),
 				disabled: n || b && C.what.type !== t.type && !!C.app,
 				onclick: () => {
-					C.what.type !== t.type && (C.what = N(t.type), J());
+					C.what.type !== t.type && (C.what = P(t.type), Y());
 				}
 			}, r("span", { class: `sc-kico k-${t.type}` }, i(t.glyph)), r("b", {}, d(`kind.${t.type}.name`)), r("span", { class: `sc-where${t.where === "browser" ? " br" : ""}` }, d(`where.${t.where}`)), r("small", {}, n && t.type === "automation" ? d("kind.automation.missing") : d(`kind.${t.type}.hint`)));
 		}));
@@ -570,17 +570,17 @@ function I({ id: e = null, copy: l = null, prefill: m = {} }, v) {
 		if (e.type === "notify") {
 			let t = e.open?.file === void 0 ? e.open?.app ? "app" : "none" : "file", n = c.installedApps().filter((e) => e.id !== "scheduler");
 			return [
-				B(d("notify.text"), (() => {
+				V(d("notify.text"), (() => {
 					let t = r("textarea", {
 						class: "ed-input",
 						rows: 3,
 						maxlength: 300
 					});
 					return t.value = e.text, t.addEventListener("input", () => {
-						e.text = t.value, Y();
+						e.text = t.value, X();
 					}), t;
 				})()),
-				B(d("notify.level"), H(e.level, [
+				V(d("notify.level"), U(e.level, [
 					"info",
 					"success",
 					"warning",
@@ -591,7 +591,7 @@ function I({ id: e = null, copy: l = null, prefill: m = {} }, v) {
 				})), (t) => {
 					e.level = t;
 				})),
-				B(d("notify.open"), U(t, [
+				V(d("notify.open"), W(t, [
 					{
 						value: "none",
 						label: d("notify.openNone")
@@ -612,20 +612,20 @@ function I({ id: e = null, copy: l = null, prefill: m = {} }, v) {
 						app: n[0]?.id ?? "",
 						entry: "main",
 						args: null
-					}, J();
+					}, Y();
 				})),
-				t === "file" ? B(d("notify.file"), r("div", { class: "ed-place" }, r("span", { class: "ed-input ed-path" }, i("file"), e.open.label || r("span", { class: "ed-ph" }, d("editor.choose"))), r("button", {
+				t === "file" ? V(d("notify.file"), r("div", { class: "ed-place" }, r("span", { class: "ed-input ed-path" }, i("file"), e.open.label || r("span", { class: "ed-ph" }, d("editor.choose"))), r("button", {
 					class: "sc-btn",
 					type: "button",
 					onclick: async () => {
-						let t = await G("file", d("notify.file"));
+						let t = await K("file", d("notify.file"));
 						t && (e.open = {
 							file: t.id,
 							label: g(t.id)
-						}, J());
+						}, Y());
 					}
 				}, d("editor.choose")))) : null,
-				t === "app" ? B(d("notify.app"), H(e.open.app, n.map((e) => ({
+				t === "app" ? V(d("notify.app"), U(e.open.app, n.map((e) => ({
 					value: e.id,
 					label: e.name
 				})), (t) => {
@@ -646,7 +646,7 @@ function I({ id: e = null, copy: l = null, prefill: m = {} }, v) {
 			});
 			let n = t.find((t) => t.app === e.app && t.entry === e.entry);
 			return [
-				B(d("service.which"), H(`${e.app}#${e.entry}`, t.map((e) => ({
+				V(d("service.which"), U(`${e.app}#${e.entry}`, t.map((e) => ({
 					value: `${e.app}#${e.entry}`,
 					label: `${e.name} · ${e.label}`
 				})), (t) => {
@@ -655,19 +655,19 @@ function I({ id: e = null, copy: l = null, prefill: m = {} }, v) {
 						app: n,
 						entry: r,
 						params: {}
-					}), J();
+					}), Y();
 				})),
 				...n?.params ? Object.entries(n.params).map(([t, n]) => ne(e, t, n)) : [r("p", { class: "ed-hint" }, d("service.noParams"))],
 				r("p", { class: "ed-hint" }, d("service.hint"))
 			];
 		}
 		if (e.type === "copy") return [
-			r("div", { class: "ed-two" }, B(d("copy.from"), K(e.from, d("copy.from"), (t) => {
-				e.from = t, J();
-			})), B(d("copy.to"), K(e.to, d("copy.to"), (t) => {
-				e.to = t, J();
+			r("div", { class: "ed-two" }, V(d("copy.from"), q(e.from, d("copy.from"), (t) => {
+				e.from = t, Y();
+			})), V(d("copy.to"), q(e.to, d("copy.to"), (t) => {
+				e.to = t, Y();
 			}))),
-			B(d("copy.how"), W("copy-mode", e.mode, [
+			V(d("copy.how"), G("copy-mode", e.mode, [
 				{
 					value: "versions",
 					label: d("copy.versions", { keep: e.keep })
@@ -681,16 +681,16 @@ function I({ id: e = null, copy: l = null, prefill: m = {} }, v) {
 					label: d("copy.mirror")
 				}
 			], (t) => {
-				e.mode = t, J();
+				e.mode = t, Y();
 			})),
-			e.mode === "versions" ? B(d("copy.keep"), V(e.keep, (t) => {
+			e.mode === "versions" ? V(d("copy.keep"), H(e.keep, (t) => {
 				e.keep = Math.max(1, Math.min(100, Number(t) || 1));
 			}, {
 				type: "number",
 				min: 1,
 				max: 100
 			})) : null,
-			B(d("copy.exclude"), V(e.exclude.join(", "), (t) => {
+			V(d("copy.exclude"), H(e.exclude.join(", "), (t) => {
 				e.exclude = t.split(",").map((e) => e.trim()).filter(Boolean);
 			}, { placeholder: "*.tmp, ~$*, .cache" }), d("copy.excludeHint")),
 			r("p", { class: "ed-hint" }, d("copy.hint"))
@@ -698,7 +698,7 @@ function I({ id: e = null, copy: l = null, prefill: m = {} }, v) {
 		if (e.type === "command") {
 			let t = !!e.host || e._ssh;
 			return [
-				B(d("command.where"), U(t ? "ssh" : "lilos", [{
+				V(d("command.where"), W(t ? "ssh" : "lilos", [{
 					value: "lilos",
 					label: d("command.inLilos")
 				}, {
@@ -706,15 +706,15 @@ function I({ id: e = null, copy: l = null, prefill: m = {} }, v) {
 					label: d("command.onSsh"),
 					disabled: !T.hosts.length
 				}], (t) => {
-					t === "ssh" ? (e._ssh = !0, e.host = T.hosts[0]?.id ?? null, e.hostLabel = T.hosts[0]?.name ?? "", e.cwd = null) : (e._ssh = !1, e.host = null, e.hostLabel = ""), J();
+					t === "ssh" ? (e._ssh = !0, e.host = T.hosts[0]?.id ?? null, e.hostLabel = T.hosts[0]?.name ?? "", e.cwd = null) : (e._ssh = !1, e.host = null, e.hostLabel = ""), Y();
 				})),
-				t ? B(d("command.host"), H(e.host, T.hosts.map((e) => ({
+				t ? V(d("command.host"), U(e.host, T.hosts.map((e) => ({
 					value: e.id,
 					label: `${e.name} · ${e.address}`
 				})), (t) => {
 					e.host = t, e.hostLabel = T.hosts.find((e) => e.id === t)?.name ?? "";
 				})) : null,
-				B(d("command.lines"), (() => {
+				V(d("command.lines"), (() => {
 					let t = r("textarea", {
 						class: "ed-input mono",
 						rows: 6,
@@ -722,22 +722,22 @@ function I({ id: e = null, copy: l = null, prefill: m = {} }, v) {
 						placeholder: d("command.placeholder")
 					});
 					return t.value = e.lines, t.addEventListener("input", () => {
-						e.lines = t.value, Y();
+						e.lines = t.value, X();
 					}), t;
 				})(), d(t ? "command.sshHint" : "command.hint")),
-				t ? null : B(d("command.cwd"), r("div", { class: "ed-place" }, r("span", { class: "ed-input ed-path" }, i("folder"), e.cwdLabel || "~"), r("button", {
+				t ? null : V(d("command.cwd"), r("div", { class: "ed-place" }, r("span", { class: "ed-input ed-path" }, i("folder"), e.cwdLabel || "~"), r("button", {
 					class: "sc-btn",
 					type: "button",
 					onclick: async () => {
-						let t = await G("folder", d("command.cwd"));
-						t && (e.cwd = t.id, e.cwdLabel = g(t.id), J());
+						let t = await K("folder", d("command.cwd"));
+						t && (e.cwd = t.id, e.cwdLabel = g(t.id), Y());
 					}
 				}, d("editor.choose")))),
-				Z(e, ["replace", "append"])
+				Q(e, ["replace", "append"])
 			];
 		}
 		if (e.type === "web") {
-			let t = r("div", { class: "ed-headers" }, e.headers.map((t, n) => r("div", { class: "ed-header" }, V(t.name, (e) => {
+			let t = r("div", { class: "ed-headers" }, e.headers.map((t, n) => r("div", { class: "ed-header" }, H(t.name, (e) => {
 				t.name = e;
 			}, {
 				placeholder: d("web.headerName"),
@@ -746,9 +746,9 @@ function I({ id: e = null, copy: l = null, prefill: m = {} }, v) {
 				class: "sc-link",
 				type: "button",
 				onclick: () => {
-					t.value = "", t.set = !1, J();
+					t.value = "", t.set = !1, Y();
 				}
-			}, d("web.change"))) : V(t.value ?? "", (e) => {
+			}, d("web.change"))) : H(t.value ?? "", (e) => {
 				t.value = e;
 			}, {
 				placeholder: d("web.headerValue"),
@@ -758,19 +758,19 @@ function I({ id: e = null, copy: l = null, prefill: m = {} }, v) {
 			}), r("label", {
 				class: "ed-check",
 				title: d("web.secretHint")
-			}, V(t.secret, (e) => {
-				t.secret = e, J();
+			}, H(t.secret, (e) => {
+				t.secret = e, Y();
 			}, { type: "checkbox" }), i("lock"), d("web.secret")), r("button", {
 				class: "sc-icon",
 				type: "button",
 				title: d("web.removeHeader"),
 				"aria-label": d("web.removeHeader"),
 				onclick: () => {
-					e.headers.splice(n, 1), J();
+					e.headers.splice(n, 1), Y();
 				}
 			}, i("x"))))), n = typeof e.expect.status == "number" ? "n" : e.expect.status;
 			return [
-				r("div", { class: "ed-url" }, H(e.method, [
+				r("div", { class: "ed-url" }, U(e.method, [
 					"GET",
 					"HEAD",
 					"POST",
@@ -781,16 +781,16 @@ function I({ id: e = null, copy: l = null, prefill: m = {} }, v) {
 					value: e,
 					label: e
 				})), (t) => {
-					e.method = t, (t === "GET" || t === "HEAD") && (e.body = { kind: "none" }), J();
-				}, d("web.method")), V(e.url, (t) => {
-					e.url = t.trim(), Y();
+					e.method = t, (t === "GET" || t === "HEAD") && (e.body = { kind: "none" }), Y();
+				}, d("web.method")), H(e.url, (t) => {
+					e.url = t.trim(), X();
 				}, {
 					type: "url",
 					"aria-label": d("web.url"),
 					placeholder: "https://…",
 					spellcheck: "false"
 				})),
-				B(d("web.headers"), r("div", {}, t, r("button", {
+				V(d("web.headers"), r("div", {}, t, r("button", {
 					class: "sc-btn",
 					type: "button",
 					onclick: () => {
@@ -798,10 +798,10 @@ function I({ id: e = null, copy: l = null, prefill: m = {} }, v) {
 							name: "",
 							value: "",
 							secret: !1
-						}), J();
+						}), Y();
 					}
 				}, i("plus"), d("web.addHeader")))),
-				e.method !== "GET" && e.method !== "HEAD" ? B(d("web.body"), r("div", {}, H(e.body.kind, [
+				e.method !== "GET" && e.method !== "HEAD" ? V(d("web.body"), r("div", {}, U(e.body.kind, [
 					"none",
 					"text",
 					"json",
@@ -813,7 +813,7 @@ function I({ id: e = null, copy: l = null, prefill: m = {} }, v) {
 					e.body = t === "none" ? { kind: "none" } : {
 						kind: t,
 						text: e.body.text ?? ""
-					}, J();
+					}, Y();
 				}, d("web.body")), e.body.kind === "none" ? null : (() => {
 					let t = r("textarea", {
 						class: "ed-input mono",
@@ -824,7 +824,7 @@ function I({ id: e = null, copy: l = null, prefill: m = {} }, v) {
 						e.body.text = t.value;
 					}), t;
 				})())) : null,
-				r("div", { class: "ed-two" }, B(d("web.status"), r("div", { class: "ed-line" }, H(n, [
+				r("div", { class: "ed-two" }, V(d("web.status"), r("div", { class: "ed-line" }, U(n, [
 					{
 						value: "2xx",
 						label: "200–299"
@@ -838,18 +838,18 @@ function I({ id: e = null, copy: l = null, prefill: m = {} }, v) {
 						label: d("web.exactStatus")
 					}
 				], (t) => {
-					e.expect.status = t === "n" ? 200 : t, J();
-				}, d("web.status")), n === "n" ? V(e.expect.status, (t) => {
+					e.expect.status = t === "n" ? 200 : t, Y();
+				}, d("web.status")), n === "n" ? H(e.expect.status, (t) => {
 					e.expect.status = Number(t) || 200;
 				}, {
 					type: "number",
 					min: 100,
 					max: 599,
 					class: "ed-input ed-small"
-				}) : null)), B(d("web.contains"), V(e.expect.contains ?? "", (t) => {
+				}) : null)), V(d("web.contains"), H(e.expect.contains ?? "", (t) => {
 					e.expect.contains = t || null;
 				}, { placeholder: d("web.containsPh") }))),
-				B(d("web.timeout"), r("div", { class: "ed-line" }, V(e.timeoutS, (t) => {
+				V(d("web.timeout"), r("div", { class: "ed-line" }, H(e.timeoutS, (t) => {
 					e.timeoutS = Math.max(1, Math.min(300, Number(t) || 30));
 				}, {
 					type: "number",
@@ -857,14 +857,14 @@ function I({ id: e = null, copy: l = null, prefill: m = {} }, v) {
 					max: 300,
 					class: "ed-input ed-small"
 				}), r("span", {}, d("web.seconds")))),
-				Z(e, ["replace", "dated"]),
+				Q(e, ["replace", "dated"]),
 				r("p", { class: "ed-hint" }, d("web.hint"))
 			];
 		}
 		if (e.type === "open") {
 			let t = e.file !== void 0 && e.file !== null ? "file" : "app", n = c.installedApps().filter((e) => e.id !== "scheduler" && (!C.app || e.id === C.app));
 			return t === "app" && !e.app && n[0] && (e.app = n[0].id, e.label = n[0].name), [
-				B(d("open.what"), U(t, [{
+				V(d("open.what"), W(t, [{
 					value: "app",
 					label: d("open.app")
 				}, {
@@ -876,30 +876,30 @@ function I({ id: e = null, copy: l = null, prefill: m = {} }, v) {
 						type: "open",
 						file: null,
 						label: ""
-					} : N("open"), J();
+					} : P("open"), Y();
 				})),
-				t === "app" ? B(d("open.app"), H(e.app, n.map((e) => ({
+				t === "app" ? V(d("open.app"), U(e.app, n.map((e) => ({
 					value: e.id,
 					label: e.name
 				})), (t) => {
-					e.app = t, e.label = n.find((e) => e.id === t)?.name ?? t, Y();
-				})) : B(d("open.file"), r("div", { class: "ed-place" }, r("span", { class: "ed-input ed-path" }, i("file"), e.label || r("span", { class: "ed-ph" }, d("editor.choose"))), r("button", {
+					e.app = t, e.label = n.find((e) => e.id === t)?.name ?? t, X();
+				})) : V(d("open.file"), r("div", { class: "ed-place" }, r("span", { class: "ed-input ed-path" }, i("file"), e.label || r("span", { class: "ed-ph" }, d("editor.choose"))), r("button", {
 					class: "sc-btn",
 					type: "button",
 					onclick: async () => {
-						let t = await G("file", d("open.file"));
-						t && (e.file = t.id, e.label = g(t.id), J());
+						let t = await K("file", d("open.file"));
+						t && (e.file = t.id, e.label = g(t.id), Y());
 					}
 				}, d("editor.choose")))),
 				r("p", { class: "ed-warn" }, i("window"), d("open.browserHint"))
 			];
 		}
-		return [B(d("automation.file"), r("div", { class: "ed-place" }, r("span", { class: "ed-input ed-path" }, i("automation"), e.label || r("span", { class: "ed-ph" }, d("editor.choose"))), r("button", {
+		return [V(d("automation.file"), r("div", { class: "ed-place" }, r("span", { class: "ed-input ed-path" }, i("automation"), e.label || r("span", { class: "ed-ph" }, d("editor.choose"))), r("button", {
 			class: "sc-btn",
 			type: "button",
 			onclick: async () => {
-				let t = await G("file", d("automation.file"), ["automata"]);
-				t && (e.file = t.id, e.label = g(t.id), J());
+				let t = await K("file", d("automation.file"), ["automata"]);
+				t && (e.file = t.id, e.label = g(t.id), Y());
 			}
 		}, d("editor.choose")))), r("p", { class: "ed-warn" }, i("window"), d("automation.hint"))];
 	}
@@ -907,51 +907,51 @@ function I({ id: e = null, copy: l = null, prefill: m = {} }, v) {
 		let i = Object.hasOwn(e.params, t) ? e.params[t] : n.default, a = (n) => {
 			n === "" || n == null ? delete e.params[t] : e.params[t] = n;
 		}, o;
-		if (n.type === "boolean") o = V(i === !0, (e) => a(e), { type: "checkbox" });
-		else if (n.type === "choice") o = H(i ?? "", [{
+		if (n.type === "boolean") o = H(i === !0, (e) => a(e), { type: "checkbox" });
+		else if (n.type === "choice") o = U(i ?? "", [{
 			value: "",
 			label: "—"
 		}, ...n.options.map((e) => ({
 			value: String(e.value),
 			label: e.label
 		}))], (e) => a(e === "" ? null : n.options.find((t) => String(t.value) === e)?.value));
-		else if (n.type === "number") o = V(i ?? "", (e) => a(e === "" ? null : Number(e)), {
+		else if (n.type === "number") o = H(i ?? "", (e) => a(e === "" ? null : Number(e)), {
 			type: "number",
 			min: n.min,
 			max: n.max
 		});
 		else if (n.type === "file" || n.type === "folder") {
-			let e = V(i ?? "", (e) => a(e.trim()), { placeholder: "~/…" });
+			let e = H(i ?? "", (e) => a(e.trim()), { placeholder: "~/…" });
 			o = r("div", { class: "ed-place" }, e, r("button", {
 				class: "sc-btn",
 				type: "button",
 				onclick: async () => {
-					let t = await G(n.type, n.label);
+					let t = await K(n.type, n.label);
 					t && (e.value = g(t.id), a(e.value));
 				}
 			}, d("editor.choose")));
-		} else o = V(i ?? "", (e) => a(e), {});
-		return B(n.label, o, n.description);
+		} else o = H(i ?? "", (e) => a(e), {});
+		return V(n.label, o, n.description);
 	}
-	function Z(e, t) {
+	function Q(e, t) {
 		let a = !!e.saveTo;
-		return B(d("saveTo.title"), r("div", { class: "ed-saveto" }, r("label", { class: "ed-check" }, V(a, (n) => {
+		return V(d("saveTo.title"), r("div", { class: "ed-saveto" }, r("label", { class: "ed-check" }, H(a, (n) => {
 			e.saveTo = n ? {
 				folder: "root",
 				label: "~",
 				name: e.type === "web" ? "risposta.txt" : "output.txt",
 				mode: t[0]
-			} : null, J();
+			} : null, Y();
 		}, { type: "checkbox" }), d(e.type === "web" ? "saveTo.web" : "saveTo.command")), a ? r("div", { class: "ed-line" }, r("button", {
 			class: "sc-btn",
 			type: "button",
 			onclick: async () => {
-				let t = await G("folder", d("saveTo.folder"));
-				t && !n.isRemote?.(t.id) && (e.saveTo.folder = t.id === n.root ? "root" : t.id, e.saveTo.label = g(t.id), J());
+				let t = await K("folder", d("saveTo.folder"));
+				t && !n.isRemote?.(t.id) && (e.saveTo.folder = t.id === n.root ? "root" : t.id, e.saveTo.label = g(t.id), Y());
 			}
-		}, i("folder"), e.saveTo.label || "~"), V(e.saveTo.name, (t) => {
+		}, i("folder"), e.saveTo.label || "~"), H(e.saveTo.name, (t) => {
 			e.saveTo.name = t.trim();
-		}, { "aria-label": d("saveTo.name") }), H(e.saveTo.mode, t.map((e) => ({
+		}, { "aria-label": d("saveTo.name") }), U(e.saveTo.mode, t.map((e) => ({
 			value: e,
 			label: d(`saveTo.${e}`)
 		})), (t) => {
@@ -959,7 +959,7 @@ function I({ id: e = null, copy: l = null, prefill: m = {} }, v) {
 		}, d("saveTo.mode"))) : null));
 	}
 	function re() {
-		let e = C.form, t = [U(e.mode, [
+		let e = C.form, t = [W(e.mode, [
 			{
 				value: "once",
 				label: d("when.once")
@@ -982,57 +982,57 @@ function I({ id: e = null, copy: l = null, prefill: m = {} }, v) {
 					tz: e.tz,
 					start: e.start
 				});
-				t && Object.assign(e, P(t), { mode: "repeat" });
+				t && Object.assign(e, F(t), { mode: "repeat" });
 			}
-			e.mode = t, J();
+			e.mode = t, Y();
 		})];
-		if (e.mode === "once") t.push(r("div", { class: "ed-two" }, B(d("when.date"), V(e.once.slice(0, 10), (t) => {
-			e.once = `${t}T${e.once.slice(11)}`, Y();
-		}, { type: "date" })), B(d("when.time"), V(e.once.slice(11), (t) => {
-			e.once = `${e.once.slice(0, 10)}T${t}`, Y();
+		if (e.mode === "once") t.push(r("div", { class: "ed-two" }, V(d("when.date"), H(e.once.slice(0, 10), (t) => {
+			e.once = `${t}T${e.once.slice(11)}`, X();
+		}, { type: "date" })), V(d("when.time"), H(e.once.slice(11), (t) => {
+			e.once = `${e.once.slice(0, 10)}T${t}`, X();
 		}, { type: "time" }))));
-		else if (e.mode === "cron") t.push(B(d("when.cronField"), V(e.cron, (t) => {
-			e.cron = t, Y();
+		else if (e.mode === "cron") t.push(V(d("when.cronField"), H(e.cron, (t) => {
+			e.cron = t, X();
 		}, {
 			class: "ed-input mono",
 			spellcheck: "false"
 		}), d("when.cronHint")));
 		else {
 			let n = e.every.unit;
-			if (t.push(B(d("when.every"), r("div", { class: "ed-line" }, V(e.every.n, (t) => {
-				e.every.n = Math.max(1, Number(t) || 1), Y();
+			if (t.push(V(d("when.every"), r("div", { class: "ed-line" }, H(e.every.n, (t) => {
+				e.every.n = Math.max(1, Number(t) || 1), X();
 			}, {
 				type: "number",
 				min: 1,
 				class: "ed-input ed-small",
 				"aria-label": d("when.n")
-			}), H(n, E.map((t) => ({
+			}), U(n, D.map((t) => ({
 				value: t,
 				label: d(`unit.${t}`, { n: e.every.n })
 			})), (t) => {
-				e.every.unit = t, J();
-			}, d("when.unit"))))), (n === "week" || n === "minute" || n === "hour") && t.push(B(d(n === "week" ? "when.on" : "when.onlyDays"), r("div", {
+				e.every.unit = t, Y();
+			}, d("when.unit"))))), (n === "week" || n === "minute" || n === "hour") && t.push(V(d(n === "week" ? "when.on" : "when.onlyDays"), r("div", {
 				class: "ed-days",
 				role: "group"
-			}, D.map((t) => r("button", {
+			}, O.map((t) => r("button", {
 				type: "button",
 				"aria-pressed": String(e.days.includes(t)),
 				title: d(`day.${t}`),
 				onclick: () => {
-					e.days = e.days.includes(t) ? e.days.filter((e) => e !== t) : [...e.days, t].sort(), e.days.length || (e.days = [t]), J();
+					e.days = e.days.includes(t) ? e.days.filter((e) => e !== t) : [...e.days, t].sort(), e.days.length || (e.days = [t]), Y();
 				}
-			}, d(`day.${t}.short`)))))), n === "minute" || n === "hour") t.push(B(d("when.between"), r("div", { class: "ed-line" }, V(!!e.between, (t) => {
-				e.between = t ? ["09:00", "18:00"] : null, J();
+			}, d(`day.${t}.short`)))))), n === "minute" || n === "hour") t.push(V(d("when.between"), r("div", { class: "ed-line" }, H(!!e.between, (t) => {
+				e.between = t ? ["09:00", "18:00"] : null, Y();
 			}, {
 				type: "checkbox",
 				"aria-label": d("when.between")
-			}), e.between ? V(e.between[0], (t) => {
-				e.between[0] = t, Y();
+			}), e.between ? H(e.between[0], (t) => {
+				e.between[0] = t, X();
 			}, {
 				type: "time",
 				"aria-label": d("when.from")
-			}) : null, e.between ? r("span", {}, d("when.to")) : null, e.between ? V(e.between[1], (t) => {
-				e.between[1] = t, Y();
+			}) : null, e.between ? r("span", {}, d("when.to")) : null, e.between ? H(e.between[1], (t) => {
+				e.between[1] = t, X();
 			}, {
 				type: "time",
 				"aria-label": d("when.until")
@@ -1040,15 +1040,15 @@ function I({ id: e = null, copy: l = null, prefill: m = {} }, v) {
 			else {
 				if (n === "month" || n === "year") {
 					let i = e.monthly;
-					t.push(B(d("when.onDay"), r("div", { class: "ed-line" }, n === "year" ? H(e.month, Array.from({ length: 12 }, (e, t) => ({
+					t.push(V(d("when.onDay"), r("div", { class: "ed-line" }, n === "year" ? U(e.month, Array.from({ length: 12 }, (e, t) => ({
 						value: t + 1,
 						label: u.date(Date.UTC(2e3, t, 1), {
 							month: "long",
 							timeZone: "UTC"
 						})
 					})), (t) => {
-						e.month = Number(t), Y();
-					}, d("when.month")) : null, H(i.kind, [
+						e.month = Number(t), X();
+					}, d("when.month")) : null, U(i.kind, [
 						{
 							value: "day",
 							label: d("when.dayN")
@@ -1062,15 +1062,15 @@ function I({ id: e = null, copy: l = null, prefill: m = {} }, v) {
 							label: d("when.nthWeekday")
 						}
 					], (e) => {
-						i.kind = e, J();
-					}, d("when.onDay")), i.kind === "day" ? V(i.day, (e) => {
-						i.day = Math.max(1, Math.min(31, Number(e) || 1)), Y();
+						i.kind = e, Y();
+					}, d("when.onDay")), i.kind === "day" ? H(i.day, (e) => {
+						i.day = Math.max(1, Math.min(31, Number(e) || 1)), X();
 					}, {
 						type: "number",
 						min: 1,
 						max: 31,
 						class: "ed-input ed-small"
-					}) : null, i.kind === "nth" ? H(i.nth, [
+					}) : null, i.kind === "nth" ? U(i.nth, [
 						1,
 						2,
 						3,
@@ -1081,16 +1081,16 @@ function I({ id: e = null, copy: l = null, prefill: m = {} }, v) {
 						value: e,
 						label: d(`nth.${e}`)
 					})), (e) => {
-						i.nth = Number(e), Y();
-					}, d("when.nth")) : null, i.kind === "nth" ? H(i.weekday, D.map((e) => ({
+						i.nth = Number(e), X();
+					}, d("when.nth")) : null, i.kind === "nth" ? U(i.weekday, O.map((e) => ({
 						value: e,
 						label: d(`day.${e}`)
 					})), (e) => {
-						i.weekday = Number(e), Y();
+						i.weekday = Number(e), X();
 					}, d("when.weekday")) : null)));
 				}
-				t.push(B(d("when.at"), r("div", { class: "ed-times" }, e.times.map((t, n) => r("span", { class: "ed-chip" }, V(t, (t) => {
-					e.times[n] = t, Y();
+				t.push(V(d("when.at"), r("div", { class: "ed-times" }, e.times.map((t, n) => r("span", { class: "ed-chip" }, H(t, (t) => {
+					e.times[n] = t, X();
 				}, {
 					type: "time",
 					"aria-label": d("when.time")
@@ -1099,20 +1099,20 @@ function I({ id: e = null, copy: l = null, prefill: m = {} }, v) {
 					type: "button",
 					"aria-label": d("when.removeTime"),
 					onclick: () => {
-						e.times.splice(n, 1), J();
+						e.times.splice(n, 1), Y();
 					}
 				}, i("x")) : null)), r("button", {
 					class: "sc-btn",
 					type: "button",
 					onclick: () => {
-						e.times.push("12:00"), J();
+						e.times.push("12:00"), Y();
 					}
 				}, i("plus"), d("when.addTime")))));
 			}
 		}
-		return e.mode === "once" ? t.push(B(d("when.zone"), Q(e))) : (t.push(r("div", { class: "ed-two" }, B(d("when.start"), V(e.start, (t) => {
-			e.start = t, Y();
-		}, { type: "datetime-local" })), B(d("when.zone"), Q(e)))), t.push(B(d("when.end"), r("div", { class: "ed-line" }, W("end", e.endKind, [
+		return e.mode === "once" ? t.push(V(d("when.zone"), $(e))) : (t.push(r("div", { class: "ed-two" }, V(d("when.start"), H(e.start, (t) => {
+			e.start = t, X();
+		}, { type: "datetime-local" })), V(d("when.zone"), $(e)))), t.push(V(d("when.end"), r("div", { class: "ed-line" }, G("end", e.endKind, [
 			{
 				value: "never",
 				label: d("when.never")
@@ -1126,14 +1126,14 @@ function I({ id: e = null, copy: l = null, prefill: m = {} }, v) {
 				label: d("when.after")
 			}
 		], (t) => {
-			e.endKind = t, J();
-		}), e.endKind === "date" ? V(e.end || e.start.slice(0, 10), (t) => {
-			e.end = t, Y();
+			e.endKind = t, Y();
+		}), e.endKind === "date" ? H(e.end || e.start.slice(0, 10), (t) => {
+			e.end = t, X();
 		}, {
 			type: "date",
 			"aria-label": d("when.onDate")
-		}) : null, e.endKind === "count" ? V(e.count, (t) => {
-			e.count = Math.max(1, Number(t) || 1), Y();
+		}) : null, e.endKind === "count" ? H(e.count, (t) => {
+			e.count = Math.max(1, Number(t) || 1), X();
 		}, {
 			type: "number",
 			min: 1,
@@ -1141,7 +1141,7 @@ function I({ id: e = null, copy: l = null, prefill: m = {} }, v) {
 			"aria-label": d("when.after")
 		}) : null, e.endKind === "count" ? r("span", {}, d("when.times")) : null)))), t;
 	}
-	function Q(e) {
+	function $(e) {
 		let t = [];
 		try {
 			t = Intl.supportedValuesOf("timeZone");
@@ -1150,19 +1150,19 @@ function I({ id: e = null, copy: l = null, prefill: m = {} }, v) {
 		}
 		t.includes(e.tz) || t.unshift(e.tz);
 		let n = h();
-		return H(e.tz, t.map((e) => ({
+		return U(e.tz, t.map((e) => ({
 			value: e,
 			label: e === n ? d("when.thisBrowser", { zone: e }) : e
 		})), (t) => {
-			e.tz = t, Y();
+			e.tz = t, X();
 		}, d("when.zone"));
 	}
 	function ie() {
 		let e = C.options, t = p(C.what.type).where === "browser", n = [
-			B(d("opt.name"), V(C.name, (e) => {
+			V(d("opt.name"), H(C.name, (e) => {
 				C.name = e;
 			}, { maxlength: 120 })),
-			B(d("opt.missed"), W("missed", e.missed, [{
+			V(d("opt.missed"), G("missed", e.missed, [{
 				value: "once",
 				label: d("opt.missedOnce")
 			}, {
@@ -1171,10 +1171,10 @@ function I({ id: e = null, copy: l = null, prefill: m = {} }, v) {
 			}], (t) => {
 				e.missed = t;
 			})),
-			t ? B(d("opt.closed"), r("label", { class: "ed-check" }, V(e.ask, (t) => {
+			t ? V(d("opt.closed"), r("label", { class: "ed-check" }, H(e.ask, (t) => {
 				e.ask = t;
 			}, { type: "checkbox" }), d("opt.ask"))) : null,
-			B(d("opt.overlap"), W("overlap", e.overlap, [
+			V(d("opt.overlap"), G("overlap", e.overlap, [
 				{
 					value: "skip",
 					label: d("opt.overlapSkip")
@@ -1190,21 +1190,21 @@ function I({ id: e = null, copy: l = null, prefill: m = {} }, v) {
 			], (t) => {
 				e.overlap = t;
 			})),
-			r("div", { class: "ed-two" }, B(d("opt.timeout"), r("div", { class: "ed-line" }, V(e.timeoutMin, (t) => {
+			r("div", { class: "ed-two" }, V(d("opt.timeout"), r("div", { class: "ed-line" }, H(e.timeoutMin, (t) => {
 				e.timeoutMin = Math.max(1, Math.min(1440, Number(t) || 60));
 			}, {
 				type: "number",
 				min: 1,
 				max: 1440,
 				class: "ed-input ed-small"
-			}), r("span", {}, d("opt.minutes")))), B(d("opt.retries"), r("div", { class: "ed-line" }, V(e.retries, (t) => {
+			}), r("span", {}, d("opt.minutes")))), V(d("opt.retries"), r("div", { class: "ed-line" }, H(e.retries, (t) => {
 				e.retries = Math.max(0, Math.min(5, Number(t) || 0));
 			}, {
 				type: "number",
 				min: 0,
 				max: 5,
 				class: "ed-input ed-small"
-			}), r("span", {}, d("opt.timesEvery")), V(e.retryMin, (t) => {
+			}), r("span", {}, d("opt.timesEvery")), H(e.retryMin, (t) => {
 				e.retryMin = Math.max(1, Math.min(1440, Number(t) || 5));
 			}, {
 				type: "number",
@@ -1212,7 +1212,7 @@ function I({ id: e = null, copy: l = null, prefill: m = {} }, v) {
 				max: 1440,
 				class: "ed-input ed-small"
 			}), r("span", {}, d("opt.minutes"))))),
-			B(d("opt.notify"), W("notify", e.notify, [
+			V(d("opt.notify"), G("notify", e.notify, [
 				{
 					value: "error",
 					label: d("opt.notifyError")
@@ -1229,9 +1229,9 @@ function I({ id: e = null, copy: l = null, prefill: m = {} }, v) {
 				e.notify = t;
 			}))
 		];
-		if (O && !b) {
+		if (k && !b) {
 			let e = T.users.filter((e) => e.id !== s.user?.id);
-			n.push(B(d("opt.runAs"), H(C.owner ?? "", [
+			n.push(V(d("opt.runAs"), U(C.owner ?? "", [
 				{
 					value: "",
 					label: d("opt.me", { name: s.user?.name ?? "" })
@@ -1245,24 +1245,24 @@ function I({ id: e = null, copy: l = null, prefill: m = {} }, v) {
 					label: e.name || e.username
 				}))
 			], (e) => {
-				C.owner = e || null, J();
+				C.owner = e || null, Y();
 			}, d("opt.runAs")), C.owner === "*" ? d("opt.systemHint") : C.owner ? d("opt.otherHint") : null));
 		}
-		return n.push(r("label", { class: "ed-check" }, V(C.enabled, (e) => {
+		return n.push(r("label", { class: "ed-check" }, H(C.enabled, (e) => {
 			C.enabled = e;
 		}, { type: "checkbox" }), d("opt.enabled"))), n;
 	}
 	function ae() {
 		try {
-			return o.rules.checkWhen(F(C.form));
+			return o.rules.checkWhen(I(C.form));
 		} catch {
 			return null;
 		}
 	}
-	function $() {
+	function oe() {
 		let e = null, t = "";
 		try {
-			e = o.rules.checkWhen(F(C.form));
+			e = o.rules.checkWhen(I(C.form));
 		} catch (e) {
 			t = e.message;
 		}
@@ -1273,10 +1273,10 @@ function I({ id: e = null, copy: l = null, prefill: m = {} }, v) {
 			let i = o.rules.toCron(e);
 			i && n.push(r("div", { class: "sc-sub" }, d("side.cron")), r("code", { class: "ed-cron" }, i));
 		}
-		n.push(r("div", { class: "sc-sub" }, d("side.what")), r("div", { class: "ed-summary" }, r("span", { class: `sc-kico k-${C.what.type}` }, i(p(C.what.type).glyph)), y(C.what, T) || d(`kind.${C.what.type}.name`))), p(C.what.type).where === "browser" && n.push(r("p", { class: "ed-warn" }, i("window"), d("side.browser"))), L.replaceChildren(...n);
+		n.push(r("div", { class: "sc-sub" }, d("side.what")), r("div", { class: "ed-summary" }, r("span", { class: `sc-kico k-${C.what.type}` }, i(p(C.what.type).glyph)), y(C.what, T) || d(`kind.${C.what.type}.name`))), p(C.what.type).where === "browser" && n.push(r("p", { class: "ed-warn" }, i("window"), d("side.browser"))), E(R, ...n);
 	}
-	function oe() {
-		let e = k(C.what);
+	function se() {
+		let e = A(C.what);
 		return delete e._ssh, e.type === "web" && (e.headers = C.what.headers.filter((e) => e.name).map((e) => e.secret ? e.value ? {
 			name: e.name,
 			secret: !0,
@@ -1288,32 +1288,32 @@ function I({ id: e = null, copy: l = null, prefill: m = {} }, v) {
 			name: e.name,
 			value: e.value ?? ""
 		})), e.type === "open" && e.file === null && delete e.file, {
-			name: C.name.trim() || X(),
+			name: C.name.trim() || Z(),
 			enabled: C.enabled,
-			when: F(C.form),
+			when: I(C.form),
 			what: e,
 			options: C.options,
 			...!b && C.owner && { owner: C.owner }
 		};
 	}
-	async function se() {
-		j = "";
+	async function ce() {
+		M = "";
 		try {
-			let t = oe();
+			let t = se();
 			b ? await o.update(e, t) : await o.create(t), S.emit("close");
 		} catch (e) {
-			j = e.message, q(), await a(S, {
+			M = e.message, J(), await a(S, {
 				icon: "error",
 				title: d("error.save"),
 				text: e.message
 			});
 		}
 	}
-	return q(), S;
+	return J(), S;
 }
 // src/scheduler/list.js
-var L = 250;
-function R({ args: e = {}, openWindow: n } = {}) {
+var R = (e, ...t) => e.replaceChildren(...t.flat(Infinity).filter((e) => e != null && e !== !1)), z = 250;
+function B({ args: e = {}, openWindow: n } = {}) {
 	let c = new t({
 		title: d("app.name"),
 		icon: "clock",
@@ -1345,9 +1345,9 @@ function R({ args: e = {}, openWindow: n } = {}) {
 		class: "sc-detail",
 		"aria-label": d("detail.label")
 	}), v = r("div", { class: "sc-status" }), b = r("div", { class: "sc-body" }, h, g, _);
-	if (c.body.append(r("div", { class: "sc" }, f, b, v)), !o?.available) return b.replaceChildren(r("p", { class: "sc-empty" }, d("needsKernel"))), c;
+	if (c.body.append(r("div", { class: "sc" }, f, b, v)), !o?.available) return R(b, r("p", { class: "sc-empty" }, d("needsKernel"))), c;
 	let T = 0, E = () => {
-		clearTimeout(T), T = setTimeout(() => D().catch(() => {}), L);
+		clearTimeout(T), T = setTimeout(() => D().catch(() => {}), z);
 	};
 	async function D() {
 		try {
@@ -1371,16 +1371,16 @@ function R({ args: e = {}, openWindow: n } = {}) {
 	}), c.on("launch", (e) => {
 		e?.task && (l.selected = e.task), (e?.tab === "history" || e?.run) && (l.tab = "history", l.openRun = e.run ?? null, l.runFilter.task = e.task ?? ""), D();
 	});
-	let k = (e) => e === "*" ? d("owner.system") : e === u() ? d("owner.me") : l.catalog?.users?.find((t) => t.id === e)?.name ?? e, j = (e) => p(e).where, M = () => l.tasks.filter((e) => {
+	let k = (e) => e === "*" ? d("owner.system") : e === u() ? d("owner.me") : l.catalog?.users?.find((t) => t.id === e)?.name ?? e, A = (e) => p(e).where, M = () => l.tasks.filter((e) => {
 		let t = l.filter;
-		if (t === "active" && !e.enabled || t === "paused" && e.enabled || t === "failed" && e.last?.state !== "error" || t === "mine" && (e.owner !== u() || e.app) || t === "apps" && !e.app || t === "kernel" && j(e.what.type) !== "kernel" || t === "browser" && j(e.what.type) !== "browser" || l.group !== null && e.owner !== l.group) return !1;
+		if (t === "active" && !e.enabled || t === "paused" && e.enabled || t === "failed" && e.last?.state !== "error" || t === "mine" && (e.owner !== u() || e.app) || t === "apps" && !e.app || t === "kernel" && A(e.what.type) !== "kernel" || t === "browser" && A(e.what.type) !== "browser" || l.group !== null && e.owner !== l.group) return !1;
 		let n = l.search.trim().toLowerCase();
 		return !(n && !`${e.name} ${y(e.what, l.catalog)}`.toLowerCase().includes(n));
 	});
 	function N() {
-		P(), F(), l.tab === "history" ? V() : B(), H();
+		P(), F(), l.tab === "history" ? H() : V(), U();
 		let e = l.tasks.filter((e) => e.enabled).length;
-		v.replaceChildren(r("span", {}, r("i", { class: "sc-dot on" }), d("status.module")), r("span", {}, d("status.count", {
+		R(v, r("span", {}, r("i", { class: "sc-dot on" }), d("status.module")), r("span", {}, d("status.count", {
 			n: l.tasks.length,
 			active: e
 		})), l.error ? r("span", {
@@ -1403,21 +1403,21 @@ function R({ args: e = {}, openWindow: n } = {}) {
 			"aria-label": d("tools.search")
 		});
 		a.addEventListener("input", () => {
-			l.search = a.value, B();
-		}), f.replaceChildren(r("button", {
+			l.search = a.value, V();
+		}), R(f, r("button", {
 			class: "sc-btn vio",
 			type: "button",
-			onclick: () => A(n, {})
+			onclick: () => j(n, {})
 		}, i("plus"), d("tools.new")), r("button", {
 			class: "sc-btn",
 			type: "button",
 			disabled: !e,
-			onclick: () => G(e)
+			onclick: () => K(e)
 		}, i("play"), d("tools.run")), r("button", {
 			class: "sc-btn",
 			type: "button",
 			disabled: !e,
-			onclick: () => K(e)
+			onclick: () => q(e)
 		}, i(e?.enabled === !1 ? "play" : "pause"), e?.enabled === !1 ? d("tools.resume") : d("tools.pause")), r("span", { class: "sc-grow" }), r("div", {
 			class: "sc-tabs",
 			role: "group"
@@ -1445,29 +1445,29 @@ function R({ args: e = {}, openWindow: n } = {}) {
 			n.push(r("h6", {}, d("side.users")));
 			for (let r of i.sort((e, t) => e === u() ? -1 : t === u() ? 1 : k(e).localeCompare(k(t)))) n.push(t("", "user", r === u() ? d("owner.meNamed", { name: s.user?.name ?? "" }) : k(r), e((e) => e.owner === r), { group: r }));
 		} else n.push(r("h6", {}, d("side.madeBy")), t("mine", "user", d("side.mine"), e((e) => !e.app)), t("apps", "grid", d("side.apps"), e((e) => !!e.app)));
-		n.push(r("h6", {}, d("side.where")), t("kernel", "monitor", d("where.kernel"), e((e) => j(e.what.type) === "kernel")), t("browser", "window", d("where.browser"), e((e) => j(e.what.type) === "browser"))), h.replaceChildren(...n);
+		n.push(r("h6", {}, d("side.where")), t("kernel", "monitor", d("where.kernel"), e((e) => A(e.what.type) === "kernel")), t("browser", "window", d("where.browser"), e((e) => A(e.what.type) === "browser"))), R(h, ...n);
 	}
-	let I = (e) => r("span", { class: `sc-kico k-${e}` }, i(p(e).glyph)), R = (e) => {
+	let I = (e) => r("span", { class: `sc-kico k-${e}` }, i(p(e).glyph)), L = (e) => {
 		if (!e.enabled && !e.last) return r("span", { class: "sc-st pause" }, i("pause"), d("state.paused"));
 		if (!e.last) return r("span", { class: "sc-m" }, "—");
 		let t = e.last.state;
 		return r("span", { class: `sc-st ${t}` }, i(m[t] ?? "info"), t === "error" ? d("last.failed", { when: x(e.last.at) }) : x(e.last.at));
 	};
-	function z(e) {
+	function B(e) {
 		let t = e.enabled ? e.next ? x(e.next) : d("next.done") : d("state.paused");
 		return r("div", {
 			class: `sc-row${e.id === l.selected ? " sel" : ""}${e.enabled ? "" : " off"}`,
 			role: "row",
 			tabindex: "0",
 			"aria-selected": String(e.id === l.selected),
-			onclick: () => U(e.id),
-			ondblclick: () => A(n, { id: e.id }),
+			onclick: () => W(e.id),
+			ondblclick: () => j(n, { id: e.id }),
 			onkeydown: (t) => {
-				t.key === "Enter" && A(n, { id: e.id });
+				t.key === "Enter" && j(n, { id: e.id });
 			}
-		}, I(e.what.type), r("span", { class: "sc-nm" }, r("b", {}, e.name), r("small", {}, r("span", { class: `sc-where${j(e.what.type) === "browser" ? " br" : ""}` }, d(`where.${j(e.what.type)}`)), e.app ? r("span", { class: "sc-from" }, d("row.byApp", { app: e.app })) : null, r("span", {}, y(e.what, l.catalog)))), r("span", { class: "sc-m" }, C(e.when)), r("span", { class: "sc-m" }, r("b", {}, t)), R(e));
+		}, I(e.what.type), r("span", { class: "sc-nm" }, r("b", {}, e.name), r("small", {}, r("span", { class: `sc-where${A(e.what.type) === "browser" ? " br" : ""}` }, d(`where.${A(e.what.type)}`)), e.app ? r("span", { class: "sc-from" }, d("row.byApp", { app: e.app })) : null, r("span", {}, y(e.what, l.catalog)))), r("span", { class: "sc-m" }, C(e.when)), r("span", { class: "sc-m" }, r("b", {}, t)), L(e));
 	}
-	function B() {
+	function V() {
 		if (l.tab !== "list") return;
 		let e = M(), t = r("div", {
 			class: "sc-row head",
@@ -1475,18 +1475,18 @@ function R({ args: e = {}, openWindow: n } = {}) {
 		}, r("span"), r("span", {}, d("col.name")), r("span", {}, d("col.when")), r("span", {}, d("col.next")), r("span", {}, d("col.last"))), a = [];
 		if (l.admin && l.group === null && l.filter === "all") {
 			let t = [...new Set(e.map((e) => e.owner))].sort((e, t) => e === "*" ? -1 : t === "*" ? 1 : e === u() ? -1 : +(t === u()));
-			for (let n of t) a.push(r("div", { class: "sc-grp" }, i(n === "*" ? "monitor" : "user"), k(n), r("small", {}, n === "*" ? d("grp.system") : d("grp.count", { n: e.filter((e) => e.owner === n).length })))), a.push(...e.filter((e) => e.owner === n).map(z));
-		} else a.push(...e.map(z));
-		g.replaceChildren(t, r("div", {
+			for (let n of t) a.push(r("div", { class: "sc-grp" }, i(n === "*" ? "monitor" : "user"), n === u() ? d("owner.meNamed", { name: s.user?.name ?? "" }) : k(n), r("small", {}, n === "*" ? d("grp.system") : d("grp.count", { n: e.filter((e) => e.owner === n).length })))), a.push(...e.filter((e) => e.owner === n).map(B));
+		} else a.push(...e.map(B));
+		R(g, t, r("div", {
 			class: "sc-rows",
 			role: "rowgroup"
 		}, a.length ? a : r("div", { class: "sc-empty" }, l.tasks.length ? d("list.noneHere") : r("div", { class: "sc-welcome" }, i("clock"), r("h2", {}, d("welcome.title")), r("p", {}, d("welcome.text")), r("button", {
 			class: "sc-btn vio",
 			type: "button",
-			onclick: () => A(n, {})
+			onclick: () => j(n, {})
 		}, i("plus"), d("tools.new"))))));
 	}
-	function V() {
+	function H() {
 		let e = r("select", {
 			class: "sc-select",
 			"aria-label": d("history.task")
@@ -1524,10 +1524,10 @@ function R({ args: e = {}, openWindow: n } = {}) {
 				tabindex: "0",
 				role: "row",
 				onclick: () => {
-					l.openRun = t ? null : e.id, V();
+					l.openRun = t ? null : e.id, H();
 				},
 				onkeydown: (n) => {
-					n.key === "Enter" && (l.openRun = t ? null : e.id, V());
+					n.key === "Enter" && (l.openRun = t ? null : e.id, H());
 				}
 			}, r("span", { class: `sc-st ${e.state}` }, i(m[e.state] ?? "info")), r("span", { class: "sc-t" }, x(e.at ?? e.due)), r("span", { class: "sc-w" }, r("b", {}, `${e.name}${e.state === "ok" ? "" : ` · ${d(`state.${e.state}`)}`}`), r("small", {}, e.reason === "catchup" ? d("history.catchup", {
 				due: x(e.due),
@@ -1535,39 +1535,39 @@ function R({ args: e = {}, openWindow: n } = {}) {
 			}) : e.text || "")), r("span", { class: "sc-t" }, e.end && e.at ? S(e.end - e.at) : "—"), r("span", { class: "sc-t" }, n));
 			return t && e.log ? [a, r("pre", { class: "sc-log" }, e.log)] : [a];
 		}).flat();
-		g.replaceChildren(r("div", { class: "sc-hfilters" }, e, t), r("div", {
+		R(g, r("div", { class: "sc-hfilters" }, e, t), r("div", {
 			class: "sc-hrow head",
 			role: "row"
 		}, r("span"), r("span", {}, d("col.when")), r("span", {}, d("history.what")), r("span", {}, d("history.took")), r("span", {}, d("history.how"))), r("div", { class: "sc-rows" }, n.length ? n : r("div", { class: "sc-empty" }, d("history.none")))), g.querySelector(".sc-hrow.sel")?.scrollIntoView({ block: "nearest" });
 	}
-	function H() {
+	function U() {
 		let e = l.tasks.find((e) => e.id === l.selected);
-		if (_.hidden = l.tab === "history" || !e, !e) return _.replaceChildren();
+		if (_.hidden = l.tab === "history" || !e, !e) return R(_);
 		let t = l.lastRuns.get(e.id) ?? [], a = w(e);
-		_.replaceChildren(r("h4", {}, I(e.what.type), r("span", {}, e.name)), r("dl", { class: "sc-kv" }, r("dt", {}, d("detail.when")), r("dd", {}, C(e.when), r("br"), r("span", { class: "sc-tz" }, e.when.tz)), r("dt", {}, d("detail.what")), r("dd", {}, y(e.what, l.catalog)), r("dt", {}, d("detail.runs")), r("dd", {}, j(e.what.type) === "kernel" ? d("detail.inKernel", { who: k(e.owner) }) : d("detail.inBrowser", { who: k(e.owner) })), r("dt", {}, d("detail.missed")), r("dd", {}, e.options.missed === "once" ? d("detail.missedOnce") : d("detail.missedSkip")), e.by && e.by.id !== e.owner ? [r("dt", {}, d("detail.by")), r("dd", {}, e.by.name)] : null), r("div", {}, r("div", { class: "sc-sub" }, d("detail.next")), a.length ? r("div", { class: "sc-nexts" }, a.map((e) => r("span", {}, r("b", {}, x(e))))) : r("p", { class: "sc-hint" }, e.enabled ? d("next.done") : d("state.paused"))), r("div", {}, r("div", { class: "sc-sub" }, d("detail.last", { n: t.length })), r("div", { class: "sc-dots" }, t.slice().reverse().map((e) => r("i", {
+		R(_, r("h4", {}, I(e.what.type), r("span", {}, e.name)), r("dl", { class: "sc-kv" }, r("dt", {}, d("detail.when")), r("dd", {}, C(e.when), r("br"), r("span", { class: "sc-tz" }, e.when.tz)), r("dt", {}, d("detail.what")), r("dd", {}, y(e.what, l.catalog)), r("dt", {}, d("detail.runs")), r("dd", {}, A(e.what.type) === "kernel" ? d("detail.inKernel", { who: k(e.owner) }) : d("detail.inBrowser", { who: k(e.owner) })), r("dt", {}, d("detail.missed")), r("dd", {}, e.options.missed === "once" ? d("detail.missedOnce") : d("detail.missedSkip")), e.by && e.by.id !== e.owner ? [r("dt", {}, d("detail.by")), r("dd", {}, e.by.name)] : null), r("div", {}, r("div", { class: "sc-sub" }, d("detail.next")), a.length ? r("div", { class: "sc-nexts" }, a.map((e) => r("span", {}, r("b", {}, x(e))))) : r("p", { class: "sc-hint" }, e.enabled ? d("next.done") : d("state.paused"))), r("div", {}, r("div", { class: "sc-sub" }, d("detail.last", { n: t.length })), r("div", { class: "sc-dots" }, t.slice().reverse().map((e) => r("i", {
 			class: `d-${e.state}`,
 			title: `${x(e.at ?? e.due)} · ${d(`state.${e.state}`)}`
 		}))), t[0] ? r("p", { class: "sc-hint" }, `${x(t[0].at ?? t[0].due)} · ${t[0].text || d(`state.${t[0].state}`)}`) : null), r("div", { class: "sc-acts" }, r("button", {
 			class: "sc-btn",
 			type: "button",
-			onclick: () => G(e)
+			onclick: () => K(e)
 		}, i("play"), d("tools.run")), r("button", {
 			class: "sc-btn",
 			type: "button",
 			disabled: !1,
-			onclick: () => A(n, { id: e.id })
+			onclick: () => j(n, { id: e.id })
 		}, i("pencil"), d("detail.edit")), r("button", {
 			class: "sc-btn",
 			type: "button",
-			onclick: () => K(e)
+			onclick: () => q(e)
 		}, i(e.enabled ? "pause" : "play"), e.enabled ? d("tools.pause") : d("tools.resume")), r("button", {
 			class: "sc-btn",
 			type: "button",
-			onclick: () => A(n, { copy: e.id })
+			onclick: () => j(n, { copy: e.id })
 		}, i("filePlus"), d("detail.duplicate")), r("button", {
 			class: "sc-btn danger",
 			type: "button",
-			onclick: () => q(e)
+			onclick: () => J(e)
 		}, i("trash"), d("detail.delete")), r("button", {
 			class: "sc-btn",
 			type: "button",
@@ -1576,13 +1576,13 @@ function R({ args: e = {}, openWindow: n } = {}) {
 			}
 		}, i("restart"), d("tabs.history"))), e.owner !== u() && e.owner !== "*" ? r("p", { class: "sc-warn" }, i("lock"), d("detail.othersNote", { who: k(e.owner) })) : null);
 	}
-	async function U(e) {
+	async function W(e) {
 		l.selected = e, N(), l.lastRuns.set(e, await o.history({
 			task: e,
 			limit: 14
-		}).catch(() => [])), H();
+		}).catch(() => [])), U();
 	}
-	let W = async (e) => {
+	let G = async (e) => {
 		try {
 			await e();
 		} catch (e) {
@@ -1593,26 +1593,26 @@ function R({ args: e = {}, openWindow: n } = {}) {
 			});
 		}
 		D();
-	}, G = (e) => e && W(() => o.run(e.id)), K = (e) => e && W(() => o.enable(e.id, !e.enabled));
-	async function q(e) {
+	}, K = (e) => e && G(() => o.run(e.id)), q = (e) => e && G(() => o.enable(e.id, !e.enabled));
+	async function J(e) {
 		await a(c, {
 			icon: "warning",
 			title: d("delete.title", { name: e.name }),
 			text: d("delete.text"),
 			buttons: ["continue", "cancel"]
-		}) === "continue" && await W(() => o.remove(e.id));
+		}) === "continue" && await G(() => o.remove(e.id));
 	}
 	return D(), c;
 }
 // src/scheduler/SchedulerApp.js
-var z = R, B = j, V = j, H = ({ args: e, openWindow: t } = {}) => R({
+var V = B, H = M, U = M, W = ({ args: e, openWindow: t } = {}) => B({
 	args: {
 		...e ?? {},
 		tab: "history"
 	},
 	openWindow: t
 });
-function U({ args: e } = {}) {
+function G({ args: e } = {}) {
 	let i = new t({
 		title: d("app.name"),
 		icon: "clock",
@@ -1625,4 +1625,4 @@ function U({ args: e } = {}) {
 	} else typeof a.app == "string" && c.isInstalled(a.app) ? c.launch(a.app, a.args ?? void 0, typeof a.entry == "string" ? a.entry : "main") : o = d("open.noApp");
 	return i.body.append(r("p", { class: "sc-empty" }, o || d("open.done"))), o || setTimeout(() => i.emit("close"), 0), i;
 }
-export { V as create, z as default, B as edit, H as history, U as open };
+export { U as create, V as default, H as edit, W as history, G as open };

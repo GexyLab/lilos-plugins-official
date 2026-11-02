@@ -1,7 +1,7 @@
 import * as e from "/host/sdk.js";
-import { Window as t, actionButton as n, appIcon as r, apps as i, fs as a, h as o, icon as s, kernel as c, kernelModules as l, repositories as u, settings as d, textField as f, toast as p, toggle as ee } from "/host/sdk.js";
-import * as m from "/host/system.js";
-import { describePermission as h, launch as te } from "/host/system.js";
+import { Window as t, actionButton as n, appIcon as r, apps as i, fs as a, h as o, icon as s, kernel as c, kernelModules as l, repositories as u, settings as d, textField as f, toast as p, toggle as m } from "/host/sdk.js";
+import * as h from "/host/system.js";
+import { describePermission as ee, launch as te } from "/host/system.js";
 // src/appstore/markdown.js
 var ne = /(`+)([^`]+?)\1|\*\*(.+?)\*\*|__(.+?)__|\*(?!\s)(.+?)\*|\b_(?!\s)(.+?)_\b|!\[([^\]]*)\]\([^)]*\)|\[([^\]]+)\]\(\s*<?((?:[^()\s<>]|\([^()\s]*\))+)>?(?:\s+"[^"]*")?\s*\)|<(https?:\/\/[^>\s]+)>/;
 function g(e) {
@@ -89,7 +89,7 @@ function x(e) {
 	return n;
 }
 // src/shared/i18n.js
-function re(t, n) {
+function S(t, n) {
 	if (e.locale) return e.locale.forApp(t).i18n;
 	let r = {
 		...n.en.strings,
@@ -108,7 +108,7 @@ function re(t, n) {
 		number: (e, t) => new Intl.NumberFormat("it-IT", t).format(e)
 	};
 }
-var { t: S } = re("appstore", {
+var { t: C } = S("appstore", {
 	en: { strings: {
 		"@name": "AppStore",
 		"@description": "Installs, updates and removes apps and kernel modules from repositories; checks for updates even with lilOS closed.",
@@ -172,6 +172,18 @@ var { t: S } = re("appstore", {
 		"updates.needsEngine": "Needs the kernel’s service engine (the services-isolate module)",
 		"updates.bySystem": "Chosen by an administrator for everyone: change it in Control Panel → Startup → Services",
 		"updates.description": "When you sign in and then at intervals (every 24 hours, change it in Control Panel → Startup → Services), even with lilOS closed: a notification tells you what can be updated",
+		"updates.check": "Check for updates",
+		"updates.taskHint": "An operation of the Scheduler, also with lilOS closed: a notification tells you what can be updated",
+		"updates.when": "How often",
+		"updates.daily": "Every day at 09:00",
+		"updates.weekly": "Every Monday at 09:00",
+		"updates.other": "As in the Scheduler",
+		"updates.inScheduler": "Change it in the Scheduler",
+		"updates.taskName": "Check for updates",
+		"service.found": {
+			one: "1 update available",
+			other: "{n} updates available"
+		},
 		"notify.updates": {
 			one: "Update available: {names}. Open the AppStore.",
 			other: "{n} updates available: {names}. Open the AppStore."
@@ -355,6 +367,18 @@ var { t: S } = re("appstore", {
 		"updates.needsEngine": "Serve il motore dei servizi del kernel (modulo services-isolate)",
 		"updates.bySystem": "Scelto da un amministratore per tutti: si cambia dal Pannello di controllo → Avvio → Servizi",
 		"updates.description": "Quando entri e poi a intervalli (ogni 24 ore, si cambia nel Pannello di controllo → Avvio → Servizi), anche con lilOS chiuso: un avviso dice cosa si può aggiornare",
+		"updates.check": "Controlla gli aggiornamenti",
+		"updates.taskHint": "Un’operazione della Pianificazione, anche a lilOS chiuso: un avviso dice cosa si può aggiornare",
+		"updates.when": "Ogni quanto",
+		"updates.daily": "Ogni giorno alle 09:00",
+		"updates.weekly": "Ogni lunedì alle 09:00",
+		"updates.other": "Come nella Pianificazione",
+		"updates.inScheduler": "Cambiala nella Pianificazione",
+		"updates.taskName": "Controlla aggiornamenti",
+		"service.found": {
+			one: "1 aggiornamento disponibile",
+			other: "{n} aggiornamenti disponibili"
+		},
 		"notify.updates": {
 			one: "Aggiornamento disponibile: {names}. Apri l’AppStore.",
 			other: "{n} aggiornamenti disponibili: {names}. Apri l’AppStore."
@@ -475,7 +499,7 @@ var { t: S } = re("appstore", {
 		"options.nameLabel": "Nome del repository",
 		"options.adminOnly": "Solo un amministratore aggiunge e rimuove repository."
 	} }
-}), C = /* @__PURE__ */ new Set([
+}), re = /* @__PURE__ */ new Set([
 	"fs.app",
 	"fs.tmp",
 	"fs.open",
@@ -485,27 +509,27 @@ var { t: S } = re("appstore", {
 ]), ie = () => [
 	{
 		id: "system",
-		label: S("category.system")
+		label: C("category.system")
 	},
 	{
 		id: "productivity",
-		label: S("category.productivity")
+		label: C("category.productivity")
 	},
 	{
 		id: "media",
-		label: S("category.media")
+		label: C("category.media")
 	},
 	{
 		id: "development",
-		label: S("category.development")
+		label: C("category.development")
 	},
 	{
 		id: "other",
-		label: S("category.other")
+		label: C("category.other")
 	},
 	{
 		id: "kernel",
-		label: S("category.kernel")
+		label: C("category.kernel")
 	}
 ], ae = /* @__PURE__ */ new Set([
 	"system",
@@ -527,8 +551,8 @@ d.define({ "appstore.showUnofficial": !0 });
 var T = (e, t) => {
 	let n = e.split(".").map(Number), r = t.split(".").map(Number);
 	return (n[0] - r[0] || n[1] - r[1] || n[2] - r[2]) > 0;
-}, E = (e) => e.replace(/\.git$/i, "").replace(/\/+$/, ""), D = (e, t) => !!e?.url && E(e.url).toLowerCase() === E(t.url).toLowerCase(), O = (e) => E(e.url).split(/[/\\]/).pop() || e.name, k = (e) => (e ?? []).filter((e) => !C.has(e.split(":")[0]));
-function A({ openWindow: ne }) {
+}, E = (e) => e.replace(/\.git$/i, "").replace(/\/+$/, ""), D = (e, t) => !!e?.url && E(e.url).toLowerCase() === E(t.url).toLowerCase(), O = (e) => E(e.url).split(/[/\\]/).pop() || e.name, k = (e) => (e ?? []).filter((e) => !re.has(e.split(":")[0]));
+function le({ openWindow: ne }) {
 	let g = c.user?.role === "admin", _ = {
 		repos: [],
 		catalogs: /* @__PURE__ */ new Map(),
@@ -561,7 +585,7 @@ function A({ openWindow: ne }) {
 			_.busy = e, $();
 			try {
 				let e = await t(), r = typeof n == "function" ? n(e) : n;
-				r && p(r, { timeout: 5e3 }), await C({ quiet: !0 });
+				r && p(r, { timeout: 5e3 }), await A({ quiet: !0 });
 			} catch (e) {
 				p(e.message, { timeout: 7e3 });
 			} finally {
@@ -570,18 +594,78 @@ function A({ openWindow: ne }) {
 		}
 	}
 	async function b() {
-		let e = await m.services?.list().catch(() => null);
+		let e = await h.services?.list().catch(() => null);
 		_.updates = e?.available ? e.services.find((e) => e.app === "appstore" && e.entry === "updates") ?? null : null;
 	}
-	async function re(e) {
+	let S = e.schedule?.available && typeof e.schedule.forApp == "function" ? e.schedule.forApp("appstore") : null, re = {
+		daily: () => ({
+			every: {
+				n: 1,
+				unit: "day"
+			},
+			times: ["09:00"]
+		}),
+		weekly: () => ({
+			every: {
+				n: 1,
+				unit: "week"
+			},
+			days: [1],
+			times: ["09:00"]
+		})
+	}, E = () => {
+		let e = /* @__PURE__ */ new Date(), t = (e) => String(e).padStart(2, "0");
+		return `${e.getFullYear()}-${t(e.getMonth() + 1)}-${t(e.getDate())}T09:00`;
+	}, le = () => Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+	async function ue() {
+		S && (_.updateTask = (await S.list().catch(() => [])).find((e) => e.what?.type === "service" && e.what.app === "appstore" && e.what.entry === "updates") ?? null, !_.updateTask && _.updates?.startup === "login" && (_.updateTask = await de({
+			on: !0,
+			every: "daily"
+		}).catch(() => null), await h.services.setStartup("appstore", "updates", "none").catch(() => {}), await b()));
+	}
+	async function de({ on: e, every: t }) {
+		let n = _.updateTask, r = t ?? fe(n) ?? "daily", i = {
+			name: C("updates.taskName"),
+			enabled: e,
+			when: n && !t ? n.when : {
+				...re[r](),
+				start: n?.when?.start ?? E(),
+				tz: n?.when?.tz ?? le()
+			},
+			what: {
+				type: "service",
+				app: "appstore",
+				entry: "updates",
+				params: {}
+			},
+			options: {
+				...n?.options ?? {},
+				notify: "error"
+			}
+		};
+		return n ? S.update(n.id, i) : S.create(i);
+	}
+	let fe = (e) => e?.when?.every ? e.when.every.unit === "week" ? "weekly" : e.when.every.unit === "day" ? "daily" : "other" : null;
+	async function pe(e) {
 		try {
-			await m.services.setStartup("appstore", "updates", e ? "login" : "none"), await m.services[e ? "start" : "stop"]("appstore", "updates"), p(S(e ? "updates.atStartOn" : "updates.atStartOff"));
+			_.updateTask = await de({
+				on: _.updateTask?.enabled ?? !1,
+				...e
+			});
+		} catch (e) {
+			p(e.message, { timeout: 7e3 });
+		}
+		$();
+	}
+	async function me(e) {
+		try {
+			await h.services.setStartup("appstore", "updates", e ? "login" : "none"), await h.services[e ? "start" : "stop"]("appstore", "updates"), p(C(e ? "updates.atStartOn" : "updates.atStartOff"));
 		} catch (e) {
 			p(e.message, { timeout: 7e3 });
 		}
 		await b(), $();
 	}
-	async function C({ quiet: e = !1 } = {}) {
+	async function A({ quiet: e = !1 } = {}) {
 		e || (_.loading = !0, $());
 		try {
 			_.repos = await u.list(), await Promise.all(_.repos.map(async (e) => {
@@ -590,14 +674,14 @@ function A({ openWindow: ne }) {
 				} catch (t) {
 					_.catalogs.delete(e.id), _.errors.set(e.id, t.message);
 				}
-			})), _.modules = g ? await l.list().catch(() => []) : [], _.system = w ? await w.info().catch(() => null) : null, await b(), await i.refresh();
+			})), _.modules = g ? await l.list().catch(() => []) : [], _.system = w ? await w.info().catch(() => null) : null, await b(), await ue(), await i.refresh();
 		} catch (e) {
 			p(e.message, { timeout: 7e3 });
 		}
 		_.loading = !1, $();
 	}
-	let E = () => _.repos.filter((e) => e.official || d.get("appstore.showUnofficial"));
-	function A(t, n, r) {
+	let j = () => _.repos.filter((e) => e.official || d.get("appstore.showUnofficial"));
+	function he(t, n, r) {
 		let i = n?.manifest ?? r.manifest, a = (n ? n.locales && e.locale?.manifest(n.manifest, n.locales) : e.locale?.manifest(r.manifest)) || i, o = n?.manifest.version ?? null, s = !!r && (!n || D(r.source, t));
 		return {
 			key: `app:${t?.id ?? "-"}:${i.id}`,
@@ -623,7 +707,7 @@ function A({ openWindow: ne }) {
 			verified: !!r?.signed || !!t?.official
 		};
 	}
-	function le(e, t, n) {
+	function M(e, t, n) {
 		let r = t?.module ?? n, i = t?.module.version ?? null, a = !!n && (!t || D(n.source, e));
 		return {
 			key: `module:${e?.id ?? "-"}:${r.name}`,
@@ -646,10 +730,11 @@ function A({ openWindow: ne }) {
 			elsewhere: !!n && !a,
 			update: a && n.enabled && i && T(i, n.enabled) ? i : null,
 			provides: r.provides ?? [],
-			verified: !!e?.official
+			verified: !!e?.official,
+			required: !!n?.required || !!t?.module?.required
 		};
 	}
-	function ue() {
+	function ge() {
 		let e = _.system;
 		if (!e) return null;
 		let t = _.repos.find((e) => e.official) ?? null, n = t && _.catalogs.get(t.id)?.system?.system ? _.catalogs.get(t.id).system : null, r = n?.system.version ?? null, i = e.mode === "installed";
@@ -658,7 +743,7 @@ function A({ openWindow: ne }) {
 			kind: "system",
 			id: "lilos",
 			name: "lilOS",
-			description: S("system.description"),
+			description: C("system.description"),
 			icon: ce,
 			publisher: "lilOS",
 			category: "system",
@@ -678,29 +763,29 @@ function A({ openWindow: ne }) {
 			verified: !0
 		};
 	}
-	function de() {
+	function _e() {
 		let e = i.list(), t = _.modules.filter((e) => e.enabled || e.running), n = [];
-		for (let r of E()) {
+		for (let r of j()) {
 			let i = _.catalogs.get(r.id);
-			for (let t of i?.apps ?? []) t.manifest && n.push(A(r, t, e.find((e) => e.id === t.manifest.id)));
-			if (g) for (let e of i?.modules ?? []) e.module && n.push(le(r, e, t.find((t) => t.name === e.module.name)));
+			for (let t of i?.apps ?? []) t.manifest && n.push(he(r, t, e.find((e) => e.id === t.manifest.id)));
+			if (g) for (let e of i?.modules ?? []) e.module && n.push(M(r, e, t.find((t) => t.name === e.module.name)));
 		}
-		for (let t of e) n.some((e) => e.kind === "app" && e.here && e.id === t.id) || n.push(A(_.repos.find((e) => D(t.source, e)) ?? null, null, t));
-		for (let e of t) n.some((t) => t.kind === "module" && t.here && t.id === e.name) || n.push(le(_.repos.find((t) => D(e.source, t)) ?? null, null, e));
-		let r = ue();
+		for (let t of e) n.some((e) => e.kind === "app" && e.here && e.id === t.id) || n.push(he(_.repos.find((e) => D(t.source, e)) ?? null, null, t));
+		for (let e of t) n.some((t) => t.kind === "module" && t.here && t.id === e.name) || n.push(M(_.repos.find((t) => D(e.source, t)) ?? null, null, e));
+		let r = ge();
 		return r ? [r, ...n] : n;
 	}
-	function fe(e) {
+	function ve(e) {
 		let t = new Set(e.map((e) => e.category));
 		return [
 			{
 				id: "installed",
-				label: S("tab.installed"),
+				label: C("tab.installed"),
 				filter: (e) => e.here
 			},
 			{
 				id: "updates",
-				label: S("tab.updates"),
+				label: C("tab.updates"),
 				filter: (e) => !!e.update,
 				badge: !0
 			},
@@ -711,14 +796,14 @@ function A({ openWindow: ne }) {
 			}))
 		];
 	}
-	let pe = (e, t) => !t || [
+	let ye = (e, t) => !t || [
 		e.name,
 		e.id,
 		e.description,
 		e.publisher,
 		e.repo ? O(e.repo) : ""
-	].some((e) => e.toLowerCase().includes(t)), me = () => g && _.modules.some((e) => (e.enabled ?? null) !== (e.running ?? null)), j = () => g ? _.system?.next ?? null : null;
-	function M({ title: e, glyph: r, height: i, body: a, confirm: s }) {
+	].some((e) => e.toLowerCase().includes(t)), N = () => g && _.modules.some((e) => (e.enabled ?? null) !== (e.running ?? null)), P = () => g ? _.system?.next ?? null : null;
+	function F({ title: e, glyph: r, height: i, body: a, confirm: s }) {
 		return new Promise((c) => {
 			let l = new t({
 				title: e,
@@ -731,7 +816,7 @@ function A({ openWindow: ne }) {
 				u || (u = !0, c(e), l.emit("close"));
 			};
 			l.on("destroy", () => d(null)), l.body.append(o("div", { class: "as-dialog" }, ...a, o("div", { class: "as-dialog-buttons" }, n({
-				label: S("action.cancel"),
+				label: C("action.cancel"),
 				onClick: () => d(null)
 			}), n({
 				label: s.label,
@@ -741,20 +826,20 @@ function A({ openWindow: ne }) {
 			})))), ne(l);
 		});
 	}
-	function N({ title: e, name: t, permissions: n = [], official: r, kernelModule: i = !1 }) {
+	function I({ title: e, name: t, permissions: n = [], official: r, kernelModule: i = !1 }) {
 		let a = k(n);
-		return M({
+		return F({
 			title: e,
 			glyph: "download",
 			height: i || !r ? 340 : 300,
 			body: [
-				o("p", { class: "as-dialog-lead" }, S(i ? "confirm.kernelModule" : "confirm.mayDo", { name: t })),
-				!i && a.length ? o("ul", {}, ...a.map((e) => o("li", {}, h(e)))) : null,
-				!i && !a.length ? o("p", {}, S("permissions.none")) : null,
-				r ? null : o("p", { class: "as-warning" }, S("confirm.unverified"))
+				o("p", { class: "as-dialog-lead" }, C(i ? "confirm.kernelModule" : "confirm.mayDo", { name: t })),
+				!i && a.length ? o("ul", {}, ...a.map((e) => o("li", {}, ee(e)))) : null,
+				!i && !a.length ? o("p", {}, C("permissions.none")) : null,
+				r ? null : o("p", { class: "as-warning" }, C("confirm.unverified"))
 			],
 			confirm: {
-				label: S(r ? "action.install" : "action.installAnyway"),
+				label: C(r ? "action.install" : "action.installAnyway"),
 				primary: r,
 				danger: !r,
 				value: {
@@ -764,18 +849,18 @@ function A({ openWindow: ne }) {
 			}
 		});
 	}
-	let he = (e) => M({
-		title: S("confirm.uninstallTitle", { name: e.name }),
+	let be = (e) => F({
+		title: C("confirm.uninstallTitle", { name: e.name }),
 		glyph: "trash",
 		height: 230,
-		body: [o("p", { class: "as-dialog-lead" }, S("confirm.uninstall", { name: e.name })), o("p", {}, S("confirm.uninstallFiles"))],
+		body: [o("p", { class: "as-dialog-lead" }, C("confirm.uninstall", { name: e.name })), o("p", {}, C("confirm.uninstallFiles"))],
 		confirm: {
-			label: S("action.uninstall"),
+			label: C("action.uninstall"),
 			danger: !0,
 			value: !0
 		}
 	});
-	async function ge(e) {
+	async function xe(e) {
 		let { repo: t, entry: n } = e, r = {
 			type: "git",
 			url: t.url,
@@ -783,27 +868,27 @@ function A({ openWindow: ne }) {
 			ref: _.catalogs.get(t.id)?.ref
 		};
 		if (e.kind === "module") {
-			let n = await N({
-				title: S("confirm.installTitle", { name: e.name }),
+			let n = await I({
+				title: C("confirm.installTitle", { name: e.name }),
 				name: e.name,
 				official: t.official,
 				kernelModule: !0
 			});
-			n && y("install", () => l.install(r, { allowUnsigned: n.allowUnsigned }), S("done.moduleInstalled", { name: e.name }));
+			n && y("install", () => l.install(r, { allowUnsigned: n.allowUnsigned }), C("done.moduleInstalled", { name: e.name }));
 			return;
 		}
-		let a = await N({
-			title: S("confirm.installTitle", { name: e.name }),
+		let a = await I({
+			title: C("confirm.installTitle", { name: e.name }),
 			name: e.name,
 			permissions: e.manifest.permissions,
 			official: t.official
 		});
-		a && y("install", () => i.install(r, a), S("done.appInstalled", { name: e.name }));
+		a && y("install", () => i.install(r, a), C("done.appInstalled", { name: e.name }));
 	}
-	async function P(e) {
+	async function Se(e) {
 		let t = !!e.repo?.official;
-		if (e.kind === "module") return t || await N({
-			title: S("confirm.updateTitle", { name: e.name }),
+		if (e.kind === "module") return t || await I({
+			title: C("confirm.updateTitle", { name: e.name }),
 			name: e.name,
 			official: t,
 			kernelModule: !0
@@ -812,16 +897,16 @@ function A({ openWindow: ne }) {
 		return !n.length && t ? {
 			grant: [],
 			allowUnsigned: !1
-		} : N({
-			title: S("confirm.updateTitle", { name: e.name }),
+		} : I({
+			title: C("confirm.updateTitle", { name: e.name }),
 			name: e.name,
 			permissions: n,
 			official: t
 		});
 	}
-	let F = (e, t) => e.kind === "module" ? l.update(e.id, t) : i.update(e.id, t);
-	async function I(e, { reinstall: t = !1 } = {}) {
-		if (!m.updateApps) {
+	let L = (e, t) => e.kind === "module" ? l.update(e.id, t) : i.update(e.id, t);
+	async function Ce(e, { reinstall: t = !1 } = {}) {
+		if (!h.updateApps) {
 			let t = [];
 			for (let n of e) t.push(await n.run().then((e) => ({
 				item: n.item,
@@ -832,7 +917,7 @@ function A({ openWindow: ne }) {
 			})));
 			return t;
 		}
-		let n = await m.updateApps(e.map(({ item: e, run: t }) => ({
+		let n = await h.updateApps(e.map(({ item: e, run: t }) => ({
 			id: e.id,
 			run: t,
 			restartOnUpdate: e.entry?.manifest.restartOnUpdate
@@ -845,8 +930,8 @@ function A({ openWindow: ne }) {
 			item: e[n].item
 		}));
 	}
-	async function L(e, t, n) {
-		let [r] = await I([{
+	async function we(e, t, n) {
+		let [r] = await Ce([{
 			item: e,
 			run: t
 		}], n) ?? [null];
@@ -854,110 +939,110 @@ function A({ openWindow: ne }) {
 		return r ? r.result : null;
 	}
 	async function R(e) {
-		let t = await P(e);
+		let t = await Se(e);
 		if (!t) return;
 		let n = e.kind === "module", r = e.name;
-		y("update", () => n ? F(e, t) : L(e, () => F(e, t)), (e) => e ? e.unchanged ? S(n ? "done.moduleUpToDate" : "done.appUpToDate", { name: r }) : S(n ? "done.moduleUpdated" : "done.appUpdated", {
+		y("update", () => n ? L(e, t) : we(e, () => L(e, t)), (e) => e ? e.unchanged ? C(n ? "done.moduleUpToDate" : "done.appUpToDate", { name: r }) : C(n ? "done.moduleUpdated" : "done.appUpdated", {
 			name: r,
 			version: e.version
 		}) : null);
 	}
-	function _e(e) {
+	function Te(e) {
 		y("update", async () => {
 			let t = 0, n = [], r = e.find((e) => e.kind === "system");
 			for (let i of e) {
 				if (i === r) continue;
-				let e = await P(i);
+				let e = await Se(i);
 				if (e) {
 					if (i.kind !== "module") n.push({
 						item: i,
-						run: () => F(i, e)
+						run: () => L(i, e)
 					});
 					else try {
-						await F(i, e), t++;
+						await L(i, e), t++;
 					} catch (e) {
 						p(`${i.name}: ${e.message}`, { timeout: 7e3 });
 					}
 				}
 			}
-			for (let e of n.length && await I(n) || []) e.error ? p(`${e.item.name}: ${e.error.message}`, { timeout: 7e3 }) : t++;
-			if (r && await Se(r)) try {
+			for (let e of n.length && await Ce(n) || []) e.error ? p(`${e.item.name}: ${e.error.message}`, { timeout: 7e3 }) : t++;
+			if (r && await Ae(r)) try {
 				(await w.update()).unchanged || t++;
 			} catch (e) {
 				p(`${r.name}: ${e.message}`, { timeout: 7e3 });
 			}
 			return t;
-		}, (e) => S("done.updatedCount", { n: e }));
+		}, (e) => C("done.updatedCount", { n: e }));
 	}
-	async function ve(e) {
+	async function Ee(e) {
 		let t = e.name;
-		e.kind === "module" ? y("remove", () => l.remove(e.id), (e) => e.kept.length ? S("done.moduleRemovedDataKept", { name: t }) : S("done.moduleRemoved", { name: t })) : await he(e) && y("remove", () => i.uninstall(e.id), S("done.appRemoved", { name: t }));
+		e.kind === "module" ? y("remove", () => l.remove(e.id), (e) => e.kept.length ? C("done.moduleRemovedDataKept", { name: t }) : C("done.moduleRemoved", { name: t })) : await be(e) && y("remove", () => i.uninstall(e.id), C("done.appRemoved", { name: t }));
 	}
-	let ye = (e) => g && e.kind === "app" && e.here && !e.required, be = (e) => y("reinstall", () => L(e, () => i.update(e.id, {
+	let De = (e) => g && e.kind === "app" && e.here && !e.required, Oe = (e) => y("reinstall", () => we(e, () => i.update(e.id, {
 		reinstall: !0,
 		allowUnsigned: !e.verified
-	}), { reinstall: !0 }), (t) => t ? S("done.appReinstalled", { name: e.name }) : null);
-	async function xe(e, t) {
+	}), { reinstall: !0 }), (t) => t ? C("done.appReinstalled", { name: e.name }) : null);
+	async function ke(e, t) {
 		t.disabled = !0, t.setAttribute("aria-busy", "true");
 		try {
 			let t = await u.readme(e.repo.id, e.entry.path), n = a.children(a.root).find((e) => e.type === "folder" && e.system && e.name === "Download");
-			if (!n) throw Error(S("error.noDownloadFolder"));
+			if (!n) throw Error(C("error.noDownloadFolder"));
 			let r = a.create(n.id, {
 				type: "file",
 				name: `${e.name} - README.md`
 			});
-			await a.write(r.id, t), p(S("readme.saved", { file: r.name }), { timeout: 6e3 });
+			await a.write(r.id, t), p(C("readme.saved", { file: r.name }), { timeout: 6e3 });
 		} catch (e) {
 			p(e.message, { timeout: 7e3 });
 		} finally {
 			t.disabled = !1, t.removeAttribute("aria-busy");
 		}
 	}
-	let Se = (e) => M({
-		title: S("system.confirmTitle", { version: e.update }),
+	let Ae = (e) => F({
+		title: C("system.confirmTitle", { version: e.update }),
 		glyph: "download",
 		height: 290,
 		body: [
-			o("p", { class: "as-dialog-lead" }, S("system.confirmLead", {
+			o("p", { class: "as-dialog-lead" }, C("system.confirmLead", {
 				version: e.update,
 				current: e.installed
 			})),
-			o("p", {}, S("system.confirmRestart")),
-			o("p", {}, S("system.confirmRollback", { current: e.installed }))
+			o("p", {}, C("system.confirmRestart")),
+			o("p", {}, C("system.confirmRollback", { current: e.installed }))
 		],
 		confirm: {
-			label: S("action.update"),
+			label: C("action.update"),
 			primary: !0,
 			value: !0
 		}
 	});
-	async function Ce(e) {
-		await Se(e) && y("update", () => w.update(), (e) => e.unchanged ? S("system.upToDate") : S("system.ready", { version: e.version }));
+	async function je(e) {
+		await Ae(e) && y("update", () => w.update(), (e) => e.unchanged ? C("system.upToDate") : C("system.ready", { version: e.version }));
 	}
-	let we = (e) => y("system", () => w.use(e), (t) => t.restartRequired ? S("system.ready", { version: e }) : S("system.nextCancelled"));
-	async function Te(e) {
-		await M({
-			title: S("system.removeTitle", { version: e }),
+	let Me = (e) => y("system", () => w.use(e), (t) => t.restartRequired ? C("system.ready", { version: e }) : C("system.nextCancelled"));
+	async function Ne(e) {
+		await F({
+			title: C("system.removeTitle", { version: e }),
 			glyph: "trash",
 			height: 210,
-			body: [o("p", { class: "as-dialog-lead" }, S("system.removeLead", { version: e }))],
+			body: [o("p", { class: "as-dialog-lead" }, C("system.removeLead", { version: e }))],
 			confirm: {
-				label: S("action.delete"),
+				label: C("action.delete"),
 				danger: !0,
 				value: !0
 			}
-		}) && y("system", () => w.remove(e), S("system.removed", { version: e }));
+		}) && y("system", () => w.remove(e), C("system.removed", { version: e }));
 	}
-	async function Ee(e, t) {
+	async function Pe(e, t) {
 		t.disabled = !0, t.setAttribute("aria-busy", "true");
 		try {
 			let t = await u.readme(e.repo.id, e.entry.path, "CHANGELOG.md"), n = a.children(a.root).find((e) => e.type === "folder" && e.system && e.name === "Download");
-			if (!n) throw Error(S("error.noDownloadFolder"));
+			if (!n) throw Error(C("error.noDownloadFolder"));
 			let r = a.create(n.id, {
 				type: "file",
 				name: "lilOS - CHANGELOG.md"
 			});
-			await a.write(r.id, t), p(S("readme.saved", { file: r.name }), { timeout: 6e3 });
+			await a.write(r.id, t), p(C("readme.saved", { file: r.name }), { timeout: 6e3 });
 		} catch (e) {
 			p(e.message, { timeout: 7e3 });
 		} finally {
@@ -965,9 +1050,9 @@ function A({ openWindow: ne }) {
 		}
 	}
 	let z = () => y("restart", async () => {
-		let e = me();
-		await l.restart(), await new Promise((e) => setTimeout(e, 2500)), e && m.requestRestart?.(S("restart.kernelReason"), "kernel-modules");
-	}, S("done.kernelRestarted")), B = (e, t, { key: r = "", ...i } = {}) => {
+		let e = N();
+		await l.restart(), await new Promise((e) => setTimeout(e, 2500)), e && h.requestRestart?.(C("restart.kernelReason"), "kernel-modules");
+	}, C("done.kernelRestarted")), B = (e, t, { key: r = "", ...i } = {}) => {
 		let a = `${e}|${r}`, o = n({
 			label: e,
 			onClick: () => (_.pressed = a, t()),
@@ -977,57 +1062,57 @@ function A({ openWindow: ne }) {
 	}, V = (e, t = !1) => o("span", { class: "as-state" }, t ? s("check") : null, e), H = (e) => e.repo ? o("span", {
 		class: "as-repo",
 		title: e.repo.url
-	}, s("link"), o("span", {}, O(e.repo))) : o("span", { class: "as-repo" }, s("folder"), o("span", {}, e.kind === "module" ? S("repo.manual") : S("repo.localFolder"))), De = (e) => e.repo && !e.repo.official ? o("span", { class: "as-unofficial" }, S("repo.unofficial")) : null, Oe = (e) => e.kind === "system" ? S("system.inUse") : e.kind === "module" ? S("status.installedModule") : S("status.installedApp"), U = (e, ...t) => o("div", { class: "as-section-title" }, e, ...t), W = (e, t) => o("div", { class: "as-fact" }, o("b", {}, e), String(t)), G = (e) => o("button", {
+	}, s("link"), o("span", {}, O(e.repo))) : o("span", { class: "as-repo" }, s("folder"), o("span", {}, e.kind === "module" ? C("repo.manual") : C("repo.localFolder"))), Fe = (e) => e.repo && !e.repo.official ? o("span", { class: "as-unofficial" }, C("repo.unofficial")) : null, Ie = (e) => e.kind === "system" ? C("system.inUse") : e.kind === "module" ? C("status.installedModule") : C("status.installedApp"), U = (e, ...t) => o("div", { class: "as-section-title" }, e, ...t), W = (e, t) => o("div", { class: "as-fact" }, o("b", {}, e), String(t)), G = (e) => o("button", {
 		class: "as-back",
 		onclick: () => Q("list")
 	}, s("arrowLeft"), e);
-	function ke(e) {
-		return e.kind === "system" ? e.update ? g ? B(S("action.update"), () => Ce(e), {
+	function Le(e) {
+		return e.kind === "system" ? e.update ? g ? B(C("action.update"), () => je(e), {
 			primary: !0,
 			key: e.key
-		}) : V(S("status.updateAvailable", { version: e.update })) : j() ? V(S("system.nextShort", { version: j() })) : V(S("system.inUse"), !0) : e.update ? g ? B(S("action.update"), () => R(e), {
+		}) : V(C("status.updateAvailable", { version: e.update })) : P() ? V(C("system.nextShort", { version: P() })) : V(C("system.inUse"), !0) : e.update ? g ? B(C("action.update"), () => R(e), {
 			primary: !0,
 			key: e.key
-		}) : V(S("status.updateAvailable", { version: e.update })) : e.here ? V(e.kind === "module" && !e.have.enabled ? S("status.removed") : Oe(e), !0) : e.elsewhere ? V(S("status.otherRepo")) : g ? B(S("action.install"), () => ge(e), { key: e.key }) : V(S("status.available"));
+		}) : V(C("status.updateAvailable", { version: e.update })) : e.here ? V(e.kind === "module" && !e.have.enabled ? C("status.removed") : Ie(e), !0) : e.elsewhere ? V(C("status.otherRepo")) : g ? B(C("action.install"), () => xe(e), { key: e.key }) : V(C("status.available"));
 	}
-	function Ae(e, { uninstall: t = !1 } = {}) {
-		let n = e.update ? `${e.installed} → ${e.update}` : e.here ? e.installed : e.offered, i = t && ye(e) ? B(S("action.uninstall"), () => ve(e), {
+	function Re(e, { uninstall: t = !1 } = {}) {
+		let n = e.update ? `${e.installed} → ${e.update}` : e.here ? e.installed : e.offered, i = t && De(e) ? B(C("action.uninstall"), () => Ee(e), {
 			danger: !0,
 			key: e.key
 		}) : null;
 		return o("div", { class: "as-card" }, o("div", { class: "as-card-top" }, r(e.icon), o("div", { class: "as-card-head" }, o("button", {
 			class: "as-card-open",
 			onclick: () => Q("detail", e.key)
-		}, e.name, o("span", { class: "as-ver" }, n)), o("div", { class: "as-card-desc" }, e.description))), o("div", { class: "as-card-foot" }, H(e), De(e), o("span", { class: "as-spacer" }), i && !e.update ? null : ke(e), i));
+		}, e.name, o("span", { class: "as-ver" }, n)), o("div", { class: "as-card-desc" }, e.description))), o("div", { class: "as-card-foot" }, H(e), Fe(e), o("span", { class: "as-spacer" }), i && !e.update ? null : Le(e), i));
 	}
-	let K = (e, t) => o("div", { class: "as-grid" }, ...e.map((e) => Ae(e, t)));
+	let K = (e, t) => o("div", { class: "as-grid" }, ...e.map((e) => Re(e, t)));
 	function q() {
 		let e = [];
-		j() && [
+		P() && [
 			"installed",
 			"updates",
 			"system"
-		].includes(_.tab) && e.push(o("div", { class: "as-banner" }, s("info"), o("span", {}, S("banner.systemRestart", { version: j() })), B(S("action.restartKernel"), z, {
+		].includes(_.tab) && e.push(o("div", { class: "as-banner" }, s("info"), o("span", {}, C("banner.systemRestart", { version: P() })), B(C("action.restartKernel"), z, {
 			primary: !0,
 			key: "system"
-		}))), me() && [
+		}))), N() && [
 			"installed",
 			"updates",
 			"kernel"
-		].includes(_.tab) && e.push(o("div", { class: "as-banner" }, s("info"), o("span", {}, S("banner.restartNeeded")), B(S("action.restartKernel"), z, { primary: !0 })));
-		let t = E().filter((e) => _.errors.has(e.id));
-		return t.length && e.push(o("div", { class: "as-banner" }, s("info"), o("span", {}, t.length === 1 ? S("banner.repoUnreachable", { name: O(t[0]) }) : S("banner.reposUnreachable", { n: t.length })), o("button", {
+		].includes(_.tab) && e.push(o("div", { class: "as-banner" }, s("info"), o("span", {}, C("banner.restartNeeded")), B(C("action.restartKernel"), z, { primary: !0 })));
+		let t = j().filter((e) => _.errors.has(e.id));
+		return t.length && e.push(o("div", { class: "as-banner" }, s("info"), o("span", {}, t.length === 1 ? C("banner.repoUnreachable", { name: O(t[0]) }) : C("banner.reposUnreachable", { n: t.length })), o("button", {
 			class: "as-link",
 			onclick: () => Q("options")
-		}, S("action.details")))), e;
+		}, C("action.details")))), e;
 	}
-	function je(e, t) {
-		let n = (_.query[t.id] ?? "").trim().toLowerCase(), r = e.filter(t.filter).filter((e) => pe(e, n));
-		if (Z.textContent = _.loading ? S("list.reading") : `${S("list.items", { n: r.length })} · ${S("list.repos", { n: E().length })}`, !r.length) {
-			let e = _.loading && t.id !== "installed" ? S("list.reading") : n ? S("list.noResults", {
+	function ze(e, t) {
+		let n = (_.query[t.id] ?? "").trim().toLowerCase(), r = e.filter(t.filter).filter((e) => ye(e, n));
+		if (Z.textContent = _.loading ? C("list.reading") : `${C("list.items", { n: r.length })} · ${C("list.repos", { n: j().length })}`, !r.length) {
+			let e = _.loading && t.id !== "installed" ? C("list.reading") : n ? C("list.noResults", {
 				query: n,
 				tab: t.label
-			}) : t.id === "updates" ? S("list.upToDate") : t.id === "installed" ? S("list.nothingInstalled") : S("list.emptyCategory");
+			}) : t.id === "updates" ? C("list.upToDate") : t.id === "installed" ? C("list.nothingInstalled") : C("list.emptyCategory");
 			return [...q(), o("div", { class: "as-empty" }, e)];
 		}
 		if (t.id === "installed") {
@@ -1035,87 +1120,124 @@ function A({ openWindow: ne }) {
 			return [
 				...q(),
 				n.length ? [U("lilOS"), K(n)] : null,
-				e.length ? [U(S("list.apps")), K(e, { uninstall: !0 })] : null,
-				t.length ? [U(S("list.modules")), K(t)] : null
+				e.length ? [U(C("list.apps")), K(e, { uninstall: !0 })] : null,
+				t.length ? [U(C("list.modules")), K(t)] : null
 			];
 		}
 		if (t.id === "updates") return [
 			...q(),
-			U(S("list.updates", { n: r.length }), g && r.length > 1 ? o("span", { class: "as-bulk" }, B(S("action.updateAll"), () => _e(r), { primary: !0 })) : null),
+			U(C("list.updates", { n: r.length }), g && r.length > 1 ? o("span", { class: "as-bulk" }, B(C("action.updateAll"), () => Te(r), { primary: !0 })) : null),
 			K(r)
 		];
 		let i = (e) => Number(e.here || e.elsewhere);
 		return [...q(), K([...r].sort((e, t) => i(e) - i(t) || e.name.localeCompare(t.name)))];
 	}
-	function Me(e, t) {
-		let n = e.have, i = n.mode === "installed", a = j(), c = [];
-		g && e.update && c.push(B(S("action.updateTo", { version: e.update }), () => Ce(e), {
+	function Be(e, t) {
+		let n = e.have, i = n.mode === "installed", a = P(), c = [];
+		g && e.update && c.push(B(C("action.updateTo", { version: e.update }), () => je(e), {
 			primary: !0,
 			key: e.key
 		}));
-		let l = g && i ? (n.releases ?? []).filter((e) => e !== n.version) : [], u = (e) => o("div", { class: "as-row" }, o("div", { class: "as-row-text" }, o("b", {}, `lilOS ${e}`), o("span", {}, e === a ? S("system.next", { version: e }) : e === n.failed?.version ? S("system.keptFailed") : S("system.keptHint"))), e === a ? B(S("system.cancelNext"), () => we(n.version), { key: e }) : B(S("system.use"), () => we(e), { key: e }), e === a ? null : B(S("action.delete"), () => Te(e), {
+		let l = g && i ? (n.releases ?? []).filter((e) => e !== n.version) : [], u = (e) => o("div", { class: "as-row" }, o("div", { class: "as-row-text" }, o("b", {}, `lilOS ${e}`), o("span", {}, e === a ? C("system.next", { version: e }) : e === n.failed?.version ? C("system.keptFailed") : C("system.keptHint"))), e === a ? B(C("system.cancelNext"), () => Me(n.version), { key: e }) : B(C("system.use"), () => Me(e), { key: e }), e === a ? null : B(C("action.delete"), () => Ne(e), {
 			danger: !0,
 			key: e
 		}));
-		return Z.textContent = `lilOS ${n.version}`, o("div", { class: "as-detail" }, G(t.label), o("div", { class: "as-detail-head" }, r(e.icon), o("div", { class: "as-detail-title" }, o("h1", {}, "lilOS"), o("div", { class: "as-sub" }, S("detail.kindSystem")), o("div", { class: "as-meta" }, H(e), o("span", { class: "as-state" }, s("shield"), S("detail.verified")), o("span", { class: "as-state" }, S("detail.required"))), c.length ? o("div", { class: "as-detail-actions" }, ...c) : null)), a ? o("div", { class: "as-banner" }, s("info"), o("span", {}, S("banner.systemRestart", { version: a })), B(S("action.restartKernel"), z, {
+		return Z.textContent = `lilOS ${n.version}`, o("div", { class: "as-detail" }, G(t.label), o("div", { class: "as-detail-head" }, r(e.icon), o("div", { class: "as-detail-title" }, o("h1", {}, "lilOS"), o("div", { class: "as-sub" }, C("detail.kindSystem")), o("div", { class: "as-meta" }, H(e), o("span", { class: "as-state" }, s("shield"), C("detail.verified")), o("span", { class: "as-state" }, C("detail.required"))), c.length ? o("div", { class: "as-detail-actions" }, ...c) : null)), a ? o("div", { class: "as-banner" }, s("info"), o("span", {}, C("banner.systemRestart", { version: a })), B(C("action.restartKernel"), z, {
 			primary: !0,
 			key: "system"
-		})) : null, g && n.failed ? o("div", { class: "as-banner" }, s("warning"), o("span", {}, S("system.failed", {
+		})) : null, g && n.failed ? o("div", { class: "as-banner" }, s("warning"), o("span", {}, C("system.failed", {
 			version: n.failed.version,
 			reason: n.failed.reason,
 			current: n.version
-		}))) : null, i ? null : o("div", { class: "as-banner" }, s("info"), o("span", {}, S("system.development"))), o("div", { class: "as-facts" }, W(S("system.inUse"), n.version), W(S("detail.version"), e.offered ?? "—"), W(S("detail.repository"), e.repo ? O(e.repo) : "—"), W(S("detail.state"), a ? S("system.next", { version: a }) : S(i ? "system.installedMode" : "system.developmentMode"))), l.length ? [U(S("system.kept")), o("div", { class: "as-group" }, ...l.map(u))] : null, o("div", { class: "as-perm" }, o("h3", {}, s("info"), S("detail.warning")), o("p", {}, S("system.warning"))), e.changelog ? [o("div", { class: "as-readme-title" }, s("file"), "CHANGELOG.md"), o("article", { class: "as-readme" }, ...x(e.changelog))] : null, e.changelog && e.changelogTruncated ? o("p", { class: "as-readme-cut" }, S("readme.truncated"), " ", o("button", {
+		}))) : null, i ? null : o("div", { class: "as-banner" }, s("info"), o("span", {}, C("system.development"))), o("div", { class: "as-facts" }, W(C("system.inUse"), n.version), W(C("detail.version"), e.offered ?? "—"), W(C("detail.repository"), e.repo ? O(e.repo) : "—"), W(C("detail.state"), a ? C("system.next", { version: a }) : C(i ? "system.installedMode" : "system.developmentMode"))), l.length ? [U(C("system.kept")), o("div", { class: "as-group" }, ...l.map(u))] : null, o("div", { class: "as-perm" }, o("h3", {}, s("info"), C("detail.warning")), o("p", {}, C("system.warning"))), e.changelog ? [o("div", { class: "as-readme-title" }, s("file"), "CHANGELOG.md"), o("article", { class: "as-readme" }, ...x(e.changelog))] : null, e.changelog && e.changelogTruncated ? o("p", { class: "as-readme-cut" }, C("readme.truncated"), " ", o("button", {
 			class: "as-link",
-			onclick: (t) => Ee(e, t.currentTarget)
-		}, s("download"), S("readme.download"))) : null, o("div", { class: "as-readme-title" }, s("file"), "README.md"), e.readme ? o("article", { class: "as-readme" }, ...x(e.readme)) : o("p", { class: "as-muted" }, e.repo ? S("readme.none") : S("readme.notFromRepo")), e.readme && e.readmeTruncated ? o("p", { class: "as-readme-cut" }, S("readme.truncated"), " ", o("button", {
+			onclick: (t) => Pe(e, t.currentTarget)
+		}, s("download"), C("readme.download"))) : null, o("div", { class: "as-readme-title" }, s("file"), "README.md"), e.readme ? o("article", { class: "as-readme" }, ...x(e.readme)) : o("p", { class: "as-muted" }, e.repo ? C("readme.none") : C("readme.notFromRepo")), e.readme && e.readmeTruncated ? o("p", { class: "as-readme-cut" }, C("readme.truncated"), " ", o("button", {
 			class: "as-link",
-			onclick: (t) => xe(e, t.currentTarget)
-		}, s("download"), S("readme.download"))) : null);
+			onclick: (t) => ke(e, t.currentTarget)
+		}, s("download"), C("readme.download"))) : null);
 	}
-	function Ne(e, t) {
-		if (e.kind === "system") return Me(e, t);
+	function Ve(e, t) {
+		if (e.kind === "system") return Be(e, t);
 		let n = e.kind === "module", i = [];
-		e.here && !n && i.push(B(S("action.open"), () => te(e.id), { primary: !e.update || !g })), g && (e.update && i.push(B(S("action.updateTo", { version: e.update }), () => R(e), {
+		e.here && !n && i.push(B(C("action.open"), () => te(e.id), { primary: !e.update || !g })), g && (e.update && i.push(B(C("action.updateTo", { version: e.update }), () => R(e), {
 			primary: !0,
 			key: e.key
-		})), e.here && (!n || e.have.enabled) && (!e.update && e.have.source && i.push(B(S("action.checkUpdates"), () => R(e), { key: e.key })), n || i.push(B(S("action.reinstall"), () => be(e), { key: e.key })), e.required || i.push(B(S(n ? "action.remove" : "action.uninstall"), () => ve(e), {
+		})), e.here && (!n || e.have.enabled) && (!e.update && e.have.source && i.push(B(C("action.checkUpdates"), () => R(e), { key: e.key })), n || i.push(B(C("action.reinstall"), () => Oe(e), { key: e.key })), e.required || i.push(B(C(n ? "action.remove" : "action.uninstall"), () => Ee(e), {
 			danger: !0,
 			key: e.key
-		}))), !e.here && !e.elsewhere && e.entry && i.push(B(e.repo.official ? S("action.install") : S("action.installAnyway"), () => ge(e), {
+		}))), !e.here && !e.elsewhere && e.entry && i.push(B(e.repo.official ? C("action.install") : C("action.installAnyway"), () => xe(e), {
 			primary: !0,
 			danger: !e.repo.official,
 			key: e.key
 		})));
-		let a = n && e.have ? e.have.enabled ? e.have.running === e.have.enabled ? S("moduleState.inUse") : e.have.running ? S("moduleState.oldUntilRestart", { version: e.have.running }) : S("moduleState.nextStart") : S("moduleState.removed") : null, c = k(e.manifest?.permissions);
+		let a = n && e.have ? e.have.enabled ? e.have.running === e.have.enabled ? C("moduleState.inUse") : e.have.running ? C("moduleState.oldUntilRestart", { version: e.have.running }) : C("moduleState.nextStart") : C("moduleState.removed") : null, c = k(e.manifest?.permissions);
 		return Z.textContent = `${e.name} ${e.offered ?? e.installed}`, o("div", { class: "as-detail" }, G(t.label), o("div", { class: "as-detail-head" }, r(e.icon), o("div", { class: "as-detail-title" }, o("h1", {}, e.name), o("div", { class: "as-sub" }, [
 			e.publisher,
-			S(n ? "detail.kindModule" : "detail.kindApp"),
+			C(n ? "detail.kindModule" : "detail.kindApp"),
 			ie().find((t) => t.id === e.category)?.label
-		].filter(Boolean).join(" · ")), o("div", { class: "as-meta" }, H(e), e.verified ? o("span", { class: "as-state" }, s("shield"), S("detail.verified")) : e.repo ? o("span", { class: "as-unofficial" }, S("detail.unverified")) : null, e.required ? o("span", { class: "as-state" }, S("detail.required")) : null, e.elsewhere ? o("span", { class: "as-state" }, S(n ? "status.installedElsewhereModule" : "status.installedElsewhereApp")) : null), i.length ? o("div", { class: "as-detail-actions" }, ...i) : null)), e.repo && !e.repo.official && !e.here ? o("div", { class: "as-banner" }, s("info"), o("span", {}, S("detail.unofficialWarning"))) : null, o("div", { class: "as-facts" }, W(S("detail.version"), e.offered ?? e.installed), W(Oe(e), e.installed ?? "—"), W(S("detail.repository"), e.repo ? O(e.repo) : "—"), n ? W(S("detail.provides"), e.provides.join(", ") || "—") : W(S("detail.id"), e.id), a ? W(S("detail.state"), a) : null), n ? o("div", { class: "as-perm" }, o("h3", {}, s("info"), S("detail.warning")), o("p", {}, S("detail.moduleWarning"))) : o("div", { class: "as-perm" }, o("h3", {}, s("shield"), S("detail.mayDo")), c.length ? o("ul", {}, ...c.map((e) => o("li", {}, s("check"), h(e)))) : o("p", { class: "as-muted" }, S("permissions.none"))), o("div", { class: "as-readme-title" }, s("file"), "README.md"), e.readme ? o("article", { class: "as-readme" }, ...x(e.readme)) : null, e.readme && e.readmeTruncated ? o("p", { class: "as-readme-cut" }, S("readme.truncated"), " ", o("button", {
+		].filter(Boolean).join(" · ")), o("div", { class: "as-meta" }, H(e), e.verified ? o("span", { class: "as-state" }, s("shield"), C("detail.verified")) : e.repo ? o("span", { class: "as-unofficial" }, C("detail.unverified")) : null, e.required ? o("span", { class: "as-state" }, C("detail.required")) : null, e.elsewhere ? o("span", { class: "as-state" }, C(n ? "status.installedElsewhereModule" : "status.installedElsewhereApp")) : null), i.length ? o("div", { class: "as-detail-actions" }, ...i) : null)), e.repo && !e.repo.official && !e.here ? o("div", { class: "as-banner" }, s("info"), o("span", {}, C("detail.unofficialWarning"))) : null, o("div", { class: "as-facts" }, W(C("detail.version"), e.offered ?? e.installed), W(Ie(e), e.installed ?? "—"), W(C("detail.repository"), e.repo ? O(e.repo) : "—"), n ? W(C("detail.provides"), e.provides.join(", ") || "—") : W(C("detail.id"), e.id), a ? W(C("detail.state"), a) : null), n ? o("div", { class: "as-perm" }, o("h3", {}, s("info"), C("detail.warning")), o("p", {}, C("detail.moduleWarning"))) : o("div", { class: "as-perm" }, o("h3", {}, s("shield"), C("detail.mayDo")), c.length ? o("ul", {}, ...c.map((e) => o("li", {}, s("check"), ee(e)))) : o("p", { class: "as-muted" }, C("permissions.none"))), o("div", { class: "as-readme-title" }, s("file"), "README.md"), e.readme ? o("article", { class: "as-readme" }, ...x(e.readme)) : null, e.readme && e.readmeTruncated ? o("p", { class: "as-readme-cut" }, C("readme.truncated"), " ", o("button", {
 			class: "as-link",
-			onclick: (t) => xe(e, t.currentTarget)
-		}, s("download"), S("readme.download"))) : null, e.readme ? null : o("p", { class: "as-muted" }, e.repo ? S("readme.none") : S("readme.notFromRepo")));
+			onclick: (t) => ke(e, t.currentTarget)
+		}, s("download"), C("readme.download"))) : null, e.readme ? null : o("p", { class: "as-muted" }, e.repo ? C("readme.none") : C("readme.notFromRepo")));
 	}
-	function Pe() {
-		let e = _.updates, t = !e || e.system && !e.canControl, n = e ? e.system ? S("updates.bySystem") : S("updates.description") : S("updates.needsEngine"), r = ee({
-			value: !!e && e.startup !== "none",
-			label: S("updates.atStart"),
-			onChange: re
+	function He() {
+		let e = _.updateTask, t = fe(e) ?? "daily", n = m({
+			value: !!e?.enabled,
+			label: C("updates.check"),
+			onChange: (e) => pe({ on: e })
+		}), r = [
+			{
+				value: "daily",
+				label: C("updates.daily")
+			},
+			{
+				value: "weekly",
+				label: C("updates.weekly")
+			},
+			...t === "other" ? [{
+				value: "other",
+				label: C("updates.other")
+			}] : []
+		], i = o("select", {
+			class: "ctl-select",
+			"aria-label": C("updates.when")
+		}, r.map((e) => o("option", {
+			value: e.value,
+			selected: e.value === t
+		}, e.label)));
+		i.disabled = !e?.enabled, i.addEventListener("change", () => {
+			i.value !== "other" && pe({ every: i.value });
 		});
-		return r.disabled = t, o("div", { class: "as-row" }, o("div", { class: "as-row-text" }, o("b", {}, S("updates.atStart")), o("span", {}, n)), r);
+		let a = o("button", {
+			class: "as-link",
+			type: "button",
+			style: "background:none;border:0;padding:0;cursor:pointer;width:max-content",
+			onclick: () => te("scheduler", { task: e?.id }, "main")
+		}, C("updates.inScheduler"));
+		return o("div", { class: "as-row" }, o("div", { class: "as-row-text" }, o("b", {}, C("updates.check")), o("span", {}, C("updates.taskHint")), e ? a : null), i, n);
 	}
-	function Fe(e) {
+	function Ue() {
+		if (S && _.updates) return He();
+		let e = _.updates, t = !e || e.system && !e.canControl, n = e ? e.system ? C("updates.bySystem") : C("updates.description") : C("updates.needsEngine"), r = m({
+			value: !!e && e.startup !== "none",
+			label: C("updates.atStart"),
+			onChange: me
+		});
+		return r.disabled = t, o("div", { class: "as-row" }, o("div", { class: "as-row-text" }, o("b", {}, C("updates.atStart")), o("span", {}, n)), r);
+	}
+	function We(e) {
 		let t = _.newRepo;
-		return Z.textContent = S("options.title"), o("div", { class: "as-options" }, G(e.label), o("h2", {}, S("options.title")), o("p", { class: "as-lead" }, S("options.lead")), U("AppStore"), o("div", { class: "as-group" }, o("div", { class: "as-row" }, o("div", { class: "as-row-text" }, o("b", {}, S("options.showUnofficial")), o("span", {}, S("options.showUnofficialHint"))), ee({
+		return Z.textContent = C("options.title"), o("div", { class: "as-options" }, G(e.label), o("h2", {}, C("options.title")), o("p", { class: "as-lead" }, C("options.lead")), U("AppStore"), o("div", { class: "as-group" }, o("div", { class: "as-row" }, o("div", { class: "as-row-text" }, o("b", {}, C("options.showUnofficial")), o("span", {}, C("options.showUnofficialHint"))), m({
 			value: d.get("appstore.showUnofficial"),
-			label: S("options.showUnofficial"),
+			label: C("options.showUnofficial"),
 			onChange: (e) => d.set("appstore.showUnofficial", e)
-		})), Pe()), U(S("options.repositories"), o("span", { class: "as-bulk" }, B(S("action.reload"), () => C()))), o("div", { class: "as-group" }, ..._.repos.map((e) => {
-			let t = _.catalogs.get(e.id), n = (e) => (e ?? []).filter((e) => !e.error).length, i = [...t?.apps ?? [], ...t?.modules ?? []].filter((e) => e.error), a = _.errors.has(e.id) ? S("options.unreachable", { error: _.errors.get(e.id) }) : t ? [
-				S("options.apps", { n: n(t.apps) }),
-				S("options.modules", { n: n(t.modules) }),
-				i.length ? S("options.invalid", { n: i.length }) : null
-			].filter(Boolean).join(" · ") : S("options.reading");
+		})), Ue()), U(C("options.repositories"), o("span", { class: "as-bulk" }, B(C("action.reload"), () => A()))), o("div", { class: "as-group" }, ..._.repos.map((e) => {
+			let t = _.catalogs.get(e.id), n = (e) => (e ?? []).filter((e) => !e.error).length, i = [...t?.apps ?? [], ...t?.modules ?? []].filter((e) => e.error), a = _.errors.has(e.id) ? C("options.unreachable", { error: _.errors.get(e.id) }) : t ? [
+				C("options.apps", { n: n(t.apps) }),
+				C("options.modules", { n: n(t.modules) }),
+				i.length ? C("options.invalid", { n: i.length }) : null
+			].filter(Boolean).join(" · ") : C("options.reading");
 			return o("div", { class: "as-row" }, r(e.official ? {
 				glyph: "shield",
 				color: "#30a46c"
@@ -1125,37 +1247,37 @@ function A({ openWindow: ne }) {
 			}), o("div", { class: "as-row-text" }, o("b", {}, O(e), o("span", { class: "as-muted" }, ` · ${e.name}`)), o("span", {}, e.url), o("span", {
 				class: _.errors.has(e.id) ? "as-error" : null,
 				title: i.map((e) => `${e.path}: ${e.error}`).join("\n") || null
-			}, a)), e.official ? o("span", { class: "as-muted" }, S("options.alwaysThere")) : g ? B(S("action.remove"), () => y("repo", () => u.remove(e.id), S("done.repoRemoved", { name: O(e) })), {
+			}, a)), e.official ? o("span", { class: "as-muted" }, C("options.alwaysThere")) : g ? B(C("action.remove"), () => y("repo", () => u.remove(e.id), C("done.repoRemoved", { name: O(e) })), {
 				danger: !0,
 				key: e.id
 			}) : null);
-		})), U(S("options.addRepo")), g ? o("div", { class: "as-group" }, o("div", { class: "as-row" }, o("div", { class: "as-row-text" }, o("b", {}, S("options.address")), o("span", {}, S("options.addressHint"))), f({
+		})), U(C("options.addRepo")), g ? o("div", { class: "as-group" }, o("div", { class: "as-row" }, o("div", { class: "as-row-text" }, o("b", {}, C("options.address")), o("span", {}, C("options.addressHint"))), f({
 			value: t.url,
 			placeholder: "https://…",
-			label: S("options.addressLabel"),
+			label: C("options.addressLabel"),
 			onInput: (e) => {
 				t.url = e;
 			}
-		})), o("div", { class: "as-row" }, o("div", { class: "as-row-text" }, o("b", {}, S("options.name")), o("span", {}, S("options.nameHint"))), f({
+		})), o("div", { class: "as-row" }, o("div", { class: "as-row-text" }, o("b", {}, C("options.name")), o("span", {}, C("options.nameHint"))), f({
 			value: t.name,
-			placeholder: S("options.name"),
-			label: S("options.nameLabel"),
+			placeholder: C("options.name"),
+			label: C("options.nameLabel"),
 			onInput: (e) => {
 				t.name = e;
 			}
-		})), o("div", { class: "as-row as-row-end" }, B(S("action.add"), () => y("repo", async () => {
+		})), o("div", { class: "as-row as-row-end" }, B(C("action.add"), () => y("repo", async () => {
 			let e = await u.add(t.url.trim(), t.name.trim() || void 0);
 			return _.newRepo = {
 				url: "",
 				name: ""
 			}, e;
-		}, (e) => S("done.repoAdded", { name: O(e) })), { primary: !0 }))) : o("p", { class: "as-muted" }, S("options.adminOnly")));
+		}, (e) => C("done.repoAdded", { name: O(e) })), { primary: !0 }))) : o("p", { class: "as-muted" }, C("options.adminOnly")));
 	}
 	let J = o("input", {
 		type: "search",
 		autocomplete: "off",
 		spellcheck: "false",
-		"aria-label": S("search.label")
+		"aria-label": C("search.label")
 	}), Y = o("div", {
 		class: "as-tabs",
 		role: "tablist"
@@ -1163,11 +1285,11 @@ function A({ openWindow: ne }) {
 	v.body.append(o("div", { class: "as-head" }, o("label", { class: "as-search" }, s("search"), J), Y), X, o("footer", { class: "as-foot" }, Z, o("span", { class: "as-spacer" }), o("button", {
 		class: "as-link",
 		onclick: () => Q("options")
-	}, s("gear"), S("options.title"))));
+	}, s("gear"), C("options.title"))));
 	function Q(e, t = null) {
 		_.view = e, _.key = t, $(), X.scrollTop = 0;
 	}
-	function Ie(e) {
+	function Ge(e) {
 		_.tab = e, Q("list");
 	}
 	J.addEventListener("input", () => {
@@ -1180,7 +1302,7 @@ function A({ openWindow: ne }) {
 		t[(t.indexOf(document.activeElement) + (e.key === "ArrowRight" ? 1 : -1) + t.length) % t.length].click(), Y.querySelector("[tabindex=\"0\"]")?.focus();
 	});
 	function $() {
-		let e = de(), t = fe(e);
+		let e = _e(), t = ve(e);
 		t.some((e) => e.id === _.tab) || (_.tab = "installed");
 		let n = t.find((e) => e.id === _.tab), r = e.filter((e) => e.update).length;
 		Y.replaceChildren(...t.flatMap((e, n) => [e.category && !t[n - 1].category ? o("span", { class: "as-tab-sep" }) : null, o("button", {
@@ -1188,11 +1310,11 @@ function A({ openWindow: ne }) {
 			role: "tab",
 			"aria-selected": String(_.view === "list" && e.id === _.tab),
 			tabindex: e.id === _.tab ? "0" : "-1",
-			onclick: () => Ie(e.id)
-		}, e.label, e.badge && r ? o("span", { class: "as-count" }, String(r)) : null)].filter(Boolean))), J.placeholder = S("search.placeholder", { tab: n.label }), J.value !== (_.query[_.tab] ?? "") && (J.value = _.query[_.tab] ?? "");
+			onclick: () => Ge(e.id)
+		}, e.label, e.badge && r ? o("span", { class: "as-count" }, String(r)) : null)].filter(Boolean))), J.placeholder = C("search.placeholder", { tab: n.label }), J.value !== (_.query[_.tab] ?? "") && (J.value = _.query[_.tab] ?? "");
 		let i = _.view === "detail" ? e.find((e) => e.key === _.key) : null;
 		_.view === "detail" && !i && (_.view = "list");
-		let a = _.view === "options" ? Fe(n) : i ? Ne(i, n) : je(e, n);
+		let a = _.view === "options" ? We(n) : i ? Ve(i, n) : ze(e, n);
 		X.replaceChildren(...[a].flat(3).filter(Boolean));
 	}
 	v.on("launch", (e) => {
@@ -1200,13 +1322,13 @@ function A({ openWindow: ne }) {
 			apps: "installed",
 			modules: "kernel"
 		}[e?.tab] ?? e?.tab;
-		t === "repos" || t === "options" ? Q("options") : typeof t == "string" && Ie(t);
+		t === "repos" || t === "options" ? Q("options") : typeof t == "string" && Ge(t);
 	});
-	let Le = i.on("change", () => $()), Re = d.on("change:appstore.showUnofficial", () => $()), ze = m.services?.on("change", (e) => {
+	let Ke = i.on("change", () => $()), qe = d.on("change:appstore.showUnofficial", () => $()), Je = h.services?.on("change", (e) => {
 		e.app === "appstore" && b().then($);
 	});
 	return v.on("destroy", () => {
-		Le(), Re(), ze?.();
-	}), $(), C(), v;
+		Ke(), qe(), Je?.();
+	}), $(), A(), v;
 }
-export { A as default };
+export { le as default };

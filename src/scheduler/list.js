@@ -3,6 +3,9 @@ import { t } from './i18n.js';
 import { kindOf, STATE_GLYPH, whatText, when, duration, ruleText, nextTimes } from './model.js';
 import { openEditor } from './editor.js';
 
+/** replaceChildren without the nulls and falses (h() skips them, the DOM would write them). */
+const fill = (el, ...kids) => el.replaceChildren(...kids.flat(Infinity).filter(k => k != null && k !== false));
+
 /**
  * The Scheduler's main window. Elenco: the operations (a user's own; an admin's grouped as Sistema
  * and one group per user), filters on the left, the chosen one on the right with its next times
@@ -35,7 +38,7 @@ export function createMain({ args = {}, openWindow } = {}) {
   win.body.append(h('div', { class: 'sc' }, toolbar, body, status));
 
   if (!schedule?.available) {
-    body.replaceChildren(h('p', { class: 'sc-empty' }, t('needsKernel')));
+    fill(body, h('p', { class: 'sc-empty' }, t('needsKernel')));
     return win;
   }
 
@@ -95,7 +98,7 @@ export function createMain({ args = {}, openWindow } = {}) {
     if (state.tab === 'history') drawHistory(); else drawList();
     drawDetail();
     const active = state.tasks.filter(x => x.enabled).length;
-    status.replaceChildren(
+    fill(status, 
       h('span', {}, h('i', { class: 'sc-dot on' }), t('status.module')),
       h('span', {}, t('status.count', { n: state.tasks.length, active })),
       state.error ? h('span', { class: 'sc-err', role: 'alert' }, state.error) : null);
@@ -106,7 +109,7 @@ export function createMain({ args = {}, openWindow } = {}) {
     const tab = (id, glyph, label) => h('button', { type: 'button', 'aria-pressed': String(state.tab === id), onclick: () => { state.tab = id; load(); } }, icon(glyph), label);
     const search = h('input', { class: 'sc-search', type: 'search', placeholder: t('tools.search'), value: state.search, 'aria-label': t('tools.search') });
     search.addEventListener('input', () => { state.search = search.value; drawList(); });
-    toolbar.replaceChildren(
+    fill(toolbar, 
       h('button', { class: 'sc-btn vio', type: 'button', onclick: () => openEditor(openWindow, {}) }, icon('plus'), t('tools.new')),
       h('button', { class: 'sc-btn', type: 'button', disabled: !sel, onclick: () => runNow(sel) }, icon('play'), t('tools.run')),
       h('button', { class: 'sc-btn', type: 'button', disabled: !sel, onclick: () => toggle(sel) }, icon(sel?.enabled === false ? 'play' : 'pause'), sel?.enabled === false ? t('tools.resume') : t('tools.pause')),
@@ -145,7 +148,7 @@ export function createMain({ args = {}, openWindow } = {}) {
     parts.push(h('h6', {}, t('side.where')),
       item('kernel', 'monitor', t('where.kernel'), count(x => where(x.what.type) === 'kernel')),
       item('browser', 'window', t('where.browser'), count(x => where(x.what.type) === 'browser')));
-    side.replaceChildren(...parts);
+    fill(side, ...parts);
   }
 
   const kico = type => h('span', { class: `sc-kico k-${type}` }, icon(kindOf(type).glyph));
@@ -182,11 +185,11 @@ export function createMain({ args = {}, openWindow } = {}) {
     if (state.admin && state.group === null && state.filter === 'all') {
       const owners = [...new Set(list.map(x => x.owner))].sort((a, b) => (a === '*' ? -1 : b === '*' ? 1 : a === me() ? -1 : b === me() ? 1 : 0));
       for (const o of owners) {
-        rows.push(h('div', { class: 'sc-grp' }, icon(o === '*' ? 'monitor' : 'user'), ownerName(o), h('small', {}, o === '*' ? t('grp.system') : t('grp.count', { n: list.filter(x => x.owner === o).length }))));
+        rows.push(h('div', { class: 'sc-grp' }, icon(o === '*' ? 'monitor' : 'user'), o === me() ? t('owner.meNamed', { name: session.user?.name ?? '' }) : ownerName(o), h('small', {}, o === '*' ? t('grp.system') : t('grp.count', { n: list.filter(x => x.owner === o).length }))));
         rows.push(...list.filter(x => x.owner === o).map(row));
       }
     } else rows.push(...list.map(row));
-    main.replaceChildren(head, h('div', { class: 'sc-rows', role: 'rowgroup' }, rows.length ? rows : h('div', { class: 'sc-empty' },
+    fill(main, head, h('div', { class: 'sc-rows', role: 'rowgroup' }, rows.length ? rows : h('div', { class: 'sc-empty' },
       state.tasks.length ? t('list.noneHere') : h('div', { class: 'sc-welcome' }, icon('clock'), h('h2', {}, t('welcome.title')), h('p', {}, t('welcome.text')),
         h('button', { class: 'sc-btn vio', type: 'button', onclick: () => openEditor(openWindow, {}) }, icon('plus'), t('tools.new'))))));
   }
@@ -216,7 +219,7 @@ export function createMain({ args = {}, openWindow } = {}) {
       h('span', { class: 'sc-t' }, reason));
       return open && r.log ? [line, h('pre', { class: 'sc-log' }, r.log)] : [line];
     }).flat();
-    main.replaceChildren(
+    fill(main, 
       h('div', { class: 'sc-hfilters' }, taskSel, stateSel),
       h('div', { class: 'sc-hrow head', role: 'row' }, h('span'), h('span', {}, t('col.when')), h('span', {}, t('history.what')), h('span', {}, t('history.took')), h('span', {}, t('history.how'))),
       h('div', { class: 'sc-rows' }, rows.length ? rows : h('div', { class: 'sc-empty' }, t('history.none'))));
@@ -227,11 +230,11 @@ export function createMain({ args = {}, openWindow } = {}) {
   function drawDetail() {
     const task = state.tasks.find(x => x.id === state.selected);
     detail.hidden = state.tab === 'history' || !task;
-    if (!task) return detail.replaceChildren();
+    if (!task) return fill(detail, );
     const runs = state.lastRuns.get(task.id) ?? [];
     const times = nextTimes(task);
     const editable = true;
-    detail.replaceChildren(
+    fill(detail, 
       h('h4', {}, kico(task.what.type), h('span', {}, task.name)),
       h('dl', { class: 'sc-kv' },
         h('dt', {}, t('detail.when')), h('dd', {}, ruleText(task.when), h('br'), h('span', { class: 'sc-tz' }, task.when.tz)),

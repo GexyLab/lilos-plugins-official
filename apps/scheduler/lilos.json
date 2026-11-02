@@ -16,7 +16,7 @@
   "sdk": "2",
   "system": true,
   "required": true,
-  "lilos": ">=1.16.0",
+  "lilos": ">=1.17.0",
   "entrypoints": {
     "main": {
       "kind": "window"
@@ -117,12 +117,12 @@
   },
   "entry": "dist/index.js",
   "styles": [
-    "dist/index-Dneph6Kn.css"
+    "dist/index-Dxof-ZXL.css"
   ],
   "locales": "locales.json",
   "files": {
-    "dist/index-Dneph6Kn.css": "sha256-7Jxm3vr2jXstunxAQiQHPseFSYqEcczLMVTrRJDCwYg=",
-    "dist/index.js": "sha256-XhWFhnDVYxb8GN7hLQm5azCuhKv/+qarORv7vspecGo=",
+    "dist/index-Dxof-ZXL.css": "sha256-5128kl/PnlzsjGeI8FnxaBLg199GFBrN4VBhx7kTL4o=",
+    "dist/index.js": "sha256-SJzGEoH0SRK5OayCvQ0/pbpCEPD+tpGyiK0NyhTg76c=",
     "locales.json": "sha256-2mVXq45yuwqc0a8+vIBiER9ez05CusvaZwDc1G3hRnU="
   }
 }

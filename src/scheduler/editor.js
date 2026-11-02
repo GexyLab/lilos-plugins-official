@@ -3,6 +3,9 @@ import * as system from '@lilos/system';
 import { t, i18n } from './i18n.js';
 import { KINDS, kindOf, whatText, nodeLabel, placeOf, browserZone, localNow, when as whenText } from './model.js';
 
+/** replaceChildren without the nulls and falses (h() skips them, the DOM would write them). */
+const fill = (el, ...kids) => el.replaceChildren(...kids.flat(Infinity).filter(k => k != null && k !== false));
+
 /**
  * A new operation, or one to change, in three steps: Cosa (the action and its values), Quando
  * (one time, repeated, or cron), Opzioni (missed times, overlaps, time limit, retries, when to
@@ -177,19 +180,19 @@ function editorWindow({ id = null, copy = null, prefill = {} }, openWindow) {
 
   function draw() {
     const names = [t('step.what'), t('step.when'), t('step.options')];
-    steps.replaceChildren(...names.map((n, i) => h('button', {
+    fill(steps, ...names.map((n, i) => h('button', {
       type: 'button', role: 'tab', 'aria-selected': String(i === step), class: i < step ? 'done' : '',
       onclick: () => { step = i; draw(); },
     }, h('i', {}, i < step ? '✓' : String(i + 1)), n)));
-    if (!loaded) { mainEl.replaceChildren(h('p', { class: 'ed-hint' }, t('editor.loading'))); return; }
-    mainEl.replaceChildren(...[stepWhat, stepWhen, stepOptions][step]());
+    if (!loaded) { fill(mainEl, h('p', { class: 'ed-hint' }, t('editor.loading'))); return; }
+    fill(mainEl, ...[stepWhat, stepWhen, stepOptions][step]());
     drawSide();
     errEl.textContent = error;
     const back = h('button', { class: 'sc-btn', type: 'button', disabled: step === 0, onclick: () => { step--; draw(); } }, t('editor.back'));
     const next = step < 2
       ? h('button', { class: 'sc-btn vio', type: 'button', onclick: () => { if (step === 0 && !draft.name.trim()) draft.name = suggestName(); step++; draw(); } }, t('editor.next'))
       : h('button', { class: 'sc-btn vio', type: 'button', onclick: save }, icon('check'), editing ? t('editor.save') : t('editor.create'));
-    foot.replaceChildren(back, h('span', { class: 'sc-grow' }), h('button', { class: 'sc-btn', type: 'button', onclick: () => win.emit('close') }, t('editor.cancel')), next);
+    fill(foot, back, h('span', { class: 'sc-grow' }), h('button', { class: 'sc-btn', type: 'button', onclick: () => win.emit('close') }, t('editor.cancel')), next);
   }
 
   const redraw = () => draw();
@@ -485,7 +488,7 @@ function editorWindow({ id = null, copy = null, prefill = {} }, openWindow) {
     }
     items.push(h('div', { class: 'sc-sub' }, t('side.what')), h('div', { class: 'ed-summary' }, h('span', { class: `sc-kico k-${draft.what.type}` }, icon(kindOf(draft.what.type).glyph)), whatText(draft.what, catalog) || t(`kind.${draft.what.type}.name`)));
     if (kindOf(draft.what.type).where === 'browser') items.push(h('p', { class: 'ed-warn' }, icon('window'), t('side.browser')));
-    sideEl.replaceChildren(...items);
+    fill(sideEl, ...items);
   }
 
   // ---------- Saving ----------
