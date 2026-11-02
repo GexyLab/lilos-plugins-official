@@ -1,6 +1,6 @@
 {
   "id": "appstore",
-  "version": "1.8.0",
+  "version": "1.9.0",
   "kind": "local",
   "name": "AppStore",
   "description": "Installs, updates and removes apps and kernel modules from repositories; checks for updates even with lilOS closed.",
@@ -10,6 +10,7 @@
   "sdk": "1",
   "system": true,
   "required": true,
+  "lilos": ">=1.21.0",
   "entrypoints": { "updates": { "kind": "service", "file": "dist/updates.js", "label": "Updates", "params": {
     "ore": { "type": "number", "label": "Check every (hours)", "min": 1, "max": 168, "default": 24 }
   } } },

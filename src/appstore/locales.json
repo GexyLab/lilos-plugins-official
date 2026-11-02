@@ -18,7 +18,6 @@
       "search.label": "Search",
       "search.placeholder": "Search in {tab}",
 
-      "action.cancel": "Cancel",
       "action.install": "Install",
       "action.installAnyway": "Install anyway",
       "action.update": "Update",
@@ -46,6 +45,7 @@
 
       "done.appInstalled": "{name} installed",
       "done.moduleInstalled": "{name} installed: restart the kernel to use it",
+      "done.moduleReplaced": "It takes the place of {names}, with their settings.",
       "done.appUpToDate": "{name} is already up to date",
       "done.moduleUpToDate": "{name} is already up to date",
       "done.appUpdated": "{name} updated to {version}",
@@ -202,7 +202,6 @@
       "search.label": "Cerca",
       "search.placeholder": "Cerca in {tab}",
 
-      "action.cancel": "Annulla",
       "action.install": "Installa",
       "action.installAnyway": "Installa comunque",
       "action.update": "Aggiorna",
@@ -230,6 +229,7 @@
 
       "done.appInstalled": "{name} installata",
       "done.moduleInstalled": "{name} installato: riavvia il kernel per usarlo",
+      "done.moduleReplaced": "Prende il posto di {names}, con le loro impostazioni.",
       "done.appUpToDate": "{name} è già aggiornata",
       "done.moduleUpToDate": "{name} è già aggiornato",
       "done.appUpdated": "{name} aggiornata alla {version}",
