@@ -1,5 +1,7 @@
 import { Calculator } from './engine.js';
 import { separators, localize, number, expression } from './format.js';
+import { h } from '../shared/sandbox/dom.js';
+import { onLocale } from '../shared/sandbox/app.js';
 
 /**
  * Calculator: a simple desk calculator (sdk 2, an installable app). The logic is in engine.js,
@@ -7,18 +9,6 @@ import { separators, localize, number, expression } from './format.js';
  * It runs isolated (root is the sandbox's body) or in a Shadow DOM (root is the shadow root):
  * it has no lilOS SDK, only `lilos`.
  */
-const h = (tag, attrs = {}, ...children) => {
-  const el = document.createElement(tag);
-  for (const [k, v] of Object.entries(attrs)) {
-    if (v == null || v === false) continue;
-    if (k === 'class') el.className = v;
-    else if (k.startsWith('on')) el.addEventListener(k.slice(2), v);
-    else el.setAttribute(k, v === true ? '' : String(v));
-  }
-  el.append(...children.filter(c => c != null));
-  return el;
-};
-
 /** [key of the engine, text on the key, kind, name for assistive technologies, keyboard keys] in rows of four. */
 const KEYPAD = [
   ['%', '%', 'fn', 'key.percent', '%'], ['ce', 'CE', 'fn', 'key.clearEntry', 'keyname.delete'], ['c', 'C', 'fn', 'key.clear', 'Esc'], ['back', '⌫', 'fn', 'key.backspace', 'keyname.backspace'],
@@ -124,7 +114,7 @@ export function main({ lilos, root }) {
   // Keys pressed with the mouse keep the focus in the calculator, so the keyboard keeps working
   box.addEventListener('pointerdown', e => { if (!e.target.closest('button')) requestAnimationFrame(() => box.focus()); });
 
-  const off = lilos.on('locale', () => {
+  const off = onLocale(lilos, () => {
     sep = separators(lilos.locale.code ?? i18n().lang);
     drawKeys();
     draw();

@@ -1,6 +1,6 @@
 {
   "id": "zip",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "kind": "local",
   "name": "Zip",
   "description": "Compress files and folders into .zip archives and extract them, from the menu of files and folders (Compress → Zip or Unzip).",
@@ -8,6 +8,7 @@
   "icon": { "glyph": "archive", "color": "#b07a2a" },
   "publisher": { "id": "lilos", "name": "lilOS" },
   "sdk": "2",
+  "lilos": ">=1.21.0",
   "entrypoints": {
     "main": { "kind": "window" },
     "work": { "kind": "background", "label": "Compress and extract" }

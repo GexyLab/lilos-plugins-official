@@ -1,6 +1,7 @@
 {
   "en": {
     "strings": {
+      "@name": "FileCrypt",
       "@description": "Encrypt single files with a password. Encrypted files keep their name, open in their own app once unlocked and save encrypted again.",
       "@entrypoints.unlock.label": "Unlock",
       "@entrypoints.encrypt.label": "Encrypt",
@@ -95,6 +96,7 @@
   },
   "it": {
     "strings": {
+      "@name": "FileCrypt",
       "@description": "Cifra singoli file con una password. I file cifrati tengono il loro nome, si aprono nella loro app dopo lo sblocco e si salvano di nuovo cifrati.",
       "@entrypoints.unlock.label": "Sblocca",
       "@entrypoints.encrypt.label": "Cifra",

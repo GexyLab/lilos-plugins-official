@@ -1,6 +1,6 @@
 {
   "id": "filecrypt",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "kind": "local",
   "name": "FileCrypt",
   "description": "Encrypt single files with a password. Encrypted files keep their name, open in their own app once unlocked and save encrypted again.",
@@ -8,6 +8,7 @@
   "icon": { "glyph": "lock", "color": "#3f7d5c" },
   "publisher": { "id": "lilos", "name": "lilOS" },
   "sdk": "2",
+  "lilos": ">=1.21.0",
   "entrypoints": {
     "main": { "kind": "window" },
     "unlock": { "kind": "window", "label": "Unlock", "window": { "width": 400, "height": 290 } },

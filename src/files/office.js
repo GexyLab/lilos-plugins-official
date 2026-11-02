@@ -1,4 +1,4 @@
-import { Window, h, icon, fs, storage, openMenu, splitName } from '@lilos/sdk';
+import { storage, openMenu, splitName, messageBox } from '@lilos/sdk';
 import * as sdk from '@lilos/sdk';   // `net`, `notifications`: missing in older lilOS, so not imported by name
 import * as system from '@lilos/system';   // appFor: read by name only where it exists
 import { network, mountOf, protocolOf, openInBrowser, askSignIn } from './network.js';
@@ -113,15 +113,12 @@ export function uploadAndOpen(browser, node, { mount = null, ifExists = null } =
 }
 
 /** A file with that name is on OneDrive already: replace it, keep both, or give up. */
-function askExisting(browser, node, m, name) {
-  const win = new Window({ title: t('office.exists.title'), icon: 'warning', width: 420, height: 220, minWidth: 320, minHeight: 180 });
-  const pick = ifExists => { win.emit('close'); if (ifExists) uploadAndOpen(browser, node, { mount: m, ifExists }); };
-  win.body.append(h('div', { class: 'fm-net-dialog' },
-    h('div', { class: 'fm-net-body' }, h('p', {}, t('office.exists.text', { name, folder: prefs().folder }))),
-    h('div', { class: 'fm-net-foot' },
-      h('button', { class: 'ctl-btn', type: 'button', onclick: () => pick(null) }, t('net.cancel')),
-      h('span', { class: 'fm-sp' }),
-      h('button', { class: 'ctl-btn', type: 'button', onclick: () => pick('keep') }, t('office.exists.keep')),
-      h('button', { class: 'ctl-btn primary', type: 'button', onclick: () => pick('replace') }, icon('arrowUp'), t('office.exists.replace')))));
-  browser.openWindow(win);
+async function askExisting(browser, node, m, name) {
+  const ifExists = await messageBox(browser.win, {
+    icon: 'warning',
+    title: t('office.exists.title'),
+    text: t('office.exists.text', { name, folder: prefs().folder }),
+    buttons: ['cancel', { value: 'keep', label: t('office.exists.keep') }, { value: 'replace', label: t('office.exists.replace'), icon: 'arrowUp', primary: true }],
+  });
+  if (ifExists === 'keep' || ifExists === 'replace') uploadAndOpen(browser, node, { mount: m, ifExists });
 }

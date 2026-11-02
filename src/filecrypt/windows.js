@@ -1,7 +1,8 @@
 import { h, select, vaultChannel, STYLE } from './ui.js';
 import { strength } from './crypto.js';
 import { ALGORITHMS } from './format.js';
-import { readSettings, explain, record, SETTINGS_KEY } from './vault.js';
+import { readSettings, explain, SETTINGS_KEY } from './vault.js';
+import { fileFromArgs, recordStep, frame as sandboxFrame } from '../shared/sandbox/app.js';
 
 /**
  * FileCrypt's windows:
@@ -16,14 +17,7 @@ const ALG_OPTIONS = () => ALGORITHMS.map(a => [a, a]);
 const LOCK_OPTIONS = t => [5, 15, 30, 60, 0].map(m => [String(m), m ? t('settings.minutes', { n: m }) : t('settings.never')]);
 
 /** The window's root: its style and a box to draw in. Redraws when the language changes. */
-function frame(lilos, root, draw) {
-  root.append(h('style', {}, STYLE));
-  const box = h('div', { class: 'fc' });
-  root.append(box);
-  const redraw = () => draw(box);
-  const off = lilos.on('locale', redraw);
-  return { box, redraw, off };
-}
+const frame = (lilos, root, draw) => sandboxFrame(lilos, root, { style: STYLE, className: 'fc' }, draw);
 
 function busy(button, on) {
   button.disabled = on;
@@ -92,7 +86,7 @@ export async function unlock({ lilos, root, args }) {
   let file = null, mode = 'unlock', name = '', error = '';
   let vault = null;
   const take = a => {
-    file = a?.file ?? (Array.isArray(a?.files) ? a.files[0] : null);
+    file = fileFromArgs(a);
     mode = a?.action === 'filecrypt.decrypt' ? 'decrypt' : 'unlock';
     error = '';
   };
@@ -114,7 +108,7 @@ export async function unlock({ lilos, root, args }) {
         if (mode === 'unlock') await lilos.files.open(file);
         else {
           lilos.ui.toast(t('toast.decrypted', { name }));
-          await record(lilos, 'filecrypt.decrypt', { params: { file } });
+          await recordStep(lilos, 'filecrypt.decrypt', { params: { file } });
         }
         lilos.window.close();
       } catch (err) {
@@ -151,7 +145,7 @@ export async function unlock({ lilos, root, args }) {
 
 export async function encrypt({ lilos, root, args }) {
   const t = (k, p) => lilos.locale.i18n.t(k, p);
-  let file = Array.isArray(args?.files) ? args.files[0] : args?.file ?? null;
+  let file = fileFromArgs(args);
   let name = '';
   let vault = null;
   const settings = await readSettings(lilos);
@@ -184,7 +178,7 @@ export async function encrypt({ lilos, root, args }) {
         await vault.ask({ op: 'encrypt', file, password: first.value, alg: alg.value, kdf: kdf.value });
         first.value = second.value = '';
         lilos.ui.toast(t('toast.encrypted', { name }));
-        await record(lilos, 'filecrypt.encrypt', { params: { file, alg: alg.value, kdf: kdf.value }, defaults: { alg: settings.alg, kdf: settings.kdf } });
+        await recordStep(lilos, 'filecrypt.encrypt', { params: { file, alg: alg.value, kdf: kdf.value }, defaults: { alg: settings.alg, kdf: settings.kdf } });
         lilos.window.close();
       } catch (err) {
         message.textContent = explain(t, err);
@@ -210,7 +204,7 @@ export async function encrypt({ lilos, root, args }) {
     lilos.window.setTitle(t('encrypt.windowTitle'));
     redraw();
   };
-  const offLaunch = lilos.on('launch', a => { file = Array.isArray(a?.files) ? a.files[0] : a?.file ?? file; load(); });
+  const offLaunch = lilos.on('launch', a => { file = fileFromArgs(a) ?? file; load(); });
   await load();
   return () => { off(); offLaunch(); vault?.close(); };
 }

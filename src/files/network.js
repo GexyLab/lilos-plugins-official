@@ -1,7 +1,9 @@
-import { Window, h, icon, fs, openMenu } from '@lilos/sdk';
-import * as sdk from '@lilos/sdk';   // `net` and `messageBox`: missing in older lilOS, so not imported by name
+import { Window, h, icon, fs, openMenu, messageBox, formatBytes } from '@lilos/sdk';
+import * as sdk from '@lilos/sdk';   // `net`: missing in a lilOS without the network, so not imported by name
 import { pickFile, launch } from '@lilos/system';
 import * as system from '@lilos/system';   // `canLinkOnDesk`: missing in older lilOS
+import { fieldsForm, fieldText as text } from '../shared/fieldsForm.js';
+import { trustPrompt } from '../shared/trustPrompt.js';
 import { t } from './i18n.js';
 
 /**
@@ -94,9 +96,7 @@ export function mountMenu(browser, m, x, y) {
 }
 
 async function removeMount(browser, m) {
-  const answer = sdk.messageBox
-    ? await sdk.messageBox(browser.win, { icon: 'warning', title: t('net.remove.title', { name: m.name }), text: t('net.remove.text'), buttons: ['continue', 'cancel'] })
-    : 'continue';
+  const answer = await messageBox(browser.win, { icon: 'warning', title: t('net.remove.title', { name: m.name }), text: t('net.remove.text'), buttons: ['continue', 'cancel'] });
   if (answer === 'continue') network()?.remove(m.id).catch(err => browser.netError(err));
 }
 
@@ -117,7 +117,7 @@ export function mountBar(browser, folderId) {
   if (m.state === 'on' && protocol?.space && sdk.net.space) {
     sdk.net.space(m.id).then(s => {
       if (!s) return;
-      space.textContent = s.total ? t('net.space.of', { used: bytes(s.used), total: bytes(s.total) }) : t('net.space.used', { used: bytes(s.used) });
+      space.textContent = s.total ? t('net.space.of', { used: formatBytes(s.used), total: formatBytes(s.total) }) : t('net.space.used', { used: formatBytes(s.used) });
     }, () => {});
   }
   return h('div', { class: `fm-mountbar ${m.state}` },
@@ -128,14 +128,6 @@ export function mountBar(browser, folderId) {
     importer,
     web,
     m.state === 'on' ? disconnect : null);
-}
-
-/** '1,2 GB' */
-function bytes(n) {
-  const units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
-  let v = n, u = 0;
-  while (v >= 1024 && u < units.length - 1) { v /= 1024; u++; }
-  return `${u ? v.toLocaleString(undefined, { maximumFractionDigits: 1 }) : v} ${units[u]}`;
 }
 
 /**
@@ -216,8 +208,8 @@ export function importDialog(browser, m) {
   showWhere();
   win.body.append(h('div', { class: 'fm-net-dialog' },
     h('div', { class: 'fm-net-body' },
-      h('div', { class: 'fm-net-row' }, h('label', {}, t('net.import.where')), h('div', { class: 'fm-net-pick' }, where, change)),
-      h('div', { class: 'fm-net-row' }, h('label', {}, t('net.import.step')), h('div', {}, pick), h('small', {}, t('net.import.hint'))),
+      h('div', { class: 'sh-field' }, h('label', {}, t('net.import.where')), h('div', { class: 'sh-field-pick' }, where, change)),
+      h('div', { class: 'sh-field' }, h('label', {}, t('net.import.step')), h('div', {}, pick), h('small', { class: 'sh-field-hint' }, t('net.import.hint'))),
       status),
     h('div', { class: 'fm-net-foot' }, h('span', { class: 'fm-sp' }),
       h('button', { class: 'ctl-btn', type: 'button', onclick: () => win.emit('close') }, t('net.cancel')), go)));
@@ -265,16 +257,7 @@ export async function readRemote(browser, id) {
 
 /** Asks the user to confirm a server (its key or certificate), then connects with it. Resolves true if confirmed. */
 async function confirmTrust(browser, mountId, name, trust) {
-  if (!trust?.fingerprint || !sdk.messageBox) return false;
-  // A key or certificate other than the one confirmed before: someone may be in between
-  const changed = trust.changed === true;
-  const answer = await sdk.messageBox(browser.win, {
-    icon: changed ? 'error' : 'warning',
-    title: t(changed ? 'net.trust.changed.title' : 'net.trust.title', { name }),
-    text: t(changed ? 'net.trust.changed' : trust.kind === 'ssh' ? 'net.trust.ssh' : 'net.trust.tls', { fingerprint: trust.text ?? trust.fingerprint, previous: trust.previous ?? '' }),
-    buttons: ['continue', 'cancel'], default: 'cancel',
-  });
-  if (answer !== 'continue') return false;
+  if (!await trustPrompt(browser.win, trust, { t, name })) return false;
   try {
     await network().connect(mountId, { trust: trust.fingerprint });
     return true;
@@ -287,53 +270,37 @@ async function confirmTrust(browser, mountId, name, trust) {
 
 // ---------- Fields of a protocol ----------
 
-const text = v => network()?.text(v) ?? (typeof v === 'string' ? v : '');
-const shown = (f, values) => !f.when || Object.entries(f.when).every(([k, want]) => (Array.isArray(want) ? want.includes(values[k]) : values[k] === want));
-
 /**
- * The fields of a protocol in a form: returns { el, values(), secret(), check() }.
+ * The fields of a protocol in a form (the shared fieldsForm, see its options), with what only the
+ * File Manager has: the sign-in to an account ('signin' fields) and the list of shares of a server.
+ * Returns the form, and signin(): the sign-in made in this window (its id for the kernel), or null.
  *   initial   values of a connection being changed (its secret fields stay empty: "unchanged"), or to start from
- *   editing   the values are a saved connection's (default: when there is a server in them)
+ *   editing   the values are a saved connection's
  *   only      'secret': only the secret fields (asking the password again)
+ *   onShares  (button, pick) lists the shares of the server under the button; pick(name) chooses one
  */
-function protocolFields(browser, protocol, { initial = {}, editing = !!initial.host, only = null, onShares = null, onChange = null } = {}) {
-  const values = { ...initial }, secret = {};
+function protocolFields(browser, protocol, { initial = {}, editing = false, only = null, onShares = null, onChange = null } = {}) {
   const signin = { id: null };   // a sign-in made in this window: the kernel keeps what it gave
-  for (const f of protocol.fields) if (values[f.key] === undefined && f.default !== undefined && !f.secret) values[f.key] = f.default;
-  const rows = [];
-  const el = h('div', { class: 'fm-net-fields' });
-  const draw = () => {
-    rows.length = 0;
-    for (const f of protocol.fields) {
-      if (only === 'secret' && !f.secret) continue;
-      if (!shown(f, values)) continue;
-      if (f.type === 'signin') {
-        rows.push(signInRow(browser, protocol, f, values, signin, () => { onChange?.(); draw(); }));
-        continue;
-      }
-      rows.push(fieldRow(browser, f, f.secret ? secret : values, { editing: editing && f.secret, onShares, changed: () => { onChange?.(); if (protocol.fields.some(x => x.when)) draw(); } }));
-    }
-    el.replaceChildren(...rows);
-  };
-  draw();
-  return {
-    el,
-    values: () => Object.fromEntries(Object.entries(values).filter(([k]) => protocol.fields.some(f => f.key === k && !f.secret && f.type !== 'signin' && shown(f, values)))),
-    secret: () => ({ ...secret }),
-    /** The sign-in made here (its id for the kernel), or null. */
-    signin: () => signin.id,
-    /** The keys of required fields shown and left empty (secret ones count only when asked for). */
-    missing: (needSecret = true) => protocol.fields.filter(f => f.required && shown(f, values) && (
-      f.type === 'signin' ? !signin.id && !values[f.key] : f.secret ? needSecret && !secret[f.key] : values[f.key] === undefined || values[f.key] === '')).map(f => text(f.label)),
-    focus: () => el.querySelector('input, select, textarea')?.focus(),
-  };
+  const form = fieldsForm(protocol.fields, {
+    t, values: initial, editing, only, onChange,
+    pickFile: options => pickFile(browser.openWindow, options),
+    signin: (f, { values, changed }) => signInRow(protocol, f, values, signin, changed),
+    extra: (f, { set }) => {
+      if (f.key !== 'share' || !onShares) return null;
+      const list = h('button', { class: 'ctl-btn', type: 'button' }, t('net.shares.list'));
+      list.addEventListener('click', () => onShares(list, set));
+      return list;
+    },
+  });
+  return { ...form, signin: () => signin.id };
 }
 
 /**
  * A 'signin' field: the account signed in to, or the button that opens the provider's page in a
  * window (lilOS waits for it there, with Annulla). Signing in again here changes the account.
  */
-function signInRow(browser, protocol, f, values, signin, changed) {
+function signInRow(protocol, f, values, signin, changed) {
+  const row = h('div', { class: 'sh-field' });
   const status = h('small', { class: 'fm-net-wait', role: 'status' });
   const paste = pasteBox(status);
   let controller = null, buttons = [];
@@ -350,6 +317,7 @@ function signInRow(browser, protocol, f, values, signin, changed) {
     asked.then(({ signin: id, account }) => {
       signin.id = id;
       values[f.key] = account;
+      draw();
       changed();
     }, err => {
       for (const b of buttons) b.disabled = false;
@@ -360,17 +328,23 @@ function signInRow(browser, protocol, f, values, signin, changed) {
     });
   };
   const cancel = h('button', { class: 'ctl-btn', type: 'button', hidden: true, onclick: () => controller?.abort() }, t('net.cancel'));
-  const label = h('label', {}, text(f.label), f.required ? h('span', { class: 'fm-req', 'aria-hidden': 'true' }, ' *') : null);
-  if (values[f.key]) {
-    const other = h('button', { class: 'ctl-btn', type: 'button', onclick: go }, t('net.signin.other'));
-    buttons = [other];
-    return h('div', { class: 'fm-net-row' }, label,
-      h('div', { class: 'fm-net-account' }, icon(signin.id ? 'check' : 'user'), h('span', { class: 'fm-net-who' }, values[f.key]), other, cancel),
-      paste.el, status);
-  }
-  const button = h('button', { class: 'ctl-btn primary fm-signin', type: 'button', onclick: go }, icon('user'), text(f.button) || t('net.signin.button'));
-  buttons = [button];
-  return h('div', { class: 'fm-net-row' }, label, h('div', { class: 'fm-net-pick' }, button, cancel), f.hint ? h('small', {}, text(f.hint)) : null, paste.el, status);
+  // Drawn again in place once signed in: the account instead of the button
+  const draw = () => {
+    cancel.hidden = true;
+    const label = h('label', {}, text(f.label), f.required ? h('span', { class: 'sh-field-req', 'aria-hidden': 'true' }, ' *') : null);
+    if (values[f.key]) {
+      const other = h('button', { class: 'ctl-btn', type: 'button', onclick: go }, t('net.signin.other'));
+      buttons = [other];
+      return row.replaceChildren(label,
+        h('div', { class: 'fm-net-account' }, icon(signin.id ? 'check' : 'user'), h('span', { class: 'fm-net-who' }, values[f.key]), other, cancel),
+        paste.el, status);
+    }
+    const button = h('button', { class: 'ctl-btn primary fm-signin', type: 'button', onclick: go }, icon('user'), text(f.button) || t('net.signin.button'));
+    buttons = [button];
+    row.replaceChildren(label, h('div', { class: 'sh-field-pick' }, button, cancel), f.hint ? h('small', { class: 'sh-field-hint' }, text(f.hint)) : null, paste.el, status);
+  };
+  draw();
+  return row;
 }
 
 /**
@@ -384,7 +358,7 @@ function pasteBox(status) {
   const go = h('button', { class: 'ctl-btn primary', type: 'button' }, t('net.signin.paste.go'));
   const el = h('div', { class: 'fm-net-paste', hidden: true },
     h('small', {}, t('net.signin.paste.text')),
-    h('div', { class: 'fm-net-pick' }, input, go));
+    h('div', { class: 'sh-field-pick' }, input, go));
   const ask = signal => error => new Promise(resolve => {
     el.hidden = false;
     status.textContent = error ?? '';
@@ -399,63 +373,13 @@ function pasteBox(status) {
   return { el, ask };
 }
 
-function fieldRow(browser, f, store, { editing, onShares, changed }) {
-  const id = `fm-net-${f.key}-${Math.random().toString(36).slice(2, 7)}`;
-  const label = h('label', { for: id }, text(f.label), f.required ? h('span', { class: 'fm-req', 'aria-hidden': 'true' }, ' *') : null);
-  const set = v => { if (v === '' || v === undefined) delete store[f.key]; else store[f.key] = v; changed(); };
-  let input;
-  if (f.type === 'checkbox') {
-    input = h('input', { id, type: 'checkbox', checked: store[f.key] === true });
-    input.addEventListener('change', () => set(input.checked));
-    return h('label', { class: 'fm-net-check' }, input, text(f.label));
-  }
-  if (f.type === 'select') {
-    // Disabled options are shown («coming»), not chosen
-    input = h('select', { id, class: 'ctl-select' }, ...(f.options ?? []).map(o => h('option', { value: String(o.value), selected: o.value === store[f.key], disabled: !!o.disabled }, text(o.label))));
-    input.addEventListener('change', () => set(f.options.find(o => String(o.value) === input.value)?.value));
-  } else if (f.type === 'textarea') {
-    input = h('textarea', { id, class: 'ctl-text', rows: '3', spellcheck: 'false', placeholder: f.placeholder ?? '' });
-    input.value = store[f.key] ?? '';
-    input.addEventListener('input', () => set(input.value));
-  } else if (f.type === 'file') {
-    // The text of a file of lilOS (a private key): chosen, read, kept as the field's value
-    const name = h('span', { class: 'fm-net-file' }, store[f.key] ? t('net.file.chosen') : editing ? t('net.secret.unchanged') : t('net.file.none'));
-    input = h('button', { id, class: 'ctl-btn', type: 'button' }, t('net.file.browse'));
-    input.addEventListener('click', async () => {
-      const node = await pickFile(browser.openWindow, { title: text(f.label) });
-      if (!node) return;
-      try {
-        set(await fs.read(node.id));
-        name.textContent = node.name;
-      } catch (err) { browser.netError(err); }
-    });
-    return h('div', { class: 'fm-net-row' }, label, h('div', { class: 'fm-net-pick' }, name, input), f.hint ? h('small', {}, text(f.hint)) : null);
-  } else {
-    const type = f.type === 'password' ? 'password' : f.type === 'number' ? 'number' : 'text';
-    input = h('input', {
-      id, class: 'ctl-text', type, spellcheck: 'false', autocomplete: f.type === 'password' ? 'new-password' : 'off',
-      placeholder: f.secret && editing ? t('net.secret.unchanged') : f.placeholder ?? '',
-      ...(f.min !== undefined && { min: String(f.min) }), ...(f.max !== undefined && { max: String(f.max) }),
-    });
-    input.value = store[f.key] ?? '';
-    input.addEventListener('input', () => set(type === 'number' ? (input.value === '' ? '' : Number(input.value)) : input.value));
-  }
-  const row = [label];
-  if (f.key === 'share' && onShares) {
-    const list = h('button', { class: 'ctl-btn', type: 'button' }, t('net.shares.list'));
-    list.addEventListener('click', () => onShares(list, name => { input.value = name; set(name); }));
-    row.push(h('div', { class: 'fm-net-pick' }, input, list));
-  } else row.push(input);
-  if (f.hint) row.push(h('small', {}, text(f.hint)));
-  return h('div', { class: 'fm-net-row' }, ...row);
-}
-
 // ---------- Windows ----------
 
 /**
  * Connetti a un server (m: a connection to change, or none for a new one): the protocol from a
  * list, its fields, the name of the folder in Rete, remember the password, connect at sign-in.
- * Prova tries without saving; the main button saves and connects (and opens the folder).
+ * Prova tries without saving; the main button saves and connects (and opens the folder). A
+ * server lilOS does not know yet is confirmed in a message box (trustPrompt), then tried again.
  *   initial      a new connection filled in: { protocol, values, name } (Nuovo collegamento)
  *   onConnected  (mount) once connected, in place of opening its folder; onClosed: closed before
  */
@@ -471,13 +395,12 @@ export function connectDialog(browser, m = null, { initial = null, onConnected =
   const groups = GROUPS.map(g => [g, net.protocols.filter(p => (p.group ?? 'server') === g)]).filter(([, list]) => list.length);
   const select = h('select', { class: 'ctl-select', id: 'fm-net-protocol', disabled: !!m },
     ...(groups.length > 1 ? groups.map(([g, list]) => h('optgroup', { label: t(`net.group.${g}`) }, ...list.map(option))) : net.protocols.map(option)));
-  const name = h('input', { class: 'ctl-text', type: 'text', spellcheck: 'false', value: m?.name ?? initial?.name ?? '' });
-  const nameHint = h('small');
+  const name = h('input', { class: 'ctl-text', type: 'text', id: 'fm-net-name', spellcheck: 'false', value: m?.name ?? initial?.name ?? '' });
+  const nameHint = h('small', { class: 'sh-field-hint' });
   const remember = h('input', { type: 'checkbox', checked: m ? m.remembered : true });
   const rememberText = h('span', {}, t('net.remember'));
   const auto = h('input', { type: 'checkbox', checked: !!m?.auto });
   const holder = h('div');
-  const note = h('div', { class: 'fm-net-note', hidden: true, role: 'alert' });
   const status = h('p', { class: 'fm-net-status', role: 'status' });
   const test = h('button', { class: 'ctl-btn', type: 'button' }, t('net.test'));
   const cancel = h('button', { class: 'ctl-btn', type: 'button', onclick: () => win.emit('close') }, t('net.cancel'));
@@ -488,8 +411,6 @@ export function connectDialog(browser, m = null, { initial = null, onConnected =
   const say = (msg, bad = false) => { status.textContent = msg; status.classList.toggle('bad', bad); };
   const draw = () => {
     trust = null;
-    note.hidden = true;
-    save.textContent = m ? t('net.save') : t('net.connect.go');
     // Not usable yet (a module setting missing): why, instead of the fields
     const why = protocol.notReady;
     test.disabled = save.disabled = !!why;
@@ -508,36 +429,39 @@ export function connectDialog(browser, m = null, { initial = null, onConnected =
       onShares: protocol.canListShares ? listShares : null,
       onChange: () => {
         if (!named) { name.value = fields.values().host ?? (signsIn(protocol) ? text(protocol.label) : ''); hint(); }
-        if (trust) { trust = null; note.hidden = true; save.textContent = m ? t('net.save') : t('net.connect.go'); }
+        trust = null;   // another server: confirmed again
       },
     });
     holder.replaceChildren(fields.el);
   };
-  const config = () => ({ protocol: protocol.id, values: fields.values(), ...(trust && { trust: trust.fingerprint }), ...(fields.signin() && { signin: fields.signin() }) });
+  /** What the kernel gets: the configuration, and the secrets apart (files of the fields read now). */
+  const config = async () => {
+    const { values, secret } = await fields.read();
+    return [{ protocol: protocol.id, values, ...(trust && { trust: trust.fingerprint }), ...(fields.signin() && { signin: fields.signin() }) }, secret];
+  };
+  /** A server lilOS does not know: true when the user confirms it (it goes with the next tries). */
+  const confirm = async tr => {
+    if (!await trustPrompt(win, tr, { t, name: name.value.trim() || tr?.host })) return false;
+    trust = tr;
+    return true;
+  };
 
   async function listShares(button, pick) {
+    button.disabled = true;
     try {
-      button.disabled = true;
-      const shares = await net.shares(config(), fields.secret());
-      const r = button.getBoundingClientRect();
-      if (!shares.length) return say(t('net.shares.none'));
-      openMenu(r.left, r.bottom, shares.map(s => ({ label: s, icon: 'folder', action: () => pick(s) })));
-    } catch (err) {
-      if (err.code === 'untrusted') return showTrust(err.details?.trust);
-      say(err.message, true);
+      for (;;) {
+        try {
+          const shares = await net.shares(...await config());
+          const r = button.getBoundingClientRect();
+          if (!shares.length) return say(t('net.shares.none'));
+          return void openMenu(r.left, r.bottom, shares.map(s => ({ label: s, icon: 'folder', action: () => pick(s) })));
+        } catch (err) {
+          if (err.code === 'untrusted' && await confirm(err.details?.trust)) continue;
+          return say(err.code === 'untrusted' ? '' : err.message, true);
+        }
+      }
     } finally { button.disabled = false; }
   }
-
-  /** A server to confirm: its fingerprint in the window; the main button confirms and goes on. */
-  const showTrust = tr => {
-    if (!tr?.fingerprint) return;
-    trust = tr;
-    note.replaceChildren(h('b', {}, t('net.trust.first')), ' ', t(tr.kind === 'ssh' ? 'net.trust.key' : 'net.trust.cert'),
-      h('code', {}, tr.text ?? tr.fingerprint), h('span', {}, t('net.trust.check')));
-    note.hidden = false;
-    save.textContent = t('net.trust.go');
-    say('');
-  };
 
   select.addEventListener('change', () => { protocol = net.protocols.find(p => p.id === select.value); draw(); });
   name.addEventListener('input', () => { named = !!name.value.trim(); hint(); });
@@ -546,12 +470,14 @@ export function connectDialog(browser, m = null, { initial = null, onConnected =
     const missing = fields.missing(!m);
     if (missing.length) return say(t('net.missing', { fields: missing.join(', ') }), true);
     say(t('net.testing'));
-    try {
-      await net.test(config(), fields.secret());
-      say(t('net.test.ok'));
-    } catch (err) {
-      if (err.code === 'untrusted') return showTrust(err.details?.trust);
-      say(err.message, true);
+    for (;;) {
+      try {
+        await net.test(...await config());
+        return say(t('net.test.ok'));
+      } catch (err) {
+        if (err.code === 'untrusted' && await confirm(err.details?.trust)) continue;
+        return say(err.code === 'untrusted' ? '' : err.message, true);
+      }
     }
   });
 
@@ -562,16 +488,18 @@ export function connectDialog(browser, m = null, { initial = null, onConnected =
     save.disabled = true;
     say(t('net.connecting'));
     try {
-      const body = { name: name.value.trim(), ...config(), auto: auto.checked, remember: remember.checked };
-      const saved = m ? await net.update(m.id, body, fields.secret()) : await net.create(body, fields.secret());
+      const [values, secret] = await config();
+      const body = { name: name.value.trim(), ...values, auto: auto.checked, remember: remember.checked };
+      const saved = m ? await net.update(m.id, body, secret) : await net.create(body, secret);
       m = saved;
-      try {
-        await net.connect(saved.id, trust ? { trust: trust.fingerprint } : {});
-      } catch (err) {
-        if (err.code === 'untrusted') { showTrust(err.details?.trust); return; }
-        if (err.code === 'secret_required') { say(err.message, true); return; }
-        say(err.message, true);
-        return;
+      for (;;) {
+        try {
+          await net.connect(saved.id, trust ? { trust: trust.fingerprint } : {});
+          break;
+        } catch (err) {
+          if (err.code === 'untrusted' && await confirm(err.details?.trust)) continue;
+          return say(err.code === 'untrusted' ? '' : err.message, true);
+        }
       }
       connected = true;
       win.emit('close');
@@ -589,12 +517,11 @@ export function connectDialog(browser, m = null, { initial = null, onConnected =
   hint();
   win.body.append(h('div', { class: 'fm-net-dialog' },
     h('div', { class: 'fm-net-body' },
-      h('div', { class: 'fm-net-row' }, h('label', { for: 'fm-net-protocol' }, t('net.protocol')), select),
+      h('div', { class: 'sh-field' }, h('label', { for: 'fm-net-protocol' }, t('net.protocol')), select),
       holder,
-      h('div', { class: 'fm-net-row' }, h('label', {}, t('net.name')), name, nameHint),
-      h('label', { class: 'fm-net-check' }, remember, rememberText),
-      h('label', { class: 'fm-net-check' }, auto, t('net.auto')),
-      note,
+      h('div', { class: 'sh-field' }, h('label', { for: 'fm-net-name' }, t('net.name')), name, nameHint),
+      h('label', { class: 'sh-field-check' }, remember, rememberText),
+      h('label', { class: 'sh-field-check' }, auto, t('net.auto')),
       status),
     h('div', { class: 'fm-net-foot' }, test, h('span', { class: 'fm-sp' }), cancel, save)));
   browser.openWindow(win);
@@ -603,92 +530,75 @@ export function connectDialog(browser, m = null, { initial = null, onConnected =
 
 /**
  * Asks to sign in again to the account of a connection (the provider no longer takes the one it
- * had), then connects with the new sign-in. Resolves true once connected, false if the user gave up.
+ * had), then connects with the new sign-in: a message box over the File Manager with the button
+ * that opens the provider's page. Resolves true once connected, false if the user gave up.
  */
-export function askSignIn(browser, m) {
+export async function askSignIn(browser, m) {
   const net = network();
   const protocol = net?.protocols.find(p => p.id === m.protocol);
-  if (!protocol || !net.signIn) return Promise.resolve(false);
-  return new Promise(resolve => {
-    const win = new Window({ title: t('net.signin.again.title', { name: m.name }), icon: 'user', width: 420, height: 300, minWidth: 320, minHeight: 200 });
-    const field = protocol.fields.find(f => f.type === 'signin');
-    const status = h('p', { class: 'fm-net-status', role: 'status' });
-    const paste = pasteBox(status);
-    const go = h('button', { class: 'ctl-btn primary', type: 'button' }, icon('user'), text(field?.button) || t('net.signin.button'));
-    let done = false, controller = null;
-    const finish = value => { if (done) return; done = true; controller?.abort(); resolve(value); win.emit('close'); };
-    go.addEventListener('click', () => {
-      controller?.abort();
-      controller = new AbortController();
-      const manual = !!net.signInByHand?.(protocol);
-      const asked = net.signIn(protocol.id, m.values, { signal: controller.signal, ...(manual && { manual: true, askAddress: paste.ask(controller.signal) }) });
-      go.disabled = true;
-      status.classList.remove('bad');
-      status.textContent = manual ? '' : t('net.signin.waiting');
-      asked.then(({ signin }) => net.connect(m.id, { signin, remember: m.remembered }))
-        .then(() => finish(true), err => {
-          go.disabled = false;
-          paste.el.hidden = true;
-          if (err.code === 'canceled') { status.textContent = ''; return; }
-          status.textContent = err.code === 'blocked' ? t('net.signin.blocked') : err.message;
-          status.classList.add('bad');
-        });
-    });
-    win.on('destroy', () => { if (!done) { done = true; controller?.abort(); resolve(false); } });
-    win.body.append(h('div', { class: 'fm-net-dialog' },
-      h('div', { class: 'fm-net-body' },
-        h('p', {}, t('net.signin.again.text', { account: m.values?.[field?.key] ?? m.address })),
-        h('div', {}, go),
-        paste.el,
-        status),
-      h('div', { class: 'fm-net-foot' }, h('span', { class: 'fm-sp' }),
-        h('button', { class: 'ctl-btn', type: 'button', onclick: () => finish(false) }, t('net.later')))));
-    browser.openWindow(win);
-    requestAnimationFrame(() => go.focus());
+  if (!protocol || !net.signIn) return false;
+  const field = protocol.fields.find(f => f.type === 'signin');
+  const status = h('p', { class: 'fm-net-status', role: 'status' });
+  const paste = pasteBox(status);
+  const go = h('button', { class: 'ctl-btn primary', type: 'button' }, icon('user'), text(field?.button) || t('net.signin.button'));
+  let controller = null;
+  const box = messageBox(browser.win, {
+    icon: 'info',
+    title: t('net.signin.again.title', { name: m.name }),
+    text: t('net.signin.again.text', { account: m.values?.[field?.key] ?? m.address }),
+    content: h('div', { class: 'fm-net-signin' }, h('div', {}, go), paste.el, status),
+    buttons: [{ value: 'cancel', label: t('net.later') }],
   });
+  go.addEventListener('click', () => {
+    controller?.abort();
+    controller = new AbortController();
+    const manual = !!net.signInByHand?.(protocol);
+    const asked = net.signIn(protocol.id, m.values, { signal: controller.signal, ...(manual && { manual: true, askAddress: paste.ask(controller.signal) }) });
+    go.disabled = true;
+    status.classList.remove('bad');
+    status.textContent = manual ? '' : t('net.signin.waiting');
+    asked.then(({ signin }) => net.connect(m.id, { signin, remember: m.remembered }))
+      .then(() => box.close('connected'), err => {
+        go.disabled = false;
+        paste.el.hidden = true;
+        if (err.code === 'canceled') { status.textContent = ''; return; }
+        status.textContent = err.code === 'blocked' ? t('net.signin.blocked') : err.message;
+        status.classList.add('bad');
+      });
+  });
+  go.focus();
+  const answer = await box;
+  controller?.abort();
+  return answer === 'connected';
 }
 
 /**
- * Asks the password (the secret fields of the protocol) of a connection, then connects with it.
- * wrong: the last one was not right. Resolves true once connected (or when the next step is to
- * confirm the server), false if the user gave up.
+ * Asks the password (the secret fields of the protocol) of a connection in a message box, and
+ * connects with it before the box closes. wrong: the last one was not right. Resolves true once
+ * connected (or when the next step is to confirm the server), false if the user gave up.
  */
-function askSecret(browser, m, wrong = false) {
+async function askSecret(browser, m, wrong = false) {
   const net = network();
   const protocol = net?.protocols.find(p => p.id === m.protocol);
-  if (!protocol) return Promise.resolve(false);
-  return new Promise(resolve => {
-    const win = new Window({ title: t('net.password.title', { name: m.name }), icon: 'lock', width: 380, height: 300, minWidth: 320, minHeight: 220 });
-    const fields = protocolFields(browser, protocol, { initial: m.values, only: 'secret' });
-    const remember = h('input', { type: 'checkbox', checked: m.remembered });
-    const status = h('p', { class: 'fm-net-status bad', role: 'status' }, wrong ? t('net.password.wrong') : '');
-    const ok = h('button', { class: 'ctl-btn primary', type: 'button' }, t('net.connect.go'));
-    let done = false;
-    const finish = value => { if (done) return; done = true; resolve(value); win.emit('close'); };
-    const go = async () => {
-      ok.disabled = true;
-      status.textContent = '';
+  if (!protocol) return false;
+  const fields = protocolFields(browser, protocol, { initial: m.values, only: 'secret' });
+  const box = messageBox(browser.win, {
+    icon: wrong ? 'warning' : 'info',
+    title: t('net.password.title', { name: m.name }),
+    text: [wrong && t('net.password.wrong'), t('net.password.text', { address: m.address })].filter(Boolean).join('\n\n'),
+    content: fields.el,
+    fields: [{ name: 'remember', type: 'checkbox', label: t('net.remember'), value: m.remembered }],
+    buttons: ['cancel', { value: 'connect', label: t('net.connect.go'), primary: true }],
+    validate: async ({ remember }) => {
       try {
-        await net.connect(m.id, { secret: fields.secret(), remember: remember.checked });
-        finish(true);
+        await net.connect(m.id, { secret: await fields.secret(), remember });
       } catch (err) {
-        if (err.code === 'untrusted') return finish(true);   // reading again asks to confirm the server
-        status.textContent = err.message;
-        ok.disabled = false;
+        if (err.code !== 'untrusted') return err.message;   // untrusted: reading again asks to confirm the server
       }
-    };
-    ok.addEventListener('click', go);
-    fields.el.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); go(); } });
-    win.on('destroy', () => { if (!done) { done = true; resolve(false); } });
-    win.body.append(h('div', { class: 'fm-net-dialog' },
-      h('div', { class: 'fm-net-body' },
-        h('p', {}, t('net.password.text', { address: m.address })),
-        fields.el,
-        h('label', { class: 'fm-net-check' }, remember, t('net.remember')),
-        status),
-      h('div', { class: 'fm-net-foot' }, h('span', { class: 'fm-sp' }),
-        h('button', { class: 'ctl-btn', type: 'button', onclick: () => finish(false) }, t('net.cancel')), ok)));
-    browser.openWindow(win);
-    requestAnimationFrame(() => fields.focus());
+      return true;
+    },
   });
+  fields.focus();   // the password, not the checkbox under it
+  const { button } = await box;
+  return button === 'connect';
 }

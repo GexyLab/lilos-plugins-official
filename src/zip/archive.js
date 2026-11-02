@@ -33,7 +33,8 @@ const cleanName = name => String(name).replace(/[\u0000-\u001f\u007f]/g, '').rep
 
 /**
  * `name`, or `name 2.ext`, `name 3.ext`… if `taken` (lower-case names) has it, like lilOS's
- * fs.uniqueName. The name it gives back is added to `taken`.
+ * fs.uniqueName: for names inside an archive (lilOS gives the free names of what is saved,
+ * files.write and files.mkdir with `unique`). The name it gives back is added to `taken`.
  */
 function unique(name, taken, { folder = false } = {}) {
   const ext = folder ? '' : extOf(name);
@@ -44,16 +45,10 @@ function unique(name, taken, { folder = false } = {}) {
   return out;
 }
 
-/** Paths: '/home/eugenio/Documenti' (files.info) ↔ '~/Documenti' (what the files.* calls take). */
-export async function paths(lilos) {
-  const home = (await lilos.files.info('~')).path;
-  return {
-    ref: path => (path === home ? '~' : path.startsWith(`${home}/`) ? `~${path.slice(home.length)}` : fail('outside', path)),
-    parent: ref => ref.slice(0, ref.lastIndexOf('/')) || '~',
-  };
-}
-
-const namesIn = async (lilos, ref) => new Set((await lilos.files.list(ref)).map(n => n.name.toLowerCase()));
+/** The '~' path of an item (files.info gives it: what the files.* calls take). */
+const refOf = info => info.ref ?? fail('outside', info.path);
+/** The folder of a '~' path. */
+const parent = ref => ref.slice(0, ref.lastIndexOf('/')) || '~';
 
 const bytes = async (lilos, ref) => new Uint8Array(await (await lilos.files.read(ref, { bytes: true })).arrayBuffer());
 
@@ -63,11 +58,10 @@ const mtime = ms => new Date(Math.min(Math.max(Number.isFinite(ms) ? ms : Date.n
 /**
  * Packs these items (ids of files and folders, in one folder) into a new .zip next to the first:
  * '<name>.zip' for one item, '<archiveName>.zip' for more (with a number if the name is taken).
- * → { name, ref, count, size }
+ * → { name, ref, id, count, size }
  */
 export async function pack(lilos, ids, { archiveName = 'Archive', onProgress } = {}) {
-  const { ref: refOf, parent } = await paths(lilos);
-  const top = (await Promise.all(ids.map(id => lilos.files.info(id)))).map(i => ({ ...i, ref: refOf(i.path) }));
+  const top = (await Promise.all(ids.map(id => lilos.files.info(id)))).map(i => ({ ...i, ref: refOf(i) }));
   if (!top.length) throw fail('nothing');
   const dir = parent(top[0].ref);
 
@@ -97,10 +91,8 @@ export async function pack(lilos, ids, { archiveName = 'Archive', onProgress } =
   if (zipped.byteLength > MAX_FILE) throw fail('resultTooBig', zipped.byteLength);
   const first = top[0];
   const wanted = top.length === 1 ? (first.type === 'folder' ? first.name : baseOf(first.name)) : archiveName;
-  const name = unique(`${wanted}.zip`, await namesIn(lilos, dir));
-  const ref = `${dir}/${name}`;
-  await lilos.files.write(ref, zipped);
-  return { name, ref, count, size: zipped.byteLength };
+  const made = await lilos.files.write(`${dir}/${wanted}.zip`, zipped, { unique: true });
+  return { name: made.name, ref: made.ref, id: made.id, count, size: zipped.byteLength };
 }
 
 /** 'a//b\\c.txt' → ['a', 'b', 'c.txt'] (names as lilOS keeps them), null if unsafe. */
@@ -171,10 +163,9 @@ export function read(data) {
  * Unpacks a .zip (a file id or a '~' path) next to it. An archive with a single folder at the top
  * gives that folder; otherwise a new folder named as the archive holds everything. Names already
  * taken get a number: nothing is ever overwritten.
- * → { name, ref, count, skipped: [{ name, why }] }
+ * → { name, ref, id, count, skipped: [{ name, why }] }
  */
 export async function unpack(lilos, file, { onProgress } = {}) {
-  const { ref: refOf, parent } = await paths(lilos);
   const info = await lilos.files.info(file);
   if (info.type !== 'file') throw fail('notZip', info.name);
   const data = await bytes(lilos, file).catch(err => { throw fail('read', `${info.name}: ${err?.message ?? err}`); });
@@ -182,9 +173,9 @@ export async function unpack(lilos, file, { onProgress } = {}) {
   if (!entries.length) throw fail(skipped.length ? 'skippedAll' : 'empty', info.name);
 
   const single = new Set(entries.map(e => e.path[0].toLowerCase())).size === 1 && entries.every(e => e.path.length > 1 || e.folder);
-  const dir = parent(refOf(info.path));
-  const name = unique(cleanName(single ? entries[0].path[0] : baseOf(info.name)) || 'Archive', await namesIn(lilos, dir), { folder: true });
-  const root = `${dir}/${name}`;
+  const dir = parent(refOf(info));
+  const made = await lilos.files.mkdir(`${dir}/${cleanName(single ? entries[0].path[0] : baseOf(info.name)) || 'Archive'}`, { unique: true });
+  const root = made.ref;
 
   // Where each folder of the archive goes, chosen once; names that differ only by case (lilOS
   // does not tell them apart) get a number
@@ -210,7 +201,7 @@ export async function unpack(lilos, file, { onProgress } = {}) {
     }
   }
   // A parent always comes before its folders in the map
-  for (const d of [root, ...folders.values()]) await lilos.files.mkdir(d);
+  for (const d of folders.values()) await lilos.files.mkdir(d);
 
   let count = 0;
   const contents = unzipSync(data, { filter: f => targets.has(f.name) });
@@ -220,5 +211,5 @@ export async function unpack(lilos, file, { onProgress } = {}) {
     await lilos.files.write(target, content);
     count++;
   }
-  return { name, ref: root, count, skipped };
+  return { name: made.name, ref: root, id: made.id, count, skipped };
 }

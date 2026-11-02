@@ -1,7 +1,8 @@
 /**
  * Images as canvases: reading a file, the formats a browser can write, resizing, cropping.
  */
-import { t, i18n } from './i18n.js';
+import { t } from './i18n.js';
+import { contributes } from './app.json';
 
 /** Formats Photo writes. JPEG has no transparency: what is transparent becomes white. note: a sentence about it, in the system's language. */
 export const FORMATS = [
@@ -10,8 +11,8 @@ export const FORMATS = [
   { id: 'webp', label: 'WebP', type: 'image/webp', ext: 'webp', lossy: true, get note() { return t('format.webp.note'); } },
 ];
 
-/** Extensions Photo opens; only some of them it can also write (formatOf). */
-export const OPENS = ['png', 'jpg', 'jpeg', 'gif', 'webp', 'bmp', 'avif', 'ico', 'svg'];
+/** Extensions Photo opens (its manifest's file types); only some of them it can also write (formatOf). */
+export const OPENS = contributes.fileTypes;
 
 const BY_EXT = { png: 'png', jpg: 'jpeg', jpeg: 'jpeg', webp: 'webp' };
 const LABELS = { png: 'PNG', jpg: 'JPEG', jpeg: 'JPEG', gif: 'GIF', webp: 'WebP', bmp: 'BMP', avif: 'AVIF', ico: 'ICO', svg: 'SVG' };
@@ -111,11 +112,4 @@ export function cropped(source, { x, y, width, height }) {
   const out = canvasOf(width, height);
   out.getContext('2d').drawImage(source, Math.round(x), Math.round(y), out.width, out.height, 0, 0, out.width, out.height);
   return out;
-}
-
-export function formatBytes(n) {
-  if (!Number.isFinite(n)) return '';
-  if (n < 1024) return t('size.bytes', { n });
-  if (n < 1024 * 1024) return `${Math.round(n / 1024)} KB`;
-  return `${i18n.number(n / 1024 / 1024, { minimumFractionDigits: 1, maximumFractionDigits: 1, useGrouping: false })} MB`;
 }

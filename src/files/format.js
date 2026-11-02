@@ -1,4 +1,4 @@
-import { h, fs, fileType, session, settings } from '@lilos/sdk';
+import { h, fs, fileType, session, settings, formatBytes } from '@lilos/sdk';
 import * as sdk from '@lilos/sdk';   // `net`: missing in older lilOS
 import { describeWorkspace } from '@lilos/system';
 import { t } from './i18n.js';
@@ -39,14 +39,6 @@ export function ownerNode(n) {
   if (ws) dot.style.background = ws.color;   // validated hex color (workspaces/store.js)
   return h('span', { class: ['ws-owner', !ws && 'shared', ws?.removed && 'removed'].filter(Boolean).join(' '), title: t('owner.label', { name: ownerLabel(n) }) },
     dot, h('span', {}, ownerLabel(n)));
-}
-
-export function formatBytes(bytes) {
-  if (bytes < 1024) return `${bytes} B`;
-  const units = ['KB', 'MB', 'GB'];
-  let v = bytes, u = -1;
-  do { v /= 1024; u++; } while (v >= 1024 && u < units.length - 1);
-  return `${v.toLocaleString(session.locale, { maximumFractionDigits: 1 })} ${units[u]}`;
 }
 
 export const countLabel = n => t('count.items', { n, count: num(n) });

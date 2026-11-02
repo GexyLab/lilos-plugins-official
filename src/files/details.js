@@ -1,7 +1,7 @@
-import { h, icon, fs, tags, fileType, session, appIcon } from '@lilos/sdk';
-import { itemIcon, getApp, links } from '@lilos/system';
+import { h, icon, fs, tags, fileType, session, appIcon, formatBytes } from '@lilos/sdk';
+import { itemIcon, getApp, links, nodeFacts } from '@lilos/system';
 import * as system from '@lilos/system';   // `filePreview`: missing in older lilOS, so not imported by name
-import { num, typeLabel, linkPlace, folderName, locationLabel, originLabel, ownerLabel, ownerNode, formatBytes, countLabel, retentionLabel, dateLabel } from './format.js';
+import { num, typeLabel, linkPlace, folderName, locationLabel, ownerLabel, ownerNode, countLabel, retentionLabel, dateLabel } from './format.js';
 import { t } from './i18n.js';
 
 /** Characters of a file shown by the preview (the rest is cut). */
@@ -15,15 +15,11 @@ const MAX_CHILDREN = 200;
 /** "1,2 KB (1.234 byte)", or "512 B". */
 const bytesDetail = bytes => (bytes < 1024 ? formatBytes(bytes) : t('info.bytesDetail', { size: formatBytes(bytes), count: num(bytes) }));
 
-/** Bytes of every file inside a folder, at any depth. */
-function treeBytes(id) {
-  let total = 0;
-  for (const child of fs.children(id)) total += child.type === 'folder' ? treeBytes(child.id) : child.size ?? 0;
-  return total;
-}
+/** Bytes of a node with what it contains, at any depth (trashed items too). */
+const nodeBytes = n => fs.usage(n.id)?.bytes ?? n.bytes ?? n.size ?? 0;
 
-/** Bytes of a node with what it contains (trashed items know theirs). */
-const nodeBytes = n => (n.trashed ? n.bytes ?? 0 : n.type === 'folder' ? treeBytes(n.id) : n.size ?? 0);
+/** The facts of nodeFacts() shown under Organization (the others are under General). */
+const ORGANIZATION = new Set(['workspace', 'tags']);
 
 /** True if the preview and the counts can read the node's content. */
 export const readable = n => n?.type === 'file' && !n.trashed;
@@ -67,30 +63,18 @@ export function infoView({ nodes, place, text }) {
   return h('div', {}, h('p', { class: 'fm-info-hint' }, t('info.folderHint')), nodeInfo(place.node, text));
 }
 
+/**
+ * One item: the facts lilOS gives of it (nodeFacts, the same as its Properties window), with what
+ * the File Manager adds: the exact bytes, the workspace's colour, the tags as chips, its
+ * attributes, and the lines and words of a text.
+ */
 function nodeInfo(n, text) {
-  const { ext } = fileType(n.name);
-  const app = n.type === 'app' ? getApp(n.app) : null;
-  const general = [
-    [t('info.type'), n.type === 'file' && ext ? `${typeLabel(n)} (.${ext})` : n.type === 'app' ? t('type.appLink') : typeLabel(n)],
-    n.type === 'app' && [t('info.app'), app ? app.name : t('info.appMissing', { id: n.app })],
-  ];
-  if (n.type === 'file') general.push([t('info.size'), bytesDetail(n.size ?? 0)]);
-  if (n.type === 'link') {
-    general.push([t('info.linkTarget'), linkPlace(n), 'mono']);
-    if (n.link?.broken) general.push([t('info.linkState'), t('info.linkBroken')]);
-  }
-  if (n.type === 'folder') {
-    const direct = n.trashed ? null : fs.children(n.id).length;
-    const all = n.trashed ? n.inside : fs.count(n.id);
-    general.push([t('info.contents'), direct === null || all === direct ? countLabel(all) : t('info.contentsTotal', { items: countLabel(direct), total: num(all) })]);
-    general.push([t('info.size'), bytesDetail(nodeBytes(n))]);
-  }
-  if (n.trashed) {
-    general.push([t('info.deleted'), dateLabel(n.trashed.at)], [t('info.origin'), originLabel(n), 'mono']);
-  } else {
-    general.push([t('info.path'), fs.path(n.id), 'mono']);
-  }
-  general.push([t('info.created'), dateLabel(n.created)], [t('info.modified'), dateLabel(n.modified)]);
+  const all = nodeFacts(n);
+  const row = f => (f.key === 'size' ? [f.label, bytesDetail(f.bytes)] : [f.label, f.value, f.mono ? 'mono' : null]);
+  const general = all.filter(f => !ORGANIZATION.has(f.key)).map(row);
+  const organization = all.filter(f => ORGANIZATION.has(f.key)).map(f => (f.key === 'workspace'
+    ? [f.label, ownerNode(n)]
+    : [f.label, tagChips(f.tags.map(tag => tag.id))]));
 
   const notes = [
     n.system && t('note.system'),
@@ -102,10 +86,7 @@ function nodeInfo(n, text) {
   const view = h('div', {},
     head(itemIcon(n), folderName(n), typeLabel(n)),
     section(t('info.general'), facts(general)),
-    section(t('info.organization'), facts([
-      [t('info.workspace'), ownerNode(n)],
-      [t('info.tags'), tagChips(n.tags ?? [])],
-    ])),
+    section(t('info.organization'), facts(organization)),
     notes.length ? section(t('info.attributes'), h('ul', { class: 'fm-notes' }, notes.map(note => h('li', {}, note)))) : null);
 
   // Lines, words and characters of a file: from its content, when it arrives

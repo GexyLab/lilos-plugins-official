@@ -1,6 +1,6 @@
 {
   "id": "photo",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "kind": "local",
   "name": "Photo",
   "description": "View and touch up images: drawing, text, cropping, resizing and conversion to PNG, JPEG or WebP.",
@@ -9,6 +9,7 @@
   "publisher": { "id": "lilos", "name": "lilOS" },
   "sdk": "2",
   "system": true,
+  "lilos": ">=1.21.0",
   "entrypoints": {
     "main": { "kind": "window", "params": {
       "file": {"type": "file", "label": "Image", "description": "The image to open"}

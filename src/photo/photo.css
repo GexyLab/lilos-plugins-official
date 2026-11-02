@@ -99,13 +99,9 @@
 .ph-zoom-value:hover { background: var(--hover); }
 .ph-status > .ph-zoom-btn:first-of-type { margin-left: 0; }
 
-/* Dialogs over the app */
-.ph-scrim { position: absolute; inset: 0; z-index: 5; display: grid; place-items: center; background: rgba(0, 0, 0, .2); padding: 16px; }
-.ph-dialog { width: min(380px, 100%); background: var(--surface); border-radius: var(--radius); box-shadow: 0 0 0 1px var(--border), var(--shadow-pop); overflow: hidden; user-select: none; }
-.ph-dialog-head { height: 32px; display: flex; align-items: center; gap: 8px; padding: 0 12px; background: var(--chrome); border-bottom: 1px solid var(--border); font-size: 12px; font-weight: 600; }
-.ph-dialog-head .ico { width: 14px; height: 14px; color: var(--dim); }
-.ph-dialog-body { padding: 14px 16px; display: grid; gap: 12px; font-size: 12.5px; }
-.ph-dialog-foot { display: flex; justify-content: flex-end; gap: 8px; padding: 10px 16px; border-top: 1px solid var(--border); background: var(--side); }
+/* Dialogs over the app (message boxes, dialogs.js) */
+.ph-sheet { display: grid; gap: 12px; font-size: 12.5px; }
+.ph-sheet .ph-hint { white-space: normal; line-height: 1.45; }
 .ph-row { display: flex; align-items: center; gap: 10px; min-height: 28px; }
 .ph-row.off { opacity: .45; }
 .ph-row-label { width: 84px; flex: none; color: var(--dim); }
@@ -129,4 +125,3 @@
 .ph-folder:hover { background: var(--hover); }
 .ph-folder .ico { width: 14px; height: 14px; color: var(--dim); flex: none; }
 .ph-folder-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.ph-dialog .ph-hint { white-space: normal; line-height: 1.45; }
