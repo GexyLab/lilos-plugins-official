@@ -39,6 +39,17 @@ nav.fm-path button { cursor: default; }
 
 .fm-side { position: relative; width: 150px; flex: none; padding: 6px; overflow: auto; background: var(--side); border-right: 1px solid var(--border); user-select: none; }
 .fm-side h6 { padding: 8px 6px 3px; font-size: 10.5px; font-weight: 500; letter-spacing: .05em; text-transform: uppercase; color: var(--faint); }
+/* A section that folds (FilesApp #fold): the triangle at the left of its title, as the tree's */
+.fm-side-fold { width: 14px; height: 14px; flex: none; margin: 0 -1px 0 -5px; border-radius: 3px; display: grid; place-items: center; color: var(--faint); }
+.fm-side-fold:hover { background: var(--hover); color: var(--text); }
+.fm-side-fold::before {
+  content: ''; width: 4px; height: 4px; margin-left: -2px; border-right: 1.5px solid; border-bottom: 1.5px solid;
+  transform: rotate(-45deg); transition: transform .12s;
+}
+.fm-side-fold.open::before { margin: -2px 0 0; transform: rotate(45deg); }
+.fm-side-label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fm-side section.folded > :not(h6) { display: none; }
+.fm-side section.folded { padding-bottom: 2px; }
 .fm-place { width: 100%; height: 24px; display: flex; align-items: center; gap: 7px; padding: 0 6px; border-radius: var(--radius-sm); text-align: left; }
 .fm-place:hover { background: var(--hover); }
 .fm-place .ico { width: 14px; height: 14px; color: var(--dim); }
@@ -221,6 +232,12 @@ nav.fm-path button { cursor: default; }
 .fm-preview-app { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 32px 16px; text-align: center; }
 .fm-preview-app .app-icon { width: 56px; height: 56px; border-radius: 12px; }
 .fm-preview-app .app-icon .ico { width: 30px; height: 30px; }
+.fm-preview-app > .icon-link .icon-folder { width: 56px; height: 48px; }
+.fm-preview-app > .icon-link .icon-file { width: 42px; height: 52px; }
+.fm-preview-link { font-family: var(--mono, monospace); font-size: 11.5px; color: var(--dim); overflow-wrap: anywhere; }
+/* The sign of a link (lilOS itemIcons.js) on the small icons of the list and the sidebar */
+.fm-icon .icon-link-mark, .fm-link-icon .icon-link-mark { left: -4px; bottom: -3px; width: 10px; height: 10px; box-shadow: 0 0 0 1px var(--surface, #fff); }
+.fm-icon .icon-link-mark .ico, .fm-link-icon .icon-link-mark .ico { width: 7px; height: 7px; stroke-width: 3; }
 .fm-preview-empty, .fm-preview-wait {
   flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding: 24px 16px; text-align: center; color: var(--faint);
 }

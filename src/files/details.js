@@ -1,7 +1,7 @@
 import { h, icon, fs, tags, fileType, session, appIcon } from '@lilos/sdk';
 import { itemIcon, getApp, links } from '@lilos/system';
 import * as system from '@lilos/system';   // `filePreview`: missing in older lilOS, so not imported by name
-import { num, typeLabel, folderName, locationLabel, originLabel, ownerLabel, ownerNode, formatBytes, countLabel, retentionLabel, dateLabel } from './format.js';
+import { num, typeLabel, linkPlace, folderName, locationLabel, originLabel, ownerLabel, ownerNode, formatBytes, countLabel, retentionLabel, dateLabel } from './format.js';
 import { t } from './i18n.js';
 
 /** Characters of a file shown by the preview (the rest is cut). */
@@ -75,6 +75,10 @@ function nodeInfo(n, text) {
     n.type === 'app' && [t('info.app'), app ? app.name : t('info.appMissing', { id: n.app })],
   ];
   if (n.type === 'file') general.push([t('info.size'), bytesDetail(n.size ?? 0)]);
+  if (n.type === 'link') {
+    general.push([t('info.linkTarget'), linkPlace(n), 'mono']);
+    if (n.link?.broken) general.push([t('info.linkState'), t('info.linkBroken')]);
+  }
   if (n.type === 'folder') {
     const direct = n.trashed ? null : fs.children(n.id).length;
     const all = n.trashed ? n.inside : fs.count(n.id);
@@ -212,6 +216,7 @@ export class Preview {
     if (n.trashed) return this.#show(this.#title(n), empty('trash', t('preview.trashed'), t('preview.restoreToSee')));
     if (n.type === 'folder') return this.#show(this.#title(n), this.#folder(n));
     if (n.type === 'app') return this.#show(this.#title(n), this.#app(n));
+    if (n.type === 'link') return this.#show(this.#title(n), this.#link(n));
     const loading = h('div', { class: 'fm-preview-wait' }, t('preview.loading'));
     this.#show(this.#title(n), loading);
     const shown = view => { if (this.#key === key) loading.replaceWith(view()); };
@@ -283,12 +288,17 @@ export class Preview {
   #folder(n) {
     const children = fs.children(n.id);
     if (!children.length) return empty('folder', t('preview.emptyFolder'), '');
-    const rank = { folder: 0, file: 1, app: 1 };
+    const rank = { folder: 0, file: 1, app: 1, link: 1 };
     children.sort((a, b) => rank[a.type] - rank[b.type] || a.name.localeCompare(b.name, session.locale, { numeric: true }));
     return h('ul', { class: 'fm-preview-list', 'aria-label': t('preview.contentsOf', { name: n.name }) },
       children.slice(0, MAX_CHILDREN).map(c => h('li', { title: t('preview.childTitle', { name: c.name }), ondblclick: () => this.open(c) },
         h('span', { class: 'fm-icon' }, itemIcon(c)), h('span', { class: 'fm-label' }, c.name))),
       children.length > MAX_CHILDREN ? h('li', { class: 'more' }, t('list.more', { count: num(children.length - MAX_CHILDREN) })) : null);
+  }
+
+  /** A link: where it points (the preview of the target would mean finding it, on a server too). */
+  #link(n) {
+    return h('div', { class: 'fm-preview-app' }, itemIcon(n), h('strong', {}, typeLabel(n)), h('span', { class: 'fm-preview-link' }, linkPlace(n)));
   }
 
   #app(n) {

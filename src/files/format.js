@@ -1,4 +1,5 @@
 import { h, fs, fileType, session, settings } from '@lilos/sdk';
+import * as sdk from '@lilos/sdk';   // `net`: missing in older lilOS
 import { describeWorkspace } from '@lilos/system';
 import { t } from './i18n.js';
 
@@ -6,7 +7,16 @@ import { t } from './i18n.js';
 
 export const num = n => n.toLocaleString(session.locale);
 
-export const typeLabel = n => (n.type === 'folder' ? t('type.folder') : n.type === 'app' ? t('type.app') : fileType(n.name).label);
+export const typeLabel = n => (n.type === 'folder' ? t('type.folder') : n.type === 'app' ? t('type.app')
+  : n.type === 'link' ? t({ folder: 'type.linkFolder', web: 'type.linkWeb' }[n.link?.kind] ?? 'type.linkFile') : fileType(n.name).label);
+
+/** Where a link points: its path in the home, or the connection and the path on it. */
+export function linkPlace(n) {
+  const link = n.link ?? {};
+  if (link.kind === 'web') return link.url;
+  if (link.home) return fs.exists(link.home) ? fs.path(link.home) : t('link.notFound');
+  return `${sdk.net?.mount(link.mount)?.name ?? t('link.mountGone')}: ${link.path}`;
+}
 export const folderName = n => (n.id === fs.root ? t('place.home') : n.name);
 export const locationLabel = n => (n.parent === fs.root ? t('place.home') : fs.path(n.parent));
 

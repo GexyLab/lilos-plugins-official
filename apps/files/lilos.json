@@ -1,9 +1,9 @@
 {
   "id": "files",
-  "version": "1.11.0",
+  "version": "1.12.0",
   "kind": "local",
   "name": "File Manager",
-  "description": "Browse, search and organize files and folders: tags, links, trash, info and preview.",
+  "description": "Browse, search and organize files and folders: tags, links, desktop links, trash, info and preview.",
   "category": "system",
   "icon": {
     "glyph": "folder",
@@ -24,6 +24,21 @@
           "type": "folder",
           "label": "Folder",
           "description": "The folder it shows when it opens"
+        }
+      }
+    },
+    "newLink": {
+      "kind": "window",
+      "label": "New link",
+      "window": {
+        "width": 520,
+        "height": 290
+      },
+      "params": {
+        "folder": {
+          "type": "folder",
+          "label": "Folder",
+          "description": "Where the link is made"
         }
       }
     }
@@ -66,12 +81,12 @@
   },
   "entry": "dist/index.js",
   "styles": [
-    "dist/index-CC1jBfiz.css"
+    "dist/index-B4_j1PaQ.css"
   ],
   "locales": "locales.json",
   "files": {
-    "dist/index-CC1jBfiz.css": "sha256-IJzup8mrffo06RtQ6PTwnad7/6+eqgXUe7PpqKoNabI=",
-    "dist/index.js": "sha256-e5PWdIuLjh5aucKF+2SXTSpXDrfHK0ZMig0JGST/01M=",
-    "locales.json": "sha256-Ug4D+MYB2LFVmNrI+eZnEyCdTxBV5CrsVni2uUlen0I="
+    "dist/index-B4_j1PaQ.css": "sha256-OJ+OAj7zrn1qvIvpP8iYpb68mRiDmdZqLSljq4zwQhU=",
+    "dist/index.js": "sha256-aHAjZ0LG9uMqcwRg3YCZVoIlbVRsNCOGY4r9M78GDWg=",
+    "locales.json": "sha256-Ezdk2rPMvcoh3SP1+yoMVUylap7opK7JfQ3mcBk96g0="
   }
 }

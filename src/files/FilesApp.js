@@ -21,6 +21,7 @@ import { Columns, MIN_COL } from './columns.js';
 import { t } from './i18n.js';
 import { network, mountOf, sideSection, mountMenu, mountBar, readRemote } from './network.js';
 import { officeEntries, openOffice } from './office.js';
+import { newLinkWindow } from './newLink.js';
 import './files.css';
 
 /** Biggest file of a network connection the panels read to show it. */
@@ -30,6 +31,8 @@ const PREVIEW_NET_MAX = 1 << 20;
 const MAIN_MIN = 260;
 
 const VIEW_KEY = 'files-view';
+/** The sections of the sidebar folded away with their triangle (Collegamenti, Tag, Rete), by key. */
+const FOLDED_KEY = 'files-side-folded';
 /** The views of the list: rows with columns, small icons, big previews (the thumbnails apps make of files). */
 const VIEWS = ['list', 'grid', 'thumbs'];
 /** Longest side of a thumbnail in the preview view (CSS pixels), and how wide a tile is there with its gap. */
@@ -90,14 +93,25 @@ export default function createFiles({ args, openWindow } = {}) {
   const gone = missing(args);
   // Once the window is on screen (lilOS opens it after this returns)
   if (gone) requestAnimationFrame(() => browser.notFound(gone));
+  else if (args?.link) requestAnimationFrame(() => browser.followLink(args.link));
   // Launched again (e.g. a folder opened from the desk): show that folder in this window
   win.on('launch', a => {
     const folder = startFolder(a);
     if (folder) browser.go(folder);
-    else if (missing(a)) browser.notFound(missing(a));
+    else if (missing(a)) return browser.notFound(missing(a));
+    if (a?.link) browser.followLink(a.link);
   });
   win.getState = () => ({ folder: browser.folder });
   return win;
+}
+
+/**
+ * Entry point newLink: the window "Nuovo collegamento" alone, making the link in args.folder (the
+ * desk's Nuovo → Collegamento opens it). Launched again, the window already open stays.
+ */
+export function newLink({ args, openWindow } = {}) {
+  const folder = args?.folder && fs.get(args.folder)?.type === 'folder' && !fs.isRemote?.(args.folder) ? args.folder : fs.root;
+  return newLinkWindow({ folder, openWindow: openWindow ?? (() => {}) });
 }
 
 /** Lowercase without accents, for search. */
@@ -108,6 +122,7 @@ class FileBrowser {
   #back = [];
   #forward = [];
   #view = VIEWS.includes(storage.get(VIEW_KEY)) ? storage.get(VIEW_KEY) : 'list';
+  #folded = new Set([].concat(storage.get(FOLDED_KEY) ?? []).filter(k => typeof k === 'string'));
   #sort = { key: 'name', dir: 1 };
   #columns = new Columns();   // widths and visibility of the list view's columns
   #query = '';
@@ -366,9 +381,51 @@ class FileBrowser {
   open(node) {
     if (node.type === 'folder') return this.go(node.id);
     if (node.type === 'app') return launch(node.app);
+    if (node.type === 'link') return this.#openLink(node);
     // A document of OneDrive: Office for the web (unless an app of lilOS is chosen for it)
     if (openOffice(this, node)) return;
     openFile(node);
+  }
+
+  /**
+   * A link: what it points to, a folder here, a file with its app. On a connection it is read from
+   * the server asking the password when needed; not found, lilOS says so and marks the link broken.
+   */
+  async #openLink(node) {
+    if (node.link?.kind === 'web') return system.openWebLink?.(node.link.url);
+    const target = await system.findLinkTarget?.(node, { win: this.win, read: id => readRemote(this, id) });
+    if (target) this.open(target);
+  }
+
+  /** Launched to open a link (lilOS hands it here when a connection asks for a password). */
+  followLink(id) {
+    const node = fs.get(id);
+    if (node?.type === 'link') this.#openLink(node);
+  }
+
+  /** "Nuovo collegamento…": the window to write where a link points, making it in the folder shown (selected once made). */
+  newLink() {
+    if (this.inTrash || this.inTag) return;
+    const folder = this.folder;
+    this.openWindow(newLinkWindow({
+      folder, openWindow: this.openWindow,
+      onMade: id => {
+        recordCreated(this.history, id);
+        if (this.folder === folder) this.#select([id], id);
+      },
+    }));
+  }
+
+  /** "Aggiungi un collegamento al desktop": one on this workspace's desk to each item (Ctrl Z takes them away). */
+  addDeskLinks(ids) {
+    let made;
+    try {
+      made = system.addDeskLinks(ids);
+    } catch (err) {
+      return void this.#error(t('error.deskLink'), err.message);
+    }
+    made.forEach(id => recordCreated(this.history, id));
+    if (made.length) toast(t('toast.deskLinks', { n: made.length, count: num(made.length) }));
   }
 
   openSelected() {
@@ -699,13 +756,37 @@ class FileBrowser {
     const trash = place({ id: TRASH, name: t('place.trash'), glyph: 'trash' });
     trash.dataset.trash = '';
     const rete = roots.find(n => n.system && n.name === system.NETWORK_NAME)?.id ?? null;
+    const plain = label => h('h6', { class: 'fm-side-head' }, h('span', { class: 'fm-side-label' }, label));
     this.side.replaceChildren(
-      h('section', { class: 'fm-side-links', 'aria-label': t('side.links') }, h('h6', {}, t('side.links')), ...links.arrange(defaults).flatMap(show)),
-      ...(list.length ? [h('h6', {}, t('side.tags')), ...list.map(tagPlace)] : []),
-      ...sideSection(this, { active: mount, reteFolder: rete }),
+      this.#fold('links', t('side.links'), h('section', { class: 'fm-side-links', 'aria-label': t('side.links') }, plain(t('side.links')), ...links.arrange(defaults).flatMap(show))),
+      ...(list.length ? [this.#fold('tags', t('side.tags'), h('section', { class: 'fm-side-tags', 'aria-label': t('side.tags') }, plain(t('side.tags')), ...list.map(tagPlace)))] : []),
+      ...sideSection(this, { active: mount, reteFolder: rete }).map(s => this.#fold('net', t('net.section'), s)),
       h('hr', { class: 'fm-side-sep' }),
       trash,
       this.gap);
+  }
+
+  /**
+   * A section of the sidebar that folds: a triangle at the left of its title shows or hides what is
+   * under it (a click on a plain title too). Folded or not, it stays so (FOLDED_KEY).
+   */
+  #fold(key, label, section) {
+    const open = !this.#folded.has(key);
+    const head = section.querySelector(':scope > h6');
+    const text = t(open ? 'side.collapse' : 'side.expand', { name: label });
+    const toggle = () => {
+      if (open) this.#folded.add(key); else this.#folded.delete(key);
+      storage.set(FOLDED_KEY, [...this.#folded]);
+      this.#renderSide();
+      this.side.querySelector(`[data-fold="${key}"]`)?.focus();
+    };
+    head.prepend(h('button', {
+      class: open ? 'fm-side-fold open' : 'fm-side-fold', type: 'button', dataset: { fold: key },
+      title: text, 'aria-label': text, 'aria-expanded': String(open), onclick: toggle,
+    }));
+    head.querySelector('.fm-side-label')?.addEventListener('click', toggle);
+    section.classList.toggle('folded', !open);
+    return section;
   }
 
   /** Deletes a link of the sidebar (the file or folder stays where it is); Ctrl Z puts it back. */
@@ -747,7 +828,7 @@ class FileBrowser {
       return movable && { el: mount, run: (ev, stack) => moveInto(stack, movable, mount.dataset.folder) };
     }
     const section = this.side.querySelector('.fm-side-links');
-    if (!section?.contains(hit)) return null;
+    if (!section?.contains(hit) || section.classList.contains('folded')) return null;
     const entries = [...section.querySelectorAll(':scope > [data-entry]')];
     const el = hit.closest('[data-entry]');
     if (el && entries.includes(el)) {
@@ -993,7 +1074,7 @@ class FileBrowser {
       : key === 'deleted' ? n.trashed?.at ?? n.modified
       : key === 'origin' && n.trashed ? originLabel(n)
       : key === 'location' ? locationLabel(n) : n.name;
-    const rank = { folder: 0, file: 1, app: 1 };
+    const rank = { folder: 0, file: 1, app: 1, link: 1 };
     return [...nodes].sort((a, b) => {
       if (rank[a.type] !== rank[b.type]) return rank[a.type] - rank[b.type];  // folders first
       const va = value(a), vb = value(b);
@@ -1158,9 +1239,12 @@ class FileBrowser {
         collapse,
       ].filter(Boolean));
     }
+    // Links are made in folders of the home (lilOS with links only)
+    const linkable = system.locateLink && !fs.isRemote?.(this.folder);
     openMenu(e.clientX, e.clientY, [
       { label: t('menu.newFolder'), icon: 'folderPlus', action: () => this.create('folder') },
       { label: t('menu.newTextFile'), icon: 'filePlus', action: () => this.create('file') },
+      linkable && { label: t('menu.newLink'), icon: 'link', action: () => this.newLink() },
       '-',
       toggleView,
       columns,
@@ -1205,6 +1289,7 @@ class FileBrowser {
       !remote && tagSubmenu(ids),
       tag && { label: t('menu.untag', { name: tag.name }), icon: 'x', action: () => setTag(ids, tag.id, false) },
       !remote && linkEntry(ids),
+      system.canLinkOnDesk?.(ids) && { label: t('menu.deskLink'), icon: 'link', action: () => this.addDeskLinks(ids) },
       { label: t('menu.info'), icon: 'info', shortcut: shortcuts.label('files.info'), action: () => this.info.setOpen(true) },
       !many && { label: t('menu.properties'), icon: 'info', action: () => showProperties(nodes[0].id) },
       ...(system.appActionEntries?.(ids, { separator: true }) ?? []),

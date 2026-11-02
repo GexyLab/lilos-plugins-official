@@ -1,6 +1,7 @@
 import { Window, h, icon, fs, openMenu } from '@lilos/sdk';
 import * as sdk from '@lilos/sdk';   // `net` and `messageBox`: missing in older lilOS, so not imported by name
 import { pickFile, launch } from '@lilos/system';
+import * as system from '@lilos/system';   // `canLinkOnDesk`: missing in older lilOS
 import { t } from './i18n.js';
 
 /**
@@ -67,15 +68,17 @@ export function sideSection(browser, { active, reteFolder }) {
 export function mountMenu(browser, m, x, y) {
   const net = network();
   if (!net) return;
+  const node = net.mountNode(m.id);
   openMenu(x, y, [
     { label: t('net.menu.open'), icon: 'open', action: () => browser.go(net.mountNode(m.id)) },
     m.state === 'on'
       ? { label: t('net.menu.disconnect'), icon: 'x', action: () => net.disconnect(m.id).catch(err => browser.netError(err)) }
       : { label: t('net.menu.connect'), icon: 'globe', action: () => browser.go(net.mountNode(m.id)) },
     { label: t('net.menu.edit'), icon: 'pencil', action: () => connectDialog(browser, m) },
+    system.canLinkOnDesk?.([node]) && { label: t('menu.deskLink'), icon: 'link', action: () => browser.addDeskLinks([node]) },
     '-',
     { label: t('net.menu.remove'), icon: 'trash', danger: true, action: () => removeMount(browser, m) },
-  ]);
+  ].filter(Boolean));
 }
 
 async function removeMount(browser, m) {
@@ -169,10 +172,11 @@ const shown = (f, values) => !f.when || Object.entries(f.when).every(([k, want])
 
 /**
  * The fields of a protocol in a form: returns { el, values(), secret(), check() }.
- *   initial   values of a connection being changed (its secret fields stay empty: "unchanged")
+ *   initial   values of a connection being changed (its secret fields stay empty: "unchanged"), or to start from
+ *   editing   the values are a saved connection's (default: when there is a server in them)
  *   only      'secret': only the secret fields (asking the password again)
  */
-function protocolFields(browser, protocol, { initial = {}, only = null, onShares = null, onChange = null } = {}) {
+function protocolFields(browser, protocol, { initial = {}, editing = !!initial.host, only = null, onShares = null, onChange = null } = {}) {
   const values = { ...initial }, secret = {};
   const signin = { id: null };   // a sign-in made in this window: the kernel keeps what it gave
   for (const f of protocol.fields) if (values[f.key] === undefined && f.default !== undefined && !f.secret) values[f.key] = f.default;
@@ -187,7 +191,7 @@ function protocolFields(browser, protocol, { initial = {}, only = null, onShares
         rows.push(signInRow(browser, protocol, f, values, signin, () => { onChange?.(); draw(); }));
         continue;
       }
-      rows.push(fieldRow(browser, f, f.secret ? secret : values, { editing: !!initial.host && f.secret, onShares, changed: () => { onChange?.(); if (protocol.fields.some(x => x.when)) draw(); } }));
+      rows.push(fieldRow(browser, f, f.secret ? secret : values, { editing: editing && f.secret, onShares, changed: () => { onChange?.(); if (protocol.fields.some(x => x.when)) draw(); } }));
     }
     el.replaceChildren(...rows);
   };
@@ -302,16 +306,19 @@ function fieldRow(browser, f, store, { editing, onShares, changed }) {
  * Connetti a un server (m: a connection to change, or none for a new one): the protocol from a
  * list, its fields, the name of the folder in Rete, remember the password, connect at sign-in.
  * Prova tries without saving; the main button saves and connects (and opens the folder).
+ *   initial      a new connection filled in: { protocol, values, name } (Nuovo collegamento)
+ *   onConnected  (mount) once connected, in place of opening its folder; onClosed: closed before
  */
-export function connectDialog(browser, m = null) {
+export function connectDialog(browser, m = null, { initial = null, onConnected = null, onClosed = null } = {}) {
   const net = network();
   if (!net) return;
   const win = new Window({ title: m ? t('net.edit.title', { name: m.name }) : t('net.connect.title'), icon: 'globe', width: 460, height: 660, minWidth: 360, minHeight: 360 });
-  let protocol = net.protocols.find(p => p.id === (m?.protocol ?? net.protocols[0]?.id));
+  let protocol = net.protocols.find(p => p.id === (m?.protocol ?? initial?.protocol)) ?? net.protocols[0];
+  let connected = false;
   let fields = null, trust = null;
   const select = h('select', { class: 'ctl-select', id: 'fm-net-protocol', disabled: !!m },
     ...net.protocols.map(p => h('option', { value: p.id, selected: p.id === protocol.id }, text(p.label))));
-  const name = h('input', { class: 'ctl-text', type: 'text', spellcheck: 'false', value: m?.name ?? '' });
+  const name = h('input', { class: 'ctl-text', type: 'text', spellcheck: 'false', value: m?.name ?? initial?.name ?? '' });
   const nameHint = h('small');
   const remember = h('input', { type: 'checkbox', checked: m ? m.remembered : true });
   const rememberText = h('span', {}, t('net.remember'));
@@ -343,7 +350,8 @@ export function connectDialog(browser, m = null) {
     if (!named && signsIn(protocol)) { name.value = text(protocol.label); hint(); }
     rememberText.textContent = t(signsIn(protocol) ? 'net.remember.signin' : 'net.remember');
     fields = protocolFields(browser, protocol, {
-      initial: m?.values ?? {},
+      initial: m?.values ?? (protocol.id === initial?.protocol ? initial.values : {}),
+      editing: !!m,
       onShares: protocol.canListShares ? listShares : null,
       onChange: () => {
         if (!named) { name.value = fields.values().host ?? (signsIn(protocol) ? text(protocol.label) : ''); hint(); }
@@ -412,8 +420,10 @@ export function connectDialog(browser, m = null) {
         say(err.message, true);
         return;
       }
+      connected = true;
       win.emit('close');
-      browser.go(net.mountNode(saved.id));
+      if (onConnected) onConnected(saved);
+      else browser.go(net.mountNode(saved.id));
     } catch (err) {
       say(err.message, true);
     } finally {
@@ -421,6 +431,7 @@ export function connectDialog(browser, m = null) {
     }
   });
 
+  if (onClosed) win.on('destroy', () => { if (!connected) onClosed(); });
   draw();
   hint();
   win.body.append(h('div', { class: 'fm-net-dialog' },

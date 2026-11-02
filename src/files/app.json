@@ -1,9 +1,9 @@
 {
   "id": "files",
-  "version": "1.11.0",
+  "version": "1.12.0",
   "kind": "local",
   "name": "File Manager",
-  "description": "Browse, search and organize files and folders: tags, links, trash, info and preview.",
+  "description": "Browse, search and organize files and folders: tags, links, desktop links, trash, info and preview.",
   "category": "system",
   "icon": { "glyph": "folder", "color": "#3b6ef5" },
   "publisher": { "id": "lilos", "name": "lilOS" },
@@ -12,6 +12,9 @@
   "required": true,
   "entrypoints": { "main": { "kind": "window", "params": {
     "folder": {"type": "folder", "label": "Folder", "description": "The folder it shows when it opens"}
+  } },
+  "newLink": { "kind": "window", "label": "New link", "window": { "width": 520, "height": 290 }, "params": {
+    "folder": {"type": "folder", "label": "Folder", "description": "Where the link is made"}
   } } },
   "permissions": ["fs.write:~", "fs.workspaces", "tags.write", "desktop.items", "ui.shortcuts"],
   "contributes": {
