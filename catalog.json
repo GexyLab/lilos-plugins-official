@@ -12,7 +12,6 @@
     "apps/keyboard",
     "apps/zip",
     "apps/automata",
-    "apps/arduino-ide",
     "apps/scheduler"
   ],
   "modules": [
@@ -34,8 +33,7 @@
     "modules/term-ssh",
     "modules/term-telnet",
     "modules/term-rlogin",
-    "modules/term-supdup",
-    "modules/arduino"
+    "modules/term-supdup"
   ],
   "system": "system/lilos"
 }

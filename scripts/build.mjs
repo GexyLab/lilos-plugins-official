@@ -33,7 +33,6 @@ const APPS = [
   { id: 'keyboard', entry: 'KeyboardApp.js' },
   { id: 'zip', entry: 'ZipApp.js' },
   { id: 'automata', entry: 'AutomataApp.js' },
-  { id: 'arduino-ide', entry: 'ArduinoApp.js' },
   { id: 'scheduler', entry: 'SchedulerApp.js' },
 ];
 

@@ -58,11 +58,7 @@ const VENDORED = [
  * versions are read from the module's own list, licenses here; the check stops on one missing.
  */
 const DOWNLOADED = {
-  'modules/arduino/tools.js': {
-    'arduino-cli': { license: 'GPL-3.0', copyright: 'Copyright © ARDUINO SA', url: 'https://github.com/arduino/arduino-cli' },
-    'arduino-language-server': { license: 'AGPL-3.0', copyright: 'Copyright © ARDUINO SA', url: 'https://github.com/arduino/arduino-language-server' },
-    clangd: { license: 'Apache-2.0 WITH LLVM-exception', copyright: 'Copyright © The LLVM Project', url: 'https://clangd.llvm.org' },
-  },
+  // 'modules/<name>/tools.js': { '<program>': { license, copyright, url } },
 };
 
 const readJson = file => JSON.parse(readFileSync(file, 'utf8'));
