@@ -1,10 +1,10 @@
-import { Window, h, icon, fs, tags, session, storage, openMenu, shortcuts, toast, UndoStack, history, trackDrag } from '@lilos/sdk';
-import * as sdk from '@lilos/sdk';   // `messageBox`, `automation`: missing in older lilOS, so not imported by name
+import { Window, h, icon, fs, tags, session, storage, openMenu, shortcuts, toast, UndoStack, history, trackDrag, messageBox } from '@lilos/sdk';
+import * as sdk from '@lilos/sdk';   // `automation`, `net`: missing in older lilOS, so not imported by name
 import { launch, handleCommand } from '@lilos/system';
 import { openFile } from '@lilos/system';
 import { itemIcon } from '@lilos/system';
 import { addTarget } from '@lilos/system';
-import { confirmRemove } from '@lilos/system';
+import { confirmRemove, confirmPurge, confirmEmptyTrash } from '@lilos/system';
 import { recordCreated, renameNode, restoreNodes, removeNodes } from '@lilos/system';
 import { markItem, dropZone, dragItems, movableInto, moveInto } from '@lilos/system';
 import { links, linkEntry } from '@lilos/system';
@@ -22,6 +22,7 @@ import { t } from './i18n.js';
 import { network, mountOf, sideSection, mountMenu, mountBar, readRemote, netChips, openInBrowser } from './network.js';
 import { officeEntries, openOffice } from './office.js';
 import { newLinkWindow } from './newLink.js';
+import { inlineRename } from '../shared/inlineRename.js';
 import './files.css';
 
 /** Recording and replaying what the user does (Automata): null in a lilOS without it. */
@@ -199,7 +200,7 @@ class FileBrowser {
 
     // Panels on the right: the preview next to the list, the information at the edge
     const panel = (key, texts, width, open) => new SidePanel({
-      key, ...texts, width, open, signal: win.signal,
+      key, ...texts, width, open,
       room: () => this.#room() - (key === 'info' ? this.preview : this.info).shown,
       onLayout: () => { this.#fit(); this.#renderPanels(); },
     });
@@ -370,7 +371,7 @@ class FileBrowser {
   async #goAddress() {
     const text = this.address.value.trim().replace(/\\/g, '/');
     const node = text ? fs.resolve(text) : null;
-    if (!node && text && sdk.messageBox) {
+    if (!node && text) {
       // Riprova: back to the text written, to correct it; Annulla (Esc): back to the path
       this.#badAddress(true);
       this.#asking = true;
@@ -489,32 +490,22 @@ class FileBrowser {
     this.render();
     const input = this.list.querySelector('.fm-rename');
     if (!input) return;
-    input.focus();
-    const ext = node.type === 'file' ? node.name.lastIndexOf('.') : -1;
-    input.setSelectionRange(0, ext > 0 ? ext : node.name.length);
-    let done = false;
-    const finish = commit => {
-      if (done) return;
-      done = true;
-      this.#editing = null;
-      const name = input.value.replace(/\s+/g, ' ').trim();
-      if (commit && name && name !== node.name && fs.exists(id)) {
-        try { renameNode(created ? null : this.history, id, name); } catch (err) {
-          // Riprova: the name can be changed again
-          this.#error(t('error.rename', { name: node.name }), err.message, ['retry', 'cancel'])
-            .then(answer => { if (answer === 'retry' && fs.exists(id)) this.rename(id); });
+    // Acted on in the same task as the key or the blur: the list is drawn again at once
+    inlineRename(input, node, {
+      onDone: name => {
+        this.#editing = null;
+        if (name && fs.exists(id)) {
+          try { renameNode(created ? null : this.history, id, name); } catch (err) {
+            // Riprova: the name can be changed again
+            this.#error(t('error.rename', { name: node.name }), err.message, ['retry', 'cancel'])
+              .then(answer => { if (answer === 'retry' && fs.exists(id)) this.rename(id); });
+          }
         }
-      }
-      if (created) recordCreated(this.history, id);
-      this.render();
-      this.list.focus();
-    };
-    input.addEventListener('keydown', e => {
-      e.stopPropagation();
-      if (e.key === 'Enter') { e.preventDefault(); finish(true); }
-      if (e.key === 'Escape') { e.preventDefault(); finish(false); }
+        if (created) recordCreated(this.history, id);
+        this.render();
+        this.list.focus();
+      },
     });
-    input.addEventListener('blur', () => finish(true));
   }
 
   /**
@@ -560,22 +551,13 @@ class FileBrowser {
   purge(ids) {
     const nodes = this.#items.filter(n => ids.includes(n.id));
     if (!nodes.length) return;
-    const label = nodes.length === 1 ? t('confirm.purge', { name: nodes[0].name }) : t('confirm.purgeMany', { count: num(nodes.length) });
     const { x, y } = this.#menuPoint(nodes[0].id);
-    openMenu(x, y, [
-      { label, icon: 'trash', danger: true, action: () => fs.purge(nodes.map(n => n.id)) },
-      { label: t('confirm.cancel'), icon: 'x', action: () => {} },
-    ]);
+    confirmPurge(nodes.map(n => n.id), x, y);
   }
 
   /** Empties the trash, asking first. */
   empty(x, y) {
-    const n = fs.trashed().length;
-    if (!n) return;
-    openMenu(x, y, [
-      { label: t('confirm.emptyTrash', { n, count: num(n) }), icon: 'trash', danger: true, action: () => fs.purgeTrash() },
-      { label: t('confirm.cancel'), icon: 'x', action: () => {} },
-    ]);
+    confirmEmptyTrash(x, y);
   }
 
   // ---------- Rendering ----------
@@ -1405,16 +1387,9 @@ class FileBrowser {
     }, opts);
   }
 
-  /**
-   * An error, in a message box over the window: resolves with the button pressed. A lilOS without
-   * message boxes says it in the status bar (and resolves null).
-   */
+  /** An error, in a message box over the window: resolves with the button pressed. */
   async #error(title, text = '', buttons = ['ok']) {
-    if (!sdk.messageBox) {
-      this.#say(text ? `${title}: ${text}` : title);
-      return null;
-    }
-    const answer = await sdk.messageBox(this.win, { icon: 'error', title, text, buttons });
+    const answer = await messageBox(this.win, { icon: 'error', title, text, buttons });
     if (this.list.isConnected && !this.win.el.contains(document.activeElement)) this.list.focus();
     return answer;
   }

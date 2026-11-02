@@ -1,5 +1,4 @@
-import { Window, h, fs, openMenu } from '@lilos/sdk';
-import * as sdk from '@lilos/sdk';   // `messageBox`: missing in older lilOS
+import { Window, h, fs, openMenu, messageBox } from '@lilos/sdk';
 import * as system from '@lilos/system';   // the links of lilOS: missing in older lilOS
 import { pickFile } from '@lilos/system';
 import { network, readRemote, connectDialog } from './network.js';
@@ -139,9 +138,7 @@ export function newLinkWindow({ folder, openWindow, onMade = null }) {
   // What network.js asks of the File Manager, for this window: its dialogs and messages over it
   const host = {
     win, openWindow,
-    netError: (err, { retry = false, title = t('net.error.title') } = {}) => (sdk.messageBox
-      ? sdk.messageBox(win, { icon: 'error', title, text: err?.message ?? String(err), buttons: retry ? ['retry', 'cancel'] : ['ok'] })
-      : Promise.resolve(null)),
+    netError: (err, { retry = false, title = t('net.error.title') } = {}) => messageBox(win, { icon: 'error', title, text: err?.message ?? String(err), buttons: retry ? ['retry', 'cancel'] : ['ok'] }),
     go: () => {},
   };
   const address = h('input', { class: 'ctl-text', type: 'text', id: 'fm-link-address', spellcheck: 'false', autocomplete: 'off', placeholder: t('newLink.address.placeholder') });
@@ -243,11 +240,11 @@ export function newLinkWindow({ folder, openWindow, onMade = null }) {
 
   win.body.append(h('div', { class: 'fm-net-dialog' },
     h('div', { class: 'fm-net-body' },
-      h('div', { class: 'fm-net-row' },
+      h('div', { class: 'sh-field' },
         h('label', { for: 'fm-link-address' }, t('newLink.address')),
-        h('div', { class: 'fm-net-pick' }, address, browse),
-        h('small', {}, t('newLink.address.hint'))),
-      h('div', { class: 'fm-net-row' }, h('label', { for: 'fm-link-name' }, t('newLink.name')), name),
+        h('div', { class: 'sh-field-pick' }, address, browse),
+        h('small', { class: 'sh-field-hint' }, t('newLink.address.hint'))),
+      h('div', { class: 'sh-field' }, h('label', { for: 'fm-link-name' }, t('newLink.name')), name),
       status),
     h('div', { class: 'fm-net-foot' }, h('span', { class: 'fm-sp' }), cancel, make)));
   requestAnimationFrame(() => address.focus());

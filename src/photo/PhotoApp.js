@@ -1,8 +1,8 @@
-import { Window, h, icon, fs, UndoStack, history, toast, slider, segmented, selectField, actionButton, isEditing } from '@lilos/sdk';
+import { Window, h, icon, fs, UndoStack, history, toast, slider, segmented, selectField, actionButton, isEditing, formatBytes } from '@lilos/sdk';
 import * as sdk from '@lilos/sdk';   // `automation`: missing in older lilOS, so not imported by name
 import { launch, handleCommand, pickFile } from '@lilos/system';
 import { glyph } from './glyphs.js';
-import { OPENS, extOf, labelOf, formatOf, supported, decode, encode, resample, cropped, copyOf, formatBytes, FORMATS } from './image.js';
+import { OPENS, extOf, labelOf, formatOf, supported, decode, encode, resample, cropped, copyOf, FORMATS } from './image.js';
 import { resizeDialog, convertDialog } from './dialogs.js';
 import { t } from './i18n.js';
 import './photo.css';
@@ -319,7 +319,7 @@ class Photo {
     this.#commitText();
     if (!this.canvas) return false;
     const proposal = this.#copyProposal();
-    const choice = await convertDialog(this.win.body, this.openWindow, { ...proposal, title, okLabel });
+    const choice = await convertDialog(this.win, this.openWindow, { ...proposal, title, okLabel });
     if (!choice) return false;
     if (open !== undefined) choice.open = open;
     const from = this.fileId;
@@ -488,7 +488,7 @@ class Photo {
     this.#commitText();
     if (!this.canvas) return;
     const { width, height } = this.canvas;
-    const choice = await resizeDialog(this.win.body, { width, height });
+    const choice = await resizeDialog(this.win, { width, height });
     if (!choice) return;
     this.#replace(t('history.resize'), resample(this.canvas, choice.width, choice.height, choice.quality));
     automation()?.record('photo.resize', {
@@ -844,7 +844,7 @@ class Photo {
   // ---------- Keys, drop ----------
 
   #onKey(e) {
-    if (e.defaultPrevented || isEditing() || e.target.closest?.('.ph-banner, .ph-scrim, select, input')) return;
+    if (e.defaultPrevented || isEditing() || e.target.closest?.('.ph-banner, .msgbox-layer, select, input')) return;
     if (e.ctrlKey || e.metaKey || e.altKey) return;
     const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
     const tool = TOOLS.find(x => x.key.toLowerCase() === key);

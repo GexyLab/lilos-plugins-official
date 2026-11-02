@@ -1,5 +1,7 @@
 import { pack, unpack, read, MAX_FILE } from './archive.js';
-import { h, STYLE } from './ui.js';
+import { STYLE } from './ui.js';
+import { h } from '../shared/sandbox/dom.js';
+import { fileFromArgs, recordStep, frame, explain as explainCode, background } from '../shared/sandbox/app.js';
 
 /**
  * Zip: makes and opens .zip archives. An installable app (sdk 2), not part of lilOS. Its entry
@@ -10,38 +12,13 @@ import { h, STYLE } from './ui.js';
  *          { automation: { action: 'zip.zip' | 'zip.unzip', params }, files } → the id of what it made
  */
 const SHOWN = 500;   // entries listed in the window
+const KNOWN = ['nothing', 'tooMany', 'tooBig', 'resultTooBig', 'read', 'corrupt', 'empty', 'skippedAll', 'notZip', 'outside'];
 
-/** 12345 → '12 KB', in the language of the system. */
-function size(i18n, n) {
-  const units = ['B', 'KB', 'MB', 'GB'];
-  let u = 0;
-  while (n >= 1024 && u < units.length - 1) { n /= 1024; u++; }
-  return `${i18n.number(n, { maximumFractionDigits: u && n < 10 ? 1 : 0 })} ${units[u]}`;
-}
-
-/** An error of archive.js, in words. */
+/** An error of archive.js, in words: sizes as the system writes them. */
 function explain(lilos, err) {
   const t = (k, p) => lilos.locale.i18n.t(k, p);
-  const code = err?.message;
-  const detail = typeof err?.detail === 'number' ? size(lilos.locale.i18n, err.detail) : String(err?.detail ?? '');
-  const known = ['nothing', 'tooMany', 'tooBig', 'resultTooBig', 'read', 'corrupt', 'empty', 'skippedAll', 'notZip', 'outside'];
-  return known.includes(code)
-    ? t(`error.${code}`, { detail, limit: size(lilos.locale.i18n, MAX_FILE), max: err.detail })
-    : t('error.generic', { error: code ?? String(err) });
-}
-
-/** The node id of a '~' path the app made (automations name nodes by id). */
-const idOf = async (lilos, ref) => (await lilos.files.info(ref)).id;
-
-/**
- * Tells an automation being recorded what the user did (an action of contributes.automation),
- * with the '~' path of what it made. Older lilOS has no lilos.automation; a failure only means
- * the step is not recorded.
- */
-async function record(lilos, id, params, made) {
-  try {
-    if (lilos.automation) await lilos.automation.record(id, { params, result: await idOf(lilos, made) });
-  } catch { /* not recorded */ }
+  const size = n => lilos.locale.formatBytes(n);
+  return explainCode(t, err, KNOWN, { ...(typeof err?.detail === 'number' && { detail: size(err.detail) }), limit: size(MAX_FILE), max: err?.detail });
 }
 
 /** What was left out of an archive, in a sentence ('' when nothing). */
@@ -55,13 +32,12 @@ function skippedText(t, skipped) {
 
 export async function main({ lilos, root, args }) {
   const t = (k, p) => lilos.locale.i18n.t(k, p);
-  root.append(h('style', {}, STYLE));
-  const box = h('div', { class: 'zp' });
-  root.append(box);
+  const size = n => lilos.locale.formatBytes(n);
+  const { box, off } = frame(lilos, root, { style: STYLE, className: 'zp' }, () => draw());
 
   let file = null, info = null, content = null, error = '', done = null, working = false;
   const take = a => {
-    file = a?.file ?? (Array.isArray(a?.files) ? a.files[0] : null) ?? null;
+    file = fileFromArgs(a);
     info = content = done = null;
     error = '';
   };
@@ -69,7 +45,7 @@ export async function main({ lilos, root, args }) {
   const draw = () => {
     if (!file) {
       lilos.window.setTitle('Zip');
-      return box.replaceChildren(h('h1', {}, 'Zip'), h('p', {}, t('main.intro')), h('p', { class: 'hint' }, t('main.limits', { limit: size(lilos.locale.i18n, MAX_FILE) })));
+      return box.replaceChildren(h('h1', {}, 'Zip'), h('p', {}, t('main.intro')), h('p', { class: 'hint' }, t('main.limits', { limit: size(MAX_FILE) })));
     }
     lilos.window.setTitle(info?.name ?? 'Zip');
     if (error) return box.replaceChildren(h('h1', {}, info?.name ?? ''), h('div', { class: 'error', role: 'alert' }, error));
@@ -79,11 +55,11 @@ export async function main({ lilos, root, args }) {
     const go = h('button', { type: 'button', class: 'primary', disabled: working || !content.entries.length, 'aria-busy': working ? 'true' : 'false', onclick: extract }, t(working ? 'main.extracting' : 'main.extract'));
     box.replaceChildren(...[
       h('h1', {}, info.name),
-      h('p', {}, t('main.summary', { n: files.length, size: size(lilos.locale.i18n, total), packed: size(lilos.locale.i18n, info.size) })),
+      h('p', {}, t('main.summary', { n: files.length, size: size(total), packed: size(info.size) })),
       content.entries.length
         ? h('ul', { class: 'list', 'aria-label': t('main.content') }, ...content.entries.slice(0, SHOWN).map(e => h('li', { class: e.folder ? 'folder' : '' },
           h('span', { class: 'name', title: e.path.join('/') }, e.path.join('/') + (e.folder ? '/' : '')),
-          h('span', { class: 'size' }, e.folder ? '' : size(lilos.locale.i18n, e.size)))),
+          h('span', { class: 'size' }, e.folder ? '' : size(e.size)))),
         content.entries.length > SHOWN && h('li', { class: 'more' }, t('main.more', { n: content.entries.length - SHOWN })))
         : h('div', { class: 'empty' }, t('main.empty')),
       content.skipped.length > 0 && h('p', { class: 'warn' }, skippedText(t, content.skipped)),
@@ -101,7 +77,7 @@ export async function main({ lilos, root, args }) {
       const result = await unpack(lilos, file);
       done = [t('done.unzip', { name: result.name, n: result.count }), skippedText(t, result.skipped)].filter(Boolean).join(' ');
       lilos.ui.notify({ text: done, level: 'success' });
-      await record(lilos, 'zip.unzip', { file }, result.ref);
+      await recordStep(lilos, 'zip.unzip', { params: { file }, result: result.id });
     } catch (err) {
       error = explain(lilos, err);
     }
@@ -123,55 +99,49 @@ export async function main({ lilos, root, args }) {
   take(args);
   // Asked again (another archive) while open
   const offLaunch = lilos.on('launch', a => { take(a); load(); });
-  const offLocale = lilos.on('locale', draw);
   await load();
-  return () => { offLaunch(); offLocale(); };
+  return () => { offLaunch(); off(); };
 }
 
 // ---------- Work: Compress → Zip / Unzip ----------
 
 export async function work({ lilos }) {
   const t = (k, p) => lilos.locale.i18n.t(k, p);
+  const size = n => lilos.locale.formatBytes(n);
+  const zip = ids => pack(lilos, ids, { archiveName: t('archive.name') });
 
-  /** A step of an automation, done again without asking anything: the id of what it made. */
-  async function again({ action, params }) {
-    try {
-      if (action === 'zip.zip') {
-        const items = Array.isArray(params?.items) ? params.items : [];
-        return await idOf(lilos, (await pack(lilos, items, { archiveName: t('archive.name') })).ref);
-      }
-      if (action === 'zip.unzip' && typeof params?.file === 'string') return await idOf(lilos, (await unpack(lilos, params.file)).ref);
-    } catch (err) {
-      throw new Error(explain(lilos, err));
-    }
-    throw new Error('unknown');
-  }
-
-  lilos.handle(async data => {
-    if (data?.automation) return again(data.automation);
-    const ids = Array.isArray(data?.files) ? data.files : [];
-    try {
-      if (data?.action === 'zip.zip') {
-        const result = await pack(lilos, ids, { archiveName: t('archive.name') });
-        await lilos.ui.notify({ text: t('done.zip', { name: result.name, n: result.count, size: size(lilos.locale.i18n, result.size) }), level: 'success' });
-        await record(lilos, 'zip.zip', { items: ids }, result.ref);
+  background(lilos, {
+    // A step of an automation, done again without asking anything: the id of what it made
+    automation: {
+      'zip.zip': async params => (await zip(Array.isArray(params.items) ? params.items : [])).id,
+      'zip.unzip': async params => {
+        if (typeof params.file !== 'string') throw new Error('unknown');
+        return (await unpack(lilos, params.file)).id;
+      },
+    },
+    actions: {
+      'zip.zip': async ids => {
+        const result = await zip(ids);
+        await lilos.ui.notify({ text: t('done.zip', { name: result.name, n: result.count, size: size(result.size) }), level: 'success' });
+        await recordStep(lilos, 'zip.zip', { params: { items: ids }, result: result.id });
         return { name: result.name };
-      }
-      if (data?.action === 'zip.unzip') {
+      },
+      'zip.unzip': async ids => {
         const names = [];
         for (const id of ids) {
           const result = await unpack(lilos, id);
           names.push(result.name);
           await lilos.ui.notify({ text: [t('done.unzip', { name: result.name, n: result.count }), skippedText(t, result.skipped)].filter(Boolean).join(' '), level: result.skipped.length ? 'warning' : 'success' });
           // One step for each archive: it is what the action does again
-          await record(lilos, 'zip.unzip', { file: id }, result.ref);
+          await recordStep(lilos, 'zip.unzip', { params: { file: id }, result: result.id });
         }
         return { names };
-      }
-    } catch (err) {
+      },
+    },
+    onError: async err => {
       await lilos.ui.notify({ text: explain(lilos, err), level: 'error' });
       return { error: err?.message ?? String(err) };
-    }
-    throw new Error('unknown');
+    },
+    explainError: err => explain(lilos, err),
   });
 }
