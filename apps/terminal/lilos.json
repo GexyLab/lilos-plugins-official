@@ -1,6 +1,6 @@
 {
   "id": "terminal",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "kind": "local",
   "name": "Terminal",
   "description": "A bash-like shell over the files of lilOS, in tabs and panes side by side, and remote sessions: SSH, Telnet, rlogin and SUPDUP, with saved hosts, .term links and sessions that keep running when the window is closed.",
@@ -62,6 +62,12 @@
       "module": "term-supdup",
       "optional": true,
       "reason": "Remote sessions over SUPDUP"
+    },
+    {
+      "module": "services-isolate",
+      "version": ">=1.2.0",
+      "optional": true,
+      "reason": "Scheduled Terminal commands in the kernel, with the operation's time limit and Cancel"
     }
   ],
   "permissions": [
@@ -227,8 +233,8 @@
   "locales": "locales.json",
   "files": {
     "dist/index-Ljiteq9c.css": "sha256-nyi/jlg1fYcJ9gF1wPaMzKly5IgrMa+Eht6fKre+MHM=",
-    "dist/index.js": "sha256-SU/hxLePCNWzvHsvfd9qpEd+jwC/pBiGZodIXYKDYE0=",
-    "dist/shell.js": "sha256-L0h1Vbn68rLYviehaWSuo1VYxSyYjsri60KEkb5vMFU=",
-    "locales.json": "sha256-lSgQJ1Pm8/2hf78bEmsHjwQAVOySKtJtt0Zb6XjbBrs="
+    "dist/index.js": "sha256-z6YsF5Ize+fPtyDUmDR0LWKsVDJRWJPWo+IAkwcM76Q=",
+    "dist/shell.js": "sha256-5GUHs4cti2ZuY9QWSTbt166ma5GUuAVLJUZ8su46tDI=",
+    "locales.json": "sha256-Rhc3GkepAv4ihhj3VYq+h7X9r+YsM/Hv4UZyKix3K+g="
   }
 }
