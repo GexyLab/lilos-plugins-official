@@ -78,8 +78,9 @@ async function run(lilos, { lines = '', cwd = null } = {}) {
 export function shell({ lilos }) {
   // One run at a time: two operations at once would share the same tree
   let queue = Promise.resolve();
-  lilos.handle(data => {
-    if (!data?.schedule) return { ok: false, code: 2, error: 'Il servizio shell esegue solo i comandi della Pianificazione' };
+  lilos.handle((data, from) => {
+    // Only the scheduler (the kernel refuses `schedule` from pages and apps, see AppServices.call)
+    if (from !== 'scheduler' || !data?.schedule) return { ok: false, code: 2, error: 'Il servizio shell esegue solo i comandi della Pianificazione' };
     const next = queue.then(() => run(lilos, data.schedule.params ?? {}));
     queue = next.catch(() => {});
     return next;

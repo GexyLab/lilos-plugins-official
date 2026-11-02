@@ -48,6 +48,7 @@ function prefillFrom(a) {
   }
   if (plain(a.what)) out.what = a.what;
   if (typeof a.name === 'string') out.name = a.name;
+  if (typeof a.from === 'string') out.from = a.from;
   if (plain(a.when)) out.when = a.when;
   return out;
 }
@@ -185,7 +186,7 @@ function editorWindow({ id = null, copy = null, prefill = {} }, openWindow) {
       onclick: () => { step = i; draw(); },
     }, h('i', {}, i < step ? '✓' : String(i + 1)), n)));
     if (!loaded) { fill(mainEl, h('p', { class: 'ed-hint' }, t('editor.loading'))); return; }
-    fill(mainEl, ...[stepWhat, stepWhen, stepOptions][step]());
+    fill(mainEl, ...(prefill.from ? [h('p', { class: 'ed-warn' }, icon('info'), t('editor.proposedBy', { app: system.getApp(prefill.from)?.name ?? prefill.from }))] : []), ...[stepWhat, stepWhen, stepOptions][step]());
     drawSide();
     errEl.textContent = error;
     const back = h('button', { class: 'sc-btn', type: 'button', disabled: step === 0, onclick: () => { step--; draw(); } }, t('editor.back'));

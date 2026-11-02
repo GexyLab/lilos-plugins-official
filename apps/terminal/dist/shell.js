@@ -6741,14 +6741,14 @@ async function Br(e, { lines: t = "", cwd: n = null } = {}) {
 }
 function Vr({ lilos: e }) {
 	let t = Promise.resolve();
-	e.handle((n) => {
-		if (!n?.schedule) return {
+	e.handle((n, r) => {
+		if (r !== "scheduler" || !n?.schedule) return {
 			ok: !1,
 			code: 2,
 			error: "Il servizio shell esegue solo i comandi della Pianificazione"
 		};
-		let r = t.then(() => Br(e, n.schedule.params ?? {}));
-		return t = r.catch(() => {}), r;
+		let i = t.then(() => Br(e, n.schedule.params ?? {}));
+		return t = i.catch(() => {}), i;
 	});
 }
 export { Vr as shell };
