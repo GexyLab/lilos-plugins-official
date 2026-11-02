@@ -1,5 +1,9 @@
 # Changelog di lilOS
 
+## 1.20.0 — 2026-11-02
+
+- **Tutti i workspace nella barra delle applicazioni**: accanto al logo, invece del solo workspace attuale, un pulsante per ogni workspace in fila (pallino e nome). Quello in cui sei è evidenziato, un clic su un altro ti ci porta, la freccia dopo l'ultimo (o il clic destro) apre il menu dei workspace. Si sceglie dal menu dei workspace (**Mostra tutti i workspace**) o dal Pannello di controllo 1.17.0 → Workspace → Tutti; di serie resta solo l'attuale
+
 ## 1.19.2 — 2026-11-02
 
 - **Sicurezza** (con più utenti): le richieste web della Pianificazione controllano l'indirizzo nel momento in cui si collegano, anche dopo un reindirizzamento. Prima un nome di dominio poteva cambiare indirizzo tra il controllo e la connessione (*DNS rebinding*) e portare il kernel verso questo computer o la rete locale. Aggiorna subito se più persone usano lo stesso lilOS

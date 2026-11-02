@@ -1,13 +1,13 @@
 {
   "name": "lilos",
-  "version": "1.19.2",
+  "version": "1.20.0",
   "kernel": 1,
   "sdk": [
     "1",
     "2"
   ],
   "node": 22,
-  "commit": "b97a651796a3492be8033d525dee44c9af72f9da",
+  "commit": "14a74d07f2abfd3015f1ea2eb222d4b79b1804e2",
   "date": "2026-11-02",
   "files": {
     "package.json": "sha256-+eIoEoTo8Q1ydUjHGd993yoTtyp85aX5Sc7P3UtKB5Y=",
@@ -41,12 +41,12 @@
     "web/assets/boot-BZmrVO6-.css": "sha256-RHbGmezBEQge+sIYvKxlN8vUYcOd+puRYwRzAyFf5Xk=",
     "web/assets/boot-BqteZ-FE.js": "sha256-HBZXeY7bZfPZOQM9ks9mggZXxGxGGtq+I+WbUBifmXM=",
     "web/assets/index-4vTdv2dU.css": "sha256-LWqrOu9V3ovKinE9DJfpgqI5Wuf53ZCep39tcxwK43M=",
-    "web/assets/index-7Mehs7qD.js": "sha256-lyo3+QC7UehLD7EJxj2jrukuGpLBGO76TdrTaWLGeA0=",
-    "web/assets/system-BFvHam0Y.js": "sha256-mnE9X08iDYj/veZNsrUewxCGPS4dVVjM/le02Wdxhv0=",
-    "web/assets/system-VS8YvcbU.css": "sha256-O/BLBO5Y6b7OiBUpnneK8Q9pJLbEauz8U48KSuyOTIA=",
+    "web/assets/index-Blr4Mb25.js": "sha256-X1xVQ7dpr/fFkMC1yOphYgQ9conQEHgDgl7j+HnxURU=",
+    "web/assets/system-4u9USGis.js": "sha256-P2RrfvNkcQOv4bFBxNp580wyEtHfkyboLZzJKwnLf9o=",
+    "web/assets/system-CKdO5Qto.css": "sha256-tEfLLW8bMbbSt/umYI9xYTRja05o7f2IoqQsplQCf7k=",
     "web/favicon.svg": "sha256-79XhGd7Mhuct5Q4XQ5QnMYkI6NOXEZcwROrWH9/9aiA=",
     "web/host/sdk.js": "sha256-oL0ajivW3+iX+tIX5qURou5qLbLDCBNeF/CahgH/QBg=",
     "web/host/system.js": "sha256-3DKj11UjcSDoorC4wyId8lEffcqa7pBCojaNUeq6pLE=",
-    "web/index.html": "sha256-PW4lLfXhJ5wkp3faAheHtJGSyT1ojGh0xsTFxM024UY="
+    "web/index.html": "sha256-vzYWJz5AGjfVxiLd/NKglafn6ZeClUd3XwKOyVlqCIs="
   }
 }
