@@ -11,7 +11,8 @@
     "apps/calculator",
     "apps/keyboard",
     "apps/zip",
-    "apps/automata"
+    "apps/automata",
+    "apps/arduino-ide"
   ],
   "modules": [
     "modules/users-basic",
@@ -31,7 +32,8 @@
     "modules/term-ssh",
     "modules/term-telnet",
     "modules/term-rlogin",
-    "modules/term-supdup"
+    "modules/term-supdup",
+    "modules/arduino"
   ],
   "system": "system/lilos"
 }

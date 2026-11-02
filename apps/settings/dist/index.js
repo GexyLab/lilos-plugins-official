@@ -1073,6 +1073,179 @@ var ft = {
 	libraries: [
 		{
 			kind: "library",
+			name: "@codemirror/autocomplete",
+			version: "6.20.4",
+			license: "MIT",
+			copyright: "Copyright (C) 2018-2021 by Marijn Haverbeke <marijn@haverbeke.berlin> and others",
+			url: "https://code.haverbeke.berlin/codemirror/autocomplete",
+			usedBy: ["arduino-ide"]
+		},
+		{
+			kind: "library",
+			name: "@codemirror/commands",
+			version: "6.11.1",
+			license: "MIT",
+			copyright: "Copyright (C) 2018-2021 by Marijn Haverbeke <marijn@haverbeke.berlin> and others",
+			url: "https://code.haverbeke.berlin/codemirror/commands",
+			usedBy: ["arduino-ide"]
+		},
+		{
+			kind: "library",
+			name: "@codemirror/lang-cpp",
+			version: "6.0.3",
+			license: "MIT",
+			copyright: "Copyright (C) 2018-2021 by Marijn Haverbeke <marijn@haverbeke.berlin> and others",
+			url: "https://github.com/codemirror/lang-cpp",
+			usedBy: ["arduino-ide"]
+		},
+		{
+			kind: "library",
+			name: "@codemirror/language",
+			version: "6.13.1",
+			license: "MIT",
+			copyright: "Copyright (C) 2018-2021 by Marijn Haverbeke <marijn@haverbeke.berlin> and others",
+			url: "https://code.haverbeke.berlin/codemirror/language",
+			usedBy: ["arduino-ide"]
+		},
+		{
+			kind: "library",
+			name: "@codemirror/lint",
+			version: "6.9.7",
+			license: "MIT",
+			copyright: "Copyright (C) 2018-2021 by Marijn Haverbeke <marijn@haverbeke.berlin> and others",
+			url: "https://code.haverbeke.berlin/codemirror/lint",
+			usedBy: ["arduino-ide"],
+			via: ["@codemirror/lsp-client", "codemirror"]
+		},
+		{
+			kind: "library",
+			name: "@codemirror/lsp-client",
+			version: "6.3.0",
+			license: "MIT",
+			copyright: "Copyright (C) 2025 by Marijn Haverbeke <marijn@haverbeke.berlin> and others",
+			url: "https://www.npmjs.com/package/@codemirror/lsp-client",
+			usedBy: ["arduino-ide"]
+		},
+		{
+			kind: "library",
+			name: "@codemirror/search",
+			version: "6.7.2",
+			license: "MIT",
+			copyright: "Copyright (C) 2018-2021 by Marijn Haverbeke <marijn@haverbeke.berlin> and others",
+			url: "https://code.haverbeke.berlin/codemirror/search",
+			usedBy: ["arduino-ide"],
+			via: ["codemirror"]
+		},
+		{
+			kind: "library",
+			name: "@codemirror/state",
+			version: "6.7.6",
+			license: "MIT",
+			copyright: "Copyright (C) 2018-2021 by Marijn Haverbeke <marijn@haverbeke.berlin> and others",
+			url: "https://code.haverbeke.berlin/codemirror/state",
+			usedBy: ["arduino-ide"]
+		},
+		{
+			kind: "library",
+			name: "@codemirror/streamparser",
+			version: "6.0.0",
+			license: "MIT",
+			copyright: "Copyright (C) 2018-2021 by Marijn Haverbeke <marijn@haverbeke.berlin> and others",
+			url: "https://code.haverbeke.berlin/codemirror/streamparser",
+			usedBy: ["arduino-ide"],
+			via: [
+				"@codemirror/autocomplete",
+				"@codemirror/commands",
+				"@codemirror/lang-cpp",
+				"@codemirror/language",
+				"@codemirror/lsp-client",
+				"codemirror"
+			]
+		},
+		{
+			kind: "library",
+			name: "@codemirror/view",
+			version: "6.43.15",
+			license: "MIT",
+			copyright: "Copyright (C) 2018-2021 by Marijn Haverbeke <marijn@haverbeke.berlin> and others",
+			url: "https://code.haverbeke.berlin/codemirror/view",
+			usedBy: ["arduino-ide"]
+		},
+		{
+			kind: "library",
+			name: "@lezer/common",
+			version: "1.5.5",
+			license: "MIT",
+			copyright: "Copyright (C) 2018 by Marijn Haverbeke <marijn@haverbeke.berlin> and others",
+			url: "https://code.haverbeke.berlin/lezer/common",
+			usedBy: ["arduino-ide"],
+			via: [
+				"@codemirror/autocomplete",
+				"@codemirror/commands",
+				"@codemirror/lang-cpp",
+				"@codemirror/language",
+				"@codemirror/lsp-client",
+				"@lezer/highlight",
+				"codemirror"
+			]
+		},
+		{
+			kind: "library",
+			name: "@lezer/cpp",
+			version: "1.1.6",
+			license: "MIT",
+			copyright: "Copyright (C) 2020 by Marijn Haverbeke <marijn@haverbeke.berlin> and others",
+			url: "https://code.haverbeke.berlin/lezer/cpp",
+			usedBy: ["arduino-ide"],
+			via: ["@codemirror/lang-cpp"]
+		},
+		{
+			kind: "library",
+			name: "@lezer/highlight",
+			version: "1.2.5",
+			license: "MIT",
+			copyright: "Copyright (C) 2018 by Marijn Haverbeke <marijn@haverbeke.berlin> and others",
+			url: "https://code.haverbeke.berlin/lezer/highlight",
+			usedBy: ["arduino-ide"]
+		},
+		{
+			kind: "library",
+			name: "@lezer/lr",
+			version: "1.4.12",
+			license: "MIT",
+			copyright: "Copyright (C) 2018 by Marijn Haverbeke <marijn@haverbeke.berlin> and others",
+			url: "https://code.haverbeke.berlin/lezer/lr",
+			usedBy: ["arduino-ide"],
+			via: [
+				"@codemirror/autocomplete",
+				"@codemirror/commands",
+				"@codemirror/lang-cpp",
+				"@codemirror/language",
+				"@codemirror/lsp-client",
+				"codemirror"
+			]
+		},
+		{
+			kind: "library",
+			name: "@marijn/find-cluster-break",
+			version: "1.0.4",
+			license: "MIT",
+			copyright: "Copyright (C) 2024 by Marijn Haverbeke <marijn@haverbeke.berlin>",
+			url: "https://code.haverbeke.berlin/marijn/find-cluster-break",
+			usedBy: ["arduino-ide"],
+			via: [
+				"@codemirror/autocomplete",
+				"@codemirror/commands",
+				"@codemirror/lang-cpp",
+				"@codemirror/language",
+				"@codemirror/lsp-client",
+				"@codemirror/state",
+				"@codemirror/view",
+				"codemirror"
+			]
+		},
+		{
+			kind: "library",
 			name: "@noble/ciphers",
 			version: "1.3.0",
 			license: "MIT",
@@ -1218,6 +1391,24 @@ var ft = {
 		},
 		{
 			kind: "library",
+			name: "arduino-cli",
+			version: "1.5.1",
+			license: "GPL-3.0",
+			copyright: "Copyright © ARDUINO SA",
+			url: "https://github.com/arduino/arduino-cli",
+			usedBy: ["module:arduino"]
+		},
+		{
+			kind: "library",
+			name: "arduino-language-server",
+			version: "0.7.7",
+			license: "AGPL-3.0",
+			copyright: "Copyright © ARDUINO SA",
+			url: "https://github.com/arduino/arduino-language-server",
+			usedBy: ["module:arduino"]
+		},
+		{
+			kind: "library",
 			name: "asn1",
 			version: "0.2.6",
 			license: "MIT",
@@ -1288,6 +1479,24 @@ var ft = {
 		},
 		{
 			kind: "library",
+			name: "clangd",
+			version: "14.0.0",
+			license: "Apache-2.0 WITH LLVM-exception",
+			copyright: "Copyright © The LLVM Project",
+			url: "https://clangd.llvm.org",
+			usedBy: ["module:arduino"]
+		},
+		{
+			kind: "library",
+			name: "codemirror",
+			version: "6.0.2",
+			license: "MIT",
+			copyright: "Copyright (C) 2018-2021 by Marijn Haverbeke <marijn@haverbeke.berlin> and others",
+			url: "https://github.com/codemirror/basic-setup",
+			usedBy: ["arduino-ide"]
+		},
+		{
+			kind: "library",
 			name: "comma-separated-tokens",
 			version: "2.0.3",
 			license: "MIT",
@@ -1306,6 +1515,24 @@ var ft = {
 			usedBy: ["module:netfs-sftp", "module:term-ssh"],
 			via: ["ssh2"],
 			optional: !0
+		},
+		{
+			kind: "library",
+			name: "crelt",
+			version: "1.0.7",
+			license: "MIT",
+			copyright: "Copyright (C) 2020 by Marijn Haverbeke <marijn@haverbeke.berlin>",
+			url: "https://code.haverbeke.berlin/marijn/crelt",
+			usedBy: ["arduino-ide"],
+			via: [
+				"@codemirror/autocomplete",
+				"@codemirror/commands",
+				"@codemirror/lang-cpp",
+				"@codemirror/language",
+				"@codemirror/lsp-client",
+				"@codemirror/view",
+				"codemirror"
+			]
 		},
 		{
 			kind: "library",
@@ -1384,6 +1611,16 @@ var ft = {
 			url: "https://github.com/microsoft/node-jsonc-parser",
 			usedBy: ["editor"],
 			via: ["vscode-json-languageservice"]
+		},
+		{
+			kind: "library",
+			name: "marked",
+			version: "15.0.12",
+			license: "MIT",
+			copyright: "Copyright (c) 2018+, MarkedJS (https://github.com/markedjs/)",
+			url: "https://marked.js.org",
+			usedBy: ["arduino-ide"],
+			via: ["@codemirror/lsp-client"]
 		},
 		{
 			kind: "library",
@@ -1706,6 +1943,24 @@ var ft = {
 		},
 		{
 			kind: "library",
+			name: "style-mod",
+			version: "4.1.4",
+			license: "MIT",
+			copyright: "Copyright (C) 2018 by Marijn Haverbeke <marijn@haverbeke.berlin> and others",
+			url: "https://code.haverbeke.berlin/marijn/style-mod",
+			usedBy: ["arduino-ide"],
+			via: [
+				"@codemirror/autocomplete",
+				"@codemirror/commands",
+				"@codemirror/lang-cpp",
+				"@codemirror/language",
+				"@codemirror/lsp-client",
+				"@codemirror/view",
+				"codemirror"
+			]
+		},
+		{
+			kind: "library",
 			name: "tree-sitter-bash",
 			version: "0.25.1",
 			license: "MIT",
@@ -1877,6 +2132,26 @@ var ft = {
 		},
 		{
 			kind: "library",
+			name: "vscode-jsonrpc",
+			version: "10.0.0",
+			license: "MIT",
+			copyright: "Copyright (c) Microsoft Corporation",
+			url: "https://github.com/microsoft/vscode-languageserver-node/tree/main/jsonrpc",
+			usedBy: ["arduino-ide"],
+			via: ["@codemirror/lsp-client"]
+		},
+		{
+			kind: "library",
+			name: "vscode-languageserver-protocol",
+			version: "3.18.5",
+			license: "MIT",
+			copyright: "Copyright (c) Microsoft Corporation",
+			url: "https://github.com/microsoft/vscode-languageserver-node/tree/main/protocol",
+			usedBy: ["arduino-ide"],
+			via: ["@codemirror/lsp-client"]
+		},
+		{
+			kind: "library",
 			name: "vscode-languageserver-textdocument",
 			version: "1.0.15",
 			license: "MIT",
@@ -1900,6 +2175,16 @@ var ft = {
 		},
 		{
 			kind: "library",
+			name: "vscode-languageserver-types",
+			version: "3.18.5",
+			license: "MIT",
+			copyright: "Copyright (c) Microsoft Corporation",
+			url: "https://github.com/microsoft/vscode-languageserver-node/tree/main/types",
+			usedBy: ["arduino-ide"],
+			via: ["@codemirror/lsp-client"]
+		},
+		{
+			kind: "library",
 			name: "vscode-uri",
 			version: "3.2.0",
 			license: "MIT",
@@ -1910,6 +2195,24 @@ var ft = {
 				"vscode-css-languageservice",
 				"vscode-html-languageservice",
 				"vscode-json-languageservice"
+			]
+		},
+		{
+			kind: "library",
+			name: "w3c-keyname",
+			version: "2.2.8",
+			license: "MIT",
+			copyright: "Copyright (C) 2016 by Marijn Haverbeke <marijn@haverbeke.berlin> and others",
+			url: "https://github.com/marijnh/w3c-keyname",
+			usedBy: ["arduino-ide"],
+			via: [
+				"@codemirror/autocomplete",
+				"@codemirror/commands",
+				"@codemirror/lang-cpp",
+				"@codemirror/language",
+				"@codemirror/lsp-client",
+				"@codemirror/view",
+				"codemirror"
 			]
 		},
 		{
@@ -1970,6 +2273,10 @@ var ft = {
 		}
 	],
 	names: {
+		"arduino-ide": {
+			en: "ArduinoIDE",
+			it: "ArduinoIDE"
+		},
 		filecrypt: {
 			en: "FileCrypt",
 			it: "FileCrypt"

@@ -29,6 +29,7 @@ const APPS = [
   { id: 'keyboard', entry: 'KeyboardApp.js' },
   { id: 'zip', entry: 'ZipApp.js' },
   { id: 'automata', entry: 'AutomataApp.js' },
+  { id: 'arduino-ide', entry: 'ArduinoApp.js' },
 ];
 
 /** Every language without `extends` has every key of English, and none that English lacks. */

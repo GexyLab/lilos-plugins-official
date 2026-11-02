@@ -53,6 +53,18 @@ const VENDORED = [
   },
 ];
 
+/**
+ * Programs a kernel module downloads when it needs them (not in a lockfile): their names and
+ * versions are read from the module's own list, licenses here; the check stops on one missing.
+ */
+const DOWNLOADED = {
+  'modules/arduino/tools.js': {
+    'arduino-cli': { license: 'GPL-3.0', copyright: 'Copyright © ARDUINO SA', url: 'https://github.com/arduino/arduino-cli' },
+    'arduino-language-server': { license: 'AGPL-3.0', copyright: 'Copyright © ARDUINO SA', url: 'https://github.com/arduino/arduino-language-server' },
+    clangd: { license: 'Apache-2.0 WITH LLVM-exception', copyright: 'Copyright © The LLVM Project', url: 'https://clangd.llvm.org' },
+  },
+};
+
 const readJson = file => JSON.parse(readFileSync(file, 'utf8'));
 const walk = dir => readdirSync(dir, { withFileTypes: true }).flatMap(e => (e.name === 'node_modules' ? [] : e.isDirectory() ? walk(join(dir, e.name)) : [join(dir, e.name)]));
 const rel = file => relative(root, file).split(sep).join('/');
@@ -195,6 +207,17 @@ function collect() {
     if (!existsSync(join(root, v.license))) throw new Error(`${v.license} non esiste più: aggiorna VENDORED in scripts/credits.mjs`);
     const info = v.read(readFileSync(join(root, v.license), 'utf8'));
     add(`library:${info.name}@${info.version}`, { kind: 'library', ...info, usedBy: v.usedBy, vendored: true });
+  }
+
+  // Programs downloaded by kernel modules
+  for (const [file, known] of Object.entries(DOWNLOADED)) {
+    const module = file.split('/')[1];
+    const listed = [...readFileSync(join(root, file), 'utf8').matchAll(/name: '([^']+)', version: '([^']+)'/g)];
+    if (!listed.length) throw new Error(`${file}: nessun programma trovato (aggiorna DOWNLOADED in scripts/credits.mjs)`);
+    for (const [, name, version] of listed) {
+      if (!known[name]) throw new Error(`${name} (${file}) senza riconoscimento: aggiungilo a DOWNLOADED in scripts/credits.mjs`);
+      add(`library:${name}@${version}`, { kind: 'library', name, version, ...known[name], usedBy: [`module:${module}`], vendored: true });
+    }
   }
 
   // Fonts
