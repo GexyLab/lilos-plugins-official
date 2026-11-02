@@ -1,5 +1,9 @@
 # Changelog di lilOS
 
+## 1.20.2 — 2026-11-02
+
+- Passando a un altro workspace non compare più la notifica «Workspace «nome»»: il cambio lo fai tu e il pulsante del workspace mostra già dove sei. Restano le notifiche quando elimini un workspace o arrivi al massimo di 20
+
 ## 1.20.1 — 2026-11-02
 
 - I comandi dei moduli dalla riga di comando (`npm run kernel:cli -- users-basic add <nome> --admin`, `passwd`, `list`, `remove`) funzionano di nuovo: si fermavano subito con l'errore «The "path" argument must be of type string». lilOS in uso non cambia
