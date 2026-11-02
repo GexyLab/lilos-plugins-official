@@ -20,6 +20,7 @@
 
       "action.install": "Install",
       "action.installAnyway": "Install anyway",
+      "action.installName": "Install {name}",
       "action.update": "Update",
       "action.updateTo": "Update to {version}",
       "action.updateAll": "Update all",
@@ -87,6 +88,7 @@
       "status.available": "Available",
       "status.updateAvailable": "Update {version}",
       "status.removed": "Removed",
+      "status.replacedBy": "Replaced by {name}",
       "status.otherRepo": "From another repository",
       "status.installedApp": "Installed",
       "status.installedModule": "Installed",
@@ -204,6 +206,7 @@
 
       "action.install": "Installa",
       "action.installAnyway": "Installa comunque",
+      "action.installName": "Installa {name}",
       "action.update": "Aggiorna",
       "action.updateTo": "Aggiorna a {version}",
       "action.updateAll": "Aggiorna tutto",
@@ -271,6 +274,7 @@
       "status.available": "Disponibile",
       "status.updateAvailable": "Aggiornamento {version}",
       "status.removed": "Rimosso",
+      "status.replacedBy": "Sostituito da {name}",
       "status.otherRepo": "Da un altro repository",
       "status.installedApp": "Installata",
       "status.installedModule": "Installato",

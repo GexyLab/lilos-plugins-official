@@ -266,6 +266,13 @@ export default function AppStore() {
     for (const m of modules) {
       if (!out.some(i => i.kind === 'module' && i.here && i.id === m.name)) out.push(moduleItem(state.repos.find(r => sameRepo(m.source, r)) ?? null, null, m));
     }
+    // Installed modules that a module of a catalog takes the place of (its module.json `replaces`):
+    // installing that one replaces them (the kernel moves their settings and removes them)
+    const replacers = out.filter(i => i.kind === 'module' && i.entry && !i.have && i.module.replaces?.length);
+    for (const item of out) {
+      if (item.kind !== 'module' || !item.here || !item.have.enabled || item.have.replacedBy) continue;
+      item.replacedBy = replacers.find(r => r.module.replaces.includes(item.id)) ?? null;
+    }
     const system = systemItem();
     return system ? [system, ...out] : out;
   }
@@ -274,11 +281,14 @@ export default function AppStore() {
     const present = new Set(items.filter(i => !i.repo || isEnabled(i.repo)).map(i => i.category));
     return [
       { id: 'installed', label: t('tab.installed'), filter: i => i.here },
-      { id: 'updates', label: t('tab.updates'), filter: i => !!i.update, badge: true },
+      { id: 'updates', label: t('tab.updates'), filter: pending, badge: true },
       // What came from a repository switched off is only in Installed
       ...categories().filter(c => present.has(c.id) || (c.id === 'kernel' && isAdmin)).map(c => ({ ...c, category: true, filter: i => i.category === c.id && (!i.repo || isEnabled(i.repo)) })),
     ];
   }
+
+  /** Something newer to take: an update, or the module that replaces an installed one. */
+  const pending = item => !!item.update || !!item.replacedBy;
 
   const matches = (item, query) => !query || [item.name, item.id, item.description, item.publisher, item.repo ? repoName(item.repo) : '']
     .some(text => text.toLowerCase().includes(query));
@@ -324,9 +334,12 @@ export default function AppStore() {
   /** What installing or updating a module did, and the modules it took the place of (lilOS ≥ 1.21.0: result.replaced). */
   const moduleDone = (result, text) => (result?.replaced?.length ? `${text} ${t('done.moduleReplaced', { names: result.replaced.join(', ') })}` : text);
 
+  /** Where a package of a catalog is installed from. */
+  const sourceOf = ({ repo, entry }) => ({ type: 'git', url: repo.url, path: entry.path, ref: state.catalogs.get(repo.id)?.ref });
+
   async function install(item) {
-    const { repo, entry } = item;
-    const source = { type: 'git', url: repo.url, path: entry.path, ref: state.catalogs.get(repo.id)?.ref };
+    const { repo } = item;
+    const source = sourceOf(item);
     if (item.kind === 'module') {
       const answer = await confirmInstall({ title: t('confirm.installTitle', { name: item.name }), name: item.name, official: repo.official, kernelModule: true });
       if (answer) act('install', () => kernelModules.install(source, { allowUnsigned: answer.allowUnsigned }), r => moduleDone(r, t('done.moduleInstalled', { name: item.name })));
@@ -386,8 +399,24 @@ export default function AppStore() {
       let done = 0;
       const jobs = [];
       const lilos = items.find(i => i.kind === 'system');
+      const replacing = new Set();
       for (const item of items) {
         if (item === lilos) continue;
+        if (item.replacedBy) {
+          // The module that takes its place, installed once even when it replaces several
+          const by = item.replacedBy;
+          if (replacing.has(by.name)) continue;
+          replacing.add(by.name);
+          const official = !!by.repo.official;
+          if (!official && !await confirmInstall({ title: t('confirm.installTitle', { name: by.name }), name: by.name, official, kernelModule: true })) continue;
+          try {
+            await kernelModules.install(sourceOf(by), { allowUnsigned: !official });
+            done++;
+          } catch (err) {
+            toast(`${by.name}: ${err.message}`, { timeout: 7000 });
+          }
+          continue;
+        }
         const answer = await askUpdate(item);
         if (!answer) continue;
         if (item.kind !== 'module') {
@@ -505,6 +534,7 @@ export default function AppStore() {
       if (item.update) return isAdmin ? button(t('action.update'), () => updateSystem(item), { primary: true, key: item.key }) : status(t('status.updateAvailable', { version: item.update }));
       return systemNext() ? status(t('system.nextShort', { version: systemNext() })) : status(t('system.inUse'), true);
     }
+    if (item.replacedBy) return isAdmin ? button(t('action.installName', { name: item.replacedBy.name }), () => install(item.replacedBy), { primary: true, key: item.key }) : status(t('status.replacedBy', { name: item.replacedBy.name }));
     if (item.update) return isAdmin ? button(t('action.update'), () => update(item), { primary: true, key: item.key }) : status(t('status.updateAvailable', { version: item.update }));
     if (item.here) return status(item.kind === 'module' && !item.have.enabled ? t('status.removed') : installedWord(item), true);
     if (item.elsewhere) return status(t('status.otherRepo'));
@@ -513,7 +543,8 @@ export default function AppStore() {
 
   /** uninstall: the Installed tab, where each app that can go has its own button. */
   function card(item, { uninstall = false } = {}) {
-    const version = item.update ? `${item.installed} → ${item.update}` : item.here ? item.installed : item.offered;
+    const version = item.replacedBy ? `${item.installed} → ${t('status.replacedBy', { name: item.replacedBy.name })}`
+      : item.update ? `${item.installed} → ${item.update}` : item.here ? item.installed : item.offered;
     const uninstallButton = uninstall && canUninstall(item) ? button(t('action.uninstall'), () => remove(item), { danger: true, key: item.key }) : null;
     return h('div', { class: 'as-card' },
       h('div', { class: 'as-card-top' },
@@ -632,16 +663,17 @@ export default function AppStore() {
     const actions = [];
     if (item.here && !isModule) actions.push(button(t('action.open'), () => launch(item.id), { primary: !item.update || !isAdmin }));
     if (isAdmin) {
-      if (item.update) actions.push(button(t('action.updateTo', { version: item.update }), () => update(item), { primary: true, key: item.key }));
+      if (item.replacedBy) actions.push(button(t('action.installName', { name: item.replacedBy.name }), () => install(item.replacedBy), { primary: true, key: item.key }));
+      else if (item.update) actions.push(button(t('action.updateTo', { version: item.update }), () => update(item), { primary: true, key: item.key }));
       if (item.here && (!isModule || item.have.enabled)) {
-        if (!item.update && item.have.source) actions.push(button(t('action.checkUpdates'), () => update(item), { key: item.key }));
+        if (!pending(item) && item.have.source) actions.push(button(t('action.checkUpdates'), () => update(item), { key: item.key }));
         if (!isModule) actions.push(button(t('action.reinstall'), () => reinstall(item), { key: item.key }));
         if (!item.required) actions.push(button(isModule ? t('action.remove') : t('action.uninstall'), () => remove(item), { danger: true, key: item.key }));
       }
       if (!item.here && !item.elsewhere && item.entry) actions.push(button(item.repo.official ? t('action.install') : t('action.installAnyway'), () => install(item), { primary: true, danger: !item.repo.official, key: item.key }));
     }
     const moduleState = isModule && item.have
-      ? (!item.have.enabled ? t('moduleState.removed') : item.have.running !== item.have.enabled ? (item.have.running ? t('moduleState.oldUntilRestart', { version: item.have.running }) : t('moduleState.nextStart')) : t('moduleState.inUse'))
+      ? (item.replacedBy ? t('status.replacedBy', { name: item.replacedBy.name }) : !item.have.enabled ? t('moduleState.removed') : item.have.running !== item.have.enabled ? (item.have.running ? t('moduleState.oldUntilRestart', { version: item.have.running }) : t('moduleState.nextStart')) : t('moduleState.inUse'))
       : null;
     const permissions = needsGrant(item.manifest?.permissions);
     footerText.textContent = `${item.name} ${item.offered ?? item.installed}`;
@@ -802,7 +834,7 @@ export default function AppStore() {
     const list = tabs(items);
     if (!list.some(tb => tb.id === state.tab)) state.tab = 'installed';
     const tab = list.find(tb => tb.id === state.tab);
-    const updates = items.filter(i => i.update).length;
+    const updates = items.filter(pending).length;
     tabBar.replaceChildren(...list.flatMap((tb, n) => [
       tb.category && !list[n - 1].category ? h('span', { class: 'as-tab-sep' }) : null,
       h('button', { class: 'as-tab', role: 'tab', 'aria-selected': String(state.view === 'list' && tb.id === state.tab), tabindex: tb.id === state.tab ? '0' : '-1', onclick: () => selectTab(tb.id) },
