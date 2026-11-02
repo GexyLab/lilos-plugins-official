@@ -4,6 +4,7 @@ import { FitAddon } from '@xterm/addon-fit';
 import { SearchAddon } from '@xterm/addon-search';
 import { Unicode11Addon } from '@xterm/addon-unicode11';
 import { recordDialog } from './dialogs.js';
+import { isCommand } from '../keys.js';
 import { t } from '../i18n.js';
 import '@xterm/xterm/css/xterm.css';
 
@@ -15,10 +16,14 @@ const { h, icon } = sdk;
  * gets its screen back when it attaches again. Closing the tab closes the session; closing the
  * window leaves it running (the kernel closes it after 10 minutes without a window).
  *
- *   new RemoteTab(owner, session, spec)   owner: the window's tabs (TerminalApp.js); spec: how to
- *                                         open it again (Riconnetti): { host } or { protocol, values }
- *   tab.el, tab.name, tab.title, tab.closed, tab.activity
+ *   new RemoteTab(owner, session, spec)   owner: the window's tabs (window.js), changed when the
+ *                                         tab moves to another window; spec: how to open it again
+ *                                         (Riconnetti): { host } or { protocol, values }
+ *   RemoteTab.restore(owner, state)       a tab saved with the window (state()), not attached yet:
+ *                                         then attach() if the session is still there, lost() if not
+ *   tab.el, tab.name, tab.title, tab.closed, tab.activity, tab.owner
  *   tab.attach(), tab.show(), tab.hide(), tab.focus(), tab.replace(session), tab.dispose()
+ *   tab.receive(data) keys typed in another pane (input to all panes)
  */
 const THEME = {
   background: '#15171b', foreground: '#d7dae0', cursor: '#d7dae0', cursorAccent: '#15171b', selectionBackground: 'rgba(110,168,255,.35)',
@@ -76,12 +81,12 @@ export class RemoteTab {
     this.#screen = h('div', { class: 'tm-xscreen', 'aria-label': t('remote.screen') });
     this.#status = h('div', { class: 'tm-status' });
     this.el = h('div', { class: 'tm-pane tm-remote', role: 'tabpanel' }, this.#screen, this.#status);
-    // lilOS's own shortcuts must not get the keys of the terminal (Delete, Ctrl+A…)
-    this.el.addEventListener('keydown', e => e.stopPropagation());
+    // lilOS's own shortcuts must not get the keys of the terminal (Delete, Ctrl+A…), Terminal's do
+    this.el.addEventListener('keydown', e => { if (!isCommand(e)) e.stopPropagation(); });
     this.#term.open(this.#screen);
     this.#term.attachCustomKeyEventHandler(e => this.#key(e));
-    this.#term.onData(data => this.#send(SEND.encode(data)));
-    this.#term.onBinary(data => this.#send(Uint8Array.from(data, c => c.charCodeAt(0) & 255)));
+    this.#term.onData(data => { this.#send(SEND.encode(data)); this.#owner.typed?.(this, data); });
+    this.#term.onBinary(data => { this.#send(Uint8Array.from(data, c => c.charCodeAt(0) & 255)); this.#owner.typed?.(this, data); });
     this.#term.onResize(({ cols, rows }) => { this.#control({ t: 'resize', cols, rows }); this.#drawStatus(); });
     this.#term.onTitleChange(() => owner.tabChanged(this));
     this.#term.onSelectionChange(() => copy(this.#term.getSelection()));   // selecting copies, as in many terminals
@@ -89,6 +94,16 @@ export class RemoteTab {
     this.#observer.observe(this.#screen);
     this.#drawStatus();
   }
+
+  static restore(owner, s) {
+    const str = v => (typeof v === 'string' ? v.slice(0, 200) : '');
+    const session = { id: s.session, name: str(s.name) || str(s.address), protocol: str(s.protocol) || 'ssh', address: str(s.address), secure: s.secure === true, state: 'new', info: null };
+    const spec = s.spec && typeof s.spec === 'object' ? s.spec : null;
+    return new RemoteTab(owner, session, spec);
+  }
+
+  get owner() { return this.#owner; }
+  set owner(owner) { this.#owner = owner; }
 
   get name() { return this.session.name; }
   get title() { return this.#term.title || this.session.title || ''; }
@@ -107,6 +122,24 @@ export class RemoteTab {
 
   hide() { this.el.hidden = true; }
   focus() { this.#term.focus(); }
+  reflow() { if (!this.el.hidden) requestAnimationFrame(() => this.#refit()); }
+
+  /** For the window's saved state: the session (attached again if still there) and how to open it again. */
+  state() {
+    const s = this.session;
+    return { kind: 'remote', session: s.id, spec: this.spec, name: s.name, protocol: s.protocol, address: s.address, secure: !!s.secure };
+  }
+
+  /** Keys typed in another pane. */
+  receive(data) { this.#send(SEND.encode(String(data))); }
+
+  /** Its session is not in the kernel any more (a window coming back after it closed). */
+  lost() {
+    this.session = { ...this.session, state: 'closed' };
+    this.#drawStatus();
+    this.#showClosed();
+    this.#owner.tabChanged(this);
+  }
 
   // ---------- The channel with the kernel ----------
 
@@ -193,6 +226,7 @@ export class RemoteTab {
   // ---------- Keys ----------
 
   #key(e) {
+    if (isCommand(e)) return false;   // Terminal's shortcut: not for the server
     if (e.type !== 'keydown') return true;
     const k = e.key.toLowerCase();
     if (e.ctrlKey && e.shiftKey && !e.altKey) {

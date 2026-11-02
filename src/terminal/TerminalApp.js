@@ -9,6 +9,7 @@ import { tildePath } from './shell/paths.js';
 import { columns } from './commands/files.js';
 import { AnsiRenderer } from './ansi.js';
 import { complete, commonPrefix } from './completion.js';
+import { isCommand } from './keys.js';
 import { i18n, t } from './i18n.js';
 import './terminal.css';
 
@@ -26,14 +27,33 @@ const automation = () => sdk.automation ?? null;
 
 /**
  * Terminale: tabs of bash-like shells over lilOS's files (this file) and of remote sessions (SSH,
- * Telnet, rlogin, SUPDUP: remote/RemoteTab.js), with the saved hosts in a side panel (window.js).
- * args.cwd (a folder id) opens it there; { files, action: 'terminal.sshHere' } (the menu of a
- * folder of an SFTP connection) opens SSH in that folder.
+ * Telnet, rlogin, SUPDUP: remote/RemoteTab.js) in panes side by side, with the saved hosts in a
+ * side panel (window.js). args.cwd (a folder id) opens it there; args.file a .term file
+ * (termFile.js); { files, action: 'terminal.sshHere' } (the menu of a folder of an SFTP
+ * connection) opens SSH in that folder; args.layout is a window coming back (its getState()).
+ * Every Terminal window is a main window of the app: tabs detached into a window of their own
+ * come back with lilOS too.
  */
-export default function createTerminal({ args } = {}) {
-  const win = new Window({ title: t('ui.title'), icon: 'terminal', width: 760, height: 460, minWidth: 360, minHeight: 200 });
-  const tabs = new TerminalWindow(win, args, (owner, a) => new LocalShell(owner, a));
-  win.getState = () => ({ cwd: tabs.firstLocal()?.shell.cwd });
+export default function createTerminal({ args, openWindow } = {}) {
+  return makeWindow(args, openWindow);
+}
+
+export { filePreview } from './preview.js';
+
+function makeWindow(args, openWindow) {
+  const size = args?.size;
+  const win = new Window({ title: t('ui.title'), icon: 'terminal', width: size?.w ?? 760, height: size?.h ?? 460, minWidth: 360, minHeight: 200 });
+  const tabs = new TerminalWindow(win, args, {
+    openWindow,
+    makeShell: (owner, a) => new LocalShell(owner, a),
+    makeWindow: (a, at) => {
+      const other = makeWindow(a, openWindow);
+      openWindow(other, null, { main: true, at });
+      return other.terminal;
+    },
+  });
+  win.terminal = tabs;
+  win.getState = () => tabs.state();
   win.on('launch', a => tabs.launched(a));
   // Automata: a command line run again in this window (in the shell tab shown, or the first one)
   automation()?.handle('terminal.run', params => {
@@ -44,6 +64,19 @@ export default function createTerminal({ args } = {}) {
   }, { window: win, file: () => null });
   return win;
 }
+
+/** Bytes a terminal sends for the keys of the line editor (they go to the other panes, see receive()). */
+const BYTES = {
+  enter: '\r', complete: '\t', interrupt: '\x03', eof: '\x04', clear: '\x0c', home: '\x1b[H', end: '\x1b[F',
+  killBefore: '\x15', killAfter: '\x0b', deleteWord: '\x17', backspace: '\x7f', delete: '\x1b[3~',
+  left: '\x1b[D', right: '\x1b[C', wordLeft: '\x1b[1;5D', wordRight: '\x1b[1;5C', up: '\x1b[A', down: '\x1b[B', escape: '\x1b',
+};
+/** What the line editor does with the bytes another pane sends (longest first). */
+const SEQUENCES = [
+  ...Object.entries(BYTES).map(([op, bytes]) => [bytes, op]),
+  ['\n', 'enter'], ['\x01', 'home'], ['\x05', 'end'], ['\x08', 'backspace'], ['\x1bOH', 'home'], ['\x1bOF', 'end'],
+  ['\x1b[1~', 'home'], ['\x1b[4~', 'end'], ['\x1bOA', 'up'], ['\x1bOB', 'down'], ['\x1bOC', 'right'], ['\x1bOD', 'left'],
+].sort((a, b) => b[0].length - a[0].length);
 
 /** Keyboard input of the commands that read the terminal (read, cat without files…). */
 class TerminalReader extends Reader {
@@ -76,6 +109,7 @@ class LocalShell {
 
   constructor(owner, args) {
     this.owner = owner;
+    this.#quiet = args?.quiet === true;
     this.ansi = new AnsiRenderer();
     const { signal } = this.#listeners;
 
@@ -110,16 +144,22 @@ class LocalShell {
         list: () => [...this.history],
         clear: () => { this.history = []; saveHistory([]); },
       },
-      remote: owner.remote,   // ssh, telnet…: tabs of the window (commands/remote.js)
     };
+    // ssh, telnet…: tabs of the window the shell is in now (commands/remote.js)
+    Object.defineProperty(this.host, 'remote', { get: () => this.owner.remote, enumerable: true });
     this.shell = new Shell({ host: this.host, commands });
     if (args?.cwd && fs.get(args.cwd)?.type === 'folder') this.shell.cwd = args.cwd;
     this.shell.setVar('PS1', '\\[\\e[1;32m\\]\\u@\\h\\[\\e[0m\\]:\\[\\e[1;34m\\]\\w\\[\\e[0m\\]\\$ ');
+
+    // A command to run first (a .term file)
+    if (typeof args?.run === 'string' && args.run.trim()) this.queue.push(args.run);
 
     this.#updateTitle();
     /** Settles once the shell is ready for commands (~/.bashrc run). */
     this.ready = this.#start();
   }
+
+  #quiet = false;
 
   get name() { return tildePath(this.shell.cwd); }
   get subtitle() { return tildePath(this.shell.cwd); }
@@ -133,6 +173,41 @@ class LocalShell {
 
   hide() { this.el.hidden = true; }
 
+  /** Moved to another pane or window: it shows the end again. */
+  reflow() { if (!this.el.hidden) this.scrollToEnd(); }
+
+  /** For the window's saved state. */
+  state() { return { kind: 'local', cwd: this.shell.cwd }; }
+
+  /**
+   * Bytes typed in another pane (input to all panes): characters go in the line, the keys of the
+   * line editor do what they do here, other escape sequences are left out.
+   */
+  receive(data) {
+    const s = String(data);
+    let text = '';
+    const flush = () => { if (text) { this.#insert(text); text = ''; } };
+    for (let i = 0; i < s.length;) {
+      const seq = SEQUENCES.find(([bytes]) => s.startsWith(bytes, i));
+      // ESC alone is a key only at the end (otherwise it starts a sequence)
+      if (seq && !(seq[0] === '\x1b' && i + 1 < s.length)) {
+        flush();
+        this.#do(seq[1]);
+        i += seq[0].length;
+        continue;
+      }
+      const c = s.charCodeAt(i);
+      if (c === 0x1b) {
+        flush();
+        i += /^\x1b(?:\[[0-9;?]*[ -/]*[@-~]|O.|.)?/.exec(s.slice(i))[0].length;
+      } else if (c < 0x20 || c === 0x7f) {
+        flush();
+        i++;
+      } else text += s[i++];
+    }
+    flush();
+  }
+
   /** The tab or the window closes: the shell stops. */
   dispose() {
     this.#listeners.abort();
@@ -144,11 +219,14 @@ class LocalShell {
   }
 
   async #start() {
-    this.write(`\x1b[2m${t('ui.welcome')}\x1b[0m\n`);
+    if (!this.#quiet) this.write(`\x1b[2m${t('ui.welcome')}\x1b[0m\n`);
     if (this.shell.resolve(`~/${RC}`)?.type === 'file') {
       await this.#execute(`source ~/${RC}`, { record: false });
-    } else this.prompt();
-    requestAnimationFrame(() => this.focus());
+    } else {
+      this.prompt();
+      this.#drain();
+    }
+    requestAnimationFrame(() => { if (!this.el.hidden) this.focus(); });
   }
 
   focus() { this.input.focus({ preventScroll: true }); }
@@ -259,6 +337,7 @@ class LocalShell {
     this.input.value = '';
     if (!value) return;
     const lines = value.replace(/\r\n?/g, '\n').split('\n');
+    this.owner.typed?.(this, lines.join('\r'));
     this.#insert(lines[0]);
     if (lines.length > 1) this.#feed(lines.slice(1));
   }
@@ -267,6 +346,7 @@ class LocalShell {
     const text = e.clipboardData?.getData('text/plain');
     if (text == null) return;
     e.preventDefault();
+    this.owner.typed?.(this, text.replace(/\r\n?/g, '\n').replace(/\n/g, '\r'));
     const lines = text.replace(/\r\n?/g, '\n').split('\n');
     this.#insert(lines[0]);
     if (lines.length > 1) this.#feed(lines.slice(1));
@@ -293,68 +373,71 @@ class LocalShell {
   #tail = '';
 
   #onKey(e) {
+    if (isCommand(e)) return;   // Terminal's shortcuts go on to lilOS
     const ctrl = e.ctrlKey && !e.altKey && !e.metaKey;
     const key = e.ctrlKey && e.key.length === 1 ? e.key.toLowerCase() : e.key;
-    const stop = () => { e.preventDefault(); e.stopPropagation(); };
     if (key !== 'Tab') this.#tabs = 0;
     if (e.isComposing) return;
-    if (key === 'Enter') { stop(); this.#enter(); return; }
-    if (key === 'Tab') { stop(); this.#complete(); return; }
-    if (ctrl && key === 'c') {
-      if (String(getSelection()).length) return;   // copy the selected output
-      stop();
-      this.#interrupt();
-      return;
+    const op = this.#keyOp(key, ctrl);
+    if (!op) return;
+    if (op === 'interrupt' && String(getSelection()).length) return;   // Ctrl+C copies the selected output
+    e.preventDefault();
+    e.stopPropagation();
+    if (BYTES[op]) this.owner.typed?.(this, BYTES[op]);
+    this.#do(op);
+  }
+
+  #keyOp(key, ctrl) {
+    if (key === 'Enter') return 'enter';
+    if (key === 'Tab') return 'complete';
+    if (ctrl) {
+      const op = { c: 'interrupt', d: 'eof', l: 'clear', a: 'home', e: 'end', u: 'killBefore', k: 'killAfter', w: 'deleteWord', Backspace: 'deleteWord', ArrowLeft: 'wordLeft', ArrowRight: 'wordRight' }[key];
+      if (op) return op;
     }
-    if (ctrl && key === 'd') {
-      stop();
-      if (this.reader) { this.#commitLine(this.text); this.#resolveRead(null); }
-      else if (!this.running && !this.text && !this.pending) this.#exit();
-      else if (this.text) this.setLine(this.text.slice(0, this.cursor) + this.text.slice(this.cursor + 1), this.cursor);
-      return;
-    }
-    if (ctrl && key === 'l') {
-      stop();
-      this.clear();
-      if (!this.running) this.prompt();
-      return;
-    }
-    if (ctrl && key === 'a') { stop(); this.setLine(this.text, 0); return; }
-    if (ctrl && key === 'e') { stop(); this.setLine(this.text, this.text.length); return; }
-    if (ctrl && key === 'u') { stop(); this.setLine(this.text.slice(this.cursor), 0); return; }
-    if (ctrl && key === 'k') { stop(); this.setLine(this.text.slice(0, this.cursor)); return; }
-    if (ctrl && (key === 'w' || key === 'Backspace')) {
-      stop();
-      const before = this.text.slice(0, this.cursor).replace(/\S+\s*$/, '');
-      this.setLine(before + this.text.slice(this.cursor), before.length);
-      return;
-    }
-    switch (key) {
-      case 'Backspace':
-        stop();
+    return {
+      Backspace: 'backspace', Delete: 'delete', ArrowLeft: 'left', ArrowRight: 'right', Home: 'home', End: 'end',
+      ArrowUp: 'up', ArrowDown: 'down', PageUp: 'pageUp', PageDown: 'pageDown', Escape: 'escape',
+    }[key] ?? null;
+  }
+
+  /** One key of the line editor, typed here or in another pane. */
+  #do(op) {
+    switch (op) {
+      case 'enter': return this.#enter();
+      case 'complete': return this.#complete();
+      case 'interrupt': return this.#interrupt();
+      case 'eof':
+        if (this.reader) { this.#commitLine(this.text); this.#resolveRead(null); }
+        else if (!this.running && !this.text && !this.pending) this.#exit();
+        else if (this.text) this.setLine(this.text.slice(0, this.cursor) + this.text.slice(this.cursor + 1), this.cursor);
+        return;
+      case 'clear':
+        this.clear();
+        if (!this.running) this.prompt();
+        return;
+      case 'home': return this.setLine(this.text, 0);
+      case 'end': return this.setLine(this.text, this.text.length);
+      case 'killBefore': return this.setLine(this.text.slice(this.cursor), 0);
+      case 'killAfter': return this.setLine(this.text.slice(0, this.cursor));
+      case 'deleteWord': {
+        const before = this.text.slice(0, this.cursor).replace(/\S+\s*$/, '');
+        return this.setLine(before + this.text.slice(this.cursor), before.length);
+      }
+      case 'backspace':
         if (this.cursor > 0) this.setLine(this.text.slice(0, this.cursor - 1) + this.text.slice(this.cursor), this.cursor - 1);
         return;
-      case 'Delete':
-        stop();
-        this.setLine(this.text.slice(0, this.cursor) + this.text.slice(this.cursor + 1), this.cursor);
-        return;
-      case 'ArrowLeft':
-        stop();
-        if (ctrl) this.setLine(this.text, this.text.slice(0, this.cursor).replace(/\S+\s*$/, '').length);
-        else this.setLine(this.text, this.cursor - 1);
-        return;
-      case 'ArrowRight':
-        stop();
-        if (ctrl) { const m = /^\s*\S+/.exec(this.text.slice(this.cursor)); this.setLine(this.text, this.cursor + (m ? m[0].length : this.text.length)); }
-        else this.setLine(this.text, this.cursor + 1);
-        return;
-      case 'Home': stop(); this.setLine(this.text, 0); return;
-      case 'End': stop(); this.setLine(this.text, this.text.length); return;
-      case 'ArrowUp': stop(); this.#historyStep(-1); return;
-      case 'ArrowDown': stop(); this.#historyStep(1); return;
-      case 'PageUp': stop(); this.screen.scrollTop -= this.screen.clientHeight * 0.9; return;
-      case 'PageDown': stop(); this.screen.scrollTop += this.screen.clientHeight * 0.9; return;
-      case 'Escape': stop(); return;
+      case 'delete': return this.setLine(this.text.slice(0, this.cursor) + this.text.slice(this.cursor + 1), this.cursor);
+      case 'left': return this.setLine(this.text, this.cursor - 1);
+      case 'right': return this.setLine(this.text, this.cursor + 1);
+      case 'wordLeft': return this.setLine(this.text, this.text.slice(0, this.cursor).replace(/\S+\s*$/, '').length);
+      case 'wordRight': {
+        const m = /^\s*\S+/.exec(this.text.slice(this.cursor));
+        return this.setLine(this.text, this.cursor + (m ? m[0].length : this.text.length));
+      }
+      case 'up': return this.#historyStep(-1);
+      case 'down': return this.#historyStep(1);
+      case 'pageUp': this.screen.scrollTop -= this.screen.clientHeight * 0.9; return;
+      case 'pageDown': this.screen.scrollTop += this.screen.clientHeight * 0.9; return;
     }
   }
 

@@ -35,7 +35,34 @@ Ogni shell è una **scheda**: **+** ne apre un'altra nella stessa cartella. Nell
 - Nella barra in basso: cifrata o no, indirizzo, chiave, dimensione; la ricerca (Ctrl+Maiusc+F), la registrazione in un file e il menu **Tasti** per Ctrl+W, Ctrl+T, Ctrl+N e gli altri tasti che il browser tiene per sé. Copia selezionando o con Ctrl+Maiusc+C, incolla con Ctrl+Maiusc+V.
 - Nel File Manager, dentro una connessione **SFTP** della cartella Rete, **Apri terminale SSH qui** apre la sessione in quella cartella, con le stesse credenziali.
 
-I protocolli sono moduli del kernel (`term-ssh`, `term-telnet`, `term-rlogin`, `term-supdup`) che un amministratore installa dall'AppStore, scheda Kernel. Telnet, rlogin e SUPDUP non sono cifrati. Vuole lilOS 1.12.0 o successivo.
+I protocolli sono moduli del kernel (`term-ssh`, `term-telnet`, `term-rlogin`, `term-supdup`) che un amministratore installa dall'AppStore, scheda Kernel. Telnet, rlogin e SUPDUP non sono cifrati. Vuole lilOS 1.16.0 o successivo.
+
+## Riquadri affiancati e finestre
+
+- **Dividi a destra** e **Dividi in basso** (menu della scheda, o Alt+Maiusc+D e Alt+Maiusc+S) mettono la scheda in un **riquadro** nuovo accanto; se è sola nel suo riquadro, se ne apre una nuova. I riquadri formano una griglia senza limite, ognuno con le sue schede e il suo **+**. Il separatore si trascina (o si sposta con le frecce), il doppio clic rende uguali le misure.
+- Una scheda si **trascina**: su un'altra barra entra lì, dove c'è la linea blu; sul bordo di un terminale apre un riquadro nuovo da quel lato; **fuori dalla finestra** diventa una finestra sua. Esc annulla.
+- Il **menu della scheda** (tasto destro, Maiusc+F10 o tasto Menu) ha anche Rinomina, Duplica, Sposta nel riquadro, **Stacca in una nuova finestra**, **Sposta nella finestra** (le altre finestre di Terminale), Chiudi le altre, Chiudi quelle a destra.
+- Staccare o spostare una scheda **non la riavvia**: la shell tiene output, cronologia e il comando che sta girando, la sessione SSH resta la stessa. Le finestre staccate tornano con lilOS insieme ai loro riquadri; le sessioni remote ancora aperte si riagganciano.
+- **Invia l'input a tutti i riquadri** (Alt+Maiusc+B): quello che scrivi va alla scheda mostrata in ogni riquadro, per esempio lo stesso comando su più server. I riquadri si colorano di arancione finché è acceso.
+- Scorciatoie (si cambiano nel Pannello di controllo → Scorciatoie): Alt+Maiusc+T nuova shell, Alt+Maiusc+W stacca, Alt+Maiusc+frecce riquadro accanto, Alt+Maiusc+PagSu/PagGiù scheda precedente/successiva del riquadro, Ctrl+Alt+Maiusc+frecce sposta la scheda.
+
+## Collegamenti .term
+
+Un file **.term** apre una connessione con un doppio clic, dalla scrivania o dal File Manager.
+
+- **Salva come collegamento (.term)…** (menu della scheda, o di un host nel pannello) chiede nome, cartella, cartella iniziale, un comando da eseguire e dove aprirlo; **Aggiungi alla scrivania** lo crea subito sulla scrivania.
+- **Salva la password nel file**: la password viene cifrata da lilOS e vale **solo per te, su questo lilOS, per lo stesso server e utente**. A chiunque altro viene chiesta come al solito. Senza password nel file, Terminale usa quella di un host salvato con lo stesso indirizzo.
+- Il doppio clic apre il collegamento in una **finestra nuova**; si cambia in Menu di Terminale → **Opzioni…** (oppure lo dice il file stesso).
+- Un collegamento che esegue un comando e non l'hai salvato tu chiede conferma la prima volta.
+- Il file è JSON leggibile, si apre anche con l'Editor:
+
+```json
+{ "type": "lilos.term", "version": 1, "name": "web-01", "protocol": "ssh",
+  "values": { "host": "web-01.example.com", "port": 22, "user": "deploy" },
+  "cwd": "/var/www", "open": "tab" }
+```
+
+`protocol` è `local` per una shell di lilOS (`cwd` come `~/Documenti`, `command` eseguito all'avvio).
 
 ## Comandi delle altre app
 

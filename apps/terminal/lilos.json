@@ -1,9 +1,9 @@
 {
   "id": "terminal",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "kind": "local",
   "name": "Terminal",
-  "description": "A bash-like shell over the files of lilOS, in tabs, and remote sessions: SSH, Telnet, rlogin and SUPDUP, with saved hosts and sessions that keep running when the window is closed.",
+  "description": "A bash-like shell over the files of lilOS, in tabs and panes side by side, and remote sessions: SSH, Telnet, rlogin and SUPDUP, with saved hosts, .term links and sessions that keep running when the window is closed.",
   "category": "development",
   "icon": {
     "glyph": "terminal",
@@ -13,8 +13,8 @@
     "id": "lilos",
     "name": "lilOS"
   },
-  "sdk": "1",
-  "lilos": ">=1.12.0",
+  "sdk": "2",
+  "lilos": ">=1.16.0",
   "system": true,
   "entrypoints": {
     "main": {
@@ -24,21 +24,141 @@
           "type": "folder",
           "label": "Folder",
           "description": "The folder to open the terminal in"
+        },
+        "file": {
+          "type": "file",
+          "label": "Link",
+          "description": "A terminal link (.term) to open"
         }
       }
+    },
+    "filePreview": {
+      "kind": "background",
+      "label": "Previews of .term links"
     }
   },
   "permissions": [
     "fs.write:~",
     "tags.write",
     "term",
-    "ui.menus"
+    "ui.menus",
+    "ui.shortcuts"
   ],
   "contributes": {
     "window": {
       "width": 760,
       "height": 460
     },
+    "fileTypes": [
+      "term"
+    ],
+    "commands": [
+      {
+        "id": "terminal.newShell",
+        "label": "New shell",
+        "keys": [
+          "Alt+Shift+T"
+        ]
+      },
+      {
+        "id": "terminal.splitRight",
+        "label": "Split right",
+        "keys": [
+          "Alt+Shift+D"
+        ]
+      },
+      {
+        "id": "terminal.splitDown",
+        "label": "Split down",
+        "keys": [
+          "Alt+Shift+S"
+        ]
+      },
+      {
+        "id": "terminal.detach",
+        "label": "Detach tab into a new window",
+        "keys": [
+          "Alt+Shift+W"
+        ]
+      },
+      {
+        "id": "terminal.broadcast",
+        "label": "Send input to all panes",
+        "keys": [
+          "Alt+Shift+B"
+        ]
+      },
+      {
+        "id": "terminal.focusLeft",
+        "label": "Pane on the left",
+        "keys": [
+          "Alt+Shift+ArrowLeft"
+        ]
+      },
+      {
+        "id": "terminal.focusRight",
+        "label": "Pane on the right",
+        "keys": [
+          "Alt+Shift+ArrowRight"
+        ]
+      },
+      {
+        "id": "terminal.focusUp",
+        "label": "Pane above",
+        "keys": [
+          "Alt+Shift+ArrowUp"
+        ]
+      },
+      {
+        "id": "terminal.focusDown",
+        "label": "Pane below",
+        "keys": [
+          "Alt+Shift+ArrowDown"
+        ]
+      },
+      {
+        "id": "terminal.previousTab",
+        "label": "Previous tab of the pane",
+        "keys": [
+          "Alt+Shift+PageUp"
+        ]
+      },
+      {
+        "id": "terminal.nextTab",
+        "label": "Next tab of the pane",
+        "keys": [
+          "Alt+Shift+PageDown"
+        ]
+      },
+      {
+        "id": "terminal.moveLeft",
+        "label": "Move tab to the left",
+        "keys": [
+          "Ctrl+Alt+Shift+ArrowLeft"
+        ]
+      },
+      {
+        "id": "terminal.moveRight",
+        "label": "Move tab to the right",
+        "keys": [
+          "Ctrl+Alt+Shift+ArrowRight"
+        ]
+      },
+      {
+        "id": "terminal.moveUp",
+        "label": "Move tab up",
+        "keys": [
+          "Ctrl+Alt+Shift+ArrowUp"
+        ]
+      },
+      {
+        "id": "terminal.moveDown",
+        "label": "Move tab down",
+        "keys": [
+          "Ctrl+Alt+Shift+ArrowDown"
+        ]
+      }
+    ],
     "actions": [
       {
         "id": "terminal.sshHere",
@@ -74,12 +194,12 @@
   },
   "entry": "dist/index.js",
   "styles": [
-    "dist/index-WviqVvs5.css"
+    "dist/index-Ljiteq9c.css"
   ],
   "locales": "locales.json",
   "files": {
-    "dist/index-WviqVvs5.css": "sha256-Q1eSoSJG8INB0M80W73qUMjiw910kMVctOpMEqar2uA=",
-    "dist/index.js": "sha256-DrgsihStLg9dEa5EfIWlWXT5pX1+4RKMnPKd7tZ6ubE=",
-    "locales.json": "sha256-hgm9J+DoN435ZCGlfJBVySrBIFchcHmePC5rqZP+kPQ="
+    "dist/index-Ljiteq9c.css": "sha256-nyi/jlg1fYcJ9gF1wPaMzKly5IgrMa+Eht6fKre+MHM=",
+    "dist/index.js": "sha256-njfwc3D6qlHfkrhQWAgD4AM7rGRR4vAjCQc8XHMyNaI=",
+    "locales.json": "sha256-QeTf1rEFzwLkAJp3vGeiBk9aEgiWcS9q4u33UgTkadQ="
   }
 }
