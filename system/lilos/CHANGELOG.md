@@ -1,5 +1,15 @@
 # Changelog di lilOS
 
+## 1.16.0 — 2026-11-02
+
+- **Terminale 1.4.0** (dall'AppStore): la finestra si divide in **riquadri**, affiancati o uno sopra l'altro, quanti ne vuoi, ognuno con le sue schede. **Dividi a destra** e **Dividi in basso** sono nel menu della scheda; oppure si trascina una scheda sul bordo di un terminale. I separatori si trascinano, il doppio clic rende le misure uguali
+- Il **menu della scheda** (tasto destro, Maiusc F10 o tasto Menu): Rinomina, Duplica, Dividi, Sposta nel riquadro, **Stacca in una nuova finestra**, **Sposta nella finestra**, Salva come collegamento, Aggiungi alla scrivania, Riconnetti, Copia indirizzo, Chiudi le altre / quelle a destra. Una scheda trascinata fuori dalla finestra diventa una finestra nuova; staccare o spostare non riavvia niente (comando in corso, sessione SSH)
+- Le finestre staccate tornano con lilOS insieme ai loro riquadri; le sessioni remote ancora aperte si riagganciano
+- **Invia l'input a tutti i riquadri**: quello che scrivi va alla scheda mostrata in ogni riquadro (per esempio lo stesso comando su più server)
+- **Collegamenti `.term`**: un file che apre una shell o una sessione remota con un doppio clic, di serie in una finestra nuova (si cambia nelle Opzioni di Terminale). Si crea con **Salva come collegamento (.term)…** o **Aggiungi alla scrivania**. La password si può salvare nel file, **cifrata**: vale solo per chi l'ha salvata, su questo lilOS, per lo stesso server e utente. Senza password nel file si usa quella di un host salvato con lo stesso indirizzo. Un collegamento che esegue un comando chiede conferma la prima volta. Anteprima nel File Manager
+- Scorciatoie nuove di Terminale (si cambiano nel Pannello di controllo → Scorciatoie): Alt Maiusc T, D, S, W, B, Alt Maiusc frecce e PagSu/PagGiù, Ctrl Alt Maiusc frecce per spostare la scheda
+- Per gli sviluppatori: SDK 0.10.0 con `term.seal` e i campi `cwd`, `name`, `sealed` di `term.open` (anche `lilos.term` nelle app installate); `openWindow(win, key, { main, at })` apre un'altra finestra principale dell'app; tipo di file `term` (decisione D66)
+
 ## 1.15.0 — 2026-11-02
 
 - Nuova app **Automata**, da installare dall'AppStore: registra quello che fai in lilOS e lo rifà quando vuoi, anche su altri file. Avvii la registrazione, lavori come sempre e ogni operazione diventa un **passo**; Ctrl Z toglie anche il passo annullato
