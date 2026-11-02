@@ -1,5 +1,14 @@
 # Changelog di lilOS
 
+## 1.12.0 — 2026-11-02
+
+- Nuova app **Terminale remoto** (dall'AppStore): terminali SSH, Telnet, rlogin e SUPDUP in schede, con la connessione rapida (`ssh utente@server`), gli host salvati in cartelle e le password cifrate nel kernel. Una password non salvata la chiede il terminale stesso, come fa `ssh`
+- Le sessioni restano aperte nel kernel anche a finestra chiusa o pagina ricaricata: riaprendo l'app le ritrovi in «Sessioni ancora attive» e le riprendi con lo schermo com'era. Senza finestra si chiudono dopo 10 minuti
+- La prima connessione SSH chiede di confermare l'impronta della chiave del server; se cambia, un avviso rosso. Telnet, rlogin e SUPDUP non sono cifrati e la barra in basso lo dice
+- Nel File Manager, dentro una connessione SFTP della Rete, «Apri terminale SSH qui» apre la shell in quella cartella; nel Terminale i comandi `ssh`, `telnet`, `rlogin` e `supdup` aprono una scheda
+- I protocolli sono moduli del kernel da installare dall'AppStore (scheda Kernel): term-ssh, term-telnet, term-rlogin, term-supdup. Le nuove installazioni li hanno già
+- Per chi fa app: SDK 0.6.0 con `term`, il permesso `term` e `lilos.term` per le app installate, e la condizione `when.net` per le voci dei menu (solo dentro le connessioni di rete di certi protocolli)
+
 ## 1.11.0 — 2026-11-02
 
 - **OneDrive** nella cartella Rete (modulo netfs-onedrive, da installare dall'AppStore → Kernel): il tuo OneDrive, personale o di lavoro, diventa una cartella di Home → Rete. Ci si collega con **Accedi con Microsoft**, che apre la pagina di Microsoft in una finestra; i token restano nel kernel, cifrati, e se Microsoft chiede un nuovo accesso lilOS lo dice

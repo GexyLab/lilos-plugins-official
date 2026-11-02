@@ -1,0 +1,1 @@
+export{n as checkSystem}from"./systemPackage-B6z7zUz3.js";
