@@ -446,6 +446,12 @@ class Session {
     return it?.webUrl;
   }
 
+  /** The space of the OneDrive (its quota). */
+  async space() {
+    const drive = await this.#graph('GET', '/me/drive?$select=quota');
+    return { used: Number(drive?.quota?.used) || 0, total: Number(drive?.quota?.total) || 0 };
+  }
+
   #forget(path) {
     const key = this.#full(path).toLowerCase();
     for (const p of [...this.#anchors.keys()]) if (p === key || p.startsWith(`${key}/`)) this.#anchors.delete(p);
@@ -525,6 +531,8 @@ const driver = {
   order: 60,
   links: { office: true },
   recycles: true,
+  space: true,
+  group: 'cloud',
   fields: [
     {
       key: 'account', type: 'signin', label: label('Microsoft account', 'Account Microsoft'), required: true,

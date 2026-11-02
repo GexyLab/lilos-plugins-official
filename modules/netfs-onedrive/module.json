@@ -1,6 +1,6 @@
 {
   "name": "netfs-onedrive",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Il tuo OneDrive (personale o di lavoro) nella cartella Rete, con «Apri in Office online» sui documenti Office e «Carica su OneDrive e apri» per quelli della Home",
   "kernel": "1",
   "icon": { "glyph": "cloud", "color": "#0f5bb5" },

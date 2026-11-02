@@ -7,6 +7,7 @@ Modulo del kernel che porta **OneDrive** nella cartella Rete: il OneDrive person
 - Sui documenti Office della Home c'è **Carica su OneDrive e apri**: il file va nella cartella scelta nel Pannello di controllo e si apre in Office online.
 - Eliminare manda nel **cestino di OneDrive**: si recupera da onedrive.com.
 - Con l'opzione **Apri le cartelle condivise con me** si aprono anche le cartelle che altri hanno condiviso e che l'utente ha aggiunto a «I miei file» su onedrive.com (**Aggiungi collegamento**). L'elenco «Condivisi con me» di Microsoft Graph smette di funzionare a novembre 2026, quindi il modulo non lo usa.
+- Nella barra della connessione c'è lo spazio usato (con lilOS 1.13.0 o successivo).
 - I token restano nel kernel, cifrati come le password: la pagina non li riceve mai.
 
 ## Impostazioni

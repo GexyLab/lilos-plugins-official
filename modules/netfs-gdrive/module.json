@@ -1,0 +1,51 @@
+{
+  "name": "netfs-gdrive",
+  "version": "1.0.0",
+  "description": "Google Drive nella cartella Rete: Il mio Drive o un Drive condiviso, con i documenti Google copiati in formato Office",
+  "kernel": "1",
+  "icon": { "glyph": "cloud", "color": "#137333" },
+  "provides": [
+    "netfs.gdrive"
+  ],
+  "requires": [],
+  "settings": [
+    {
+      "key": "clientId", "type": "text",
+      "label": { "en": "Client ID", "it": "ID client" },
+      "placeholder": "123456789012-abc.apps.googleusercontent.com",
+      "hint": { "en": "console.cloud.google.com → APIs & Services → Credentials → your OAuth client", "it": "console.cloud.google.com → API e servizi → Credenziali → il tuo client OAuth" }
+    },
+    {
+      "key": "clientSecret", "type": "password",
+      "label": { "en": "Client secret", "it": "Segreto client" },
+      "hint": { "en": "Kept encrypted in the kernel: nobody sees it again, it can only be replaced", "it": "Cifrato nel kernel: nessuno lo rivede, si può solo sostituire" }
+    },
+    {
+      "key": "clientType", "type": "select", "default": "web",
+      "label": { "en": "Client type", "it": "Tipo di client" },
+      "options": [
+        { "value": "web", "label": { "en": "Web application (sign-in window; elsewhere by pasting the address)", "it": "Applicazione web (finestra di accesso; altrove incollando l'indirizzo)" } },
+        { "value": "desktop", "label": { "en": "Desktop app (always by pasting the address)", "it": "App desktop (sempre incollando l'indirizzo)" } }
+      ]
+    },
+    {
+      "key": "shared", "type": "checkbox", "default": true,
+      "label": { "en": "Show «Shared with me»", "it": "Mostra «Condivisi con me»" },
+      "hint": { "en": "A folder at the top of each My Drive connection with what others shared", "it": "Una cartella in cima a ogni connessione a Il mio Drive con ciò che altri hanno condiviso" }
+    },
+    {
+      "key": "exportFormat", "type": "select", "default": "office",
+      "label": { "en": "Google documents copied out of Drive", "it": "Documenti Google copiati fuori da Drive" },
+      "options": [
+        { "value": "office", "label": { "en": "Office format (.docx, .xlsx, .pptx)", "it": "Formato Office (.docx, .xlsx, .pptx)" } },
+        { "value": "odf", "label": { "en": "OpenDocument (.odt, .ods, .odp)", "it": "OpenDocument (.odt, .ods, .odp)" } },
+        { "value": "pdf", "label": { "en": "PDF", "it": "PDF" } }
+      ]
+    }
+  ],
+  "defaultConfig": {
+    "clientType": "web",
+    "shared": true,
+    "exportFormat": "office"
+  }
+}

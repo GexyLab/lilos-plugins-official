@@ -1,0 +1,28 @@
+{
+  "name": "netfs-azblob",
+  "version": "1.0.0",
+  "description": "Contenitori di Azure Blob Storage (anche Data Lake Storage Gen2) nella cartella Rete, con la chiave dell'account, un token SAS o l'accesso con Microsoft Entra",
+  "kernel": "1",
+  "icon": { "glyph": "cloud", "color": "#0b5a91" },
+  "provides": [
+    "netfs.azblob"
+  ],
+  "requires": [],
+  "settings": [
+    {
+      "key": "clientId", "type": "text",
+      "label": { "en": "Application (client) ID, for Microsoft Entra", "it": "ID dell'applicazione (client), per Microsoft Entra" },
+      "placeholder": "00000000-0000-0000-0000-000000000000",
+      "hint": { "en": "Only to sign in with Microsoft Entra: the app on Azure (it can be OneDrive's, with the Azure Storage permission added). Account key and SAS need nothing", "it": "Solo per l'accesso con Microsoft Entra: l'app su Azure (può essere quella di OneDrive, con il permesso Azure Storage aggiunto). Chiave dell'account e SAS non chiedono niente" }
+    },
+    {
+      "key": "tenant", "type": "text", "default": "organizations",
+      "label": { "en": "Directory (tenant)", "it": "Directory (tenant)" },
+      "placeholder": "organizations",
+      "hint": { "en": "organizations (any work or school account), or your directory's ID or domain", "it": "organizations (qualsiasi account di lavoro o dell'istituto), oppure l'ID o il dominio della tua directory" }
+    }
+  ],
+  "defaultConfig": {
+    "tenant": "organizations"
+  }
+}
