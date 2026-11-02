@@ -1,6 +1,7 @@
 import { Window, h, fs, storage, session } from '@lilos/sdk';
+import * as sdk from '@lilos/sdk';   // `automation`: missing in older lilOS, so not imported by name
 import { TerminalWindow } from './window.js';
-import { Shell } from './shell/Shell.js';
+import { Shell, quote } from './shell/Shell.js';
 import { commands } from './commands/index.js';
 import { Reader, FnWriter } from './shell/streams.js';
 import { Incomplete, ParseError, ExitSignal, Interrupt, Token } from './shell/signals.js';
@@ -15,6 +16,13 @@ const HISTORY_KEY = 'terminal.history';
 const HISTORY_MAX = 1000;
 const SCROLLBACK = 400_000;   // characters of output kept
 const RC = '.bashrc';
+/** Longest command line recorded for Automata (a longer one would be cut: it is not recorded). */
+const COMMAND_MAX = 4000;
+/** Characters of the error output kept while Automata runs a line (the reason it failed). */
+const ERROR_TAIL = 2000;
+
+/** Recording and replaying what the user does (Automata): null in a lilOS without it. */
+const automation = () => sdk.automation ?? null;
 
 /**
  * Terminale: tabs of bash-like shells over lilOS's files (this file) and of remote sessions (SSH,
@@ -27,6 +35,13 @@ export default function createTerminal({ args } = {}) {
   const tabs = new TerminalWindow(win, args, (owner, a) => new LocalShell(owner, a));
   win.getState = () => ({ cwd: tabs.firstLocal()?.shell.cwd });
   win.on('launch', a => tabs.launched(a));
+  // Automata: a command line run again in this window (in the shell tab shown, or the first one)
+  automation()?.handle('terminal.run', params => {
+    let shell = tabs.current && !tabs.current.remote ? tabs.current : tabs.firstLocal();
+    if (!shell) tabs.add(shell = new LocalShell(tabs, {}));
+    tabs.select(shell);
+    return shell.replay(params);
+  }, { window: win, file: () => null });
   return win;
 }
 
@@ -102,7 +117,8 @@ class LocalShell {
     this.shell.setVar('PS1', '\\[\\e[1;32m\\]\\u@\\h\\[\\e[0m\\]:\\[\\e[1;34m\\]\\w\\[\\e[0m\\]\\$ ');
 
     this.#updateTitle();
-    this.#start();
+    /** Settles once the shell is ready for commands (~/.bashrc run). */
+    this.ready = this.#start();
   }
 
   get name() { return tildePath(this.shell.cwd); }
@@ -431,29 +447,49 @@ class LocalShell {
     this.#execute(source, { record: true });
   }
 
-  async #execute(source, { record }) {
+  /**
+   * Runs source text. record: typed by the user (history, Automata); replay: run by Automata (a
+   * construct left open is an error, not more lines to ask for). Resolves with { status, error }:
+   * the exit status and, with replay, the end of what went to stderr.
+   */
+  async #execute(source, { record, replay = false }) {
     if (!source.trim()) {
       this.pending = '';
       this.prompt();
-      return;
+      return { status: 0, error: '' };
     }
+    const folder = this.shell.cwd;   // where the line runs (recorded with it)
     this.running = true;
     this.renderLine();
     this.#token = new Token();
     this.shell.token = this.#token;
     this.host.stdin = new TerminalReader(this);
+    // Run by Automata: the error output is kept too, to say why it failed
+    let error = '';
+    const io = replay ? { ...this.host, stderr: new FnWriter(text => { error = (error + text).slice(-ERROR_TAIL); this.write(text); }) } : this.host;
     let incomplete = false;
     try {
-      await this.shell.run(source, this.host);
+      // What the line does (files moved, copied, deleted…) is part of it: lilOS does not record it apart
+      const run = () => this.shell.run(source, io);
+      await (automation()?.quiet(run) ?? run());
     } catch (err) {
-      if (err instanceof Incomplete) incomplete = true;
-      else if (err instanceof ParseError) { this.write(`bash: ${err.message}\n`); this.shell.status = 2; }
-      else if (err instanceof ExitSignal) { this.flush(); this.#exit(); return; }
+      if (err instanceof Incomplete && !replay) incomplete = true;
+      else if (err instanceof Incomplete) { io.stderr.write(`bash: ${err.message || t('parse.unexpectedEndOfFile')}\n`); this.shell.status = 2; }
+      else if (err instanceof ParseError) { io.stderr.write(`bash: ${err.message}\n`); this.shell.status = 2; }
+      else if (err instanceof ExitSignal) { this.flush(); this.#exit(); return { status: err.code ?? 0, error }; }
       else if (err instanceof Interrupt) this.shell.status = 130;
-      else { this.write(`bash: ${err?.message ?? err}\n`); this.shell.status = 1; }
+      else { io.stderr.write(`bash: ${err?.message ?? err}\n`); this.shell.status = 1; }
     }
+    const status = this.shell.status;
     this.pending = incomplete ? source : '';
     if (record && !incomplete) this.#remember(source);
+    // Automata: the line once it ran fine (a failed one would only fail again), but not `automata` itself
+    if (record && !incomplete && status === 0 && automation()?.recording && !/^\s*automata(\s|$)/.test(source)) {
+      // The quiet of the run ends a moment after it (a timer): told after that
+      await new Promise(r => setTimeout(r));
+      if (source.length > COMMAND_MAX) automation()?.missed('terminal', t('automation.tooLong'));
+      else automation()?.record('terminal.run', { params: { command: source, folder } });
+    }
     this.running = false;
     this.reader = null;
     this.#updateTitle();
@@ -462,6 +498,35 @@ class LocalShell {
     if (!/\n$/.test(this.edit.previousSibling?.textContent ?? '\n')) this.write('\n');
     this.prompt();
     this.#drain();
+    return { status, error };
+  }
+
+  /**
+   * Automata runs a recorded line in this shell: in the folder it ran in (gone there first, like a
+   * cd typed by hand), shown as if typed. Resolves once it is over; throws if its status is not 0.
+   */
+  async replay({ command = '', folder = null } = {}) {
+    await this.ready;
+    if (!command.trim()) throw new Error(t('automation.noCommand'));
+    if (this.running || this.pending) throw new Error(t('automation.busy'));
+    if (folder && fs.get(folder)?.type !== 'folder') throw new Error(t('automation.noFolder'));
+    // What the user was typing comes back afterwards
+    const typed = { text: this.text, cursor: this.cursor };
+    this.setLine('');
+    if (folder && folder !== this.shell.cwd) {
+      const path = tildePath(folder);
+      this.write(`cd ${path.startsWith('~/') ? `~/${quote(path.slice(2))}` : quote(path)}\n`);
+      this.shell.cwd = folder;
+      this.#updateTitle();
+      this.prompt();
+    }
+    this.#commitLine(command);
+    const { status, error } = await this.#execute(command, { record: false, replay: true });
+    if (typed.text && !this.running && !this.text) this.setLine(typed.text, typed.cursor);
+    if (status !== 0) {
+      const reason = error.replace(/\x1b\[[0-9;]*m/g, '').trim().split('\n').at(-1);
+      throw new Error(reason || t('automation.status', { status }));
+    }
   }
 
   #remember(source) {

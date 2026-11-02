@@ -14,3 +14,7 @@ Guarda le immagini e le ritocca.
 
 Si apre facendo doppio clic su un'immagine, oppure dal menu Start.
 Vuole una versione di lilOS che salva i file binari (con `fs.readBlob`).
+
+## Automazioni
+
+Con **Automata** (lilOS 1.15.0 o successivo) Photo rende registrabili: **Ridimensiona l'immagine** (larghezza, altezza, unità, proporzioni, qualità), **Ritaglia l'immagine** (sinistra, alto, larghezza, altezza in pixel), **Converti e salva una copia** (formato, qualità, nome, cartella, aprire la copia) e **Salva l'immagine**. Rifatti, i passi lavorano sull'immagine mostrata nella finestra (o la aprono) senza finestre di dialogo; con le proporzioni bloccate l'altezza segue ogni immagine. Il **pennello** e il **testo** non si registrano: il Registratore li mostra barrati.

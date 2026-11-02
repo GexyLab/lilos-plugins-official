@@ -1,7 +1,7 @@
 import { h, select, vaultChannel, STYLE } from './ui.js';
 import { strength } from './crypto.js';
 import { ALGORITHMS } from './format.js';
-import { readSettings, SETTINGS_KEY } from './vault.js';
+import { readSettings, explain, record, SETTINGS_KEY } from './vault.js';
 
 /**
  * FileCrypt's windows:
@@ -23,12 +23,6 @@ function frame(lilos, root, draw) {
   const redraw = () => draw(box);
   const off = lilos.on('locale', redraw);
   return { box, redraw, off };
-}
-
-/** Errors of the vault, in words. */
-function explain(t, err) {
-  const known = { wrong: 'error.wrong', corrupt: 'error.corrupt', short: 'encrypt.tooShort', already: 'error.already', 'not-encrypted': 'error.notEncrypted', 'bad-header': 'error.badHeader', 'no-argon2': 'error.noArgon2' };
-  return known[err?.message] ? t(known[err.message]) : t('error.generic', { error: err?.message ?? String(err) });
 }
 
 function busy(button, on) {
@@ -118,7 +112,10 @@ export async function unlock({ lilos, root, args }) {
         await vault.ask({ op: mode, file, password: password.value });
         password.value = '';
         if (mode === 'unlock') await lilos.files.open(file);
-        else lilos.ui.toast(t('toast.decrypted', { name }));
+        else {
+          lilos.ui.toast(t('toast.decrypted', { name }));
+          await record(lilos, 'filecrypt.decrypt', { params: { file } });
+        }
         lilos.window.close();
       } catch (err) {
         error = explain(t, err);
@@ -187,6 +184,7 @@ export async function encrypt({ lilos, root, args }) {
         await vault.ask({ op: 'encrypt', file, password: first.value, alg: alg.value, kdf: kdf.value });
         first.value = second.value = '';
         lilos.ui.toast(t('toast.encrypted', { name }));
+        await record(lilos, 'filecrypt.encrypt', { params: { file, alg: alg.value, kdf: kdf.value }, defaults: { alg: settings.alg, kdf: settings.kdf } });
         lilos.window.close();
       } catch (err) {
         message.textContent = explain(t, err);

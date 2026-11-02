@@ -1,5 +1,5 @@
 import { Window, h, icon, fs, tags, session, storage, openMenu, shortcuts, toast, UndoStack, history, trackDrag } from '@lilos/sdk';
-import * as sdk from '@lilos/sdk';   // `messageBox`: missing in older lilOS, so not imported by name
+import * as sdk from '@lilos/sdk';   // `messageBox`, `automation`: missing in older lilOS, so not imported by name
 import { launch, handleCommand } from '@lilos/system';
 import { openFile } from '@lilos/system';
 import { itemIcon } from '@lilos/system';
@@ -23,6 +23,11 @@ import { network, mountOf, sideSection, mountMenu, mountBar, readRemote, netChip
 import { officeEntries, openOffice } from './office.js';
 import { newLinkWindow } from './newLink.js';
 import './files.css';
+
+/** Recording and replaying what the user does (Automata): null in a lilOS without it. */
+const automation = () => sdk.automation ?? null;
+/** A search is told to the recorder once the user stops typing for this long (or presses Enter). */
+const SEARCH_SETTLE = 1000;
 
 /** Biggest file of a network connection the panels read to show it. */
 const PREVIEW_NET_MAX = 1 << 20;
@@ -97,7 +102,8 @@ export default function createFiles({ args, openWindow } = {}) {
   // Launched again (e.g. a folder opened from the desk): show that folder in this window
   win.on('launch', a => {
     const folder = startFolder(a);
-    if (folder) browser.go(folder);
+    // lilOS records the folder opened with the app itself
+    if (folder) browser.go(folder, true, false);
     else if (missing(a)) return browser.notFound(missing(a));
     if (a?.link) browser.followLink(a.link);
   });
@@ -126,6 +132,8 @@ class FileBrowser {
   #sort = { key: 'name', dir: 1 };
   #columns = new Columns();   // widths and visibility of the list view's columns
   #query = '';
+  #searched = '';       // the search last told to the automation recorder
+  #searchTimer = 0;
   #items = [];          // nodes shown, in order
   #expanded = new Set();  // folders opened in place in the list view (a tree), by id
   #depth = new Map();     // id → how deep an item of the list is in that tree (0: in the folder shown)
@@ -168,9 +176,15 @@ class FileBrowser {
     this.previewBtn = tool('sidebar', '', () => this.preview.toggle());
     this.infoBtn = tool('info', '', () => this.info.toggle());
     this.search = h('input', { type: 'text', spellcheck: 'false', 'aria-label': t('toolbar.search') });
-    this.search.addEventListener('input', () => { this.#query = fold(this.search.value.trim()); this.render(); });
+    this.search.addEventListener('input', () => {
+      this.#query = fold(this.search.value.trim());
+      this.render();
+      clearTimeout(this.#searchTimer);
+      this.#searchTimer = setTimeout(() => this.#recordSearch(), SEARCH_SETTLE);
+    });
     this.search.addEventListener('keydown', e => {
-      if (e.key === 'Escape' && this.search.value) { e.stopPropagation(); this.search.value = ''; this.#query = ''; this.render(); }
+      if (e.key === 'Enter') this.#recordSearch();
+      if (e.key === 'Escape' && this.search.value) { e.stopPropagation(); this.search.value = ''; this.#query = ''; this.render(); this.#recordSearch(); }
       if (e.key === 'ArrowDown') { e.preventDefault(); this.list.focus(); }
     });
 
@@ -249,8 +263,9 @@ class FileBrowser {
     ];
     win.on('destroy', () => {
       off(); offLinks(); offScope(); offWorkspaces(); offTrash(); offTags(); offNet(); removeTarget(); detach();
-      commands.forEach(c => c()); fit.disconnect(); this.previewView.destroy();
+      commands.forEach(c => c()); fit.disconnect(); this.previewView.destroy(); clearTimeout(this.#searchTimer);
     });
+    this.#handleAutomation();
   }
 
   /** True while the trash is shown. */
@@ -264,7 +279,11 @@ class FileBrowser {
 
   // ---------- Navigation ----------
 
-  go(id, record = true) {
+  /**
+   * Shows a folder (or the trash, or a tag's items). record: it goes in the Back history; byUser:
+   * the user went there (told to the automation recorder; not the folder a window opens on).
+   */
+  go(id, record = true, byUser = record) {
     if (id !== TRASH && !viewTag(id) && fs.get(id)?.type !== 'folder') return;
     if (record && id !== this.folder) {
       this.#back.push(this.folder);
@@ -277,6 +296,8 @@ class FileBrowser {
     this.#message = '';
     this.search.value = '';
     this.#query = '';
+    clearTimeout(this.#searchTimer);
+    this.#searched = '';
     // Coming back up: keep the folder we left selected, like a file manager does
     const child = fs.ancestors(previous).find(n => n.parent === id);
     this.#cursor = child?.id ?? null;
@@ -285,6 +306,7 @@ class FileBrowser {
     this.render();
     this.list.scrollTop = 0;
     if (fs.isRemote?.(id)) this.#readRemote(id);
+    if (byUser && id !== previous) this.#recordGo();
   }
 
   /** A folder of a network connection: read from the server now (it is opened), saying so meanwhile. */
@@ -371,6 +393,7 @@ class FileBrowser {
   }
 
   setView(view) {
+    if (view !== this.#view) automation()?.record('files.view', { params: { mode: view } });
     this.#view = view;
     storage.set(VIEW_KEY, view);
     this.render();
@@ -962,7 +985,11 @@ class FileBrowser {
       const sort = h('button', {
         class: ['fm-col', c.num && 'num', on && 'on'].filter(Boolean).join(' '), type: 'button', tabindex: '-1',
         'aria-sort': on ? (this.#sort.dir > 0 ? 'ascending' : 'descending') : null,
-        onclick: () => { this.#sort = { key: c.key, dir: on ? -this.#sort.dir : 1 }; this.render(); },
+        onclick: () => {
+          this.#sort = { key: c.key, dir: on ? -this.#sort.dir : 1 };
+          this.render();
+          automation()?.record('files.sort', { params: { by: c.key, direction: this.#sort.dir > 0 ? 'asc' : 'desc' } });
+        },
       }, c.label, on ? h('span', { class: 'fm-arrow', 'aria-hidden': 'true' }, this.#sort.dir > 0 ? '▲' : '▼') : null);
       return h('div', { class: 'fm-th', dataset: { col: c.key } }, sort, this.#grip(c));
     }));
@@ -1322,7 +1349,7 @@ class FileBrowser {
       const id = from.pop();
       if (!this.#reachable(id)) continue;
       to.push(this.folder);
-      this.go(id, false);
+      this.go(id, false, true);
       return;
     }
   }
@@ -1330,6 +1357,48 @@ class FileBrowser {
   #say(text) {
     this.#message = text;
     this.render();
+  }
+
+  // ---------- Automation (Automata) ----------
+
+  /** Tells the recorder the folder the user went to (the trash and the tags' views are not folders: not recorded). */
+  #recordGo() {
+    if (fs.get(this.folder)?.type === 'folder') automation()?.record('files.go', { params: { folder: this.folder } });
+  }
+
+  /** Tells the recorder the search the user settled on (also an emptied one, when it had told one). */
+  #recordSearch() {
+    clearTimeout(this.#searchTimer);
+    const query = this.search.value.trim();
+    if (query === this.#searched) return;
+    this.#searched = query;
+    automation()?.record('files.search', { params: { query } });
+  }
+
+  /** What this window can do again for Automata: go to a folder, search, sort, change the view. It shows no document. */
+  #handleAutomation() {
+    const auto = automation();
+    if (!auto) return;
+    const opts = { window: this.win, file: () => null };
+    auto.handle('files.go', ({ folder }) => {
+      if (fs.get(folder)?.type !== 'folder') throw new Error(t('automation.noFolder'));
+      this.go(folder);
+    }, opts);
+    auto.handle('files.search', ({ query = '' }) => {
+      this.search.value = query;
+      this.#query = fold(query.trim());
+      this.#searched = query.trim();
+      this.render();
+    }, opts);
+    auto.handle('files.sort', ({ by, direction }) => {
+      if (!this.#viewColumns().some(c => c.key === by)) throw new Error(t('automation.noColumn'));
+      this.#sort = { key: by, dir: direction === 'desc' ? -1 : 1 };
+      this.render();
+    }, opts);
+    auto.handle('files.view', ({ mode }) => {
+      if (!VIEWS.includes(mode)) throw new Error(t('automation.noView'));
+      this.setView(mode);
+    }, opts);
   }
 
   /**

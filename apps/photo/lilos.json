@@ -1,6 +1,6 @@
 {
   "id": "photo",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "kind": "local",
   "name": "Photo",
   "description": "View and touch up images: drawing, text, cropping, resizing and conversion to PNG, JPEG or WebP.",
@@ -66,6 +66,142 @@
           "Ctrl+O"
         ]
       }
+    ],
+    "automation": [
+      {
+        "id": "photo.resize",
+        "label": "Resize the image",
+        "target": "window",
+        "params": {
+          "width": {
+            "type": "number",
+            "label": "Width",
+            "min": 1
+          },
+          "height": {
+            "type": "number",
+            "label": "Height",
+            "min": 1
+          },
+          "unit": {
+            "type": "choice",
+            "label": "Unit",
+            "options": [
+              {
+                "value": "pixels",
+                "label": "Pixels"
+              },
+              {
+                "value": "percent",
+                "label": "Percent"
+              }
+            ]
+          },
+          "keepRatio": {
+            "type": "boolean",
+            "label": "Keep proportions",
+            "description": "The height follows the width and the proportions of each image"
+          },
+          "quality": {
+            "type": "choice",
+            "label": "Quality",
+            "options": [
+              {
+                "value": "high",
+                "label": "High"
+              },
+              {
+                "value": "medium",
+                "label": "Medium, faster"
+              },
+              {
+                "value": "pixel",
+                "label": "Crisp pixels"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "photo.crop",
+        "label": "Crop the image",
+        "target": "window",
+        "params": {
+          "x": {
+            "type": "number",
+            "label": "Left",
+            "description": "Pixels from the left edge",
+            "min": 0
+          },
+          "y": {
+            "type": "number",
+            "label": "Top",
+            "description": "Pixels from the top edge",
+            "min": 0
+          },
+          "width": {
+            "type": "number",
+            "label": "Width",
+            "min": 1
+          },
+          "height": {
+            "type": "number",
+            "label": "Height",
+            "min": 1
+          }
+        }
+      },
+      {
+        "id": "photo.saveAs",
+        "label": "Convert and save a copy",
+        "target": "window",
+        "result": "file",
+        "params": {
+          "format": {
+            "type": "choice",
+            "label": "Format",
+            "options": [
+              {
+                "value": "png",
+                "label": "PNG"
+              },
+              {
+                "value": "jpeg",
+                "label": "JPEG"
+              },
+              {
+                "value": "webp",
+                "label": "WebP"
+              }
+            ]
+          },
+          "quality": {
+            "type": "number",
+            "label": "Quality",
+            "description": "From 10 to 100, for JPEG and WebP",
+            "min": 10,
+            "max": 100
+          },
+          "name": {
+            "type": "text",
+            "label": "Name",
+            "maxLength": 255
+          },
+          "folder": {
+            "type": "folder",
+            "label": "Folder"
+          },
+          "open": {
+            "type": "boolean",
+            "label": "Open the copy after saving"
+          }
+        }
+      },
+      {
+        "id": "photo.save",
+        "label": "Save the image",
+        "target": "window"
+      }
     ]
   },
   "entry": "dist/index.js",
@@ -75,7 +211,7 @@
   "locales": "locales.json",
   "files": {
     "dist/index-DqF2jp_v.css": "sha256-oS0F1fKhzl/FkJd+jrJN0LQYEA6u+UPHsDthL9/3zmE=",
-    "dist/index.js": "sha256-O311g3cyqqJXKxPzxaxvCxl5Z+qxiCmxbf0ga88O8rs=",
-    "locales.json": "sha256-Lg2IUA0PCTiOFdjr3O9/4yjU1YNOQzpT8YWHal6ZqQ0="
+    "dist/index.js": "sha256-E5kTWKycuKGtADqPNX4qyQNboR0lb+K3PKVsPZrEspM=",
+    "locales.json": "sha256-lD6bCQYpu1Zi7hBsvf7cV++xKNGXKWmXwwhX1APHuow="
   }
 }

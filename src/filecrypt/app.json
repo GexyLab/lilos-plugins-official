@@ -1,6 +1,6 @@
 {
   "id": "filecrypt",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "kind": "local",
   "name": "FileCrypt",
   "description": "Encrypt single files with a password. Encrypted files keep their name, open in their own app once unlocked and save encrypted again.",
@@ -35,6 +35,32 @@
       { "id": "filecrypt.encrypt", "label": "Encrypt…", "entry": "encrypt", "on": "file", "glyph": "lock", "when": { "meta": "none" } },
       { "id": "filecrypt.lock", "label": "Lock", "entry": "vault", "on": "file", "glyph": "lock", "when": { "meta": "own" }, "many": true },
       { "id": "filecrypt.decrypt", "label": "Remove encryption…", "entry": "unlock", "on": "file", "glyph": "lockOpen", "when": { "meta": "own" } }
+    ],
+    "automation": [
+      { "id": "filecrypt.encrypt", "label": "Encrypt", "entry": "vault",
+        "description": "Encrypts the file with a password; it stays unlocked until it locks again",
+        "params": {
+          "file": { "type": "file", "label": "File", "subject": true },
+          "password": { "type": "secret", "label": "Password", "description": "At least 8 characters. If you forget it the file is lost" },
+          "alg": { "type": "choice", "label": "Algorithm", "options": [
+            { "value": "AES-256-GCM", "label": "AES-256-GCM" },
+            { "value": "AES-128-GCM", "label": "AES-128-GCM" },
+            { "value": "ChaCha20-Poly1305", "label": "ChaCha20-Poly1305" }
+          ] },
+          "kdf": { "type": "choice", "label": "Key from the password", "options": [
+            { "value": "argon2id", "label": "Argon2id (recommended)" },
+            { "value": "pbkdf2", "label": "PBKDF2-SHA256" }
+          ] }
+        } },
+      { "id": "filecrypt.decrypt", "label": "Remove encryption", "entry": "vault", "confirm": true,
+        "description": "Saves the file in clear again",
+        "params": {
+          "file": { "type": "file", "label": "File", "subject": true },
+          "password": { "type": "secret", "label": "Password" }
+        } },
+      { "id": "filecrypt.lock", "label": "Lock", "entry": "vault",
+        "description": "Locks unlocked files again: opening them asks for their password",
+        "params": { "files": { "type": "files", "label": "Files", "subject": true } } }
     ],
     "badge": { "glyph": "lock", "label": "Encrypted with FileCrypt" }
   }

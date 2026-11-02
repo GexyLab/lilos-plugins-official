@@ -177,6 +177,11 @@ var { t: w } = Te("editor", {
 		"@entrypoints.main.params.folder.label": "Folder",
 		"@entrypoints.main.params.folder.description": "The folder in the panel on the right",
 		"@entrypoints.filePreview.label": "Text file previews",
+		"@automation.editor.save.label": "Save the file",
+		"automation.typing": "Typing",
+		"automation.notOpen": "The file is not open in this window",
+		"automation.notRead": "The file could not be read",
+		"automation.notSaved": "The file was not saved",
 		"document.untitled": "Untitled",
 		"document.untitledFile": "Untitled.txt",
 		"document.text": "Document text",
@@ -371,7 +376,7 @@ var { t: w } = Te("editor", {
 		"tabs.pathCopied": "Path copied",
 		"tabs.copyFailed": "Couldn’t copy the path: {error}"
 	} },
-	it: /* @__PURE__ */ JSON.parse("{\"strings\":{\"@name\":\"Editor\",\"@description\":\"Editor di testo e codice con evidenziazione, suggerimenti e controllo di JSON, CSS e HTML.\",\"@commands.editor.save.label\":\"Salva\",\"@commands.editor.new.label\":\"Nuovo documento\",\"@commands.editor.openFile.label\":\"Apri un file\",\"@commands.editor.openFolder.label\":\"Apri una cartella\",\"@commands.editor.sidebar.label\":\"Mostra o nascondi la cartella\",\"@commands.editor.complete.label\":\"Mostra i suggerimenti\",\"@commands.editor.closeTab.label\":\"Chiudi la scheda\",\"@commands.editor.nextTab.label\":\"Scheda successiva\",\"@commands.editor.previousTab.label\":\"Scheda precedente\",\"@commands.editor.reopenTab.label\":\"Riapri la scheda chiusa\",\"@entrypoints.main.params.file.label\":\"File\",\"@entrypoints.main.params.file.description\":\"Il file da aprire\",\"@entrypoints.main.params.folder.label\":\"Cartella\",\"@entrypoints.main.params.folder.description\":\"La cartella nel pannello a destra\",\"@entrypoints.filePreview.label\":\"Anteprime dei file di testo\",\"document.untitled\":\"Senza titolo\",\"document.untitledFile\":\"Senza titolo.txt\",\"document.text\":\"Testo del documento\",\"document.untitledNumber\":\"Senza titolo {n}\",\"toolbar.newDocument\":\"Nuovo documento\",\"toolbar.openFile\":\"Apri un file…\",\"toolbar.openFolder\":\"Apri una cartella…\",\"toolbar.save\":\"Salva\",\"toolbar.reveal\":\"Mostra nella cartella\",\"toolbar.language\":\"Linguaggio\",\"toolbar.settings\":\"Impostazioni dell’Editor\",\"toolbar.showFolder\":\"Mostra la cartella\",\"toolbar.hideFolder\":\"Nascondi la cartella\",\"picker.openFile.title\":\"Apri un file\",\"picker.openFolder.title\":\"Apri una cartella\",\"picker.openFolder.text\":\"La cartella compare a destra: lì puoi creare, rinominare, spostare ed eliminare file e cartelle.\",\"dialog.unsaved.text\":\"Le modifiche a «{name}» non sono salvate.\",\"dialog.unsaved.save\":\"Salva\",\"dialog.unsaved.discard\":\"Non salvare\",\"dialog.cancel\":\"Annulla\",\"dialog.conflict.text\":\"«{name}» è cambiato dopo le tue ultime modifiche non salvate.\",\"dialog.conflict.keep\":\"Tieni la mia versione\",\"dialog.conflict.reload\":\"Usa quella del file\",\"status.position\":{\"one\":\"Riga {line}, colonna {col} · {n} riga\",\"other\":\"Riga {line}, colonna {col} · {n} righe\"},\"status.savedIn\":\"Salvato in {path}\",\"status.saved\":\"Salvato · {path}\",\"status.modified\":\"Modificato\",\"status.newDocument\":\"Nuovo documento\",\"status.restored\":\"Il file è stato ripristinato\",\"status.trashed\":\"Il file è nel cestino: il testo resta qui finché non lo salvi o lo ripristini\",\"status.deleted\":\"Il file è stato eliminato: il testo resta qui finché non lo salvi\",\"status.loading\":\"Apertura…\",\"status.readFailed\":\"Impossibile aprire «{name}»: {error}\",\"status.missing\":\"Il file non esiste più: il testo resta qui finché non lo salvi\",\"diagnostic.error\":\"errore: {message}\",\"diagnostic.warning\":\"avviso: {message}\",\"diagnostic.info\":\"informazione: {message}\",\"diagnostic.hint\":\"suggerimento: {message}\",\"info.engineLoading\":\"{engine} ({loading} in caricamento)\",\"info.engineUnavailable\":\"{engine} non disponibile: {error}\",\"info.errors\":{\"one\":\"{n} errore\",\"other\":\"{n} errori\"},\"info.warnings\":{\"one\":\"{n} avviso\",\"other\":\"{n} avvisi\"},\"info.problems\":\"{errors}, {warnings}\",\"engine.simple\":\"Semplice\",\"engine.noTextmate\":\"Nessuna grammatica TextMate per {language}\",\"engine.noTreesitter\":\"Nessuna grammatica Tree-sitter per {language}\",\"language.text\":\"Testo\",\"grammar.fileDeleted\":\"File eliminato\",\"grammar.invalid\":\"Non è una grammatica TextMate (mancano scopeName o patterns)\",\"server.starting\":\"Avvio del server…\",\"server.unavailable\":\"Server non disponibile: {error}\",\"server.unknownError\":\"errore\",\"server.closedShort\":\"chiuso\",\"server.external\":\"Server esterno ({url})\",\"server.builtin\":\"Server {lang} (nel browser)\",\"server.closed\":\"Il server si è chiuso\",\"server.crashed\":\"Errore nel server: {message}\",\"server.unknown\":\"sconosciuto\",\"server.connectFailed\":\"Impossibile collegarsi a {url}\",\"server.connectionClosed\":\"Connessione chiusa ({code})\",\"schema.button\":\"Schema: {name}\",\"schema.none\":\"nessuno\",\"schema.fileDeleted\":\"file eliminato\",\"schema.tooltip\":\"Schema JSON del file\",\"schema.saveFirst\":\"Salva il file per associargli uno schema\",\"schema.menu.none\":\"Nessuno schema\",\"schema.menu.file\":\"Scegli un file di lilOS…\",\"schema.menu.url\":\"Indirizzo web…\",\"schema.menu.inFile\":\"Vale anche \\\"$schema\\\" scritto nel file\",\"schema.picker.title\":\"Scegli lo schema JSON\",\"schema.picker.text\":\"Lo schema descrive le chiavi e i valori ammessi in «{name}».\",\"schema.url.label\":\"Indirizzo dello schema\",\"schema.url.prompt\":\"Indirizzo dello schema JSON:\",\"schema.url.invalid\":\"Serve un indirizzo http:// o https://\",\"schema.url.use\":\"Usa\",\"schema.notFound\":\"Schema non trovato: {path}\",\"schema.invalidUrl\":\"Indirizzo dello schema non valido: {url}\",\"schema.downloadFailed\":\"Impossibile scaricare lo schema ({status})\",\"completion.label\":\"Suggerimenti\",\"completion.kind.text\":\"testo\",\"completion.kind.method\":\"metodo\",\"completion.kind.function\":\"funzione\",\"completion.kind.constructor\":\"costruttore\",\"completion.kind.field\":\"campo\",\"completion.kind.variable\":\"variabile\",\"completion.kind.class\":\"classe\",\"completion.kind.interface\":\"interfaccia\",\"completion.kind.module\":\"modulo\",\"completion.kind.property\":\"proprietà\",\"completion.kind.unit\":\"unità\",\"completion.kind.value\":\"valore\",\"completion.kind.enum\":\"enumerazione\",\"completion.kind.keyword\":\"parola chiave\",\"completion.kind.snippet\":\"snippet\",\"completion.kind.color\":\"colore\",\"completion.kind.file\":\"file\",\"completion.kind.reference\":\"riferimento\",\"completion.kind.folder\":\"cartella\",\"completion.kind.constant\":\"costante\",\"completion.kind.struct\":\"struttura\",\"completion.kind.event\":\"evento\",\"completion.kind.operator\":\"operatore\",\"completion.kind.type\":\"tipo\",\"completion.detail.fromText\":\"dal testo\",\"completion.detail.builtin\":\"predefinita\",\"completion.detail.member\":\"proprietà o metodo\",\"completion.detail.global\":\"globale\",\"completion.detail.rule\":\"regola\",\"completion.detail.element\":\"elemento\",\"completion.detail.character\":\"carattere\",\"completion.detail.toClose\":\"da chiudere\",\"completion.detail.attributeOf\":\"attributo di <{tag}>\",\"completion.detail.attribute\":\"attributo\",\"completion.detail.key\":\"chiave\",\"completion.detail.blockLanguage\":\"linguaggio del blocco\",\"tree.label\":\"Contenuto della cartella\",\"tree.panel\":\"Cartella aperta\",\"tree.resize\":\"Larghezza del pannello della cartella\",\"tree.newFile\":\"Nuovo file\",\"tree.newFolder\":\"Nuova cartella\",\"tree.close\":\"Chiudi la cartella\",\"tree.empty\":\"Cartella vuota\",\"tree.newName\":\"Nuovo nome\",\"tree.defaultFileName\":\"nuovo.txt\",\"tree.defaultFolderName\":\"Nuova cartella\",\"tree.menu.open\":\"Apri\",\"tree.menu.rename\":\"Rinomina\",\"tree.menu.moveTo\":\"Sposta in…\",\"tree.menu.delete\":\"Elimina\",\"tree.move.title\":\"Sposta «{name}»\",\"tree.move.text\":\"Scegli la cartella, dentro «{root}», in cui spostarlo.\",\"settings.title\":\"Impostazioni dell’Editor\",\"settings.remove\":\"Rimuovi\",\"settings.tab.highlight\":\"Evidenziazione\",\"settings.tab.highlight.description\":\"Con quale motore colorare ogni linguaggio, e grammatiche in più.\",\"settings.tab.servers\":\"Language server\",\"settings.tab.servers.description\":\"Server che suggeriscono il codice e segnalano gli errori (Language Server Protocol).\",\"settings.tab.schemas\":\"Schemi JSON\",\"settings.tab.schemas.description\":\"Gli schemi che descrivono i file JSON.\",\"settings.engines.title\":\"Motore per linguaggio\",\"settings.engines.custom\":\"Grammatica aggiunta · {exts}\",\"settings.engines.keywords\":\"evidenziazione colori tree-sitter textmate\",\"settings.engines.label\":\"Motore per {language}\",\"settings.grammars.title\":\"Grammatiche TextMate aggiunte\",\"settings.grammars.fileDeleted\":\"file eliminato\",\"settings.grammars.fallbackName\":\"Grammatica\",\"settings.grammars.notLoaded\":\"Non caricata: {error}\",\"settings.grammars.add\":\"Aggiungi una grammatica\",\"settings.grammars.addDescription\":\"Un file .tmLanguage.json di lilOS (il formato di VS Code, Sublime Text, Shiki)\",\"settings.grammars.choose\":\"Scegli file…\",\"settings.grammars.picker.title\":\"Aggiungi una grammatica TextMate\",\"settings.grammars.picker.text\":\"Scegli un file .tmLanguage.json: deve contenere \\\"scopeName\\\" e \\\"patterns\\\"; \\\"fileTypes\\\" indica le estensioni.\",\"settings.servers.builtin\":\"Nel browser\",\"settings.servers.json\":\"Completamento, errori, schemi JSON\",\"settings.servers.css\":\"Completamento ed errori\",\"settings.servers.html\":\"Completamento di tag, attributi e valori\",\"settings.servers.external\":\"Server esterni (WebSocket)\",\"settings.servers.language\":\"Linguaggio\",\"settings.servers.url\":\"Indirizzo WebSocket\",\"settings.servers.add\":\"Aggiungi\",\"settings.servers.invalidUrl\":\"Serve un indirizzo ws:// o wss://\",\"settings.servers.addServer\":\"Aggiungi un server\",\"settings.servers.addDescription\":\"Un Language Server raggiungibile via WebSocket (per esempio avviato con un ponte come lsp-ws-proxy). Ha la precedenza su quello nel browser.\",\"settings.schemas.title\":\"Schemi associati ai file\",\"settings.schemas.fileDeleted\":\"file dello schema eliminato\",\"settings.schemas.unavailable\":\"{source} · non disponibile\",\"settings.schemas.empty\":\"Nessuno schema associato\",\"settings.schemas.emptyDescription\":\"Si sceglie dall’Editor con un file JSON aperto (pulsante Schema). Vale anche \\\"$schema\\\" scritto nel file.\",\"settings.tab.general\":\"Generale\",\"settings.tab.general.description\":\"Le schede, e cosa torna quando riapri l’Editor.\",\"settings.tabs.title\":\"Schede\",\"settings.tabs.reopen\":\"Riapri schede e modifiche\",\"settings.tabs.reopenDescription\":\"Chiudendo l’Editor restano i file aperti e le modifiche non salvate, senza salvarle, e tornano la volta dopo. Per i file cifrati da un’app e i testi molto lunghi chiede comunque. Spento: chiudendo chiede per ogni modifica.\",\"settings.tabs.keywords\":\"schede sessione ripristino bozze non salvate\",\"tabs.label\":\"Documenti aperti\",\"tabs.close\":\"Chiudi «{name}»\",\"tabs.menu.close\":\"Chiudi\",\"tabs.menu.closeOthers\":\"Chiudi le altre\",\"tabs.menu.closeRight\":\"Chiudi quelle a destra\",\"tabs.menu.closeSaved\":\"Chiudi quelle salvate\",\"tabs.menu.copyPath\":\"Copia il percorso\",\"tabs.menu.reveal\":\"Mostra nel File Manager\",\"tabs.pathCopied\":\"Percorso copiato\",\"tabs.copyFailed\":\"Impossibile copiare il percorso: {error}\"}}")
+	it: /* @__PURE__ */ JSON.parse("{\"strings\":{\"@name\":\"Editor\",\"@description\":\"Editor di testo e codice con evidenziazione, suggerimenti e controllo di JSON, CSS e HTML.\",\"@commands.editor.save.label\":\"Salva\",\"@commands.editor.new.label\":\"Nuovo documento\",\"@commands.editor.openFile.label\":\"Apri un file\",\"@commands.editor.openFolder.label\":\"Apri una cartella\",\"@commands.editor.sidebar.label\":\"Mostra o nascondi la cartella\",\"@commands.editor.complete.label\":\"Mostra i suggerimenti\",\"@commands.editor.closeTab.label\":\"Chiudi la scheda\",\"@commands.editor.nextTab.label\":\"Scheda successiva\",\"@commands.editor.previousTab.label\":\"Scheda precedente\",\"@commands.editor.reopenTab.label\":\"Riapri la scheda chiusa\",\"@entrypoints.main.params.file.label\":\"File\",\"@entrypoints.main.params.file.description\":\"Il file da aprire\",\"@entrypoints.main.params.folder.label\":\"Cartella\",\"@entrypoints.main.params.folder.description\":\"La cartella nel pannello a destra\",\"@entrypoints.filePreview.label\":\"Anteprime dei file di testo\",\"@automation.editor.save.label\":\"Salva il file\",\"automation.typing\":\"Scrittura del testo\",\"automation.notOpen\":\"Il file non è aperto in questa finestra\",\"automation.notRead\":\"Il file non si è potuto leggere\",\"automation.notSaved\":\"Il file non è stato salvato\",\"document.untitled\":\"Senza titolo\",\"document.untitledFile\":\"Senza titolo.txt\",\"document.text\":\"Testo del documento\",\"document.untitledNumber\":\"Senza titolo {n}\",\"toolbar.newDocument\":\"Nuovo documento\",\"toolbar.openFile\":\"Apri un file…\",\"toolbar.openFolder\":\"Apri una cartella…\",\"toolbar.save\":\"Salva\",\"toolbar.reveal\":\"Mostra nella cartella\",\"toolbar.language\":\"Linguaggio\",\"toolbar.settings\":\"Impostazioni dell’Editor\",\"toolbar.showFolder\":\"Mostra la cartella\",\"toolbar.hideFolder\":\"Nascondi la cartella\",\"picker.openFile.title\":\"Apri un file\",\"picker.openFolder.title\":\"Apri una cartella\",\"picker.openFolder.text\":\"La cartella compare a destra: lì puoi creare, rinominare, spostare ed eliminare file e cartelle.\",\"dialog.unsaved.text\":\"Le modifiche a «{name}» non sono salvate.\",\"dialog.unsaved.save\":\"Salva\",\"dialog.unsaved.discard\":\"Non salvare\",\"dialog.cancel\":\"Annulla\",\"dialog.conflict.text\":\"«{name}» è cambiato dopo le tue ultime modifiche non salvate.\",\"dialog.conflict.keep\":\"Tieni la mia versione\",\"dialog.conflict.reload\":\"Usa quella del file\",\"status.position\":{\"one\":\"Riga {line}, colonna {col} · {n} riga\",\"other\":\"Riga {line}, colonna {col} · {n} righe\"},\"status.savedIn\":\"Salvato in {path}\",\"status.saved\":\"Salvato · {path}\",\"status.modified\":\"Modificato\",\"status.newDocument\":\"Nuovo documento\",\"status.restored\":\"Il file è stato ripristinato\",\"status.trashed\":\"Il file è nel cestino: il testo resta qui finché non lo salvi o lo ripristini\",\"status.deleted\":\"Il file è stato eliminato: il testo resta qui finché non lo salvi\",\"status.loading\":\"Apertura…\",\"status.readFailed\":\"Impossibile aprire «{name}»: {error}\",\"status.missing\":\"Il file non esiste più: il testo resta qui finché non lo salvi\",\"diagnostic.error\":\"errore: {message}\",\"diagnostic.warning\":\"avviso: {message}\",\"diagnostic.info\":\"informazione: {message}\",\"diagnostic.hint\":\"suggerimento: {message}\",\"info.engineLoading\":\"{engine} ({loading} in caricamento)\",\"info.engineUnavailable\":\"{engine} non disponibile: {error}\",\"info.errors\":{\"one\":\"{n} errore\",\"other\":\"{n} errori\"},\"info.warnings\":{\"one\":\"{n} avviso\",\"other\":\"{n} avvisi\"},\"info.problems\":\"{errors}, {warnings}\",\"engine.simple\":\"Semplice\",\"engine.noTextmate\":\"Nessuna grammatica TextMate per {language}\",\"engine.noTreesitter\":\"Nessuna grammatica Tree-sitter per {language}\",\"language.text\":\"Testo\",\"grammar.fileDeleted\":\"File eliminato\",\"grammar.invalid\":\"Non è una grammatica TextMate (mancano scopeName o patterns)\",\"server.starting\":\"Avvio del server…\",\"server.unavailable\":\"Server non disponibile: {error}\",\"server.unknownError\":\"errore\",\"server.closedShort\":\"chiuso\",\"server.external\":\"Server esterno ({url})\",\"server.builtin\":\"Server {lang} (nel browser)\",\"server.closed\":\"Il server si è chiuso\",\"server.crashed\":\"Errore nel server: {message}\",\"server.unknown\":\"sconosciuto\",\"server.connectFailed\":\"Impossibile collegarsi a {url}\",\"server.connectionClosed\":\"Connessione chiusa ({code})\",\"schema.button\":\"Schema: {name}\",\"schema.none\":\"nessuno\",\"schema.fileDeleted\":\"file eliminato\",\"schema.tooltip\":\"Schema JSON del file\",\"schema.saveFirst\":\"Salva il file per associargli uno schema\",\"schema.menu.none\":\"Nessuno schema\",\"schema.menu.file\":\"Scegli un file di lilOS…\",\"schema.menu.url\":\"Indirizzo web…\",\"schema.menu.inFile\":\"Vale anche \\\"$schema\\\" scritto nel file\",\"schema.picker.title\":\"Scegli lo schema JSON\",\"schema.picker.text\":\"Lo schema descrive le chiavi e i valori ammessi in «{name}».\",\"schema.url.label\":\"Indirizzo dello schema\",\"schema.url.prompt\":\"Indirizzo dello schema JSON:\",\"schema.url.invalid\":\"Serve un indirizzo http:// o https://\",\"schema.url.use\":\"Usa\",\"schema.notFound\":\"Schema non trovato: {path}\",\"schema.invalidUrl\":\"Indirizzo dello schema non valido: {url}\",\"schema.downloadFailed\":\"Impossibile scaricare lo schema ({status})\",\"completion.label\":\"Suggerimenti\",\"completion.kind.text\":\"testo\",\"completion.kind.method\":\"metodo\",\"completion.kind.function\":\"funzione\",\"completion.kind.constructor\":\"costruttore\",\"completion.kind.field\":\"campo\",\"completion.kind.variable\":\"variabile\",\"completion.kind.class\":\"classe\",\"completion.kind.interface\":\"interfaccia\",\"completion.kind.module\":\"modulo\",\"completion.kind.property\":\"proprietà\",\"completion.kind.unit\":\"unità\",\"completion.kind.value\":\"valore\",\"completion.kind.enum\":\"enumerazione\",\"completion.kind.keyword\":\"parola chiave\",\"completion.kind.snippet\":\"snippet\",\"completion.kind.color\":\"colore\",\"completion.kind.file\":\"file\",\"completion.kind.reference\":\"riferimento\",\"completion.kind.folder\":\"cartella\",\"completion.kind.constant\":\"costante\",\"completion.kind.struct\":\"struttura\",\"completion.kind.event\":\"evento\",\"completion.kind.operator\":\"operatore\",\"completion.kind.type\":\"tipo\",\"completion.detail.fromText\":\"dal testo\",\"completion.detail.builtin\":\"predefinita\",\"completion.detail.member\":\"proprietà o metodo\",\"completion.detail.global\":\"globale\",\"completion.detail.rule\":\"regola\",\"completion.detail.element\":\"elemento\",\"completion.detail.character\":\"carattere\",\"completion.detail.toClose\":\"da chiudere\",\"completion.detail.attributeOf\":\"attributo di <{tag}>\",\"completion.detail.attribute\":\"attributo\",\"completion.detail.key\":\"chiave\",\"completion.detail.blockLanguage\":\"linguaggio del blocco\",\"tree.label\":\"Contenuto della cartella\",\"tree.panel\":\"Cartella aperta\",\"tree.resize\":\"Larghezza del pannello della cartella\",\"tree.newFile\":\"Nuovo file\",\"tree.newFolder\":\"Nuova cartella\",\"tree.close\":\"Chiudi la cartella\",\"tree.empty\":\"Cartella vuota\",\"tree.newName\":\"Nuovo nome\",\"tree.defaultFileName\":\"nuovo.txt\",\"tree.defaultFolderName\":\"Nuova cartella\",\"tree.menu.open\":\"Apri\",\"tree.menu.rename\":\"Rinomina\",\"tree.menu.moveTo\":\"Sposta in…\",\"tree.menu.delete\":\"Elimina\",\"tree.move.title\":\"Sposta «{name}»\",\"tree.move.text\":\"Scegli la cartella, dentro «{root}», in cui spostarlo.\",\"settings.title\":\"Impostazioni dell’Editor\",\"settings.remove\":\"Rimuovi\",\"settings.tab.highlight\":\"Evidenziazione\",\"settings.tab.highlight.description\":\"Con quale motore colorare ogni linguaggio, e grammatiche in più.\",\"settings.tab.servers\":\"Language server\",\"settings.tab.servers.description\":\"Server che suggeriscono il codice e segnalano gli errori (Language Server Protocol).\",\"settings.tab.schemas\":\"Schemi JSON\",\"settings.tab.schemas.description\":\"Gli schemi che descrivono i file JSON.\",\"settings.engines.title\":\"Motore per linguaggio\",\"settings.engines.custom\":\"Grammatica aggiunta · {exts}\",\"settings.engines.keywords\":\"evidenziazione colori tree-sitter textmate\",\"settings.engines.label\":\"Motore per {language}\",\"settings.grammars.title\":\"Grammatiche TextMate aggiunte\",\"settings.grammars.fileDeleted\":\"file eliminato\",\"settings.grammars.fallbackName\":\"Grammatica\",\"settings.grammars.notLoaded\":\"Non caricata: {error}\",\"settings.grammars.add\":\"Aggiungi una grammatica\",\"settings.grammars.addDescription\":\"Un file .tmLanguage.json di lilOS (il formato di VS Code, Sublime Text, Shiki)\",\"settings.grammars.choose\":\"Scegli file…\",\"settings.grammars.picker.title\":\"Aggiungi una grammatica TextMate\",\"settings.grammars.picker.text\":\"Scegli un file .tmLanguage.json: deve contenere \\\"scopeName\\\" e \\\"patterns\\\"; \\\"fileTypes\\\" indica le estensioni.\",\"settings.servers.builtin\":\"Nel browser\",\"settings.servers.json\":\"Completamento, errori, schemi JSON\",\"settings.servers.css\":\"Completamento ed errori\",\"settings.servers.html\":\"Completamento di tag, attributi e valori\",\"settings.servers.external\":\"Server esterni (WebSocket)\",\"settings.servers.language\":\"Linguaggio\",\"settings.servers.url\":\"Indirizzo WebSocket\",\"settings.servers.add\":\"Aggiungi\",\"settings.servers.invalidUrl\":\"Serve un indirizzo ws:// o wss://\",\"settings.servers.addServer\":\"Aggiungi un server\",\"settings.servers.addDescription\":\"Un Language Server raggiungibile via WebSocket (per esempio avviato con un ponte come lsp-ws-proxy). Ha la precedenza su quello nel browser.\",\"settings.schemas.title\":\"Schemi associati ai file\",\"settings.schemas.fileDeleted\":\"file dello schema eliminato\",\"settings.schemas.unavailable\":\"{source} · non disponibile\",\"settings.schemas.empty\":\"Nessuno schema associato\",\"settings.schemas.emptyDescription\":\"Si sceglie dall’Editor con un file JSON aperto (pulsante Schema). Vale anche \\\"$schema\\\" scritto nel file.\",\"settings.tab.general\":\"Generale\",\"settings.tab.general.description\":\"Le schede, e cosa torna quando riapri l’Editor.\",\"settings.tabs.title\":\"Schede\",\"settings.tabs.reopen\":\"Riapri schede e modifiche\",\"settings.tabs.reopenDescription\":\"Chiudendo l’Editor restano i file aperti e le modifiche non salvate, senza salvarle, e tornano la volta dopo. Per i file cifrati da un’app e i testi molto lunghi chiede comunque. Spento: chiudendo chiede per ogni modifica.\",\"settings.tabs.keywords\":\"schede sessione ripristino bozze non salvate\",\"tabs.label\":\"Documenti aperti\",\"tabs.close\":\"Chiudi «{name}»\",\"tabs.menu.close\":\"Chiudi\",\"tabs.menu.closeOthers\":\"Chiudi le altre\",\"tabs.menu.closeRight\":\"Chiudi quelle a destra\",\"tabs.menu.closeSaved\":\"Chiudi quelle salvate\",\"tabs.menu.copyPath\":\"Copia il percorso\",\"tabs.menu.reveal\":\"Mostra nel File Manager\",\"tabs.pathCopied\":\"Percorso copiato\",\"tabs.copyFailed\":\"Impossibile copiare il percorso: {error}\"}}")
 }), Ee = /* @__PURE__ */ "console.document.window.globalThis.Math.JSON.Array.Object.String.Number.Boolean.Promise.Map.Set.WeakMap.Date.RegExp.Error.Symbol.fetch.setTimeout.setInterval.clearTimeout.clearInterval.requestAnimationFrame.localStorage.parseInt.parseFloat.isNaN.structuredClone.true.false.null.undefined".split("."), De = /* @__PURE__ */ "log.warn.error.info.length.push.pop.shift.unshift.slice.splice.concat.map.filter.reduce.forEach.find.findIndex.some.every.includes.indexOf.join.sort.reverse.flat.flatMap.at.split.trim.toLowerCase.toUpperCase.replace.replaceAll.startsWith.endsWith.padStart.keys.values.entries.assign.then.catch.finally.resolve.all.addEventListener.removeEventListener.querySelector.querySelectorAll.getElementById.createElement.append.appendChild.remove.classList.textContent.style.dataset.parse.stringify.floor.ceil.round.max.min.abs.random.now.toString.toFixed.get.set.has.delete.size".split("."), Oe = /* @__PURE__ */ "print.len.range.str.int.float.bool.list.dict.set.tuple.open.input.enumerate.zip.map.filter.sorted.reversed.sum.min.max.abs.round.isinstance.type.super.self.True.False.None".split("."), ke = /* @__PURE__ */ "append.extend.insert.pop.remove.sort.copy.keys.values.items.get.update.split.join.strip.lower.upper.replace.format.startswith.endswith.find.count.read.write.readlines.close".split("."), Ae = /* @__PURE__ */ "align-content.align-items.align-self.animation.aspect-ratio.background.background-color.background-image.background-position.background-repeat.background-size.border.border-bottom.border-color.border-left.border-radius.border-right.border-style.border-top.border-width.bottom.box-shadow.box-sizing.color.column-gap.content.cursor.display.filter.flex.flex-basis.flex-direction.flex-grow.flex-shrink.flex-wrap.font.font-family.font-size.font-style.font-weight.gap.grid.grid-area.grid-column.grid-row.grid-template-areas.grid-template-columns.grid-template-rows.height.inset.justify-content.justify-items.justify-self.left.letter-spacing.line-height.list-style.margin.margin-bottom.margin-left.margin-right.margin-top.max-height.max-width.min-height.min-width.object-fit.opacity.outline.overflow.overflow-x.overflow-y.padding.padding-bottom.padding-left.padding-right.padding-top.pointer-events.position.right.row-gap.text-align.text-decoration.text-overflow.text-transform.top.transform.transition.user-select.vertical-align.visibility.white-space.width.word-break.z-index".split("."), je = [
 	"auto",
 	"none",
@@ -2420,7 +2425,7 @@ async function Sn(e, t, n) {
 	return f?.type === "image/webp" ? f : d("image/png");
 }
 // src/editor/EditorApp.js
-var Cn = "  ", wn = 3e5, Tn = 1e5, En = 1e3, Dn = () => w("document.untitledFile"), On = {
+var Cn = "  ", wn = 3e5, Tn = 1e5, En = 1e3, Dn = () => e.automation ?? null, On = () => w("document.untitledFile"), kn = {
 	kw: "kw",
 	fn: "ƒ",
 	pr: "pr",
@@ -2430,8 +2435,8 @@ var Cn = "  ", wn = 3e5, Tn = 1e5, En = 1e3, Dn = () => w("document.untitledFile
 	abc: "abc",
 	ty: "T",
 	snip: "{}"
-}, kn = { shell: "shellscript" }, An = (e, t) => w(e === 2 ? "diagnostic.warning" : e === 3 ? "diagnostic.info" : e === 4 ? "diagnostic.hint" : "diagnostic.error", { message: t }), $ = (e) => Object.values(c.get(e)?.apps ?? {}).some((e) => e?.content === !0), jn = B();
-function Mn({ args: e, openWindow: t } = {}) {
+}, An = { shell: "shellscript" }, jn = (e, t) => w(e === 2 ? "diagnostic.warning" : e === 3 ? "diagnostic.info" : e === 4 ? "diagnostic.hint" : "diagnostic.error", { message: t }), $ = (e) => Object.values(c.get(e)?.apps ?? {}).some((e) => e?.content === !0), Mn = B();
+function Nn({ args: e, openWindow: t } = {}) {
 	let n = new a({
 		title: w("document.untitled"),
 		subtitle: "Editor",
@@ -2440,23 +2445,23 @@ function Mn({ args: e, openWindow: t } = {}) {
 		height: 520,
 		minWidth: 460,
 		minHeight: 280
-	}), r = new Ln(n, t), i = e && "folder" in e ? e.folder : Ht.savedRoot();
+	}), r = new Rn(n, t), i = e && "folder" in e ? e.folder : Ht.savedRoot();
 	return r.tree.setRoot(i && c.get(i)?.type === "folder" ? i : null), r.start(e), n.on("launch", (e) => {
 		e?.folder && c.get(e.folder)?.type === "folder" && r.tree.setRoot(e.folder), e?.file && c.exists(e.file) && r.open(e.file);
 	}), n.canClose = () => r.canClose(), n.closeFiles = (e) => r.closeFiles(e), n.getState = () => r.windowState(), e?.sidebar === !1 && r.tree.root && r.tree.setCollapsed(!0), n;
 }
-var Nn = (e, t) => {
+var Pn = (e, t) => {
 	let n = 1;
 	for (let r = e.indexOf("\n"); r !== -1 && r < t; r = e.indexOf("\n", r + 1)) n++;
 	return n;
-}, Pn = (e, t) => {
+}, Fn = (e, t) => {
 	let n = document.createTreeWalker(e, NodeFilter.SHOW_TEXT), r, i = null;
 	for (; r = n.nextNode();) {
 		if (t <= r.length) return [r, t];
 		t -= r.length, i = r;
 	}
 	return i ? [i, i.length] : [e, 0];
-}, Fn = (e, t) => Promise.race([e, new Promise((e, n) => setTimeout(() => n(/* @__PURE__ */ Error("timeout")), t))]), In = class {
+}, In = (e, t) => Promise.race([e, new Promise((e, n) => setTimeout(() => n(/* @__PURE__ */ Error("timeout")), t))]), Ln = class {
 	fileId = null;
 	name = "";
 	saved = "";
@@ -2482,7 +2487,7 @@ var Nn = (e, t) => {
 	constructor(e, t) {
 		this.key = e, this.input = t;
 	}
-}, Ln = class {
+}, Rn = class {
 	tabs = [];
 	tab = null;
 	sid = null;
@@ -2624,7 +2629,10 @@ var Nn = (e, t) => {
 				redo: () => this.#y("redo")
 			})
 		];
-		e.on("dismiss", () => {
+		Dn()?.handle("editor.save", (e, { file: t }) => this.saveFile(t), {
+			window: e,
+			file: () => this.fileId
+		}), e.on("dismiss", () => {
 			this.#v = !0;
 		}), e.on("destroy", () => {
 			i.forEach((e) => e()), this.#re(), cancelAnimationFrame(this.#t), clearTimeout(this.#g), this.#w();
@@ -2689,14 +2697,14 @@ var Nn = (e, t) => {
 				draft: t,
 				secret: $(n.id)
 			}), t && (i.input.value = t.text)) : e.file ? (Object.assign(i, {
-				name: e.name || Dn(),
+				name: e.name || On(),
 				isNew: !1,
 				lost: {
 					id: e.file,
 					saved: ""
 				},
 				message: w("status.missing")
-			}), i.input.value = t.text) : (i.name = e.name || Dn(), i.number = this.#N(i), i.input.value = t?.text ?? ""), e.lang ? Object.assign(i, {
+			}), i.input.value = t.text) : (i.name = e.name || On(), i.number = this.#N(i), i.input.value = t?.text ?? ""), e.lang ? Object.assign(i, {
 				lang: L(e.lang).id,
 				langChosen: !0
 			}) : i.lang = R(i.name), i.sel = e.sel ?? null, i.top = e.top ?? 0, i.loaded && this.#B(i);
@@ -2770,7 +2778,7 @@ var Nn = (e, t) => {
 	newDocument() {
 		let e = this.#N(), t = this.#P();
 		Object.assign(t, {
-			name: Dn(),
+			name: On(),
 			number: e
 		}), t.lang = R(t.name), this.#R(t);
 	}
@@ -2807,7 +2815,13 @@ var Nn = (e, t) => {
 			}), e.message = w("status.savedIn", { path: c.path(n.id) });
 		} else e.message = "";
 		let n = e.input.value;
-		return await c.write(e.fileId, n), e.saved = n, e.conflict = !1, this.#h?.kind === "conflict" && this.tab === e && this.#fe(), this.#O(e), t && this.tab === e && this.#ne(), this.tab === e && this.tree.setCurrent(e.fileId), this.#C(), this.render(), !0;
+		return await c.write(e.fileId, n), e.saved = n, e.conflict = !1, t || Dn()?.record("editor.save", { file: e.fileId }), this.#h?.kind === "conflict" && this.tab === e && this.#fe(), this.#O(e), t && this.tab === e && this.#ne(), this.tab === e && this.tree.setCurrent(e.fileId), this.#C(), this.render(), !0;
+	}
+	async saveFile(e) {
+		let t = e ? this.#j(e, "fileId") : null;
+		if (!t) throw Error(w("automation.notOpen"));
+		if (this.#R(t, { focus: !1 }), t.loaded || await this.#z(t), !t.loaded || !this.tabs.includes(t)) throw Error(w("automation.notRead"));
+		if (!await this.save()) throw Error(w("automation.notSaved"));
 	}
 	reveal(e = this.tab) {
 		let t = e?.fileId && c.get(e.fileId);
@@ -2900,7 +2914,7 @@ var Nn = (e, t) => {
 			"focus"
 		]) r.addEventListener(e, () => this.#X(), { signal: n });
 		this.area.insertBefore(r, this.suggestions);
-		let i = new In(e, r), a = t ? this.tabs.indexOf(t) : -1;
+		let i = new Ln(e, r), a = t ? this.tabs.indexOf(t) : -1;
 		return this.tabs.splice(a === -1 ? this.tabs.length : a + 1, 0, i), i;
 	}
 	#F(e) {
@@ -2929,7 +2943,7 @@ var Nn = (e, t) => {
 	#z(e) {
 		return e.loading ||= (e.message = w("status.loading"), e.input.readOnly = !0, e === this.tab && this.render(), (async () => {
 			try {
-				let [t] = await Promise.all([c.read(e.fileId), jn]);
+				let [t] = await Promise.all([c.read(e.fileId), Mn]);
 				if (!this.tabs.includes(e) || !e.fileId || e.loaded) return;
 				if (Object.assign(e, {
 					saved: t,
@@ -3089,7 +3103,7 @@ var Nn = (e, t) => {
 		let r = this.code.children[e];
 		if (!r) return [];
 		let i = document.createRange();
-		i.setStart(...Pn(r, t)), i.setEnd(...Pn(r, n));
+		i.setStart(...Fn(r, t)), i.setEnd(...Fn(r, n));
 		let a = r.getBoundingClientRect(), o = parseFloat(getComputedStyle(r).lineHeight), s = /* @__PURE__ */ new Map();
 		for (let e of i.getClientRects()) {
 			let t = Math.max(0, Math.floor((e.top + e.height / 2 - a.top) / o)), n = s.get(t);
@@ -3123,12 +3137,12 @@ var Nn = (e, t) => {
 	}
 	#X() {
 		if (!this.tab) return;
-		let e = this.text, t = this.input.selectionStart, n = Nn(e, t), r = t - e.lastIndexOf("\n", t - 1), i = this.#se(e, t);
+		let e = this.text, t = this.input.selectionStart, n = Pn(e, t), r = t - e.lastIndexOf("\n", t - 1), i = this.#se(e, t);
 		this.position.textContent = w("status.position", {
 			line: n,
 			col: r,
 			n: this.#e
-		}), this.state.textContent = i ? An(i.severity ?? 1, i.message) : this.#n, this.state.title = this.state.textContent, this.state.classList.toggle("diag", !!i), this.gutter.querySelector(".on")?.classList.remove("on"), this.gutter.children[n - 1]?.classList.add("on");
+		}), this.state.textContent = i ? jn(i.severity ?? 1, i.message) : this.#n, this.state.title = this.state.textContent, this.state.classList.toggle("diag", !!i), this.gutter.querySelector(".on")?.classList.remove("on"), this.gutter.children[n - 1]?.classList.add("on");
 		let a = this.code.children[n - 1];
 		a && (this.current.style.setProperty("--top", `${a.offsetTop}px`), this.current.style.setProperty("--height", `${a.offsetHeight}px`));
 	}
@@ -3182,7 +3196,7 @@ var Nn = (e, t) => {
 			}), i.on("status", () => {
 				i.ready || this.#o !== i || (this.#o = null, this.#d = [], this.#l = w("server.unavailable", { error: i.error ?? w("server.closedShort") }), this.#oe(), this.#Y());
 			})]
-		}, i.open(a, kn[t.id] ?? t.id, 1, this.text), this.#l = i.name, this.#Y();
+		}, i.open(a, An[t.id] ?? t.id, 1, this.text), this.#l = i.name, this.#Y();
 	}
 	#re() {
 		this.#c = null, clearTimeout(this.#u), this.#o?.ready && this.#s && this.#o.close(this.#s.uri), this.#s?.off.forEach((e) => e()), this.#o = null, this.#s = null, this.#d = [];
@@ -3341,7 +3355,7 @@ var Nn = (e, t) => {
 		if (a?.ready && a.capabilities.completionProvider && this.#s) {
 			this.#ae();
 			try {
-				let e = await Fn(a.completion(this.#s.uri, Mt(this.text, n.selectionStart), t), 1500);
+				let e = await In(a.completion(this.#s.uri, Mt(this.text, n.selectionStart), t), 1500);
 				if (r !== this.#p) return;
 				i = Lt(e, this.text, n.selectionStart);
 			} catch {
@@ -3362,7 +3376,7 @@ var Nn = (e, t) => {
 				role: "option",
 				id: `${this.suggestions.id}-${t}`,
 				dataset: { index: t }
-			}, l("span", { class: `ed-ci-kind k-${e.kind}` }, On[e.kind] ?? e.kind), l("span", { class: "ed-ci-label" }, n ? l("b", {}, e.label.slice(0, n)) : null, e.label.slice(n)), l("span", { class: "ed-ci-detail" }, e.detail));
+			}, l("span", { class: `ed-ci-kind k-${e.kind}` }, kn[e.kind] ?? e.kind), l("span", { class: "ed-ci-label" }, n ? l("b", {}, e.label.slice(0, n)) : null, e.label.slice(n)), l("span", { class: "ed-ci-detail" }, e.detail));
 		})), this.suggestions.hidden = !1, this.input.setAttribute("aria-expanded", "true"), this.#ge(0), this.#ve(i.from);
 	}
 	#he() {
@@ -3386,13 +3400,13 @@ var Nn = (e, t) => {
 	}
 	#ve(e) {
 		this.#t && (cancelAnimationFrame(this.#t), this.#t = 0, this.render());
-		let t = this.text, n = t.lastIndexOf("\n", e - 1) + 1, [r] = this.#J(Nn(t, e) - 1, e - n, e - n);
+		let t = this.text, n = t.lastIndexOf("\n", e - 1) + 1, [r] = this.#J(Pn(t, e) - 1, e - n, e - n);
 		if (!r) return;
 		let i = this.suggestions, a = this.input.getBoundingClientRect(), o = r.left - a.left, s = r.top - a.top, c = r.height, l = i.offsetWidth, u = i.offsetHeight, d = s + c + 2, f = d + u > a.height && s - u - 2 >= 0 ? s - u - 2 : d;
 		i.style.left = Math.max(4, Math.min(o - 30, a.width - l - 4)) + "px", i.style.top = f + "px";
 	}
 	#ye(e) {
-		if (this.tab.discarded = !1, this.#xe(), this.#ie(), this.#m) return;
+		if (this.tab.discarded = !1, Dn()?.missed("editor", w("automation.typing")), this.#xe(), this.#ie(), this.#m) return;
 		let t = typeof e.data == "string" ? e.data : "", n = e.inputType === "insertText" && t.length === 1, r = this.#o?.ready ? this.#o.triggerCharacters : [], i = L(this.tab.lang).simple;
 		n && (r.includes(t) || !/\s/.test(t) || i === "html" && t === " ") ? this.#me(this.#f?.manual ?? !1, r.includes(t) ? t : null) : e.inputType === "deleteContentBackward" && this.#f ? this.#me(this.#f.manual) : this.#he();
 	}
@@ -3480,4 +3494,4 @@ var Nn = (e, t) => {
 		}
 	}
 };
-export { Mn as default, bn as filePreview };
+export { Nn as default, bn as filePreview };

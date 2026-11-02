@@ -1,7 +1,8 @@
 import { Window, h, icon, fs, UndoStack, history, toast, slider, segmented, selectField, actionButton, isEditing } from '@lilos/sdk';
+import * as sdk from '@lilos/sdk';   // `automation`: missing in older lilOS, so not imported by name
 import { launch, handleCommand, pickFile } from '@lilos/system';
 import { glyph } from './glyphs.js';
-import { OPENS, extOf, labelOf, formatOf, decode, encode, resample, cropped, copyOf, formatBytes, FORMATS } from './image.js';
+import { OPENS, extOf, labelOf, formatOf, supported, decode, encode, resample, cropped, copyOf, formatBytes, FORMATS } from './image.js';
 import { resizeDialog, convertDialog } from './dialogs.js';
 import { t } from './i18n.js';
 import './photo.css';
@@ -35,6 +36,9 @@ const ZOOMS = [0.05, 0.1, 1 / 6, 0.25, 1 / 3, 0.5, 2 / 3, 1, 1.5, 2, 3, 4, 6, 8,
 const LINE = 1.2;          // line height of the text tool, in font sizes
 const STEPS = 20;          // undo steps kept (each one holds a copy of the image)
 const PAD = 24;            // space around the image when it fits the window
+const MAX_SIDE = 16384;    // the largest width or height a resize may give
+/** Automations (the Automata app): what the user does here is recorded and done again. */
+const automation = () => sdk.automation ?? null;
 
 /**
  * Image viewer with a little editing: drawing, text, crop, resize, conversion to PNG, JPEG or
@@ -172,6 +176,15 @@ class Photo {
       history.attach(win.body, this.stack),
     ];
     win.on('destroy', () => { off.forEach(o => o()); resizes.disconnect(); });
+    // Automations: this window does again, without dialogs, what was recorded on the image it shows
+    const auto = automation();
+    if (auto) {
+      const file = () => this.fileId;
+      auto.handle('photo.resize', params => this.resizeTo(params), { window: win, file });
+      auto.handle('photo.crop', params => void this.cropTo(params), { window: win, file });
+      auto.handle('photo.saveAs', params => this.saveCopy(params), { window: win, file });
+      auto.handle('photo.save', () => this.saveInPlace(), { window: win, file });
+    }
     this.setTool('view');
   }
 
@@ -265,39 +278,64 @@ class Photo {
       return false;
     }
     this.#savedRev = this.#rev;
+    automation()?.record('photo.save', { file: node.id });
     const saved = this.#message = t('status.saved');
     this.render();
     setTimeout(() => { if (this.#message === saved) { this.#message = ''; this.render(); } }, 2000);
     return true;
   }
 
-  /** A copy in another format (and, if asked, opens it here). Resolves true when saved. */
-  async convert({ title, okLabel, open } = {}) {
-    this.#commitText();
-    if (!this.canvas) return false;
+  /** Saving over the file without asking anything (automations); throws when it cannot. */
+  async saveInPlace() {
+    if (!this.canvas) throw new Error(t('automation.noImage'));
+    const node = this.node;
+    if (!node || !formatOf(node.name)) throw new Error(node ? t('save.cannotWrite', { format: labelOf(node.name) }) : t('save.fileGone'));
+    if (!(await this.save())) throw new Error(t('automation.notSaved'));
+  }
+
+  /** What the copy dialog proposes: next to the file, in PNG (or JPEG for a PNG). */
+  #copyProposal() {
     const node = this.node;
     const folder = node && fs.get(node.parent)?.type === 'folder' ? node.parent : (fs.resolve('/Immagini') ?? fs.get(fs.root)).id;
     const current = node && formatOf(node.name);
-    const choice = await convertDialog(this.win.body, this.openWindow, {
-      name: this.name || `${t('file.defaultName')}.png`, folder, format: current?.id === 'png' ? 'jpeg' : 'png', title, okLabel,
-    });
-    if (!choice) return false;
-    if (open !== undefined) choice.open = open;
-    let blob;
-    try {
-      blob = await encode(this.canvas, choice.format, choice.quality);
-    } catch (err) {
-      toast(`Non salvata: ${err?.message ?? err}`);
-      return false;
-    }
-    const copy = fs.create(choice.folder, { type: 'file', name: choice.name });
+    return { name: this.name || `${t('file.defaultName')}.png`, folder, format: current?.id === 'png' ? 'jpeg' : 'png' };
+  }
+
+  /** Writes the image as a new file: { format, quality (0–1), name, folder }. Resolves { copy, blob }; throws if not saved. */
+  async #writeCopy({ format, quality, name, folder }) {
+    const blob = await encode(this.canvas, format, quality);
+    const copy = fs.create(folder, { type: 'file', name });
     try {
       await fs.write(copy.id, blob);
     } catch (err) {
       fs.remove(copy.id);
+      throw err;
+    }
+    return { copy, blob };
+  }
+
+  /** A copy in another format (and, if asked, opens it here). Resolves true when saved. */
+  async convert({ title, okLabel, open } = {}) {
+    this.#commitText();
+    if (!this.canvas) return false;
+    const proposal = this.#copyProposal();
+    const choice = await convertDialog(this.win.body, this.openWindow, { ...proposal, title, okLabel });
+    if (!choice) return false;
+    if (open !== undefined) choice.open = open;
+    const from = this.fileId;
+    let copy, blob;
+    try {
+      ({ copy, blob } = await this.#writeCopy(choice));
+    } catch (err) {
       toast(`Non salvata: ${err?.message ?? err}`);
       return false;
     }
+    const base = proposal.name.replace(/\.[^.]+$/, '') || t('file.defaultName');
+    automation()?.record('photo.saveAs', {
+      params: { format: choice.format.id, quality: Math.round(choice.quality * 100), name: choice.name, folder: choice.folder, open: choice.open },
+      defaults: { format: proposal.format, quality: 90, name: `${base}.${FORMATS.find(f => f.id === proposal.format).ext}`, folder: proposal.folder, open: true },
+      file: from, result: copy.id,
+    });
     if (choice.open) {
       // The copy has the changes: open it as saved, without asking about the old file
       this.#savedRev = this.#rev;
@@ -306,6 +344,28 @@ class Photo {
       toast(t('convert.saved', { name: copy.name, size: formatBytes(blob.size) }));
     }
     return true;
+  }
+
+  /**
+   * The copy without the dialog (automations): { format, quality (10–100), name, folder, open },
+   * what is missing as the dialog would propose it. Resolves the id of the new file.
+   */
+  async saveCopy({ format, quality = 90, name, folder, open = false } = {}) {
+    this.#commitText();
+    if (!this.canvas) throw new Error(t('automation.noImage'));
+    const proposal = this.#copyProposal();
+    const chosen = FORMATS.find(f => f.id === (format ?? proposal.format));
+    if (!chosen || !supported(chosen)) throw new Error(t('automation.badFormat'));
+    const parent = folder ?? proposal.folder;
+    if (fs.get(parent)?.type !== 'folder') throw new Error(t('convert.noFolder'));
+    const fileName = name?.trim() || `${proposal.name.replace(/\.[^.]+$/, '') || t('file.defaultName')}.${chosen.ext}`;
+    if (fileName.includes('/')) throw new Error(t('convert.badName'));
+    const { copy } = await this.#writeCopy({ format: chosen, quality: clamp(Number(quality) || 90, 10, 100) / 100, name: fileName, folder: parent });
+    if (open) {
+      this.#savedRev = this.#rev;
+      await this.open(copy.id);
+    }
+    return copy.id;
   }
 
   /** The image on the computer: the file as it is, or with the changes (PNG if its format cannot be written). */
@@ -427,8 +487,36 @@ class Photo {
   async resize() {
     this.#commitText();
     if (!this.canvas) return;
-    const choice = await resizeDialog(this.win.body, { width: this.canvas.width, height: this.canvas.height });
-    if (choice) this.#replace(t('history.resize'), resample(this.canvas, choice.width, choice.height, choice.quality));
+    const { width, height } = this.canvas;
+    const choice = await resizeDialog(this.win.body, { width, height });
+    if (!choice) return;
+    this.#replace(t('history.resize'), resample(this.canvas, choice.width, choice.height, choice.quality));
+    automation()?.record('photo.resize', {
+      params: choice.asked,
+      defaults: { width, height, unit: 'pixels', keepRatio: true, quality: 'high' },
+      file: this.fileId,
+    });
+  }
+
+  /**
+   * The resize without the dialog (automations): width and height in pixels or percent; with
+   * keepRatio the height follows the width and the proportions of the image shown.
+   */
+  resizeTo({ width, height, unit = 'pixels', keepRatio = true, quality = 'high' } = {}) {
+    this.#commitText();
+    if (!this.canvas) throw new Error(t('automation.noImage'));
+    const W = this.canvas.width, H = this.canvas.height;
+    let tw, th;
+    if (unit === 'percent') {
+      tw = Math.round(W * width / 100);
+      th = Math.round(H * (keepRatio ? width : height) / 100);
+    } else {
+      tw = Math.round(width);
+      th = keepRatio ? Math.max(1, Math.round(width * H / W)) : Math.round(height);
+    }
+    if (!(tw > 0 && th > 0) || tw > MAX_SIDE || th > MAX_SIDE) throw new Error(t('resize.outOfRange'));
+    if (tw === W && th === H) return;
+    this.#replace(t('history.resize'), resample(this.canvas, tw, th, ['high', 'medium', 'pixel'].includes(quality) ? quality : 'high'));
   }
 
   /** Sizes of brush and text that suit the image, until the user picks their own. */
@@ -538,6 +626,8 @@ class Photo {
         ctx.clearRect(0, 0, this.overlay.width, this.overlay.height);
       }
       this.#record(erase ? t('history.erase') : t('history.draw'), before);
+      // Free-hand: an automation cannot do it again (the recorder shows it struck out)
+      automation()?.missed('photo', t('tool.brush'));
       this.render();
     };
     this.paper.setPointerCapture(e.pointerId);
@@ -597,6 +687,7 @@ class Photo {
     lines.forEach((line, i) => ctx.fillText(line, x, y + size * (LINE - 1) / 2 + i * size * LINE));
     ctx.restore();
     this.#record(t('history.text'), before);
+    automation()?.missed('photo', t('tool.text'));
     this.render();
   }
 
@@ -673,10 +764,25 @@ class Photo {
   applyCrop() {
     const c = this.#crop;
     if (!c || !this.canvas) return;
-    const x = Math.round(c.x), y = Math.round(c.y);
-    const width = clamp(Math.round(c.width), 1, this.canvas.width - x), height = clamp(Math.round(c.height), 1, this.canvas.height - y);
-    if (width === this.canvas.width && height === this.canvas.height) return;
-    this.#replace(t('history.crop'), cropped(this.canvas, { x, y, width, height }));
+    const area = this.cropTo({ x: c.x, y: c.y, width: c.width, height: c.height });
+    if (area) automation()?.record('photo.crop', { params: area, file: this.fileId });
+  }
+
+  /**
+   * Crops to { x, y, width, height } in image pixels, kept inside the image (also for
+   * automations). Returns the area cropped, or null when it is the whole image; throws when
+   * there is no image or the area starts outside it.
+   */
+  cropTo({ x = 0, y = 0, width, height } = {}) {
+    if (!this.canvas) throw new Error(t('automation.noImage'));
+    const W = this.canvas.width, H = this.canvas.height;
+    x = Math.round(x);
+    y = Math.round(y);
+    if (!(x >= 0 && y >= 0 && x < W && y < H)) throw new Error(t('automation.cropOutside'));
+    const area = { x, y, width: clamp(Math.round(width ?? W - x), 1, W - x), height: clamp(Math.round(height ?? H - y), 1, H - y) };
+    if (area.width === W && area.height === H) return null;
+    this.#replace(t('history.crop'), cropped(this.canvas, area));
+    return area;
   }
 
   // ---------- Zoom ----------

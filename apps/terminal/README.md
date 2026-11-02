@@ -53,6 +53,12 @@ Un’app installata può aggiungere i suoi comandi al Terminale nel manifesto:
 
 Non ci sono processi né programmi esterni: i comandi sono quelli del Terminale e delle app. Mancano gli array associativi, `trap`, `getopts`, `select` e i permessi dei file (in lilOS non esistono); i nomi dei file non distinguono maiuscole e minuscole, come nel resto di lilOS.
 
+## Automazioni
+
+Con **Automata** (lilOS 1.15.0 o successivo) il Terminale rende registrabile **Esegui un comando**: la riga eseguita e la cartella in cui l'hai eseguita. Si registrano solo le righe finite con successo, non quelle che iniziano con `automata` né quelle più lunghe di 4000 caratteri. La riga gira senza registrare quello che fa ai file, che è già dentro la riga. Rifatto, il comando si scrive nel Terminale (nella cartella registrata) e il passo riesce solo se l'uscita è 0, altrimenti mostra l'ultima riga d'errore.
+
+Il Terminale ha anche il comando di Automata: `automata list` e `automata run <nome> [file…] [--campo=valore…] [--yes]` (vedi Automata).
+
 ## Riconoscimenti
 
 - [xterm.js](https://xtermjs.org) 6.0.0 e gli addon fit, search e unicode11, per le schede delle sessioni remote: licenza MIT, © The xterm.js authors, © SourceLair Private Company, © Christopher Jeffrey.

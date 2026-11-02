@@ -1,4 +1,5 @@
 import { Window, h, icon, fs, uid, settings, selectField, actionButton, openMenu, history, shortcuts, toast, PipeStopped } from '@lilos/sdk';
+import * as sdk from '@lilos/sdk';   // `automation`: missing in older lilOS, so not imported by name
 import { launch } from '@lilos/system';
 import { handleCommand } from '@lilos/system';
 import { pickFile } from '@lilos/system';
@@ -23,6 +24,8 @@ const HIGHLIGHT_LIMIT = 300_000;   // characters: above this the text is shown p
 const TEXTMATE_LIMIT = 100_000;    // TextMate re-tokenizes everything: above this the simple engine is used
 const DRAFT_DELAY = 1000;          // ms after the last change before the unsaved text is kept
 const CLOSED_TABS = 20;            // tabs that Ctrl+Alt+T can open again
+/** Automations (the Automata app): what the user does here is recorded and done again. */
+const automation = () => sdk.automation ?? null;
 const untitled = () => t('document.untitledFile');
 /** Short badges for the kinds of suggestion (complete.js, lsp/convert.js). */
 const KIND_BADGES = { kw: 'kw', fn: 'ƒ', pr: 'pr', val: 'val', tag: '<>', attr: '=', abc: 'abc', ty: 'T', snip: '{}' };
@@ -260,6 +263,8 @@ class TextEditor {
         redo: () => this.#nativeHistory('redo'),
       }),
     ];
+    // Automations: this window saves again the file of a step (in its tab, shown first)
+    automation()?.handle('editor.save', (params, { file }) => this.saveFile(file), { window: win, file: () => this.fileId });
     win.on('dismiss', () => { this.#dismissed = true; });
     win.on('destroy', () => {
       off.forEach(o => o());
@@ -493,6 +498,8 @@ class TextEditor {
     await fs.write(doc.fileId, text);
     doc.saved = text;
     doc.conflict = false;
+    // A new document is not recorded: lilOS records the file it creates
+    if (!wasUntitled) automation()?.record('editor.save', { file: doc.fileId });
     if (this.#banner?.kind === 'conflict' && this.tab === doc) this.#closeBanner();
     this.#writeDraft(doc);
     if (wasUntitled && this.tab === doc) this.#connect();   // the document has a file URI now
@@ -500,6 +507,16 @@ class TextEditor {
     this.#saveSessionSoon();
     this.render();
     return true;
+  }
+
+  /** Saves the tab of a file without asking anything (automations), showing it first. */
+  async saveFile(id) {
+    const doc = id ? this.#find(id, 'fileId') : null;
+    if (!doc) throw new Error(t('automation.notOpen'));
+    this.#activate(doc, { focus: false });
+    if (!doc.loaded) await this.#loadFile(doc);
+    if (!doc.loaded || !this.tabs.includes(doc)) throw new Error(t('automation.notRead'));
+    if (!(await this.save())) throw new Error(t('automation.notSaved'));
   }
 
   /** Opens File on the folder of a document (the one shown). */
@@ -1271,6 +1288,8 @@ class TextEditor {
 
   #onInput(e) {
     this.tab.discarded = false;
+    // Typing is not recorded: the recorder shows it, struck out, once per burst
+    automation()?.missed('editor', t('automation.typing'));
     this.#changed();
     this.#syncLater();
     if (this.#accepting) return;

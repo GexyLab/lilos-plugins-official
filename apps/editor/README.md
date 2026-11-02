@@ -12,3 +12,7 @@ Editor di testo e di codice.
 
 Si apre facendo doppio clic su un file di testo, oppure dal menu Start.
 Si può nascondere o rimuovere: lilOS funziona anche senza.
+
+## Automazioni
+
+Con **Automata** (lilOS 1.15.0 o successivo) l'Editor rende registrabile **Salva il file**: rifatto, salva la scheda di quel file senza chiedere niente. Scrivere non si registra (il Registratore lo mostra barrato). Non ci sono ancora «Trova e sostituisci» né «Salva con nome», quindi non c'è altro da registrare.

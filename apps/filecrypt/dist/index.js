@@ -523,8 +523,25 @@ async function Z(e) {
 		lockAfter: Number.isInteger(n.lockAfter) && n.lockAfter >= 0 && n.lockAfter <= 1440 ? n.lockAfter : je.lockAfter
 	};
 }
-var Me = 8, Q = async (e) => new Uint8Array(await e.arrayBuffer());
-async function Ne({ lilos: e }) {
+function Me(e, t) {
+	let n = {
+		wrong: "error.wrong",
+		corrupt: "error.corrupt",
+		short: "encrypt.tooShort",
+		already: "error.already",
+		"not-encrypted": "error.notEncrypted",
+		"bad-header": "error.badHeader",
+		"no-argon2": "error.noArgon2"
+	};
+	return n[t?.message] ? e(n[t.message]) : e("error.generic", { error: t?.message ?? String(t) });
+}
+async function Q(e, t, n) {
+	try {
+		await e.automation?.record(t, n);
+	} catch {}
+}
+var Ne = 8, $ = async (e) => new Uint8Array(await e.arrayBuffer());
+async function Pe({ lilos: e }) {
 	let t = (t, n) => e.locale.i18n.t(t, n), n = /* @__PURE__ */ new Map(), r = /* @__PURE__ */ new Set(), i = await Z(e), a = () => [...n].map(([e, t]) => ({
 		id: e,
 		name: t.name,
@@ -564,7 +581,7 @@ async function Ne({ lilos: e }) {
 		if (!a) return { stop: { error: t("error.locked", { name: e.name }) } };
 		let o = i.caller;
 		if (o && !o.system && !o.opened) return { stop: { error: t("error.otherApp", { name: e.name }) } };
-		let s = await Q(r);
+		let s = await $(r);
 		if (!ce(s)) return { stop: { error: t("error.broken", { name: e.name }) } };
 		try {
 			let e = await De(s, a.state);
@@ -578,15 +595,18 @@ async function Ne({ lilos: e }) {
 		...c
 	}, async ({ node: e, content: r }) => {
 		let i = n.get(e.id);
-		return i ? (i.used = Date.now(), { data: { content: new Blob([await we(await Q(r), i.state)]) } }) : { stop: { error: t("error.writeLocked", { name: e.name }) } };
+		return i ? (i.used = Date.now(), { data: { content: new Blob([await we(await $(r), i.state)]) } }) : { stop: { error: t("error.writeLocked", { name: e.name }) } };
 	});
 	async function l(t) {
 		switch (t.op) {
 			case "follow": return { status: a() };
 			case "settings": return i = await Z(e), {};
-			case "lock": return { locked: await s(Array.isArray(t.files) ? t.files : [...n.keys()]) };
+			case "lock": {
+				let r = Array.isArray(t.files) ? t.files : [...n.keys()], i = await s(r);
+				return await Q(e, "filecrypt.lock", { params: { files: r } }), { locked: i };
+			}
 			case "unlock": {
-				let r = await e.files.info(t.file), { state: i } = await Ee(await Q(await e.files.read(t.file, { bytes: !0 })), String(t.password));
+				let r = await e.files.info(t.file), { state: i } = await Ee(await $(await e.files.read(t.file, { bytes: !0 })), String(t.password));
 				return n.set(t.file, {
 					state: i,
 					name: r.name,
@@ -597,8 +617,8 @@ async function Ne({ lilos: e }) {
 			case "encrypt": {
 				let r = await e.files.info(t.file);
 				if (r.meta) throw Error("already");
-				if (String(t.password ?? "").length < Me) throw Error("short");
-				let { bytes: a, state: s } = await Te(await Q(await e.files.read(t.file, { bytes: !0 })), {
+				if (String(t.password ?? "").length < Ne) throw Error("short");
+				let { bytes: a, state: s } = await Te(await $(await e.files.read(t.file, { bytes: !0 })), {
 					password: String(t.password),
 					alg: t.alg ?? i.alg,
 					kdf: t.kdf ?? i.kdf
@@ -611,7 +631,7 @@ async function Ne({ lilos: e }) {
 				}), o(), {};
 			}
 			case "decrypt": {
-				let { plain: r } = await Ee(await Q(await e.files.read(t.file, { bytes: !0 })), String(t.password));
+				let { plain: r } = await Ee(await $(await e.files.read(t.file, { bytes: !0 })), String(t.password));
 				return await e.files.write(t.file, new Blob([r]), { mark: null }), n.get(t.file)?.state.key.fill(0), n.delete(t.file), o(), {};
 			}
 			default: throw Error("unknown");
@@ -632,8 +652,42 @@ async function Ne({ lilos: e }) {
 				});
 			}
 		};
-	}), e.handle(async (t) => {
-		if (t?.action === "filecrypt.lock") return { locked: await s(t.files ?? []) };
+	});
+	async function u({ action: e, params: n }) {
+		let r = n && typeof n == "object" ? n : {};
+		try {
+			switch (e) {
+				case "filecrypt.encrypt":
+					await l({
+						op: "encrypt",
+						file: r.file,
+						password: r.password,
+						alg: K.includes(r.alg) ? r.alg : void 0,
+						kdf: ie.includes(r.kdf) ? r.kdf : void 0
+					});
+					return;
+				case "filecrypt.decrypt":
+					await l({
+						op: "decrypt",
+						file: r.file,
+						password: r.password
+					});
+					return;
+				case "filecrypt.lock":
+					await s(Array.isArray(r.files) ? r.files : [], { quiet: !0 });
+					return;
+			}
+		} catch (e) {
+			throw Error(Me(t, e));
+		}
+		throw Error("unknown");
+	}
+	e.handle(async (t) => {
+		if (t?.automation) return u(t.automation);
+		if (t?.action === "filecrypt.lock") {
+			let n = await s(t.files ?? []);
+			return await Q(e, "filecrypt.lock", { params: { files: t.files ?? [] } }), { locked: n };
+		}
 		if (t?.op === "prepare") {
 			let r = await e.files.info(t.file);
 			return {
@@ -647,14 +701,14 @@ async function Ne({ lilos: e }) {
 	});
 }
 // src/filecrypt/windows.js
-var Pe = (e) => [["argon2id", e("kdf.argon2id")], ["pbkdf2", e("kdf.pbkdf2")]], Fe = () => K.map((e) => [e, e]), Ie = (e) => [
+var Fe = (e) => [["argon2id", e("kdf.argon2id")], ["pbkdf2", e("kdf.pbkdf2")]], Ie = () => K.map((e) => [e, e]), Le = (e) => [
 	5,
 	15,
 	30,
 	60,
 	0
 ].map((t) => [String(t), t ? e("settings.minutes", { n: t }) : e("settings.never")]);
-function Le(t, n, r) {
+function Re(t, n, r) {
 	n.append(e("style", {}, "\n  :host, body { margin: 0; }\n  .fc { box-sizing: border-box; height: 100%; overflow: auto; padding: 18px 20px; display: flex; flex-direction: column; gap: 14px; color: var(--text); font: 13px/1.45 var(--font, system-ui); }\n  .fc * { box-sizing: border-box; }\n  .fc h1 { font-size: 15px; font-weight: 600; margin: 0; overflow-wrap: anywhere; }\n  .fc h2 { font-size: 12px; font-weight: 600; margin: 4px 0 0; color: var(--dim); text-transform: uppercase; letter-spacing: .04em; }\n  .fc p { margin: 0; color: var(--dim); }\n  .fc .fc-form { display: flex; flex-direction: column; gap: 12px; }\n  .fc label { display: flex; flex-direction: column; gap: 5px; font-weight: 500; }\n  .fc input, .fc select { font: inherit; color: var(--text); background: var(--field-bg, var(--surface)); border: 1px solid var(--border); border-radius: var(--radius-sm, 6px); padding: 7px 9px; }\n  .fc input:focus-visible, .fc select:focus-visible, .fc button:focus-visible, .fc summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }\n  .fc .row { display: flex; gap: 8px; align-items: center; justify-content: flex-end; flex-wrap: wrap; }\n  .fc button { font: inherit; padding: 6px 14px; border-radius: var(--radius-sm, 6px); border: 1px solid var(--border); background: var(--surface); color: var(--text); cursor: pointer; }\n  .fc button:hover:not(:disabled) { background: var(--hover); }\n  .fc button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }\n  .fc button.primary:hover:not(:disabled) { filter: brightness(1.08); background: var(--accent); }\n  .fc button:disabled { opacity: .55; cursor: default; }\n  .fc .error { color: var(--danger, #d64545); min-height: 1.45em; }\n  .fc .warn { padding: 9px 11px; border-radius: var(--radius-sm, 6px); background: color-mix(in srgb, var(--danger, #d64545) 10%, transparent); color: var(--text); }\n  .fc .meter { display: flex; gap: 4px; }\n  .fc .meter span { flex: 1; height: 4px; border-radius: 2px; background: var(--border); }\n  .fc .meter[data-level=\"1\"] span:nth-child(-n+1) { background: #d64545; }\n  .fc .meter[data-level=\"2\"] span:nth-child(-n+2) { background: #e0a030; }\n  .fc .meter[data-level=\"3\"] span:nth-child(-n+3) { background: #7fb24a; }\n  .fc .meter[data-level=\"4\"] span { background: #3f9d5c; }\n  .fc .hint { font-size: 12px; color: var(--dim); font-weight: 400; }\n  .fc details { border: 1px solid var(--border); border-radius: var(--radius-sm, 6px); padding: 6px 10px; }\n  .fc details[open] { padding-bottom: 10px; }\n  .fc details > div { display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }\n  .fc summary { cursor: pointer; font-weight: 500; }\n  .fc ul { list-style: none; margin: 0; padding: 0; border: 1px solid var(--border); border-radius: var(--radius-sm, 6px); }\n  .fc li { display: flex; align-items: center; gap: 10px; padding: 7px 10px; }\n  .fc li + li { border-top: 1px solid var(--border); }\n  .fc li .name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }\n  .fc li .when { color: var(--dim); font-size: 12px; }\n  .fc .empty { padding: 12px 10px; color: var(--dim); }\n  .fc .settings { display: grid; grid-template-columns: 1fr; gap: 10px; }\n  .fc [aria-busy=\"true\"] { cursor: progress; }\n"));
 	let i = e("div", { class: "fc" });
 	n.append(i);
@@ -665,22 +719,10 @@ function Le(t, n, r) {
 		off: t.on("locale", a)
 	};
 }
-function Re(e, t) {
-	let n = {
-		wrong: "error.wrong",
-		corrupt: "error.corrupt",
-		short: "encrypt.tooShort",
-		already: "error.already",
-		"not-encrypted": "error.notEncrypted",
-		"bad-header": "error.badHeader",
-		"no-argon2": "error.noArgon2"
-	};
-	return n[t?.message] ? e(n[t.message]) : e("error.generic", { error: t?.message ?? String(t) });
-}
-function $(e, t) {
+function ze(e, t) {
 	e.disabled = t, e.setAttribute("aria-busy", t ? "true" : "false");
 }
-function ze(t, ...n) {
+function Be(t, ...n) {
 	let r = e("div", {
 		class: "fc-form",
 		role: "form"
@@ -689,8 +731,8 @@ function ze(t, ...n) {
 		e.key === "Enter" && e.target.tagName === "INPUT" && (e.preventDefault(), t());
 	}), r;
 }
-async function Be({ lilos: r, root: i }) {
-	let a = (e, t) => r.locale.i18n.t(e, t), o = await n(r), s = [], c = await Z(r), { redraw: l, off: u } = Le(r, i, (n) => {
+async function Ve({ lilos: r, root: i }) {
+	let a = (e, t) => r.locale.i18n.t(e, t), o = await n(r), s = [], c = await Z(r), { redraw: l, off: u } = Re(r, i, (n) => {
 		let i = async (e) => {
 			c = {
 				...c,
@@ -712,7 +754,7 @@ async function Be({ lilos: r, root: i }) {
 		}, a("main.lock"))))) : e("div", { class: "empty" }, a("main.none")), s.length > 1 && e("div", { class: "row" }, e("button", {
 			type: "button",
 			onclick: () => o.ask({ op: "lock" })
-		}, a("main.lockAll"))), e("h2", {}, a("settings.title")), e("div", { class: "settings" }, e("label", {}, a("settings.alg"), t(Fe(), c.alg, (e) => i({ alg: e }))), e("label", {}, a("settings.kdf"), t(Pe(a), c.kdf, (e) => i({ kdf: e }))), e("label", {}, a("settings.lockAfter"), t(Ie(a), c.lockAfter, (e) => i({ lockAfter: Number(e) })))), e("p", { class: "hint" }, a("main.limits")));
+		}, a("main.lockAll"))), e("h2", {}, a("settings.title")), e("div", { class: "settings" }, e("label", {}, a("settings.alg"), t(Ie(), c.alg, (e) => i({ alg: e }))), e("label", {}, a("settings.kdf"), t(Fe(a), c.kdf, (e) => i({ kdf: e }))), e("label", {}, a("settings.lockAfter"), t(Le(a), c.lockAfter, (e) => i({ lockAfter: Number(e) })))), e("p", { class: "hint" }, a("main.limits")));
 	});
 	return o.onStatus((e) => {
 		s = e, l();
@@ -720,12 +762,12 @@ async function Be({ lilos: r, root: i }) {
 		u(), o.close();
 	};
 }
-async function Ve({ lilos: t, root: r, args: i }) {
+async function He({ lilos: t, root: r, args: i }) {
 	let a = (e, n) => t.locale.i18n.t(e, n), o = null, s = "unlock", c = "", l = "", u = null, d = (e) => {
 		o = e?.file ?? (Array.isArray(e?.files) ? e.files[0] : null), s = e?.action === "filecrypt.decrypt" ? "decrypt" : "unlock", l = "";
 	};
 	d(i);
-	let { redraw: f, off: p } = Le(t, r, (r) => {
+	let { redraw: f, off: p } = Re(t, r, (r) => {
 		if (!o) return r.replaceChildren(e("p", {}, a("unlock.noFile")));
 		let i = e("input", {
 			type: "password",
@@ -739,7 +781,7 @@ async function Ve({ lilos: t, root: r, args: i }) {
 		}, l), f = async () => {
 			if (!p.disabled) {
 				if (!i.value) return i.focus();
-				$(p, !0);
+				ze(p, !0);
 				try {
 					await t.app.call("vault", {
 						op: "prepare",
@@ -748,9 +790,9 @@ async function Ve({ lilos: t, root: r, args: i }) {
 						op: s,
 						file: o,
 						password: i.value
-					}), i.value = "", s === "unlock" ? await t.files.open(o) : t.ui.toast(a("toast.decrypted", { name: c })), t.window.close();
+					}), i.value = "", s === "unlock" ? await t.files.open(o) : (t.ui.toast(a("toast.decrypted", { name: c })), await Q(t, "filecrypt.decrypt", { params: { file: o } })), t.window.close();
 				} catch (e) {
-					l = Re(a, e), d.textContent = l, i.value = "", $(p, !1), i.focus();
+					l = Me(a, e), d.textContent = l, i.value = "", ze(p, !1), i.focus();
 				}
 			}
 		}, p = e("button", {
@@ -758,7 +800,7 @@ async function Ve({ lilos: t, root: r, args: i }) {
 			class: "primary",
 			onclick: f
 		}, a(s === "decrypt" ? "decrypt.button" : "unlock.button"));
-		r.replaceChildren(e("h1", {}, a(s === "decrypt" ? "decrypt.title" : "unlock.title", { name: c })), e("p", {}, a(s === "decrypt" ? "decrypt.intro" : "unlock.intro")), ze(f, e("label", {}, a("unlock.password"), i), d, e("div", { class: "row" }, e("button", {
+		r.replaceChildren(e("h1", {}, a(s === "decrypt" ? "decrypt.title" : "unlock.title", { name: c })), e("p", {}, a(s === "decrypt" ? "decrypt.intro" : "unlock.intro")), Be(f, e("label", {}, a("unlock.password"), i), d, e("div", { class: "row" }, e("button", {
 			type: "button",
 			onclick: () => t.window.close()
 		}, a("common.cancel")), p))), i.focus();
@@ -771,14 +813,14 @@ async function Ve({ lilos: t, root: r, args: i }) {
 		p(), h(), u?.close();
 	};
 }
-async function He({ lilos: r, root: i, args: a }) {
+async function Ue({ lilos: r, root: i, args: a }) {
 	let o = (e, t) => r.locale.i18n.t(e, t), s = Array.isArray(a?.files) ? a.files[0] : a?.file ?? null, c = "", l = null, u = await Z(r), d = () => [
 		"",
 		o("strength.weak"),
 		o("strength.fair"),
 		o("strength.good"),
 		o("strength.strong")
-	], { redraw: f, off: p } = Le(r, i, (i) => {
+	], { redraw: f, off: p } = Re(r, i, (i) => {
 		if (!s) return i.replaceChildren(e("p", {}, o("unlock.noFile")));
 		let a = e("input", {
 			type: "password",
@@ -797,7 +839,7 @@ async function He({ lilos: r, root: i, args: a }) {
 			class: "hint",
 			id: "fc-strength",
 			"aria-live": "polite"
-		}, o("strength.short")), h = t(Fe(), u.alg), g = t(Pe(o), u.kdf), _ = e("div", {
+		}, o("strength.short")), h = t(Ie(), u.alg), g = t(Fe(o), u.kdf), _ = e("div", {
 			class: "error",
 			role: "alert"
 		});
@@ -809,7 +851,7 @@ async function He({ lilos: r, root: i, args: a }) {
 			if (!y.disabled) {
 				if (_.textContent = "", Oe(a.value) === 0) return _.textContent = o("encrypt.tooShort"), a.focus();
 				if (a.value !== f.value) return _.textContent = o("encrypt.mismatch"), f.focus();
-				$(y, !0), y.textContent = o("encrypt.working");
+				ze(y, !0), y.textContent = o("encrypt.working");
 				try {
 					await r.app.call("vault", {
 						op: "prepare",
@@ -820,16 +862,26 @@ async function He({ lilos: r, root: i, args: a }) {
 						password: a.value,
 						alg: h.value,
 						kdf: g.value
-					}), a.value = f.value = "", r.ui.toast(o("toast.encrypted", { name: c })), r.window.close();
+					}), a.value = f.value = "", r.ui.toast(o("toast.encrypted", { name: c })), await Q(r, "filecrypt.encrypt", {
+						params: {
+							file: s,
+							alg: h.value,
+							kdf: g.value
+						},
+						defaults: {
+							alg: u.alg,
+							kdf: u.kdf
+						}
+					}), r.window.close();
 				} catch (e) {
-					_.textContent = Re(o, e), $(y, !1), y.textContent = o("encrypt.button");
+					_.textContent = Me(o, e), ze(y, !1), y.textContent = o("encrypt.button");
 				}
 			}
 		}, y = e("button", {
 			type: "button",
 			class: "primary",
 			onclick: v
-		}, o("encrypt.button")), b = ze(v, e("label", {}, o("encrypt.password"), a, p, m), e("label", {}, o("encrypt.repeat"), f), e("details", {}, e("summary", {}, o("encrypt.advanced")), e("div", {}, e("label", {}, o("settings.alg"), h), e("label", {}, o("settings.kdf"), g))), e("div", { class: "warn" }, o("encrypt.warning")), _, e("div", { class: "row" }, e("button", {
+		}, o("encrypt.button")), b = Be(v, e("label", {}, o("encrypt.password"), a, p, m), e("label", {}, o("encrypt.repeat"), f), e("details", {}, e("summary", {}, o("encrypt.advanced")), e("div", {}, e("label", {}, o("settings.alg"), h), e("label", {}, o("settings.kdf"), g))), e("div", { class: "warn" }, o("encrypt.warning")), _, e("div", { class: "row" }, e("button", {
 			type: "button",
 			onclick: () => r.window.close()
 		}, o("common.cancel")), y));
@@ -843,4 +895,4 @@ async function He({ lilos: r, root: i, args: a }) {
 		p(), h(), l?.close();
 	};
 }
-export { He as encrypt, Be as main, Ve as unlock, Ne as vault };
+export { Ue as encrypt, Ve as main, He as unlock, Pe as vault };

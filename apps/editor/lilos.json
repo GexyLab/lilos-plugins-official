@@ -1,6 +1,6 @@
 {
   "id": "editor",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "kind": "local",
   "name": "Editor",
   "description": "Text and code editor with tabs, syntax highlighting, suggestions and checking of JSON, CSS and HTML.",
@@ -142,6 +142,13 @@
           "Ctrl+Alt+T"
         ]
       }
+    ],
+    "automation": [
+      {
+        "id": "editor.save",
+        "label": "Save the file",
+        "target": "window"
+      }
     ]
   },
   "entry": "dist/index.js",
@@ -160,7 +167,7 @@
     "dist/html-B15Ssl5e.js": "sha256-PJMtOy7kJUfJFSHO8t7GbBYoT2yH+aK8FYcA23r21Rk=",
     "dist/html.worker-X9Fc__8d.js": "sha256-jFf7ptUItSrts9eQ7N//iO01MztcEqg6xqw6BMaDFJk=",
     "dist/index-D0UqtePr.css": "sha256-aiPg9w5XMIhRRWW14UYhhRootYbBsB+X567JrjFL/xc=",
-    "dist/index.js": "sha256-qbMs9X5vAifKvhzWBWbPCyGPB+aWA+WH/8orwSEENMc=",
+    "dist/index.js": "sha256-MmWQf1KlGkRPvtOkCo/+XSI37t+P2hHJmuMOpORvaH8=",
     "dist/javascript-BSjxD7Ei.js": "sha256-s8CfycJSC1caXhuX6szihKZYWf7x7I2GYsoIuFpm4IQ=",
     "dist/json-CWJmcBQn.js": "sha256-dVtXsP0tUNXlIISVsZ7QnwwXlVjM7mKTz5hRYVuq03M=",
     "dist/json.worker-B3saI9fz.js": "sha256-BGs4zSqxY8hdyWDK4v0jTG79BA3Qp8G00azIsfKM83g=",
@@ -190,6 +197,6 @@
     "dist/web-tree-sitter-DoPK4l5c.js": "sha256-7K+bnFwHSgKdzQhkdorj73593h2Z49ADsQn+h3d8/fY=",
     "dist/xml-D0f8rgW-.js": "sha256-cm+7flrmzmSI3f440/y68CAeYL14EsA77y9rz+kOPG8=",
     "dist/yaml-CcAIbj8h.js": "sha256-YJayirpdTRH4e3BlU6cu0ocMhodswcZ5fS6iV20/Xtc=",
-    "locales.json": "sha256-j7FgCbgwhWgq/sWpKo/UYAI+dFd7QBHHiYE2/7L2S/4="
+    "locales.json": "sha256-IeKG2dbYZEzKXPlrVlAQkEhsywXjC+/NgPrE4fAQqVA="
   }
 }

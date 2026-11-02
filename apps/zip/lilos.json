@@ -1,6 +1,6 @@
 {
   "id": "zip",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "kind": "local",
   "name": "Zip",
   "description": "Compress files and folders into .zip archives and extract them, from the menu of files and folders (Compress → Zip or Unzip).",
@@ -71,12 +71,42 @@
         },
         "many": true
       }
+    ],
+    "automation": [
+      {
+        "id": "zip.zip",
+        "label": "Compress into a .zip",
+        "entry": "work",
+        "result": "file",
+        "description": "Makes a .zip archive of the items, next to them",
+        "params": {
+          "items": {
+            "type": "files",
+            "label": "Items to compress",
+            "subject": true
+          }
+        }
+      },
+      {
+        "id": "zip.unzip",
+        "label": "Extract a .zip",
+        "entry": "work",
+        "result": "file",
+        "description": "Extracts the archive into a new folder next to it",
+        "params": {
+          "file": {
+            "type": "file",
+            "label": "Archive",
+            "subject": true
+          }
+        }
+      }
     ]
   },
   "entry": "dist/index.js",
   "locales": "locales.json",
   "files": {
-    "dist/index.js": "sha256-1ILEFY4NvailkeaNjv+IDC4+K9tjuRyWBmVGRh+HYdI=",
-    "locales.json": "sha256-LgbwVg1N4IVGQP9rVfrtg0ElopDxhkOLMFZS/oncxgg="
+    "dist/index.js": "sha256-uI7eOoI2RrhZcfa6ufbFSrs7Ibkpc8a9Lmegi22rAAg=",
+    "locales.json": "sha256-Hwyj6zldjOIhA9Qm5PQfxuKFFNS3RS6s3ax6Qm5dHzk="
   }
 }

@@ -49,7 +49,10 @@ function openSheet(host, { title, symbol, rows, okLabel, collect, focus }) {
 const row = (label, ...control) => h('div', { class: 'ph-row' }, h('span', { class: 'ph-row-label' }, label), ...control);
 const number = (value, label) => h('input', { class: 'ph-number', type: 'number', min: 1, step: 1, value, 'aria-label': label });
 
-/** Width and height of the image: pixels or percent, proportions locked or not. Resolves { width, height, quality } or null. */
+/**
+ * Width and height of the image: pixels or percent, proportions locked or not. Resolves
+ * { width, height, quality, asked: { width, height, unit, keepRatio, quality } } or null.
+ */
 export function resizeDialog(host, { width, height }) {
   let unit = 'px', locked = true;
   const w = number(width, t('resize.width')), hgt = number(height, t('resize.height'));
@@ -113,7 +116,11 @@ export function resizeDialog(host, { width, height }) {
         result.textContent = t('resize.outOfRange');
         return undefined;
       }
-      return tw === width && th === height ? null : { width: tw, height: th, quality };
+      if (tw === width && th === height) return null;
+      // asked: what the fields said, in their unit (for automations)
+      const percent = unit === '%';
+      const asked = { width: percent ? Number(w.value) : tw, height: percent ? Number(hgt.value) : th, unit: percent ? 'percent' : 'pixels', keepRatio: locked, quality };
+      return { width: tw, height: th, quality, asked };
     },
   });
 }

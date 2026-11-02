@@ -10,7 +10,8 @@
     "apps/filecrypt",
     "apps/calculator",
     "apps/keyboard",
-    "apps/zip"
+    "apps/zip",
+    "apps/automata"
   ],
   "modules": [
     "modules/users-basic",

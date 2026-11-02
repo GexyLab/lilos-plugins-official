@@ -12,6 +12,8 @@ import { looksEncrypted, ALGORITHMS, KDFS } from './format.js';
  * Its own windows talk to it over a channel (lilos.app.connect): passwords go from them to it
  * directly, not through lilOS. They first hand it the file with a call ({ op: 'prepare', file }).
  * Menu actions and calls: { action: 'filecrypt.lock', files } locks; { op: 'status' } lists.
+ * Automations (Automata) do encrypt, decrypt and lock again here, without a window:
+ * { automation: { action, params }, files }, the password in params (never kept, never recorded).
  * Files lock again after the minutes of inactivity of the settings (not while a window shows
  * them), and when lilOS signs out. A locked file's key is wiped from memory.
  */
@@ -28,6 +30,21 @@ export async function readSettings(lilos) {
     kdf: KDFS.includes(s.kdf) ? s.kdf : DEFAULTS.kdf,
     lockAfter: Number.isInteger(s.lockAfter) && s.lockAfter >= 0 && s.lockAfter <= 1440 ? s.lockAfter : DEFAULTS.lockAfter,
   };
+}
+
+/** Errors of the vault, in words. */
+export function explain(t, err) {
+  const known = { wrong: 'error.wrong', corrupt: 'error.corrupt', short: 'encrypt.tooShort', already: 'error.already', 'not-encrypted': 'error.notEncrypted', 'bad-header': 'error.badHeader', 'no-argon2': 'error.noArgon2' };
+  return known[err?.message] ? t(known[err.message]) : t('error.generic', { error: err?.message ?? String(err) });
+}
+
+/**
+ * Tells an automation being recorded what the user did (an action of contributes.automation;
+ * never with the password). Older lilOS has no lilos.automation; a failure only means the step
+ * is not recorded.
+ */
+export async function record(lilos, id, data) {
+  try { await lilos.automation?.record(id, data); } catch { /* not recorded */ }
 }
 
 const MIN_PASSWORD = 8;
@@ -114,8 +131,13 @@ export async function vault({ lilos }) {
       case 'settings':
         settings = await readSettings(lilos);
         return {};
-      case 'lock':
-        return { locked: await lock(Array.isArray(m.files) ? m.files : [...open.keys()]) };
+      case 'lock': {
+        // The Lock buttons of the main window
+        const ids = Array.isArray(m.files) ? m.files : [...open.keys()];
+        const locked = await lock(ids);
+        await record(lilos, 'filecrypt.lock', { params: { files: ids } });
+        return { locked };
+      }
       case 'unlock': {
         const info = await lilos.files.info(m.file);
         const { state } = await unlock(await bytesOf(await lilos.files.read(m.file, { bytes: true })), String(m.password));
@@ -160,8 +182,38 @@ export async function vault({ lilos }) {
     };
   });
 
+  /**
+   * A step of an automation, done again without asking anything (its files are handed with it):
+   * what the windows ask over their channel, with the password Automata asked for.
+   */
+  async function again({ action, params }) {
+    const p = params && typeof params === 'object' ? params : {};
+    try {
+      switch (action) {
+        case 'filecrypt.encrypt':
+          // A choice this version does not know: the settings' one
+          await answer({ op: 'encrypt', file: p.file, password: p.password, alg: ALGORITHMS.includes(p.alg) ? p.alg : undefined, kdf: KDFS.includes(p.kdf) ? p.kdf : undefined });
+          return;
+        case 'filecrypt.decrypt':
+          await answer({ op: 'decrypt', file: p.file, password: p.password });
+          return;
+        case 'filecrypt.lock':
+          await lock(Array.isArray(p.files) ? p.files : [], { quiet: true });
+          return;
+      }
+    } catch (err) {
+      throw new Error(explain(t, err));
+    }
+    throw new Error('unknown');
+  }
+
   lilos.handle(async data => {
-    if (data?.action === 'filecrypt.lock') return { locked: await lock(data.files ?? []) };
+    if (data?.automation) return again(data.automation);
+    if (data?.action === 'filecrypt.lock') {
+      const locked = await lock(data.files ?? []);
+      await record(lilos, 'filecrypt.lock', { params: { files: data.files ?? [] } });
+      return { locked };
+    }
     // A window hands it a file (the call gives it to the vault), before the password comes over the channel
     if (data?.op === 'prepare') {
       const info = await lilos.files.info(data.file);

@@ -1,6 +1,6 @@
 {
   "id": "files",
-  "version": "1.13.0",
+  "version": "1.14.0",
   "kind": "local",
   "name": "File Manager",
   "description": "Browse, search and organize files and folders: tags, links, desktop links, trash, info and preview.",
@@ -77,6 +77,116 @@
           "Ctrl+L"
         ]
       }
+    ],
+    "automation": [
+      {
+        "id": "files.go",
+        "label": "Go to a folder",
+        "target": "window",
+        "params": {
+          "folder": {
+            "type": "folder",
+            "label": "Folder",
+            "subject": true
+          }
+        }
+      },
+      {
+        "id": "files.search",
+        "label": "Search the folder",
+        "target": "window",
+        "params": {
+          "query": {
+            "type": "text",
+            "label": "Search for",
+            "maxLength": 200
+          }
+        }
+      },
+      {
+        "id": "files.sort",
+        "label": "Sort",
+        "target": "window",
+        "params": {
+          "by": {
+            "type": "choice",
+            "label": "Sort by",
+            "options": [
+              {
+                "value": "name",
+                "label": "Name"
+              },
+              {
+                "value": "modified",
+                "label": "Modified"
+              },
+              {
+                "value": "size",
+                "label": "Size"
+              },
+              {
+                "value": "type",
+                "label": "Type"
+              },
+              {
+                "value": "workspace",
+                "label": "Workspace"
+              },
+              {
+                "value": "location",
+                "label": "Location"
+              },
+              {
+                "value": "deleted",
+                "label": "Deleted"
+              },
+              {
+                "value": "origin",
+                "label": "Original location"
+              }
+            ]
+          },
+          "direction": {
+            "type": "choice",
+            "label": "Order",
+            "options": [
+              {
+                "value": "asc",
+                "label": "Ascending"
+              },
+              {
+                "value": "desc",
+                "label": "Descending"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "files.view",
+        "label": "Change the view",
+        "target": "window",
+        "params": {
+          "mode": {
+            "type": "choice",
+            "label": "View",
+            "options": [
+              {
+                "value": "list",
+                "label": "List"
+              },
+              {
+                "value": "grid",
+                "label": "Icons"
+              },
+              {
+                "value": "thumbs",
+                "label": "Previews"
+              }
+            ]
+          }
+        }
+      }
     ]
   },
   "entry": "dist/index.js",
@@ -86,7 +196,7 @@
   "locales": "locales.json",
   "files": {
     "dist/index-DCrpzGcy.css": "sha256-sVXS8jqu8+QBfzSAQMDhK/LkFP78iB+rm5I6TAsQBmo=",
-    "dist/index.js": "sha256-LTQco3O0yGIZzKMx0gaR+RqNcfcY2ygodPqg2ehN4UQ=",
-    "locales.json": "sha256-Drn+bfAu+4w4kTXSkXWysd6MSKgQyMmEbQKEd8lsOng="
+    "dist/index.js": "sha256-2JtS7IYxfcnheCUvKoObo/oDGVWshUmhpMSqp/PIAlI=",
+    "locales.json": "sha256-0WsM2tIWoa4wMUGwR8vMOGUGVk4twK+zJdC1DujHGDY="
   }
 }

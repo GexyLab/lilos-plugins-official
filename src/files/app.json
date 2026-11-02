@@ -1,6 +1,6 @@
 {
   "id": "files",
-  "version": "1.13.0",
+  "version": "1.14.0",
   "kind": "local",
   "name": "File Manager",
   "description": "Browse, search and organize files and folders: tags, links, desktop links, trash, info and preview.",
@@ -23,6 +23,29 @@
       { "id": "files.info", "label": "Show or hide the info panel", "keys": ["Alt+I"] },
       { "id": "files.preview", "label": "Show or hide the preview", "keys": ["Alt+P"] },
       { "id": "files.address", "label": "Type a path", "keys": ["Ctrl+L"] }
+    ],
+    "automation": [
+      { "id": "files.go", "label": "Go to a folder", "target": "window", "params": {
+        "folder": {"type": "folder", "label": "Folder", "subject": true}
+      } },
+      { "id": "files.search", "label": "Search the folder", "target": "window", "params": {
+        "query": {"type": "text", "label": "Search for", "maxLength": 200}
+      } },
+      { "id": "files.sort", "label": "Sort", "target": "window", "params": {
+        "by": {"type": "choice", "label": "Sort by", "options": [
+          {"value": "name", "label": "Name"}, {"value": "modified", "label": "Modified"}, {"value": "size", "label": "Size"},
+          {"value": "type", "label": "Type"}, {"value": "workspace", "label": "Workspace"}, {"value": "location", "label": "Location"},
+          {"value": "deleted", "label": "Deleted"}, {"value": "origin", "label": "Original location"}
+        ]},
+        "direction": {"type": "choice", "label": "Order", "options": [
+          {"value": "asc", "label": "Ascending"}, {"value": "desc", "label": "Descending"}
+        ]}
+      } },
+      { "id": "files.view", "label": "Change the view", "target": "window", "params": {
+        "mode": {"type": "choice", "label": "View", "options": [
+          {"value": "list", "label": "List"}, {"value": "grid", "label": "Icons"}, {"value": "thumbs", "label": "Previews"}
+        ]}
+      } }
     ]
   }
 }

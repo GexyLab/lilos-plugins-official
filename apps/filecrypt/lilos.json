@@ -1,6 +1,6 @@
 {
   "id": "filecrypt",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "kind": "local",
   "name": "FileCrypt",
   "description": "Encrypt single files with a password. Encrypted files keep their name, open in their own app once unlocked and save encrypted again.",
@@ -121,6 +121,89 @@
         }
       }
     ],
+    "automation": [
+      {
+        "id": "filecrypt.encrypt",
+        "label": "Encrypt",
+        "entry": "vault",
+        "description": "Encrypts the file with a password; it stays unlocked until it locks again",
+        "params": {
+          "file": {
+            "type": "file",
+            "label": "File",
+            "subject": true
+          },
+          "password": {
+            "type": "secret",
+            "label": "Password",
+            "description": "At least 8 characters. If you forget it the file is lost"
+          },
+          "alg": {
+            "type": "choice",
+            "label": "Algorithm",
+            "options": [
+              {
+                "value": "AES-256-GCM",
+                "label": "AES-256-GCM"
+              },
+              {
+                "value": "AES-128-GCM",
+                "label": "AES-128-GCM"
+              },
+              {
+                "value": "ChaCha20-Poly1305",
+                "label": "ChaCha20-Poly1305"
+              }
+            ]
+          },
+          "kdf": {
+            "type": "choice",
+            "label": "Key from the password",
+            "options": [
+              {
+                "value": "argon2id",
+                "label": "Argon2id (recommended)"
+              },
+              {
+                "value": "pbkdf2",
+                "label": "PBKDF2-SHA256"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "filecrypt.decrypt",
+        "label": "Remove encryption",
+        "entry": "vault",
+        "confirm": true,
+        "description": "Saves the file in clear again",
+        "params": {
+          "file": {
+            "type": "file",
+            "label": "File",
+            "subject": true
+          },
+          "password": {
+            "type": "secret",
+            "label": "Password"
+          }
+        }
+      },
+      {
+        "id": "filecrypt.lock",
+        "label": "Lock",
+        "entry": "vault",
+        "description": "Locks unlocked files again: opening them asks for their password",
+        "params": {
+          "files": {
+            "type": "files",
+            "label": "Files",
+            "subject": true
+          }
+        }
+      }
+    ],
     "badge": {
       "glyph": "lock",
       "label": "Encrypted with FileCrypt"
@@ -129,7 +212,7 @@
   "entry": "dist/index.js",
   "locales": "locales.json",
   "files": {
-    "dist/index.js": "sha256-29p++JtgY73IpiBjfb3BD8oH7ZXz6TsdVMeQ79mOfIc=",
-    "locales.json": "sha256-c0LkyfbUZmJ2cQ6WXo4aAaLGsfu3d+3fF//ovIJVmRo="
+    "dist/index.js": "sha256-TEZmvvF078EIuHP84yd8pm8uAcvnhR8s84zXUWOS1yk=",
+    "locales.json": "sha256-EAqCaE8ngfjY1IR6/cu4xWpPu/DE7UFJabXBrYYOoiA="
   }
 }

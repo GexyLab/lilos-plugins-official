@@ -1,6 +1,6 @@
 {
   "id": "editor",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "kind": "local",
   "name": "Editor",
   "description": "Text and code editor with tabs, syntax highlighting, suggestions and checking of JSON, CSS and HTML.",
@@ -31,6 +31,9 @@
       { "id": "editor.nextTab", "label": "Next tab", "keys": ["Ctrl+Alt+PageDown"] },
       { "id": "editor.previousTab", "label": "Previous tab", "keys": ["Ctrl+Alt+PageUp"] },
       { "id": "editor.reopenTab", "label": "Reopen closed tab", "keys": ["Ctrl+Alt+T"] }
+    ],
+    "automation": [
+      { "id": "editor.save", "label": "Save the file", "target": "window" }
     ]
   }
 }

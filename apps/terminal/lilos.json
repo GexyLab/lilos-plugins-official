@@ -1,6 +1,6 @@
 {
   "id": "terminal",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "kind": "local",
   "name": "Terminal",
   "description": "A bash-like shell over the files of lilOS, in tabs, and remote sessions: SSH, Telnet, rlogin and SUPDUP, with saved hosts and sessions that keep running when the window is closed.",
@@ -52,6 +52,24 @@
           ]
         }
       }
+    ],
+    "automation": [
+      {
+        "id": "terminal.run",
+        "label": "Run a command",
+        "target": "window",
+        "params": {
+          "command": {
+            "type": "text",
+            "label": "Command"
+          },
+          "folder": {
+            "type": "folder",
+            "label": "Folder",
+            "description": "The working folder the command runs in"
+          }
+        }
+      }
     ]
   },
   "entry": "dist/index.js",
@@ -61,7 +79,7 @@
   "locales": "locales.json",
   "files": {
     "dist/index-WviqVvs5.css": "sha256-Q1eSoSJG8INB0M80W73qUMjiw910kMVctOpMEqar2uA=",
-    "dist/index.js": "sha256-B4cEO6r2aHxdMQXIzVIDb6dMpgD1U+Ued9RoCCsdMvE=",
-    "locales.json": "sha256-0oL8SZTkMocJEN6p/kTuS1/NgAXsUWTlGiIM+YDuqgI="
+    "dist/index.js": "sha256-DrgsihStLg9dEa5EfIWlWXT5pX1+4RKMnPKd7tZ6ubE=",
+    "locales.json": "sha256-hgm9J+DoN435ZCGlfJBVySrBIFchcHmePC5rqZP+kPQ="
   }
 }

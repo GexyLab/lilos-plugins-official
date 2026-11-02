@@ -19,3 +19,7 @@ Zip non sovrascrive mai niente: un nome già usato prende un numero (`Foto 2.zip
 - I nomi con lettere accentate restano tali (UTF-8).
 
 Vuole una versione di lilOS con i sottomenu per le voci delle app (`contributes.menus` e `when.notExt`).
+
+## Automazioni
+
+Con **Automata** (lilOS 1.15.0 o successivo) Zip rende registrabili **Comprimi in un .zip** e **Estrai un .zip**, ognuno con il file che ha fatto. Rifatti, funzionano in sottofondo come le voci del menu **Comprimi**, senza notifiche aggiuntive, e il file creato può servire ai passi seguenti (per esempio per spostarlo).

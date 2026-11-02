@@ -789,7 +789,16 @@ function Fe(e, t) {
 		max: t.detail
 	}) : n("error.generic", { error: r ?? String(t) });
 }
-function Ie(e, t) {
+var Ie = async (e, t) => (await e.files.info(t)).id;
+async function Le(e, t, n, r) {
+	try {
+		e.automation && await e.automation.record(t, {
+			params: n,
+			result: await Ie(e, r)
+		});
+	} catch {}
+}
+function Re(e, t) {
 	if (!t.length) return "";
 	let n = t.slice(0, 3).map((e) => e.name).join(", ");
 	return e("skipped", {
@@ -797,7 +806,7 @@ function Ie(e, t) {
 		names: t.length > 3 ? `${n}, …` : n
 	});
 }
-async function Le({ lilos: e, root: t, args: n }) {
+async function ze({ lilos: e, root: t, args: n }) {
 	let r = (t, n) => e.locale.i18n.t(t, n);
 	t.append($("style", {}, Me));
 	let i = $("div", { class: "zp" });
@@ -835,7 +844,7 @@ async function Le({ lilos: e, root: t, args: n }) {
 				class: "name",
 				title: t.path.join("/")
 			}, t.path.join("/") + (t.folder ? "/" : "")), $("span", { class: "size" }, t.folder ? "" : Pe(e.locale.i18n, t.size)))), s.entries.length > Ne && $("li", { class: "more" }, r("main.more", { n: s.entries.length - Ne }))) : $("div", { class: "empty" }, r("main.empty")),
-			s.skipped.length > 0 && $("p", { class: "warn" }, Ie(r, s.skipped)),
+			s.skipped.length > 0 && $("p", { class: "warn" }, Re(r, s.skipped)),
 			l && $("p", {
 				class: "ok",
 				role: "status"
@@ -854,10 +863,10 @@ async function Le({ lilos: e, root: t, args: n }) {
 				l = [r("done.unzip", {
 					name: t.name,
 					n: t.count
-				}), Ie(r, t.skipped)].filter(Boolean).join(" "), e.ui.notify({
+				}), Re(r, t.skipped)].filter(Boolean).join(" "), e.ui.notify({
 					text: l,
 					level: "success"
-				});
+				}), await Le(e, "zip.unzip", { file: a }, t.ref);
 			} catch (t) {
 				c = Fe(e, t);
 			}
@@ -882,13 +891,23 @@ async function Le({ lilos: e, root: t, args: n }) {
 		h(), g();
 	};
 }
-async function Re({ lilos: e }) {
+async function Be({ lilos: e }) {
 	let t = (t, n) => e.locale.i18n.t(t, n);
-	e.handle(async (n) => {
-		let r = Array.isArray(n?.files) ? n.files : [];
+	async function n({ action: n, params: r }) {
 		try {
-			if (n?.action === "zip.zip") {
-				let n = await De(e, r, { archiveName: t("archive.name") });
+			if (n === "zip.zip") return await Ie(e, (await De(e, Array.isArray(r?.items) ? r.items : [], { archiveName: t("archive.name") })).ref);
+			if (n === "zip.unzip" && typeof r?.file == "string") return await Ie(e, (await je(e, r.file)).ref);
+		} catch (t) {
+			throw Error(Fe(e, t));
+		}
+		throw Error("unknown");
+	}
+	e.handle(async (r) => {
+		if (r?.automation) return n(r.automation);
+		let i = Array.isArray(r?.files) ? r.files : [];
+		try {
+			if (r?.action === "zip.zip") {
+				let n = await De(e, i, { archiveName: t("archive.name") });
 				return await e.ui.notify({
 					text: t("done.zip", {
 						name: n.name,
@@ -896,19 +915,19 @@ async function Re({ lilos: e }) {
 						size: Pe(e.locale.i18n, n.size)
 					}),
 					level: "success"
-				}), { name: n.name };
+				}), await Le(e, "zip.zip", { items: i }, n.ref), { name: n.name };
 			}
-			if (n?.action === "zip.unzip") {
+			if (r?.action === "zip.unzip") {
 				let n = [];
-				for (let i of r) {
-					let r = await je(e, i);
-					n.push(r.name), await e.ui.notify({
+				for (let r of i) {
+					let i = await je(e, r);
+					n.push(i.name), await e.ui.notify({
 						text: [t("done.unzip", {
-							name: r.name,
-							n: r.count
-						}), Ie(t, r.skipped)].filter(Boolean).join(" "),
-						level: r.skipped.length ? "warning" : "success"
-					});
+							name: i.name,
+							n: i.count
+						}), Re(t, i.skipped)].filter(Boolean).join(" "),
+						level: i.skipped.length ? "warning" : "success"
+					}), await Le(e, "zip.unzip", { file: r }, i.ref);
 				}
 				return { names: n };
 			}
@@ -921,4 +940,4 @@ async function Re({ lilos: e }) {
 		throw Error("unknown");
 	});
 }
-export { Le as main, Re as work };
+export { ze as main, Be as work };

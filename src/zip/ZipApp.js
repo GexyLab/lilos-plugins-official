@@ -6,7 +6,8 @@ import { h, STYLE } from './ui.js';
  * points are the exports here (see the manifest, app.json):
  *   main   a .zip opened with the app: what is inside, and Extract here
  *   work   the actions of the menu of files and folders (Compress → Zip / Unzip), in the background;
- *          the result is a notification
+ *          the result is a notification. Also does them again for an automation (Automata):
+ *          { automation: { action: 'zip.zip' | 'zip.unzip', params }, files } → the id of what it made
  */
 const SHOWN = 500;   // entries listed in the window
 
@@ -27,6 +28,20 @@ function explain(lilos, err) {
   return known.includes(code)
     ? t(`error.${code}`, { detail, limit: size(lilos.locale.i18n, MAX_FILE), max: err.detail })
     : t('error.generic', { error: code ?? String(err) });
+}
+
+/** The node id of a '~' path the app made (automations name nodes by id). */
+const idOf = async (lilos, ref) => (await lilos.files.info(ref)).id;
+
+/**
+ * Tells an automation being recorded what the user did (an action of contributes.automation),
+ * with the '~' path of what it made. Older lilOS has no lilos.automation; a failure only means
+ * the step is not recorded.
+ */
+async function record(lilos, id, params, made) {
+  try {
+    if (lilos.automation) await lilos.automation.record(id, { params, result: await idOf(lilos, made) });
+  } catch { /* not recorded */ }
 }
 
 /** What was left out of an archive, in a sentence ('' when nothing). */
@@ -86,6 +101,7 @@ export async function main({ lilos, root, args }) {
       const result = await unpack(lilos, file);
       done = [t('done.unzip', { name: result.name, n: result.count }), skippedText(t, result.skipped)].filter(Boolean).join(' ');
       lilos.ui.notify({ text: done, level: 'success' });
+      await record(lilos, 'zip.unzip', { file }, result.ref);
     } catch (err) {
       error = explain(lilos, err);
     }
@@ -116,12 +132,29 @@ export async function main({ lilos, root, args }) {
 
 export async function work({ lilos }) {
   const t = (k, p) => lilos.locale.i18n.t(k, p);
+
+  /** A step of an automation, done again without asking anything: the id of what it made. */
+  async function again({ action, params }) {
+    try {
+      if (action === 'zip.zip') {
+        const items = Array.isArray(params?.items) ? params.items : [];
+        return await idOf(lilos, (await pack(lilos, items, { archiveName: t('archive.name') })).ref);
+      }
+      if (action === 'zip.unzip' && typeof params?.file === 'string') return await idOf(lilos, (await unpack(lilos, params.file)).ref);
+    } catch (err) {
+      throw new Error(explain(lilos, err));
+    }
+    throw new Error('unknown');
+  }
+
   lilos.handle(async data => {
+    if (data?.automation) return again(data.automation);
     const ids = Array.isArray(data?.files) ? data.files : [];
     try {
       if (data?.action === 'zip.zip') {
         const result = await pack(lilos, ids, { archiveName: t('archive.name') });
         await lilos.ui.notify({ text: t('done.zip', { name: result.name, n: result.count, size: size(lilos.locale.i18n, result.size) }), level: 'success' });
+        await record(lilos, 'zip.zip', { items: ids }, result.ref);
         return { name: result.name };
       }
       if (data?.action === 'zip.unzip') {
@@ -130,6 +163,8 @@ export async function work({ lilos }) {
           const result = await unpack(lilos, id);
           names.push(result.name);
           await lilos.ui.notify({ text: [t('done.unzip', { name: result.name, n: result.count }), skippedText(t, result.skipped)].filter(Boolean).join(' '), level: result.skipped.length ? 'warning' : 'success' });
+          // One step for each archive: it is what the action does again
+          await record(lilos, 'zip.unzip', { file: id }, result.ref);
         }
         return { names };
       }

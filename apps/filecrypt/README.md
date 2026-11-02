@@ -28,3 +28,7 @@ Tutto avviene nell'app: lilOS e il kernel non vedono mai la password né le chia
 - I backup del database possono contenere versioni precedenti di un file, salvate quando non era ancora cifrato.
 
 Vuole una versione di lilOS con le pipe sugli eventi e i dati delle app sui file.
+
+## Automazioni
+
+Con **Automata** (lilOS 1.15.0 o successivo) FileCrypt rende registrabili **Cifra** (con algoritmo e derivazione della chiave), **Togli la cifratura** (che chiede conferma di serie) e **Blocca**. **La password non si registra mai**: i passi che la usano la chiedono ogni volta che girano (dal Terminale con `--yes` il passo fallisce, a meno che la password sia nella riga: `--password=…`). Cifrare dopo una registrazione lascia il file sbloccato finché non si blocca di nuovo.
