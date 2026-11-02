@@ -28,6 +28,8 @@ export const session = {
   get locale() { return api?.locale?.code ?? 'en'; },
 };
 
+// A copy of lilOS's TAG_COLORS (sdk/core/tags.js): the kernel's isolate cannot import the SDK.
+// Keep it the same when lilOS changes its colors.
 export const TAG_COLORS = [
   { value: '#e5484d', label: 'Rosso' }, { value: '#d9822b', label: 'Arancione' }, { value: '#d4a72c', label: 'Giallo' },
   { value: '#30a46c', label: 'Verde' }, { value: '#0d9488', label: 'Verde acqua' }, { value: '#3b6ef5', label: 'Blu' },

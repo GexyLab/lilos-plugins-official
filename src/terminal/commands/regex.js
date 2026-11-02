@@ -1,4 +1,6 @@
+import { escapeRegExp } from '../../shared/text.js';
 import { ShellError } from '../shell/signals.js';
+import { POSIX_CLASSES } from '../shell/classes.js';
 import { t } from '../i18n.js';
 
 /**
@@ -6,10 +8,6 @@ import { t } from '../i18n.js';
  * default): \( \) \{ \} \| \+ \? are the operators and ( ) { } | + ? plain characters. Extended
  * (ERE, -E): like JavaScript. In both: [[:digit:]] classes, \< \> word edges.
  */
-const CLASSES = {
-  alpha: 'a-zA-Z', digit: '0-9', alnum: 'a-zA-Z0-9', upper: 'A-Z', lower: 'a-z', space: '\\s', blank: ' \\t',
-  punct: '!-\\/:-@\\[-`{-~', xdigit: '0-9A-Fa-f', word: '\\w', cntrl: '\\x00-\\x1f\\x7f', print: '\\x20-\\x7e', graph: '\\x21-\\x7e',
-};
 const BRE_SWAP = new Set(['(', ')', '{', '}', '|', '+', '?']);
 
 export function toJsSource(pattern, extended) {
@@ -25,7 +23,7 @@ export function toJsSource(pattern, extended) {
       for (; j < pattern.length && pattern[j] !== ']'; j++) {
         if (pattern[j] === '[' && pattern[j + 1] === ':') {
           const end = pattern.indexOf(':]', j + 2);
-          if (end > 0) { cls += CLASSES[pattern.slice(j + 2, end)] ?? ''; j = end + 1; continue; }
+          if (end > 0) { cls += POSIX_CLASSES[pattern.slice(j + 2, end)] ?? ''; j = end + 1; continue; }
         }
         cls += pattern[j] === '\\' ? '\\\\' : pattern[j] === '[' ? '\\[' : pattern[j];
       }
@@ -49,7 +47,7 @@ export function toJsSource(pattern, extended) {
 }
 
 export function compile(pattern, { extended = false, fixed = false, ignoreCase = false, word = false, line = false, global = false } = {}) {
-  let source = fixed ? pattern.replace(/[.*+?^${}()|[\]\\/]/g, '\\$&') : toJsSource(pattern, extended);
+  let source = fixed ? escapeRegExp(pattern) : toJsSource(pattern, extended);
   if (word) source = `(?<![\\w])(?:${source})(?![\\w])`;
   if (line) source = `^(?:${source})$`;
   try {

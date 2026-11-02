@@ -1,16 +1,15 @@
 /**
- * Find and replace in a text (the find bar, FindBar.js, and the automation editor.replace).
+ * Find and replace in a text (the find bar, shared/FindBar.js, and the automation editor.replace).
  * A query is { find, replace, matchCase, wholeWord, regex }: `find` as written, or a regular
  * expression; ^ and $ match at every line. Empty matches (a* or ^) are left out: they would
  * replace nothing visible and could never be selected.
  */
+import { escapeRegExp } from '../shared/text.js';
 
 /** Letters that make a word for «whole word» (\w and the accented and Greek or Cyrillic letters). */
 const WORD = '[\\w\\u00C0-\\u024F\\u0370-\\u03FF\\u0400-\\u04FF]';
 /** Matches counted for the find bar at most (replacing all has no limit). */
 export const MAX_MATCHES = 10_000;
-
-const escape = text => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 /**
  * The RegExp of a query, or null when there is nothing to find. Throws a SyntaxError when
@@ -19,7 +18,7 @@ const escape = text => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 export function queryRegExp({ find = '', matchCase = false, wholeWord = false, regex = false } = {}) {
   if (!find) return null;
   const flags = `gm${matchCase ? '' : 'i'}`;
-  let source = regex ? find : escape(find);
+  let source = regex ? find : escapeRegExp(find);
   // Checked alone first: the error speaks of what the user wrote, not of the word boundaries
   if (regex) new RegExp(source, flags);
   if (wholeWord) source = `(?<!${WORD})(?:${source})(?!${WORD})`;

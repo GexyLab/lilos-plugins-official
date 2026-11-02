@@ -1,4 +1,4 @@
-import { Emitter, h, icon, fs, fileType, session, storage, openMenu, shortcuts, trackDrag, UndoStack, history } from '@lilos/sdk';
+import { Emitter, h, icon, fs, fileType, session, storage, openMenu, shortcuts, resizeHandle, UndoStack, history } from '@lilos/sdk';
 import { addTarget } from '@lilos/system';
 import { markItem, dropZone, dragItems } from '@lilos/system';
 import { linkEntry } from '@lilos/system';
@@ -6,6 +6,7 @@ import { confirmRemove } from '@lilos/system';
 import { recordCreated, renameNode, moveNode } from '@lilos/system';
 import { pickFile } from '@lilos/system';
 import { FOLDER_COLOR } from '@lilos/system';
+import { inlineRename } from '../shared/inlineRename.js';
 import { t } from './i18n.js';
 
 const STATE_KEY = 'editor-tree';   // { root, expanded: [ids], width }
@@ -35,7 +36,6 @@ export class FileTree extends Emitter {
   #selected = null;
   #current = null;       // the file open in the editor
   #editing = null;       // id being renamed
-  #editingNew = false;   // the renamed node was just created: open it afterwards (files)
   #message = '';
 
   constructor({ win, openWindow }) {
@@ -49,11 +49,14 @@ export class FileTree extends Emitter {
     const tool = (glyph, label, onclick) => h('button', { class: 'ft-btn', type: 'button', title: label, 'aria-label': label, onclick }, icon(glyph));
     this.tree = h('div', { class: 'ft-tree', role: 'tree', tabindex: '0', 'aria-label': t('tree.label') });
     this.note = h('div', { class: 'ft-note', role: 'status', 'aria-live': 'polite' });
-    this.split = h('div', {
-      class: 'ft-split', role: 'separator', tabindex: '0', 'aria-orientation': 'vertical',
-      'aria-label': t('tree.resize'), 'aria-valuemin': MIN_WIDTH,
+    this.el = h('aside', { class: 'ft', 'aria-label': t('tree.panel') });
+    // The panel is on the right of its bar: dragging left makes it wider
+    this.split = resizeHandle({
+      orientation: 'vertical', className: 'at-start', invert: true, host: this.el, label: t('tree.resize'),
+      get: () => this.width, set: (px, final) => this.resize(px, final),
+      min: MIN_WIDTH, max: () => this.#maxWidth(), reset: DEFAULT_WIDTH,
     });
-    this.el = h('aside', { class: 'ft', 'aria-label': t('tree.panel') }, this.split,
+    this.el.append(this.split,
       h('div', { class: 'ft-head' },
         this.rootIcon, this.title,
         tool('filePlus', t('tree.newFile'), () => this.create('file', this.#targetFolder())),
@@ -110,12 +113,14 @@ export class FileTree extends Emitter {
 
   /** Panel width in pixels, kept between the limits of the window. */
   resize(px, save = true) {
-    const host = this.el.parentElement?.clientWidth || 800;
-    this.width = Math.round(Math.max(MIN_WIDTH, Math.min(px, Math.max(MIN_WIDTH, host * 0.6))));
+    this.width = Math.round(Math.max(MIN_WIDTH, Math.min(px, this.#maxWidth())));
     this.el.style.width = `${this.width}px`;
-    this.split.setAttribute('aria-valuenow', this.width);
-    this.split.setAttribute('aria-valuemax', Math.round(Math.max(MIN_WIDTH, host * 0.6)));
     if (save) this.#save();
+  }
+
+  /** The widest the panel may be: most of the window. */
+  #maxWidth() {
+    return Math.round(Math.max(MIN_WIDTH, (this.el.parentElement?.clientWidth || 800) * 0.6));
   }
 
   /** Highlights the file open in the editor (and opens the folders above it). */
@@ -142,36 +147,21 @@ export class FileTree extends Emitter {
   rename(id, isNew = false) {
     if (!id || id === this.root || !fs.exists(id) || fs.get(id).system) return;
     this.#editing = id;
-    this.#editingNew = isNew;
     this.render();
     const input = this.tree.querySelector('.ft-rename');
     if (!input) return;
-    input.focus();
-    const name = fs.get(id).name;
-    const dot = fs.get(id).type === 'file' ? name.lastIndexOf('.') : -1;
-    input.setSelectionRange(0, dot > 0 ? dot : name.length);
-    let done = false;
-    const finish = commit => {
-      if (done) return;
-      done = true;
+    // A new node is opened afterwards (a file); its rename is part of creating it, not undone apart
+    inlineRename(input, fs.get(id), { onDone: name => {
       this.#editing = null;
-      const value = input.value.replace(/\s+/g, ' ').trim();
-      const created = this.#editingNew;
-      if (commit && value && value !== name && fs.exists(id)) {
-        try { renameNode(created ? null : this.history, id, value); } catch (err) { this.#say(err.message); }
+      if (name && fs.exists(id)) {
+        try { renameNode(isNew ? null : this.history, id, name); } catch (err) { this.#say(err.message); }
       }
-      if (created) recordCreated(this.history, id);
-      const opened = created && fs.get(id)?.type === 'file';
+      if (isNew) recordCreated(this.history, id);
+      const opened = isNew && fs.get(id)?.type === 'file';
       this.render();
       this.tree.focus();
       if (opened) this.emit('open', id);
-    };
-    input.addEventListener('keydown', e => {
-      e.stopPropagation();
-      if (e.key === 'Enter') { e.preventDefault(); finish(true); }
-      if (e.key === 'Escape') { e.preventDefault(); finish(false); }
-    });
-    input.addEventListener('blur', () => finish(true));
+    } });
   }
 
   remove(id) {
@@ -263,27 +253,6 @@ export class FileTree extends Emitter {
 
   #bind(signal) {
     const rowOf = e => e.target.closest?.('.ft-row');
-
-    // Resizing: the panel is on the right, so dragging left makes it wider
-    this.split.addEventListener('pointerdown', e => {
-      if (e.button !== 0) return;
-      e.preventDefault();
-      const start = this.width;
-      this.el.classList.add('resizing');
-      trackDrag(e, {
-        threshold: 0,
-        onMove: dx => this.resize(start - dx, false),
-        onEnd: () => { this.el.classList.remove('resizing'); this.#save(); },
-      });
-    }, { signal });
-    this.split.addEventListener('dblclick', () => this.resize(DEFAULT_WIDTH), { signal });
-    this.split.addEventListener('keydown', e => {
-      const step = e.shiftKey ? 48 : 16;
-      const to = { ArrowLeft: this.width + step, ArrowRight: this.width - step, Home: MIN_WIDTH, End: Infinity }[e.key];
-      if (to === undefined) return;
-      e.preventDefault();
-      this.resize(to);
-    }, { signal });
 
     this.tree.addEventListener('click', e => {
       if (e.target.closest('.ft-rename')) return;

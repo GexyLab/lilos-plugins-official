@@ -40,12 +40,6 @@ export function locate(cwd, path) {
   return { parent: fs.resolve('~/' + parts.join('/')), name };
 }
 
-/** Path shown for a node: '~' for the home, '~/Documenti/Note' inside it. */
-export function tildePath(id) {
-  const names = fs.ancestors(id).slice(1).map(n => n.name);
-  return names.length ? '~/' + names.join('/') : '~';
-}
-
 const join = (base, name) => (base === '' ? name : base.endsWith('/') ? base + name : `${base}/${name}`);
 
 /**

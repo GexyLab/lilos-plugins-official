@@ -31,16 +31,17 @@ Ogni shell è una **scheda**: **+** ne apre un'altra nella stessa cartella. Nell
 - `ssh utente@server` (anche `-p porta`, `-l utente` e un comando da eseguire), `telnet server [porta]`, `rlogin -l utente server` e `supdup server` aprono la sessione in una **scheda nuova**. Al posto dell'indirizzo va bene il nome di un host salvato: `ssh web-01`.
 - Il pannello a sinistra (pulsante accanto alle schede) ha gli **host salvati**, raggruppabili in cartelle, con le password cifrate nel kernel, e le sessioni **ancora attive**. **+** aggiunge un host; il tasto destro lo modifica.
 - Le sessioni remote restano nel kernel anche a finestra chiusa: si riprendono dal pannello (**Riprendi**) o con `sessions` e `sessions <n>`. Senza finestra si chiudono dopo 10 minuti.
-- Alla prima connessione SSH si conferma l'impronta della chiave del server; se cambia, un avviso. Una password non salvata la chiede il terminale stesso.
-- Nella barra in basso: cifrata o no, indirizzo, chiave, dimensione; la ricerca (Ctrl+Maiusc+F), la registrazione in un file e il menu **Tasti** per Ctrl+W, Ctrl+T, Ctrl+N e gli altri tasti che il browser tiene per sé. Copia selezionando o con Ctrl+Maiusc+C, incolla con Ctrl+Maiusc+V.
+- Alla prima connessione SSH si conferma l'impronta della chiave del server; se cambia, un avviso. Il pulsante predefinito è **Annulla** (Invio ed Esc annullano): per fidarsi si sceglie Continua. Una password non salvata la chiede il terminale stesso.
+- Nella barra in basso: cifrata o no, indirizzo, chiave, dimensione; la ricerca (Ctrl+Maiusc+F, con maiuscole e minuscole, parola intera ed espressioni regolari), la registrazione in un file e il menu **Tasti** per Ctrl+W, Ctrl+T, Ctrl+N e gli altri tasti che il browser tiene per sé. Copia selezionando o con Ctrl+Maiusc+C, incolla con Ctrl+Maiusc+V.
 - Nel File Manager, dentro una connessione **SFTP** della cartella Rete, **Apri terminale SSH qui** apre la sessione in quella cartella, con le stesse credenziali.
 
-I protocolli sono moduli del kernel (`term-ssh`, `term-telnet`, `term-rlogin`, `term-supdup`) che un amministratore installa dall'AppStore, scheda Kernel. Telnet, rlogin e SUPDUP non sono cifrati. Vuole lilOS 1.16.0 o successivo.
+I protocolli sono moduli del kernel (`term-ssh`, `term-telnet`, `term-rlogin`, `term-supdup`) che un amministratore installa dall'AppStore, scheda Kernel. Telnet, rlogin e SUPDUP non sono cifrati. Vuole lilOS 1.21.0 o successivo.
 
 ## Riquadri affiancati e finestre
 
 - **Dividi a destra** e **Dividi in basso** (menu della scheda, o Alt+Maiusc+D e Alt+Maiusc+S) mettono la scheda in un **riquadro** nuovo accanto; se è sola nel suo riquadro, se ne apre una nuova. I riquadri formano una griglia senza limite, ognuno con le sue schede e il suo **+**. Il separatore si trascina (o si sposta con le frecce), il doppio clic rende uguali le misure.
 - Una scheda si **trascina**: su un'altra barra entra lì, dove c'è la linea blu; sul bordo di un terminale apre un riquadro nuovo da quel lato; **fuori dalla finestra** diventa una finestra sua. Esc annulla.
+- Con la tastiera, sulla barra delle schede: le frecce, Home e Fine scelgono la scheda, Canc la chiude, il clic centrale pure.
 - Il **menu della scheda** (tasto destro, Maiusc+F10 o tasto Menu) ha anche Rinomina, Duplica, Sposta nel riquadro, **Stacca in una nuova finestra**, **Sposta nella finestra** (le altre finestre di Terminale), Chiudi le altre, Chiudi quelle a destra.
 - Staccare o spostare una scheda **non la riavvia**: la shell tiene output, cronologia e il comando che sta girando, la sessione SSH resta la stessa. Le finestre staccate tornano con lilOS insieme ai loro riquadri; le sessioni remote ancora aperte si riagganciano.
 - **Invia l'input a tutti i riquadri** (Alt+Maiusc+B): quello che scrivi va alla scheda mostrata in ogni riquadro, per esempio lo stesso comando su più server. I riquadri si colorano di arancione finché è acceso.

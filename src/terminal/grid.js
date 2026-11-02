@@ -1,16 +1,17 @@
-import { h, trackDrag } from '@lilos/sdk';
+import { h, resizeHandle } from '@lilos/sdk';
+import { TabBar } from '../shared/TabBar.js';
 import { t } from './i18n.js';
 
 /**
  * The panes of a Terminal window: a grid of groups of tabs, each group with its own tab bar. The
  * layout is a tree whose leaves are groups:
  *
- *   Group                                    tabs, current, el (bar + panes)
+ *   Group                                    tabs, current, tabBar (TabBar), el (bar + panes)
  *   split { dir: 'row' | 'column', items: [node], sizes: [fraction] }   side by side / one under the other
  *
  * There is no limit to how many there are. A split always has two items or more; the sizes add up
- * to 1. The separators between them are dragged (or moved with the arrow keys) to change the sizes,
- * a double click makes them equal.
+ * to 1. The separators between them (the SDK's resizeHandle) are dragged, or moved with the arrow
+ * keys, to change the sizes; a double click makes them equal.
  *
  *   new Grid(onChange)      onChange(): the layout changed (sizes too)
  *   grid.el, grid.root
@@ -23,15 +24,24 @@ import { t } from './i18n.js';
 export class Group {
   tabs = [];
   current = null;
+  #abort = new AbortController();
 
-  constructor() {
-    this.bar = h('div', { class: 'tm-tabs', role: 'tablist', 'aria-label': t('remote.tabs') });
+  /** dragStart(pointer event, key): a tab of its bar is being dragged (drag.js). */
+  constructor({ dragStart } = {}) {
+    this.tabBar = new TabBar({ t, signal: this.#abort.signal, label: t('remote.tabs'), newLabel: t('remote.newShell'), dragStart, className: 'tm-tabbar' });
+    this.bar = this.tabBar.el;
     this.panes = h('div', { class: 'tm-panes' });
     this.el = h('div', { class: 'tm-group' }, this.bar, this.panes);
+  }
+
+  /** The pane is gone (or its window): its bar stops listening. */
+  dispose() {
+    this.#abort.abort();
   }
 }
 
 const MIN = { row: 140, column: 90 };   // pixels a pane keeps when the separator is dragged
+const GUTTER = 5;                        // pixels of a separator (terminal.css, .tm-gutter)
 const isSplit = node => !!node && !(node instanceof Group) && Array.isArray(node.items);
 
 export class Grid {
@@ -148,56 +158,39 @@ export class Grid {
     this.onChange?.();
   }
 
-  /** The separator before item i of a split. */
+  /** The separator before item i of a split: it sizes the item before it (and the one after, with what is left of the two). */
   #gutter(split, i, box) {
     const row = split.dir === 'row';
     const sizeOf = () => {
       const r = box.getBoundingClientRect();
-      const gutters = (split.items.length - 1) * 5;
+      const gutters = (split.items.length - 1) * GUTTER;
       return Math.max(1, (row ? r.width : r.height) - gutters);
     };
     const apply = () => {
       const kids = [...box.children].filter(el => !el.classList.contains('tm-gutter'));
       kids.forEach((el, k) => { el.style.flex = `${split.sizes[k]} 1 0`; });
     };
-    const shift = (delta, total) => {
-      const min = Math.min(0.45, MIN[split.dir] / total);
-      const pair = split.sizes[i - 1] + split.sizes[i];
-      const a = Math.max(min, Math.min(pair - min, split.sizes[i - 1] + delta));
-      split.sizes[i - 1] = a;
-      split.sizes[i] = pair - a;
-      apply();
-    };
-    const el = h('div', {
-      class: 'tm-gutter', role: 'separator', tabindex: '0', title: t('grid.gutter'),
-      'aria-orientation': row ? 'vertical' : 'horizontal', 'aria-label': t('grid.gutter'),
-      onpointerdown: e => {
-        if (e.button !== 0) return;
-        e.preventDefault();
-        const total = sizeOf();
-        const start = split.sizes[i - 1];
-        el.classList.add('on');
-        trackDrag(e, {
-          threshold: 0,
-          onMove: (dx, dy) => { split.sizes[i] += split.sizes[i - 1] - start; split.sizes[i - 1] = start; shift((row ? dx : dy) / total, total); },
-          onEnd: () => { el.classList.remove('on'); this.onChange?.(); },
-        });
+    const pair = () => split.sizes[i - 1] + split.sizes[i];
+    const least = () => Math.min(0.45 * sizeOf(), MIN[split.dir]);
+    return resizeHandle({
+      orientation: row ? 'vertical' : 'horizontal', className: 'tm-gutter', label: t('grid.gutter'), step: 24,
+      get: () => split.sizes[i - 1] * sizeOf(),
+      set: (px, final) => {
+        const both = pair();
+        const a = Math.min(both, px / sizeOf());
+        split.sizes[i - 1] = a;
+        split.sizes[i] = both - a;
+        apply();
+        if (final) this.onChange?.();
       },
-      ondblclick: () => {
+      min: least,
+      max: () => pair() * sizeOf() - least(),
+      reset: () => {
         split.sizes = split.items.map(() => 1 / split.items.length);
         apply();
         this.onChange?.();
       },
-      onkeydown: e => {
-        const keys = row ? { ArrowLeft: -1, ArrowRight: 1 } : { ArrowUp: -1, ArrowDown: 1 };
-        if (!(e.key in keys)) return;
-        e.preventDefault();
-        e.stopPropagation();
-        shift(keys[e.key] * 0.05, sizeOf());
-        this.onChange?.();
-      },
     });
-    return el;
   }
 
   // ---------- Saved state ----------

@@ -5,7 +5,6 @@ import { Shell, quote } from './shell/Shell.js';
 import { commands } from './commands/index.js';
 import { Reader, FnWriter } from './shell/streams.js';
 import { Incomplete, ParseError, ExitSignal, Interrupt, Token } from './shell/signals.js';
-import { tildePath } from './shell/paths.js';
 import { columns } from './commands/files.js';
 import { AnsiRenderer } from './ansi.js';
 import { complete, commonPrefix } from './completion.js';
@@ -24,6 +23,9 @@ const ERROR_TAIL = 2000;
 
 /** Recording and replaying what the user does (Automata): null in a lilOS without it. */
 const automation = () => sdk.automation ?? null;
+
+/** Path shown for a folder: '~' for the home (and a folder that went), '~/Documenti/Note' inside it. */
+const tildePath = id => fs.tildePath(id) ?? '~';
 
 /**
  * Terminale: tabs of bash-like shells over lilOS's files (this file) and of remote sessions (SSH,

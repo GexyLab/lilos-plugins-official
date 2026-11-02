@@ -1,5 +1,3 @@
-import { splitName } from '@lilos/sdk';
-
 /**
  * Small regex highlighter. Each language is a list of [pattern, class]; the patterns are joined
  * into one regex with a capture group each, so they must not contain capture groups themselves
@@ -86,15 +84,6 @@ export const LANGUAGES = {
     ],
   },
 };
-
-const BY_EXTENSION = {
-  md: 'markdown', markdown: 'markdown',
-  js: 'javascript', mjs: 'javascript', cjs: 'javascript', ts: 'javascript',
-  css: 'css', html: 'html', htm: 'html', xml: 'html', svg: 'html',
-  json: 'json', py: 'python',
-};
-
-export const languageFor = name => BY_EXTENSION[splitName(name ?? '')[1].toLowerCase()] ?? 'text';
 
 const compiled = new Map();
 

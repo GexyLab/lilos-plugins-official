@@ -17,6 +17,22 @@ const SIDES = { focusLeft: 'left', focusRight: 'right', focusUp: 'up', focusDown
 /** Every Terminal window open in the page: tabs move from one to another. */
 export const windows = new Set();
 
+/** A tab's key in the TabBar of its pane: the same in every pane and window it moves to. */
+const keys = new WeakMap();
+let lastKey = 0;
+const keyOf = tab => {
+  if (!keys.has(tab)) keys.set(tab, `tab-${++lastKey}`);
+  return keys.get(tab);
+};
+
+/** The protocol's badge of a remote tab, made once (the TabBar draws an icon again only when it changes). */
+const badges = new WeakMap();
+function badgeOf(tab) {
+  const protocol = tab.session.protocol;
+  if (badges.get(tab)?.protocol !== protocol) badges.set(tab, { protocol, el: badge(protocol) });
+  return badges.get(tab).el;
+}
+
 /**
  * One Terminal window: its tabs (shells and remote sessions) in a grid of panes, each pane with its
  * own tab bar (grid.js), and the side panel of the saved hosts and of the remote sessions still
@@ -53,6 +69,12 @@ export class TerminalWindow {
       resume: session => this.resume(session),
     };
     this.side = h('aside', { class: 'tm-side', 'aria-label': t('remote.side.label') });
+    // The buttons of the tab bars: the side panel's and the window's menu in the first pane's bar
+    this.sideButton = h('button', { type: 'button', class: 'tm-iconbtn', title: t('remote.side.toggle'), 'aria-label': t('remote.side.toggle'), onclick: () => this.toggleSide() }, icon('sidebar'));
+    this.menuButton = h('button', {
+      type: 'button', class: 'tm-iconbtn', title: t('menu.title'), 'aria-label': t('menu.title'), 'aria-haspopup': 'menu',
+      onclick: e => { const r = e.currentTarget.getBoundingClientRect(); this.#appMenu(r.right - 220, r.bottom); },
+    }, icon('list'));
     this.grid = new Grid(() => this.#layoutChanged());
     win.body.classList.add('tm');
     win.body.append(h('div', { class: 'tm-layout' }, this.side, this.grid.el));
@@ -69,6 +91,7 @@ export class TerminalWindow {
       windows.delete(this);
       this.#offs.forEach(off => off?.());
       for (const tab of this.tabs) tab.dispose();   // the remote sessions stay in the kernel (10 minutes)
+      for (const group of this.grid.groups()) group.dispose();
     });
 
     if (!(args?.layout && this.#restore(args.layout))) {
@@ -137,12 +160,26 @@ export class TerminalWindow {
   // ---------- Panes and tabs ----------
 
   #newGroup() {
-    const group = new Group();
+    const tabOf = key => group.tabs.find(tab => keyOf(tab) === key) ?? null;
+    const group = new Group({ dragStart: (e, key) => { const tab = tabOf(key); if (tab) dragTab(e, tab, this); } });
     groupAt.set(group.el, { owner: this, group });
     group.el.addEventListener('pointerdown', () => this.#activate(group), true);
     group.el.addEventListener('focusin', () => this.#activate(group));
-    group.bar.addEventListener('contextmenu', e => { if (e.target === group.bar) { e.preventDefault(); this.#appMenu(e.clientX, e.clientY); } });
-    group.bar.addEventListener('dblclick', e => { if (e.target === group.bar) this.add(this.#makeShell(this, { cwd: this.#cwdNear(group) }), group); });
+    const bar = group.tabBar;
+    // Chosen with the keys (← →): the focus stays on the bar, where show() would take it away
+    let byKeys = false;
+    bar.list.addEventListener('keydown', () => { byKeys = true; setTimeout(() => { byKeys = false; }); }, true);
+    bar.on('select', key => {
+      const tab = tabOf(key);
+      if (!tab || group.current === tab) return;
+      this.select(tab);
+      if (byKeys) requestAnimationFrame(() => bar.focus());
+    });
+    bar.on('close', key => { const tab = tabOf(key); if (tab) this.closeTab(tab); });
+    bar.on('new', () => this.add(this.#makeShell(this, { cwd: this.#cwdNear(group) }), group));
+    bar.on('menu', ({ key, x, y }) => { const tab = tabOf(key); if (tab) { this.select(tab); this.tabMenu(tab, x, y); } });
+    // The free part of the bar: the window's menu
+    bar.el.addEventListener('contextmenu', e => { if (e.target === bar.el || e.target === bar.list) { e.preventDefault(); this.#appMenu(e.clientX, e.clientY); } });
     return group;
   }
 
@@ -204,6 +241,7 @@ export class TerminalWindow {
     }
     if (!group.tabs.length && this.grid.groups().length > 1) {
       this.grid.remove(group);
+      group.dispose();
       if (this.active === group) this.active = this.grid.groups()[0];
       this.#markActive();
     } else this.drawTabs(group);
@@ -384,37 +422,26 @@ export class TerminalWindow {
   drawTabs(only = null) {
     const groups = this.grid.groups();
     const first = groups[0];
+    const many = groups.length > 1;
+    this.sideButton.setAttribute('aria-pressed', String(!this.side.hidden));
     for (const group of only ? [only] : groups) {
-      const many = groups.length > 1;
-      const tabEl = (tab, i) => h('div', {
-        class: `tm-tab${tab.closed ? ' lost' : ''}${tab.remote ? ' remote' : ''}`, role: 'tab', tabindex: '0',
-        'aria-selected': group.current === tab ? 'true' : 'false', title: [this.nameOf(tab), tab.title].filter(Boolean).join(' — '),
-        onclick: () => this.select(tab),
-        onauxclick: e => { if (e.button === 1) this.closeTab(tab); },
-        onpointerdown: e => { if (!e.target.closest('button')) dragTab(e, tab, this); },
-        oncontextmenu: e => { e.preventDefault(); this.select(tab); this.tabMenu(tab, e.clientX, e.clientY); },
-        onkeydown: e => {
-          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this.select(tab); }
-          if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') group.bar.querySelectorAll('[role=tab]')[i + (e.key === 'ArrowRight' ? 1 : -1)]?.focus();
-          if (e.key === 'ContextMenu' || (e.key === 'F10' && e.shiftKey)) {
-            e.preventDefault();
-            const r = e.currentTarget.getBoundingClientRect();
-            this.tabMenu(tab, r.left, r.bottom);
-          }
-        },
-      },
-      tab.remote ? badge(tab.session.protocol) : icon('terminal'),
-      h('span', { class: 'tm-tab-name' }, this.nameOf(tab)),
-      tab.activity && h('span', { class: 'tm-act', title: t('remote.activity') }),
-      h('button', { type: 'button', class: 'tm-iconbtn', tabindex: '-1', title: t(tab.remote ? 'remote.closeSession' : 'remote.closeTab'), 'aria-label': t('remote.closeNamed', { name: this.nameOf(tab) }), onclick: e => { e.stopPropagation(); this.closeTab(tab); } }, icon('x')));
-      group.bar.replaceChildren(...[
-        group === first && h('button', { type: 'button', class: 'tm-iconbtn', title: t('remote.side.toggle'), 'aria-label': t('remote.side.toggle'), 'aria-pressed': this.side.hidden ? 'false' : 'true', onclick: () => this.toggleSide() }, icon('sidebar')),
-        ...group.tabs.map(tabEl),
-        h('button', { type: 'button', class: 'tm-iconbtn', title: t('remote.newShell'), 'aria-label': t('remote.newShell'), onclick: () => this.add(this.#makeShell(this, { cwd: this.#cwdNear(group) }), group) }, icon('plus')),
-        h('span', { class: 'tm-grow' }),
-        this.broadcast && many && h('button', { type: 'button', class: 'tm-cast', title: t('grid.broadcastOff'), onclick: () => this.toggleBroadcast(false) }, icon('keyboard'), t('grid.broadcastOn')),
-        group === first && h('button', { type: 'button', class: 'tm-iconbtn', title: t('menu.title'), 'aria-label': t('menu.title'), 'aria-haspopup': 'menu', onclick: e => { const r = e.currentTarget.getBoundingClientRect(); this.#appMenu(r.right - 220, r.bottom); } }, icon('list')),
-      ].filter(Boolean));
+      group.tabBar.render(group.tabs.map(tab => {
+        const name = this.nameOf(tab);
+        return {
+          key: keyOf(tab), label: name, title: [name, tab.title].filter(Boolean).join(' — '),
+          icon: tab.remote ? badgeOf(tab) : 'terminal',
+          activity: tab.activity ? t('remote.activity') : false,
+          class: [tab.closed && 'lost', tab.remote && 'remote'].filter(Boolean).join(' '),
+          closeLabel: t('remote.closeNamed', { name }), closeTitle: t(tab.remote ? 'remote.closeSession' : 'remote.closeTab'),
+        };
+      }), group.current ? keyOf(group.current) : null);
+      group.tabBar.setSlots({
+        start: group === first ? this.sideButton : null,
+        end: [
+          this.broadcast && many && h('button', { type: 'button', class: 'tm-cast', title: t('grid.broadcastOff'), onclick: () => this.toggleBroadcast(false) }, icon('keyboard'), t('grid.broadcastOn')),
+          group === first && this.menuButton,
+        ],
+      });
     }
   }
 
@@ -478,21 +505,15 @@ export class TerminalWindow {
     if (node) openTermFile(this, node.id, { fresh: false }).catch(err => this.error(err));
   }
 
-  rename(tab) {
-    const input = h('input', { type: 'text', value: this.nameOf(tab), maxLength: 60, 'aria-label': t('tabs.renameLabel') });
-    const done = save => {
-      dialog.close();
-      if (save) tab.customName = input.value.replace(/\s+/g, ' ').trim() || null;
-      this.tabChanged(tab);
-      tab.focus();
-    };
-    const dialog = this.showDialog(h('div', { class: 'tm-dialog', role: 'dialog', 'aria-modal': 'true', onkeydown: e => { if (e.key === 'Enter') { e.preventDefault(); done(true); } } },
-      h('h2', {}, t('tabs.rename')),
-      h('div', { class: 'tm-dialog-body' }, h('label', { class: 'tm-field' }, h('span', {}, t('tabs.renameLabel')), input, h('small', {}, t('tabs.renameHint')))),
-      h('div', { class: 'tm-dialog-foot' },
-        h('button', { type: 'button', class: 'tm-btn', onclick: () => done(false) }, t('remote.cancel')),
-        h('button', { type: 'button', class: 'tm-btn primary', onclick: () => done(true) }, t('tabs.renameOk')))), () => tab.focus());
-    input.select();
+  async rename(tab) {
+    const { button, values } = await sdk.messageBox(this.win, {
+      title: t('tabs.rename'),
+      fields: [{ name: 'name', label: t('tabs.renameLabel'), value: this.nameOf(tab), maxLength: 60, hint: t('tabs.renameHint') }],
+      buttons: ['cancel', { value: 'rename', label: t('tabs.renameOk'), primary: true }],
+    });
+    if (button === 'rename') tab.customName = values.name.replace(/\s+/g, ' ').trim() || null;
+    this.tabChanged(tab);
+    tab.focus();
   }
 
   /** The same again in a new tab next to it: a shell in the same folder, a new session to the same server. */
@@ -507,7 +528,7 @@ export class TerminalWindow {
     this.side.hidden = !this.side.hidden;
     storage.set(SIDE_KEY, !this.side.hidden);
     if (!this.side.hidden) this.load();
-    this.drawTabs(this.grid.groups()[0]);
+    this.sideButton.setAttribute('aria-pressed', String(!this.side.hidden));
   }
 
   // ---------- Remote sessions ----------
@@ -580,19 +601,6 @@ export class TerminalWindow {
     if (result?.action === 'connect') this.openRemote({ host: result.host.id }).catch(err => this.error(err));
   }
 
-  // ---------- Dialogs ----------
-
-  showDialog(node, onCancel) {
-    const back = h('div', { class: 'tm-backdrop' }, node);
-    const close = () => back.remove();
-    back.addEventListener('keydown', e => {
-      e.stopPropagation();
-      if (e.key === 'Escape') { e.preventDefault(); close(); onCancel?.(); }
-    });
-    this.win.body.append(back);
-    return { close };
-  }
-
   // ---------- Side panel ----------
 
   drawSide() {
@@ -633,7 +641,7 @@ export class TerminalWindow {
         ...running.map(s => h('div', { class: 'tm-live' },
           h('div', { class: 'tm-live-name', title: s.address }, badge(s.protocol), h('span', {}, s.name)),
           h('div', { class: 'tm-live-when' }, [s.title, s.attached ? t('remote.side.elsewhere') : s.closesAt ? t('remote.side.closesIn', { n: Math.max(1, Math.round((s.closesAt - Date.now()) / 60000)) }) : '', i18n.date(s.created, { timeStyle: 'short' })].filter(Boolean).join(' · ')),
-          h('button', { type: 'button', class: 'tm-btn primary', onclick: () => this.resume(s).catch(err => this.error(err)) }, t('remote.side.resume')))),
+          h('button', { type: 'button', class: 'ctl-btn primary', onclick: () => this.resume(s).catch(err => this.error(err)) }, t('remote.side.resume')))),
       ] : []),
     );
   }
