@@ -1,0 +1,31 @@
+{
+  "id": "remote-terminal",
+  "version": "1.0.0",
+  "kind": "local",
+  "name": "Remote Terminal",
+  "description": "SSH, Telnet, rlogin and SUPDUP terminals: saved hosts, tabs, and sessions that keep running in lilOS when the window is closed.",
+  "category": "development",
+  "icon": { "glyph": "terminal", "color": "#1f6f5c" },
+  "publisher": { "id": "lilos", "name": "lilOS" },
+  "sdk": "2",
+  "lilos": ">=1.12.0",
+  "entrypoints": {
+    "main": { "kind": "window", "params": {
+      "host": { "type": "text", "label": "Host", "description": "The name of a saved host to connect to", "maxLength": 60 }
+    } },
+    "cli": { "kind": "background", "label": "Terminal commands" }
+  },
+  "permissions": ["term", "fs.write:~", "ui.menus"],
+  "contributes": {
+    "window": { "width": 880, "height": 560 },
+    "actions": [
+      { "id": "remote-terminal.here", "label": "Open SSH terminal here", "entry": "main", "on": "item", "glyph": "terminal", "when": { "net": ["sftp"] } }
+    ],
+    "shell": [
+      { "name": "ssh", "entry": "cli", "help": true, "summary": "Opens an SSH session in Remote Terminal", "usage": "ssh [-p port] [-l user] [user@]host [command]" },
+      { "name": "telnet", "entry": "cli", "help": true, "summary": "Opens a Telnet session in Remote Terminal", "usage": "telnet [-l user] host [port]" },
+      { "name": "rlogin", "entry": "cli", "help": true, "summary": "Opens an rlogin session in Remote Terminal", "usage": "rlogin [-l user] host" },
+      { "name": "supdup", "entry": "cli", "help": true, "summary": "Opens a SUPDUP session in Remote Terminal", "usage": "supdup host [port]" }
+    ]
+  }
+}

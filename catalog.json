@@ -10,7 +10,8 @@
     "apps/filecrypt",
     "apps/calculator",
     "apps/keyboard",
-    "apps/zip"
+    "apps/zip",
+    "apps/remote-terminal"
   ],
   "modules": [
     "modules/users-basic",
@@ -21,7 +22,11 @@
     "modules/netfs-ftp",
     "modules/netfs-webdav",
     "modules/netfs-smb",
-    "modules/netfs-onedrive"
+    "modules/netfs-onedrive",
+    "modules/term-ssh",
+    "modules/term-telnet",
+    "modules/term-rlogin",
+    "modules/term-supdup"
   ],
   "system": "system/lilos"
 }
