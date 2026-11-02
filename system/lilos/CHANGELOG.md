@@ -1,5 +1,16 @@
 # Changelog di lilOS
 
+## 1.19.0 — 2026-11-02
+
+- lilOS 1.19.0: la Pianificazione (operazioni a una data e ora o ripetute, nel kernel anche a lilOS chiuso); SDK 0.12.0
+- Documentazione della Pianificazione riallineata (D68, lilOS 1.19.0, avvio da sola di Automata); si pianificano solo automazioni senza file
+- Documentazione: la Pianificazione (guida, API, ricette), moduli obbligatori, lilos.home, services-isolate 1.1.0
+- Pianificazione: correzioni della revisione di sicurezza
+- Comando del Terminale pianificato: nella home con la shell del Terminale o su un host SSH salvato; lilos.home per i servizi; spostamenti del kernel nelle pagine aperte
+- Modulo obbligatorio nel pacchetto di lilOS e nella configurazione; Pianificazione tra le app di base
+- Pianificazione nella pagina: SDK schedule, esecutore del browser, lilos.schedule per le app
+- Pianificazione nel kernel: modulo obbligatorio scheduler, regole, azioni e API
+
 ## 1.18.0 — 2026-11-02
 
 - Nuova app **ArduinoIDE**, da installare dall'AppStore (Sviluppo): sketch per **Arduino Uno, Nano e Mega**. Editor con evidenziazione C++ e **suggerimenti mentre scrivi** (funzioni, metodi di `Serial`, parametri, definizioni), **Verifica** (Ctrl R) con la memoria usata, **Carica** (Ctrl U), **monitor seriale** (velocità, fine riga, ora davanti alle righe, salva in un file; si mette in pausa da solo durante il caricamento), **gestore librerie** (cerca, versioni, dipendenze, «Includi»), esempi, pannello **Problemi** che porta alla riga e propone la libreria che manca («Installa e riprova»). Gli sketch sono cartelle in `~/Arduino`, le tue librerie in `~/Arduino/libraries`

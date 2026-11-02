@@ -22,7 +22,7 @@
     },
     {
       "name": "services-isolate",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "config": {}
     },
     {
@@ -71,6 +71,18 @@
       "config": {
         "defaultKeep": 20,
         "perMinute": 10
+      }
+    },
+    {
+      "name": "scheduler",
+      "version": "1.0.0",
+      "config": {
+        "maxTasksPerUser": 100,
+        "minIntervalMinutes": 1,
+        "maxParallel": 4,
+        "historyPerTask": 50,
+        "catchUpHours": 12,
+        "outputKb": 16
       }
     }
   ],
