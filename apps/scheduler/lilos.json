@@ -122,7 +122,7 @@
   "locales": "locales.json",
   "files": {
     "dist/index-Dxof-ZXL.css": "sha256-5128kl/PnlzsjGeI8FnxaBLg199GFBrN4VBhx7kTL4o=",
-    "dist/index.js": "sha256-jEkd9b/kD7TSqVT/Ur0l7YQhXseJRoEXXVTj99F4Fuk=",
-    "locales.json": "sha256-eE/yhhShXyvavJbCw+Rvo3oSBFCMfMPG7v1LEqUxrvg="
+    "dist/index.js": "sha256-/7tUUdd7KAfahW4lZ537tNJq6LxM0mu4XtM2dOCrYIY=",
+    "locales.json": "sha256-yeElIVzCyUt1rqoBRJTrQkUzwrbvgtrtKCdUFCJkubI="
   }
 }
