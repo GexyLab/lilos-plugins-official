@@ -1,5 +1,18 @@
 # Changelog di lilOS
 
+## 1.14.0 — 2026-11-02
+
+- Cinque nuovi protocolli in **Connetti a un server**, da installare dall'AppStore (scheda Kernel): **Google Drive** (netfs-gdrive), **Google Foto** (netfs-gphotos), **Amazon S3 e compatibili** (netfs-s3: AWS, Cloudflare R2, Backblaze B2, Wasabi, MinIO o un altro indirizzo), **Azure Blob Storage** (netfs-azblob) e **NFS** (netfs-nfs, NFSv3). Ogni connessione è una cartella in `~/Rete`, con i trasferimenti nel kernel come per gli altri protocolli. Le installazioni nuove non li hanno già: li installa un amministratore
+- La lista dei protocolli è divisa in **Server**, **Cloud** e **Rete locale**
+- **Google Drive**: il Mio Drive o un Drive condiviso, la cartella «Condivisi con me», l'eliminazione nel cestino di Drive e lo spazio usato. I documenti Google si aprono su Google in una nuova scheda; copiati fuori da Drive diventano .docx, .xlsx o .pptx (il formato lo sceglie l'amministratore). Due file con lo stesso nome si vedono come «Nome (2)»
+- **Google Foto**: «Importa da Google Foto» apre la scelta di Google in una nuova scheda e copia le foto scelte in una cartella di lilOS (di serie `~/Immagini/Google Foto/<data ora>`). Nella cartella della connessione ci sono gli album creati da lilOS: Google non lascia vedere alle app il resto della libreria, né eliminare o rinominare le foto (si possono solo togliere da un album)
+- Google Drive e Google Foto vogliono un progetto Google Cloud dell'amministratore (ID e segreto client nel Pannello di controllo, schede Google Drive e Google Foto; il segreto resta cifrato e non si rivede). Google accetta il ritorno dall'accesso solo su un indirizzo https con un dominio o su `localhost`: altrimenti si accede incollando in lilOS l'indirizzo della pagina finale (client Google di tipo «App desktop»)
+- **Azure Blob Storage**: accesso con la chiave dell'account, un token SAS o l'account Microsoft (Entra). Sugli account con lo spazio dei nomi gerarchico (Data Lake Gen2) le cartelle sono vere e rinominare è immediato
+- **NFS**: lilOS parla NFSv3 da solo, anche su Windows. UID e GID sul server li assegna l'amministratore a ogni utente (Pannello di controllo, scheda NFS): chi non li ha non si connette. Kerberos e NFSv4.1 arriveranno dopo
+- OneDrive 1.1.0 mostra lo spazio usato
+- Nel Terminale le sessioni remote (SSH, Telnet, rlogin, SUPDUP) sono schede del Terminale stesso; l'app Terminale remoto non è più nel catalogo. term-ssh 1.0.1: confermare la chiave di un server dopo più di 20 secondi fermava il kernel
+- Per gli sviluppatori: SDK 0.8.0; nel contratto dei protocolli `group`, elementi `web`/`export`, `badge`, `can`, `removeLabel`, `space()`, l'importazione dalla pagina del fornitore, l'accesso incollando l'indirizzo e i campi segreti nelle impostazioni dei moduli (decisione D63)
+
 ## 1.13.1 — 2026-11-02
 
 - La cartella **Sistema**, dove lilOS tiene la copia dello sfondo, non si vede più: non è tra le cartelle della Home, nella barra laterale del File Manager né nella scelta dei file. Lo sfondo funziona come prima; per aprirla si scrive `~/Sistema` nel percorso del File Manager
