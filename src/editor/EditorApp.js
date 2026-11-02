@@ -12,8 +12,8 @@ import { clientFor, fileUri, servers } from './lsp/manager.js';
 import { positionAt, offsetAt, fromServer } from './lsp/convert.js';
 import { openEditorSettings } from './EditorSettings.js';
 import { FileTree } from './FileTree.js';
-import { TabBar } from './TabBar.js';
-import { FindBar } from './FindBar.js';
+import { TabBar } from '../shared/TabBar.js';
+import { FindBar } from '../shared/FindBar.js';
 import { queryRegExp, regexError, findAll, firstAtOrAfter, replacementFor, replaceAll, MAX_MATCHES } from './search.js';
 import { readSession, writeSession, removeSession, takeClosed, addClosed, readDraft, writeDraft, removeDraft, hash, CLOSED, DRAFT_LIMIT } from './sessions.js';
 import { t } from './i18n.js';
@@ -48,11 +48,11 @@ const isSecret = id => Object.values(fs.get(id)?.apps ?? {}).some(v => v?.conten
 const grammarsReady = loadCustomGrammars();
 
 /**
- * Text editor: one tab per open document (TabBar.js), line numbers, syntax highlighting
+ * Text editor: one tab per open document (shared/TabBar.js), line numbers, syntax highlighting
  * (Tree-sitter, TextMate or simple), completion and diagnostics from language servers (LSP) or the
  * built-in vocabularies, JSON schemas. args.file opens a file, args.folder opens a folder in the
  * panel on the right (FileTree.js), where its content is managed; the last folder opened comes
- * back in new windows. Find and replace in a bar above the text (FindBar.js, search.js: Ctrl+F,
+ * back in new windows. Find and replace in a bar above the text (shared/FindBar.js, search.js: Ctrl+F,
  * Ctrl+H); «Save as» (Ctrl+Shift+S, and the first save of a new document) asks for the name and
  * the folder in the bar above the text.
  *
@@ -182,7 +182,7 @@ class TextEditor {
     this.#fillLanguages();
     this.banner = h('div', { class: 'ed-banner', role: 'alertdialog', hidden: true });
 
-    this.tabBar = new TabBar({ signal });
+    this.tabBar = new TabBar({ t, signal, label: t('tabs.label'), newLabel: t('toolbar.newDocument') });
     this.tabBar.on('select', key => this.#activate(this.#find(key)));
     this.tabBar.on('close', key => this.closeTab(this.#find(key)));
     this.tabBar.on('new', () => this.newDocument());
@@ -218,7 +218,7 @@ class TextEditor {
     this.tree.on('layout', () => this.#renderSidebarButton());
     this.sidebarBtn = tool('sidebar', t('toolbar.showFolder'), () => this.toggleSidebar());
 
-    this.findBar = new FindBar({ signal });
+    this.findBar = new FindBar({ t, signal });
     this.findBar.on('query', () => this.#findFrom(this.input?.selectionStart ?? 0));
     this.findBar.on('next', () => this.findNext(1));
     this.findBar.on('previous', () => this.findNext(-1));
@@ -884,7 +884,7 @@ class TextEditor {
     try {
       queryRegExp(query);
     } catch (err) {
-      throw new Error(t('find.badRegex', { error: regexError(err) }));
+      throw new Error(t('shared.find.badRegex', { error: regexError(err) }));
     }
     const n = this.#replaceAll(query);
     if (n) {
@@ -962,12 +962,7 @@ class TextEditor {
     if (!s) { if (this.marks.firstChild) this.marks.replaceChildren(); return; }
     const { matches } = s;
     const cur = this.#currentMatch(s);
-    const total = `${matches.length}${matches.length >= MAX_MATCHES ? '+' : ''}`;
-    if (s.error) this.findBar.setStatus(t('find.badRegex', { error: s.error }), { error: true });
-    else if (!this.findBar.query.find) this.findBar.setStatus('');
-    else if (!matches.length) this.findBar.setStatus(t('find.none'));
-    else if (cur !== -1) this.findBar.setStatus(t('find.count', { index: cur + 1, total }));
-    else this.findBar.setStatus(t('find.total', { n: matches.length, total }));
+    this.findBar.results({ total: matches.length, index: cur, more: matches.length >= MAX_MATCHES, error: s.error });
     if (!matches.length) return this.marks.replaceChildren();
 
     // Only the lines on screen: their rows in the copy, found by their place

@@ -3,7 +3,7 @@ import { badge } from './remote/RemoteTab.js';
 import { t } from './i18n.js';
 
 /**
- * Dragging a tab (window.js). Where it is dropped:
+ * Dragging a tab (window.js: the dragStart of its pane's TabBar). Where it is dropped:
  *   on a tab bar                 into that pane, where the blue line is          { kind: 'bar', owner, group, index }
  *   near an edge of a terminal   a new pane on that side                          { kind: 'split', owner, group, side }
  *   in the middle of a terminal  at the end of that pane (another pane)           { kind: 'pane', owner, group }
@@ -64,9 +64,8 @@ function find(x, y, tab, owner) {
   }
   const { group } = at;
   const own = group.tabs.includes(tab);
-  const bar = el.closest('.tm-tabs');
-  if (bar) {
-    const tabs = [...bar.querySelectorAll('.tm-tab')];
+  if (group.bar.contains(el)) {
+    const tabs = [...group.tabBar.list.querySelectorAll('.sh-tab')];
     let index = tabs.findIndex(n => { const r = n.getBoundingClientRect(); return x < r.left + r.width / 2; });
     if (index < 0) index = tabs.length;
     return { kind: 'bar', owner: at.owner, group, index };
@@ -90,8 +89,8 @@ function drawMark(target, tab, owner, ev) {
     return mark;
   }
   if (target.kind === 'bar') {
-    const { bar } = target.group;
-    const tabs = [...bar.querySelectorAll('.tm-tab')];
+    const { bar, tabBar } = target.group;
+    const tabs = [...tabBar.list.querySelectorAll('.sh-tab')];
     const b = bar.getBoundingClientRect();
     const ref = tabs[target.index];
     const x = ref ? ref.getBoundingClientRect().left - 2 : (tabs.at(-1)?.getBoundingClientRect().right ?? b.left + 30) + 1;

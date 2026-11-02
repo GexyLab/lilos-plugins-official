@@ -1,8 +1,10 @@
-import * as sdk from '@lilos/sdk';   // `term` and `messageBox`: missing in older lilOS, so not imported by name
+import * as sdk from '@lilos/sdk';   // `term`: missing in older lilOS, so not imported by name
 import { Terminal } from '@xterm/xterm';
 import { FitAddon } from '@xterm/addon-fit';
 import { SearchAddon } from '@xterm/addon-search';
 import { Unicode11Addon } from '@xterm/addon-unicode11';
+import { FindBar } from '../../shared/FindBar.js';
+import { trustPrompt } from '../../shared/trustPrompt.js';
 import { recordDialog } from './dialogs.js';
 import { isCommand } from '../keys.js';
 import { t } from '../i18n.js';
@@ -32,6 +34,8 @@ const THEME = {
 };
 const FONT = 'ui-monospace, "Cascadia Mono", "JetBrains Mono", Consolas, "DejaVu Sans Mono", "Liberation Mono", monospace';
 const RECORD_MAX = 8 << 20;     // a recording stops at 8 MB
+/** The matches of the find bar, on the dark screen and in its scroll bar. */
+const MATCHES = { matchOverviewRuler: '#e8c35a', activeMatchColorOverviewRuler: '#ff6b6b', matchBackground: '#5a4a1a', activeMatchBackground: '#2f6fde' };
 const SEND = new TextEncoder();
 
 /** What the user may send that the browser keeps for itself, for the Tasti menu: label → bytes. */
@@ -57,7 +61,8 @@ export class RemoteTab {
   #screen;
   #status;
   #overlay = null;
-  #find = null;
+  #find = null;       // the find bar (FindBar), made the first time it opens
+  #abort = new AbortController();
   #record = null;     // { path, colors, chunks: [], size, timer, saving }
   #observer;
   #decoder = new TextDecoder();
@@ -199,27 +204,11 @@ export class RemoteTab {
 
   /** A server key to confirm: the first time, or (a strong warning) changed since. */
   async #confirm(trust) {
-    this.#trusting?.close(null);
-    const changed = trust.changed === true;
-    const lines = [
-      changed ? t('remote.trust.changedText') : t(trust.kind === 'tls' ? 'remote.trust.firstTls' : 'remote.trust.first'),
-      '',
-      `${t('remote.trust.server')}: ${trust.host ?? ''}`,
-      `${t(trust.kind === 'tls' ? 'remote.trust.certificate' : 'remote.trust.key')}: ${trust.text || trust.fingerprint}`,
-      ...(changed && trust.previous ? [`${t('remote.trust.previous')}: ${trust.previous}`] : []),
-      '',
-      t(changed ? 'remote.trust.askChanged' : 'remote.trust.ask'),
-    ];
-    this.#trusting = sdk.messageBox(this.#owner.win, {
-      icon: changed ? 'error' : 'warning',
-      title: t(changed ? 'remote.trust.changedTitle' : 'remote.trust.title', { host: trust.host ?? '' }),
-      text: lines.join('\n'),
-      buttons: ['cancel', 'continue'],
-      default: changed ? 'cancel' : 'continue',
-    });
-    const answer = await this.#trusting;
+    this.#trusting?.close();
+    this.#trusting = trustPrompt(this.#owner.win, trust, { t });
+    const ok = await this.#trusting;
     this.#trusting = null;
-    this.#control({ t: 'trust', ok: answer === 'continue' });
+    this.#control({ t: 'trust', ok });
     this.#term.focus();
   }
 
@@ -255,7 +244,7 @@ export class RemoteTab {
       h('span', { class: 'tm-sp' }),
       h('button', { type: 'button', class: 'tm-iconbtn', title: t('remote.find'), 'aria-label': t('remote.find'), onclick: () => this.openFind() }, icon('search')),
       h('button', { type: 'button', class: 'tm-iconbtn', title: t(recording ? 'remote.recordStop' : 'remote.record'), 'aria-label': t(recording ? 'remote.recordStop' : 'remote.record'), 'aria-pressed': recording ? 'true' : 'false', onclick: () => this.#toggleRecord() }, icon(recording ? 'pause' : 'save')),
-      h('button', { type: 'button', class: 'tm-btn', 'aria-haspopup': 'menu', onclick: e => this.#keysMenu(e.currentTarget) }, icon('keyboard'), t('remote.keys')),
+      h('button', { type: 'button', class: 'ctl-btn', 'aria-haspopup': 'menu', onclick: e => this.#keysMenu(e.currentTarget) }, icon('keyboard'), t('remote.keys')),
     );
   }
 
@@ -277,26 +266,30 @@ export class RemoteTab {
 
   // ---------- Find ----------
 
+  /** The find bar over the screen (Ctrl+Shift+F): the text of the screen and of what scrolled away. */
   openFind() {
-    if (this.#find) return this.#find.querySelector('input').focus();
-    const input = h('input', { type: 'text', 'aria-label': t('remote.find'), spellcheck: 'false' });
-    const count = h('small', {}, '');
-    const go = back => {
-      const options = { decorations: { matchOverviewRuler: '#e8c35a', activeMatchColorOverviewRuler: '#ff6b6b', matchBackground: '#5a4a1a', activeMatchBackground: '#2f6fde' } };
-      if (back) this.#search.findPrevious(input.value, options); else this.#search.findNext(input.value, options);
-    };
-    this.#search.onDidChangeResults?.(r => { count.textContent = r.resultCount ? t('remote.find.count', { i: r.resultIndex + 1, n: r.resultCount }) : input.value ? t('remote.find.none') : ''; });
-    const close = () => { this.#search.clearDecorations(); this.#find?.remove(); this.#find = null; this.#term.focus(); };
-    input.addEventListener('input', () => go(false));
-    input.addEventListener('keydown', e => {
-      if (e.key === 'Enter') { e.preventDefault(); go(e.shiftKey); } else if (e.key === 'Escape') { e.preventDefault(); close(); }
-    });
-    this.#find = h('div', { class: 'tm-findbar', role: 'search' }, input, count,
-      h('button', { type: 'button', class: 'tm-iconbtn', title: t('remote.find.prev'), 'aria-label': t('remote.find.prev'), onclick: () => go(true) }, icon('arrowUp')),
-      h('button', { type: 'button', class: 'tm-iconbtn', title: t('remote.find.next'), 'aria-label': t('remote.find.next'), onclick: () => go(false) }, icon('arrowDown')),
-      h('button', { type: 'button', class: 'tm-iconbtn', title: t('remote.close'), 'aria-label': t('remote.close'), onclick: close }, icon('x')));
-    this.#screen.append(this.#find);
-    input.focus();
+    if (!this.#find) {
+      const bar = this.#find = new FindBar({ t, signal: this.#abort.signal, replace: false, floating: true, className: 'tm-findbar' });
+      const go = back => {
+        const q = bar.query;
+        if (!q.find) { this.#search.clearDecorations(); return bar.results(); }
+        const options = { caseSensitive: q.matchCase, wholeWord: q.wholeWord, regex: q.regex, decorations: MATCHES };
+        try {
+          if (back) this.#search.findPrevious(q.find, options); else this.#search.findNext(q.find, options);
+        } catch (err) {
+          this.#search.clearDecorations();
+          bar.results({ error: err.message });
+        }
+      };
+      this.#search.onDidChangeResults(r => bar.results({ total: r.resultCount, index: r.resultIndex }));
+      // A new query, or an option changed: the addon counts again only for a term it has not cached
+      bar.on('query', () => { this.#search.clearDecorations(); go(false); });
+      bar.on('next', () => go(false));
+      bar.on('previous', () => go(true));
+      bar.on('close', () => { this.#search.clearDecorations(); bar.close(); this.#term.focus(); });
+      this.#screen.append(bar.el);
+    }
+    this.#find.open();
   }
 
   // ---------- Overlays ----------
@@ -304,7 +297,7 @@ export class RemoteTab {
   #showOverlay(text, actions) {
     this.#hideOverlay();
     this.#overlay = h('div', { class: 'tm-overlay', role: 'status' }, icon('warning'), h('span', {}, text),
-      ...actions.map(([label, run, primary]) => h('button', { type: 'button', class: `tm-btn${primary ? ' primary' : ''}`, onclick: run }, label)));
+      ...actions.map(([label, run, primary]) => h('button', { type: 'button', class: `ctl-btn${primary ? ' primary' : ''}`, onclick: run }, label)));
     this.#screen.append(this.#overlay);
   }
 
@@ -315,7 +308,7 @@ export class RemoteTab {
 
   #showClosed() {
     this.#stopRecord();
-    this.#trusting?.close(null);
+    this.#trusting?.close();
     this.#showOverlay(this.session.reason ? t('remote.closedWhy', { reason: this.session.reason }) : t('remote.closed'), [
       [t('remote.closeTab'), () => this.#owner.closeTab(this)],
       ...(this.spec ? [[t('remote.reconnect'), () => this.#owner.reconnect(this), true]] : []),
@@ -389,7 +382,8 @@ export class RemoteTab {
   /** The window goes: the session stays in the kernel. */
   dispose() {
     this.#stopRecord();
-    this.#trusting?.close(null);
+    this.#trusting?.close();
+    this.#abort.abort();
     this.#detach();
     this.#observer.disconnect();
     this.#term.dispose();

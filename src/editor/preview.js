@@ -5,12 +5,10 @@
  * to say what kind of content the file has: lines that do not fit are cut. `size` is the longest
  * side lilOS wants, in pixels.
  */
-import { tokenize, languageFor } from './highlight.js';
+import { previewHandler, canvasToImage } from '../shared/preview.js';
+import { tokenize } from './highlight.js';
+import { getLanguage, languageForName } from './lang/languages.js';
 
-/** Longest side (the height) when the caller does not say, and the limits of what it may ask. */
-const SIZE = 1024;
-const MIN_SIZE = 16;
-const MAX_SIZE = 2048;
 /** Bytes read from the start of the file: more than any sheet shows. */
 const READ = 64 << 10;
 /** The sheet is 4:5 (width : height); about this many columns fit in its width (fewer on a small one, so lines still show). */
@@ -23,16 +21,16 @@ const COLORS = { kw: '#cf222e', st: '#0a3069', nu: '#0550ae', cm: '#6e7781', fn:
 const STYLES = { cm: 'italic ', it: 'italic ', hd: 'bold ', bd: 'bold ' };
 
 export function filePreview({ lilos }) {
-  lilos.handle(async data => {
-    if (typeof data?.file !== 'string') return null;
-    const info = await lilos.files.info(data.file);
+  previewHandler(lilos, async (file, height) => {
+    const info = await lilos.files.info(file);
     if (!info.size) return null;   // empty: the File Manager says so itself
-    const bytes = await lilos.files.read(data.file, { bytes: true });
+    const bytes = await lilos.files.read(file, { bytes: true });
     const head = new Blob([bytes]).slice(0, READ);
     const text = new TextDecoder().decode(await head.arrayBuffer());
     if (text.includes('\0')) return null;   // not text
-    const height = Number.isFinite(data.size) ? Math.min(MAX_SIZE, Math.max(MIN_SIZE, Math.round(data.size))) : SIZE;
-    return { image: await sheet(text, languageFor(info.name), height) };
+    // Colored by the simple highlighter, as the Editor colors the file's language with it
+    const lang = getLanguage(languageForName(info.name)).simple ?? 'text';
+    return { image: await canvasToImage(sheet(text, lang, height)) };
   });
 }
 
@@ -48,7 +46,7 @@ function lines(text, lang) {
   return out;
 }
 
-async function sheet(text, lang, height) {
+function sheet(text, lang, height) {
   const width = Math.max(1, Math.round(height * RATIO));
   const canvas = document.createElement('canvas');
   canvas.width = width;
@@ -84,8 +82,5 @@ async function sheet(text, lang, height) {
     }
   });
   ctx.restore();
-
-  const encode = type => new Promise(resolve => canvas.toBlob(resolve, type, 0.85));
-  const webp = await encode('image/webp');
-  return webp?.type === 'image/webp' ? webp : encode('image/png');
+  return canvas;
 }

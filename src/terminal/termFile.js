@@ -1,11 +1,15 @@
-import * as sdk from '@lilos/sdk';   // `term` and `messageBox`: missing in older lilOS, so not imported by name
+import * as sdk from '@lilos/sdk';   // `term`: missing in older lilOS, so not imported by name
 import { DESK_NAME, pickFile } from '@lilos/system';
-import { tildePath } from './shell/paths.js';
+import { fieldsForm, shown, withDefaults } from '../shared/fieldsForm.js';
 import { badge } from './remote/RemoteTab.js';
+import { fieldRow } from './remote/dialogs.js';
 import { options } from './options.js';
 import { t } from './i18n.js';
 
 const { h, fs, storage } = sdk;
+
+/** Path shown for a folder: '~' for the home (and a folder that went), '~/Documenti/Note' inside it. */
+const tildePath = id => fs.tildePath(id) ?? '~';
 
 /**
  * .term files: links to a terminal, opened by Terminal (contributes.fileTypes) with a double click.
@@ -142,7 +146,7 @@ function baseOf(owner, { tab, host }) {
 export const canSaveTerm = (owner, tab) => !!baseOf(owner, { tab });
 
 const deskFolder = () => fs.children(fs.root).find(n => n.system && n.type === 'folder' && n.name === DESK_NAME)?.id ?? null;
-const fileName = name => `${String(name).replace(/[\\/:*?"<>|\x00-\x1f]+/g, '_').replace(/\s+/g, ' ').trim().slice(0, 80) || 'terminal'}.term`;
+const fileName = name => `${fs.cleanName(name, { portable: true }).slice(0, 80).trim() || 'terminal'}.term`;
 
 /** A name not used yet in the folder: 'web-01.term', 'web-01 (2).term'… */
 function freeName(folder, name) {
@@ -179,102 +183,82 @@ export async function addTermToDesk(owner, what) {
   sdk.notifications?.send?.({ text: t('file.onDesk', { name: node.name }), level: 'success' });
 }
 
-/** The fields of the protocol's password (or key) shown with these values, to keep it in the file. */
-function secretInputs(protocol, values) {
-  return protocol?.fields?.filter(f => f.secret && (!f.when || Object.entries(f.when).every(([k, want]) => (Array.isArray(want) ? want.includes(values[k]) : values[k] === want)))) ?? [];
-}
-
 /** «Save as link (.term)…»: where, what to keep in it, and maybe the password. */
-export function saveTermDialog(owner, what) {
+export async function saveTermDialog(owner, what) {
   const base = baseOf(owner, what);
   if (!base) return owner.error(t('file.cannot'));
   const local = base.protocol === 'local';
   const protocol = owner.data.protocols.find(p => p.id === base.protocol);
   let folder = deskFolder() ?? fs.root;
-  const name = h('input', { type: 'text', value: fileName(base.name).replace(/\.term$/, ''), maxLength: 80, spellcheck: 'false' });
-  const where = h('input', { type: 'text', value: tildePath(folder), readOnly: true, tabIndex: -1 });
-  const cwd = h('input', { type: 'text', value: base.cwd ?? '', spellcheck: 'false', placeholder: local ? '~/Documenti' : '/var/www' });
-  const command = h('input', { type: 'text', value: '', spellcheck: 'false', placeholder: local ? 'ls -l' : '' });
-  const openAs = h('select', {},
+  const name = h('input', { class: 'ctl-text', type: 'text', value: fileName(base.name).replace(/\.term$/, ''), maxLength: 80, spellcheck: 'false' });
+  const where = h('input', { class: 'ctl-text', type: 'text', value: tildePath(folder), readOnly: true, tabIndex: -1 });
+  const cwd = h('input', { class: 'ctl-text', type: 'text', value: base.cwd ?? '', spellcheck: 'false', placeholder: local ? '~/Documenti' : '/var/www' });
+  const command = h('input', { class: 'ctl-text', type: 'text', value: '', spellcheck: 'false', placeholder: local ? 'ls -l' : '' });
+  const openAs = h('select', { class: 'ctl-select' },
     h('option', { value: '' }, t('file.openDefault', { how: t(`options.openTerm.${options.get('openTerm')}`) })),
     h('option', { value: 'tab' }, t('options.openTerm.tab')),
     h('option', { value: 'window' }, t('options.openTerm.window')));
   const keep = h('input', { type: 'checkbox' });
   const remembered = !!base.host?.remembered;
-  const fields = local ? [] : secretInputs(protocol, base.values);
-  const typed = {};
-  const secretBox = h('div', { class: 'tm-fields', hidden: true }, ...(remembered ? [h('small', { class: 'tm-hint' }, t('file.passwordSaved'))] : fields.map(f => {
-    const input = h('input', {
-      type: f.type === 'password' ? 'password' : 'text', autocomplete: 'off', spellcheck: 'false',
-      placeholder: f.type === 'file' ? '~/.ssh/id_ed25519' : '',
-      oninput: () => { typed[f.key] = input.value; },
-    });
-    return h('label', { class: 'tm-field' }, h('span', {}, sdk.term.text(f.label)), input);
-  })));
+  // The password (or key) of the protocol, to keep it in the file: asked here unless the host keeps one
+  const fields = local ? [] : protocol?.fields ?? [];
+  const values = withDefaults(fields, { ...base.values });
+  const secrets = fields.some(f => f.secret && shown(f, values));
+  const secretForm = secrets && !remembered
+    ? fieldsForm(fields, { t, only: 'secret', values: base.values, text: v => sdk.term.text(v), filePlaceholder: '~/.ssh/id_ed25519', pickFile: o => pickFile(owner.openWindow, o) })
+    : null;
+  const secretBox = h('div', { class: 'tm-secret', hidden: true }, remembered ? h('small', { class: 'tm-hint' }, t('file.passwordSaved')) : secretForm?.el);
   keep.addEventListener('change', () => { secretBox.hidden = !keep.checked; });
-  const error = h('p', { class: 'tm-error', role: 'alert', hidden: true });
-  const fail = message => { error.textContent = message; error.hidden = false; };
 
   const change = async () => {
     const node = await pickFile(owner.openWindow, { kind: 'folder', title: t('file.pickFolder') });
     if (node) { folder = node.id; where.value = tildePath(folder); }
   };
 
+  // Written before the box closes: what goes wrong is said in it
   const save = async () => {
-    error.hidden = true;
     const file = fileName(name.value);
-    if (!fs.get(folder)) return fail(t('file.noFolder', { path: where.value }));
-    if (fs.children(folder).some(n => n.name.toLowerCase() === file.toLowerCase())) return fail(t('file.exists', { name: file }));
+    if (!fs.get(folder)) return t('file.noFolder', { path: where.value });
+    if (fs.children(folder).some(n => n.name.toLowerCase() === file.toLowerCase())) return t('file.exists', { name: file });
     const path = cwd.value.trim();
-    if (path && local && fs.resolve(path)?.type !== 'folder') return fail(t('file.noFolder', { path }));
-    if (path && !local && !path.startsWith('/')) return fail(t('file.serverFolder'));
+    if (path && local && fs.resolve(path)?.type !== 'folder') return t('file.noFolder', { path });
+    if (path && !local && !path.startsWith('/')) return t('file.serverFolder');
     const extra = { cwd: path || undefined };
     if (local && command.value.trim()) extra.command = command.value.trim();
     if (!local && command.value.trim()) extra.values = { ...base.values, command: command.value.trim() };
     if (openAs.value) extra.open = openAs.value;
-    try {
-      if (keep.checked) {
-        if (remembered) extra.sealed = await sdk.term.seal({ host: base.host.id });
-        else {
-          const secret = {};
-          for (const f of fields) {
-            const v = typed[f.key]?.trim?.() ? typed[f.key] : '';
-            if (!v) continue;
-            if (f.type === 'file') {
-              const key = fs.resolve(v.startsWith('~') || v.startsWith('/') ? v : `~/${v}`);
-              if (key?.type !== 'file') return fail(t('err.noSuchFile', { path: v }));
-              secret[f.key] = await fs.read(key.id);
-            } else secret[f.key] = v;
-          }
-          if (!Object.keys(secret).length) return fail(t('file.noPassword'));
-          extra.sealed = await sdk.term.seal({ protocol: base.protocol, values: extra.values ?? base.values, secret });
-        }
+    if (keep.checked) {
+      if (remembered) extra.sealed = await sdk.term.seal({ host: base.host.id });
+      else {
+        const secret = secretForm ? await secretForm.secret() : {};
+        for (const [k, v] of Object.entries(secret)) if (!String(v).trim()) delete secret[k];
+        if (!Object.keys(secret).length) return t('file.noPassword');
+        extra.sealed = await sdk.term.seal({ protocol: base.protocol, values: extra.values ?? base.values, secret });
       }
-      const term = JSON.parse(JSON.stringify(linkOf(base, extra)));   // undefined fields go
-      const node = await writeTerm(folder, file, term);
-      dialog.close();
-      sdk.notifications?.send?.({ text: t('file.saved', { path: tildePath(node.id) }), level: 'success' });
-    } catch (err) {
-      fail(err.message);
     }
+    const term = JSON.parse(JSON.stringify(linkOf(base, extra)));   // undefined fields go
+    const node = await writeTerm(folder, file, term);
+    sdk.notifications?.send?.({ text: t('file.saved', { path: tildePath(node.id) }), level: 'success' });
   };
 
   const summary = local ? null : h('div', { class: 'tm-summary' }, badge(base.protocol), h('code', {}, termAddress({ protocol: base.protocol, values: base.values })));
-  const dialog = owner.showDialog(h('div', { class: 'tm-dialog', role: 'dialog', 'aria-modal': 'true', onkeydown: e => { if (e.key === 'Enter' && e.target.tagName === 'INPUT' && e.target.type !== 'checkbox') { e.preventDefault(); save(); } } },
-    h('h2', {}, t('file.saveTitle')),
-    h('div', { class: 'tm-dialog-body' },
-      h('label', { class: 'tm-field' }, h('span', {}, t('file.name')), h('div', { class: 'tm-suffix' }, name, h('span', {}, '.term'))),
-      h('div', { class: 'tm-field' }, h('span', {}, t('file.folder')), h('div', { class: 'tm-row' }, where, h('button', { type: 'button', class: 'tm-btn', onclick: change }, t('file.change')))),
+  const answer = sdk.messageBox(owner.win, {
+    title: t('file.saveTitle'),
+    width: 440,
+    content: h('div', { class: 'sh-fields' },
+      fieldRow(t('file.name'), name, { beside: h('span', { class: 'tm-suffix' }, '.term') }),
+      fieldRow(t('file.folder'), where, { beside: h('button', { type: 'button', class: 'ctl-btn', onclick: change }, t('file.change')) }),
       summary,
-      h('label', { class: 'tm-field' }, h('span', {}, t(local ? 'file.cwdLocal' : 'file.cwdRemote')), cwd),
-      (local || base.protocol === 'ssh') && h('label', { class: 'tm-field' }, h('span', {}, t(local ? 'file.command' : 'file.commandRemote')), command, !local && h('small', {}, t('file.commandRemoteHint'))),
-      h('label', { class: 'tm-field' }, h('span', {}, t('file.openAs')), openAs),
-      !local && (remembered || fields.length) && h('label', { class: 'tm-check' }, keep, t('file.keepPassword')),
+      fieldRow(t(local ? 'file.cwdLocal' : 'file.cwdRemote'), cwd),
+      (local || base.protocol === 'ssh') && fieldRow(t(local ? 'file.command' : 'file.commandRemote'), command, { hint: !local && t('file.commandRemoteHint') }),
+      fieldRow(t('file.openAs'), openAs),
+      !local && (remembered || secrets) && h('label', { class: 'tm-check' }, keep, t('file.keepPassword')),
       !local && secretBox,
-      !local && h('small', { class: 'tm-hint' }, t('file.passwordHint')),
-      error),
-    h('div', { class: 'tm-dialog-foot' },
-      h('button', { type: 'button', class: 'tm-btn', onclick: () => dialog.close() }, t('remote.cancel')),
-      h('button', { type: 'button', class: 'tm-btn primary', onclick: save }, t('file.save')))));
+      !local && h('small', { class: 'tm-hint' }, t('file.passwordHint'))),
+    buttons: ['cancel', { value: 'save', label: t('file.save'), primary: true }],
+    validate: save,
+  });
+  name.focus();
   name.select();
+  await answer;
 }

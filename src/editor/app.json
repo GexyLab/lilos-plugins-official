@@ -1,6 +1,6 @@
 {
   "id": "editor",
-  "version": "1.5.1",
+  "version": "1.6.0",
   "kind": "local",
   "name": "Editor",
   "description": "Text and code editor with tabs, syntax highlighting, suggestions and checking of JSON, CSS and HTML.",
@@ -8,6 +8,7 @@
   "icon": { "glyph": "code", "color": "#7c5cdb" },
   "publisher": { "id": "lilos", "name": "lilOS" },
   "sdk": "2",
+  "lilos": ">=1.21.0",
   "system": true,
   "entrypoints": {
     "main": { "kind": "window", "params": {

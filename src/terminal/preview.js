@@ -4,11 +4,9 @@
  * where the browser cannot write it), and the address as the note. Thumbnails (desk, File Manager)
  * ask for small ones with `size`.
  */
+import { previewHandler, canvasToImage } from '../shared/preview.js';
 import { parseTerm, termAddress } from './termFile.js';
 
-const SIZE = 512;
-const MIN_SIZE = 16;
-const MAX_SIZE = 2048;
 const TILE = '#2b3038';
 const BADGES = {
   ssh: ['SSH', '#dff3ec', '#1d6f57'], telnet: ['TELNET', '#fdeccf', '#8a5a0f'],
@@ -16,16 +14,14 @@ const BADGES = {
 };
 
 export function filePreview({ lilos }) {
-  lilos.handle(async data => {
-    if (typeof data?.file !== 'string') return null;
+  previewHandler(lilos, async (file, size) => {
     let term;
-    try { term = parseTerm(await lilos.files.read(data.file)); } catch { return null; }
-    const size = Number.isFinite(data.size) ? Math.min(MAX_SIZE, Math.max(MIN_SIZE, Math.round(data.size))) : SIZE;
-    return { image: await draw(term, size), note: termAddress(term) };
-  });
+    try { term = parseTerm(await lilos.files.read(file)); } catch { return null; }
+    return { image: await canvasToImage(draw(term, size), 0.9), note: termAddress(term) };
+  }, { size: 512 });
 }
 
-async function draw(term, size) {
+function draw(term, size) {
   const canvas = document.createElement('canvas');
   canvas.width = canvas.height = size;
   const ctx = canvas.getContext('2d');
@@ -58,7 +54,5 @@ async function draw(term, size) {
     ctx.textBaseline = 'middle';
     ctx.fillText(text, x + 4 * s, y + hgt / 2 + 0.5 * s);
   }
-  const encode = type => new Promise(resolve => canvas.toBlob(resolve, type, 0.9));
-  const webp = await encode('image/webp');
-  return webp?.type === 'image/webp' ? webp : encode('image/png');
+  return canvas;
 }

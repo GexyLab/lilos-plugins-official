@@ -3,14 +3,12 @@
  * pattern a backslash quotes the next char: quoted parts of a word come in already escaped
  * (escapeGlob), so `"*".txt` matches only the name `*.txt`.
  */
-const CLASSES = {
-  alpha: 'a-zA-Z', digit: '0-9', alnum: 'a-zA-Z0-9', upper: 'A-Z', lower: 'a-z', space: '\\s', blank: ' \\t',
-  punct: '!-\\/:-@\\[-`{-~', xdigit: '0-9A-Fa-f', word: '\\w', cntrl: '\\x00-\\x1f\\x7f', print: '\\x20-\\x7e', graph: '\\x21-\\x7e',
-};
+import { escapeRegExp } from '../../shared/text.js';
+import { POSIX_CLASSES } from './classes.js';
+
 const cache = new Map();
 
 export const escapeGlob = s => String(s).replace(/[\\*?[\]]/g, '\\$&');
-const escapeRegex = s => s.replace(/[.*+?^${}()|[\]\\/-]/g, '\\$&');
 
 /** True if the pattern has an unquoted * ? or [ … ]. */
 export function hasGlob(pattern) {
@@ -44,7 +42,7 @@ export function patternSource(pattern) {
   for (let i = 0; i < pattern.length; i++) {
     const c = pattern[i];
     if (c === '\\') {
-      if (i + 1 < pattern.length) out += escapeRegex(pattern[++i]);
+      if (i + 1 < pattern.length) out += escapeRegExp(pattern[++i]);
       else out += '\\\\';
     } else if (c === '*') out += '[\\s\\S]*';
     else if (c === '?') out += '[\\s\\S]';
@@ -57,7 +55,7 @@ export function patternSource(pattern) {
         if (d === '[' && pattern[j + 1] === ':') {
           const close = pattern.indexOf(':]', j + 2);
           const name = pattern.slice(j + 2, close);
-          cls += CLASSES[name] ?? '';
+          cls += POSIX_CLASSES[name] ?? '';
           j = close + 1;
         } else if (d === '\\') cls += '\\' + (pattern[++j] ?? '\\');
         else if (d === '-' && j > i + 1 && j < end - 1 && cls && cls !== '^') cls += '-';
@@ -65,7 +63,7 @@ export function patternSource(pattern) {
       }
       out += `[${cls}]`;
       i = end;
-    } else out += escapeRegex(c);
+    } else out += escapeRegExp(c);
   }
   return out;
 }
