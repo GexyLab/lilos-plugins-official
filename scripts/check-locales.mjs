@@ -3,11 +3,15 @@
  *   errors    keys used with t('…') that English lacks; texts of app.json without their '@' key
  *             in a language; languages without every key of English
  *   warnings  keys of English that no t('…') uses (keys built at run time look unused too)
+ * The strings of the shared components (src/shared/locales.json) are checked too: every language
+ * with every key of English, the keys their code uses in English. An app that uses shared
+ * components knows the parts of them it gets (scripts/shared-locales.mjs).
  *
- *   node scripts/check-locales.mjs [id…]     every app with a locales.json by default
+ *   node scripts/check-locales.mjs [id…]     every app with a locales.json by default, and the shared strings
  */
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
+import { sharedTable, checkSharedTable, sharedSources, withShared } from './shared-locales.mjs';
 
 const walk = dir => readdirSync(dir, { withFileTypes: true }).flatMap(e => (e.isDirectory() ? (e.name === 'public' ? [] : walk(join(dir, e.name))) : [join(dir, e.name)]));
 
@@ -42,16 +46,35 @@ function manifestKeys(m) {
   return keys;
 }
 
+const keysUsed = file => [...readFileSync(file, 'utf8').matchAll(/\bt\(\s*(['"`])([\w.:-]+)\1/g)].map(m => m[2]);
+
 let failed = false;
-const ids = process.argv.slice(2).length ? process.argv.slice(2) : readdirSync('src').filter(id => existsSync(join('src', id, 'locales.json')));
+const SHARED = sharedTable();
+{
+  const errors = checkSharedTable(SHARED);
+  const en = SHARED.en?.strings ?? {}, used = new Set();
+  for (const file of sharedSources()) {
+    // Keys chosen at run time (t(a ? 'shared.x.a' : 'shared.x.b')) count as used too
+    for (const m of readFileSync(file, 'utf8').matchAll(/(['"`])(shared\.[\w.-]+)\1/g)) used.add(m[2]);
+    // Other keys are the app's (a component may use one every app has: 'error.generic')
+    for (const key of keysUsed(file)) if (key.startsWith('shared.') && !Object.hasOwn(en, key)) errors.push(`${file}: "${key}" non è in en`);
+  }
+  const unused = Object.keys(en).filter(k => !used.has(k));
+  console.log(`shared: ${Object.keys(en).length} chiavi, ${errors.length} errori${unused.length ? `, non usate (o costruite al volo): ${unused.join(', ')}` : ''}`);
+  for (const e of errors) console.log(`  ${e}`);
+  if (errors.length) failed = true;
+}
+const ids = process.argv.slice(2).length ? process.argv.slice(2) : readdirSync('src').filter(id => id !== 'shared' && existsSync(join('src', id, 'locales.json')));
 for (const id of ids) {
-  const table = JSON.parse(readFileSync(join('src', id, 'locales.json'), 'utf8'));
-  const en = table.en?.strings ?? {};
+  const own = JSON.parse(readFileSync(join('src', id, 'locales.json'), 'utf8'));
   const errors = [], used = new Set();
+  let table = own;
+  try { table = withShared(id, own, SHARED); } catch (err) { errors.push(err.message); }
+  const en = table.en?.strings ?? {};
   for (const file of walk(join('src', id)).filter(f => f.endsWith('.js'))) {
-    for (const m of readFileSync(file, 'utf8').matchAll(/\bt\(\s*(['"`])([\w.:-]+)\1/g)) {
-      used.add(m[2]);
-      if (!Object.hasOwn(en, m[2])) errors.push(`${file}: "${m[2]}" non è in en`);
+    for (const key of keysUsed(file)) {
+      used.add(key);
+      if (!Object.hasOwn(en, key)) errors.push(`${file}: "${key}" non è in en`);
     }
   }
   const manifest = JSON.parse(readFileSync(join('src', id, 'app.json'), 'utf8'));
@@ -60,8 +83,8 @@ for (const id of ids) {
     for (const key of manifestKeys(manifest)) if (!Object.hasOwn(entry.strings ?? {}, key)) errors.push(`${lang}: manca ${key} (testo del manifesto)`);
     if (lang !== 'en') for (const key of Object.keys(en)) if (!Object.hasOwn(entry.strings ?? {}, key)) errors.push(`${lang}: manca ${key}`);
   }
-  const unused = Object.keys(en).filter(k => !k.startsWith('@') && !used.has(k));
-  console.log(`${id}: ${Object.keys(en).length} chiavi, ${errors.length} errori${unused.length ? `, non usate (o costruite al volo): ${unused.join(', ')}` : ''}`);
+  const unused = Object.keys(en).filter(k => !k.startsWith('@') && !k.startsWith('shared.') && !used.has(k));
+  console.log(`${id}: ${Object.keys(own.en?.strings ?? {}).length} chiavi, ${errors.length} errori${unused.length ? `, non usate (o costruite al volo): ${unused.join(', ')}` : ''}`);
   for (const e of errors) console.log(`  ${e}`);
   if (errors.length) failed = true;
 }

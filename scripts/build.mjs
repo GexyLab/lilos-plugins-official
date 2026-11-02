@@ -4,6 +4,8 @@
  * installs them as they are, without building anything.
  * The translations (src/<id>/locales.json, see lilOS's SDK i18n.js) go to apps/<id>/locales.json,
  * named by `locales` in the manifest; the build stops if a language lacks keys of English.
+ * An app that uses shared components (src/shared) gets their strings in it too, the parts it needs
+ * of src/shared/locales.json (scripts/shared-locales.mjs).
  * It also stops if the credits of the Control Panel miss a library (scripts/credits.mjs).
  * Services (entry points of kind 'service') run in the kernel's isolate, where nothing can be
  * imported: src/<id>/services/*.js are copied as they are; src/<id>/kernel/<name>.js are bundled
@@ -18,8 +20,12 @@ import { copyFileSync, existsSync, readFileSync, readdirSync, writeFileSync } fr
 import { join, relative, sep, resolve as resolvePath } from 'node:path';
 import { appConfig } from '../vite.config.js';
 import { checkCredits } from './credits.mjs';
+import { sharedTable, checkSharedTable, withShared } from './shared-locales.mjs';
 
 checkCredits();
+const SHARED = sharedTable();
+const sharedErrors = checkSharedTable(SHARED);
+if (sharedErrors.length) throw new Error(`src/shared/locales.json: ${sharedErrors.join('; ')}`);
 
 const APPS = [
   { id: 'files', entry: 'FilesApp.js' },
@@ -74,8 +80,13 @@ for (const { id, entry } of APPS.filter(a => !process.argv[2] || process.argv.sl
   }
   const locales = join('src', id, 'locales.json');
   if (existsSync(locales)) {
-    checkLocales(id, JSON.parse(readFileSync(locales, 'utf8')));
-    copyFileSync(locales, join(pkg, 'locales.json'));
+    const table = JSON.parse(readFileSync(locales, 'utf8'));
+    checkLocales(id, table);
+    // With the strings of the shared components it uses; as it is when it uses none
+    const full = withShared(id, table, SHARED);
+    if (full === table) copyFileSync(locales, join(pkg, 'locales.json'));
+    else writeFileSync(join(pkg, 'locales.json'), `${JSON.stringify(full, null, 2)}
+`);
   }
   const files = {};
   for (const file of walk(join(pkg, 'dist')).sort()) files[relative(pkg, file).split(sep).join('/')] = sha256(readFileSync(file));
