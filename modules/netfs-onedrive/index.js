@@ -9,17 +9,16 @@ import { fetcher, bearerCall } from './lib/shared/cloud.js';
 import { chunks, skipFirst } from './lib/shared/streams.js';
 import { folderParts, under } from './lib/shared/paths.js';
 import { sleep, retryDelay } from './lib/shared/time.js';
-import { needPaths } from './lib/shared/kernel.js';
+import { needPaths, needKernel } from './lib/shared/kernel.js';
 
 /**
  * OneDrive for the Rete folder (service 'netfs.onedrive', see the kernel's net/drivers.js): the
  * user's own OneDrive, personal or of work or school, through Microsoft Graph.
  *
- * Sign-in: the provider's page in a window (OAuth 2.0 authorization code with PKCE, the kernel's
- * net/signin.js), with the app each lilOS installation registers on Azure as a public client
- * ("Mobile and desktop applications" platform: the kernel redeems the code itself, with no
- * secret). The refresh token is the connection's secret; Microsoft gives a new one at each
- * renewal, and the driver hands it to the kernel (saveSecret). Access tokens stay in memory.
+ * Sign-in: the kernel's (`oauth`, net/oauth.js), with the Microsoft app each lilOS installation
+ * registers on Azure as a public client, set once for every protocol in Control Panel → Microsoft
+ * app. The refresh token is the connection's secret; connect() gets the access token from
+ * ctx.tokens, which the kernel renews (and keeps the new refresh token Microsoft gives).
  *
  * Shared folders: Graph's list of what others shared (sharedWithMe) stops working in November
  * 2026, so the folders shared with the user open through their shortcuts, the ones added to "My
@@ -28,11 +27,8 @@ import { needPaths } from './lib/shared/kernel.js';
  *
  * Downloads resume (Range); uploads start over (an upload session cannot add to a file). Removing
  * sends to OneDrive's recycle bin. Settings (the module's configuration, Control Panel → OneDrive):
- *   clientId   the application (client) ID of the app on Azure
- *   accounts   'common' (personal and work or school) | 'organizations' | 'consumers' | 'tenant'
- *   tenant     the directory (tenant) ID or domain, with accounts 'tenant'
  *   shared     open the shared folders added as shortcuts (asks for Files.ReadWrite.All)
- * For tests only: loginUrl and graphUrl replace Microsoft's addresses.
+ * For tests only: graphUrl replaces Microsoft's address.
  */
 const SIMPLE_MAX = 4 << 20;                  // bigger files go by upload session
 const CHUNK = 320 * 1024 * 32;               // 10 MiB: upload pieces are multiples of 320 KiB
@@ -48,21 +44,11 @@ const label = (en, it) => ({ en, it });
 let conf = {};
 let moduleCtx = null;
 
-const loginBase = () => String(conf.loginUrl || 'https://login.microsoftonline.com').replace(/\/+$/, '');
 const graphBase = () => String(conf.graphUrl || 'https://graph.microsoft.com/v1.0').replace(/\/+$/, '');
-const clientId = () => (typeof conf.clientId === 'string' ? conf.clientId.trim() : '');
 const sharedOn = () => conf.shared === true;
 
-/** The directory the sign-in goes to: common, organizations, consumers, or one tenant. */
-function authority() {
-  const kind = ['common', 'organizations', 'consumers', 'tenant'].includes(conf.accounts) ? conf.accounts : 'common';
-  if (kind !== 'tenant') return kind;
-  const tenant = String(conf.tenant ?? '').trim();
-  if (!/^[\w.-]{1,100}$/.test(tenant)) throw netError('invalid', 'ID della directory (tenant) non valido nelle impostazioni di OneDrive');
-  return tenant;
-}
-
-const scopes = () => ['offline_access', 'User.Read', sharedOn() ? 'Files.ReadWrite.All' : 'Files.ReadWrite'].join(' ');
+/** What the sign-in asks Microsoft for (the kernel adds offline_access, openid, profile). */
+const scopes = () => ['User.Read', sharedOn() ? 'Files.ReadWrite.All' : 'Files.ReadWrite'];
 
 /** '/a b/c' → '/a%20b/c' (each part encoded, ':' and '#' too). */
 const encodePath = path => path.split('/').map(encodeURIComponent).join('/');
@@ -79,65 +65,6 @@ function checkName(name) {
 
 /** fetch with a time limit until the answer starts (the body may then take its time). */
 const timedFetch = fetcher('OneDrive');
-
-// ---------- Sign-in and tokens ----------
-
-/** What Microsoft's errors at sign-in mean for whoever set up the app on Azure. */
-function tokenError(body, status) {
-  const codes = Array.isArray(body?.error_codes) ? body.error_codes : [];
-  const said = String(body?.error_description ?? body?.error ?? `errore ${status}`).split(/\r?\n/)[0].slice(0, 240);
-  if (codes.includes(9002327) || codes.includes(7000218) || codes.includes(700025)) {
-    return netError('invalid', 'Su Azure l’indirizzo di ritorno di lilOS va registrato nella piattaforma «Applicazioni per dispositivi mobili e desktop», con «Consenti flussi client pubblici» attivo');
-  }
-  if (codes.includes(50011) || codes.includes(500113)) return netError('invalid', 'L’indirizzo di ritorno di lilOS non è registrato nell’app su Azure (Pannello di controllo → OneDrive lo mostra)');
-  if (codes.includes(700016)) return netError('invalid', 'App non trovata su Azure: controlla l’ID dell’applicazione e gli account ammessi (Pannello di controllo → OneDrive)');
-  if (['invalid_grant', 'interaction_required', 'consent_required', 'login_required'].includes(body?.error)) return netError('auth', `Serve un nuovo accesso (${said})`);
-  if (body?.error === 'invalid_client' || body?.error === 'unauthorized_client') return netError('invalid', `App su Azure non valida: ${said}`);
-  return netError(status >= 500 ? 'unreachable' : 'invalid', `Accesso a Microsoft non riuscito: ${said}`);
-}
-
-async function tokenRequest(form) {
-  const res = await timedFetch(`${loginBase()}/${encodeURIComponent(authority())}/oauth2/v2.0/token`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded', Accept: 'application/json' },
-    body: new URLSearchParams({ client_id: clientId(), scope: scopes(), ...form }),
-  });
-  const body = await res.json().catch(() => null);
-  if (!res.ok || typeof body?.access_token !== 'string') throw tokenError(body, res.status);
-  return body;
-}
-
-/** The access token of a session, renewed with the refresh token when it is about to end. */
-class Tokens {
-  #refresh; #save; #access = null; #until = 0; #renewing = null;
-
-  constructor(refresh, save, first = null) {
-    this.#refresh = refresh;
-    this.#save = save;
-    if (first) this.#keep(first);
-  }
-
-  #keep(body) {
-    this.#access = body.access_token;
-    this.#until = Date.now() + (Number(body.expires_in) || 3600) * 1000;
-    if (typeof body.refresh_token === 'string' && body.refresh_token && body.refresh_token !== this.#refresh) {
-      this.#refresh = body.refresh_token;
-      try { this.#save?.({ account: body.refresh_token }); } catch { /* the kernel logs it */ }
-    }
-  }
-
-  async get() {
-    if (this.#access && Date.now() < this.#until - 120_000) return this.#access;
-    return this.renew();
-  }
-
-  renew() {
-    this.#renewing ??= tokenRequest({ grant_type: 'refresh_token', refresh_token: this.#refresh })
-      .then(body => { this.#keep(body); return this.#access; })
-      .finally(() => { this.#renewing = null; });
-    return this.#renewing;
-  }
-}
 
 // ---------- Graph ----------
 
@@ -479,13 +406,6 @@ const driver = {
     },
   ],
 
-  ready() {
-    if (!clientId()) {
-      return label('An administrator must first enter the ID of the app registered on Azure (Control Panel → OneDrive)', 'Un amministratore deve prima inserire l’ID dell’app registrata su Azure (Pannello di controllo → OneDrive)');
-    }
-    return null;
-  },
-
   check(v) {
     cleanRoot(v.root);
   },
@@ -495,36 +415,25 @@ const driver = {
     return `onedrive://${v.account ?? ''}${root === '/' ? '' : root}`;
   },
 
-  signIn: {
-    start({ redirectUri, state, challenge }) {
-      if (!clientId()) throw netError('unsupported', 'App Azure non impostata (Pannello di controllo → OneDrive)');
-      const url = new URL(`${loginBase()}/${encodeURIComponent(authority())}/oauth2/v2.0/authorize`);
-      url.search = new URLSearchParams({
-        client_id: clientId(), response_type: 'code', redirect_uri: redirectUri, response_mode: 'query',
-        scope: scopes(), state, code_challenge: challenge, code_challenge_method: 'S256', prompt: 'select_account',
-      });
-      return url.href;
-    },
-
-    async finish({ code, redirectUri, verifier }) {
-      const body = await tokenRequest({ grant_type: 'authorization_code', code, redirect_uri: redirectUri, code_verifier: verifier });
-      if (typeof body.refresh_token !== 'string') throw netError('invalid', 'Microsoft non ha dato un accesso duraturo (manca offline_access)');
-      const session = new Session(new Tokens(body.refresh_token, null, body), '/', null);   // only the top: no paths to take apart
+  oauth: {
+    provider: 'microsoft',
+    scopes,
+    /** The account's e-mail address or user name, once its OneDrive answers. */
+    async account({ tokens }) {
+      const session = new Session(tokens, '/', null);   // only the top: no paths to take apart
       const me = await session.me();
       await session.check().catch(err => {
         throw err.net === 'not_found' || err.net === 'denied' ? netError('invalid', `L’account ${me} non ha un OneDrive (${err.message})`) : err;
       });
-      return { account: me, secret: body.refresh_token };
+      return me;
     },
   },
 
   async connect(values, ctx = {}) {
-    const { secret = {}, saveSecret = null } = ctx;
+    const { tokens } = needKernel(ctx, 'tokens');
     const paths = needPaths(ctx, moduleCtx);
-    if (!clientId()) throw netError('unsupported', 'App Azure non impostata (Pannello di controllo → OneDrive)');
-    if (typeof secret.account !== 'string' || !secret.account) throw netError('auth', 'Serve un nuovo accesso');
-    const tokens = new Tokens(secret.account, saveSecret);
-    await tokens.renew();
+    if (!tokens) throw netError('auth', 'Serve un nuovo accesso');
+    await tokens.get();
     const session = new Session(tokens, cleanRoot(values.root), paths);
     await session.check();
     return session;

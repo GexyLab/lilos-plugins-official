@@ -1,6 +1,6 @@
 # netfs-google
 
-Modulo del kernel che porta **Google Drive** e **Google Foto** nella cartella Rete, con un solo progetto Google Cloud per tutti e due. Sostituisce i moduli `netfs-gdrive` e `netfs-gphotos`: il kernel ne trasferisce le impostazioni (ID e segreto client) e le connessioni restano come sono.
+Modulo del kernel che porta **Google Drive** e **Google Foto** nella cartella Rete, con un solo progetto Google Cloud per tutti e due. Sostituisce i moduli `netfs-gdrive` e `netfs-gphotos`: il kernel ne trasferisce le impostazioni (ID e segreto client vanno nel Progetto Google del Pannello di controllo) e le connessioni restano come sono.
 
 ## Google Drive
 
@@ -24,7 +24,7 @@ Dal 31 marzo 2025 Google non lascia più leggere tutta la libreria alle app este
 
 ## Impostazioni
 
-Ogni installazione usa il **proprio progetto Google Cloud**. Un amministratore lo imposta nel **Pannello di controllo** (schede Google Drive e Google Foto): ID client, **segreto client** (cifrato nel kernel, non si rivede), tipo di client; per Drive «Condivisi con me» e il formato dei documenti copiati; **Google Foto** si può spegnere (resta solo Drive).
+Ogni installazione usa il **proprio progetto Google Cloud**. Un amministratore lo imposta in **Pannello di controllo → Progetto Google**: ID client, **segreto client** (cifrato nel kernel, non si rivede), tipo di client; l'accesso a Google lo fa il kernel. Nelle schede Google Drive e Google Foto restano le impostazioni del modulo: per Drive «Condivisi con me» e il formato dei documenti copiati; **Google Foto** si può spegnere (resta solo Drive).
 
 1. [console.cloud.google.com](https://console.cloud.google.com) → nuovo progetto → **API e servizi** → abilita **Google Drive API** e, per Google Foto, **Google Photos Picker API** e **Photos Library API**.
 2. **Schermata di consenso OAuth**: **Interno** con Google Workspace; altrimenti **Esterno** e poi **Pubblica l'app** (in «Test» l'accesso scade ogni 7 giorni; un'app non verificata con l'ambito `drive` ha al massimo 100 utenti). Ambiti: `https://www.googleapis.com/auth/drive`; per Google Foto `photospicker.mediaitems.readonly`, `photoslibrary.appendonly`, `photoslibrary.readonly.appcreateddata`, `photoslibrary.edit.appcreateddata`.

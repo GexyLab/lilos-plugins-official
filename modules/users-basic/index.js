@@ -1,6 +1,5 @@
-import { readFile, writeFile, rename, stat } from 'node:fs/promises';
 import { randomBytes, scrypt as scryptCallback, timingSafeEqual, createHash } from 'node:crypto';
-import { join } from 'node:path';
+import { needKernel } from './lib/shared/kernel.js';
 import { promisify } from 'node:util';
 
 /**
@@ -51,45 +50,7 @@ async function verifyPassword(password, stored) {
   return actual.length === expected.length && timingSafeEqual(actual, expected);
 }
 
-/** users.json, validated on every read: it is edited by hand too. */
-class Store {
-  #file;
-  #data = { version: 1, users: [] };
-  #mtime = -1;
-  #queue = Promise.resolve();
-
-  constructor(file) { this.#file = file; }
-
-  /** Current data (read again if the file changed). */
-  async read() {
-    const s = await stat(this.#file).catch(() => null);
-    if (!s) {
-      this.#data = { version: 1, users: [] };
-      this.#mtime = 0;
-    } else if (s.mtimeMs !== this.#mtime) {
-      const raw = JSON.parse(await readFile(this.#file, 'utf8'));
-      this.#data = clean(raw);
-      this.#mtime = s.mtimeMs;
-    }
-    return this.#data;
-  }
-
-  /** Runs fn(data) and saves, one change at a time. Returns what fn returns. */
-  change(fn) {
-    const run = this.#queue.then(async () => {
-      const data = await this.read();
-      const result = await fn(data);
-      const tmp = `${this.#file}.tmp`;
-      await writeFile(tmp, JSON.stringify(data, null, 2), { mode: 0o600 });
-      await rename(tmp, this.#file);
-      this.#mtime = (await stat(this.#file)).mtimeMs;
-      return result;
-    });
-    this.#queue = run.catch(() => {});
-    return run;
-  }
-}
-
+/** users.json, validated on every read: it is edited by hand too (read again when it changed). */
 function clean(raw) {
   const users = [];
   for (const u of Array.isArray(raw?.users) ? raw.users : []) {
@@ -111,8 +72,8 @@ let store, ctx, limits;
 
 export default {
   async init(context) {
-    ctx = context;
-    store = new Store(join(ctx.dir, 'users.json'));
+    ctx = needKernel(context, 'jsonStore');
+    store = ctx.jsonStore('users.json', { clean, watch: true, pretty: true });
     const users = (await store.read()).users;
     const sessionMs = (Number(ctx.config.sessionDays) || 30) * DAY;
     const idleMs = (Number(ctx.config.idleDays) || 7) * DAY;

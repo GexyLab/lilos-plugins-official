@@ -5,17 +5,17 @@ import { parseXml, kid, kids, txt } from './lib/shared/xml.js';
 import { chunks } from './lib/shared/streams.js';
 import { folderParts } from './lib/shared/paths.js';
 import { sleep } from './lib/shared/time.js';
-import { needLookup } from './lib/shared/kernel.js';
+import { needLookup, needKernel } from './lib/shared/kernel.js';
 
 /**
  * Azure Blob Storage for the Rete folder: service 'netfs.azblob', see the kernel's net/drivers.js.
  * A connection is one container of a storage account (and, if the user wants, a folder in it).
  *
  * Three ways in: the account key (Shared Key: requests signed here), a SAS token (added to every
- * address as it is), or Microsoft Entra (the provider's page, the kernel's net/signin.js: a token
- * for https://storage.azure.com; the user needs a data role such as "Storage Blob Data
- * Contributor"). Entra needs an app registered on Azure, set by an admin in the module's settings
- * (it may be the same app as OneDrive's, with the Azure Storage permission added).
+ * address as it is), or Microsoft Entra (the kernel's sign-in, `oauth`: a token for
+ * https://storage.azure.com from ctx.tokens; the user needs a data role such as "Storage Blob Data
+ * Contributor"). Entra uses the Microsoft app of Control Panel → Microsoft app (OneDrive's too),
+ * with the Azure Storage permission added; key and SAS need no app.
  *
  * Without a hierarchical namespace folders are parts of blob names ('Foto/2026/a.jpg'); an empty
  * folder is an empty blob named as the folder with the metadata hdi_isfolder=true (as Data Lake
@@ -24,27 +24,15 @@ import { needLookup } from './lib/shared/kernel.js';
  * to the dfs endpoint, in one request. Big files go in blocks of 8 MB (Put Block + Put Block
  * List), each tried again on its own. Downloads resume. Blobs in the Archive tier have a badge and
  * cannot be read until rehydrated.
- * For tests only: settings loginUrl replaces Microsoft's sign-in address.
  */
 const VERSION = '2021-12-02';
 const MAX_PAGES = 100;               // 100 × 5000 names at most in a listing
 const SINGLE_MAX = 32 << 20;         // known and up to this: one Put Blob
 const BLOCK = 8 << 20;
 const MAX_BLOCKS = 50_000;
-const REQUEST_TIMEOUT = 60_000;
 const COPY_WAIT = 30 * 60_000;       // longest wait for a server-side copy
 
 const label = (en, it) => ({ en, it });
-
-let conf = {};
-const loginBase = () => String(conf.loginUrl || 'https://login.microsoftonline.com').replace(/\/+$/, '');
-const clientId = () => (typeof conf.clientId === 'string' ? conf.clientId.trim() : '');
-const tenant = () => {
-  const t = String(conf.tenant ?? '').trim() || 'organizations';
-  if (!/^[\w.-]{1,100}$/.test(t)) throw netError('invalid', 'Directory (tenant) non valida nelle impostazioni di Azure Blob Storage');
-  return t;
-};
-const SCOPES = 'https://storage.azure.com/user_impersonation offline_access openid profile';
 
 // ---------- Addresses ----------
 
@@ -126,68 +114,6 @@ export function azError(status, code, body, { entra = false } = {}) {
   if (status === 413) return netError('denied', 'File troppo grande');
   if (status >= 500 || status === 429) return netError('unreachable', `servizio non disponibile (${said})`);
   return netError('invalid', said);
-}
-
-// ---------- Entra (Microsoft's sign-in) ----------
-
-function tokenError(body, status) {
-  const said = String(body?.error_description ?? body?.error ?? `errore ${status}`).split(/\r?\n/)[0].slice(0, 240);
-  if (['invalid_grant', 'interaction_required', 'consent_required', 'login_required'].includes(body?.error)) return netError('auth', `Serve un nuovo accesso (${said})`);
-  if (body?.error === 'invalid_client' || body?.error === 'unauthorized_client') return netError('invalid', `App su Azure non valida: ${said}`);
-  return netError(status >= 500 ? 'unreachable' : 'invalid', `Accesso a Microsoft non riuscito: ${said}`);
-}
-
-async function tokenRequest(form) {
-  let res;
-  try {
-    res = await fetch(`${loginBase()}/${encodeURIComponent(tenant())}/oauth2/v2.0/token`, {
-      method: 'POST', signal: AbortSignal.timeout(REQUEST_TIMEOUT),
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded', Accept: 'application/json' },
-      body: new URLSearchParams({ client_id: clientId(), scope: SCOPES, ...form }),
-    });
-  } catch (err) {
-    throw netError('unreachable', `Microsoft non raggiungibile (${err.cause?.code ?? err.message})`);
-  }
-  const body = await res.json().catch(() => null);
-  if (!res.ok || typeof body?.access_token !== 'string') throw tokenError(body, res.status);
-  return body;
-}
-
-/** Who signed in, from the id token (only shown: the account the field says). */
-function accountOf(idToken) {
-  try {
-    const claims = JSON.parse(Buffer.from(String(idToken).split('.')[1], 'base64url').toString('utf8'));
-    return String(claims.preferred_username || claims.email || claims.upn || claims.name || '').trim().slice(0, 200);
-  } catch {
-    return '';
-  }
-}
-
-class Tokens {
-  #refresh; #save; #access = null; #until = 0; #renewing = null;
-
-  constructor(refresh, save, first = null) {
-    this.#refresh = refresh;
-    this.#save = save;
-    if (first) this.#keep(first);
-  }
-
-  #keep(body) {
-    this.#access = body.access_token;
-    this.#until = Date.now() + (Number(body.expires_in) || 3600) * 1000;
-    if (typeof body.refresh_token === 'string' && body.refresh_token && body.refresh_token !== this.#refresh) {
-      this.#refresh = body.refresh_token;
-      try { this.#save?.({ entra: body.refresh_token }); } catch { /* the kernel logs it */ }
-    }
-  }
-
-  async get() {
-    if (this.#access && Date.now() < this.#until - 120_000) return this.#access;
-    this.#renewing ??= tokenRequest({ grant_type: 'refresh_token', refresh_token: this.#refresh })
-      .then(body => { this.#keep(body); return this.#access; })
-      .finally(() => { this.#renewing = null; });
-    return this.#renewing;
-  }
 }
 
 // ---------- The session ----------
@@ -453,7 +379,8 @@ function entry(name, { size, modified, tier }) {
 }
 
 /** How a connection signs its requests. */
-function authOf(values, secret, saveSecret) {
+function authOf(values, ctx) {
+  const secret = ctx.secret ?? {};
   const kind = values.auth ?? 'key';
   if (kind === 'sas') {
     const sas = String(secret.sas ?? '').trim().replace(/^\?/, '');
@@ -461,9 +388,9 @@ function authOf(values, secret, saveSecret) {
     return { kind, sas };
   }
   if (kind === 'entra') {
-    if (!clientId()) throw netError('unsupported', 'App Azure non impostata (Pannello di controllo → Azure Blob Storage)');
-    if (typeof secret.entra !== 'string' || !secret.entra) throw netError('auth', 'Serve un nuovo accesso');
-    return { kind, tokens: new Tokens(secret.entra, saveSecret) };
+    const { tokens } = needKernel(ctx, 'tokens');
+    if (!tokens) throw netError('auth', 'Serve un nuovo accesso');
+    return { kind, tokens };
   }
   const key = String(secret.key ?? '').trim();
   if (!key || !/^[A-Za-z0-9+/=]{20,200}$/.test(key)) throw netError('auth', 'Chiave dell’account mancante o non valida');
@@ -521,33 +448,17 @@ const driver = {
     return `azure://${v.account ?? ''}/${v.share ?? ''}${root ? `/${root.slice(0, -1)}` : ''}`;
   },
 
-  ready() {
-    return null;   // key and SAS need nothing; Entra says what is missing when chosen
-  },
-
-  signIn: {
+  oauth: {
+    provider: 'microsoft',
+    scopes: ['https://storage.azure.com/user_impersonation'],
+    accounts: 'work',     // a data role is given to work or school accounts
     manual: true,
-    start({ redirectUri, state, challenge }) {
-      if (!clientId()) throw netError('unsupported', 'App Azure non impostata: un amministratore la inserisce in Pannello di controllo → Azure Blob Storage');
-      const url = new URL(`${loginBase()}/${encodeURIComponent(tenant())}/oauth2/v2.0/authorize`);
-      url.search = new URLSearchParams({
-        client_id: clientId(), response_type: 'code', redirect_uri: redirectUri, response_mode: 'query',
-        scope: SCOPES, state, code_challenge: challenge, code_challenge_method: 'S256', prompt: 'select_account',
-      });
-      return url.href;
-    },
-    async finish({ code, redirectUri, verifier }) {
-      const body = await tokenRequest({ grant_type: 'authorization_code', code, redirect_uri: redirectUri, code_verifier: verifier });
-      if (typeof body.refresh_token !== 'string') throw netError('invalid', 'Microsoft non ha dato un accesso duraturo (manca offline_access)');
-      const account = accountOf(body.id_token);
-      if (!account) throw netError('invalid', 'Microsoft non ha detto chi è l’account');
-      return { account, secret: body.refresh_token };
-    },
+    optional: true,       // key and SAS work without the app
+    field: 'entra',
   },
 
   async shares(values, ctx = {}) {
-    const { secret = {}, trust = null, saveSecret = null } = ctx;
-    const session = new Session(accountUrl(values), '', '', authOf(values, secret, saveSecret), trust, needLookup(ctx));
+    const session = new Session(accountUrl(values), '', '', authOf(values, ctx), ctx.trust ?? null, needLookup(ctx));
     try {
       return await session.containers();
     } finally {
@@ -556,9 +467,8 @@ const driver = {
   },
 
   async connect(values, ctx = {}) {
-    const { secret = {}, trust = null, saveSecret = null } = ctx;
     if (!CONTAINER.test(String(values.share ?? ''))) throw netError('invalid', 'Nome del contenitore non valido');
-    const session = new Session(accountUrl(values), values.share, cleanPrefix(values.root), authOf(values, secret, saveSecret), trust, needLookup(ctx));
+    const session = new Session(accountUrl(values), values.share, cleanPrefix(values.root), authOf(values, ctx), ctx.trust ?? null, needLookup(ctx));
     try {
       await session.check();
     } catch (err) {
@@ -571,8 +481,6 @@ const driver = {
 
 export default {
   async init(ctx) {
-    conf = ctx.config;
-    ctx.onConfig?.(config => { conf = config; });
     ctx.provide('netfs.azblob', driver);
   },
 };

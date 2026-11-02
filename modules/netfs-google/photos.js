@@ -2,7 +2,7 @@ import { Readable } from 'node:stream';
 import { netError } from './lib/shared/errors.js';
 import { bearerCall } from './lib/shared/cloud.js';
 import { skipFirst } from './lib/shared/streams.js';
-import { config, pathsOf, projectSet, label, timedFetch, tokenRequest, Tokens, signInUrl, onlyManual, googleName, named } from './google.js';
+import { config, pathsOf, tokensOf, label, timedFetch, googleName, named } from './google.js';
 
 /**
  * Google Photos for the Rete folder: service 'netfs.gphotos', see the kernel's net/drivers.js.
@@ -17,8 +17,8 @@ import { config, pathsOf, projectSet, label, timedFetch, tokenRequest, Tokens, s
  *     folder is a new album; an album can be renamed. Google does not let apps delete or rename
  *     photos nor delete albums: removing a photo takes it out of the album (it stays in the
  *     library).
- * Sign-in as for Google Drive (google.js: the project of the installation), with the Photos
- * scopes. The setting `photos` false turns Google Photos off (the protocol says why it cannot be
+ * Sign-in as for Google Drive (the kernel's, with the Google project of Control Panel), with the
+ * Photos scopes; the account is the id token's e-mail address. The setting `photos` false turns Google Photos off (the protocol says why it cannot be
  * used). Uploads start over when interrupted; downloads of album items resume (Range). For tests
  * only: settings pickerUrl, libraryUrl.
  */
@@ -36,8 +36,7 @@ const SCOPES = [
   'https://www.googleapis.com/auth/photoslibrary.appendonly',
   'https://www.googleapis.com/auth/photoslibrary.readonly.appcreateddata',
   'https://www.googleapis.com/auth/photoslibrary.edit.appcreateddata',
-  'openid', 'email',
-].join(' ');
+];
 
 // ---------- HTTP ----------
 
@@ -58,16 +57,6 @@ async function apiError(res) {
   if (res.status === 409) return netError('exists', said);
   if (res.status === 429 || res.status >= 500) return netError('unreachable', said);
   return netError('invalid', said);
-}
-
-/** Who signed in, from the id token. */
-function emailOf(idToken) {
-  try {
-    const claims = JSON.parse(Buffer.from(String(idToken).split('.')[1], 'base64url').toString('utf8'));
-    return String(claims.email || '').trim().slice(0, 200);
-  } catch {
-    return '';
-  }
 }
 
 // ---------- The session ----------
@@ -337,42 +326,20 @@ export const photos = {
   ],
 
   ready() {
-    if (!photosOn()) return label('Google Photos is turned off (Control Panel → Google Photos)', 'Google Foto è spento (Pannello di controllo → Google Foto)');
-    if (!projectSet()) {
-      return label('An administrator must first enter the client ID and secret of the Google Cloud project (Control Panel → Google Photos)', 'Un amministratore deve prima inserire ID e segreto client del progetto Google Cloud (Pannello di controllo → Google Foto)');
-    }
-    return null;
+    return photosOn() ? null : label('Google Photos is turned off (Control Panel → Google Photos)', 'Google Foto è spento (Pannello di controllo → Google Foto)');
   },
 
   address(v) {
     return `gphotos://${v.account ?? ''}`;
   },
 
-  signIn: {
-    manual: true,
-    onlyManual,
-    start(flow) {
-      if (!photosOn()) throw netError('unsupported', 'Google Foto è spento (Pannello di controllo → Google Foto)');
-      if (!projectSet()) throw netError('unsupported', 'Progetto Google non impostato (Pannello di controllo → Google Foto)');
-      return signInUrl(flow, SCOPES);
-    },
-    async finish({ code, redirectUri, verifier }) {
-      const body = await tokenRequest({ grant_type: 'authorization_code', code, redirect_uri: redirectUri, code_verifier: verifier });
-      if (typeof body.refresh_token !== 'string') throw netError('invalid', 'Google non ha dato un accesso duraturo: togli lilOS dalle app collegate all’account e riprova');
-      const account = emailOf(body.id_token);
-      if (!account) throw netError('invalid', 'Google non ha detto chi è l’account');
-      return { account, secret: body.refresh_token };
-    },
-  },
+  oauth: { provider: 'google', scopes: SCOPES },
 
   async connect(values, ctx = {}) {
-    const { secret = {}, saveSecret = null } = ctx;
+    const tokens = tokensOf(ctx);
     const paths = pathsOf(ctx);
     if (!photosOn()) throw netError('unsupported', 'Google Foto è spento (Pannello di controllo → Google Foto)');
-    if (!projectSet()) throw netError('unsupported', 'Progetto Google non impostato (Pannello di controllo → Google Foto)');
-    if (typeof secret.account !== 'string' || !secret.account) throw netError('auth', 'Serve un nuovo accesso');
-    const tokens = new Tokens(secret.account, saveSecret);
-    await tokens.renew();
+    await tokens.get();
     const session = new Session(tokens, paths);
     await session.list('/');
     return session;

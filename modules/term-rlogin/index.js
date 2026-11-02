@@ -1,5 +1,5 @@
 import { privilegedConnect } from './lib/shared/tcp.js';
-import { needLookup } from './lib/shared/kernel.js';
+import { needLookup, needKernel } from './lib/shared/kernel.js';
 
 /**
  * rlogin for the remote terminals (service 'term.rlogin', see the kernel's term/drivers.js):
@@ -32,6 +32,7 @@ const driver = {
   address: v => `rlogin://${v.user ? `${v.user}@` : ''}${v.host ?? ''}${v.port && v.port !== 513 ? `:${v.port}` : ''}`,
 
   async open(values, ctx) {
+    needKernel(ctx, 'output', 'closed');
     const host = values.host, port = values.port ?? 513;
     const { socket, privileged } = await privilegedConnect(host, port, { lookup: needLookup(ctx), signal: ctx.signal });
     if (!privileged) ctx.print('Nessuna porta privilegiata disponibile: il server potrebbe rifiutare la connessione.');
@@ -44,11 +45,9 @@ const driver = {
 };
 
 function session(socket, ctx) {
-  const data = [], closed = [];
-  let pending = [], gone = false, acked = false, said = false;
+  let gone = false, acked = false, said = false;
   // The window size: 'wait' (not signed in yet), 'enter' (Enter typed: the server's answer next), 'on'
   let sizing = 'wait', size = { cols: ctx.cols, rows: ctx.rows };
-  const output = chunk => (data.length ? data.forEach(fn => fn(chunk)) : pending.push(chunk));
   const windowSize = (cols, rows) => {
     const b = Buffer.alloc(12);
     b.set([0xff, 0xff, 0x73, 0x73]);
@@ -64,7 +63,7 @@ function session(socket, ctx) {
     }
     if (!chunk.length) return;
     said = true;
-    output(chunk);
+    ctx.output(chunk);
     if (sizing === 'enter') {
       sizing = 'sending';
       setTimeout(() => { sizing = 'on'; windowSize(size.cols, size.rows); }, 500);
@@ -73,7 +72,7 @@ function session(socket, ctx) {
   const end = reason => {
     if (gone) return;
     gone = true;
-    closed.forEach(fn => fn({ reason }));
+    ctx.closed({ reason });
     socket.destroy();
   };
   // Closed before saying anything: rlogind refuses whom it does not trust (an ordinary port above all)
@@ -84,12 +83,6 @@ function session(socket, ctx) {
   return {
     info: null,
     signals: [],
-    onData(fn) {
-      data.push(fn);
-      pending.forEach(fn);
-      pending = [];
-    },
-    onClose(fn) { closed.push(fn); },
     write(bytes) {
       if (socket.destroyed) return;
       socket.write(bytes);

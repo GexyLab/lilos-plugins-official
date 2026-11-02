@@ -8,3 +8,5 @@ Modulo del kernel che conserva le **notifiche** degli utenti: i messaggi che lil
 - Quando arriva una notifica il modulo lo dice alle pagine lilOS aperte da quell'utente (evento `notification.new`); quando ne vengono lette o cancellate, con `notification.change`.
 
 Fornisce il servizio `notifications`. Senza questo modulo lilOS mostra le notifiche lo stesso, ma le tiene solo nella pagina: ricaricandola si perdono.
+
+Versione 1.1.0: `notifications.json` lo legge e lo scrive il kernel (`ctx.jsonStore`); niente di diverso per chi lo usa. Richiede lilOS 1.21.0 o successivo.

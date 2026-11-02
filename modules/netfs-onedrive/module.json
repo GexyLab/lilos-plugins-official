@@ -10,35 +10,12 @@
   "requires": [],
   "settings": [
     {
-      "key": "clientId", "type": "text",
-      "label": { "en": "Application (client) ID", "it": "ID dell'applicazione (client)" },
-      "placeholder": "00000000-0000-0000-0000-000000000000",
-      "hint": { "en": "portal.azure.com → App registrations → your app → Overview", "it": "portal.azure.com → Registrazioni app → la tua app → Panoramica" }
-    },
-    {
-      "key": "accounts", "type": "select", "default": "common",
-      "label": { "en": "Accounts allowed", "it": "Account ammessi" },
-      "hint": { "en": "As «Supported account types» of the app on Azure", "it": "Come «Tipi di account supportati» dell'app su Azure" },
-      "options": [
-        { "value": "common", "label": { "en": "Personal, and work or school", "it": "Personali, e di lavoro o dell'istituto" } },
-        { "value": "organizations", "label": { "en": "Work or school only", "it": "Solo di lavoro o dell'istituto" } },
-        { "value": "consumers", "label": { "en": "Personal only", "it": "Solo personali" } },
-        { "value": "tenant", "label": { "en": "One organization only", "it": "Solo di un'organizzazione" } }
-      ]
-    },
-    {
-      "key": "tenant", "type": "text", "when": { "accounts": "tenant" },
-      "label": { "en": "Directory (tenant) ID or domain", "it": "ID della directory (tenant) o dominio" },
-      "placeholder": "contoso.onmicrosoft.com"
-    },
-    {
       "key": "shared", "type": "checkbox", "default": false,
       "label": { "en": "Open the folders shared with me", "it": "Apri le cartelle condivise con me" },
       "hint": { "en": "Shared folders added to «My files» on onedrive.com (Add shortcut) open inside the connection. It asks for the Files.ReadWrite.All permission: everyone signs in again", "it": "Le cartelle condivise aggiunte a «I miei file» su onedrive.com (Aggiungi collegamento) si aprono dentro la connessione. Chiede il permesso Files.ReadWrite.All: tutti rifanno l'accesso" }
     }
   ],
   "defaultConfig": {
-    "accounts": "common",
     "shared": false
   }
 }

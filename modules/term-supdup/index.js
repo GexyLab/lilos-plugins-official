@@ -1,7 +1,7 @@
 import { paramBlock, screenSize, Screen, Keys, LOGOUT } from './supdup.js';
 import { netError } from './lib/shared/errors.js';
 import { tcpConnect } from './lib/shared/tcp.js';
-import { needLookup } from './lib/shared/kernel.js';
+import { needLookup, needKernel } from './lib/shared/kernel.js';
 
 /**
  * SUPDUP for the Terminale remoto app (service 'term.supdup', see the kernel's term/drivers.js):
@@ -49,34 +49,33 @@ const driver = {
   },
 
   async open(values, ctx) {
+    needKernel(ctx, 'output', 'closed');
     driver.check(values);
     const { cols, rows } = screenSize(ctx.cols, ctx.rows);
     const socket = await tcpConnect(values.host.trim(), portOf(values), { lookup: needLookup(ctx), signal: ctx.signal });
     socket.setNoDelay(true);
     socket.setKeepAlive(true, 30_000);
     socket.write(paramBlock(cols, rows));   // the server answers with its greeting
-    return session(socket, cols, rows);
+    return session(socket, cols, rows, ctx);
   },
 };
 
-function session(socket, cols, rows) {
+function session(socket, cols, rows, ctx) {
   const screen = new Screen(cols, rows);
   const keys = new Keys();
-  let dataFn = null, closeFn = null;
-  const pending = [];          // output before onData is set
   let ended = null;            // { reason } once the connection is over
   let closing = false;         // close() was called: the end is not an error
   let failure = null;
 
   const emit = buf => {
     if (!buf.length) return;
-    if (dataFn) dataFn(buf); else pending.push(buf);
+    ctx.output(buf);
   };
   const end = reason => {
     if (ended) return;
     ended = { reason };
     emit(Buffer.from(screen.teardown()));
-    closeFn?.(ended);
+    ctx.closed(ended);
   };
 
   // Output resets the server may not announce. Typing ^S (flush output) or ^G (quit) makes ITS
@@ -121,16 +120,6 @@ function session(socket, cols, rows) {
   return {
     signals: [],
     info: null,
-
-    onData(fn) {
-      dataFn = fn;
-      for (const buf of pending.splice(0)) fn(buf);
-    },
-
-    onClose(fn) {
-      closeFn = fn;
-      if (ended) fn(ended);
-    },
 
     write(data) {
       if (ended || closing || socket.destroyed) return;

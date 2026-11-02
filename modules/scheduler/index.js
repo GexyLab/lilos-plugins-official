@@ -1,6 +1,5 @@
-import { readFile, writeFile, rename, stat } from 'node:fs/promises';
 import { randomBytes } from 'node:crypto';
-import { join } from 'node:path';
+import { needKernel } from './lib/shared/kernel.js';
 
 /**
  * The 'scheduler' service (see the kernel's services.js): the operations of the users and of the
@@ -53,35 +52,6 @@ const newId = () => randomBytes(9).toString('base64url');
 const isAdmin = p => p?.kind === 'kernel' || (p?.kind === 'user' && p.role === 'admin');
 const num = (v, min, max, fallback) => (Number.isInteger(v) && v >= min && v <= max ? v : fallback);
 const clip = (text, n) => (typeof text === 'string' ? text.slice(0, n) : '');
-
-class Store {
-  #file; #empty; #data = null; #queue = Promise.resolve();
-
-  constructor(file, empty) { this.#file = file; this.#empty = empty; }
-
-  /** What was read, without waiting (null before the first read). */
-  get current() { return this.#data; }
-
-  async read() {
-    if (!this.#data) {
-      const there = await stat(this.#file).then(() => true, () => false);
-      let raw = null;
-      try { raw = there ? JSON.parse(await readFile(this.#file, 'utf8')) : null; } catch { raw = null; }
-      this.#data = this.#empty(raw);
-    }
-    return this.#data;
-  }
-
-  save() {
-    const run = this.#queue.then(async () => {
-      const tmp = `${this.#file}.tmp`;
-      await writeFile(tmp, JSON.stringify(this.#data), { mode: 0o600 });
-      await rename(tmp, this.#file);
-    });
-    this.#queue = run.catch(() => {});
-    return run;
-  }
-}
 
 function cleanOptions(raw = {}) {
   const o = plain(raw) ? raw : {};
@@ -314,7 +284,7 @@ function drain() {
 // ---------- History ----------
 
 function historyStore(file) {
-  const store = new Store(file, raw => ({ version: 1, runs: (Array.isArray(raw?.runs) ? raw.runs : []).filter(r => plain(r) && ID.test(r.id ?? '') && ID.test(r.task ?? '')) }));
+  const store = ctx.jsonStore(file, { invalid: 'empty', clean: raw => ({ version: 1, runs: (Array.isArray(raw?.runs) ? raw.runs : []).filter(r => plain(r) && ID.test(r.id ?? '') && ID.test(r.task ?? '')) }) });
   let index = null;
   const trim = data => {
     const per = new Map();
@@ -689,11 +659,11 @@ function cleanTasks(raw) {
 
 export default {
   async init(context) {
-    ctx = context;
+    ctx = needKernel(context, 'jsonStore');
     stopped = false;
-    tasks = new Store(join(ctx.dir, 'scheduler.json'), cleanTasks);
+    tasks = ctx.jsonStore('scheduler.json', { clean: cleanTasks, invalid: 'empty' });
     await tasks.read();
-    history = historyStore(join(ctx.dir, 'history.json'));
+    history = historyStore('history.json');
     await history.load();
     ctx.provide('scheduler', service);
   },

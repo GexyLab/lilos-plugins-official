@@ -2,7 +2,7 @@ import { isIP } from 'node:net';
 import { netError } from './lib/shared/errors.js';
 import { certificateOf } from './lib/shared/trust.js';
 import { tcpConnect } from './lib/shared/tcp.js';
-import { needLookup } from './lib/shared/kernel.js';
+import { needLookup, needKernel } from './lib/shared/kernel.js';
 
 /**
  * Telnet for the remote terminals (service 'term.telnet', see the kernel's term/drivers.js):
@@ -36,6 +36,7 @@ const driver = {
   address: v => `${v.tls ? 'telnets' : 'telnet'}://${v.user ? `${v.user}@` : ''}${v.host ?? ''}${v.port && v.port !== (v.tls ? 992 : 23) ? `:${v.port}` : ''}`,
 
   async open(values, ctx) {
+    needKernel(ctx, 'output', 'closed');
     const host = values.host, port = values.port ?? (values.tls ? 992 : 23);
     const socket = await tcpConnect(host, port, {
       lookup: needLookup(ctx), signal: ctx.signal,
@@ -59,12 +60,11 @@ const driver = {
 };
 
 function session(socket, values, ctx) {
-  const data = [], closed = [];
-  let pending = [], gone = false;
+  let gone = false;
   let size = { cols: ctx.cols, rows: ctx.rows };
   // Option states: false (off), 'asked' (we asked, no answer yet), true (on)
   const local = new Map(), remote = new Map();
-  const output = chunk => (data.length ? data.forEach(fn => fn(chunk)) : pending.push(chunk));
+  const output = chunk => ctx.output(chunk);
   const send = bytes => { if (!socket.destroyed) socket.write(Buffer.from(bytes)); };
 
   const naws = () => {
@@ -147,7 +147,7 @@ function session(socket, values, ctx) {
   const end = reason => {
     if (gone) return;
     gone = true;
-    closed.forEach(fn => fn({ reason }));
+    ctx.closed({ reason });
     socket.destroy();
   };
   socket.on('end', () => end(''));
@@ -175,12 +175,6 @@ function session(socket, values, ctx) {
   return {
     info: values.tls ? { tls: socket.getProtocol?.() ?? 'TLS' } : null,
     signals: ['break', 'interrupt', 'ayt'],
-    onData(fn) {
-      data.push(fn);
-      pending.forEach(fn);
-      pending = [];
-    },
-    onClose(fn) { closed.push(fn); },
     write(bytes) {
       const binary = local.get(BINARY) === true;
       const out = [];

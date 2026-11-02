@@ -8,6 +8,16 @@ import { netError } from './errors.js';
 const OLD_KERNEL = 'Questo modulo richiede lilOS ≥ 1.21.0: aggiorna lilOS';
 
 /**
+ * The ctx (of init(), connect(), open()…) if it has every one of `members`, else the clear error:
+ * jsonStore of init(), tokens of connect() and shares() (null when the connection has no refresh
+ * token, which still counts as there), output and closed of the terminals' open().
+ */
+export function needKernel(ctx, ...members) {
+  if (members.some(m => ctx?.[m] === undefined)) throw netError('unsupported', OLD_KERNEL);
+  return ctx;
+}
+
+/**
  * ctx.lookup of connect(), shares() and open(): dns.lookup's signature, resolving only to the
  * addresses the kernel's NetGuard allows. Every connection a driver opens resolves through it, so
  * it goes to an address checked a moment ago (no DNS rebinding between the kernel's check and the

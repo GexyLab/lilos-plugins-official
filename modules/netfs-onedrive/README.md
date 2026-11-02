@@ -12,13 +12,9 @@ Modulo del kernel che porta **OneDrive** nella cartella Rete: il OneDrive person
 
 ## Impostazioni
 
-Ogni installazione di lilOS usa la propria app registrata su Azure. Un amministratore la imposta in **Pannello di controllo → OneDrive**:
+Ogni installazione di lilOS usa la propria app registrata su Azure, una sola per OneDrive e Azure Blob Storage. Un amministratore la imposta in **Pannello di controllo → App Microsoft**: l'ID dell'applicazione (client) e gli account ammessi (personali e di lavoro, solo di lavoro, solo personali, o una sola organizzazione con il suo ID o dominio). L'accesso a Microsoft lo fa il kernel.
 
-| Impostazione | Cosa è |
-|---|---|
-| ID dell'applicazione (client) | L'ID dell'app su Azure (Panoramica) |
-| Account ammessi | Personali e di lavoro, solo di lavoro, solo personali, o una sola organizzazione (con il suo ID o dominio) |
-| Apri le cartelle condivise con me | Le cartelle condivise aggiunte come collegamento; chiede il permesso `Files.ReadWrite.All` |
+In **Pannello di controllo → OneDrive** resta solo **Apri le cartelle condivise con me**: le cartelle condivise aggiunte come collegamento; chiede il permesso `Files.ReadWrite.All`.
 
 ## Registrare l'app su Azure
 
@@ -29,10 +25,10 @@ Serve un account Azure (gratuito).
 3. URI di reindirizzamento: piattaforma **Client pubblico/nativo (dispositivi mobili e desktop)**, indirizzo `<indirizzo di lilOS>/api/net/signin/callback`, per esempio `http://localhost:8790/api/net/signin/callback` o `https://lilos.example.com/api/net/signin/callback`. Il Pannello di controllo mostra quello giusto da copiare. Non usare «Web» né «Applicazione a pagina singola»: il kernel scambia il codice da sé, senza segreto.
 4. **Autenticazione** → **Consenti flussi client pubblici**: **Sì**.
 5. **Autorizzazioni API** → Microsoft Graph → autorizzazioni delegate: `Files.ReadWrite`, `User.Read`, `offline_access` (e `Files.ReadWrite.All` per le cartelle condivise).
-6. Copia l'**ID dell'applicazione (client)** in Pannello di controllo → OneDrive.
+6. Copia l'**ID dell'applicazione (client)** in Pannello di controllo → App Microsoft.
 
 L'accesso funziona con lilOS su `https://`, o su `http://` solo da questo computer (`localhost`): Microsoft non accetta altri indirizzi di ritorno.
 
 Fornisce il servizio `netfs.onedrive`. Nessuna dipendenza. Richiede lilOS 1.21.0 o successivo.
 
-Versione 1.2.0: codice in comune con gli altri moduli di rete (richieste, riprese, nomi delle cartelle); nessun cambiamento visibile.
+Versione 1.2.0: l'accesso a Microsoft lo fa il kernel, con l'app di **Pannello di controllo → App Microsoft** (le impostazioni dell'app passano lì da sole; le connessioni restano come sono); codice in comune con gli altri moduli di rete.

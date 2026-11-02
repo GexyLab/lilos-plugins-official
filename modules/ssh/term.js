@@ -1,5 +1,5 @@
 import { sshConnect } from './connect.js';
-import { needLookup } from './lib/shared/kernel.js';
+import { needLookup, needKernel } from './lib/shared/kernel.js';
 import { netError } from './lib/shared/errors.js';
 
 /**
@@ -40,6 +40,7 @@ export const term = {
   address: v => `ssh://${v.user ? `${v.user}@` : ''}${v.host ?? ''}${v.port && v.port !== 22 ? `:${v.port}` : ''}`,
 
   async open(values, ctx) {
+    needKernel(ctx, 'output', 'closed');
     const { client, shown, cipher } = await sshConnect(values, {
       secret: ctx.secret ?? {}, lookup: needLookup(ctx), signal: ctx.signal,
       confirm: key => ctx.confirm(key), ask: (prompt, opts) => ctx.ask(prompt, opts), print: text => ctx.print(text),
@@ -59,7 +60,7 @@ export const term = {
           client.end();
           return reject(netError('unsupported', `Il server non apre il terminale: ${err.message}`));
         }
-        resolve(session(client, stream, { text: shown?.text ?? '', cipher }));
+        resolve(session(client, stream, ctx, { text: shown?.text ?? '', cipher }));
       };
       if (steps.length) client.exec(steps.join(' && '), { pty: window }, started);
       else client.shell(window, started);
@@ -67,10 +68,9 @@ export const term = {
   },
 };
 
-function session(client, stream, info) {
-  const data = [], closed = [];
-  let pending = [], code = null, signal = null, gone = null;
-  const output = chunk => (data.length ? data.forEach(fn => fn(chunk)) : pending.push(chunk));
+function session(client, stream, ctx, info) {
+  let code = null, signal = null, gone = null;
+  const output = chunk => ctx.output(chunk);
   stream.on('data', output);
   stream.stderr?.on('data', output);
   // The server's exit-status (a number) or exit-signal (null and the signal's name, 'KILL')
@@ -80,7 +80,7 @@ function session(client, stream, info) {
   const end = (reason, last = {}) => {
     if (gone) return;
     gone = { reason, code: null, signal: null, ...last };
-    closed.forEach(fn => fn(gone));
+    ctx.closed(gone);
     client.end();
   };
   stream.on('close', () => end(signal ? `Terminata dal segnale SIG${signal}` : code === null || code === 0 ? '' : `Uscita con codice ${code}`, { code, signal }));
@@ -89,13 +89,6 @@ function session(client, stream, info) {
   return {
     info: { key: info.text, cipher: info.cipher },
     signals: [],
-    onData(fn) {
-      data.push(fn);
-      pending.forEach(fn);
-      pending = [];
-    },
-    // A quick command can end before anyone listens (in the same packet that opened it)
-    onClose(fn) { if (gone) queueMicrotask(() => fn(gone)); else closed.push(fn); },
     write(bytes) { stream.write(bytes); },
     resize(cols, rows) { stream.setWindow(rows, cols, 0, 0); },
     pause() { stream.pause(); },

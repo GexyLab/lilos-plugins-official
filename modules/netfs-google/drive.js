@@ -4,12 +4,12 @@ import { bearerCall } from './lib/shared/cloud.js';
 import { chunks, skipFirst } from './lib/shared/streams.js';
 import { folderParts } from './lib/shared/paths.js';
 import { sleep } from './lib/shared/time.js';
-import { config, pathsOf, projectSet, label, timedFetch, tokenRequest, Tokens, signInUrl, onlyManual, googleName, named } from './google.js';
+import { config, pathsOf, tokensOf, label, timedFetch, googleName, named } from './google.js';
 
 /**
  * Google Drive for the Rete folder: service 'netfs.gdrive', see the kernel's net/drivers.js. The
- * user's My Drive, or a shared drive of their organization, through the Drive API v3. Sign-in and
- * the project's settings: google.js.
+ * user's My Drive, or a shared drive of their organization, through the Drive API v3. Sign-in: the
+ * kernel's, with the Google project of Control Panel (google.js).
  *
  * Drive is not a tree of names: items have ids, a folder may hold two items with the same name, a
  * name may have '/'. A folder is read whole and its names made unique for lilOS: the second
@@ -35,7 +35,7 @@ const SHORTCUT = 'application/vnd.google-apps.shortcut';
 const FIELDS = 'id,name,mimeType,size,modifiedTime,createdTime,shortcutDetails(targetId,targetMimeType),capabilities(canRename,canTrash)';
 
 const apiBase = () => String(config().apiUrl || 'https://www.googleapis.com').replace(/\/+$/, '');
-const SCOPES = 'https://www.googleapis.com/auth/drive openid email';
+const DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive';
 
 /** Google's own documents: what they are, and what they are copied as (per export format). */
 const DOCS = {
@@ -406,13 +406,6 @@ export const drive = {
     },
   ],
 
-  ready() {
-    if (!projectSet()) {
-      return label('An administrator must first enter the client ID and secret of the Google Cloud project (Control Panel → Google Drive)', 'Un amministratore deve prima inserire ID e segreto client del progetto Google Cloud (Pannello di controllo → Google Drive)');
-    }
-    return null;
-  },
-
   check(v) {
     cleanRoot(v.root);
     if (v.share !== undefined && String(v.share).length > 200) throw netError('invalid', 'Nome del Drive troppo lungo');
@@ -424,41 +417,27 @@ export const drive = {
     return `gdrive://${v.account ?? ''}${drive}${root.length ? `/${root.join('/')}` : ''}`;
   },
 
-  signIn: {
-    manual: true,
-    onlyManual,
-    start(flow) {
-      if (!projectSet()) throw netError('unsupported', 'Progetto Google non impostato (Pannello di controllo → Google Drive)');
-      return signInUrl(flow, SCOPES, { include_granted_scopes: 'true' });
-    },
-    async finish({ code, redirectUri, verifier }) {
-      const body = await tokenRequest({ grant_type: 'authorization_code', code, redirect_uri: redirectUri, code_verifier: verifier });
-      if (typeof body.refresh_token !== 'string') throw netError('invalid', 'Google non ha dato un accesso duraturo: togli lilOS dalle app collegate all’account e riprova');
-      if (typeof body.scope === 'string' && !body.scope.split(' ').includes('https://www.googleapis.com/auth/drive')) {
-        throw netError('invalid', 'Serve il permesso su tutto Google Drive: riprova e lascia la casella del permesso selezionata');
-      }
-      const tokens = new Tokens(body.refresh_token, null, body);
+  oauth: {
+    provider: 'google',
+    scopes: [DRIVE_SCOPE],
+    /** The account's address; Drive must have been granted whole (Google lets the user untick it). */
+    async account({ tokens, granted }) {
+      if (granted && !granted.includes(DRIVE_SCOPE)) throw netError('invalid', 'Serve il permesso su tutto Google Drive: riprova e lascia la casella del permesso selezionata');
       const about = await call(tokens, 'GET', '/about', { query: { fields: 'user(emailAddress)' } });
-      const account = String(about?.user?.emailAddress ?? '').trim();
-      if (!account) throw netError('invalid', 'Google non ha detto chi è l’account');
-      return { account, secret: body.refresh_token };
+      return String(about?.user?.emailAddress ?? '').trim();
     },
   },
 
   /** The drives the account can open: My Drive, then its shared drives. */
-  async shares(values, { secret = {}, saveSecret = null } = {}) {
-    if (typeof secret.account !== 'string' || !secret.account) throw netError('auth', 'Accedi prima con Google');
-    const tokens = new Tokens(secret.account, saveSecret);
+  async shares(values, ctx = {}) {
+    const tokens = tokensOf(ctx);
     return ['Il mio Drive', ...(await sharedDrives(tokens)).map(d => d.name)];
   },
 
   async connect(values, ctx = {}) {
-    const { secret = {}, saveSecret = null } = ctx;
+    const tokens = tokensOf(ctx);
     const paths = pathsOf(ctx);
-    if (!projectSet()) throw netError('unsupported', 'Progetto Google non impostato (Pannello di controllo → Google Drive)');
-    if (typeof secret.account !== 'string' || !secret.account) throw netError('auth', 'Serve un nuovo accesso');
-    const tokens = new Tokens(secret.account, saveSecret);
-    await tokens.renew();
+    await tokens.get();
     let driveId = null;
     if (!isMyDrive(values.share)) {
       const drive = (await sharedDrives(tokens)).find(d => d.name === values.share || d.id === values.share);

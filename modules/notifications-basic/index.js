@@ -1,6 +1,5 @@
-import { readFile, writeFile, rename, stat } from 'node:fs/promises';
 import { randomBytes } from 'node:crypto';
-import { join } from 'node:path';
+import { needKernel } from './lib/shared/kernel.js';
 
 /**
  * Notifications, standalone: every user's are in notifications.json, in this module's folder.
@@ -51,42 +50,12 @@ function clean(raw) {
   return { version: 1, users };
 }
 
-class Store {
-  #file;
-  #data = null;
-  #queue = Promise.resolve();
-
-  constructor(file) { this.#file = file; }
-
-  async read() {
-    if (!this.#data) {
-      const exists = await stat(this.#file).then(() => true, () => false);
-      this.#data = exists ? clean(JSON.parse(await readFile(this.#file, 'utf8'))) : { version: 1, users: {} };
-    }
-    return this.#data;
-  }
-
-  /** Runs fn(data) and saves, one change at a time. Returns what fn returns. */
-  change(fn) {
-    const run = this.#queue.then(async () => {
-      const data = await this.read();
-      const result = await fn(data);
-      const tmp = `${this.#file}.tmp`;
-      await writeFile(tmp, JSON.stringify(data), { mode: 0o600 });
-      await rename(tmp, this.#file);
-      return result;
-    });
-    this.#queue = run.catch(() => {});
-    return run;
-  }
-}
-
 let store, ctx;
 
 export default {
   async init(context) {
-    ctx = context;
-    store = new Store(join(ctx.dir, 'notifications.json'));
+    ctx = needKernel(context, 'jsonStore');
+    store = ctx.jsonStore('notifications.json', { clean });
     await store.read();
     const defaultKeep = keepOf(Number(ctx.config.defaultKeep)) ?? 20;
     const perMinute = Math.max(1, Number(ctx.config.perMinute) || 10);

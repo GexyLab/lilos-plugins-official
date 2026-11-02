@@ -14,7 +14,7 @@ Modulo del kernel che porta i contenitori di **Azure Blob Storage** nella cartel
 
 ## Microsoft Entra
 
-Serve solo per l'accesso con un account Microsoft. Un amministratore inserisce in **Pannello di controllo → Azure Blob Storage** l'ID dell'app registrata su Azure (può essere quella di OneDrive) e la directory (`organizations` per qualsiasi account di lavoro, oppure l'ID o il dominio della propria):
+Serve solo per l'accesso con un account Microsoft, che fa il kernel con l'app di **Pannello di controllo → App Microsoft** (la stessa di OneDrive): l'ID dell'app registrata su Azure e gli account ammessi (qui solo di lavoro o dell'istituto: con «solo personali» l'accesso Entra non si può usare). Chiave e token SAS non chiedono niente.
 
 1. [portal.azure.com](https://portal.azure.com) → **Registrazioni app**.
 2. **Autenticazione** → piattaforma **Applicazioni per dispositivi mobili e desktop**: l'indirizzo `<indirizzo di lilOS>/api/net/signin/callback` e, per l'accesso incollando l'indirizzo, `http://127.0.0.1:53682/`. **Consenti flussi client pubblici**: Sì.
@@ -23,4 +23,4 @@ Serve solo per l'accesso con un account Microsoft. Un amministratore inserisce i
 
 Le richieste con la chiave sono firmate dal modulo (Shared Key): nessun SDK. Fornisce il servizio `netfs.azblob`. Nessuna dipendenza. Richiede lilOS 1.21.0 o successivo.
 
-Versione 1.1.0: il nome del server si risolve con il kernel, che dà solo gli indirizzi permessi (con più utenti, niente rete locale se l'amministratore non la apre): il nome non può cambiare indirizzo tra il controllo del kernel e la connessione. Un download ripreso controlla che il servizio mandi la parte giusta del file.
+Versione 1.1.0: il nome del server si risolve con il kernel, che dà solo gli indirizzi permessi (con più utenti, niente rete locale se l'amministratore non la apre): il nome non può cambiare indirizzo tra il controllo del kernel e la connessione. Un download ripreso controlla che il servizio mandi la parte giusta del file. L'accesso con Microsoft Entra lo fa il kernel, con l'app di Pannello di controllo → App Microsoft (ID e directory passano lì da soli).
