@@ -49,8 +49,8 @@
   "locales": "locales.json",
   "files": {
     "dist/index-CSUXK4Uy.css": "sha256-vZRcQ4KvHGxr9PuhI6RU5RHmYqWMAg5FIM6JkY9HUV0=",
-    "dist/index.js": "sha256-tGEgM9WwMu9A+9lKBLs82GirFkeaIC4Gi1wbKvKThKs=",
+    "dist/index.js": "sha256-MtRG8w5NbhmJaj3r13ystqyr6h/R/pJ28LdBDzb+JH8=",
     "dist/updates.js": "sha256-ptwldS84ZrgUntI37eh8M3XjsVxDYZQHOnUy8SNfrtU=",
-    "locales.json": "sha256-VokWjgcch3QQ2oUQWovGn45aAHJiD0tmxdSHUEELmoE="
+    "locales.json": "sha256-7+X9wesZMwNG8BWfZTZpEsKpg8odECJQuvNqXxZ9T7c="
   }
 }
