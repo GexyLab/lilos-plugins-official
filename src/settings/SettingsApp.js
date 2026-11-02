@@ -1,4 +1,4 @@
-import { SettingsWindow, settings, shortcuts, shortcutField, storage, session, fs, tags, TAG_COLORS, menus, fileTypeList, toggle, swatches, segmented, selectField, textField, actionButton, toast, h, kernel, SDK_VERSION, apps as packages } from '@lilos/sdk';
+import { SettingsWindow, settings, shortcuts, shortcutField, storage, session, fs, tags, TAG_COLORS, menus, fileTypeList, toggle, swatches, segmented, selectField, textField, actionButton, toast, h, kernel, SDK_VERSION, apps as packages, formatBytes as bytesText } from '@lilos/sdk';
 import * as sdk from '@lilos/sdk';   // locale, LANGUAGES, notifications: missing in older lilOS, so not imported by name
 import { executionMode, canChangeExecution, showAppSecurity } from '@lilos/system';
 import { setTag } from '@lilos/system';
@@ -13,8 +13,7 @@ import { menuSections } from './menuEditor.js';
 import { startupOptionsSections, startupAppsSections } from './startup.js';
 import { servicesSections, watchServices } from './services.js';
 import { pipeSections, watchPipes } from './pipes.js';
-import { hasOneDrive, oneDriveSections, reloadOneDrive } from './onedrive.js';
-import { cloudTabs, reloadCloud } from './cloud.js';
+import { cloudTabs, isCloudTab, reloadCloud } from './cloud.js';
 import { creditsSections } from './credits.js';
 import { t, i18n } from './i18n.js';
 import './settings-app.css';
@@ -472,11 +471,6 @@ function trashSections() {
   ];
 }
 
-/** Bytes of all file contents (sizes kept in the tree). */
-function contentsSize(id = fs.root) {
-  return fs.children(id).reduce((sum, n) => sum + (n.type === 'folder' ? contentsSize(n.id) : n.size ?? 0), 0);
-}
-
 /** One section per command group, one row per command, each with its shortcut editor. */
 function shortcutSections() {
   const groups = new Map();
@@ -577,36 +571,15 @@ function appSecuritySections() {
   ];
 }
 
-/** Destructive action in two clicks: the first one asks for confirmation for a few seconds. */
-function confirmButton(label, confirmLabel, action) {
-  let timer = 0;
-  const btn = actionButton({
-    label,
+/** Destructive action in two clicks (the first one asks for confirmation for a few seconds); its error in a notification. */
+function confirmButton(label, confirm, action) {
+  return actionButton({
+    label, confirm,
     onClick: () => {
-      if (!btn.classList.contains('primary')) {
-        btn.textContent = confirmLabel;
-        btn.classList.add('danger', 'primary');
-        timer = setTimeout(reset, 4000);
-        return;
-      }
-      clearTimeout(timer);
       const result = action();
-      if (typeof result?.then !== 'function') { reset(); return; }
-      // Waits with the confirm label and a spinner (lilOS styles [aria-busy]) until the action ends
-      btn.disabled = true;
-      btn.setAttribute('aria-busy', 'true');
-      result.catch(err => toast(err.message, { timeout: 7000 })).finally(() => {
-        btn.disabled = false;
-        btn.removeAttribute('aria-busy');
-        reset();
-      });
+      return typeof result?.then === 'function' ? result.catch(err => toast(err.message, { timeout: 7000 })) : result;
     },
   });
-  const reset = () => {
-    btn.textContent = label;
-    btn.classList.remove('danger', 'primary');
-  };
-  return btn;
 }
 
 /** Bytes of settings, positions and views saved by lilOS (JSON text). */
@@ -614,11 +587,7 @@ function storageUsage() {
   return storage.bytes();
 }
 
-function formatBytes(bytes) {
-  if (bytes == null) return t('common.unavailable');
-  if (bytes < 1024) return `${bytes} B`;
-  return `${(bytes / 1024).toLocaleString(session.locale, { maximumFractionDigits: 1 })} KB`;
-}
+const formatBytes = bytes => (bytes == null ? t('common.unavailable') : bytesText(bytes));
 
 const BROWSERS = [[/Edg\/(\d+)/, 'Edge'], [/Firefox\/(\d+)/, 'Firefox'], [/Chrome\/(\d+)/, 'Chrome'], [/Version\/(\d+).*Safari/, 'Safari']];
 
@@ -863,15 +832,9 @@ export default function createSettings({ openWindow, args } = {}) {
           { id: 'apps', get label() { return t('startup.apps.label'); }, sections: () => startupAppsSections({ openWindow, rerender: () => view?.render() }) },
         ],
       },
-      // OneDrive (kernel module netfs-onedrive): only while it runs
-      hasOneDrive() && {
-        id: 'onedrive', icon: 'cloud',
-        get label() { return t('onedrive.label'); },
-        get description() { return t('onedrive.description'); },
-        sections: () => oneDriveSections({ rerender: () => view?.render() }),
-      },
-      // Google Drive, Google Foto, Azure Blob Storage, NFS: only while their modules run
-      ...cloudTabs({ rerender: () => view?.render() }),
+      // OneDrive, Google Drive, Google Foto, Azure Blob Storage, NFS and the provider apps they
+      // sign in with: only while their modules run
+      ...cloudTabs({ rerender: () => view?.render(), select: id => view?.select(id) }),
       { get group() { return t('group.data'); } },
       {
         id: 'storage', icon: 'disk',
@@ -882,7 +845,7 @@ export default function createSettings({ openWindow, args } = {}) {
             title: t('storage.space.title'),
             rows: [
               { label: t('storage.used.label'), description: t('storage.used.description'), control: formatBytes(storageUsage()) },
-              { label: t('storage.contents.label'), description: t('storage.contents.description'), control: formatBytes(contentsSize()) },
+              { label: t('storage.contents.label'), description: t('storage.contents.description'), control: formatBytes(fs.usage(fs.root)?.bytes) },
             ],
           },
           {
@@ -961,10 +924,10 @@ export default function createSettings({ openWindow, args } = {}) {
   // which SettingsWindow sets on each tab change with the text it was made with
   const retitle = () => win.setTitle(t('window.title'), win.view.tab?.label ?? '');
   win.view.on('select', retitle);
-  // OneDrive's settings are read again each time its tab is shown; its connections change its lists
+  // The settings of the network protocols are read again each time their tab is shown; OneDrive's
+  // connections change its lists
   win.view.on('select', () => {
-    if (win.view.tab?.id === 'onedrive') { reloadOneDrive(); win.view.render(); }
-    if (['gdrive', 'gphotos', 'azblob', 'nfs'].includes(win.view.tab?.id)) { reloadCloud(win.view.tab.id); win.view.render(); }
+    if (isCloudTab(win.view.tab?.id)) { reloadCloud(win.view.tab.id); win.view.render(); }
   });
   const offNet = sdk.net?.on?.('mounts', () => { if (win.view.tab?.id === 'onedrive') win.view.render(); });
   const offLocale = sdk.locale?.on('change', () => { win.view.render(); retitle(); });
