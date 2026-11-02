@@ -24,6 +24,19 @@ Una shell come **bash** che lavora sui file di lilOS. Si scrivono i comandi come
 
 **`rm` sposta nel cestino**: ciò che si elimina per sbaglio torna con `trash restore nome`. Per eliminare davvero: `rm --purge` o `trash empty`.
 
+## Schede e sessioni remote
+
+Ogni shell è una **scheda**: **+** ne apre un'altra nella stessa cartella. Nella stessa finestra si lavora anche su altri computer:
+
+- `ssh utente@server` (anche `-p porta`, `-l utente` e un comando da eseguire), `telnet server [porta]`, `rlogin -l utente server` e `supdup server` aprono la sessione in una **scheda nuova**. Al posto dell'indirizzo va bene il nome di un host salvato: `ssh web-01`.
+- Il pannello a sinistra (pulsante accanto alle schede) ha gli **host salvati**, raggruppabili in cartelle, con le password cifrate nel kernel, e le sessioni **ancora attive**. **+** aggiunge un host; il tasto destro lo modifica.
+- Le sessioni remote restano nel kernel anche a finestra chiusa: si riprendono dal pannello (**Riprendi**) o con `sessions` e `sessions <n>`. Senza finestra si chiudono dopo 10 minuti.
+- Alla prima connessione SSH si conferma l'impronta della chiave del server; se cambia, un avviso. Una password non salvata la chiede il terminale stesso.
+- Nella barra in basso: cifrata o no, indirizzo, chiave, dimensione; la ricerca (Ctrl+Maiusc+F), la registrazione in un file e il menu **Tasti** per Ctrl+W, Ctrl+T, Ctrl+N e gli altri tasti che il browser tiene per sé. Copia selezionando o con Ctrl+Maiusc+C, incolla con Ctrl+Maiusc+V.
+- Nel File Manager, dentro una connessione **SFTP** della cartella Rete, **Apri terminale SSH qui** apre la sessione in quella cartella, con le stesse credenziali.
+
+I protocolli sono moduli del kernel (`term-ssh`, `term-telnet`, `term-rlogin`, `term-supdup`) che un amministratore installa dall'AppStore, scheda Kernel. Telnet, rlogin e SUPDUP non sono cifrati. Vuole lilOS 1.12.0 o successivo.
+
 ## Comandi delle altre app
 
 Un’app installata può aggiungere i suoi comandi al Terminale nel manifesto:
@@ -39,3 +52,9 @@ Un’app installata può aggiungere i suoi comandi al Terminale nel manifesto:
 ## Differenze da bash
 
 Non ci sono processi né programmi esterni: i comandi sono quelli del Terminale e delle app. Mancano gli array associativi, `trap`, `getopts`, `select` e i permessi dei file (in lilOS non esistono); i nomi dei file non distinguono maiuscole e minuscole, come nel resto di lilOS.
+
+## Riconoscimenti
+
+- [xterm.js](https://xtermjs.org) 6.0.0 e gli addon fit, search e unicode11, per le schede delle sessioni remote: licenza MIT, © The xterm.js authors, © SourceLair Private Company, © Christopher Jeffrey.
+- [ssh2](https://github.com/mscdex/ssh2) 1.17.0 nel modulo del kernel `term-ssh`: licenza MIT, © Brian White.
+- Telnet: RFC 854, 856, 858, 1073, 1091, 1572. rlogin: RFC 1282. SUPDUP: RFC 734 e il protocollo SUPDUP di ITS.

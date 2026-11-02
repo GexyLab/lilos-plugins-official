@@ -1,19 +1,23 @@
 {
   "id": "terminal",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "kind": "local",
   "name": "Terminal",
-  "description": "A bash-like shell over the files of lilOS: commands, pipes, redirections, variables, loops, functions and scripts.",
+  "description": "A bash-like shell over the files of lilOS, in tabs, and remote sessions: SSH, Telnet, rlogin and SUPDUP, with saved hosts and sessions that keep running when the window is closed.",
   "category": "development",
   "icon": { "glyph": "terminal", "color": "#2b3038" },
   "publisher": { "id": "lilos", "name": "lilOS" },
   "sdk": "1",
+  "lilos": ">=1.12.0",
   "system": true,
   "entrypoints": { "main": { "kind": "window", "params": {
     "cwd": {"type": "folder", "label": "Folder", "description": "The folder to open the terminal in"}
   } } },
-  "permissions": ["fs.write:~", "tags.write"],
+  "permissions": ["fs.write:~", "tags.write", "term", "ui.menus"],
   "contributes": {
-    "window": { "width": 760, "height": 460 }
+    "window": { "width": 760, "height": 460 },
+    "actions": [
+      { "id": "terminal.sshHere", "label": "Open SSH terminal here", "entry": "main", "on": "item", "glyph": "terminal", "when": { "net": ["sftp"] } }
+    ]
   }
 }

@@ -1,9 +1,9 @@
 {
   "id": "terminal",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "kind": "local",
   "name": "Terminal",
-  "description": "A bash-like shell over the files of lilOS: commands, pipes, redirections, variables, loops, functions and scripts.",
+  "description": "A bash-like shell over the files of lilOS, in tabs, and remote sessions: SSH, Telnet, rlogin and SUPDUP, with saved hosts and sessions that keep running when the window is closed.",
   "category": "development",
   "icon": {
     "glyph": "terminal",
@@ -14,6 +14,7 @@
     "name": "lilOS"
   },
   "sdk": "1",
+  "lilos": ">=1.12.0",
   "system": true,
   "entrypoints": {
     "main": {
@@ -29,22 +30,38 @@
   },
   "permissions": [
     "fs.write:~",
-    "tags.write"
+    "tags.write",
+    "term",
+    "ui.menus"
   ],
   "contributes": {
     "window": {
       "width": 760,
       "height": 460
-    }
+    },
+    "actions": [
+      {
+        "id": "terminal.sshHere",
+        "label": "Open SSH terminal here",
+        "entry": "main",
+        "on": "item",
+        "glyph": "terminal",
+        "when": {
+          "net": [
+            "sftp"
+          ]
+        }
+      }
+    ]
   },
   "entry": "dist/index.js",
   "styles": [
-    "dist/index-cS4PAZr0.css"
+    "dist/index-WviqVvs5.css"
   ],
   "locales": "locales.json",
   "files": {
-    "dist/index-cS4PAZr0.css": "sha256-daR1N0U/TT0z8XFY0XTTGR7kLV0idwTdyhg2tGpAqb0=",
-    "dist/index.js": "sha256-V0EKxtW6aO4BvNxkmwJGeYaLWA3eYxZ12qCOAHH5pcg=",
-    "locales.json": "sha256-UeIHKrUlapGIVKjV77MH0qjy8CVxem1yxqvKYjLtu9Q="
+    "dist/index-WviqVvs5.css": "sha256-Q1eSoSJG8INB0M80W73qUMjiw910kMVctOpMEqar2uA=",
+    "dist/index.js": "sha256-B4cEO6r2aHxdMQXIzVIDb6dMpgD1U+Ued9RoCCsdMvE=",
+    "locales.json": "sha256-0oL8SZTkMocJEN6p/kTuS1/NgAXsUWTlGiIM+YDuqgI="
   }
 }

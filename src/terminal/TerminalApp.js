@@ -1,4 +1,5 @@
 import { Window, h, fs, storage, session } from '@lilos/sdk';
+import { TerminalWindow } from './window.js';
 import { Shell } from './shell/Shell.js';
 import { commands } from './commands/index.js';
 import { Reader, FnWriter } from './shell/streams.js';
@@ -16,16 +17,16 @@ const SCROLLBACK = 400_000;   // characters of output kept
 const RC = '.bashrc';
 
 /**
- * Terminale: a bash-like shell over lilOS's files. Everything shown is one stream of output; the
- * line being typed is a live span at its end, fed by a hidden textarea (so selection and copying
- * of the output work as on any page). args.cwd (a folder id) opens it there.
+ * Terminale: tabs of bash-like shells over lilOS's files (this file) and of remote sessions (SSH,
+ * Telnet, rlogin, SUPDUP: remote/RemoteTab.js), with the saved hosts in a side panel (window.js).
+ * args.cwd (a folder id) opens it there; { files, action: 'terminal.sshHere' } (the menu of a
+ * folder of an SFTP connection) opens SSH in that folder.
  */
 export default function createTerminal({ args } = {}) {
   const win = new Window({ title: t('ui.title'), icon: 'terminal', width: 760, height: 460, minWidth: 360, minHeight: 200 });
-  const term = new Terminal(win, args);
-  win.getState = () => ({ cwd: term.shell.cwd });
-  // Opened again on a folder (File Manager, a link): go there
-  win.on('launch', a => { if (a?.cwd && fs.get(a.cwd)?.type === 'folder') term.changeDir(a.cwd); });
+  const tabs = new TerminalWindow(win, args, (owner, a) => new LocalShell(owner, a));
+  win.getState = () => ({ cwd: tabs.firstLocal()?.shell.cwd });
+  win.on('launch', a => tabs.launched(a));
   return win;
 }
 
@@ -36,7 +37,12 @@ class TerminalReader extends Reader {
   pull() { return this.term.readInput(this); }
 }
 
-class Terminal {
+/**
+ * One shell. Everything shown is one stream of output; the line being typed is a live span at its
+ * end, fed by a hidden textarea (so selection and copying of the output work as on any page).
+ */
+class LocalShell {
+  remote = false;
   text = '';            // the line being typed
   cursor = 0;
   pending = '';         // lines of a command not complete yet (if without fi…)
@@ -51,10 +57,12 @@ class Terminal {
   #charWidth = 0;
   #token = null;
 
-  constructor(win, args) {
-    this.win = win;
+  #listeners = new AbortController();
+
+  constructor(owner, args) {
+    this.owner = owner;
     this.ansi = new AnsiRenderer();
-    const { signal } = win;
+    const { signal } = this.#listeners;
 
     this.edit = h('span', { class: 'tm-edit' });
     this.output = h('div', { class: 'tm-out', role: 'log', 'aria-live': 'polite' }, this.edit);
@@ -63,8 +71,7 @@ class Terminal {
       rows: '1', 'aria-label': t('ui.commandLine'),
     });
     this.screen = h('div', { class: 'tm-screen' }, this.output, this.input);
-    win.body.classList.add('tm');
-    win.body.append(this.screen);
+    this.el = h('div', { class: 'tm-pane tm-local', role: 'tabpanel' }, this.screen);
 
     this.input.addEventListener('keydown', e => this.#onKey(e), { signal });
     this.input.addEventListener('input', e => this.#onInput(e), { signal });
@@ -73,8 +80,8 @@ class Terminal {
     this.input.addEventListener('blur', () => this.screen.classList.remove('focused'), { signal });
     // A click focuses the line, unless it selected some text to copy
     this.screen.addEventListener('mouseup', () => { if (!String(getSelection()).length) this.focus(); }, { signal });
-    const resizes = new ResizeObserver(() => { this.#charWidth = 0; });
-    resizes.observe(this.screen);
+    this.resizes = new ResizeObserver(() => { this.#charWidth = 0; });
+    this.resizes.observe(this.screen);
 
     this.history = loadHistory();
     const out = new FnWriter(t => this.write(t));
@@ -88,20 +95,36 @@ class Terminal {
         list: () => [...this.history],
         clear: () => { this.history = []; saveHistory([]); },
       },
+      remote: owner.remote,   // ssh, telnet…: tabs of the window (commands/remote.js)
     };
     this.shell = new Shell({ host: this.host, commands });
     if (args?.cwd && fs.get(args.cwd)?.type === 'folder') this.shell.cwd = args.cwd;
     this.shell.setVar('PS1', '\\[\\e[1;32m\\]\\u@\\h\\[\\e[0m\\]:\\[\\e[1;34m\\]\\w\\[\\e[0m\\]\\$ ');
 
-    win.on('destroy', () => {
-      resizes.disconnect();
-      cancelAnimationFrame(this.#frame);
-      this.#token?.abort();
-      for (const job of this.shell.jobs.list) job.token.abort();
-      this.reader?.reject(new Interrupt());
-    });
     this.#updateTitle();
     this.#start();
+  }
+
+  get name() { return tildePath(this.shell.cwd); }
+  get subtitle() { return tildePath(this.shell.cwd); }
+  get closed() { return false; }
+  activity = false;
+
+  show() {
+    this.el.hidden = false;
+    requestAnimationFrame(() => { this.scrollToEnd(); this.focus(); });
+  }
+
+  hide() { this.el.hidden = true; }
+
+  /** The tab or the window closes: the shell stops. */
+  dispose() {
+    this.#listeners.abort();
+    this.resizes.disconnect();
+    cancelAnimationFrame(this.#frame);
+    this.#token?.abort();
+    for (const job of this.shell.jobs.list) job.token.abort();
+    this.reader?.reject(new Interrupt());
   }
 
   async #start() {
@@ -485,13 +508,13 @@ class Terminal {
   }
 
   #updateTitle() {
-    this.win.setTitle(t('ui.title'), tildePath(this.shell.cwd));
+    this.owner.tabChanged(this);
   }
 
   #exit() {
     this.running = true;
     this.renderLine();
-    this.win.emit('close');
+    this.owner.closeTab(this);
   }
 }
 

@@ -24,7 +24,6 @@ const APPS = [
   { id: 'calculator', entry: 'CalculatorApp.js' },
   { id: 'keyboard', entry: 'KeyboardApp.js' },
   { id: 'zip', entry: 'ZipApp.js' },
-  { id: 'remote-terminal', entry: 'RemoteTerminalApp.js' },
 ];
 
 /** Every language without `extends` has every key of English, and none that English lacks. */

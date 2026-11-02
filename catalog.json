@@ -10,8 +10,7 @@
     "apps/filecrypt",
     "apps/calculator",
     "apps/keyboard",
-    "apps/zip",
-    "apps/remote-terminal"
+    "apps/zip"
   ],
   "modules": [
     "modules/users-basic",
