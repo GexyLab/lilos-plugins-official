@@ -97,12 +97,29 @@ function workspaceSubtabs() {
   return [currentTab, ...others, allTab];
 }
 
-/** Every workspace: change to it, delete it; make a new one. */
+/** lilOS has this setting (an older one throws on keys it never defined). */
+function hasSetting(key) {
+  try { settings.get(key); return true; } catch { return false; }
+}
+
+/** Every workspace: change to it, delete it; make a new one; how the taskbar shows them. */
 function allWorkspacesSections() {
   const ws = workspaceManager();
   if (!ws) return [];
   const list = ws.list();
   return [
+    // lilOS before 1.20.0 shows only the current workspace in the taskbar
+    hasSetting('taskbarWorkspaces') && {
+      title: t('workspaces.taskbar.title'),
+      rows: [{
+        label: t('workspaces.taskbar.label'), description: t('workspaces.taskbar.description'), keywords: t('workspaces.taskbar.keywords'),
+        control: segmented({
+          value: settings.get('taskbarWorkspaces') === 'all' ? 'all' : 'current', label: t('workspaces.taskbar.label'),
+          options: [{ value: 'current', label: t('workspaces.taskbar.current') }, { value: 'all', label: t('workspaces.taskbar.all') }],
+          onChange: v => settings.set('taskbarWorkspaces', v),
+        }),
+      }],
+    },
     {
       title: t('workspaces.label'),
       rows: [
@@ -132,7 +149,7 @@ function allWorkspacesSections() {
         { label: t('workspaces.deleting.windows.label'), description: t('workspaces.deleting.windows.description') },
       ],
     },
-  ];
+  ].filter(Boolean);
 }
 
 /** Bound toggle for a boolean setting. */
