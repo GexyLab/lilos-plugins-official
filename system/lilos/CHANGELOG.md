@@ -1,5 +1,12 @@
 # Changelog di lilOS
 
+## 1.18.0 — 2026-11-02
+
+- Nuova app **ArduinoIDE**, da installare dall'AppStore (Sviluppo): sketch per **Arduino Uno, Nano e Mega**. Editor con evidenziazione C++ e **suggerimenti mentre scrivi** (funzioni, metodi di `Serial`, parametri, definizioni), **Verifica** (Ctrl R) con la memoria usata, **Carica** (Ctrl U), **monitor seriale** (velocità, fine riga, ora davanti alle righe, salva in un file; si mette in pausa da solo durante il caricamento), **gestore librerie** (cerca, versioni, dipendenze, «Includi»), esempi, pannello **Problemi** che porta alla riga e propone la libreria che manca («Installa e riprova»). Gli sketch sono cartelle in `~/Arduino`, le tue librerie in `~/Arduino/libraries`
+- La scheda è collegata **al computer da cui usi lilOS**, anche se lilOS gira su un server: il caricamento e il monitor passano dal browser (Chrome, Edge o Firefox 151+, con lilOS su https o localhost; non Safari). Il browser chiede una volta quale porta usare; le schede originali si riconoscono dall'USB, per i cloni (CH340, CP210x…) scegli la scheda e lilOS se la ricorda. Per i Nano clone c'è il processore «vecchio bootloader»
+- Compilazione, librerie e suggerimenti li fa il nuovo **modulo del kernel `arduino`** (AppStore → Kernel, poi riavvio): la prima volta un amministratore lo **prepara** da ArduinoIDE (scarica arduino-cli, il server dei suggerimenti e il pacchetto delle schede AVR, circa 150 MB, controllati con la loro impronta). Su Windows conviene una cartella dei dati corta (impostazione del modulo)
+- Per gli sviluppatori: SDK 0.11.0 con `serial` (porte seriali con Web Serial, aperte dalla pagina di lilOS) e `kernel.channel` / `kernel.module(nome)`; nelle app installate `lilos.serial` (permesso `serial`) e `lilos.kernel` (permesso `kernel:<modulo>`); i moduli del kernel hanno `ctx.socket` (WebSocket) e `ctx.dataDir`; simbolo `chip` (decisione D67)
+
 ## 1.17.0 — 2026-11-02
 
 - Le automazioni di **Automata** (1.1.0) possono partire da sole: **a un'ora** (scegliendo i giorni, e se lilOS era chiuso a quell'ora anche al prossimo accesso), **ogni tot minuti**, **quando entri** o **quando arrivano file in una cartella** (creati, spostati o copiati lì, anche solo con certe estensioni). Si imposta in Automata → Avvio, «Quando parte da sola»
