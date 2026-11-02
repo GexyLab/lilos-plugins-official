@@ -26,7 +26,7 @@ const TABS = {
   microsoft: { app: 'microsoft', icon: 'lock', protocols: ['onedrive', 'azblob'], steps: 5 },
   google: { app: 'google', icon: 'lock', protocols: ['gdrive', 'gphotos'], steps: 7 },
 };
-/** The settings of the provider apps, kept in the kernel since lilOS 1.21.0: modules that still declare them are not asked. */
+/** The settings of the provider apps, kept in the kernel since lilOS 1.22.0: modules that still declare them are not asked. */
 const APP_KEYS = ['clientId', 'clientSecret', 'clientType', 'accounts', 'tenant'];
 const CALLBACK = '/api/net/signin/callback';
 const BY_HAND = 'http://127.0.0.1:53682/';

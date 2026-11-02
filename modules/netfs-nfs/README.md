@@ -24,6 +24,6 @@ anna = 1027:100,101
 - Molti server accettano solo connessioni da una porta sotto la 1024 (l'opzione `secure` di Linux, di serie). Il modulo prova prima una di quelle; se il sistema non lo permette (Linux senza privilegi) bisogna permettere le altre porte: `insecure` in `/etc/exports`, **Consenti connessioni da porte non privilegiate** su Synology.
 - Con più utenti in lilOS la rete locale è chiusa di serie: l'amministratore la apre con `net.allowPrivate` o `net.allow` in `config.json`.
 
-La libreria (XDR, ONC RPC con record marking, portmapper, MOUNT v3, NFS v3) sta solo in questo modulo. Fornisce il servizio `netfs.nfs`. Nessuna dipendenza. Richiede lilOS 1.21.0 o successivo.
+La libreria (XDR, ONC RPC con record marking, portmapper, MOUNT v3, NFS v3) sta solo in questo modulo. Fornisce il servizio `netfs.nfs`. Nessuna dipendenza. Richiede lilOS 1.22.0 o successivo.
 
 Versione 1.1.0: il nome del server si risolve con il kernel, che dà solo gli indirizzi permessi (con più utenti, niente rete locale se l'amministratore non la apre): il nome non può cambiare indirizzo tra il controllo del kernel e la connessione. Portmapper, MOUNT e NFS vanno tutti a quell'indirizzo.

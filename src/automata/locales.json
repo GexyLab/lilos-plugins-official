@@ -10,7 +10,7 @@
       "@entrypoints.cli.label": "Terminal command",
       "@entrypoints.triggers.label": "Starts at a time moved to Scheduler",
 
-      "needsNewer": "Automata needs lilOS 1.21.0 or later.",
+      "needsNewer": "Automata needs lilOS 1.22.0 or later.",
       "newName": "New automation",
       "newNameAt": "Automation of {date}",
       "action.save": "Save",
@@ -268,7 +268,7 @@
       "@entrypoints.cli.label": "Comando del Terminale",
       "@entrypoints.triggers.label": "Partenze a un’ora spostate in Pianificazione",
 
-      "needsNewer": "Automata richiede lilOS 1.21.0 o successivo.",
+      "needsNewer": "Automata richiede lilOS 1.22.0 o successivo.",
       "newName": "Nuova automazione",
       "newNameAt": "Automazione del {date}",
       "action.save": "Salva",

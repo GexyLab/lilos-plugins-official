@@ -21,6 +21,6 @@ Serve solo per l'accesso con un account Microsoft, che fa il kernel con l'app di
 3. **Autorizzazioni API** → **Azure Storage** → `user_impersonation` (delegata).
 4. Sull'account di archiviazione: **Controllo di accesso (IAM)** → ruolo **Collaboratore ai dati dei BLOB di archiviazione** agli utenti.
 
-Le richieste con la chiave sono firmate dal modulo (Shared Key): nessun SDK. Fornisce il servizio `netfs.azblob`. Nessuna dipendenza. Richiede lilOS 1.21.0 o successivo.
+Le richieste con la chiave sono firmate dal modulo (Shared Key): nessun SDK. Fornisce il servizio `netfs.azblob`. Nessuna dipendenza. Richiede lilOS 1.22.0 o successivo.
 
 Versione 1.1.0: il nome del server si risolve con il kernel, che dà solo gli indirizzi permessi (con più utenti, niente rete locale se l'amministratore non la apre): il nome non può cambiare indirizzo tra il controllo del kernel e la connessione. Un download ripreso controlla che il servizio mandi la parte giusta del file. L'accesso con Microsoft Entra lo fa il kernel, con l'app di Pannello di controllo → App Microsoft (ID e directory passano lì da soli).

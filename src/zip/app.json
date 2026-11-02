@@ -8,7 +8,7 @@
   "icon": { "glyph": "archive", "color": "#b07a2a" },
   "publisher": { "id": "lilos", "name": "lilOS" },
   "sdk": "2",
-  "lilos": ">=1.21.0",
+  "lilos": ">=1.22.0",
   "entrypoints": {
     "main": { "kind": "window" },
     "work": { "kind": "background", "label": "Compress and extract" }
