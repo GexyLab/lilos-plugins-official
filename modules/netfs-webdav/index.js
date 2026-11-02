@@ -1,8 +1,11 @@
 import http from 'node:http';
 import https from 'node:https';
-import tls from 'node:tls';
 import { createHash, randomBytes } from 'node:crypto';
-import { Readable, Transform } from 'node:stream';
+import { Readable } from 'node:stream';
+import { netError, socketError } from './lib/shared/errors.js';
+import { sessionAgents, send, readText, drain, resumable, REQUEST_TIMEOUT } from './lib/shared/http.js';
+import { parseXml, kid, kids, txt } from './lib/shared/xml.js';
+import { needLookup, needPaths } from './lib/shared/kernel.js';
 
 /**
  * WebDAV for the Rete folder (service 'netfs.webdav', see the kernel's net/drivers.js): files and
@@ -19,99 +22,23 @@ import { Readable, Transform } from 'node:stream';
  */
 const DAV = 'DAV:';
 const MAX_XML = 8 << 20;               // a PROPFIND answer of a very big folder, at most
-const MAX_XML_DEPTH = 64;              // nesting of elements (a multistatus needs about 8)
-const MAX_XML_ELEMENTS = 500_000;
 const MAX_REDIRECTS = 3;
-const REQUEST_TIMEOUT = 60_000;        // a request with no data either way for this long fails
-const IDLE_SOCKET = 4_000;             // a kept-alive socket goes after this (before servers close theirs)
 const CONTINUE_WAIT = 1_500;           // how long PUT waits for "100 Continue" before sending anyway
 const REDIRECT = new Set([301, 302, 303, 307, 308]);
 
-const netError = (net, message, extra = {}) => Object.assign(new Error(message), { net, ...extra });
 const label = (en, it) => ({ en, it });
+let modulePaths = null;   // ctx.paths of init (the kernel's path helpers)
 
 // ---------- XML (PROPFIND answers) ----------
 
-const ENTITIES = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'" };
-const decodeEntities = s => (s.includes('&') ? s.replace(/&(#[xX][0-9a-fA-F]{1,6}|#[0-9]{1,7}|[a-zA-Z]{2,4});/g, (m, e) => {
-  if (e[0] !== '#') return ENTITIES[e] ?? m;
-  const code = e[1] === 'x' || e[1] === 'X' ? parseInt(e.slice(2), 16) : parseInt(e.slice(1), 10);
-  try { return String.fromCodePoint(code); } catch { return m; }
-}) : s);
-
-const START_TAG = /<([^\s/>!?]+)((?:\s+[^\s=/>]+\s*=\s*(?:"[^"]*"|'[^']*'))*)\s*(\/?)>/y;
-const ATTRIBUTE = /([^\s=/>]+)\s*=\s*(?:"([^"]*)"|'([^']*)')/g;
-
-/**
- * A small namespace-aware XML parser, enough for a multistatus: elements as { ns, name, children, text }
- * with the namespace resolved (prefixes vary from server to server: D:, d:, lp1:, a default xmlns).
- * No DTD (a DOCTYPE is refused, so no entity tricks); throws on what it cannot read.
- */
-export function parseXml(text) {
-  const bad = () => new Error('XML non valido');
-  const root = { ns: '', name: '', qname: '', children: [], text: '', scope: { xml: 'http://www.w3.org/XML/1998/namespace', '': '' } };
-  const stack = [root];
-  let i = 0, elements = 0;
-  while (i < text.length) {
-    const top = stack[stack.length - 1];
-    const lt = text.indexOf('<', i);
-    if (lt < 0) { top.text += decodeEntities(text.slice(i)); break; }
-    if (lt > i) top.text += decodeEntities(text.slice(i, lt));
-    if (text.startsWith('<!--', lt)) {
-      const end = text.indexOf('-->', lt + 4);
-      if (end < 0) throw bad();
-      i = end + 3;
-    } else if (text.startsWith('<![CDATA[', lt)) {
-      const end = text.indexOf(']]>', lt + 9);
-      if (end < 0) throw bad();
-      top.text += text.slice(lt + 9, end);
-      i = end + 3;
-    } else if (text.startsWith('<?', lt)) {
-      const end = text.indexOf('?>', lt + 2);
-      if (end < 0) throw bad();
-      i = end + 2;
-    } else if (text.startsWith('<!', lt)) {
-      throw bad();   // DOCTYPE and the like: no WebDAV server sends them
-    } else if (text[lt + 1] === '/') {
-      const gt = text.indexOf('>', lt);
-      if (gt < 0 || stack.length < 2 || text.slice(lt + 2, gt).trim() !== top.qname) throw bad();
-      stack.pop();
-      i = gt + 1;
-    } else {
-      START_TAG.lastIndex = lt;
-      const m = START_TAG.exec(text);
-      if (!m) throw bad();
-      // Bounded: deep nesting made every lookup walk a long chain of scopes (seconds of CPU for the whole kernel)
-      if (++elements > MAX_XML_ELEMENTS || stack.length > MAX_XML_DEPTH) throw bad();
-      let scope = top.scope;   // a new scope only for an element that declares a namespace
-      for (const [, key, v1, v2] of m[2].matchAll(ATTRIBUTE)) {
-        if (key !== 'xmlns' && !key.startsWith('xmlns:')) continue;
-        if (scope === top.scope) scope = Object.create(top.scope);
-        scope[key === 'xmlns' ? '' : key.slice(6)] = decodeEntities(v1 ?? v2 ?? '');
-      }
-      const colon = m[1].indexOf(':');
-      const prefix = colon < 0 ? '' : m[1].slice(0, colon);
-      const ns = scope[prefix];
-      if (ns === undefined) throw bad();
-      const el = { ns, name: colon < 0 ? m[1] : m[1].slice(colon + 1), qname: m[1], children: [], text: '', scope };
-      top.children.push(el);
-      if (!m[3]) stack.push(el);
-      i = START_TAG.lastIndex;
-    }
-  }
-  if (stack.length !== 1) throw bad();
-  return root;
-}
-
-const child = (el, name) => el?.children.find(c => c.ns === DAV && c.name === name) ?? null;
-const childrenOf = (el, name) => el?.children.filter(c => c.ns === DAV && c.name === name) ?? [];
-const textOf = el => (el ? (el.text + el.children.map(textOf).join('')).trim() : '');
-const statusOf = el => Number(/^HTTP\/\d(?:\.\d)?\s+(\d{3})/i.exec(textOf(el))?.[1]) || null;
+const child = (el, name) => kid(el, name, DAV);
+const childrenOf = (el, name) => kids(el, name, DAV);
+const statusOf = el => Number(/^HTTP\/\d(?:\.\d)?\s+(\d{3})/i.exec(txt(el))?.[1]) || null;
 
 /** The responses of a multistatus: [{ href, status, props: { name: element } }] (only the DAV: properties found, 2xx). */
 export function parseMultistatus(text) {
   let doc;
-  try { doc = parseXml(text); } catch { throw netError('invalid', 'Risposta del server non WebDAV'); }
+  try { doc = parseXml(text, { maxLength: MAX_XML }); } catch { throw netError('invalid', 'Risposta del server non WebDAV'); }
   const ms = child(doc, 'multistatus') ?? (() => { throw netError('invalid', 'Risposta del server non WebDAV'); })();
   return childrenOf(ms, 'response').map(r => {
     const props = {};
@@ -120,7 +47,7 @@ export function parseMultistatus(text) {
       if (code !== null && (code < 200 || code > 299)) continue;
       for (const p of child(ps, 'prop')?.children ?? []) if (p.ns === DAV) props[p.name] = p;
     }
-    return { href: textOf(child(r, 'href')), status: statusOf(child(r, 'status')), props };
+    return { href: txt(child(r, 'href')), status: statusOf(child(r, 'status')), props };
   });
 }
 
@@ -130,7 +57,6 @@ const decodePart = s => { try { return decodeURIComponent(s); } catch { return s
 /** '/a%20b/c/' → '/a b/c' (decoded, no trailing slash; '/' for the top). */
 const decodePath = pathname => `/${pathname.split('/').filter(Boolean).map(decodePart).join('/')}`;
 const encodePath = path => path.split('/').filter(Boolean).map(encodeURIComponent).join('/');
-const lastPart = path => path.slice(path.lastIndexOf('/') + 1);
 
 /** True if a redirect only adds '/' to the URL (the server's way to say it is a folder); hex case may differ. */
 function sameFolder(location, url) {
@@ -207,62 +133,7 @@ function pickChallenge(challenges) {
   return null;
 }
 
-// ---------- TLS ----------
-
-/**
- * Sockets for HTTPS that reach a request only once the server is known: its certificate is valid
- * for the name (socket.authorized), or its SHA-256 fingerprint is the one the user confirmed.
- * Otherwise the socket is destroyed right after the handshake, before anything is written to it.
- */
-class TrustAgent extends https.Agent {
-  #trust;
-
-  constructor(trust, options) {
-    super({ ...options, rejectUnauthorized: false, maxCachedSessions: 0 });   // no resumed sessions: every socket is checked
-    this.#trust = trust;
-  }
-
-  createConnection(options, callback) {
-    const socket = tls.connect({ ...options, rejectUnauthorized: false });
-    let done = false;
-    const finish = (err, s) => {
-      if (done) return;
-      done = true;
-      socket.off('error', onError);
-      callback(err, s);
-    };
-    const onError = err => finish(err);
-    socket.once('error', onError);
-    socket.once('secureConnect', () => {
-      const cert = socket.getPeerCertificate();
-      const fingerprint = cert?.fingerprint256 ?? '';
-      if (socket.authorized || (this.#trust && fingerprint && fingerprint === this.#trust && !socket.isSessionReused())) return finish(null, socket);
-      socket.destroy();
-      const name = String(cert?.subject?.CN || options.servername || options.host).replace(/[^\x20-\x7e]/g, '').slice(0, 80);
-      const reason = socket.authorizationError ? ` (${socket.authorizationError})` : '';
-      finish(netError('untrusted', `Certificato del server da confermare${reason}`, {
-        trust: { kind: 'tls', fingerprint, text: `${name} · ${fingerprint}` },
-      }));
-    });
-    return undefined;   // the socket goes to the request through the callback, after the check
-  }
-}
-
 // ---------- Errors ----------
-
-const UNREACHABLE = new Set(['ECONNREFUSED', 'ENOTFOUND', 'EHOSTUNREACH', 'ENETUNREACH', 'EAI_AGAIN', 'ETIMEDOUT', 'EADDRNOTAVAIL', 'ECONNABORTED']);
-const DROPPED = new Set(['ECONNRESET', 'EPIPE', 'ERR_STREAM_PREMATURE_CLOSE', 'ECONNABORTED']);
-
-/** A failure of the connection itself: 'unreachable' before any answer, 'lost' once the exchange had started. */
-function transportError(err, started) {
-  if (err?.net || err?.name === 'AbortError') return err;
-  const code = err?.code ?? '';
-  const text = err?.message ?? String(err);
-  if (!started && UNREACHABLE.has(code)) return netError('unreachable', code === 'ETIMEDOUT' ? 'Il server non risponde' : text);
-  if (DROPPED.has(code) || /socket hang up|aborted/i.test(text) || started) return netError('lost', text);
-  if (/SSL|TLS|EPROTO|CERT/i.test(code)) return netError('unreachable', `TLS: ${text}`);
-  return netError('unreachable', text);
-}
 
 /** An HTTP status that is not a success, as a driver error. */
 function httpError(status, method) {
@@ -281,24 +152,6 @@ function httpError(status, method) {
   if (status >= 400 && status < 500) return netError('invalid', `richiesta rifiutata (${status})`);
   return new Error(`Errore del server (${status})`);
 }
-
-/** The body of an answer as text, at most `max` bytes. */
-async function readText(res, max = MAX_XML) {
-  const chunks = [];
-  let size = 0;
-  try {
-    for await (const chunk of res) {
-      size += chunk.length;
-      if (size > max) { res.destroy(); throw netError('invalid', 'Risposta del server troppo grande'); }
-      chunks.push(chunk);
-    }
-  } catch (err) {
-    throw transportError(err, true);
-  }
-  return Buffer.concat(chunks).toString('utf8');
-}
-
-const drain = res => { res.on('error', () => {}); res.resume(); };
 
 // ---------- Driver ----------
 
@@ -338,9 +191,10 @@ const driver = {
     }
   },
 
-  async connect(values, { secret = {}, trust = null } = {}) {
+  async connect(values, ctx = {}) {
+    const { secret = {}, trust = null } = ctx;
     const { url, user } = baseUrl(values.url);
-    const session = new Session(url, values.user || user, secret.password ?? '', trust);
+    const session = new Session(url, values.user || user, secret.password ?? '', trust, { lookup: needLookup(ctx), paths: needPaths(ctx, { paths: modulePaths }) });
     try {
       const top = await session.stat('/');
       if (!top) throw netError('not_found', 'La cartella dell’indirizzo non esiste sul server');
@@ -355,14 +209,14 @@ const driver = {
 
 class Session {
   resume = { read: true, write: false };
-  #base; #user; #password; #agents; #auth = null; #nc = 0;
+  #base; #user; #password; #agents; #paths; #auth = null; #nc = 0;
 
-  constructor(base, user, password, trust) {
+  constructor(base, user, password, trust, { lookup, paths }) {
     this.#base = base;
     this.#user = user ?? '';
     this.#password = password ?? '';
-    const options = { keepAlive: true, maxSockets: 6, timeout: IDLE_SOCKET };
-    this.#agents = { 'http:': new http.Agent(options), 'https:': new TrustAgent(trust, options) };
+    this.#paths = paths;
+    this.#agents = sessionAgents(trust, { lookup, maxSockets: 6 });
   }
 
   /** The URL of a path of the connection ('/' is the address itself); folders end with '/'. */
@@ -400,19 +254,14 @@ class Session {
   }
 
   /** One request: resolves with the answer (its body not read yet); a failed connection rejects with a driver error. */
-  #send(method, url, { headers = {}, body = null, signal } = {}) {
+  async #send(method, url, { headers = {}, body = null, signal } = {}) {
     const auth = this.#authorization(method, url);
-    const lib = url.protocol === 'https:' ? https : http;
-    const req = lib.request(url, {
-      method, agent: this.#agents[url.protocol], signal, timeout: REQUEST_TIMEOUT,
+    const res = await send(url, {
+      method, body, signal, agent: this.#agents[url.protocol],
       headers: { 'User-Agent': 'lilOS', ...headers, ...(auth && { Authorization: auth }) },
     });
-    req.on('timeout', () => req.destroy(Object.assign(new Error('Il server non risponde'), { code: 'ETIMEDOUT' })));
-    return new Promise((resolve, reject) => {
-      req.on('response', res => { res.sentAuth = !!auth; resolve(res); });
-      req.on('error', err => reject(Object.assign(transportError(err, false), { reused: req.reusedSocket })));
-      req.end(body);
-    });
+    res.sentAuth = !!auth;
+    return res;
   }
 
   /**
@@ -463,12 +312,12 @@ class Session {
     if (res.statusCode !== 207 && res.statusCode !== 200) { drain(res); throw httpError(res.statusCode, 'PROPFIND'); }
     // The answer's own address (after redirects), to read relative hrefs against
     const at = new URL(res.req?.path ?? url.pathname, url);
-    return { at, responses: parseMultistatus(await readText(res)) };
+    return { at, responses: parseMultistatus(await readText(res, MAX_XML)) };
   }
 
   /** An answer of MOVE or DELETE that is a multistatus (207): the first failure in it, or null. */
   async #multistatusFailure(res, method) {
-    const failed = parseMultistatus(await readText(res)).find(r => r.status && (r.status < 200 || r.status > 299));
+    const failed = parseMultistatus(await readText(res, MAX_XML)).find(r => r.status && (r.status < 200 || r.status > 299));
     return failed ? httpError(failed.status, method) : null;
   }
 
@@ -510,9 +359,9 @@ class Session {
       try { where = decodePath(new URL(r.href, at).pathname); } catch { return; }
       if (where === self) { selfSeen = true; return; }
       // A server behind a proxy that rewrites paths: the folder itself is the first answer
-      if (index === 0 && !selfSeen && r.props.resourcetype && lastPart(where) === lastPart(self) && responses.length > 1
+      if (index === 0 && !selfSeen && r.props.resourcetype && this.#paths.baseName(where) === this.#paths.baseName(self) && responses.length > 1
         && responses.slice(1).every(o => { try { return decodePath(new URL(o.href, at).pathname).startsWith(`${where}/`); } catch { return false; } })) return;
-      const name = lastPart(where);
+      const name = this.#paths.baseName(where);
       if (!name || name === '.' || name === '..' || /[\0-\x1f\x7f]/.test(name) || names.has(name)) return;
       names.add(name);
       out.push(entryOf(name, r.props));
@@ -524,7 +373,7 @@ class Session {
     try {
       const { responses } = await this.#propfind(this.#url(path), 0);
       const r = responses.find(x => !x.status || (x.status >= 200 && x.status < 300));
-      return r ? entryOf(lastPart(path), r.props) : null;
+      return r ? entryOf(this.#paths.baseName(path), r.props) : null;
     } catch (err) {
       if (err.net === 'not_found') return null;
       throw err;
@@ -537,37 +386,7 @@ class Session {
     const status = res.statusCode;
     if (status === 416 && start > 0) { drain(res); return Readable.from([]); }   // nothing after `start`
     if (status !== 200 && status !== 206) { drain(res); throw httpError(status, 'GET'); }
-    let skip = 0;
-    if (start > 0) {
-      if (status === 206) {
-        const from = /^bytes\s+(\d+)-/i.exec(res.headers['content-range'] ?? '')?.[1];
-        if (Number(from) !== start) { res.destroy(); throw netError('invalid', 'Il server ha mandato un’altra parte del file'); }
-      } else {
-        skip = start;   // the server ignored Range: what comes before `start` is dropped
-      }
-    }
-    const expected = res.headers['content-length'] !== undefined && !res.headers['content-encoding'] ? Number(res.headers['content-length']) : null;
-    let seen = 0;
-    const out = new Transform({
-      transform(chunk, _enc, done) {
-        seen += chunk.length;
-        if (skip > 0) {
-          if (chunk.length <= skip) { skip -= chunk.length; return done(); }
-          chunk = chunk.subarray(skip);
-          skip = 0;
-        }
-        done(null, chunk);
-      },
-      flush(done) {
-        done(expected !== null && seen < expected ? netError('lost', 'File ricevuto a metà: connessione interrotta') : null);
-      },
-    });
-    const broken = err => (signal?.aborted ? signal.reason : err);   // stopped on purpose: the AbortError, not 'lost'
-    res.on('error', err => out.destroy(broken(transportError(err, true))));
-    res.on('close', () => { if (!res.complete) out.destroy(broken(netError('lost', 'File ricevuto a metà: connessione interrotta'))); });
-    out.on('close', () => { if (!res.complete) res.destroy(); });   // the reader stopped: the request goes too
-    res.pipe(out);
-    return out;
+    return resumable(res, { start, signal });
   }
 
   /**
@@ -597,7 +416,7 @@ class Session {
         let bodyStarted = false;
         const answer = new Promise((resolve, reject) => {
           req.on('response', resolve);
-          req.on('error', err => reject(transportError(err, bodyStarted)));
+          req.on('error', err => reject(socketError(err, { started: bodyStarted })));
         });
         answer.catch(() => {});
         req.flushHeaders();
@@ -669,18 +488,19 @@ class Session {
 }
 
 function entryOf(name, props) {
-  const folder = !!props.resourcetype?.children.some(c => c.ns === DAV && c.name === 'collection');
-  const modified = Date.parse(textOf(props.getlastmodified));
+  const folder = !!child(props.resourcetype, 'collection');
+  const modified = Date.parse(txt(props.getlastmodified));
   return {
     name,
     type: folder ? 'folder' : 'file',
-    size: folder ? 0 : Number(textOf(props.getcontentlength)) || 0,
+    size: folder ? 0 : Number(txt(props.getcontentlength)) || 0,
     modified: Number.isFinite(modified) ? modified : 0,
   };
 }
 
 export default {
   async init(ctx) {
+    modulePaths = ctx.paths ?? null;
     ctx.provide('netfs.webdav', driver);
   },
 };

@@ -1,6 +1,6 @@
 {
   "name": "netfs-nfs",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Cartelle NFS (versione 3) di server Linux e NAS nella cartella Rete, con UID e GID assegnati dall'amministratore a ogni utente",
   "kernel": "1",
   "icon": { "glyph": "disk", "color": "#5b3aa8" },

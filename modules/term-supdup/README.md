@@ -32,3 +32,5 @@ Modulo del kernel che aggiunge il protocollo **SUPDUP** alle sessioni remote del
 - ITS TTY (`.INFO.;ITS TTY`): protocollo del terminale intelligente e codici %TD
 - Client di riferimento: [PDP-10/supdup](https://github.com/PDP-10/supdup) (`supdup.c`, `charmap.c`)
 - Provato con KA ITS 1652 del progetto [PDP-10/its](https://github.com/PDP-10/its)
+
+Versione 1.1.0: il nome del server si risolve con il kernel, che dà solo gli indirizzi permessi (con più utenti, niente rete locale se l'amministratore non la apre): il nome non può cambiare indirizzo tra il controllo del kernel e la connessione. Richiede lilOS 1.21.0 o successivo.

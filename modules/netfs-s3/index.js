@@ -1,8 +1,11 @@
-import http from 'node:http';
 import https from 'node:https';
-import tls from 'node:tls';
 import { createHash, createHmac } from 'node:crypto';
-import { Readable, Transform } from 'node:stream';
+import { netError } from './lib/shared/errors.js';
+import { sessionAgents, request, readText, drain, resumable } from './lib/shared/http.js';
+import { parseXml, kid, kids, txt, escapeXml } from './lib/shared/xml.js';
+import { chunks } from './lib/shared/streams.js';
+import { folderParts } from './lib/shared/paths.js';
+import { needLookup } from './lib/shared/kernel.js';
 
 /**
  * Amazon S3 and the services that speak its API (Cloudflare R2, Backblaze B2, Wasabi, MinIO and
@@ -21,21 +24,14 @@ import { Readable, Transform } from 'node:stream';
  * resume (Range). Objects in an archive class (Glacier Flexible Retrieval, Deep Archive) have a
  * badge and cannot be read until restored on the provider's console.
  */
-const MAX_XML = 16 << 20;
-const MAX_XML_DEPTH = 32;
-const MAX_XML_ELEMENTS = 500_000;
 const MAX_PAGES = 200;                 // 200 × 1000 keys at most in a listing
 const SINGLE_MAX = 16 << 20;           // bigger files go in parts
 const PART = 16 << 20;
 const MAX_PARTS = 10_000;
 const COPY_MAX = 5 * 1024 ** 3;        // CopyObject's limit: bigger objects are copied in parts
-const REQUEST_TIMEOUT = 60_000;
-const RETRIES = 3;
 const ARCHIVED = new Set(['GLACIER', 'DEEP_ARCHIVE']);
 
 const label = (en, it) => ({ en, it });
-const netError = (net, message, extra = {}) => Object.assign(new Error(message), { net, ...extra });
-const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 // ---------- Providers ----------
 
@@ -83,8 +79,7 @@ const BUCKET = /^[a-zA-Z0-9][a-zA-Z0-9._-]{1,254}$/;
 
 /** The folder of the bucket the connection opens ('Lavoro/2026/' → 'Lavoro/2026/'; '' for all of it). Throws 'invalid'. */
 export function cleanPrefix(raw) {
-  const parts = String(raw ?? '').split(/[/\\]+/).map(p => p.trim()).filter(Boolean);
-  if (parts.some(p => p === '.' || p === '..' || /[\0-\x1f]/.test(p))) throw netError('invalid', 'Cartella del bucket non valida');
+  const parts = folderParts(raw, 'Cartella del bucket non valida');
   return parts.length ? `${parts.join('/')}/` : '';
 }
 
@@ -115,119 +110,15 @@ export function signV4({ method, url, headers, payload, region, accessKey, secre
   const names = Object.keys(headers).map(n => n.toLowerCase()).sort();
   const canonicalHeaders = names.map(n => `${n}:${String(headers[n]).trim().replace(/\s+/g, ' ')}\n`).join('');
   const signed = names.join(';');
-  const request = [method, url.pathname || '/', query, canonicalHeaders, signed, payload].join('\n');
+  const canonical = [method, url.pathname || '/', query, canonicalHeaders, signed, payload].join('\n');
   const scope = `${day}/${region}/${service}/aws4_request`;
-  const toSign = ['AWS4-HMAC-SHA256', amzDate, scope, sha256(request)].join('\n');
+  const toSign = ['AWS4-HMAC-SHA256', amzDate, scope, sha256(canonical)].join('\n');
   const key = hmac(hmac(hmac(hmac(`AWS4${secretKey}`, day), region), service), 'aws4_request');
   headers.authorization = `AWS4-HMAC-SHA256 Credential=${accessKey}/${scope}, SignedHeaders=${signed}, Signature=${createHmac('sha256', key).update(toSign).digest('hex')}`;
   return headers;
 }
 
-// ---------- XML ----------
-
-const ENTITIES = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'" };
-const decodeEntities = s => (s.includes('&') ? s.replace(/&(#[xX][0-9a-fA-F]{1,6}|#[0-9]{1,7}|[a-zA-Z]{2,4});/g, (m, e) => {
-  if (e[0] !== '#') return ENTITIES[e] ?? m;
-  const code = e[1] === 'x' || e[1] === 'X' ? parseInt(e.slice(2), 16) : parseInt(e.slice(1), 10);
-  try { return String.fromCodePoint(code); } catch { return m; }
-}) : s);
-const TAG = /<([^\s/>!?]+)((?:\s+[^\s=/>]+\s*=\s*(?:"[^"]*"|'[^']*'))*)\s*(\/?)>/y;
-
-/**
- * A small XML parser for S3's answers: elements { name (without prefix), children, text }. No DTD
- * (a DOCTYPE is refused: no entities to expand), bounded in size, depth and elements.
- */
-export function parseXml(text) {
-  const bad = () => netError('invalid', 'Risposta del server non valida (XML)');
-  if (text.length > MAX_XML) throw bad();
-  const root = { name: '', children: [], text: '' };
-  const stack = [root];
-  let i = 0, count = 0;
-  while (i < text.length) {
-    const top = stack[stack.length - 1];
-    const lt = text.indexOf('<', i);
-    if (lt < 0) { top.text += decodeEntities(text.slice(i)); break; }
-    if (lt > i) top.text += decodeEntities(text.slice(i, lt));
-    if (text.startsWith('<?', lt)) {
-      const end = text.indexOf('?>', lt + 2);
-      if (end < 0) throw bad();
-      i = end + 2;
-    } else if (text.startsWith('<!--', lt)) {
-      const end = text.indexOf('-->', lt + 4);
-      if (end < 0) throw bad();
-      i = end + 3;
-    } else if (text.startsWith('<![CDATA[', lt)) {
-      const end = text.indexOf(']]>', lt + 9);
-      if (end < 0) throw bad();
-      top.text += text.slice(lt + 9, end);
-      i = end + 3;
-    } else if (text.startsWith('<!', lt)) {
-      throw bad();
-    } else if (text[lt + 1] === '/') {
-      const gt = text.indexOf('>', lt);
-      if (gt < 0 || stack.length < 2 || text.slice(lt + 2, gt).trim() !== top.qname) throw bad();
-      stack.pop();
-      i = gt + 1;
-    } else {
-      TAG.lastIndex = lt;
-      const m = TAG.exec(text);
-      if (!m || ++count > MAX_XML_ELEMENTS || stack.length > MAX_XML_DEPTH) throw bad();
-      const colon = m[1].indexOf(':');
-      const el = { name: colon < 0 ? m[1] : m[1].slice(colon + 1), qname: m[1], children: [], text: '' };
-      top.children.push(el);
-      if (!m[3]) stack.push(el);
-      i = TAG.lastIndex;
-    }
-  }
-  if (stack.length !== 1) throw bad();
-  return root;
-}
-
-const kid = (el, name) => el?.children.find(c => c.name === name) ?? null;
-const kids = (el, name) => el?.children.filter(c => c.name === name) ?? [];
-const txt = el => (el ? (el.text + el.children.map(txt).join('')).trim() : '');
-
-// ---------- TLS (a server with its own certificate, confirmed by the user) ----------
-
-class TrustAgent extends https.Agent {
-  #trust;
-
-  constructor(trust, options) {
-    super({ ...options, rejectUnauthorized: false, maxCachedSessions: 0 });
-    this.#trust = trust;
-  }
-
-  createConnection(options, callback) {
-    const socket = tls.connect({ ...options, rejectUnauthorized: false });
-    let done = false;
-    const finish = (err, s) => { if (done) return; done = true; socket.off('error', finish); callback(err, s); };
-    socket.once('error', finish);
-    socket.once('secureConnect', () => {
-      const cert = socket.getPeerCertificate();
-      const fingerprint = cert?.fingerprint256 ?? '';
-      if (socket.authorized || (this.#trust && fingerprint && fingerprint === this.#trust && !socket.isSessionReused())) return finish(null, socket);
-      socket.destroy();
-      const name = String(cert?.subject?.CN || options.servername || options.host).replace(/[^\x20-\x7e]/g, '').slice(0, 80);
-      finish(netError('untrusted', `Certificato del server da confermare${socket.authorizationError ? ` (${socket.authorizationError})` : ''}`, {
-        trust: { kind: 'tls', fingerprint, text: `${name} · ${fingerprint}` },
-      }));
-    });
-    return undefined;
-  }
-}
-
 // ---------- Errors ----------
-
-const UNREACHABLE = new Set(['ECONNREFUSED', 'ENOTFOUND', 'EHOSTUNREACH', 'ENETUNREACH', 'EAI_AGAIN', 'ETIMEDOUT', 'EADDRNOTAVAIL']);
-
-function transportError(err, started) {
-  if (err?.net || err?.name === 'AbortError') return err;
-  const code = err?.code ?? '';
-  const text = err?.message ?? String(err);
-  if (!started && UNREACHABLE.has(code)) return netError('unreachable', code === 'ETIMEDOUT' ? 'Il server non risponde' : text);
-  if (started || code === 'ECONNRESET' || code === 'EPIPE' || /socket hang up|aborted/i.test(text)) return netError('lost', text);
-  return netError('unreachable', text);
-}
 
 /** An S3 error answer (status and its XML <Error>) → a driver error. */
 export function s3Error(status, body) {
@@ -258,37 +149,18 @@ export function s3Error(status, body) {
   return netError('invalid', said);
 }
 
-async function readBody(res, max = MAX_XML) {
-  const chunks = [];
-  let size = 0;
-  try {
-    for await (const c of res) {
-      size += c.length;
-      if (size > max) { res.destroy(); throw netError('invalid', 'Risposta del server troppo grande'); }
-      chunks.push(c);
-    }
-  } catch (err) {
-    throw transportError(err, true);
-  }
-  return Buffer.concat(chunks).toString('utf8');
-}
-
-const drain = res => { res.on('error', () => {}); res.resume(); };
-const retryable = status => status === 500 || status === 502 || status === 503 || status === 504;
-
 // ---------- The session ----------
 
 class Session {
   resume = { read: true, write: false };
   #end; #bucket; #prefix; #keys; #agents;
 
-  constructor(end, bucket, prefix, keys, trust) {
+  constructor(end, bucket, prefix, keys, trust, lookup) {
     this.#end = end;
     this.#bucket = bucket;
     this.#prefix = prefix;
     this.#keys = keys;
-    const options = { keepAlive: true, maxSockets: 8, timeout: 4000 };
-    this.#agents = { 'http:': new http.Agent(options), 'https:': new TrustAgent(trust, options) };
+    this.#agents = sessionAgents(trust, { lookup });
   }
 
   get region() { return this.#end.region; }
@@ -309,44 +181,25 @@ class Session {
    * its Content-Length). Throttling and server errors are tried again when the body can be sent again.
    */
   async #request(method, key, { query, headers = {}, body = null, length, signal, bucket } = {}) {
-    for (let attempt = 0; ; attempt++) {
-      const url = this.#url(key, query, { bucket: bucket ?? this.#bucket });
-      const h = { ...headers };
-      const buffered = body === null || Buffer.isBuffer(body);
-      if (Buffer.isBuffer(body)) h['content-length'] = String(body.length);
-      else if (body) h['content-length'] = String(length);
-      signV4({ method, url, headers: h, payload: buffered ? sha256(body ?? '') : 'UNSIGNED-PAYLOAD', region: this.#end.region, ...this.#keys });
-      const lib = url.protocol === 'https:' ? https : http;
-      let started = false;
-      const res = await new Promise((resolve, reject) => {
-        const req = lib.request(url, { method, headers: h, agent: this.#agents[url.protocol], signal, timeout: REQUEST_TIMEOUT });
-        req.on('timeout', () => req.destroy(Object.assign(new Error('Il server non risponde'), { code: 'ETIMEDOUT' })));
-        req.on('response', resolve);
-        req.on('error', err => reject(transportError(err, started)));
-        if (body && !buffered) {
-          started = true;
-          body.on('error', err => req.destroy(err));
-          body.pipe(req);
-        } else req.end(body ?? undefined);
-      }).catch(err => {
-        if (buffered && attempt < RETRIES && err.net === 'lost') return null;
-        throw err;
-      });
-      if (!res) { await sleep(1000 * 2 ** attempt); continue; }
-      if (res.statusCode >= 200 && res.statusCode < 300) return res;
-      if (res.statusCode === 304 || (res.statusCode === 206)) return res;
-      if (buffered && attempt < RETRIES && (retryable(res.statusCode) || res.statusCode === 429)) {
-        drain(res);
-        await sleep(Math.min(20_000, (Number(res.headers['retry-after']) || 2 ** attempt) * 1000));
-        continue;
-      }
-      throw s3Error(res.statusCode, method === 'HEAD' ? '' : await readBody(res, 64 << 10).catch(() => ''));
-    }
+    const buffered = body === null || Buffer.isBuffer(body);
+    return request({
+      method, body, signal, agents: this.#agents,
+      prepare: () => {
+        const url = this.#url(key, query, { bucket: bucket ?? this.#bucket });
+        const h = { ...headers };
+        if (Buffer.isBuffer(body)) h['content-length'] = String(body.length);
+        else if (body) h['content-length'] = String(length);
+        signV4({ method, url, headers: h, payload: buffered ? sha256(body ?? '') : 'UNSIGNED-PAYLOAD', region: this.#end.region, ...this.#keys });
+        return { url, headers: h };
+      },
+      success: status => (status >= 200 && status < 300) || status === 304,
+      fail: async res => s3Error(res.statusCode, method === 'HEAD' ? '' : await readText(res, 64 << 10).catch(() => '')),
+    });
   }
 
   async #xml(method, key, opts) {
     const res = await this.#request(method, key, opts);
-    return parseXml(await readBody(res));
+    return parseXml(await readText(res));
   }
 
   #key(path) {
@@ -418,26 +271,7 @@ class Session {
 
   async read(path, { start = 0, signal } = {}) {
     const res = await this.#request('GET', this.#key(path), { headers: start > 0 ? { range: `bytes=${start}-` } : {}, signal });
-    let skip = start > 0 && res.statusCode === 200 ? start : 0;   // Range ignored: what comes before goes
-    const expected = res.headers['content-length'] !== undefined ? Number(res.headers['content-length']) : null;
-    let seen = 0;
-    const out = new Transform({
-      transform(chunk, _enc, done) {
-        seen += chunk.length;
-        if (skip > 0) {
-          if (chunk.length <= skip) { skip -= chunk.length; return done(); }
-          chunk = chunk.subarray(skip);
-          skip = 0;
-        }
-        done(null, chunk);
-      },
-      flush(done) { done(expected !== null && seen < expected ? netError('lost', 'File ricevuto a metà: connessione interrotta') : null); },
-    });
-    res.on('error', err => out.destroy(signal?.aborted ? signal.reason : transportError(err, true)));
-    res.on('close', () => { if (!res.complete) out.destroy(signal?.aborted ? signal.reason : netError('lost', 'File ricevuto a metà: connessione interrotta')); });
-    out.on('close', () => { if (!res.complete) res.destroy(); });
-    res.pipe(out);
-    return out;
+    return resumable(res, { start, signal });
   }
 
   async write(path, source, { start = 0, signal, size } = {}) {
@@ -475,7 +309,7 @@ class Session {
       const xml = `<CompleteMultipartUpload>${done.map(p => `<Part><PartNumber>${p.n}</PartNumber><ETag>${escapeXml(p.etag)}</ETag></Part>`).join('')}</CompleteMultipartUpload>`;
       const res = await this.#request('POST', key, { query: { uploadId }, body: Buffer.from(xml), headers: { 'content-type': 'application/xml' }, signal });
       // S3 may answer 200 with an error inside, after a while
-      const text = await readBody(res);
+      const text = await readText(res);
       if (/<Error>/.test(text)) throw s3Error(500, text);
     } catch (err) {
       this.#request('DELETE', key, { query: { uploadId } }).then(drain, () => {});
@@ -507,7 +341,7 @@ class Session {
   async #copy(from, to, size) {
     const source = `/${this.#bucket}/${uriEncode(from, true)}`;
     if (size <= COPY_MAX) {
-      const text = await readBody(await this.#request('PUT', to, { headers: { 'x-amz-copy-source': source }, body: Buffer.alloc(0) }));
+      const text = await readText(await this.#request('PUT', to, { headers: { 'x-amz-copy-source': source }, body: Buffer.alloc(0) }));
       if (/<Error>/.test(text)) throw s3Error(500, text);
       return;
     }
@@ -522,7 +356,7 @@ class Session {
         done.push({ n, etag: txt(kid(kid(r, 'CopyPartResult'), 'ETag')) });
       }
       const xml = `<CompleteMultipartUpload>${done.map(p => `<Part><PartNumber>${p.n}</PartNumber><ETag>${escapeXml(p.etag)}</ETag></Part>`).join('')}</CompleteMultipartUpload>`;
-      const text = await readBody(await this.#request('POST', to, { query: { uploadId }, body: Buffer.from(xml), headers: { 'content-type': 'application/xml' } }));
+      const text = await readText(await this.#request('POST', to, { query: { uploadId }, body: Buffer.from(xml), headers: { 'content-type': 'application/xml' } }));
       if (/<Error>/.test(text)) throw s3Error(500, text);
     } catch (err) {
       this.#request('DELETE', to, { query: { uploadId } }).then(drain, () => {});
@@ -573,29 +407,11 @@ class Session {
   }
 }
 
-const escapeXml = s => String(s).replace(/[<>&'"]/g, c => `&#${c.charCodeAt(0)};`);
-
-/** A stream in pieces of exactly `size` bytes (the last one shorter): an async iterator of Buffers. */
-async function* chunks(stream, size) {
-  let held = [], length = 0;
-  for await (const chunk of stream) {
-    held.push(chunk);
-    length += chunk.length;
-    while (length >= size) {
-      const all = Buffer.concat(held);
-      yield all.subarray(0, size);
-      held = [all.subarray(size)];
-      length -= size;
-    }
-  }
-  if (length) yield Buffer.concat(held);
-}
-
 /** The region a bucket of AWS is in, from S3's answer to an unsigned HEAD (it says it even when it refuses). */
-async function bucketRegion(bucket) {
+async function bucketRegion(bucket, lookup) {
   const url = new URL(`https://s3.amazonaws.com/${uriEncode(bucket)}`);
   return new Promise(resolve => {
-    const req = https.request(url, { method: 'HEAD', timeout: 15_000 }, res => { drain(res); resolve(res.headers['x-amz-bucket-region'] || null); });
+    const req = https.request(url, { method: 'HEAD', timeout: 15_000, lookup }, res => { drain(res); resolve(res.headers['x-amz-bucket-region'] || null); });
     req.on('timeout', () => req.destroy());
     req.on('error', () => resolve(null));
     req.end();
@@ -653,8 +469,9 @@ const driver = {
     return `s3://${v.share ?? ''}${root ? `/${root.slice(0, -1)}` : ''}${where}`;
   },
 
-  async shares(values, { secret = {}, trust = null } = {}) {
-    const session = new Session(endpointOf(values), '', '', keysOf(values, secret), trust);
+  async shares(values, ctx = {}) {
+    const { secret = {}, trust = null } = ctx;
+    const session = new Session(endpointOf(values), '', '', keysOf(values, secret), trust, needLookup(ctx));
     try {
       return await session.buckets();
     } finally {
@@ -662,14 +479,16 @@ const driver = {
     }
   },
 
-  async connect(values, { secret = {}, trust = null } = {}) {
+  async connect(values, ctx = {}) {
+    const { secret = {}, trust = null } = ctx;
+    const lookup = needLookup(ctx);
     const end = endpointOf(values);
     if (!BUCKET.test(String(values.share ?? ''))) throw netError('invalid', 'Nome del bucket non valido');
     if (end.guessRegion) {
-      const region = await bucketRegion(values.share);
+      const region = await bucketRegion(values.share, lookup);
       if (region && /^[a-z0-9-]{2,40}$/.test(region)) Object.assign(end, endpointOf({ ...values, region }));
     }
-    const session = new Session(end, values.share, cleanPrefix(values.root), keysOf(values, secret), trust);
+    const session = new Session(end, values.share, cleanPrefix(values.root), keysOf(values, secret), trust, lookup);
     try {
       await session.check();
     } catch (err) {

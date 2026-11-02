@@ -3,6 +3,7 @@ import { randomUUID } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { Readable } from 'node:stream';
+import { chunks } from './lib/shared/streams.js';
 
 /**
  * lilOS's file system in PostgreSQL (table lilos_nodes, schema.sql), with its access control.
@@ -309,33 +310,26 @@ export default {
         if (!can(principal, first, true)) ctx.fail('forbidden', 'Non puoi scrivere questo file');
         if (first.type !== 'file') ctx.fail('invalid', 'Non è un file');
         const gen = randomUUID();
-        let seq = 0, size = 0, pending = [], held = 0;
+        let seq = 0, size = 0, rest = Buffer.alloc(0);
         const put = async data => {
           await pool.query('insert into lilos_chunks (node, gen, seq, data) values ($1, $2, $3, $4)', [id, gen, seq++, data]);
         };
         try {
-          for await (const chunk of source) {
+          for await (const piece of chunks(source, CHUNK)) {
             signal?.throwIfAborted();
-            const data = Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk);
-            pending.push(data);
-            held += data.length;
-            size += data.length;
-            while (held >= CHUNK) {
-              const all = Buffer.concat(pending);
-              await put(all.subarray(0, CHUNK));
-              pending = [all.subarray(CHUNK)];
-              held = pending[0].length;
-            }
+            size += piece.length;
+            if (piece.length === CHUNK) await put(piece);
+            else rest = piece;   // the last one, shorter
           }
           signal?.throwIfAborted();
           // Small: in its column, as write() keeps it
           const inline = seq === 0;
-          if (!inline && held) await put(Buffer.concat(pending));
+          if (!inline && rest.length) await put(rest);
           await tx(async db => {
             const r = await readable(db, principal, id, { lock: true });
             if (!can(principal, r, true)) ctx.fail('forbidden', 'Non puoi scrivere questo file');
             await db.query(`update lilos_nodes set content = $2, chunks = $3, size = $4, modified = $5, rev = nextval('lilos_rev') where id = $1`,
-              [id, inline ? Buffer.concat(pending) : null, inline ? null : gen, size, Date.now()]);
+              [id, inline ? rest : null, inline ? null : gen, size, Date.now()]);
             // Only the pieces it replaces: another write of the same file may still be adding its own
             if (r.chunks) await db.query('delete from lilos_chunks where node = $1 and gen = $2', [id, r.chunks]);
           });

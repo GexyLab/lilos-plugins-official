@@ -35,6 +35,7 @@ export class Client {
             throw new Error(`Client.connect: state=${this.state}`);
         const transport = await TcpTransport.connect(this.opts.host, this.opts.port ?? 445, {
             timeoutMs: this.opts.connectTimeout ?? 10_000,
+            lookup: this.opts.lookup,
         });
         this.conn = new Connection(transport);
         const encryption = this.opts.encryption ?? "if-offered";

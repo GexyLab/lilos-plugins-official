@@ -32,6 +32,7 @@ Le app di sistema girano dentro lilOS, senza sandbox. Il kernel le accetta solo 
   - Si genera con `npm run build` e si committa: il kernel installa i file così come sono, senza compilare niente.
   - `lilos.json` contiene l'hash di ogni file, controllato dal kernel all'installazione.
 - `modules/<nome>/`: un modulo del kernel così com'è (`module.json`, `index.js`, eventuale `package.json` con `package-lock.json`).
+- `modules/_shared/`: codice in comune tra i moduli (non è un modulo: il catalogo non lo elenca). Vedi «Codice in comune dei moduli».
 
 Le app importano `@lilos/sdk` e `@lilos/system` senza includerli nel build: a runtime usano quelli di lilOS, serviti come `/host/sdk.js` e `/host/system.js`. `@lilos/system` è l'API che lilOS dà alle app di sistema (vedi `src/systemApi.js` nel repository di lilOS).
 
@@ -42,6 +43,10 @@ Le app importano `@lilos/sdk` e `@lilos/system` senza includerli nel build: a ru
 3. Committa sorgenti e `apps/`, poi crea il tag: `git tag v1.1.0 && git push --follow-tags`.
 
 Le grammatiche di Tree-sitter dell'Editor si aggiornano con `npm run vendor:tree-sitter`.
+
+### Codice in comune dei moduli
+
+Un modulo si installa da solo (solo la sua cartella, come `modules/<nome>_<versione>`), quindi non può importare da un altro. Il codice che più moduli usano (errori di rete, connessioni TCP e TLS attraverso `ctx.lookup` del kernel, HTTP con i certificati da confermare, XML, richieste alle API dei servizi cloud, flussi a pezzi…) sta in `modules/_shared/`, e ogni modulo ne ha una copia in `lib/shared/`: quella dei file che il suo codice importa da lì (con quello che importano a loro volta). Si modifica sempre `modules/_shared/`, poi `npm run sync:modules` aggiorna le copie (e toglie quelle non più importate) e si aumenta la versione dei moduli che cambiano. `npm run check:modules`, e `npm run build`, si fermano se una copia manca, è diversa o non serve più.
 
 ### Riconoscimenti
 

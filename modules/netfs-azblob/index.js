@@ -1,8 +1,11 @@
-import http from 'node:http';
-import https from 'node:https';
-import tls from 'node:tls';
 import { createHmac } from 'node:crypto';
-import { Transform } from 'node:stream';
+import { netError } from './lib/shared/errors.js';
+import { sessionAgents, request, readText, drain, resumable } from './lib/shared/http.js';
+import { parseXml, kid, kids, txt } from './lib/shared/xml.js';
+import { chunks } from './lib/shared/streams.js';
+import { folderParts } from './lib/shared/paths.js';
+import { sleep } from './lib/shared/time.js';
+import { needLookup } from './lib/shared/kernel.js';
 
 /**
  * Azure Blob Storage for the Rete folder: service 'netfs.azblob', see the kernel's net/drivers.js.
@@ -24,20 +27,14 @@ import { Transform } from 'node:stream';
  * For tests only: settings loginUrl replaces Microsoft's sign-in address.
  */
 const VERSION = '2021-12-02';
-const MAX_XML = 16 << 20;
-const MAX_XML_DEPTH = 32;
-const MAX_XML_ELEMENTS = 500_000;
 const MAX_PAGES = 100;               // 100 × 5000 names at most in a listing
 const SINGLE_MAX = 32 << 20;         // known and up to this: one Put Blob
 const BLOCK = 8 << 20;
 const MAX_BLOCKS = 50_000;
 const REQUEST_TIMEOUT = 60_000;
-const RETRIES = 3;
 const COPY_WAIT = 30 * 60_000;       // longest wait for a server-side copy
 
 const label = (en, it) => ({ en, it });
-const netError = (net, message, extra = {}) => Object.assign(new Error(message), { net, ...extra });
-const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 let conf = {};
 const loginBase = () => String(conf.loginUrl || 'https://login.microsoftonline.com').replace(/\/+$/, '');
@@ -73,8 +70,7 @@ export function accountUrl(v) {
 }
 
 export function cleanPrefix(raw) {
-  const parts = String(raw ?? '').split(/[/\\]+/).map(p => p.trim()).filter(Boolean);
-  if (parts.some(p => p === '.' || p === '..' || /[\0-\x1f]/.test(p))) throw netError('invalid', 'Cartella del contenitore non valida');
+  const parts = folderParts(raw, 'Cartella del contenitore non valida');
   return parts.length ? `${parts.join('/')}/` : '';
 }
 
@@ -101,108 +97,7 @@ export function sharedKey({ method, url, headers, account, key }) {
   return `SharedKey ${account}:${sig}`;
 }
 
-// ---------- XML ----------
-
-const ENTITIES = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'" };
-const decodeEntities = s => (s.includes('&') ? s.replace(/&(#[xX][0-9a-fA-F]{1,6}|#[0-9]{1,7}|[a-zA-Z]{2,4});/g, (m, e) => {
-  if (e[0] !== '#') return ENTITIES[e] ?? m;
-  const code = e[1] === 'x' || e[1] === 'X' ? parseInt(e.slice(2), 16) : parseInt(e.slice(1), 10);
-  try { return String.fromCodePoint(code); } catch { return m; }
-}) : s);
-const TAG = /<([^\s/>!?]+)((?:\s+[^\s=/>]+\s*=\s*(?:"[^"]*"|'[^']*'))*)\s*(\/?)>/y;
-
-/** A small XML parser (no DTD, bounded): elements { name, children, text }. */
-export function parseXml(text) {
-  const bad = () => netError('invalid', 'Risposta del server non valida (XML)');
-  if (text.charCodeAt(0) === 0xfeff) text = text.slice(1);
-  if (text.length > MAX_XML) throw bad();
-  const root = { name: '', children: [], text: '' };
-  const stack = [root];
-  let i = 0, count = 0;
-  while (i < text.length) {
-    const top = stack[stack.length - 1];
-    const lt = text.indexOf('<', i);
-    if (lt < 0) { top.text += decodeEntities(text.slice(i)); break; }
-    if (lt > i) top.text += decodeEntities(text.slice(i, lt));
-    if (text.startsWith('<?', lt)) {
-      const end = text.indexOf('?>', lt + 2);
-      if (end < 0) throw bad();
-      i = end + 2;
-    } else if (text.startsWith('<!--', lt)) {
-      const end = text.indexOf('-->', lt + 4);
-      if (end < 0) throw bad();
-      i = end + 3;
-    } else if (text.startsWith('<![CDATA[', lt)) {
-      const end = text.indexOf(']]>', lt + 9);
-      if (end < 0) throw bad();
-      top.text += text.slice(lt + 9, end);
-      i = end + 3;
-    } else if (text.startsWith('<!', lt)) {
-      throw bad();
-    } else if (text[lt + 1] === '/') {
-      const gt = text.indexOf('>', lt);
-      if (gt < 0 || stack.length < 2 || text.slice(lt + 2, gt).trim() !== top.name) throw bad();
-      stack.pop();
-      i = gt + 1;
-    } else {
-      TAG.lastIndex = lt;
-      const m = TAG.exec(text);
-      if (!m || ++count > MAX_XML_ELEMENTS || stack.length > MAX_XML_DEPTH) throw bad();
-      const el = { name: m[1], children: [], text: '' };
-      top.children.push(el);
-      if (!m[3]) stack.push(el);
-      i = TAG.lastIndex;
-    }
-  }
-  if (stack.length !== 1) throw bad();
-  return root;
-}
-
-const kid = (el, name) => el?.children.find(c => c.name === name) ?? null;
-const kids = (el, name) => el?.children.filter(c => c.name === name) ?? [];
-const txt = el => (el ? (el.text + el.children.map(txt).join('')).trim() : '');
-
-// ---------- TLS ----------
-
-class TrustAgent extends https.Agent {
-  #trust;
-
-  constructor(trust, options) {
-    super({ ...options, rejectUnauthorized: false, maxCachedSessions: 0 });
-    this.#trust = trust;
-  }
-
-  createConnection(options, callback) {
-    const socket = tls.connect({ ...options, rejectUnauthorized: false });
-    let done = false;
-    const finish = (err, s) => { if (done) return; done = true; socket.off('error', finish); callback(err, s); };
-    socket.once('error', finish);
-    socket.once('secureConnect', () => {
-      const cert = socket.getPeerCertificate();
-      const fingerprint = cert?.fingerprint256 ?? '';
-      if (socket.authorized || (this.#trust && fingerprint && fingerprint === this.#trust && !socket.isSessionReused())) return finish(null, socket);
-      socket.destroy();
-      const name = String(cert?.subject?.CN || options.servername || options.host).replace(/[^\x20-\x7e]/g, '').slice(0, 80);
-      finish(netError('untrusted', `Certificato del server da confermare${socket.authorizationError ? ` (${socket.authorizationError})` : ''}`, {
-        trust: { kind: 'tls', fingerprint, text: `${name} · ${fingerprint}` },
-      }));
-    });
-    return undefined;
-  }
-}
-
 // ---------- Errors ----------
-
-const UNREACHABLE = new Set(['ECONNREFUSED', 'ENOTFOUND', 'EHOSTUNREACH', 'ENETUNREACH', 'EAI_AGAIN', 'ETIMEDOUT', 'EADDRNOTAVAIL']);
-
-function transportError(err, started) {
-  if (err?.net || err?.name === 'AbortError') return err;
-  const code = err?.code ?? '';
-  const text = err?.message ?? String(err);
-  if (!started && UNREACHABLE.has(code)) return netError('unreachable', code === 'ETIMEDOUT' ? 'Il server non risponde' : text);
-  if (started || code === 'ECONNRESET' || code === 'EPIPE' || /socket hang up|aborted/i.test(text)) return netError('lost', text);
-  return netError('unreachable', text);
-}
 
 /** An error answer of the service (status, x-ms-error-code, the XML or JSON body) → a driver error. */
 export function azError(status, code, body, { entra = false } = {}) {
@@ -232,23 +127,6 @@ export function azError(status, code, body, { entra = false } = {}) {
   if (status >= 500 || status === 429) return netError('unreachable', `servizio non disponibile (${said})`);
   return netError('invalid', said);
 }
-
-async function readBody(res, max = MAX_XML) {
-  const chunks = [];
-  let size = 0;
-  try {
-    for await (const c of res) {
-      size += c.length;
-      if (size > max) { res.destroy(); throw netError('invalid', 'Risposta del server troppo grande'); }
-      chunks.push(c);
-    }
-  } catch (err) {
-    throw transportError(err, true);
-  }
-  return Buffer.concat(chunks).toString('utf8');
-}
-
-const drain = res => { res.on('error', () => {}); res.resume(); };
 
 // ---------- Entra (Microsoft's sign-in) ----------
 
@@ -319,13 +197,12 @@ class Session {
   #where; #container; #prefix; #auth; #agents; #hns = false;
 
   /** auth: { kind: 'key', key } | { kind: 'sas', sas } | { kind: 'entra', tokens } */
-  constructor(where, container, prefix, auth, trust) {
+  constructor(where, container, prefix, auth, trust, lookup) {
     this.#where = where;
     this.#container = container;
     this.#prefix = prefix;
     this.#auth = auth;
-    const options = { keepAlive: true, maxSockets: 8, timeout: 4000 };
-    this.#agents = { 'http:': new http.Agent(options), 'https:': new TrustAgent(trust, options) };
+    this.#agents = sessionAgents(trust, { lookup });
   }
 
   #url(key, query = {}, { dfs = false, container = this.#container } = {}) {
@@ -337,46 +214,32 @@ class Session {
     return url;
   }
 
+  /**
+   * One request, signed as the connection signs (Shared Key, SAS in the address, Entra token).
+   * Throttling and server errors are tried again when the body can be sent again.
+   */
   async #request(method, key, { query, headers = {}, body = null, length, signal, dfs = false, container } = {}) {
-    for (let attempt = 0; ; attempt++) {
-      const url = this.#url(key, query, { dfs, container });
-      const h = { 'x-ms-version': VERSION, 'x-ms-date': new Date().toUTCString(), ...headers };
-      const buffered = body === null || Buffer.isBuffer(body);
-      if (Buffer.isBuffer(body)) h['content-length'] = String(body.length);
-      else if (body) h['content-length'] = String(length);
-      else if (['PUT', 'POST'].includes(method)) h['content-length'] = '0';
-      if (this.#auth.kind === 'key') h.authorization = sharedKey({ method, url, headers: h, account: this.#where.account, key: this.#auth.key });
-      else if (this.#auth.kind === 'entra') h.authorization = `Bearer ${await this.#auth.tokens.get()}`;
-      const lib = url.protocol === 'https:' ? https : http;
-      let started = false;
-      const res = await new Promise((resolve, reject) => {
-        const req = lib.request(url, { method, headers: h, agent: this.#agents[url.protocol], signal, timeout: REQUEST_TIMEOUT });
-        req.on('timeout', () => req.destroy(Object.assign(new Error('Il server non risponde'), { code: 'ETIMEDOUT' })));
-        req.on('response', resolve);
-        req.on('error', err => reject(transportError(err, started)));
-        if (body && !buffered) {
-          started = true;
-          body.on('error', err => req.destroy(err));
-          body.pipe(req);
-        } else req.end(body ?? undefined);
-      }).catch(err => {
-        if (buffered && attempt < RETRIES && err.net === 'lost') return null;
-        throw err;
-      });
-      if (!res) { await sleep(1000 * 2 ** attempt); continue; }
-      if (res.statusCode >= 200 && res.statusCode < 300) return res;
-      if (buffered && attempt < RETRIES && (res.statusCode >= 500 || res.statusCode === 429)) {
-        drain(res);
-        await sleep(Math.min(20_000, (Number(res.headers['retry-after']) || 2 ** attempt) * 1000));
-        continue;
-      }
-      const text = method === 'HEAD' ? '' : await readBody(res, 64 << 10).catch(() => '');
-      throw azError(res.statusCode, res.headers['x-ms-error-code'] ?? '', text, { entra: this.#auth.kind === 'entra' });
-    }
+    return request({
+      method, body, signal, agents: this.#agents,
+      prepare: async () => {
+        const url = this.#url(key, query, { dfs, container });
+        const h = { 'x-ms-version': VERSION, 'x-ms-date': new Date().toUTCString(), ...headers };
+        if (Buffer.isBuffer(body)) h['content-length'] = String(body.length);
+        else if (body) h['content-length'] = String(length);
+        else if (['PUT', 'POST'].includes(method)) h['content-length'] = '0';
+        if (this.#auth.kind === 'key') h.authorization = sharedKey({ method, url, headers: h, account: this.#where.account, key: this.#auth.key });
+        else if (this.#auth.kind === 'entra') h.authorization = `Bearer ${await this.#auth.tokens.get()}`;
+        return { url, headers: h };
+      },
+      fail: async res => {
+        const text = method === 'HEAD' ? '' : await readText(res, 64 << 10).catch(() => '');
+        return azError(res.statusCode, res.headers['x-ms-error-code'] ?? '', text, { entra: this.#auth.kind === 'entra' });
+      },
+    });
   }
 
   async #xml(method, key, opts) {
-    return parseXml(await readBody(await this.#request(method, key, opts)));
+    return parseXml(await readText(await this.#request(method, key, opts)));
   }
 
   #key(path) {
@@ -447,26 +310,7 @@ class Session {
 
   async read(path, { start = 0, signal } = {}) {
     const res = await this.#request('GET', this.#key(path), { headers: start > 0 ? { 'x-ms-range': `bytes=${start}-` } : {}, signal });
-    let skip = start > 0 && res.statusCode === 200 ? start : 0;
-    const expected = res.headers['content-length'] !== undefined ? Number(res.headers['content-length']) : null;
-    let seen = 0;
-    const out = new Transform({
-      transform(chunk, _enc, done) {
-        seen += chunk.length;
-        if (skip > 0) {
-          if (chunk.length <= skip) { skip -= chunk.length; return done(); }
-          chunk = chunk.subarray(skip);
-          skip = 0;
-        }
-        done(null, chunk);
-      },
-      flush(done) { done(expected !== null && seen < expected ? netError('lost', 'File ricevuto a metà: connessione interrotta') : null); },
-    });
-    res.on('error', err => out.destroy(signal?.aborted ? signal.reason : transportError(err, true)));
-    res.on('close', () => { if (!res.complete) out.destroy(signal?.aborted ? signal.reason : netError('lost', 'File ricevuto a metà: connessione interrotta')); });
-    out.on('close', () => { if (!res.complete) res.destroy(); });
-    res.pipe(out);
-    return out;
+    return resumable(res, { start, signal });
   }
 
   async write(path, source, { start = 0, signal, size } = {}) {
@@ -479,7 +323,7 @@ class Session {
     }
     const blockSize = Number.isSafeInteger(size) && size > BLOCK * (MAX_BLOCKS - 100) ? Math.ceil(size / (MAX_BLOCKS - 100) / (1 << 20)) * (1 << 20) : BLOCK;
     const ids = [];
-    for await (const piece of pieces(source, blockSize)) {
+    for await (const piece of chunks(source, blockSize, { atLeastOne: true })) {
       if (ids.length >= MAX_BLOCKS) throw netError('denied', 'File troppo grande per Azure Blob Storage');
       const id = Buffer.from(`lilos-${String(ids.length).padStart(6, '0')}`).toString('base64');
       drain(await this.#request('PUT', key, { query: { comp: 'block', blockid: id }, body: piece, signal }));
@@ -608,21 +452,6 @@ function entry(name, { size, modified, tier }) {
   };
 }
 
-async function* pieces(stream, size) {
-  let held = [], length = 0;
-  for await (const chunk of stream) {
-    held.push(chunk);
-    length += chunk.length;
-    while (length >= size) {
-      const all = Buffer.concat(held);
-      yield all.subarray(0, size);
-      held = [all.subarray(size)];
-      length -= size;
-    }
-  }
-  if (length || !held.length) yield Buffer.concat(held);
-}
-
 /** How a connection signs its requests. */
 function authOf(values, secret, saveSecret) {
   const kind = values.auth ?? 'key';
@@ -716,8 +545,9 @@ const driver = {
     },
   },
 
-  async shares(values, { secret = {}, trust = null, saveSecret = null } = {}) {
-    const session = new Session(accountUrl(values), '', '', authOf(values, secret, saveSecret), trust);
+  async shares(values, ctx = {}) {
+    const { secret = {}, trust = null, saveSecret = null } = ctx;
+    const session = new Session(accountUrl(values), '', '', authOf(values, secret, saveSecret), trust, needLookup(ctx));
     try {
       return await session.containers();
     } finally {
@@ -725,9 +555,10 @@ const driver = {
     }
   },
 
-  async connect(values, { secret = {}, trust = null, saveSecret = null } = {}) {
+  async connect(values, ctx = {}) {
+    const { secret = {}, trust = null, saveSecret = null } = ctx;
     if (!CONTAINER.test(String(values.share ?? ''))) throw netError('invalid', 'Nome del contenitore non valido');
-    const session = new Session(accountUrl(values), values.share, cleanPrefix(values.root), authOf(values, secret, saveSecret), trust);
+    const session = new Session(accountUrl(values), values.share, cleanPrefix(values.root), authOf(values, secret, saveSecret), trust, needLookup(ctx));
     try {
       await session.check();
     } catch (err) {

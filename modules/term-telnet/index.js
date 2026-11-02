@@ -1,5 +1,8 @@
-import { connect as tcpConnect, isIP } from 'node:net';
-import { connect as tlsConnect } from 'node:tls';
+import { isIP } from 'node:net';
+import { netError } from './lib/shared/errors.js';
+import { certificateOf } from './lib/shared/trust.js';
+import { tcpConnect } from './lib/shared/tcp.js';
+import { needLookup } from './lib/shared/kernel.js';
 
 /**
  * Telnet for the remote terminals (service 'term.telnet', see the kernel's term/drivers.js):
@@ -15,22 +18,6 @@ const BINARY = 0, ECHO = 1, SGA = 3, TTYPE = 24, NAWS = 31, NEW_ENVIRON = 39;
 const IS = 0, SEND = 1, VAR = 0, VALUE = 1;
 const OURS = new Set([BINARY, SGA, TTYPE, NAWS, NEW_ENVIRON]);     // options we do (WILL)
 const THEIRS = new Set([BINARY, SGA, ECHO]);                        // options we let the server do (DO)
-const CONNECT_TIMEOUT = 20_000;
-
-const netError = (net, message, extra = {}) => Object.assign(new Error(message), { net, ...extra });
-
-function connectionError(err) {
-  if (err?.net) return err;
-  if (/ECONNREFUSED|ENOTFOUND|EHOSTUNREACH|ETIMEDOUT|EAI_AGAIN|ENETUNREACH/.test(err?.code ?? '')) return netError('unreachable', err.message);
-  return netError('lost', err?.message ?? String(err));
-}
-
-/** The certificate of a TLS socket: { fingerprint, text }. */
-function certificateOf(socket, host) {
-  const cert = socket.getPeerCertificate?.() ?? {};
-  const name = String((Array.isArray(cert.subject?.CN) ? cert.subject.CN[0] : cert.subject?.CN) || host).replace(/[^\x20-\x7e]/g, '').slice(0, 80);
-  return { kind: 'tls', fingerprint: cert.fingerprint256 ?? '', text: `${name} ${cert.fingerprint256 ?? ''}`.slice(0, 200) };
-}
 
 const label = (en, it) => ({ en, it });
 
@@ -50,27 +37,23 @@ const driver = {
 
   async open(values, ctx) {
     const host = values.host, port = values.port ?? (values.tls ? 992 : 23);
-    const socket = await new Promise((resolve, reject) => {
-      let done = false;
-      const fail = err => { if (!done) { done = true; clearTimeout(timer); s.destroy(); reject(err); } };
-      const timer = setTimeout(() => fail(netError('unreachable', 'Il server non risponde')), CONNECT_TIMEOUT);
-      ctx.signal?.addEventListener('abort', () => fail(netError('cancelled', 'Annullato')), { once: true });
-      const s = values.tls
-        ? tlsConnect({ host, port, ...(isIP(host) ? {} : { servername: host }), rejectUnauthorized: false, minVersion: 'TLSv1.2' })
-        : tcpConnect({ host, port });
-      s.once('error', err => fail(connectionError(err)));
-      s.once(values.tls ? 'secureConnect' : 'connect', async () => {
-        clearTimeout(timer);
-        if (values.tls && !s.authorized) {
-          const cert = certificateOf(s, host);
-          const ok = cert.fingerprint ? await ctx.confirm(cert).catch(() => false) : false;
-          if (!ok) return fail(netError('untrusted', 'Certificato del server non confermato'));
-        }
-        if (done) return;
-        done = true;
-        resolve(s);
-      });
+    const socket = await tcpConnect(host, port, {
+      lookup: needLookup(ctx), signal: ctx.signal,
+      tls: values.tls ? { ...(isIP(host) ? {} : { servername: host }), rejectUnauthorized: false, minVersion: 'TLSv1.2' } : null,
     });
+    if (values.tls && !socket.authorized) {
+      // A certificate not valid for the server: the user confirms it (or did before)
+      const cert = certificateOf(socket, host);
+      const stopped = new Promise(resolve => {
+        socket.once('close', () => resolve(false));
+        ctx.signal?.addEventListener('abort', () => resolve(false), { once: true });
+      });
+      const ok = cert.fingerprint ? await Promise.race([ctx.confirm(cert).catch(() => false), stopped]) : false;
+      if (!ok || socket.destroyed || ctx.signal?.aborted) {
+        socket.destroy();
+        throw ctx.signal?.aborted ? netError('cancelled', 'Annullato') : netError('untrusted', 'Certificato del server non confermato');
+      }
+    }
     return session(socket, values, ctx);
   },
 };

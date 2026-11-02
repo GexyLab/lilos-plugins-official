@@ -4,12 +4,20 @@ import { posix } from 'node:path';
 import { PassThrough, Readable } from 'node:stream';
 import { setTimeout as delay } from 'node:timers/promises';
 import { TLSSocket } from 'node:tls';
+import { netError, socketError, abortError, isDriverError } from './lib/shared/errors.js';
+import { certificateOf } from './lib/shared/trust.js';
+import { resolveHost } from './lib/shared/tcp.js';
+import { needLookup } from './lib/shared/kernel.js';
+import { under } from './lib/shared/paths.js';
 
 /**
  * FTP and FTPS for the Rete folder (services 'netfs.ftp' and 'netfs.ftps', see the kernel's
  * net/drivers.js), with basic-ftp.
  *
  * FTPS: explicit (AUTH TLS on the usual port) or implicit (TLS from the start, usually port 990).
+ * The server's name resolves through the kernel (ctx.lookup: only addresses it allows) and
+ * basic-ftp connects to that address; TLS checks the certificate against the name, and the data
+ * connections go to the same address (basic-ftp ignores another one in PASV answers).
  * The password never travels on a TLS connection that is not verified: the connection is made
  * without rejecting the certificate, then, BEFORE the login, the certificate must be valid for the
  * server (signed by a known authority, right name) or be the one the user confirmed (its SHA-256
@@ -25,13 +33,9 @@ const { Client, FTPError, FileType } = ftp;
 const TIMEOUT = 30_000;
 const CONTROL = /[\0-\x1f\x7f]/;
 
-const netError = (net, message, extra = {}) => Object.assign(new Error(message), { net, ...extra });
-
-const abortError = signal => (signal?.reason instanceof Error ? signal.reason : Object.assign(new Error('Annullato'), { name: 'AbortError' }));
-
 /** An error of basic-ftp (or of the network) with `net`, what went wrong. `connecting`: while the connection opens. */
 function ftpError(err, { connecting = false, client = null } = {}) {
-  if (err?.net || err?.name === 'AbortError') return err;
+  if (isDriverError(err)) return err;
   if (client?.pinError) return client.pinError;
   const message = String(err?.message ?? err);
   if (err instanceof FTPError) {
@@ -48,21 +52,10 @@ function ftpError(err, { connecting = false, client = null } = {}) {
     if (code === 501) return netError('invalid', message);
     return err;
   }
-  if (connecting) return netError('unreachable', message);
-  if (/ECONNRESET|EPIPE|ETIMEDOUT|ECONNABORTED/.test(err?.code ?? '') || /closed|FIN packet|transmission error|Timeout|socket hang up/i.test(message)) {
-    return netError('lost', message);
-  }
-  if (/ECONNREFUSED|ENOTFOUND|EHOSTUNREACH|EAI_AGAIN|ENETUNREACH/.test(err?.code ?? '')) return netError('unreachable', message);
-  return err;
-}
-
-/** The certificate of a TLS socket: { fingerprint, text }. */
-function certificateOf(socket, host) {
-  const cert = socket.getPeerCertificate?.() ?? {};
-  const fingerprint = cert.fingerprint256 ?? '';
-  // The name is the server's: only printable text, short (it is shown next to the fingerprint)
-  const name = String((Array.isArray(cert.subject?.CN) ? cert.subject.CN[0] : cert.subject?.CN) || host).replace(/[^\x20-\x7e]/g, '').slice(0, 80);
-  return { fingerprint, text: `${name} · ${fingerprint}` };
+  if (connecting) return socketError(err);
+  // basic-ftp says it in words: the control connection closed, a transfer timed out
+  if (/closed|FIN packet|transmission error|Timeout|socket hang up/i.test(message)) return netError('lost', message);
+  return err?.code ? socketError(err, { started: true }) : err;
 }
 
 /**
@@ -96,7 +89,7 @@ function pinDataConnections(client, fingerprint) {
  * A client connected and logged in. `trust`: the fingerprint the user confirmed (or, for the clients
  * of an open session, the one already checked). Returns { client, fingerprint }.
  */
-async function openClient(values, secret, { secure, trust }) {
+async function openClient(values, secret, { secure, trust, lookup }) {
   const host = values.host, port = values.port ?? 21;
   const user = values.user || 'anonymous';
   const password = values.user ? secret.password ?? '' : secret.password || 'lilos@';
@@ -104,11 +97,13 @@ async function openClient(values, secret, { secure, trust }) {
   const client = new Client(TIMEOUT);
   let fingerprint = null;
   try {
-    // The certificate is checked here, before the login (rejectUnauthorized: false only to see it)
-    const tlsOptions = () => ({ host, ...(isIP(host) ? {} : { servername: host }), rejectUnauthorized: false, minVersion: 'TLSv1.2' });
+    // The certificate is checked here, before the login (rejectUnauthorized: false only to see it);
+    // the name it must have is the server's, the connection goes to the address it resolved to
+    const tlsOptions = () => ({ ...(isIP(host) ? {} : { servername: host }), rejectUnauthorized: false, minVersion: 'TLSv1.2' });
     try {
-      if (secure && values.tls === 'implicit') await client.connectImplicitTLS(host, port, tlsOptions());
-      else await client.connect(host, port);
+      const { address } = await resolveHost(host, lookup);
+      if (secure && values.tls === 'implicit') await client.connectImplicitTLS(address, port, tlsOptions());
+      else await client.connect(address, port);
       if (secure && values.tls !== 'implicit') {
         try {
           await client.useTLS(tlsOptions());
@@ -125,7 +120,7 @@ async function openClient(values, secret, { secure, trust }) {
       if (!(socket instanceof TLSSocket) || !socket.encrypted) throw netError('unreachable', 'Connessione TLS non stabilita');
       const cert = certificateOf(socket, host);
       if (!cert.fingerprint) throw netError('unreachable', 'Il server non ha mostrato un certificato');
-      if (!socket.authorized && cert.fingerprint !== trust) throw netError('untrusted', 'Server da confermare', { trust: { kind: 'tls', ...cert } });
+      if (!socket.authorized && cert.fingerprint !== trust) throw netError('untrusted', 'Server da confermare', { trust: cert });
       fingerprint = cert.fingerprint;
       pinDataConnections(client, fingerprint);
     }
@@ -231,15 +226,17 @@ function makeDriver(secure) {
 
     address: v => `${scheme}://${v.user ? `${v.user}@` : ''}${v.host ?? ''}${v.port && v.port !== 21 ? `:${v.port}` : ''}${v.path && v.path !== '/' ? (v.path.startsWith('/') ? v.path : `/${v.path}`) : ''}`,
 
-    async connect(values, { secret = {}, trust = null } = {}) {
+    async connect(values, ctx = {}) {
+      const { secret = {}, trust = null } = ctx;
+      const lookup = needLookup(ctx);
       const rawRoot = String(values.path || '/');
       if (CONTROL.test(rawRoot)) throw netError('invalid', 'Cartella remota non valida');
-      const { client, fingerprint } = await openClient(values, secret, { secure, trust });
+      const { client, fingerprint } = await openClient(values, secret, { secure, trust, lookup });
       try {
         let root = rawRoot.startsWith('/') ? posix.normalize(rawRoot) : posix.join(await client.pwd(), rawRoot);
         if (root.length > 1) root = root.replace(/\/+$/, '');
         const features = await client.features();
-        return session(client, { values, secret, secure, fingerprint, root, canRestart: features.has('REST') });
+        return session(client, { values, secret, secure, fingerprint, lookup, root, canRestart: features.has('REST') });
       } catch (err) {
         client.close();
         throw ftpError(err, { connecting: true, client });
@@ -248,8 +245,8 @@ function makeDriver(secure) {
   };
 }
 
-function session(main, { values, secret, secure, fingerprint, root, canRestart }) {
-  const full = path => (root === '/' ? path : path === '/' ? root : `${root}${path}`);
+function session(main, { values, secret, secure, fingerprint, lookup, root, canRestart }) {
+  const full = path => under(root, path);
   const streams = new Set();     // the clients of the files being read or written
   const lost = [];
   let closing = false, queue = Promise.resolve();
@@ -305,7 +302,7 @@ function session(main, { values, secret, secure, fingerprint, root, canRestart }
   async function streamClient(signal) {
     if (closing) throw netError('lost', 'Connessione chiusa');
     if (signal?.aborted) throw abortError(signal);
-    const { client } = await openClient(values, secret, { secure, trust: fingerprint });
+    const { client } = await openClient(values, secret, { secure, trust: fingerprint, lookup });
     streams.add(client);
     const abort = () => client.close();
     signal?.addEventListener('abort', abort, { once: true });

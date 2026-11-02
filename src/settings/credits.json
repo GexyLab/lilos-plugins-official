@@ -185,8 +185,7 @@
       "copyright": "Copyright (c) 2011 Mark Cavage, All rights reserved.",
       "url": "https://github.com/joyent/node-asn1",
       "usedBy": [
-        "module:netfs-sftp",
-        "module:term-ssh"
+        "module:ssh"
       ],
       "via": [
         "ssh2"
@@ -211,8 +210,7 @@
       "copyright": "Copyright 1997 Niels Provos <provos@physnet.uni-hamburg.de>",
       "url": "https://github.com/joyent/node-bcrypt-pbkdf",
       "usedBy": [
-        "module:netfs-sftp",
-        "module:term-ssh"
+        "module:ssh"
       ],
       "via": [
         "ssh2"
@@ -226,8 +224,7 @@
       "copyright": "Copyright Brian White. All rights reserved.",
       "url": "https://github.com/mscdex/buildcheck",
       "usedBy": [
-        "module:netfs-sftp",
-        "module:term-ssh"
+        "module:ssh"
       ],
       "via": [
         "ssh2"
@@ -298,8 +295,7 @@
       "copyright": "Copyright Brian White. All rights reserved.",
       "url": "https://github.com/mscdex/cpu-features",
       "usedBy": [
-        "module:netfs-sftp",
-        "module:term-ssh"
+        "module:ssh"
       ],
       "via": [
         "ssh2"
@@ -504,8 +500,7 @@
       "copyright": "Copyright (c) 2018 [NAN contributors](<https://github.com/nodejs/nan#wg-members--collaborators>)",
       "url": "https://github.com/nodejs/nan",
       "usedBy": [
-        "module:netfs-sftp",
-        "module:term-ssh"
+        "module:ssh"
       ],
       "via": [
         "ssh2"
@@ -784,8 +779,7 @@
       "copyright": "Copyright (c) 2018 Nikita Skovoroda <chalkerx@gmail.com>",
       "url": "https://github.com/ChALkeR/safer-buffer",
       "usedBy": [
-        "module:netfs-sftp",
-        "module:term-ssh"
+        "module:ssh"
       ],
       "via": [
         "ssh2"
@@ -838,8 +832,7 @@
       "copyright": "Copyright Brian White. All rights reserved.",
       "url": "https://github.com/mscdex/ssh2",
       "usedBy": [
-        "module:netfs-sftp",
-        "module:term-ssh"
+        "module:ssh"
       ]
     },
     {
@@ -944,8 +937,7 @@
       "copyright": "© TweetNaCl-js contributors",
       "url": "https://tweetnacl.js.org",
       "usedBy": [
-        "module:netfs-sftp",
-        "module:term-ssh"
+        "module:ssh"
       ],
       "via": [
         "ssh2"

@@ -1,12 +1,15 @@
 import { pipeline } from 'node:stream/promises';
 import { Client, SmbError } from './lib/smb3-client/index.js';
+import { netError, socketError, isDriverError } from './lib/shared/errors.js';
+import { needLookup } from './lib/shared/kernel.js';
 
 /**
  * SMB for the Rete folder (service 'netfs.smb', see the kernel's net/drivers.js): the shares of
  * Windows computers and NAS, SMB 2.0.2 to 3.1.1, signed and encrypted when the server offers it.
  * SMB1 (CIFS) is not supported: it is not safe, and Windows has it off. Sign-in with NTLMv2 (user,
  * password, domain or workgroup) or as a guest. What is in a folder is watched (CHANGE_NOTIFY)
- * while it is open in lilOS. The protocol is smb3-client (lib/smb3-client, see VENDORED.md).
+ * while it is open in lilOS. The protocol is smb3-client (lib/smb3-client, see VENDORED.md); the
+ * server's name resolves through the kernel (ctx.lookup: only addresses it allows).
  */
 const label = (en, it) => ({ en, it });
 
@@ -18,13 +21,12 @@ const IN_USE = new Set([0xc0000043, 0xc0000054, 0xc0000056]);
 const LOST = new Set([0xc00000c9, 0xc0000203, 0xc000035c, 0xc0000008]);
 const STATUS = { COLLISION: 0xc0000035, NOT_EMPTY: 0xc0000101, DISK_FULL: 0xc000007f, BAD_SHARE: 0xc00000cc };
 
-const netError = (net, message) => Object.assign(new Error(message), { net });
 // Not in a Windows name: '\' would walk up the tree, ':' opens an alternate data stream
 const BAD_PART = /[\\:*?"<>|\0-\x1f]/;
 const badParts = parts => parts.some(p => p === '.' || p === '..' || BAD_PART.test(p));
 
 function smbError(err) {
-  if (err?.net || err?.name === 'AbortError') return err;
+  if (isDriverError(err)) return err;
   const status = err instanceof SmbError || typeof err?.status === 'number' ? err.status : null;
   if (status === STATUS.BAD_SHARE) return netError('not_found', 'Condivisione inesistente sul server');
   if (NOT_FOUND.has(status)) return netError('not_found', err.message);
@@ -34,16 +36,19 @@ function smbError(err) {
   if (status === STATUS.COLLISION) return netError('exists', err.message);
   if (status === STATUS.NOT_EMPTY) return netError('denied', 'La cartella non è vuota');
   if (status === STATUS.DISK_FULL) return netError('denied', 'Spazio esaurito sul server');
-  if (LOST.has(status) || /connection closed|ECONNRESET|EPIPE/i.test(err?.message ?? '')) return netError('lost', err?.message ?? 'Connessione persa');
-  if (/ECONNREFUSED|ENOTFOUND|EHOSTUNREACH|ETIMEDOUT|EAI_AGAIN|ENETUNREACH|timed out/i.test(`${err?.code ?? ''} ${err?.message ?? ''}`)) return netError('unreachable', err.message);
+  if (LOST.has(status) || /connection closed/i.test(err?.message ?? '')) return netError('lost', err?.message ?? 'Connessione persa');
+  // The socket's own failures: as they are when connecting, else as the cause of the library's error
+  // (its errors with an NTSTATUS have a code of their own: ENOENT…)
+  const socket = typeof err?.cause?.code === 'string' ? err.cause : status === null && (err?.code || /timed? ?out/i.test(err?.message ?? '')) ? err : null;
+  if (socket) return socketError(socket);
   return netError('invalid', err?.message ?? String(err));
 }
 
 /** The client's options for these values: a guest signs in with an empty password. */
-function options(values, secret) {
+function options(values, secret, lookup) {
   const guest = values.auth === 'guest';
   return {
-    host: values.host, port: values.port ?? 445, connectTimeout: 15_000,
+    host: values.host, port: values.port ?? 445, connectTimeout: 15_000, lookup,
     username: guest ? 'guest' : values.user ?? '', password: guest ? '' : secret.password ?? '',
     domain: values.domain ?? '',
     // Unsigned answers are refused (they could be forged on the way); a guest has no key to sign
@@ -52,8 +57,8 @@ function options(values, secret) {
   };
 }
 
-async function open(values, secret) {
-  const client = new Client(options(values, secret));
+async function open(values, secret, lookup) {
+  const client = new Client(options(values, secret, lookup));
   try {
     await client.connect();
   } catch (err) {
@@ -92,8 +97,8 @@ const driver = {
   address: v => `smb://${v.auth === 'guest' ? '' : `${v.domain && v.domain !== 'WORKGROUP' ? `${v.domain};` : ''}${v.user ?? ''}@`}${v.host ?? ''}${v.port && v.port !== 445 ? `:${v.port}` : ''}/${v.share ?? ''}${v.path && v.path !== '/' ? v.path : ''}`,
 
   /** The disk shares of a server (the connection dialog's «Elenca»). */
-  async shares(values, { secret = {} } = {}) {
-    const client = await open(values, secret);
+  async shares(values, ctx = {}) {
+    const client = await open(values, ctx.secret ?? {}, needLookup(ctx));
     try {
       return (await client.listShares()).filter(s => s.type === 'disk' && !s.name.endsWith('$')).map(s => s.name);
     } catch (err) {
@@ -103,9 +108,9 @@ const driver = {
     }
   },
 
-  async connect(values, { secret = {} } = {}) {
+  async connect(values, ctx = {}) {
     if (!values.share || /[\\/]/.test(values.share)) throw netError('invalid', 'Condivisione non valida');
-    const client = await open(values, secret);
+    const client = await open(values, ctx.secret ?? {}, needLookup(ctx));
     const root = (values.path ?? '/').split('/').filter(Boolean);
     if (badParts(root)) {
       await client.close().catch(() => {});

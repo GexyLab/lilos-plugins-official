@@ -33,4 +33,6 @@ Serve un account Azure (gratuito).
 
 L'accesso funziona con lilOS su `https://`, o su `http://` solo da questo computer (`localhost`): Microsoft non accetta altri indirizzi di ritorno.
 
-Fornisce il servizio `netfs.onedrive`. Nessuna dipendenza. Richiede lilOS 1.11.0 o successivo.
+Fornisce il servizio `netfs.onedrive`. Nessuna dipendenza. Richiede lilOS 1.21.0 o successivo.
+
+Versione 1.2.0: codice in comune con gli altri moduli di rete (richieste, riprese, nomi delle cartelle); nessun cambiamento visibile.

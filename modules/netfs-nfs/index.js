@@ -1,6 +1,10 @@
 import { Readable } from 'node:stream';
 import { Nfs3, NfsError, exports, mount, unmount, FILE, DIR, LINK } from './lib/nfs3.js';
 import { RpcError } from './lib/rpc.js';
+import { netError, socketError, isDriverError } from './lib/shared/errors.js';
+import { chunks } from './lib/shared/streams.js';
+import { resolveHost } from './lib/shared/tcp.js';
+import { needLookup } from './lib/shared/kernel.js';
 
 /**
  * NFS for the Rete folder: service 'netfs.nfs', see the kernel's net/drivers.js. NFS version 3
@@ -18,10 +22,11 @@ import { RpcError } from './lib/rpc.js';
  * module tries one first; where the system does not allow it (Linux without privileges), the
  * server must allow other ports ("insecure", Synology's "Allow connections from non-privileged
  * ports"). Reading and writing go by offset: both resume. NFS has no change notifications: a
- * folder is read again when it is opened. For tests only: setting portmapPort (the portmapper's port).
+ * folder is read again when it is opened. The server's name resolves once, through the kernel
+ * (ctx.lookup: only addresses it allows): every connection (portmapper, MOUNT, NFS) goes to that
+ * address. For tests only: setting portmapPort (the portmapper's port).
  */
 const label = (en, it) => ({ en, it });
-const netError = (net, message, extra = {}) => Object.assign(new Error(message), { net, ...extra });
 const MAX_IO = 1 << 20;
 const DEFAULT_IO = 256 << 10;
 const HANDLE_LIFE = 30_000;     // a path's handle is used again for this long
@@ -59,17 +64,14 @@ function cleanExport(raw) {
 
 /** Transport and RPC failures → driver errors. */
 function wrap(err) {
-  if (err?.net || err?.name === 'AbortError') return err;
+  if (err?.code === 'ECONNREFUSED') return netError('unreachable', 'Il server non accetta connessioni NFS (porta chiusa)');
+  if (isDriverError(err)) return err;
   if (err instanceof RpcError) {
     if (err.code === 'auth') return netError('denied', err.message);
     if (err.code === 'lost' || err.code === 'timeout') return netError('lost', err.message);
     return netError('unsupported', err.message);
   }
-  const code = err?.code ?? '';
-  if (['ECONNREFUSED', 'ENOTFOUND', 'EHOSTUNREACH', 'ENETUNREACH', 'EAI_AGAIN', 'ETIMEDOUT'].includes(code)) {
-    return netError('unreachable', code === 'ECONNREFUSED' ? 'Il server non accetta connessioni NFS (porta chiusa)' : code === 'ETIMEDOUT' ? 'Il server non risponde' : err.message);
-  }
-  if (code === 'ECONNRESET' || code === 'EPIPE') return netError('lost', err.message);
+  if (typeof err?.code === 'string') return socketError(err);
   return netError('invalid', err?.message ?? String(err));
 }
 const guard = fn => async (...args) => { try { return await fn(...args); } catch (err) { throw wrap(err); } };
@@ -199,7 +201,7 @@ class Session {
     this.#forget(path);
     let offset = start, verf = null;
     const size = this.#io.write;
-    for await (const piece of pieces(source, size)) {
+    for await (const piece of chunks(source, size)) {
       for (let at = 0; at < piece.length;) {
         const { count, verf: v } = await this.#nfs.write(handle, offset, piece.subarray(at), { signal });
         if (!count) throw netError('lost', 'Il server non ha scritto niente');
@@ -247,21 +249,6 @@ class Session {
 function entryOf(name, attr) {
   if (attr.type === DIR) return { name, type: 'folder', size: 0, modified: attr.mtime };
   return { name, type: 'file', size: attr.type === FILE ? attr.size : 0, modified: attr.mtime, ...(attr.type === LINK && { link: true }) };
-}
-
-async function* pieces(stream, size) {
-  let held = [], length = 0;
-  for await (const chunk of stream) {
-    held.push(chunk);
-    length += chunk.length;
-    while (length >= size) {
-      const all = Buffer.concat(held);
-      yield all.subarray(0, size);
-      held = [all.subarray(size)];
-      length -= size;
-    }
-  }
-  if (length) yield Buffer.concat(held);
 }
 
 const portOf = v => (Number.isInteger(v.port) && v.port > 0 ? v.port : 0);
@@ -315,20 +302,23 @@ const driver = {
   },
 
   /** The folders the server exports (MOUNT EXPORT). */
-  async shares(values) {
+  async shares(values, ctx = {}) {
+    const lookup = needLookup(ctx);
     try {
-      return (await exports(String(values.host), { portmapPort: portmap() })).map(e => e.dir).filter(d => d.startsWith('/'));
+      const { address } = await resolveHost(String(values.host), lookup);
+      return (await exports(address, { portmapPort: portmap() })).map(e => e.dir).filter(d => d.startsWith('/'));
     } catch (err) {
       throw wrap(err);
     }
   },
 
-  async connect(values, { user } = {}) {
-    const identity = identityOf(user);
-    const host = String(values.host ?? '');
+  async connect(values, ctx = {}) {
+    const lookup = needLookup(ctx);
+    const identity = identityOf(ctx.user);
     const dir = cleanExport(values.share);
     const cred = Nfs3.credOf(identity);
     try {
+      const { address: host } = await resolveHost(String(values.host ?? ''), lookup);
       const { handle } = await mount(host, dir, cred, { portmapPort: portmap() });
       const nfs = await Nfs3.open(host, identity, { port: portOf(values), portmapPort: portmap() });
       try {

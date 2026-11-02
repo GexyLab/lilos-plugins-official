@@ -1,12 +1,13 @@
-import net from 'node:net';
 import { randomInt } from 'node:crypto';
 import { Reader, Writer, XdrError } from './xdr.js';
+import { privilegedConnect } from './shared/tcp.js';
 
 /**
  * ONC RPC version 2 (RFC 5531) over TCP, with record marking: calls with AUTH_SYS (uid, gid,
  * groups) or AUTH_NONE, matched to their replies by xid. Many servers take only connections from
  * a port below 1024 (NFS's "secure" option): the client tries one first, and uses an ordinary
- * port when the system does not allow it (an unprivileged process on Linux).
+ * port when the system does not allow it (an unprivileged process on Linux). The host is an
+ * address the driver resolved through the kernel (ctx.lookup).
  */
 export const AUTH_NONE = 0;
 export const AUTH_SYS = 1;
@@ -29,30 +30,6 @@ export function authSys({ uid, gid, gids = [] }) {
   return new Writer().uint(Math.floor(Date.now() / 1000)).string('lilos').uint(uid).uint(gid).uint(gids.length).uints(gids.slice(0, 16)).done();
 }
 
-/** Opens a TCP connection from a port below 1024 if it can, else from any port. → { socket, privileged } */
-export function connectFrom(host, port) {
-  const attempt = localPort => new Promise((resolve, reject) => {
-    const socket = net.connect({ host, port, ...(localPort && { localPort }), timeout: CONNECT_TIMEOUT });
-    const fail = err => { socket.destroy(); reject(err); };
-    socket.once('error', fail);
-    socket.once('timeout', () => fail(Object.assign(new Error('Il server non risponde'), { code: 'ETIMEDOUT' })));
-    socket.once('connect', () => { socket.off('error', fail); socket.setTimeout(0); resolve(socket); });
-  });
-  return (async () => {
-    let tries = 0;
-    for (let p = randomInt(600, 1024); tries < 12; tries++, p = p > 600 ? p - 1 : 1023) {
-      try {
-        return { socket: await attempt(p), privileged: true };
-      } catch (err) {
-        if (err.code === 'EADDRINUSE' || err.code === 'EADDRNOTAVAIL') continue;
-        if (err.code === 'EACCES' || err.code === 'EPERM') break;   // not allowed here: an ordinary port
-        throw err;
-      }
-    }
-    return { socket: await attempt(0), privileged: false };
-  })();
-}
-
 /** One TCP connection to an RPC program. */
 export class RpcClient {
   #socket; #pending = new Map(); #xid = randomInt(1, 2 ** 31); #buffered = []; #size = 0; #need = null; #last = false; #fragments = []; #fragmentsSize = 0;
@@ -70,7 +47,7 @@ export class RpcClient {
   }
 
   static async open(host, port) {
-    const { socket, privileged } = await connectFrom(host, port);
+    const { socket, privileged } = await privilegedConnect(host, port, { timeout: CONNECT_TIMEOUT });
     return new RpcClient(socket, privileged);
   }
 

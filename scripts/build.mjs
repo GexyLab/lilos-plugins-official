@@ -4,7 +4,8 @@
  * installs them as they are, without building anything.
  * The translations (src/<id>/locales.json, see lilOS's SDK i18n.js) go to apps/<id>/locales.json,
  * named by `locales` in the manifest; the build stops if a language lacks keys of English.
- * It also stops if the credits of the Control Panel miss a library (scripts/credits.mjs).
+ * It also stops if the credits of the Control Panel miss a library (scripts/credits.mjs), or if
+ * the copies of the kernel modules' shared code differ from modules/_shared (scripts/module-libs.mjs).
  * Services (entry points of kind 'service') run in the kernel's isolate, where nothing can be
  * imported: src/<id>/services/*.js are copied as they are; src/<id>/kernel/<name>.js are bundled
  * with what they import into dist/<name>.js, with '@lilos/sdk' and '@lilos/system' taken from
@@ -18,8 +19,11 @@ import { copyFileSync, existsSync, readFileSync, readdirSync, writeFileSync } fr
 import { join, relative, sep, resolve as resolvePath } from 'node:path';
 import { appConfig } from '../vite.config.js';
 import { checkCredits } from './credits.mjs';
+import { checkModuleLibs } from './module-libs.mjs';
 
 checkCredits();
+const stale = checkModuleLibs();
+if (stale.length) throw new Error(`codice condiviso dei moduli non allineato (npm run sync:modules): ${stale.join('; ')}`);
 
 const APPS = [
   { id: 'files', entry: 'FilesApp.js' },

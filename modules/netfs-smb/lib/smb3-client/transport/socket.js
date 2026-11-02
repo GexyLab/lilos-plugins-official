@@ -28,7 +28,7 @@ export class TcpTransport extends EventEmitter {
     }
     static connect(host, port = 445, opts = {}) {
         return new Promise((resolve, reject) => {
-            const sock = connect({ host, port });
+            const sock = connect({ host, port, ...(opts.lookup ? { lookup: opts.lookup } : {}) });
             const onError = (err) => {
                 cleanup();
                 reject(err);

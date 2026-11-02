@@ -4,6 +4,12 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { Readable, Transform } from 'node:stream';
 import { pipeline } from 'node:stream/promises';
+import { netError } from './lib/shared/errors.js';
+import { fetcher, bearerCall } from './lib/shared/cloud.js';
+import { chunks, skipFirst } from './lib/shared/streams.js';
+import { folderParts, under } from './lib/shared/paths.js';
+import { sleep, retryDelay } from './lib/shared/time.js';
+import { needPaths } from './lib/shared/kernel.js';
 
 /**
  * OneDrive for the Rete folder (service 'netfs.onedrive', see the kernel's net/drivers.js): the
@@ -30,7 +36,6 @@ import { pipeline } from 'node:stream/promises';
  */
 const SIMPLE_MAX = 4 << 20;                  // bigger files go by upload session
 const CHUNK = 320 * 1024 * 32;               // 10 MiB: upload pieces are multiples of 320 KiB
-const TIMEOUT = 60_000;                      // a request that gives no answer for this long fails
 const RETRIES = 3;                           // throttled (429, 503) or broken requests, tried again
 const MAX_WAIT = 30_000;                     // longest Retry-After honored
 const MAX_PAGES = 200;                       // 200 × 999 entries in a folder, at most
@@ -39,9 +44,9 @@ const FORBIDDEN = /["*:<>?\\|\u0000-\u001f]/;
 const RESERVED = /^(\.lock|con|prn|aux|nul|com\d|lpt\d|desktop\.ini|_vti_.*)$/i;
 
 const label = (en, it) => ({ en, it });
-const netError = (net, message, extra = {}) => Object.assign(new Error(message), { net, ...extra });
 
 let conf = {};
+let moduleCtx = null;
 
 const loginBase = () => String(conf.loginUrl || 'https://login.microsoftonline.com').replace(/\/+$/, '');
 const graphBase = () => String(conf.graphUrl || 'https://graph.microsoft.com/v1.0').replace(/\/+$/, '');
@@ -63,15 +68,7 @@ const scopes = () => ['offline_access', 'User.Read', sharedOn() ? 'Files.ReadWri
 const encodePath = path => path.split('/').map(encodeURIComponent).join('/');
 
 /** A folder of OneDrive as the user writes it ('Lavoro/2026/') → '/Lavoro/2026'; '/' for all of it. */
-export function cleanRoot(raw) {
-  const parts = String(raw ?? '').split(/[/\\]+/).map(p => p.trim()).filter(Boolean);
-  if (parts.some(p => p === '.' || p === '..' || FORBIDDEN.test(p))) throw netError('invalid', 'Cartella di OneDrive non valida');
-  return `/${parts.join('/')}`;
-}
-
-const joinPath = (a, b) => (a === '/' ? b : b === '/' ? a : `${a}${b}`);
-const parentOf = path => path.slice(0, path.lastIndexOf('/')) || '/';
-const baseName = path => path.slice(path.lastIndexOf('/') + 1);
+export const cleanRoot = raw => `/${folderParts(raw, 'Cartella di OneDrive non valida', FORBIDDEN).join('/')}`;
 
 /** A name OneDrive accepts for a new file or folder. Throws 'invalid'. */
 function checkName(name) {
@@ -80,28 +77,8 @@ function checkName(name) {
   if (/^\s|[\s.]$/.test(name)) throw netError('invalid', `OneDrive non accetta nomi che iniziano con uno spazio o finiscono con uno spazio o un punto («${name}»)`);
 }
 
-const sleep = (ms, signal) => new Promise((resolve, reject) => {
-  if (signal?.aborted) return reject(signal.reason);
-  const timer = setTimeout(resolve, ms);
-  signal?.addEventListener('abort', () => { clearTimeout(timer); reject(signal.reason); }, { once: true });
-});
-
 /** fetch with a time limit until the answer starts (the body may then take its time). */
-async function timedFetch(url, init = {}, signal = null) {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(new Error('Tempo scaduto')), TIMEOUT);
-  const stop = () => controller.abort(signal.reason);
-  signal?.addEventListener('abort', stop, { once: true });
-  try {
-    return await fetch(url, { ...init, signal: controller.signal });
-  } catch (err) {
-    if (signal?.aborted) throw signal.reason ?? err;
-    throw netError('unreachable', `OneDrive non raggiungibile (${err.cause?.code ?? err.message})`);
-  } finally {
-    clearTimeout(timer);
-    signal?.removeEventListener('abort', stop);
-  }
-}
+const timedFetch = fetcher('OneDrive');
 
 // ---------- Sign-in and tokens ----------
 
@@ -182,51 +159,33 @@ async function graphError(res) {
   }
 }
 
-const retryAfter = (res, attempt) => Math.min(MAX_WAIT, (Number(res.headers.get('retry-after')) || 2 ** attempt) * 1000);
+const retryAfter = (res, attempt) => retryDelay(res.headers.get('retry-after'), attempt, MAX_WAIT);
 
 class Session {
   resume = { read: true, write: false };
-  #tokens; #root;
+  #tokens; #root; #paths;
   #anchors = new Map();   // full path (lower case) of a shortcut → { driveId, id }
 
-  constructor(tokens, root) {
+  constructor(tokens, root, paths) {
     this.#tokens = tokens;
     this.#root = root;
+    this.#paths = paths;
   }
 
   /** A Graph request: `path` after the API address (or a whole address from Graph itself). */
   async #graph(method, path, { body, headers = {}, signal, raw = false } = {}) {
     const url = /^https?:\/\//.test(path) ? path : `${graphBase()}${path}`;
     if (!url.startsWith(`${graphBase()}/`) && !url.startsWith(graphBase().replace(/\/v1\.0$/, '/'))) throw netError('invalid', 'Indirizzo di Graph inatteso');
-    for (let attempt = 0, renewed = false; ; attempt++) {
-      const token = await this.#tokens.get();
-      const res = await timedFetch(url, {
-        method,
-        headers: { Authorization: `Bearer ${token}`, Accept: 'application/json', ...(body !== undefined && !(body instanceof Buffer) && { 'Content-Type': 'application/json' }), ...headers },
-        body: body === undefined ? undefined : body instanceof Buffer ? body : JSON.stringify(body),
-      }, signal);
-      if (res.status === 401 && !renewed) {
-        renewed = true;
-        await res.body?.cancel().catch(() => {});
-        await this.#tokens.renew();
-        continue;
-      }
-      if ([429, 502, 503, 504].includes(res.status) && attempt < RETRIES) {
-        await res.body?.cancel().catch(() => {});
-        await sleep(retryAfter(res, attempt), signal);
-        continue;
-      }
-      if (!res.ok) throw await graphError(res);
-      if (raw) return res;
-      if (res.status === 204) { await res.body?.cancel().catch(() => {}); return null; }
-      return res.json();
-    }
+    return bearerCall(url, { method, body, signal, raw, headers: { Accept: 'application/json', ...headers } }, {
+      tokens: this.#tokens, fetch: timedFetch, error: graphError, retries: RETRIES,
+      retryable: res => [429, 502, 503, 504].includes(res.status),
+    });
   }
 
   // ---------- Addresses (shortcuts included) ----------
 
   #full(path) {
-    return joinPath(this.#root, path);
+    return under(this.#root, path);
   }
 
   /**
@@ -263,7 +222,7 @@ class Session {
     for (const it of items) {
       const target = it.remoteItem;
       if (!target?.folder || !target.id || !target.parentReference?.driveId || typeof it.name !== 'string') continue;
-      this.#anchors.set(joinPath(fullFolder, `/${it.name}`).toLowerCase(), { driveId: target.parentReference.driveId, id: target.id });
+      this.#anchors.set(under(fullFolder, `/${it.name}`).toLowerCase(), { driveId: target.parentReference.driveId, id: target.id });
     }
   }
 
@@ -285,7 +244,7 @@ class Session {
     const parts = this.#full(path).split('/').filter(Boolean);
     let found = false, at = '/';
     for (const part of parts.slice(0, -1)) {
-      const next = joinPath(at, `/${part}`);
+      const next = under(at, `/${part}`);
       if (!this.#anchors.has(next.toLowerCase())) {
         const items = await this.#children(this.#address(at)).catch(() => null);
         if (!items) return found;
@@ -334,7 +293,7 @@ class Session {
     try {
       return await this.#findAnd(path, async () => {
         const it = await this.#graph('GET', `${this.#url(path)}?$select=${SELECT}`);
-        return this.#entry(it, path === '/' ? it.name : baseName(path));
+        return this.#entry(it, path === '/' ? it.name : this.#paths.baseName(path));
       });
     } catch (err) {
       if (err.net === 'not_found') return null;
@@ -352,24 +311,13 @@ class Session {
         }
         throw err;
       });
-    let stream = Readable.fromWeb(res.body);
-    if (start > 0 && res.status === 200) {
-      let skip = start;
-      stream = stream.pipe(new Transform({
-        transform(chunk, _enc, done) {
-          if (skip >= chunk.length) { skip -= chunk.length; return done(); }
-          const rest = chunk.subarray(skip);
-          skip = 0;
-          done(null, rest);
-        },
-      }));
-    }
-    return stream;
+    const stream = Readable.fromWeb(res.body);
+    return start > 0 && res.status === 200 ? stream.pipe(skipFirst(start)) : stream;
   }
 
   async write(path, source, { start = 0, signal, size } = {}) {
     if (start > 0) throw netError('unsupported', 'OneDrive non riprende un invio a metà');
-    checkName(baseName(path));
+    checkName(this.#paths.baseName(path));
     const held = await hold(source, Number.isSafeInteger(size) ? size : null, signal);
     try {
       await this.#findAnd(path, () => (held.buffer
@@ -387,7 +335,7 @@ class Session {
     if (typeof uploadUrl !== 'string' || !/^https?:\/\//.test(uploadUrl)) throw netError('invalid', 'OneDrive non ha aperto la sessione di caricamento');
     try {
       let offset = 0;
-      for await (const piece of pieces(createReadStream(held.file), CHUNK)) {
+      for await (const piece of chunks(createReadStream(held.file), CHUNK)) {
         const end = offset + piece.length - 1;
         for (let attempt = 0; ; attempt++) {
           // The upload address carries its own authorization: no token with it
@@ -408,6 +356,7 @@ class Session {
   }
 
   async mkdir(path) {
+    const { baseName, parentOf } = this.#paths;
     const name = baseName(path);
     checkName(name);
     await this.#findAnd(parentOf(path), () => this.#graph('POST', `${this.#url(parentOf(path))}/children`, {
@@ -416,6 +365,7 @@ class Session {
   }
 
   async rename(from, to) {
+    const { baseName, parentOf } = this.#paths;
     const name = baseName(to);
     checkName(name);
     const body = { name };
@@ -508,22 +458,6 @@ async function hold(source, size, signal) {
   return { file, size: total, dir };
 }
 
-/** A stream in pieces of exactly `size` bytes (the last one shorter). */
-async function* pieces(stream, size) {
-  let held = [], length = 0;
-  for await (const chunk of stream) {
-    held.push(chunk);
-    length += chunk.length;
-    while (length >= size) {
-      const all = Buffer.concat(held);
-      yield all.subarray(0, size);
-      held = [all.subarray(size)];
-      length -= size;
-    }
-  }
-  if (length) yield Buffer.concat(held);
-}
-
 // ---------- The driver ----------
 
 const driver = {
@@ -575,7 +509,7 @@ const driver = {
     async finish({ code, redirectUri, verifier }) {
       const body = await tokenRequest({ grant_type: 'authorization_code', code, redirect_uri: redirectUri, code_verifier: verifier });
       if (typeof body.refresh_token !== 'string') throw netError('invalid', 'Microsoft non ha dato un accesso duraturo (manca offline_access)');
-      const session = new Session(new Tokens(body.refresh_token, null, body), '/');
+      const session = new Session(new Tokens(body.refresh_token, null, body), '/', null);   // only the top: no paths to take apart
       const me = await session.me();
       await session.check().catch(err => {
         throw err.net === 'not_found' || err.net === 'denied' ? netError('invalid', `L’account ${me} non ha un OneDrive (${err.message})`) : err;
@@ -584,12 +518,14 @@ const driver = {
     },
   },
 
-  async connect(values, { secret = {}, saveSecret = null } = {}) {
+  async connect(values, ctx = {}) {
+    const { secret = {}, saveSecret = null } = ctx;
+    const paths = needPaths(ctx, moduleCtx);
     if (!clientId()) throw netError('unsupported', 'App Azure non impostata (Pannello di controllo → OneDrive)');
     if (typeof secret.account !== 'string' || !secret.account) throw netError('auth', 'Serve un nuovo accesso');
     const tokens = new Tokens(secret.account, saveSecret);
     await tokens.renew();
-    const session = new Session(tokens, cleanRoot(values.root));
+    const session = new Session(tokens, cleanRoot(values.root), paths);
     await session.check();
     return session;
   },
@@ -597,6 +533,7 @@ const driver = {
 
 export default {
   async init(ctx) {
+    moduleCtx = ctx;
     conf = ctx.config;
     ctx.onConfig?.(config => { conf = config; });
     ctx.provide('netfs.onedrive', driver);

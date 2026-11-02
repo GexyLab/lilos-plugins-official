@@ -1,5 +1,7 @@
-import net from 'node:net';
 import { paramBlock, screenSize, Screen, Keys, LOGOUT } from './supdup.js';
+import { netError } from './lib/shared/errors.js';
+import { tcpConnect } from './lib/shared/tcp.js';
+import { needLookup } from './lib/shared/kernel.js';
 
 /**
  * SUPDUP for the Terminale remoto app (service 'term.supdup', see the kernel's term/drivers.js):
@@ -17,19 +19,9 @@ import { paramBlock, screenSize, Screen, Keys, LOGOUT } from './supdup.js';
 export { paramBlock, screenSize, Screen, Keys, LOGOUT, TTYOPT, TD, bucky, keyWith } from './supdup.js';
 
 const DEFAULT_PORT = 95;
-const CONNECT_TIMEOUT = 20_000;
 const CLOSE_TIMEOUT = 2_000;
 const RESYNC_QUIET = 400, RESYNC_GIVE_UP = 3_000;
 const RESETS_OUTPUT = [0o23 /* ^S */, 0o7 /* ^G */];
-
-const netError = (kind, message, extra = {}) => Object.assign(new Error(message), { net: kind, ...extra });
-
-function connectionError(err) {
-  if (err?.net) return err;
-  if (/ECONNREFUSED|ENOTFOUND|EHOSTUNREACH|ETIMEDOUT|EAI_AGAIN|ENETUNREACH/.test(err?.code ?? '')) return netError('unreachable', err.message);
-  if (/ECONNRESET|EPIPE|ECONNABORTED/.test(err?.code ?? '')) return netError('lost', err.message);
-  return netError('invalid', err?.message ?? String(err));
-}
 
 const label = (en, it) => ({ en, it });
 const portOf = values => (values.port === undefined || values.port === null || values.port === '' ? DEFAULT_PORT : Number(values.port));
@@ -56,38 +48,14 @@ const driver = {
     if (!Number.isInteger(port) || port < 1 || port > 65535) throw netError('invalid', 'Porta non valida');
   },
 
-  open(values, ctx) {
+  async open(values, ctx) {
     driver.check(values);
     const { cols, rows } = screenSize(ctx.cols, ctx.rows);
-    const signal = ctx.signal;
-    return new Promise((resolve, reject) => {
-      if (signal?.aborted) return reject(netError('cancelled', 'Connessione annullata'));
-      const socket = net.connect({ host: values.host.trim(), port: portOf(values) });
-      let settled = false;
-      const fail = err => {
-        if (settled) return;
-        settled = true;
-        clearTimeout(timer);
-        signal?.removeEventListener('abort', onAbort);
-        socket.destroy();
-        reject(err);
-      };
-      const onAbort = () => fail(netError('cancelled', 'Connessione annullata'));
-      const timer = setTimeout(() => fail(netError('unreachable', 'Il server non risponde')), CONNECT_TIMEOUT);
-      signal?.addEventListener('abort', onAbort, { once: true });
-      socket.once('error', err => fail(connectionError(err)));
-      socket.once('close', () => fail(netError('unreachable', 'Connessione chiusa dal server')));
-      socket.once('connect', () => {
-        if (settled) return;
-        settled = true;
-        clearTimeout(timer);
-        signal?.removeEventListener('abort', onAbort);
-        socket.setNoDelay(true);
-        socket.setKeepAlive(true, 30_000);
-        socket.write(paramBlock(cols, rows));   // the server answers with its greeting
-        resolve(session(socket, cols, rows));
-      });
-    });
+    const socket = await tcpConnect(values.host.trim(), portOf(values), { lookup: needLookup(ctx), signal: ctx.signal });
+    socket.setNoDelay(true);
+    socket.setKeepAlive(true, 30_000);
+    socket.write(paramBlock(cols, rows));   // the server answers with its greeting
+    return session(socket, cols, rows);
   },
 };
 

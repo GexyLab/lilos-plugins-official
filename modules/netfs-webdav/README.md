@@ -10,3 +10,5 @@ Modulo del kernel per le connessioni **WebDAV** nella cartella Rete: Nextcloud, 
 Con questo modulo il protocollo compare in **Connetti a un server** (File Manager → sezione Rete → +). Ogni connessione diventa una cartella in `~/Rete`; i file si copiano trascinandoli tra la Home e la cartella, e il kernel li trasferisce anche a File Manager chiuso (finestra **Trasferimento dati**). Le password restano nel kernel, cifrate, e la pagina non le riceve mai.
 
 Fornisce il servizio `netfs.webdav`. Nessuna dipendenza.
+
+Versione 1.1.0: il nome del server si risolve con il kernel, che dà solo gli indirizzi permessi (con più utenti, niente rete locale se l'amministratore non la apre): il nome non può cambiare indirizzo tra il controllo del kernel e la connessione. Richiede lilOS 1.21.0 o successivo.

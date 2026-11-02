@@ -10,3 +10,5 @@ Modulo del kernel per i terminali remoti **Telnet** (sessioni remote del Termina
 Senza TLS non è cifrato: password comprese, tutto passa in chiaro.
 
 Fornisce il servizio `term.telnet`. Nessuna dipendenza.
+
+Versione 1.1.0: il nome del server si risolve con il kernel, che dà solo gli indirizzi permessi (con più utenti, niente rete locale se l'amministratore non la apre): il nome non può cambiare indirizzo tra il controllo del kernel e la connessione. Un certificato da confermare mostra «nome · impronta», come nelle altre connessioni. Richiede lilOS 1.21.0 o successivo.

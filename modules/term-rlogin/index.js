@@ -1,4 +1,5 @@
-import { Socket } from 'node:net';
+import { privilegedConnect } from './lib/shared/tcp.js';
+import { needLookup } from './lib/shared/kernel.js';
 
 /**
  * rlogin for the remote terminals (service 'term.rlogin', see the kernel's term/drivers.js):
@@ -13,16 +14,6 @@ import { Socket } from 'node:net';
  * - rlogind trusts only clients on a privileged port (512-1023): the connection tries one (allowed
  *   on Windows and to root), otherwise it goes from an ordinary port and many servers refuse it.
  */
-const CONNECT_TIMEOUT = 20_000;
-const RESERVED = { from: 1023, to: 512, tries: 24 };
-
-const netError = (net, message, extra = {}) => Object.assign(new Error(message), { net, ...extra });
-
-function connectionError(err) {
-  if (err?.net) return err;
-  if (/ECONNREFUSED|ENOTFOUND|EHOSTUNREACH|ETIMEDOUT|EAI_AGAIN|ENETUNREACH/.test(err?.code ?? '')) return netError('unreachable', err.message);
-  return netError('lost', err?.message ?? String(err));
-}
 
 const label = (en, it) => ({ en, it });
 
@@ -42,37 +33,8 @@ const driver = {
 
   async open(values, ctx) {
     const host = values.host, port = values.port ?? 513;
-    const attempt = localPort => new Promise((resolve, reject) => {
-      const s = new Socket();
-      let done = false;
-      const fail = err => { if (!done) { done = true; clearTimeout(timer); s.destroy(); reject(err); } };
-      const timer = setTimeout(() => fail(netError('unreachable', 'Il server non risponde')), CONNECT_TIMEOUT);
-      ctx.signal?.addEventListener('abort', () => fail(netError('cancelled', 'Annullato')), { once: true });
-      s.once('error', fail);
-      s.connect({ host, port, ...(localPort && { localPort }) }, () => {
-        clearTimeout(timer);
-        done = true;
-        resolve(s);
-      });
-    });
-    let socket = null;
-    for (let i = 0, p = RESERVED.from; i < RESERVED.tries && p >= RESERVED.to && !socket; i++, p--) {
-      try {
-        socket = await attempt(p);
-      } catch (err) {
-        if (err.code === 'EADDRINUSE') continue;          // that port is taken: the next one
-        if (err.code === 'EACCES' || err.code === 'EPERM') break;   // not allowed here: an ordinary port
-        throw connectionError(err);
-      }
-    }
-    if (!socket) {
-      ctx.print('Nessuna porta privilegiata disponibile: il server potrebbe rifiutare la connessione.');
-      try {
-        socket = await attempt(0);
-      } catch (err) {
-        throw connectionError(err);
-      }
-    }
+    const { socket, privileged } = await privilegedConnect(host, port, { lookup: needLookup(ctx), signal: ctx.signal });
+    if (!privileged) ctx.print('Nessuna porta privilegiata disponibile: il server potrebbe rifiutare la connessione.');
     const user = String(values.user ?? '').replace(/\0/g, '');
     const localUser = String(values.localUser || user).replace(/\0/g, '');
     const term = String(ctx.term || 'xterm-256color').replace(/[^\x21-\x7e]/g, '');
