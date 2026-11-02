@@ -1,5 +1,10 @@
 # Changelog di lilOS
 
+## 1.13.1 — 2026-11-02
+
+- La cartella **Sistema**, dove lilOS tiene la copia dello sfondo, non si vede più: non è tra le cartelle della Home, nella barra laterale del File Manager né nella scelta dei file. Lo sfondo funziona come prima; per aprirla si scrive `~/Sistema` nel percorso del File Manager
+- Per gli sviluppatori: `fs.setHiddenNodes` e `fs.hiddenNodes` (SDK 0.7.1)
+
 ## 1.13.0 — 2026-11-02
 
 - **Collegamenti sulla scrivania**: nel File Manager, tasto destro su un file o una cartella (anche di un server della Rete) o su una connessione → «Aggiungi un collegamento al desktop». L'icona è quella dell'originale con una piccola catena; il collegamento segue l'originale se lo sposti o lo rinomini
