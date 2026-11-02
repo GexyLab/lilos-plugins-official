@@ -30,6 +30,7 @@ const APPS = [
   { id: 'zip', entry: 'ZipApp.js' },
   { id: 'automata', entry: 'AutomataApp.js' },
   { id: 'arduino-ide', entry: 'ArduinoApp.js' },
+  { id: 'scheduler', entry: 'SchedulerApp.js' },
 ];
 
 /** Every language without `extends` has every key of English, and none that English lacks. */

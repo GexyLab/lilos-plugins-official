@@ -12,13 +12,15 @@
     "apps/keyboard",
     "apps/zip",
     "apps/automata",
-    "apps/arduino-ide"
+    "apps/arduino-ide",
+    "apps/scheduler"
   ],
   "modules": [
     "modules/users-basic",
     "modules/fs-postgres",
     "modules/services-isolate",
     "modules/notifications-basic",
+    "modules/scheduler",
     "modules/netfs-sftp",
     "modules/netfs-ftp",
     "modules/netfs-webdav",
