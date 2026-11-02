@@ -20,7 +20,8 @@
     "modules/netfs-sftp",
     "modules/netfs-ftp",
     "modules/netfs-webdav",
-    "modules/netfs-smb"
+    "modules/netfs-smb",
+    "modules/netfs-onedrive"
   ],
   "system": "system/lilos"
 }

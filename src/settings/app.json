@@ -1,6 +1,6 @@
 {
   "id": "settings",
-  "version": "1.13.1",
+  "version": "1.14.0",
   "kind": "local",
   "name": "Control Panel",
   "description": "Appearance, language, desk, user page, workspaces, notifications, tags, shortcuts, file types, startup services and apps, storage.",
@@ -11,7 +11,7 @@
   "system": true,
   "required": true,
   "entrypoints": { "main": { "kind": "window", "params": {
-    "tab": {"type": "choice", "label": "Section", "options": [{"value": "appearance", "label": "Appearance"}, {"value": "language", "label": "Language"}, {"value": "desk", "label": "Desk"}, {"value": "userpage", "label": "User page"}, {"value": "workspaces", "label": "Workspaces"}, {"value": "notifications", "label": "Notifications"}, {"value": "tags", "label": "Tags"}, {"value": "usability", "label": "Usability"}, {"value": "apps", "label": "Apps"}, {"value": "startup", "label": "Startup"}, {"value": "storage", "label": "Storage"}, {"value": "about", "label": "About"}]}
+    "tab": {"type": "choice", "label": "Section", "options": [{"value": "appearance", "label": "Appearance"}, {"value": "language", "label": "Language"}, {"value": "desk", "label": "Desk"}, {"value": "userpage", "label": "User page"}, {"value": "workspaces", "label": "Workspaces"}, {"value": "notifications", "label": "Notifications"}, {"value": "tags", "label": "Tags"}, {"value": "usability", "label": "Usability"}, {"value": "apps", "label": "Apps"}, {"value": "startup", "label": "Startup"}, {"value": "onedrive", "label": "OneDrive"}, {"value": "storage", "label": "Storage"}, {"value": "about", "label": "About"}]}
   } } },
   "permissions": ["settings.system", "workspaces.manage", "tags.write", "ui.shortcuts"]
 }

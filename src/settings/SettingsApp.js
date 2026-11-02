@@ -13,6 +13,7 @@ import { menuSections } from './menuEditor.js';
 import { startupOptionsSections, startupAppsSections } from './startup.js';
 import { servicesSections, watchServices } from './services.js';
 import { pipeSections, watchPipes } from './pipes.js';
+import { hasOneDrive, oneDriveSections, reloadOneDrive } from './onedrive.js';
 import { t, i18n } from './i18n.js';
 import './settings-app.css';
 
@@ -843,6 +844,13 @@ export default function createSettings({ openWindow, args } = {}) {
           { id: 'apps', get label() { return t('startup.apps.label'); }, sections: () => startupAppsSections({ openWindow, rerender: () => view?.render() }) },
         ],
       },
+      // OneDrive (kernel module netfs-onedrive): only while it runs
+      hasOneDrive() && {
+        id: 'onedrive', icon: 'cloud',
+        get label() { return t('onedrive.label'); },
+        get description() { return t('onedrive.description'); },
+        sections: () => oneDriveSections({ rerender: () => view?.render() }),
+      },
       { get group() { return t('group.data'); } },
       {
         id: 'storage', icon: 'disk',
@@ -926,7 +934,10 @@ export default function createSettings({ openWindow, args } = {}) {
   // which SettingsWindow sets on each tab change with the text it was made with
   const retitle = () => win.setTitle(t('window.title'), win.view.tab?.label ?? '');
   win.view.on('select', retitle);
+  // OneDrive's settings are read again each time its tab is shown; its connections change its lists
+  win.view.on('select', () => { if (win.view.tab?.id === 'onedrive') { reloadOneDrive(); win.view.render(); } });
+  const offNet = sdk.net?.on?.('mounts', () => { if (win.view.tab?.id === 'onedrive') win.view.render(); });
   const offLocale = sdk.locale?.on('change', () => { win.view.render(); retitle(); });
-  win.on('destroy', () => { offWorkspaces.forEach(off => off?.()); offTrash(); offTags(); offDesk(); offBackground.forEach(off => off?.()); offLocale?.(); offApps.forEach(off => off?.()); if (view === win.view) view = null; });
+  win.on('destroy', () => { offWorkspaces.forEach(off => off?.()); offTrash(); offTags(); offDesk(); offBackground.forEach(off => off?.()); offLocale?.(); offApps.forEach(off => off?.()); offNet?.(); if (view === win.view) view = null; });
   return win;
 }

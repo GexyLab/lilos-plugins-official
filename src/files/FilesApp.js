@@ -20,6 +20,7 @@ import { infoView, Preview, readable, contentKey } from './details.js';
 import { Columns, MIN_COL } from './columns.js';
 import { t } from './i18n.js';
 import { network, mountOf, sideSection, mountMenu, mountBar, readRemote } from './network.js';
+import { officeEntries, openOffice } from './office.js';
 import './files.css';
 
 /** Biggest file of a network connection the panels read to show it. */
@@ -365,6 +366,8 @@ class FileBrowser {
   open(node) {
     if (node.type === 'folder') return this.go(node.id);
     if (node.type === 'app') return launch(node.app);
+    // A document of OneDrive: Office for the web (unless an app of lilOS is chosen for it)
+    if (openOffice(this, node)) return;
     openFile(node);
   }
 
@@ -1194,6 +1197,7 @@ class FileBrowser {
       folder && { label: open ? t('tree.collapse') : t('tree.expand'), icon: open ? 'minus' : 'plus', action: () => this.setOpen(folder.id, !open) },
       folder && { label: t('tree.expandAll'), icon: 'plus', action: () => this.setOpen(folder.id, true, true) },
       !many && nodes[0].type === 'file' && { label: t('menu.openWith'), icon: 'open', action: () => openFile(nodes[0], { choose: true }) },
+      ...officeEntries(this, nodes),
       !many && nodes[0].type === 'folder' && { label: t('menu.openInEditor'), icon: 'code', action: () => launch('editor', { folder: nodes[0].id }) },
       // In a tag's view items come from everywhere: show one where it is
       tag && !many && { label: t('menu.reveal'), icon: 'folderOpen', action: () => this.reveal(nodes[0].id) },

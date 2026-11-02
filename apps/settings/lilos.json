@@ -1,6 +1,6 @@
 {
   "id": "settings",
-  "version": "1.13.1",
+  "version": "1.14.0",
   "kind": "local",
   "name": "Control Panel",
   "description": "Appearance, language, desk, user page, workspaces, notifications, tags, shortcuts, file types, startup services and apps, storage.",
@@ -65,6 +65,10 @@
               "label": "Startup"
             },
             {
+              "value": "onedrive",
+              "label": "OneDrive"
+            },
+            {
               "value": "storage",
               "label": "Storage"
             },
@@ -85,12 +89,12 @@
   ],
   "entry": "dist/index.js",
   "styles": [
-    "dist/index-DfdvL6H_.css"
+    "dist/index-DEpowr1t.css"
   ],
   "locales": "locales.json",
   "files": {
-    "dist/index-DfdvL6H_.css": "sha256-WlgWBk0O6HTRYhmoyY33304MyoA/5W4XRt39LRqGuQk=",
-    "dist/index.js": "sha256-YiHMTEy7TPm+UV37K6bDNYQ0S1C2YgTHZ7sgZQ6nzCw=",
-    "locales.json": "sha256-Zdiwvhd7Xu6ZqM+9smPvq0gna5eebgb7D3AwU9WINL8="
+    "dist/index-DEpowr1t.css": "sha256-9KmCwFaYbGE17NTvQEDx2G1NLVMaYACo9uu9gFolkSk=",
+    "dist/index.js": "sha256-OXrwHM3JSyTenG/mGPRSkvgRRdkQFaHvCcPtdb+W7Ss=",
+    "locales.json": "sha256-NNV30mXl3aDmHpd7lwN7ukF5N/NoWT3BsKtkfvrhIO0="
   }
 }
