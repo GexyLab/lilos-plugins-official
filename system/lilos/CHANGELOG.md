@@ -1,5 +1,10 @@
 # Changelog di lilOS
 
+## 1.19.2 — 2026-11-02
+
+- **Sicurezza** (con più utenti): le richieste web della Pianificazione controllano l'indirizzo nel momento in cui si collegano, anche dopo un reindirizzamento. Prima un nome di dominio poteva cambiare indirizzo tra il controllo e la connessione (*DNS rebinding*) e portare il kernel verso questo computer o la rete locale. Aggiorna subito se più persone usano lo stesso lilOS
+- Un comando pianificato su un host SSH fermato da un segnale (per esempio `kill -9`) ora risulta **non riuscito** e dice il segnale, invece di sembrare riuscito. Serve anche il modulo **term-ssh 1.0.2** (AppStore → Kernel)
+
 ## 1.19.0 — 2026-11-02
 
 - lilOS 1.19.0: la Pianificazione (operazioni a una data e ora o ripetute, nel kernel anche a lilOS chiuso); SDK 0.12.0
