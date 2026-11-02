@@ -312,6 +312,8 @@ class TextEditor {
     // Another width wraps the lines elsewhere
     const wrap = new ResizeObserver(() => { if (this.tab) this.#layout(); });
     wrap.observe(this.area);
+    // So does the monospaced font when it arrives after the first layout (it is loaded on first use)
+    document.fonts.addEventListener('loadingdone', () => { if (this.tab) this.#layout(); }, { signal });
     win.on('destroy', () => { fit.disconnect(); wrap.disconnect(); });
   }
 

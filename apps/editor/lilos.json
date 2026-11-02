@@ -1,6 +1,6 @@
 {
   "id": "editor",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "kind": "local",
   "name": "Editor",
   "description": "Text and code editor with tabs, syntax highlighting, suggestions and checking of JSON, CSS and HTML.",
@@ -232,7 +232,7 @@
     "dist/html-B15Ssl5e.js": "sha256-PJMtOy7kJUfJFSHO8t7GbBYoT2yH+aK8FYcA23r21Rk=",
     "dist/html.worker-X9Fc__8d.js": "sha256-jFf7ptUItSrts9eQ7N//iO01MztcEqg6xqw6BMaDFJk=",
     "dist/index-DQHACDF4.css": "sha256-QUnJSnG771hl+Cul5k3FMKfR4MZsedBxZLY18hkSGVM=",
-    "dist/index.js": "sha256-nOOpthBjP1qnGMJ5SOl8CKEA5/y6I8xM9WPBDgeD9cY=",
+    "dist/index.js": "sha256-4WCYS4OMJllkLYeLT/4CIx45c5f0DUhuekmJo07uq/g=",
     "dist/javascript-BSjxD7Ei.js": "sha256-s8CfycJSC1caXhuX6szihKZYWf7x7I2GYsoIuFpm4IQ=",
     "dist/json-CWJmcBQn.js": "sha256-dVtXsP0tUNXlIISVsZ7QnwwXlVjM7mKTz5hRYVuq03M=",
     "dist/json.worker-B3saI9fz.js": "sha256-BGs4zSqxY8hdyWDK4v0jTG79BA3Qp8G00azIsfKM83g=",

@@ -2621,7 +2621,9 @@ var Gn = (e, t) => {
 		let o = new ResizeObserver(() => {
 			this.tab && this.#ce();
 		});
-		o.observe(this.area), e.on("destroy", () => {
+		o.observe(this.area), document.fonts.addEventListener("loadingdone", () => {
+			this.tab && this.#ce();
+		}, { signal: n }), e.on("destroy", () => {
 			a.disconnect(), o.disconnect();
 		});
 	}
