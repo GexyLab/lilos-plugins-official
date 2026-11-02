@@ -10,7 +10,7 @@
   "sdk": "2",
   "system": true,
   "required": true,
-  "lilos": ">=1.17.0",
+  "lilos": ">=1.19.0",
   "entrypoints": {
     "main": { "kind": "window" },
     "edit": { "kind": "window", "label": "Edit an operation" },

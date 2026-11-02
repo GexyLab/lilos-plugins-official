@@ -84,7 +84,7 @@ export default function AppStore({ openWindow }) {
     state.updates = list?.available ? list.services.find(s => s.app === 'appstore' && s.entry === 'updates') ?? null : null;
   }
 
-  // ---------- «Controlla aggiornamenti» as an operation of the scheduler (lilOS ≥ 1.17.0) ----------
+  // ---------- «Controlla aggiornamenti» as an operation of the scheduler (lilOS ≥ 1.19.0) ----------
 
   const planner = sdk.schedule?.available && typeof sdk.schedule.forApp === 'function' ? sdk.schedule.forApp('appstore') : null;
   const UPDATE_WHEN = {
@@ -679,7 +679,7 @@ export default function AppStore({ openWindow }) {
         : h('p', { class: 'as-muted' }, item.repo ? t('readme.none') : t('readme.notFromRepo')));
   }
 
-  /** «Controlla gli aggiornamenti»: the AppStore's operation in the scheduler (with lilOS ≥ 1.17.0). */
+  /** «Controlla gli aggiornamenti»: the AppStore's operation in the scheduler (with lilOS ≥ 1.19.0). */
   function updatesTaskRow() {
     const task = state.updateTask;
     const every = updateEvery(task) ?? 'daily';
