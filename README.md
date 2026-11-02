@@ -2,7 +2,7 @@
 
 Il repository ufficiale di [lilOS](https://github.com/GexyLab/lilos): le app di sistema e i moduli del kernel. Il kernel di lilOS installa da qui le app che gli mancano e l'AppStore lo mostra sempre.
 
-Le altre app e i loro moduli, con i sorgenti aperti a tutti, stanno nel repository [lilos-plugins-community](https://github.com/GexyLab/lilos-plugins-community) (per esempio ArduinoIDE e il modulo `arduino`): un amministratore lo aggiunge da AppStore → Opzioni → Aggiungi un repository.
+Le altre app e i loro moduli, con i sorgenti aperti a tutti, stanno nel repository [lilos-plugins-community](https://github.com/GexyLab/lilos-plugins-community) (per esempio ArduinoIDE4LilOS e il modulo `arduino`): un amministratore lo aggiunge da AppStore → Opzioni → Aggiungi un repository.
 
 ## Cosa c'è
 
