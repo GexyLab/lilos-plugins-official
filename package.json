@@ -7,6 +7,8 @@
   "scripts": {
     "build": "node scripts/build.mjs",
     "check:locales": "node scripts/check-locales.mjs",
+    "credits": "node scripts/credits.mjs",
+    "check:credits": "node scripts/credits.mjs --check",
     "vendor:tree-sitter": "node scripts/vendor-tree-sitter.mjs"
   },
   "devDependencies": {

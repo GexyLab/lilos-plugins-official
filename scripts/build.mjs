@@ -4,6 +4,7 @@
  * installs them as they are, without building anything.
  * The translations (src/<id>/locales.json, see lilOS's SDK i18n.js) go to apps/<id>/locales.json,
  * named by `locales` in the manifest; the build stops if a language lacks keys of English.
+ * It also stops if the credits of the Control Panel miss a library (scripts/credits.mjs).
  *
  *   npm run build
  */
@@ -12,6 +13,9 @@ import { createHash } from 'node:crypto';
 import { copyFileSync, existsSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { join, relative, sep } from 'node:path';
 import { appConfig } from '../vite.config.js';
+import { checkCredits } from './credits.mjs';
+
+checkCredits();
 
 const APPS = [
   { id: 'files', entry: 'FilesApp.js' },

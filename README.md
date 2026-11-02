@@ -40,3 +40,7 @@ Le app importano `@lilos/sdk` e `@lilos/system` senza includerli nel build: a ru
 3. Committa sorgenti e `apps/`, poi crea il tag: `git tag v1.1.0 && git push --follow-tags`.
 
 Le grammatiche di Tree-sitter dell'Editor si aggiornano con `npm run vendor:tree-sitter`.
+
+### Riconoscimenti
+
+Ogni libreria, font o strumento di altri autori compare nel Pannello di controllo, in Informazioni → Riconoscimenti, letto da `src/settings/credits.json`. Quando aggiungi, aggiorni o togli una dipendenza (di un'app o di un modulo), installa (`npm ci` qui e in ogni modulo con un `package-lock.json`) e rigenera l'elenco con `npm run credits`, poi ricostruisci il Pannello di controllo (`npm run build -- settings`). Il codice copiato nel repository (una cartella con la sua `LICENSE`) va in `VENDORED` e i font web in `FONTS`, in `scripts/credits.mjs`. `npm run build` e `npm run check:credits` si fermano se l'elenco non corrisponde ai `package-lock.json`, al codice copiato o ai font.

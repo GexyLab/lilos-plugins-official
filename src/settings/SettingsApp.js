@@ -15,6 +15,7 @@ import { servicesSections, watchServices } from './services.js';
 import { pipeSections, watchPipes } from './pipes.js';
 import { hasOneDrive, oneDriveSections, reloadOneDrive } from './onedrive.js';
 import { cloudTabs, reloadCloud } from './cloud.js';
+import { creditsSections } from './credits.js';
 import { t, i18n } from './i18n.js';
 import './settings-app.css';
 
@@ -899,15 +900,21 @@ export default function createSettings({ openWindow, args } = {}) {
         id: 'about', icon: 'info',
         get label() { return t('about.label'); },
         get description() { return t('about.description'); },
-        sections: () => [{
-          title: 'lilOS',
-          rows: [
-            { label: t('about.version'), control: version },
-            { label: t('about.sdkVersion'), control: SDK_VERSION },
-            { label: t('about.language'), control: session.locale },
-            { label: t('about.browser'), control: browserName() },
-          ],
-        }],
+        subtabs: [
+          {
+            id: 'system', label: 'lilOS',
+            sections: () => [{
+              title: 'lilOS',
+              rows: [
+                { label: t('about.version'), control: version },
+                { label: t('about.sdkVersion'), control: SDK_VERSION },
+                { label: t('about.language'), control: session.locale },
+                { label: t('about.browser'), control: browserName() },
+              ],
+            }],
+          },
+          { id: 'credits', get label() { return t('credits.label'); }, sections: creditsSections },
+        ],
       },
     ].filter(Boolean),
   });
