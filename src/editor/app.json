@@ -1,6 +1,6 @@
 {
   "id": "editor",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "kind": "local",
   "name": "Editor",
   "description": "Text and code editor with tabs, syntax highlighting, suggestions and checking of JSON, CSS and HTML.",
@@ -22,6 +22,9 @@
     "fileTypes": ["", "txt", "md", "markdown", "log", "csv", "json", "js", "mjs", "cjs", "ts", "css", "html", "htm", "xml", "svg", "py", "sh", "yml", "yaml", "ini", "toml", "env"],
     "commands": [
       { "id": "editor.save", "label": "Save", "keys": ["Ctrl+S"] },
+      { "id": "editor.saveAs", "label": "Save as", "keys": ["Ctrl+Shift+S"] },
+      { "id": "editor.find", "label": "Find", "keys": ["Ctrl+F"] },
+      { "id": "editor.replace", "label": "Find and replace", "keys": ["Ctrl+H"] },
       { "id": "editor.new", "label": "New document", "keys": ["Ctrl+Alt+N"] },
       { "id": "editor.openFile", "label": "Open file", "keys": ["Ctrl+O"] },
       { "id": "editor.openFolder", "label": "Open folder", "keys": ["Ctrl+Alt+O"] },
@@ -33,7 +36,20 @@
       { "id": "editor.reopenTab", "label": "Reopen closed tab", "keys": ["Ctrl+Alt+T"] }
     ],
     "automation": [
-      { "id": "editor.save", "label": "Save the file", "target": "window" }
+      { "id": "editor.save", "label": "Save the file", "target": "window" },
+      { "id": "editor.replace", "label": "Replace all in the text", "target": "window",
+        "params": {
+          "find": { "type": "text", "label": "Find" },
+          "replace": { "type": "text", "label": "Replace with" },
+          "matchCase": { "type": "boolean", "label": "Match case" },
+          "wholeWord": { "type": "boolean", "label": "Whole word" },
+          "regex": { "type": "boolean", "label": "Regular expression" }
+        } },
+      { "id": "editor.saveAs", "label": "Save as", "target": "window", "result": "file",
+        "params": {
+          "folder": { "type": "folder", "label": "Folder" },
+          "name": { "type": "text", "label": "Name", "maxLength": 255 }
+        } }
     ]
   }
 }

@@ -16,3 +16,5 @@ Sfoglia, cerca e organizza i file e le cartelle di lilOS.
 ## Automazioni
 
 Con **Automata** (lilOS 1.15.0 o successivo) il File Manager rende registrabili **Vai a una cartella**, **Cerca nella cartella** (la ricerca si registra quando smetti di scrivere per un secondo o premi Invio), **Ordina** (colonna e verso) e **Cambia vista** (elenco, icone, anteprime). Rifatti, agiscono sulla finestra del File Manager più recente. Spostare, copiare, rinominare ed eliminare li registra lilOS stesso.
+
+Dalla 1.15.0 (lilOS 1.17.0) la finestra dice a lilOS cosa hai selezionato (`win.selection`, non nel cestino): la **scorciatoia** di un'automazione agisce sugli elementi selezionati nel File Manager, non solo su quelli della scrivania.

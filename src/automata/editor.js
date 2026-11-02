@@ -1,6 +1,6 @@
 import { Window, h, icon, fs, automation, messageBox, comboFromEvent, shortcuts, openMenu } from '@lilos/sdk';
 import * as system from '@lilos/system';
-import { t } from './i18n.js';
+import { t, i18n } from './i18n.js';
 import { engine, library, load, save, tell } from './store.js';
 import { actionOf, actionLabel, paramLabel, appName, appColor, appGlyph, stepChips, valueText, refText, brokenRefs } from './describe.js';
 
@@ -12,6 +12,17 @@ import { actionOf, actionLabel, paramLabel, appName, appColor, appGlyph, stepChi
 const SAVE_MS = 400;
 const NODE_TYPES = ['file', 'files', 'folder'];
 const plain = v => !!v && typeof v === 'object' && !Array.isArray(v);
+const TRIGGER_GLYPHS = { time: 'calendar', every: 'redo', login: 'user', folder: 'folderOpen' };
+
+/** A trigger in a few words ('08:30 · lun mar mer', 'ogni 30 min', 'in ~/Download'). */
+function triggerText(tr) {
+  if (tr.type === 'every') return t('trigger.chipEvery', { n: tr.minutes });
+  if (tr.type === 'login') return t('trigger.chipLogin');
+  if (tr.type === 'folder') return t('trigger.chipFolder', { path: refText(tr.folder) });
+  const monday = new Date(2026, 10, 2);
+  const days = tr.days.length && tr.days.length < 7 ? tr.days.map(d => i18n.date(new Date(monday.getTime() + (d - 1) * 864e5), { weekday: 'short' })).join(' ') : t('trigger.everyDay');
+  return `${tr.at} · ${days}`;
+}
 
 export function createEditor({ args, openWindow } = {}) {
   const win = new Window({ title: 'Automata', icon: 'automation', width: 1060, height: 620, minWidth: 760, minHeight: 440 });
@@ -139,6 +150,7 @@ export function createEditor({ args, openWindow } = {}) {
     if (doc.launch.shortcut) chips.push(h('span', { class: 'au-chip' }, icon('keyboard'), h('kbd', {}, doc.launch.shortcut)));
     if (doc.launch.menu) chips.push(h('span', { class: 'au-chip' }, icon('list'), doc.launch.ext.length ? t('chip.menuExt', { ext: doc.launch.ext.join(', ') }) : t('chip.menu')));
     if (doc.launch.command) chips.push(h('span', { class: 'au-chip' }, icon('terminal'), `automata run ${doc.launch.command}`));
+    for (const tr of doc.launch.triggers ?? []) chips.push(h('span', { class: 'au-chip auto' }, icon(TRIGGER_GLYPHS[tr.type]), triggerText(tr)));
     return chips;
   }
 
@@ -391,7 +403,7 @@ export function createEditor({ args, openWindow } = {}) {
 
   function launchDialog() {
     if (!doc) return;
-    const draft = structuredClone({ input: doc.input, launch: doc.launch });
+    const draft = structuredClone({ input: doc.input, launch: { ...doc.launch, triggers: doc.launch.triggers ?? [] } });
     const overlay = h('div', { class: 'au-overlay', role: 'dialog', 'aria-modal': 'true', 'aria-label': t('launch.title', { name: doc.name }) });
     const close = () => { overlay.remove(); refocus(); };
     const inputSeg = h('div', { class: 'au-seg wide', role: 'radiogroup', 'aria-label': t('launch.input') });
@@ -427,6 +439,7 @@ export function createEditor({ args, openWindow } = {}) {
       keyBtn.textContent = c;
     });
     const command = h('input', { class: 'au-input mono', value: draft.launch.command, placeholder: 'web', maxlength: 40, 'aria-label': t('launch.command') });
+    const triggers = triggerEditor(draft.launch.triggers);
     const fail = h('p', { class: 'au-error', role: 'alert' });
     const ok = h('button', { class: 'au-btn primary', type: 'button' }, t('action.save'));
     ok.addEventListener('click', () => {
@@ -436,8 +449,11 @@ export function createEditor({ args, openWindow } = {}) {
       if (cmd && !/^[a-z][\w.-]{0,39}$/.test(cmd)) return void (fail.textContent = t('launch.badCommand'));
       const taken = library().list().find(e => e.id !== current && cmd && e.launch.command === cmd);
       if (taken) return void (fail.textContent = t('launch.commandTaken', { name: taken.name }));
+      const list = triggers.value();
+      if (list.some(tr => tr.type === 'folder' && !tr.folder)) return void (fail.textContent = t('trigger.noFolder'));
+      if (list.some(tr => tr.type !== 'folder') && draft.input !== 'none') return void (fail.textContent = t('trigger.needsNone'));
       doc.input = draft.input;
-      doc.launch = { menu: menuOn.checked && draft.input !== 'none', ext: exts, shortcut: combo, command: cmd };
+      doc.launch = { menu: menuOn.checked && draft.input !== 'none', ext: exts, shortcut: combo, command: cmd, triggers: list };
       close();
       changed();
     });
@@ -448,12 +464,75 @@ export function createEditor({ args, openWindow } = {}) {
       h('label', { class: 'au-q' }, h('span', {}, t('launch.ext')), ext),
       h('div', { class: 'au-q' }, h('span', {}, t('launch.shortcut')), keyBtn, h('small', { class: 'au-hint' }, t('launch.shortcutHint'))),
       h('label', { class: 'au-q' }, h('span', {}, t('launch.command')), command, h('small', { class: 'au-hint' }, t('launch.commandHint'))),
-      h('p', { class: 'au-hint' }, t('launch.later')),
+      h('div', { class: 'au-opt' }, h('div', { class: 'au-sec' }, t('trigger.title')), triggers.el, h('p', { class: 'au-hint' }, t('trigger.hint'))),
       fail,
       h('div', { class: 'au-dfoot' }, h('button', { class: 'au-btn', type: 'button', onclick: close }, t('action.cancel')), ok)));
     overlay.addEventListener('keydown', e => { if (e.key === 'Escape' && !keyBtn.dataset.listening) { e.stopPropagation(); close(); } });
     root.append(overlay);
     overlay.querySelector('button[aria-checked="true"]')?.focus();
+  }
+
+  /**
+   * The triggers of the launch dialog: one row per trigger, added from four buttons. Returns
+   * { el, value() → triggers as document.js wants them }.
+   */
+  function triggerEditor(initial) {
+    const rows = initial.map(tr => ({ ...tr, days: [...(tr.days ?? [])] }));
+    const el = h('div', { class: 'au-triggers' });
+    const monday = new Date(2026, 10, 2);   // a Monday: the names of the days in the system's language
+    const dayName = (d, style) => i18n.date(new Date(monday.getTime() + (d - 1) * 864e5), { weekday: style });
+    const draw = () => {
+      el.replaceChildren(...rows.map((tr, i) => {
+        const remove = h('button', { class: 'au-icon', type: 'button', title: t('trigger.remove'), 'aria-label': t('trigger.remove'), onclick: () => { rows.splice(i, 1); draw(); } }, icon('x'));
+        let body;
+        if (tr.type === 'time') {
+          const at = h('input', { class: 'au-input', type: 'time', value: tr.at ?? '08:00', 'aria-label': t('trigger.at') });
+          at.addEventListener('change', () => { tr.at = at.value; });
+          tr.at = at.value;
+          const days = h('div', { class: 'au-days', role: 'group', 'aria-label': t('trigger.days') }, [1, 2, 3, 4, 5, 6, 7].map(d => {
+            const b = h('button', { type: 'button', class: 'au-day', 'aria-pressed': String(tr.days.includes(d)), title: dayName(d, 'long'), 'aria-label': dayName(d, 'long') }, dayName(d, 'narrow'));
+            b.addEventListener('click', () => {
+              tr.days = tr.days.includes(d) ? tr.days.filter(x => x !== d) : [...tr.days, d].sort();
+              b.setAttribute('aria-pressed', String(tr.days.includes(d)));
+            });
+            return b;
+          }));
+          const catchUp = h('input', { type: 'checkbox', checked: tr.catchUp === true });
+          catchUp.addEventListener('change', () => { tr.catchUp = catchUp.checked; });
+          body = [h('div', { class: 'au-l1' }, icon('calendar'), h('b', {}, t('trigger.time')), at, days),
+            h('label', { class: 'au-check small' }, catchUp, h('span', {}, t('trigger.catchUp')))];
+        } else if (tr.type === 'every') {
+          const minutes = h('input', { class: 'au-input num', type: 'number', min: 5, max: 1440, value: tr.minutes ?? 30, 'aria-label': t('trigger.minutes') });
+          minutes.addEventListener('change', () => { tr.minutes = Math.max(5, Math.min(1440, Math.round(Number(minutes.value) || 30))); minutes.value = tr.minutes; });
+          tr.minutes ??= 30;
+          body = [h('div', { class: 'au-l1' }, icon(TRIGGER_GLYPHS.every), h('b', {}, t('trigger.every')), minutes, h('span', {}, t('trigger.minutesUnit')))];
+        } else if (tr.type === 'login') {
+          body = [h('div', { class: 'au-l1' }, icon('user'), h('b', {}, t('trigger.login')))];
+        } else {
+          const where = h('code', { class: 'au-where' }, tr.folder ? refText(tr.folder) : t('trigger.noFolderYet'));
+          const pick = h('button', { class: 'au-btn', type: 'button' }, t('trigger.chooseFolder'));
+          pick.addEventListener('click', async () => {
+            const node = await system.pickFile?.(openWindow, { kind: 'folder', title: t('trigger.chooseFolder') });
+            if (!node) return;
+            tr.folder = { id: node.id, path: fs.path(node.id) };
+            where.textContent = refText(tr.folder);
+          });
+          body = [h('div', { class: 'au-l1' }, icon('folderOpen'), h('b', {}, t('trigger.folder')), where, pick),
+            h('small', { class: 'au-hint' }, t('trigger.folderHint'))];
+        }
+        return h('div', { class: 'au-trigger' }, h('div', { class: 'au-tbody' }, body), remove);
+      }),
+      h('div', { class: 'au-l1 wrap' }, ['time', 'every', 'login', 'folder'].map(type => h('button', {
+        class: 'au-btn', type: 'button', disabled: rows.length >= 10,
+        onclick: () => { rows.push(type === 'time' ? { type, at: '08:00', days: [], catchUp: false } : type === 'every' ? { type, minutes: 30 } : { type }); draw(); },
+      }, icon('plus'), t(`trigger.add.${type}`)))));
+    };
+    draw();
+    return {
+      el,
+      value: () => rows.map(tr => (tr.type === 'time' ? { type: 'time', at: tr.at, days: tr.days, catchUp: !!tr.catchUp }
+        : tr.type === 'every' ? { type: 'every', minutes: tr.minutes } : tr.type === 'login' ? { type: 'login' } : { type: 'folder', folder: tr.folder ?? null })),
+    };
   }
 
   async function run({ from = 0, only = false } = {}) {

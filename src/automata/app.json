@@ -1,6 +1,6 @@
 {
   "id": "automata",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "kind": "local",
   "name": "Automata",
   "description": "Record what you do in lilOS and do it again with a click: each step can ask for confirmation, or for its values, before it runs.",
@@ -9,7 +9,7 @@
   "publisher": { "id": "lilos", "name": "lilOS" },
   "sdk": "2",
   "system": true,
-  "lilos": ">=1.15.0",
+  "lilos": ">=1.17.0",
   "entrypoints": {
     "main": { "kind": "window", "params": {
       "file": { "type": "file", "label": "Automation", "description": "The automation to open" }

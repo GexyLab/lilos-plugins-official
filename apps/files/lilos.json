@@ -1,6 +1,6 @@
 {
   "id": "files",
-  "version": "1.14.0",
+  "version": "1.15.0",
   "kind": "local",
   "name": "File Manager",
   "description": "Browse, search and organize files and folders: tags, links, desktop links, trash, info and preview.",
@@ -196,7 +196,7 @@
   "locales": "locales.json",
   "files": {
     "dist/index-DCrpzGcy.css": "sha256-sVXS8jqu8+QBfzSAQMDhK/LkFP78iB+rm5I6TAsQBmo=",
-    "dist/index.js": "sha256-2JtS7IYxfcnheCUvKoObo/oDGVWshUmhpMSqp/PIAlI=",
+    "dist/index.js": "sha256-s7o7JpjMalMeIx8kBEQirxl1nCjnD3MPG7iZ8fpF9ys=",
     "locales.json": "sha256-0WsM2tIWoa4wMUGwR8vMOGUGVk4twK+zJdC1DujHGDY="
   }
 }

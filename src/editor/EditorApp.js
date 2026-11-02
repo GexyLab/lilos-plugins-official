@@ -1,5 +1,5 @@
 import { Window, h, icon, fs, uid, settings, selectField, actionButton, openMenu, history, shortcuts, toast, PipeStopped } from '@lilos/sdk';
-import * as sdk from '@lilos/sdk';   // `automation`: missing in older lilOS, so not imported by name
+import * as sdk from '@lilos/sdk';   // `automation`, `messageBox`: missing in older lilOS, so not imported by name
 import { launch } from '@lilos/system';
 import { handleCommand } from '@lilos/system';
 import { pickFile } from '@lilos/system';
@@ -13,6 +13,8 @@ import { positionAt, offsetAt, fromServer } from './lsp/convert.js';
 import { openEditorSettings } from './EditorSettings.js';
 import { FileTree } from './FileTree.js';
 import { TabBar } from './TabBar.js';
+import { FindBar } from './FindBar.js';
+import { queryRegExp, regexError, findAll, firstAtOrAfter, replacementFor, replaceAll, MAX_MATCHES } from './search.js';
 import { readSession, writeSession, removeSession, takeClosed, addClosed, readDraft, writeDraft, removeDraft, hash, CLOSED, DRAFT_LIMIT } from './sessions.js';
 import { t } from './i18n.js';
 import './editor.css';
@@ -24,6 +26,7 @@ const HIGHLIGHT_LIMIT = 300_000;   // characters: above this the text is shown p
 const TEXTMATE_LIMIT = 100_000;    // TextMate re-tokenizes everything: above this the simple engine is used
 const DRAFT_DELAY = 1000;          // ms after the last change before the unsaved text is kept
 const CLOSED_TABS = 20;            // tabs that Ctrl+Alt+T can open again
+const MAX_MARKS = 2000;            // matches of the find bar marked at once (only the lines on screen are)
 /** Automations (the Automata app): what the user does here is recorded and done again. */
 const automation = () => sdk.automation ?? null;
 const untitled = () => t('document.untitledFile');
@@ -49,7 +52,9 @@ const grammarsReady = loadCustomGrammars();
  * (Tree-sitter, TextMate or simple), completion and diagnostics from language servers (LSP) or the
  * built-in vocabularies, JSON schemas. args.file opens a file, args.folder opens a folder in the
  * panel on the right (FileTree.js), where its content is managed; the last folder opened comes
- * back in new windows.
+ * back in new windows. Find and replace in a bar above the text (FindBar.js, search.js: Ctrl+F,
+ * Ctrl+H); «Save as» (Ctrl+Shift+S, and the first save of a new document) asks for the name and
+ * the folder in the bar above the text.
  *
  * Closing the window does not ask to save: the tabs and their unsaved text are kept (sessions.js)
  * and come back with the window (args.session, from getState) or, when the user closed it, in the
@@ -81,6 +86,13 @@ const lineOf = (text, pos) => {
   let line = 1;
   for (let i = text.indexOf('\n'); i !== -1 && i < pos; i = text.indexOf('\n', i + 1)) line++;
   return line;
+};
+
+/** Offset where each line begins. */
+const lineStarts = text => {
+  const starts = [0];
+  for (let i = text.indexOf('\n'); i !== -1; i = text.indexOf('\n', i + 1)) starts.push(i + 1);
+  return starts;
 };
 
 /** Text node and offset of the character `ch` inside a line of the highlighted copy. */
@@ -153,6 +165,9 @@ class TextEditor {
   #sessionTimer = 0;
   #closed = [];           // file ids of the tabs closed, the last at the end
   #dismissed = false;     // closed by the user: the tabs go to the next new window
+  #search = null;         // { doc, text, key, matches, error, starts } of the find bar, for the text shown
+  #editing = false;       // the editor changes the text itself (replace): it is not typing
+  #marksRaf = 0;
 
   constructor(win, openWindow) {
     this.win = win;
@@ -176,11 +191,13 @@ class TextEditor {
 
     this.gutter = h('div', { class: 'ed-gutter', 'aria-hidden': 'true' });
     this.current = h('div', { class: 'ed-current', 'aria-hidden': 'true' });
+    // The matches of the find bar, under the highlighted copy
+    this.marks = h('div', { class: 'ed-marks', 'aria-hidden': 'true' });
     this.code = h('pre', { class: 'ed-hl', 'aria-hidden': 'true' });
     this.squiggles = h('div', { class: 'ed-diags', 'aria-hidden': 'true' });
     this.suggestions = h('div', { class: 'ed-complete', role: 'listbox', id: `ed-complete-${uid()}`, 'aria-label': t('completion.label'), hidden: true });
     // The textareas of the tabs go before the suggestions
-    this.area = h('div', { class: 'ed-area' }, this.current, this.code, this.squiggles, this.suggestions);
+    this.area = h('div', { class: 'ed-area' }, this.current, this.marks, this.code, this.squiggles, this.suggestions);
     // Clicking a suggestion must not take the focus away from the text
     this.suggestions.addEventListener('pointerdown', e => {
       e.preventDefault();
@@ -201,6 +218,14 @@ class TextEditor {
     this.tree.on('layout', () => this.#renderSidebarButton());
     this.sidebarBtn = tool('sidebar', t('toolbar.showFolder'), () => this.toggleSidebar());
 
+    this.findBar = new FindBar({ signal });
+    this.findBar.on('query', () => this.#findFrom(this.input?.selectionStart ?? 0));
+    this.findBar.on('next', () => this.findNext(1));
+    this.findBar.on('previous', () => this.findNext(-1));
+    this.findBar.on('replace', () => this.replaceOne());
+    this.findBar.on('replaceAll', () => this.replaceAll());
+    this.findBar.on('close', () => this.closeFind());
+
     win.body.append(
       h('div', { class: 'ed-toolbar' },
         tool('filePlus', t('toolbar.newDocument'), () => this.newDocument()),
@@ -208,6 +233,7 @@ class TextEditor {
         tool('folderOpen', t('toolbar.openFolder'), () => this.openFolder()),
         tool('save', t('toolbar.save'), () => this.save()),
         this.revealBtn,
+        tool('search', t('toolbar.find'), () => this.openFind(true)),
         h('span', { class: 'ed-grow' }),
         this.schemaBtn,
         this.langSelect,
@@ -215,6 +241,7 @@ class TextEditor {
         this.sidebarBtn),
       this.tabBar.el,
       this.banner,
+      this.findBar.el,
       h('div', { class: 'ed-main' },
         h('div', { class: 'ed' }, this.gutter, this.area),
         this.tree.el),
@@ -256,6 +283,9 @@ class TextEditor {
       handleCommand('editor.nextTab', { isActive: () => win.active && this.tabs.length > 1, run: () => this.#step(1) }),
       handleCommand('editor.previousTab', { isActive: () => win.active && this.tabs.length > 1, run: () => this.#step(-1) }),
       handleCommand('editor.reopenTab', { isActive: () => win.active, run: () => this.reopenTab() }),
+      handleCommand('editor.saveAs', { isActive: () => win.active, run: () => this.saveAs() }),
+      handleCommand('editor.find', { isActive: () => win.active, run: () => this.openFind(false) }),
+      handleCommand('editor.replace', { isActive: () => win.active, run: () => this.openFind(true) }),
       // Ctrl Z / Ctrl Y in the text: the textarea's own history (typing, completions, indents)
       history.attach(this.area, {
         text: true,
@@ -265,11 +295,14 @@ class TextEditor {
     ];
     // Automations: this window saves again the file of a step (in its tab, shown first)
     automation()?.handle('editor.save', (params, { file }) => this.saveFile(file), { window: win, file: () => this.fileId });
+    automation()?.handle('editor.replace', (params, { file }) => this.replaceAllIn(file, params), { window: win, file: () => this.fileId });
+    automation()?.handle('editor.saveAs', (params, { file }) => this.saveAsFile(file, params), { window: win, file: () => this.fileId });
     win.on('dismiss', () => { this.#dismissed = true; });
     win.on('destroy', () => {
       off.forEach(o => o());
       this.#disconnect();
       cancelAnimationFrame(this.#raf);
+      cancelAnimationFrame(this.#marksRaf);
       clearTimeout(this.#sessionTimer);
       this.#closeSession();
     });
@@ -481,32 +514,182 @@ class TextEditor {
     if (!this.tree.collapsed) this.tree.tree.focus();
   }
 
-  /** Saves the tab shown to its file; a new document is created in /Documenti (or in the open folder). */
+  /**
+   * Saves the tab shown to its file. A document without one (new, or its file was deleted) asks
+   * where and with which name, as «Save as» does. Resolves true when saved.
+   */
   async save() {
     const doc = this.tab;
     if (!doc?.loaded) return false;   // the file is not read yet: there is nothing to save over it
-    const wasUntitled = !doc.fileId || !fs.exists(doc.fileId);
-    if (wasUntitled) {
-      const docs = (this.tree.root && fs.get(this.tree.root)) ?? fs.resolve('/Documenti') ?? fs.get(fs.root);
-      const node = fs.create(docs.id, { type: 'file', name: doc.name });
-      Object.assign(doc, { fileId: node.id, name: node.name, isNew: false, lost: null });
-      doc.message = t('status.savedIn', { path: fs.path(node.id) });
-    } else {
-      doc.message = '';
-    }
+    if (!doc.fileId || !fs.exists(doc.fileId)) return this.saveAs();
+    doc.message = '';
     const text = doc.input.value;
     await fs.write(doc.fileId, text);
     doc.saved = text;
     doc.conflict = false;
-    // A new document is not recorded: lilOS records the file it creates
-    if (!wasUntitled) automation()?.record('editor.save', { file: doc.fileId });
+    automation()?.record('editor.save', { file: doc.fileId });
     if (this.#banner?.kind === 'conflict' && this.tab === doc) this.#closeBanner();
     this.#writeDraft(doc);
-    if (wasUntitled && this.tab === doc) this.#connect();   // the document has a file URI now
     if (this.tab === doc) this.tree.setCurrent(doc.fileId);
     this.#saveSessionSoon();
     this.render();
     return true;
+  }
+
+  /**
+   * «Save as»: name and folder in the bar above the text (the folder chosen with lilOS's picker),
+   * then the tab shown is saved there and becomes the new file's. A file with that name already
+   * there is written over after asking. Resolves true when saved.
+   */
+  saveAs() {
+    const doc = this.tab;
+    if (!doc?.loaded) return Promise.resolve(false);
+    const proposal = this.#saveProposal(doc);
+    let folder = proposal.folder;
+    let confirmed = null;   // without messageBox (older lilOS): the file a second Save writes over
+    let busy = false;
+    let mine = null;
+    return new Promise(resolve => {
+      const finish = saved => {
+        if (this.#banner === mine) this.#closeBanner();
+        mine = null;
+        resolve(saved);
+      };
+      const note = h('span', { class: 'ed-banner-text' }, t('saveAs.prompt'));
+      const name = h('input', { class: 'ctl-text ed-banner-input', type: 'text', spellcheck: 'false', autocomplete: 'off', 'aria-label': t('saveAs.name') });
+      name.value = proposal.name;
+      const where = h('span', { class: 'ed-saveas-path', id: `ed-saveas-${uid()}` });
+      const showFolder = () => {
+        where.textContent = fs.get(folder)?.type === 'folder' ? fs.path(folder) : t('saveAs.noFolder');
+        where.title = where.textContent;
+      };
+      const choose = actionButton({ label: t('saveAs.chooseFolder'), onClick: async () => {
+        const node = await pickFile(this.openWindow, { kind: 'folder', title: t('saveAs.pickFolder.title'), text: t('saveAs.pickFolder.text') });
+        if (!mine) return;
+        if (node) { folder = node.id; confirmed = null; showFolder(); }
+        name.focus();
+      } });
+      choose.setAttribute('aria-describedby', where.id);
+      const apply = async () => {
+        if (busy || !mine) return;
+        const fileName = name.value.trim();
+        if (!fileName || fileName.includes('/')) { note.textContent = t('saveAs.badName'); return name.focus(); }
+        if (fs.get(folder)?.type !== 'folder') { note.textContent = t('saveAs.noFolder'); return choose.focus(); }
+        const existing = this.#childNamed(folder, fileName);
+        if (existing && existing.type !== 'file') { note.textContent = t('saveAs.notAFile', { name: existing.name }); return name.focus(); }
+        if (existing && existing.id !== doc.fileId) {
+          if (sdk.messageBox) {
+            busy = true;
+            const answer = await sdk.messageBox(this.win, {
+              icon: 'warning', title: t('saveAs.overwrite.title', { name: existing.name }),
+              text: t('saveAs.overwrite.text', { path: fs.path(folder) }), buttons: ['continue', 'cancel'],
+            });
+            busy = false;
+            if (answer !== 'continue' || !mine) return name.focus();
+          } else if (confirmed !== existing.id) {
+            confirmed = existing.id;
+            note.textContent = t('saveAs.overwrite.again', { name: existing.name });
+            return;
+          }
+        }
+        const before = doc.fileId && fs.exists(doc.fileId) ? doc.fileId : null;
+        busy = true;
+        try {
+          const node = await this.#saveTo(doc, folder, fileName);
+          automation()?.record('editor.saveAs', {
+            params: { folder, name: fileName }, defaults: { folder: proposal.folder, name: proposal.name },
+            file: before, result: node.id,
+          });
+          finish(true);
+          if (this.tab === doc) doc.input.focus();
+        } catch (err) {
+          busy = false;
+          note.textContent = t('saveAs.failed', { error: err?.message ?? String(err) });
+        }
+      };
+      name.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); apply(); } });
+      name.addEventListener('input', () => { confirmed = null; });
+      showFolder();
+      this.#openBanner('saveAs', [
+        icon('save'), note, name,
+        h('span', { class: 'ed-saveas-in' }, t('saveAs.in')), where, choose,
+        actionButton({ label: t('saveAs.save'), primary: true, onClick: apply }),
+        actionButton({ label: t('dialog.cancel'), onClick: () => { finish(false); this.input?.focus(); } }),
+      ], () => { finish(false); this.input?.focus(); }, () => finish(false));
+      mine = this.#banner;
+      name.focus();
+      // The name without its extension is selected: typing replaces it
+      const dot = proposal.name.lastIndexOf('.');
+      name.setSelectionRange(0, dot > 0 ? dot : proposal.name.length);
+    });
+  }
+
+  /**
+   * «Save as» without asking anything (automations): the tab of the file (for a document that had
+   * none, the tab shown) saved as `name` in `folder`. A file already there with that name is
+   * written over without asking: a step that runs must not stop on a question, and the user chose
+   * that name when recording. Resolves the id of the file.
+   */
+  async saveAsFile(id, { folder, name } = {}) {
+    const doc = id ? this.#find(id, 'fileId') : this.tab;
+    if (!doc) throw new Error(t('automation.notOpen'));
+    this.#activate(doc, { focus: false });
+    if (!doc.loaded) await this.#loadFile(doc);
+    if (!doc.loaded || !this.tabs.includes(doc)) throw new Error(t('automation.notRead'));
+    if (typeof folder !== 'string' || fs.get(folder)?.type !== 'folder') throw new Error(t('saveAs.noFolder'));
+    const fileName = typeof name === 'string' ? name.trim() : '';
+    if (!fileName || fileName.includes('/')) throw new Error(t('saveAs.badName'));
+    const node = await this.#saveTo(doc, folder, fileName);
+    return node.id;
+  }
+
+  /** Where «Save as» proposes to save: next to the file, otherwise in the open folder or Documenti. */
+  #saveProposal(doc) {
+    const node = doc.fileId && fs.get(doc.fileId);
+    if (node && fs.get(node.parent)?.type === 'folder') return { folder: node.parent, name: node.name };
+    const folder = ((this.tree.root && fs.get(this.tree.root)) ?? fs.resolve('/Documenti') ?? fs.get(fs.root)).id;
+    return { folder, name: fs.uniqueName?.(folder, doc.name) ?? doc.name };
+  }
+
+  /** The node with this name in a folder (names are unique there, whatever the case), or null. */
+  #childNamed(folder, name) {
+    const lower = name.toLowerCase();
+    return fs.children(folder).find(n => n.name.toLowerCase() === lower) ?? null;
+  }
+
+  /**
+   * Writes the text of a tab into `name` in a folder (into the file already there with that name,
+   * or a new one) and makes the tab that file's. Another tab showing that file goes: its file now
+   * has this text. Resolves the node; throws when it could not be written.
+   */
+  async #saveTo(doc, folder, name) {
+    const existing = this.#childNamed(folder, name);
+    if (existing && existing.type !== 'file') throw new Error(t('saveAs.notAFile', { name: existing.name }));
+    const node = existing ?? await fs.create(folder, { type: 'file', name });
+    const text = doc.input.value;
+    try {
+      await fs.write(node.id, text);
+    } catch (err) {
+      if (!existing) fs.remove(node.id);
+      throw err;
+    }
+    const twin = this.tabs.find(d => d !== doc && d.fileId === node.id);
+    if (twin) this.#removeTab(twin);
+    Object.assign(doc, {
+      fileId: node.id, name: node.name, isNew: false, lost: null, saved: text, conflict: false,
+      secret: isSecret(node.id), message: t('status.savedIn', { path: fs.path(node.id) }),
+    });
+    if (!doc.langChosen) doc.lang = languageForName(node.name);
+    if (this.#banner?.kind === 'conflict' && this.tab === doc) this.#closeBanner();
+    this.#writeDraft(doc);
+    if (this.tab === doc) {
+      this.tree.setCurrent(doc.fileId);
+      this.#loadHighlighter();   // the name may say another language
+      this.#connect();           // another file URI
+    }
+    this.#saveSessionSoon();
+    this.render();
+    return node;
   }
 
   /** Saves the tab of a file without asking anything (automations), showing it first. */
@@ -568,6 +751,265 @@ class TextEditor {
     return true;
   }
 
+  // ---------- Find and replace ----------
+
+  /**
+   * Opens the find bar (Ctrl+F; Ctrl+H with the replace row). A short selection on one line
+   * becomes what to find.
+   */
+  openFind(replace = false) {
+    const ta = this.input;
+    if (!ta) return;
+    const selected = ta.value.slice(ta.selectionStart, ta.selectionEnd);
+    this.#hideCompletion();
+    this.findBar.open({ replace, text: selected && selected.length <= 200 && !selected.includes('\n') ? selected : null });
+  }
+
+  /** Closes the find bar; the focus goes back to the text, with the match it showed selected. */
+  closeFind() {
+    if (!this.findBar.isOpen) return;
+    this.findBar.close();
+    this.#search = null;
+    this.marks.replaceChildren();
+    this.input?.focus();
+  }
+
+  /**
+   * The matches of the find bar in the text shown (found again when the text or the query
+   * changes), or null when the bar is closed.
+   */
+  #matches() {
+    if (!this.findBar.isOpen || !this.tab) return null;
+    const query = this.findBar.query;
+    const key = JSON.stringify([query.find, query.matchCase, query.wholeWord, query.regex]);
+    const text = this.text;
+    const s = this.#search;
+    if (s && s.doc === this.tab && s.key === key && s.text === text) return s;
+    let re = null, error = '';
+    try {
+      re = queryRegExp(query);
+    } catch (err) {
+      error = regexError(err);
+    }
+    this.#search = { doc: this.tab, key, text, error, matches: findAll(text, re), starts: null };
+    return this.#search;
+  }
+
+  /** The index of the match selected in the text, or -1. */
+  #currentMatch(s = this.#matches()) {
+    if (!s?.matches.length) return -1;
+    const { selectionStart, selectionEnd } = this.input;
+    const i = firstAtOrAfter(s.matches, selectionStart);
+    return s.matches[i]?.start === selectionStart && s.matches[i].end === selectionEnd ? i : -1;
+  }
+
+  /** Selects the first match at `pos` or after it (the first of all after the last one). */
+  #findFrom(pos) {
+    const s = this.#matches();
+    if (s?.matches.length) {
+      const i = firstAtOrAfter(s.matches, pos);
+      this.#selectMatch(s.matches[i] ?? s.matches[0]);
+    } else this.#renderFind();
+  }
+
+  /** The next match (dir 1) or the previous one (-1), from the one selected or from the caret. */
+  findNext(dir = 1) {
+    if (!this.findBar.isOpen) return this.openFind(false);
+    const s = this.#matches();
+    if (!s?.matches.length) return this.#renderFind();
+    const list = s.matches, ta = this.input;
+    const cur = this.#currentMatch(s);
+    let i;
+    if (cur !== -1) i = (cur + dir + list.length) % list.length;
+    else if (dir > 0) i = firstAtOrAfter(list, ta.selectionEnd) % list.length;
+    else i = (firstAtOrAfter(list, ta.selectionStart) - 1 + list.length) % list.length;
+    this.#selectMatch(list[i]);
+  }
+
+  #selectMatch(match) {
+    this.input.setSelectionRange(match.start, match.end);
+    this.#reveal(match.start, match.end);
+    this.#renderFind();
+  }
+
+  /** Replaces the match selected and selects the next one; with none selected, selects the next one. */
+  replaceOne() {
+    const doc = this.tab;
+    if (!doc?.loaded || doc.input.readOnly) return;
+    const s = this.#matches();
+    if (!s?.matches.length) return;
+    const cur = this.#currentMatch(s);
+    if (cur === -1) return this.findNext(1);
+    const match = s.matches[cur];
+    const by = replacementFor(this.findBar.query, match, s.text);
+    this.#editText(match.start, match.end, by);
+    this.#findFrom(match.start + by.length);
+  }
+
+  /** Replaces every match of the find bar in the tab shown (one step of Ctrl Z), and records it. */
+  replaceAll() {
+    const doc = this.tab;
+    if (!doc?.loaded || doc.input.readOnly) return;
+    const query = this.findBar.query;
+    let n;
+    try {
+      n = this.#replaceAll(query);
+    } catch {
+      return this.#renderFind();   // an invalid regular expression: the bar says it
+    }
+    if (!n) return;
+    doc.message = t('status.replaced', { n });
+    const { find, replace, matchCase, wholeWord, regex } = query;
+    automation()?.record('editor.replace', { params: { find, replace, matchCase, wholeWord, regex }, file: doc.fileId });
+    this.render();
+  }
+
+  /**
+   * Replace all without the bar (automations), in the tab of the file (for a document without
+   * one, the tab shown), shown first. Throws when the regular expression is not valid.
+   */
+  async replaceAllIn(id, params = {}) {
+    const doc = id ? this.#find(id, 'fileId') : this.tab;
+    if (!doc) throw new Error(t('automation.notOpen'));
+    this.#activate(doc, { focus: false });
+    if (!doc.loaded) await this.#loadFile(doc);
+    if (!doc.loaded || !this.tabs.includes(doc)) throw new Error(t('automation.notRead'));
+    const query = {
+      find: typeof params.find === 'string' ? params.find : '', replace: typeof params.replace === 'string' ? params.replace : '',
+      matchCase: params.matchCase === true, wholeWord: params.wholeWord === true, regex: params.regex === true,
+    };
+    if (!query.find) throw new Error(t('automation.noFind'));
+    try {
+      queryRegExp(query);
+    } catch (err) {
+      throw new Error(t('find.badRegex', { error: regexError(err) }));
+    }
+    const n = this.#replaceAll(query);
+    if (n) {
+      doc.message = t('status.replaced', { n });
+      this.render();
+    }
+  }
+
+  /** Every match replaced in the tab shown, as one change. Returns how many; throws for an invalid regular expression. */
+  #replaceAll(query) {
+    const change = replaceAll(this.text, query);
+    if (!change) return 0;
+    this.#editText(change.from, change.to, change.text);
+    return change.count;
+  }
+
+  /**
+   * Replaces from..to of the text shown through the textarea's own editing (execCommand), so
+   * that Ctrl Z undoes it in one step. The focus goes back where it was (the find bar), and so
+   * does the scroll (the next match is shown by whoever asked).
+   */
+  #editText(from, to, text) {
+    const ta = this.input;
+    const focused = document.activeElement;
+    const top = ta.scrollTop;
+    this.#editing = true;
+    try {
+      ta.focus({ preventScroll: true });
+      ta.setSelectionRange(from, to);
+      if (document.activeElement === ta) this.#insert(text);
+      else {
+        // The textarea cannot take the focus (a replay in a window not shown): execCommand would
+        // write wherever the focus is, so the text changes without the undo history
+        ta.setRangeText(text, from, to, 'end');
+        this.tab.discarded = false;
+        this.#changed();
+        this.#syncLater();
+      }
+    } finally {
+      this.#editing = false;
+    }
+    ta.scrollTop = top;
+    if (focused && focused !== ta && focused !== document.body && focused.isConnected) focused.focus({ preventScroll: true });
+    // The copy must show the new text before matches are marked or shown
+    cancelAnimationFrame(this.#raf);
+    this.#raf = 0;
+    this.render();
+  }
+
+  /** Scrolls the text so that from..to is on screen (the textarea does it only while it has the focus). */
+  #reveal(from, to) {
+    if (this.#raf) { cancelAnimationFrame(this.#raf); this.#raf = 0; this.render(); }
+    const text = this.text;
+    const lineStart = text.lastIndexOf('\n', from - 1) + 1;
+    const lineEnd = text.indexOf('\n', from);
+    const col = from - lineStart;
+    const [at] = this.#rowRects(lineOf(text, from) - 1, col, Math.min(col + Math.max(1, to - from), (lineEnd === -1 ? text.length : lineEnd) - lineStart));
+    if (!at) return;
+    const ta = this.input;
+    const y = at.top - this.code.getBoundingClientRect().top;   // from the top of the text
+    if (y < ta.scrollTop || y + at.height > ta.scrollTop + ta.clientHeight) {
+      ta.scrollTop = Math.max(0, y - Math.round(ta.clientHeight / 3));
+      this.#syncScroll();
+    }
+  }
+
+  #renderFindSoon() {
+    if (this.#marksRaf || !this.findBar.isOpen) return;
+    this.#marksRaf = requestAnimationFrame(() => { this.#marksRaf = 0; this.#renderFind(); });
+  }
+
+  /** The count in the find bar and the matches marked on the lines on screen. */
+  #renderFind() {
+    const s = this.#matches();
+    if (!s) { if (this.marks.firstChild) this.marks.replaceChildren(); return; }
+    const { matches } = s;
+    const cur = this.#currentMatch(s);
+    const total = `${matches.length}${matches.length >= MAX_MATCHES ? '+' : ''}`;
+    if (s.error) this.findBar.setStatus(t('find.badRegex', { error: s.error }), { error: true });
+    else if (!this.findBar.query.find) this.findBar.setStatus('');
+    else if (!matches.length) this.findBar.setStatus(t('find.none'));
+    else if (cur !== -1) this.findBar.setStatus(t('find.count', { index: cur + 1, total }));
+    else this.findBar.setStatus(t('find.total', { n: matches.length, total }));
+    if (!matches.length) return this.marks.replaceChildren();
+
+    // Only the lines on screen: their rows in the copy, found by their place
+    const rows = this.code.children;
+    const ta = this.input;
+    const top = ta.scrollTop, bottom = top + ta.clientHeight;
+    let lo = 0, hi = rows.length - 1;
+    while (lo < hi) {
+      const mid = (lo + hi) >> 1;
+      if (rows[mid].offsetTop + rows[mid].offsetHeight <= top) lo = mid + 1;
+      else hi = mid;
+    }
+    let last = lo;
+    while (last < rows.length - 1 && rows[last + 1].offsetTop < bottom) last++;
+    const starts = s.starts ??= lineStarts(s.text);
+    const lineAt = pos => {
+      let a = 0, b = starts.length - 1;
+      while (a < b) {
+        const mid = (a + b + 1) >> 1;
+        if (starts[mid] <= pos) a = mid;
+        else b = mid - 1;
+      }
+      return a;
+    };
+    const origin = this.code.getBoundingClientRect();
+    const marks = [];
+    const end = starts[last + 1] ?? Infinity;
+    // A match may begin on a line above the screen and go on into it (a regular expression with \n)
+    for (let i = Math.max(0, firstAtOrAfter(matches, starts[lo]) - 1); i < matches.length && matches[i].start < end && marks.length < MAX_MARKS; i++) {
+      const { start, end: stop } = matches[i];
+      for (let l = Math.max(lo, lineAt(start)); l <= Math.min(last, lineAt(stop - 1)); l++) {
+        const from = Math.max(start, starts[l]) - starts[l];
+        const to = Math.min(stop, (starts[l + 1] ?? s.text.length + 1) - 1) - starts[l];
+        for (const r of this.#rowRects(l, from, Math.max(from, to))) {
+          marks.push(h('div', {
+            class: i === cur ? 'ed-mark on' : 'ed-mark',
+            style: { left: `${r.left - origin.left}px`, top: `${r.top - origin.top}px`, width: `${Math.max(4, r.right - r.left)}px`, height: `${r.height}px` },
+          }));
+        }
+      }
+    }
+    this.marks.replaceChildren(...marks);
+  }
+
   // ---------- Tabs ----------
 
   /** Closes a tab, asking first if it has changes. Resolves false if the user cancelled. */
@@ -627,7 +1069,7 @@ class TextEditor {
     });
     input.addEventListener('input', e => this.#onInput(e), { signal });
     input.addEventListener('keydown', e => this.#onKey(e), { signal });
-    input.addEventListener('scroll', () => { this.#syncScroll(); this.#hideCompletion(); }, { signal });
+    input.addEventListener('scroll', () => { this.#syncScroll(); this.#hideCompletion(); this.#renderFindSoon(); }, { signal });
     input.addEventListener('blur', () => this.#hideCompletion(), { signal });
     input.addEventListener('pointerdown', () => this.#hideCompletion(), { signal });
     for (const type of ['keyup', 'pointerup', 'select', 'focus']) input.addEventListener(type, () => this.#caret(), { signal });
@@ -776,6 +1218,7 @@ class TextEditor {
       { label: t('tabs.menu.closeRight'), disabled: i === this.tabs.length - 1, action: () => this.#closeMany(this.tabs.slice(i + 1)) },
       { label: t('tabs.menu.closeSaved'), disabled: !this.tabs.some(d => !this.#dirtyOf(d)), action: () => this.#closeMany(this.tabs.filter(d => !this.#dirtyOf(d))) },
       '-',
+      { label: t('tabs.menu.saveAs'), icon: 'save', shortcut: shortcuts.label('editor.saveAs'), disabled: !doc.loaded, action: () => { this.#activate(doc); this.saveAs(); } },
       { label: t('tabs.menu.copyPath'), icon: 'link', disabled: !doc.fileId, action: () => this.#copyPath(doc) },
       { label: t('tabs.menu.reveal'), icon: 'folder', disabled: !doc.fileId, action: () => this.reveal(doc) },
     ]);
@@ -880,6 +1323,7 @@ class TextEditor {
       if (num && num.style.height !== px) num.style.height = px;
     });
     this.#renderDiagnostics();
+    this.#renderFind();
     this.#caret();
     this.#syncScroll();
   }
@@ -949,6 +1393,7 @@ class TextEditor {
     const t = `translate(${-scrollLeft}px, ${-scrollTop}px)`;
     this.code.style.transform = t;
     this.squiggles.style.transform = t;
+    this.marks.style.transform = t;
     this.current.style.setProperty('--scroll', `${scrollTop}px`);
     this.gutter.scrollTop = scrollTop;
   }
@@ -1288,11 +1733,11 @@ class TextEditor {
 
   #onInput(e) {
     this.tab.discarded = false;
-    // Typing is not recorded: the recorder shows it, struck out, once per burst
-    automation()?.missed('editor', t('automation.typing'));
+    // Typing is not recorded: the recorder shows it, struck out, once per burst (a replace is not typing)
+    if (!this.#editing) automation()?.missed('editor', t('automation.typing'));
     this.#changed();
     this.#syncLater();
-    if (this.#accepting) return;
+    if (this.#accepting || this.#editing) return;
     const data = typeof e.data === 'string' ? e.data : '';
     const typed = e.inputType === 'insertText' && data.length === 1;
     const triggers = this.#client?.ready ? this.#client.triggerCharacters : [];
@@ -1362,8 +1807,9 @@ class TextEditor {
       const indent = ta.value.slice(start).match(/^[ \t]*/)[0].slice(0, ta.selectionStart - start);
       this.#insert('\n' + indent);
     } else if (e.key === 'Escape') {
-      // Leave the text with the keyboard (Tab then moves the focus on)
-      ta.blur();
+      // Closes the find bar; otherwise leaves the text with the keyboard (Tab then moves the focus on)
+      if (this.findBar.isOpen) { e.preventDefault(); this.closeFind(); }
+      else ta.blur();
     }
   }
 

@@ -1577,7 +1577,7 @@ function Zt({ args: e, openWindow: t } = {}) {
 		if (t) i.go(t, !0, !1);
 		else if (Xt(e)) return i.notFound(Xt(e));
 		e?.link && i.followLink(e.link);
-	}), r.getState = () => ({ folder: i.folder }), r;
+	}), r.getState = () => ({ folder: i.folder }), r.selection = () => i.selected, r;
 }
 function Qt({ args: e, openWindow: t } = {}) {
 	return Ft({
@@ -1730,6 +1730,9 @@ var $t = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 	}
 	get inTrash() {
 		return this.folder === Q;
+	}
+	get selected() {
+		return this.inTrash ? [] : [...this.#f];
 	}
 	get inTag() {
 		return qt(this.folder);

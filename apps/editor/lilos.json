@@ -1,6 +1,6 @@
 {
   "id": "editor",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "kind": "local",
   "name": "Editor",
   "description": "Text and code editor with tabs, syntax highlighting, suggestions and checking of JSON, CSS and HTML.",
@@ -80,6 +80,27 @@
         ]
       },
       {
+        "id": "editor.saveAs",
+        "label": "Save as",
+        "keys": [
+          "Ctrl+Shift+S"
+        ]
+      },
+      {
+        "id": "editor.find",
+        "label": "Find",
+        "keys": [
+          "Ctrl+F"
+        ]
+      },
+      {
+        "id": "editor.replace",
+        "label": "Find and replace",
+        "keys": [
+          "Ctrl+H"
+        ]
+      },
+      {
         "id": "editor.new",
         "label": "New document",
         "keys": [
@@ -148,12 +169,56 @@
         "id": "editor.save",
         "label": "Save the file",
         "target": "window"
+      },
+      {
+        "id": "editor.replace",
+        "label": "Replace all in the text",
+        "target": "window",
+        "params": {
+          "find": {
+            "type": "text",
+            "label": "Find"
+          },
+          "replace": {
+            "type": "text",
+            "label": "Replace with"
+          },
+          "matchCase": {
+            "type": "boolean",
+            "label": "Match case"
+          },
+          "wholeWord": {
+            "type": "boolean",
+            "label": "Whole word"
+          },
+          "regex": {
+            "type": "boolean",
+            "label": "Regular expression"
+          }
+        }
+      },
+      {
+        "id": "editor.saveAs",
+        "label": "Save as",
+        "target": "window",
+        "result": "file",
+        "params": {
+          "folder": {
+            "type": "folder",
+            "label": "Folder"
+          },
+          "name": {
+            "type": "text",
+            "label": "Name",
+            "maxLength": 255
+          }
+        }
       }
     ]
   },
   "entry": "dist/index.js",
   "styles": [
-    "dist/index-D0UqtePr.css"
+    "dist/index-DQHACDF4.css"
   ],
   "locales": "locales.json",
   "files": {
@@ -166,8 +231,8 @@
     "dist/github-light-BNubH2n_.js": "sha256-jXyVGTRpCh8/Pl+L8HcUIb1rpKmw0LQMRjQ8ht59XI4=",
     "dist/html-B15Ssl5e.js": "sha256-PJMtOy7kJUfJFSHO8t7GbBYoT2yH+aK8FYcA23r21Rk=",
     "dist/html.worker-X9Fc__8d.js": "sha256-jFf7ptUItSrts9eQ7N//iO01MztcEqg6xqw6BMaDFJk=",
-    "dist/index-D0UqtePr.css": "sha256-aiPg9w5XMIhRRWW14UYhhRootYbBsB+X567JrjFL/xc=",
-    "dist/index.js": "sha256-MmWQf1KlGkRPvtOkCo/+XSI37t+P2hHJmuMOpORvaH8=",
+    "dist/index-DQHACDF4.css": "sha256-QUnJSnG771hl+Cul5k3FMKfR4MZsedBxZLY18hkSGVM=",
+    "dist/index.js": "sha256-nOOpthBjP1qnGMJ5SOl8CKEA5/y6I8xM9WPBDgeD9cY=",
     "dist/javascript-BSjxD7Ei.js": "sha256-s8CfycJSC1caXhuX6szihKZYWf7x7I2GYsoIuFpm4IQ=",
     "dist/json-CWJmcBQn.js": "sha256-dVtXsP0tUNXlIISVsZ7QnwwXlVjM7mKTz5hRYVuq03M=",
     "dist/json.worker-B3saI9fz.js": "sha256-BGs4zSqxY8hdyWDK4v0jTG79BA3Qp8G00azIsfKM83g=",
@@ -197,6 +262,6 @@
     "dist/web-tree-sitter-DoPK4l5c.js": "sha256-7K+bnFwHSgKdzQhkdorj73593h2Z49ADsQn+h3d8/fY=",
     "dist/xml-D0f8rgW-.js": "sha256-cm+7flrmzmSI3f440/y68CAeYL14EsA77y9rz+kOPG8=",
     "dist/yaml-CcAIbj8h.js": "sha256-YJayirpdTRH4e3BlU6cu0ocMhodswcZ5fS6iV20/Xtc=",
-    "locales.json": "sha256-IeKG2dbYZEzKXPlrVlAQkEhsywXjC+/NgPrE4fAQqVA="
+    "locales.json": "sha256-KcXS9bo27/lzVjaPDW8yx2vpsHlLiThCJajFVl6ByFc="
   }
 }

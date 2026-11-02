@@ -1,6 +1,6 @@
 {
   "id": "files",
-  "version": "1.14.0",
+  "version": "1.15.0",
   "kind": "local",
   "name": "File Manager",
   "description": "Browse, search and organize files and folders: tags, links, desktop links, trash, info and preview.",

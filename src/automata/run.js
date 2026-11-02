@@ -67,7 +67,28 @@ export function createRun({ args, openWindow } = {}) {
       const el = h('select', { class: 'au-select', 'aria-label': label }, p.options.map(o => h('option', { value: String(o.value), selected: o.value === value }, o.label)));
       return { el, get: () => p.options.find(o => String(o.value) === el.value)?.value };
     }
-    if (p.type === 'file' || p.type === 'folder' || p.type === 'files') {
+    if (p.type === 'files') {
+      // Several: the ones proposed, then added or taken away one by one (files or folders)
+      const chosen = (Array.isArray(value) ? value : value ? [value] : []).filter(id => fs.exists(id));
+      const list = h('div', { class: 'rn-chosen' });
+      const draw = () => list.replaceChildren(...(chosen.length ? chosen.map((id, i) => h('div', { class: 'rn-line' },
+        icon(fs.get(id)?.type === 'folder' ? 'folder' : 'file'), h('code', {}, homePath(id)),
+        h('button', { class: 'au-icon', type: 'button', title: t('run.removeItem'), 'aria-label': t('run.removeItem', { name: fs.get(id)?.name ?? '' }), onclick: () => { chosen.splice(i, 1); draw(); } }, icon('x'))))
+        : [h('span', { class: 'au-hint' }, t('value.empty'))]));
+      const add = kind => async () => {
+        const node = await system.pickFile?.(openWindow, { kind, title: label });
+        if (node && !chosen.includes(node.id)) { chosen.push(node.id); draw(); }
+      };
+      draw();
+      return {
+        el: h('div', { class: 'rn-many' }, list, h('div', { class: 'rn-actions' },
+          h('button', { class: 'au-btn', type: 'button', onclick: add('file') }, icon('plus'), t('run.addFile')),
+          h('button', { class: 'au-btn', type: 'button', onclick: add('folder') }, icon('folder'), t('run.addFolder')))),
+        get: () => [...chosen],
+        check: () => (chosen.length ? '' : t('run.noneChosen')),
+      };
+    }
+    if (p.type === 'file' || p.type === 'folder') {
       let chosen = Array.isArray(value) ? value[0] : value;
       const name = h('span', { class: 'rn-path' }, chosen ? homePath(chosen) : t('value.empty'));
       const pick = h('button', { class: 'au-btn', type: 'button' }, t('run.choose'));
@@ -75,7 +96,7 @@ export function createRun({ args, openWindow } = {}) {
         const node = await system.pickFile?.(openWindow, { kind: p.type === 'folder' ? 'folder' : 'file', title: label });
         if (node) { chosen = node.id; name.textContent = homePath(node.id); }
       });
-      return { el: h('div', { class: 'rn-pick' }, name, pick), get: () => (p.type === 'files' ? (chosen ? [chosen] : []) : chosen) };
+      return { el: h('div', { class: 'rn-pick' }, name, pick), get: () => chosen };
     }
     const el = h('input', { class: 'au-input', type: p.type === 'secret' ? 'password' : p.type === 'number' ? 'number' : 'text', 'aria-label': label, autocomplete: 'off' });
     if (p.type !== 'secret' && value != null) el.value = String(value);

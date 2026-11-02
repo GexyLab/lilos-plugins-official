@@ -108,6 +108,8 @@ export default function createFiles({ args, openWindow } = {}) {
     if (a?.link) browser.followLink(a.link);
   });
   win.getState = () => ({ folder: browser.folder });
+  // What is selected here, for what acts on the selection from outside (an automation's shortcut)
+  win.selection = () => browser.selected;
   return win;
 }
 
@@ -270,6 +272,8 @@ class FileBrowser {
 
   /** True while the trash is shown. */
   get inTrash() { return this.folder === TRASH; }
+  /** Ids of the selected items (none in the trash: they cannot be worked on). */
+  get selected() { return this.inTrash ? [] : [...this.#selection]; }
 
   /** The tag whose items are shown (everything with it, wherever it is), or null. */
   get inTag() { return viewTag(this.folder); }
