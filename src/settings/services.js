@@ -1,5 +1,6 @@
-import { Window, h, icon, appIcon, fs, toggle, selectField, textField, actionButton, toast, session } from '@lilos/sdk';
+import { Window, h, icon, appIcon, toggle, selectField, actionButton, toast, session } from '@lilos/sdk';
 import { pickFile } from '@lilos/system';
+import { paramsForm } from '../shared/paramsForm.js';
 // Namespace import: lilOS versions without services still load Control Panel
 import * as system from '@lilos/system';
 import { t, i18n } from './i18n.js';
@@ -116,58 +117,17 @@ function serviceRows(s, ctx) {
     h('div', { class: 'st-label' }, h('b', {}, name),
       h('small', {}, h('span', { class: `su-state ${s.status}` }, statusText(s)), ' · ', h('code', {}, s.entry), s.system && !state.admin ? ` · ${t('services.byAdmin')}` : '')),
     when, restart, power, logButton);
-  return s.params && s.startup !== 'none' ? [row, paramsForm(s, ctx)] : [row];
+  return s.params && s.startup !== 'none' ? [row, serviceParams(s, ctx)] : [row];
 }
 
-/** The params of a service that starts by itself; saved with its choice, used from its next start. */
-function paramsForm(s, { openWindow, rerender }) {
-  const locked = s.system && !state.admin;
-  let values = { ...s.values };
-  const set = (name, value) => {
-    const next = { ...values };
-    if (value === '' || value == null) delete next[name];
-    else next[name] = value;
-    values = next;
-    run(() => system.services.setStartup(s.app, s.entry, s.startup, next), rerender);
-  };
-  const fields = Object.entries(s.params).flatMap(([name, p]) => {
-    const current = Object.hasOwn(values, name) ? values[name] : p.default;
-    const aria = `${p.label} (${s.name} · ${s.label})`;
-    let control;
-    if (p.type === 'boolean') control = toggle({ value: current === true, label: aria, onChange: v => set(name, v) });
-    else if (p.type === 'choice') {
-      control = selectField({
-        value: current === undefined ? '' : String(current), label: aria,
-        options: [{ value: '', label: '—' }, ...p.options.map(o => ({ value: String(o.value), label: o.label }))],
-        onChange: v => set(name, v === '' ? null : p.options.find(o => String(o.value) === v)?.value),
-      });
-    } else if (p.type === 'number') {
-      control = h('input', { class: 'ctl-text su-number', type: 'number', min: p.min, max: p.max, 'aria-label': aria });
-      control.value = current ?? '';
-      control.addEventListener('change', () => set(name, control.value === '' ? null : Number(control.value)));
-    } else if (p.type === 'file' || p.type === 'folder') {
-      // Services work with paths: '~/Documenti/…'
-      const shown = textField({ value: current ?? '', label: aria, placeholder: '~/…', onChange: v => set(name, v.trim()) });
-      const choose = actionButton({
-        label: t('common.choose'),
-        onClick: async () => {
-          const node = await pickFile(openWindow, { kind: p.type, title: p.label });
-          if (!node) return;
-          const path = `~${fs.path(node.id).slice(fs.home.length)}`;
-          shown.value = path;
-          set(name, path);
-        },
-      });
-      choose.disabled = locked;
-      control = h('div', { class: 'su-path' }, shown, choose);
-    } else {
-      control = textField({ value: current ?? '', label: aria, onChange: v => set(name, v) });
-    }
-    control.querySelectorAll?.('input, select, button').forEach(el => { el.disabled ||= locked; });
-    if (control.matches?.('input, select, button')) control.disabled ||= locked;
-    return [h('label', { class: 'su-plabel', title: p.description ?? '' }, p.label), h('div', { class: 'su-field' }, control)];
+/** The params of a service that starts by itself; saved with its choice, used from its next start. Services work with paths ('~/Documenti/…'). */
+function serviceParams(s, { openWindow, rerender }) {
+  const form = paramsForm(s.params, s.values, {
+    t, pathAs: 'tilde', locked: s.system && !state.admin, context: `${s.name} · ${s.label}`,
+    pickFile: options => pickFile(openWindow, options),
+    onChange: next => run(() => system.services.setStartup(s.app, s.entry, s.startup, next), rerender),
   });
-  return h('div', { class: 'su-params' }, fields);
+  return h('div', { class: 'su-params' }, form.el);
 }
 
 /** The last lines the service wrote (console.*), and when it started and stopped. */

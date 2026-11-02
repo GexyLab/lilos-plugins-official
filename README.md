@@ -33,8 +33,15 @@ Le app di sistema girano dentro lilOS, senza sandbox. Il kernel le accetta solo 
   - `lilos.json` contiene l'hash di ogni file, controllato dal kernel all'installazione.
 - `modules/<nome>/`: un modulo del kernel così com'è (`module.json`, `index.js`, eventuale `package.json` con `package-lock.json`).
 - `modules/_shared/`: codice in comune tra i moduli (non è un modulo: il catalogo non lo elenca). Vedi «Codice in comune dei moduli».
+- `src/shared/`: componenti usati da più app (vedi sotto), inclusi nel build di ogni app che li importa.
 
 Le app importano `@lilos/sdk` e `@lilos/system` senza includerli nel build: a runtime usano quelli di lilOS, serviti come `/host/sdk.js` e `/host/system.js`. `@lilos/system` è l'API che lilOS dà alle app di sistema (vedi `src/systemApi.js` nel repository di lilOS).
+
+### Componenti condivisi
+
+`src/shared/` contiene quello che più app farebbero ognuna a modo suo: `fieldsForm.js` (moduli disegnati dalla descrizione dei campi: connessioni, host, impostazioni dei moduli), `paramsForm.js` (i `params` di un entry point), `trustPrompt.js` (conferma della chiave o del certificato di un server), `FindBar.js`, `TabBar.js`, `inlineRename.js`, `preview.js` (l'entry point `filePreview`), `text.js`, e in `sandbox/` quello delle app isolate (Zip, FileCrypt, Calcolatrice), che non importa l'SDK. Ogni app li importa con un percorso relativo (`../shared/FindBar.js`) e Vite li mette nel suo bundle, CSS compreso: le regole `.sh-*` vanno cambiate solo in modi che vadano bene anche alle copie più vecchie, perché le app si aggiornano una per volta.
+
+I testi dei componenti stanno in `src/shared/locales.json` (inglese e italiano, chiavi `shared.<parte>.<nome>`), mai scritti nel codice. Il componente riceve il `t` dell'app; il build aggiunge al `locales.json` di ogni app le parti (`find`, `tabs`…) che usano i componenti condivisi che importa (`scripts/shared-locales.mjs`), e si ferma se un'app ha una lingua che `src/shared/locales.json` non ha o una chiave sua che comincia per `shared.`. `npm run check:locales` controlla anche le stringhe condivise.
 
 ## Pubblicare una nuova versione
 

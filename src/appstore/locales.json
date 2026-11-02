@@ -18,9 +18,9 @@
       "search.label": "Search",
       "search.placeholder": "Search in {tab}",
 
-      "action.cancel": "Cancel",
       "action.install": "Install",
       "action.installAnyway": "Install anyway",
+      "action.installName": "Install {name}",
       "action.update": "Update",
       "action.updateTo": "Update to {version}",
       "action.updateAll": "Update all",
@@ -46,6 +46,7 @@
 
       "done.appInstalled": "{name} installed",
       "done.moduleInstalled": "{name} installed: restart the kernel to use it",
+      "done.moduleReplaced": "It takes the place of {names}, with their settings.",
       "done.appUpToDate": "{name} is already up to date",
       "done.moduleUpToDate": "{name} is already up to date",
       "done.appUpdated": "{name} updated to {version}",
@@ -87,6 +88,7 @@
       "status.available": "Available",
       "status.updateAvailable": "Update {version}",
       "status.removed": "Removed",
+      "status.replacedBy": "Replaced by {name}",
       "status.otherRepo": "From another repository",
       "status.installedApp": "Installed",
       "status.installedModule": "Installed",
@@ -202,9 +204,9 @@
       "search.label": "Cerca",
       "search.placeholder": "Cerca in {tab}",
 
-      "action.cancel": "Annulla",
       "action.install": "Installa",
       "action.installAnyway": "Installa comunque",
+      "action.installName": "Installa {name}",
       "action.update": "Aggiorna",
       "action.updateTo": "Aggiorna a {version}",
       "action.updateAll": "Aggiorna tutto",
@@ -230,6 +232,7 @@
 
       "done.appInstalled": "{name} installata",
       "done.moduleInstalled": "{name} installato: riavvia il kernel per usarlo",
+      "done.moduleReplaced": "Prende il posto di {names}, con le loro impostazioni.",
       "done.appUpToDate": "{name} è già aggiornata",
       "done.moduleUpToDate": "{name} è già aggiornato",
       "done.appUpdated": "{name} aggiornata alla {version}",
@@ -271,6 +274,7 @@
       "status.available": "Disponibile",
       "status.updateAvailable": "Aggiornamento {version}",
       "status.removed": "Rimosso",
+      "status.replacedBy": "Sostituito da {name}",
       "status.otherRepo": "Da un altro repository",
       "status.installedApp": "Installata",
       "status.installedModule": "Installato",
