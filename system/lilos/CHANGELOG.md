@@ -1,5 +1,13 @@
 # Changelog di lilOS
 
+## 1.11.0 — 2026-11-02
+
+- **OneDrive** nella cartella Rete (modulo netfs-onedrive, da installare dall'AppStore → Kernel): il tuo OneDrive, personale o di lavoro, diventa una cartella di Home → Rete. Ci si collega con **Accedi con Microsoft**, che apre la pagina di Microsoft in una finestra; i token restano nel kernel, cifrati, e se Microsoft chiede un nuovo accesso lilOS lo dice
+- Sui documenti Word, Excel e PowerPoint di OneDrive c'è **Apri in Word/Excel/PowerPoint online** (anche col doppio clic): si aprono in Office per il web in una nuova scheda. Sui documenti Office della Home c'è **Carica su OneDrive e apri**. Eliminare da OneDrive manda nel cestino di OneDrive
+- Nuova scheda **Pannello di controllo → OneDrive**: l'amministratore inserisce l'app registrata su Azure (con i passi e l'indirizzo di ritorno da copiare) e sceglie se aprire le cartelle condivise aggiunte a «I miei file»; ognuno sceglie dove vanno i file di «Carica su OneDrive e apri». Servono File Manager 1.11.0 e Pannello di controllo 1.14.0 (da aggiornare dall'AppStore)
+- L'accesso con Microsoft funziona con lilOS su https, o su http da questo computer (localhost)
+- Per chi scrive moduli: i moduli del kernel possono avere impostazioni che un amministratore cambia senza riavviare, e i protocolli di rete un accesso sulla pagina del fornitore
+
 ## 1.10.1 — 2026-11-02
 
 - Con più utenti, i server della rete locale del computer su cui gira lilOS (per esempio `192.168.…`) non sono più raggiungibili di serie: chi gestisce lilOS li apre tutti (`"net": { "allowPrivate": true }` in `config.json`) o solo quelli che servono, come il NAS (`"net": { "allow": ["192.168.1.50/32"] }`). Con un solo utente non cambia niente
