@@ -1,6 +1,6 @@
 {
   "id": "files",
-  "version": "1.12.0",
+  "version": "1.12.1",
   "kind": "local",
   "name": "File Manager",
   "description": "Browse, search and organize files and folders: tags, links, desktop links, trash, info and preview.",
@@ -13,7 +13,7 @@
     "id": "lilos",
     "name": "lilOS"
   },
-  "sdk": "1",
+  "sdk": "2",
   "system": true,
   "required": true,
   "entrypoints": {
