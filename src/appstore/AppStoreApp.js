@@ -1,4 +1,4 @@
-import { Window, h, icon, appIcon, apps, repositories, kernelModules, kernel, fs, settings, toast, actionButton, textField, toggle } from '@lilos/sdk';
+import { Window, h, icon, appIcon, apps, repositories, kernelModules, kernel, fs, settings, storage, toast, actionButton, textField, toggle } from '@lilos/sdk';
 import * as sdk from '@lilos/sdk';   // `locale`: missing in older lilOS, so not imported by name
 import { describePermission, launch } from '@lilos/system';
 // Namespace import: lilOS versions without services (before the kernel's services) still load the AppStore
@@ -16,6 +16,11 @@ import './appstore.css';
  * the items of every repository), cards that open the details with the README, and "Options"
  * (preferences and repositories) at the bottom right. A README the kernel cut (past 64 KB) can be
  * saved whole in the Download folder.
+ *
+ * Each user can switch repositories off, the official one too: an inactive one is not read, and
+ * nothing of it is listed or offered as an update (lilOS's own neither, when it is the official
+ * one); what was installed from it stays in Installed. The list is the app's data
+ * (app:appstore:repos.disabled, [{ id, name }]), so the Updates service skips them as well.
  *
  * lilOS itself is an item too (kind 'system', with a lilOS that has sdk.systemReleases): its version,
  * the newer one in the official repository with README and changelog, the versions kept on disk.
@@ -39,6 +44,13 @@ const SYSTEM_ICON = { glyph: 'window', color: '#3b6ef5' };
 const releases = sdk.systemReleases ?? null;
 
 settings.define({ 'appstore.showUnofficial': true });
+
+/** Repositories this user switched off: [{ id, name }] (the name for the Updates service, which only gets names). */
+const DISABLED_KEY = 'app:appstore:repos.disabled';
+const readDisabled = () => {
+  const raw = storage.get(DISABLED_KEY, []);
+  return (Array.isArray(raw) ? raw : []).filter(r => typeof r?.id === 'string' && typeof r.name === 'string');
+};
 
 const newer = (a, b) => {
   const pa = a.split('.').map(Number), pb = b.split('.').map(Number);
@@ -141,19 +153,24 @@ export default function AppStore({ openWindow }) {
     render();
   }
 
+  async function readCatalog(repo) {
+    try {
+      state.catalogs.set(repo.id, await repositories.catalog(repo.id));
+      state.errors.delete(repo.id);
+    } catch (err) {
+      state.catalogs.delete(repo.id);
+      state.errors.set(repo.id, err.message);
+    }
+  }
+
   async function load({ quiet = false } = {}) {
     if (!quiet) { state.loading = true; render(); }
     try {
       state.repos = await repositories.list();
-      await Promise.all(state.repos.map(async repo => {
-        try {
-          state.catalogs.set(repo.id, await repositories.catalog(repo.id));
-          state.errors.delete(repo.id);
-        } catch (err) {
-          state.catalogs.delete(repo.id);
-          state.errors.set(repo.id, err.message);
-        }
-      }));
+      // A removed repository leaves the list of the inactive ones
+      const disabled = readDisabled();
+      if (disabled.some(d => !state.repos.some(r => r.id === d.id))) storage.set(DISABLED_KEY, disabled.filter(d => state.repos.some(r => r.id === d.id)));
+      await Promise.all(state.repos.filter(isEnabled).map(readCatalog));
       state.modules = isAdmin ? await kernelModules.list().catch(() => []) : [];
       state.system = releases ? await releases.info().catch(() => null) : null;
       await loadUpdatesService();
@@ -168,7 +185,21 @@ export default function AppStore({ openWindow }) {
 
   // ---------- Items: apps and modules of every repository, and what is installed ----------
 
-  const visibleRepos = () => state.repos.filter(r => r.official || settings.get('appstore.showUnofficial'));
+  const isEnabled = repo => !readDisabled().some(d => d.id === repo.id);
+  const visibleRepos = () => state.repos.filter(r => isEnabled(r) && (r.official || settings.get('appstore.showUnofficial')));
+
+  /** Switches a repository on (its catalog is read now) or off, for this user. */
+  async function setEnabled(repo, on) {
+    const others = readDisabled().filter(d => d.id !== repo.id);
+    storage.set(DISABLED_KEY, on ? others : [...others, { id: repo.id, name: repo.name }]);
+    // The view is drawn again: the focus stays on the switch
+    const redraw = () => { render(); win.body.querySelector(`#as-repo-${repo.id}`)?.focus(); };
+    redraw();
+    if (on && !state.catalogs.has(repo.id)) {
+      await readCatalog(repo);
+      redraw();
+    }
+  }
 
   function appItem(repo, entry, have) {
     const manifest = entry?.manifest ?? have.manifest;
@@ -209,7 +240,8 @@ export default function AppStore({ openWindow }) {
     const info = state.system;
     if (!info) return null;
     const repo = state.repos.find(r => r.official) ?? null;
-    const entry = repo && state.catalogs.get(repo.id)?.system?.system ? state.catalogs.get(repo.id).system : null;
+    // The official repository switched off: no newer lilOS offered
+    const entry = repo && isEnabled(repo) && state.catalogs.get(repo.id)?.system?.system ? state.catalogs.get(repo.id).system : null;
     const offered = entry?.system.version ?? null;
     const installed = info.mode === 'installed';
     return {
@@ -245,11 +277,12 @@ export default function AppStore({ openWindow }) {
   }
 
   function tabs(items) {
-    const present = new Set(items.map(i => i.category));
+    const present = new Set(items.filter(i => !i.repo || isEnabled(i.repo)).map(i => i.category));
     return [
       { id: 'installed', label: t('tab.installed'), filter: i => i.here },
       { id: 'updates', label: t('tab.updates'), filter: i => !!i.update, badge: true },
-      ...categories().filter(c => present.has(c.id) || (c.id === 'kernel' && isAdmin)).map(c => ({ ...c, category: true, filter: i => i.category === c.id })),
+      // What came from a repository switched off is only in Installed
+      ...categories().filter(c => present.has(c.id) || (c.id === 'kernel' && isAdmin)).map(c => ({ ...c, category: true, filter: i => i.category === c.id && (!i.repo || isEnabled(i.repo)) })),
     ];
   }
 
@@ -550,6 +583,12 @@ export default function AppStore({ openWindow }) {
         h('span', {}, failed.length === 1 ? t('banner.repoUnreachable', { name: repoName(failed[0]) }) : t('banner.reposUnreachable', { n: failed.length })),
         h('button', { class: 'as-link', onclick: () => show('options') }, t('action.details'))));
     }
+    const off = state.repos.filter(r => !isEnabled(r));
+    if (off.length && state.tab !== 'installed') {
+      out.push(h('div', { class: 'as-banner' }, icon('info'),
+        h('span', {}, off.some(r => r.official) ? t('banner.officialDisabled') : t('banner.reposDisabled', { n: off.length })),
+        h('button', { class: 'as-link', onclick: () => show('options') }, t('options.title'))));
+    }
     return out;
   }
 
@@ -711,20 +750,23 @@ export default function AppStore({ openWindow }) {
     const draft = state.newRepo;
     footerText.textContent = t('options.title');
     const repoRow = repo => {
+      const on = isEnabled(repo);
       const catalog = state.catalogs.get(repo.id);
       const valid = list => (list ?? []).filter(e => !e.error).length;
       const invalid = [...catalog?.apps ?? [], ...catalog?.modules ?? []].filter(e => e.error);
-      const what = state.errors.has(repo.id) ? t('options.unreachable', { error: state.errors.get(repo.id) })
-        : catalog ? [t('options.apps', { n: valid(catalog.apps) }), t('options.modules', { n: valid(catalog.modules) }),
-          invalid.length ? t('options.invalid', { n: invalid.length }) : null].filter(Boolean).join(' · ')
-          : t('options.reading');
-      return h('div', { class: 'as-row' },
+      const what = !on ? t('options.disabled')
+        : state.errors.has(repo.id) ? t('options.unreachable', { error: state.errors.get(repo.id) })
+          : catalog ? [t('options.apps', { n: valid(catalog.apps) }), t('options.modules', { n: valid(catalog.modules) }),
+            invalid.length ? t('options.invalid', { n: invalid.length }) : null].filter(Boolean).join(' · ')
+            : t('options.reading');
+      return h('div', { class: on ? 'as-row' : 'as-row as-row-off' },
         appIcon(repo.official ? { glyph: 'shield', color: '#30a46c' } : { glyph: 'link', color: '#8a909b' }),
         h('div', { class: 'as-row-text' },
           h('b', {}, repoName(repo), h('span', { class: 'as-muted' }, ` · ${repo.name}`)),
           h('span', {}, repo.url),
-          h('span', { class: state.errors.has(repo.id) ? 'as-error' : null, title: invalid.map(e => `${e.path}: ${e.error}`).join('\n') || null }, what)),
-        repo.official ? h('span', { class: 'as-muted' }, t('options.alwaysThere')) : isAdmin ? button(t('action.remove'), () => act('repo', () => repositories.remove(repo.id), t('done.repoRemoved', { name: repoName(repo) })), { danger: true, key: repo.id }) : null);
+          h('span', { class: on && state.errors.has(repo.id) ? 'as-error' : null, title: (on && invalid.map(e => `${e.path}: ${e.error}`).join('\n')) || null }, what)),
+        repo.official ? h('span', { class: 'as-muted' }, t('options.alwaysThere')) : isAdmin ? button(t('action.remove'), () => act('repo', () => repositories.remove(repo.id), t('done.repoRemoved', { name: repoName(repo) })), { danger: true, key: repo.id }) : null,
+        Object.assign(toggle({ value: on, label: t('options.active', { name: repoName(repo) }), onChange: v => setEnabled(repo, v) }), { id: `as-repo-${repo.id}` }));
     };
     return h('div', { class: 'as-options' },
       backButton(tab.label),

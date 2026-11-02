@@ -99,6 +99,8 @@
       "banner.restartNeeded": "Changes to modules take effect from the next kernel start.",
       "banner.repoUnreachable": "{name} is unreachable: what it offers is not listed.",
       "banner.reposUnreachable": { "one": "{n} repository is unreachable: what it offers is not listed.", "other": "{n} repositories are unreachable: what they offer is not listed." },
+      "banner.reposDisabled": { "one": "{n} repository is off: what it offers is not listed.", "other": "{n} repositories are off: what they offer is not listed." },
+      "banner.officialDisabled": "The official repository is off: its apps and the updates of lilOS and of its apps are not listed.",
 
       "list.reading": "Reading the repositories…",
       "list.items": { "one": "{n} item", "other": "{n} items" },
@@ -159,7 +161,7 @@
       "system.warning": "lilOS is updated for every user. The new version is put next to the one in use and starts with the kernel’s restart; the one before stays on disk until you delete it.",
 
       "options.title": "Options",
-      "options.lead": "AppStore preferences and the repositories apps and modules come from.",
+      "options.lead": "AppStore preferences and the repositories apps and modules come from. Switch a repository off to list only what the active ones offer.",
       "options.showUnofficial": "Show unofficial repositories",
       "options.showUnofficialHint": "When off, the tabs list only what the official repository offers",
       "options.repositories": "Repositories",
@@ -169,6 +171,8 @@
       "options.invalid": { "one": "{n} invalid package", "other": "{n} invalid packages" },
       "options.reading": "Reading…",
       "options.alwaysThere": "Always present",
+      "options.active": "{name} active",
+      "options.disabled": "Off: not read, nothing of it is listed or offered as an update",
       "options.addRepo": "Add a repository",
       "options.address": "Address",
       "options.addressHint": "A git repository with catalog.json, for example https://github.com/name/repo",
@@ -279,6 +283,8 @@
       "banner.restartNeeded": "Le modifiche ai moduli valgono dal prossimo avvio del kernel.",
       "banner.repoUnreachable": "{name} non è raggiungibile: quello che offre non è elencato.",
       "banner.reposUnreachable": { "one": "{n} repository non è raggiungibile: quello che offre non è elencato.", "other": "{n} repository non sono raggiungibili: quello che offrono non è elencato." },
+      "banner.reposDisabled": { "one": "{n} repository è disattivato: quello che offre non è elencato.", "other": "{n} repository sono disattivati: quello che offrono non è elencato." },
+      "banner.officialDisabled": "Il repository ufficiale è disattivato: non sono elencati le sue app né gli aggiornamenti di lilOS e delle sue app.",
 
       "list.reading": "Lettura dei repository…",
       "list.items": { "one": "{n} elemento", "other": "{n} elementi" },
@@ -339,7 +345,7 @@
       "system.warning": "lilOS si aggiorna per tutti gli utenti. La nuova versione si mette accanto a quella in uso e parte al riavvio del kernel; quella di prima resta sul disco finché non la elimini.",
 
       "options.title": "Opzioni",
-      "options.lead": "Preferenze dell’AppStore e repository da cui arrivano app e moduli.",
+      "options.lead": "Preferenze dell’AppStore e repository da cui arrivano app e moduli. Disattiva un repository per elencare solo quello che offrono quelli attivi.",
       "options.showUnofficial": "Mostra i repository non ufficiali",
       "options.showUnofficialHint": "Se spento, le schede elencano solo quello che offre il repository ufficiale",
       "options.repositories": "Repository",
@@ -349,6 +355,8 @@
       "options.invalid": { "one": "{n} pacchetto non valido", "other": "{n} pacchetti non validi" },
       "options.reading": "Lettura…",
       "options.alwaysThere": "Sempre presente",
+      "options.active": "{name} attivo",
+      "options.disabled": "Disattivato: non si legge, niente di suo è elencato né proposto come aggiornamento",
       "options.addRepo": "Aggiungi un repository",
       "options.address": "Indirizzo",
       "options.addressHint": "Un repository git con catalog.json, per esempio https://github.com/nome/repo",

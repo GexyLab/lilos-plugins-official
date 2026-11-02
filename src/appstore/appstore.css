@@ -108,6 +108,7 @@
 .appstore .as-row { display: flex; align-items: center; gap: 14px; padding: 10px 14px; }
 .appstore .as-row + .as-row { border-top: 1px solid var(--border); }
 .appstore .as-row-end { justify-content: flex-end; }
+.appstore .as-row-off > .app-icon, .appstore .as-row-off > .as-row-text { opacity: .55; }
 .appstore .as-row .app-icon { width: 30px; height: 30px; border-radius: 7px; }
 .appstore .as-row-text { flex: 1; min-width: 0; display: flex; flex-direction: column; }
 .appstore .as-row-text b { font-weight: 500; }

@@ -8,6 +8,9 @@
  * aggiornamenti», daily by default) it only answers { schedule } calls: one check each, the result
  * as { text }. Started otherwise (at sign-in, by hand) it checks at once and then every `ore` hours.
  *
+ * Repositories the user switched off in the AppStore (storage 'repos.disabled', [{ id, name }])
+ * are skipped: apps.updates() names the repository, it has no id.
+ *
  * Calls: { op: 'check' } checks now; { schedule } checks for the scheduler; anything else returns
  * the last result { at, updates }.
  * Texts: lilos.locale gives the app's strings (locales.json) in the user's language; a kernel
@@ -25,7 +28,9 @@ export async function updates({ lilos, args }) {
 
   const check = async () => {
     try {
-      const found = await lilos.apps.updates();
+      // Not from the repositories the user switched off in the AppStore (its windows keep them here)
+      const off = new Set(((await lilos.storage.get('repos.disabled')) ?? []).map(r => r?.name));
+      const found = (await lilos.apps.updates()).filter(u => !off.has(u.repo));
       const told = (await lilos.storage.get('updates.told')) ?? {};
       const fresh = found.filter(u => told[u.id] !== u.latest);
       if (fresh.length) {
