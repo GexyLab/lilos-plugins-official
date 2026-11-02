@@ -433,7 +433,7 @@
       "deps.optional": "Facoltativi: installare anche questi?",
       "deps.unavailable": "Ora non disponibili: {list}",
       "deps.restartNote": "I moduli del kernel entrano in funzione dopo il riavvio del kernel: te lo chiedo alla fine.",
-      "deps.installed": {"zero": "{name} installata", "one": "{name} installata, con {n} altro pacchetto", "other": "{name} installata, con altri {n} pacchetti"},
+      "deps.installed": {"zero": "Installazione di {name} completata", "one": "Installazione di {name} completata, con {n} altro pacchetto", "other": "Installazione di {name} completata, con altri {n} pacchetti"},
       "deps.alsoRemove": "Rimuovi anche {name}",
       "deps.unneededTitle": "Non servono più",
       "deps.unneededHint": "Erano stati installati solo per questo e niente altro li usa. Quelli spuntati si rimuovono insieme.",
