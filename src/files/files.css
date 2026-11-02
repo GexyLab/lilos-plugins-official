@@ -298,3 +298,21 @@ nav.fm-path button { cursor: default; }
 .fm-net-wait:empty { display: none; }
 .fm-net-foot { display: flex; align-items: center; gap: 8px; padding: 10px 16px; border-top: 1px solid var(--border); background: var(--side); }
 .fm-mountbar .ctl-btn { display: inline-flex; align-items: center; gap: 5px; flex: none; }
+
+/* Items of a connection: a document with no bytes of its own (web) or a badge beside the name */
+.fm-label-chips { display: flex; align-items: center; gap: 6px; min-width: 0; }
+/* The name keeps its room: the chips give way first */
+.fm-label-chips > .fm-label { flex: 0 1 auto; min-width: 3em; }
+.fm-chip { flex: 0 1000 auto; min-width: 1.5em; overflow: hidden; text-overflow: ellipsis; font-size: 10px; font-weight: 600; line-height: 16px; padding: 0 6px; border-radius: 8px; background: var(--hover); color: var(--dim); white-space: nowrap; }
+.fm-chip.web { background: var(--accent-soft); color: var(--accent); }
+.fm-row.selected .fm-chip, .fm-tile.selected .fm-chip { background: rgba(255, 255, 255, .22); color: #fff; }
+.fm-tile .fm-label-chips { flex-direction: column; gap: 2px; }
+.fm-mountbar-space { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.fm-mountbar-space:empty { display: none; }
+/* Sign-in by hand: the address of the page that does not open */
+.fm-net-paste { display: grid; gap: 4px; margin-top: 4px; }
+.fm-net-paste[hidden] { display: none; }
+.fm-net-paste small { color: var(--dim); }
+.fm-net-where { font-family: var(--mono); font-size: 11px; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fm-net-dialog .ctl-btn { display: inline-flex; align-items: center; gap: 6px; }
+.fm-net-dialog .ctl-btn .ico { width: 13px; height: 13px; flex: none; }

@@ -19,7 +19,7 @@ import { SidePanel, MIN_WIDTH } from './SidePanel.js';
 import { infoView, Preview, readable, contentKey } from './details.js';
 import { Columns, MIN_COL } from './columns.js';
 import { t } from './i18n.js';
-import { network, mountOf, sideSection, mountMenu, mountBar, readRemote } from './network.js';
+import { network, mountOf, sideSection, mountMenu, mountBar, readRemote, netChips, openInBrowser } from './network.js';
 import { officeEntries, openOffice } from './office.js';
 import { newLinkWindow } from './newLink.js';
 import './files.css';
@@ -382,6 +382,8 @@ class FileBrowser {
     if (node.type === 'folder') return this.go(node.id);
     if (node.type === 'app') return launch(node.app);
     if (node.type === 'link') return this.#openLink(node);
+    // A document with no bytes of its own (Google's): it opens on the provider's site
+    if (node.net && node.web) return openInBrowser(this, node.id);
     // A document of OneDrive: Office for the web (unless an app of lilOS is chosen for it)
     if (openOffice(this, node)) return;
     openFile(node);
@@ -455,6 +457,7 @@ class FileBrowser {
   rename(id, created = false) {
     const node = fs.get(id);
     if (!node || node.system) return;
+    if (node.noRename) return this.#say(t('message.noRename', { name: node.name }));
     this.#editing = id;
     this.render();
     const input = this.list.querySelector('.fm-rename');
@@ -507,8 +510,8 @@ class FileBrowser {
 
   remove(ids) {
     if (this.inTrash) return this.purge(ids);
-    const removable = ids.filter(id => !fs.get(id)?.system);
-    if (!removable.length) return void this.#error(t('error.delete'), t('message.systemFolders'));
+    const removable = ids.filter(id => !fs.get(id)?.system && !fs.get(id)?.noRemove);
+    if (!removable.length) return void this.#error(t('error.delete'), ids.some(id => fs.get(id)?.noRemove) ? t('message.noRemove') : t('message.systemFolders'));
     const { x, y } = this.#menuPoint(removable[0]);
     confirmRemove(removable, x, y, this.history);
   }
@@ -1050,7 +1053,9 @@ class FileBrowser {
 
   #nameNode(n) {
     if (this.#editing === n.id) return h('input', { class: 'fm-rename', type: 'text', value: n.name, spellcheck: 'false', 'aria-label': t('rename.label') });
-    return h('span', { class: 'fm-label', title: n.name }, n.name);
+    const chips = netChips(n);
+    if (!chips.length) return h('span', { class: 'fm-label', title: n.name }, n.name);
+    return h('span', { class: 'fm-label-chips' }, h('span', { class: 'fm-label', title: n.name }, n.name), ...chips);
   }
 
   #option(n, cls, ...children) {
@@ -1285,7 +1290,7 @@ class FileBrowser {
       !many && nodes[0].type === 'folder' && { label: t('menu.openInEditor'), icon: 'code', action: () => launch('editor', { folder: nodes[0].id }) },
       // In a tag's view items come from everywhere: show one where it is
       tag && !many && { label: t('menu.reveal'), icon: 'folderOpen', action: () => this.reveal(nodes[0].id) },
-      { label: t('menu.rename'), icon: 'pencil', shortcut: shortcuts.label('items.rename'), disabled: many || fixed, action: () => this.rename(nodes[0].id) },
+      { label: t('menu.rename'), icon: 'pencil', shortcut: shortcuts.label('items.rename'), disabled: many || fixed || nodes[0].noRename, action: () => this.rename(nodes[0].id) },
       !remote && tagSubmenu(ids),
       tag && { label: t('menu.untag', { name: tag.name }), icon: 'x', action: () => setTag(ids, tag.id, false) },
       !remote && linkEntry(ids),
@@ -1294,7 +1299,8 @@ class FileBrowser {
       !many && { label: t('menu.properties'), icon: 'info', action: () => showProperties(nodes[0].id) },
       ...(system.appActionEntries?.(ids, { separator: true }) ?? []),
       '-',
-      { label: many ? t('menu.deleteMany', { count }) : t('menu.delete'), icon: 'trash', shortcut: shortcuts.label('items.delete'), danger: true, disabled: fixed, action: () => this.remove(nodes.map(n => n.id)) },
+      // A connection may name removing otherwise («Togli dall’album»), or not allow it
+      { label: nodes.every(n => n.removeLabel) ? network()?.text(nodes[0].removeLabel) : many ? t('menu.deleteMany', { count }) : t('menu.delete'), icon: 'trash', shortcut: shortcuts.label('items.delete'), danger: true, disabled: fixed || nodes.every(n => n.noRemove), action: () => this.remove(nodes.map(n => n.id)) },
     ].filter(Boolean));
   }
 

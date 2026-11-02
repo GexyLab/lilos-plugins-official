@@ -23,7 +23,19 @@ export function mountOf(id) {
 const STATES = { on: 'net.state.on', connecting: 'net.state.connecting', off: 'net.state.off', error: 'net.state.error' };
 export const stateLabel = m => t(STATES[m.state] ?? 'net.state.off') + (m.state === 'error' && m.error ? `: ${m.error}` : '');
 
-const PROTOCOL_BADGE = { ftp: 'FTP', ftps: 'FTPS', sftp: 'SFTP', webdav: 'DAV', smb: 'SMB', onedrive: 'OD' };
+const PROTOCOL_BADGE = { ftp: 'FTP', ftps: 'FTPS', sftp: 'SFTP', webdav: 'DAV', smb: 'SMB', onedrive: 'OD', gdrive: 'GD', gphotos: 'GF', s3: 'S3', azblob: 'AZ', nfs: 'NFS' };
+const GROUPS = ['server', 'cloud', 'local'];
+const PICTURES = 'Immagini';
+
+/** The words a node of a connection shows beside its name: a document of the provider's site, a badge. */
+export function netChips(n) {
+  if (!n?.net) return [];
+  const text = v => network()?.text(v) ?? '';
+  const out = [];
+  if (n.web) out.push(h('span', { class: 'fm-chip web', title: n.exportAs ? t('net.web.copiedAs', { ext: `.${n.exportAs}` }) : t('net.web.only') }, text(n.web)));
+  if (n.badge) out.push(h('span', { class: 'fm-chip' }, text(n.badge)));
+  return out;
+}
 
 /** The protocol of a connection, as the kernel describes it (links, office, recycles, fields…). */
 export const protocolOf = m => (m ? network()?.protocols.find(p => p.id === m.protocol) ?? null : null);
@@ -93,15 +105,123 @@ export function mountBar(browser, folderId) {
   const m = mountOf(folderId);
   if (!m) return null;
   const disconnect = h('button', { class: 'ctl-btn', type: 'button', onclick: () => network().disconnect(m.id).catch(err => browser.netError(err)) }, icon('x'), t('net.menu.disconnect'));
-  const web = m.state === 'on' && protocolOf(m)?.links && sdk.net.openWeb
+  const protocol = protocolOf(m);
+  const web = m.state === 'on' && protocol?.links && sdk.net.openWeb
     ? h('button', { class: 'ctl-btn', type: 'button', onclick: () => openInBrowser(browser, folderId) }, icon('globe'), t('net.web.open'))
     : null;
+  const importer = m.state === 'on' && protocol?.importer && sdk.net.imports
+    ? h('button', { class: 'ctl-btn', type: 'button', onclick: () => importDialog(browser, m) }, icon('download'), network().text(protocol.importer.label))
+    : null;
+  // The account's space, read when the bar is drawn (a moment later)
+  const space = h('span', { class: 'fm-mountbar-space' });
+  if (m.state === 'on' && protocol?.space && sdk.net.space) {
+    sdk.net.space(m.id).then(s => {
+      if (!s) return;
+      space.textContent = s.total ? t('net.space.of', { used: bytes(s.used), total: bytes(s.total) }) : t('net.space.used', { used: bytes(s.used) });
+    }, () => {});
+  }
   return h('div', { class: `fm-mountbar ${m.state}` },
     icon(m.state === 'on' ? 'lock' : 'globe'),
     h('span', { class: 'fm-mountbar-text' }, m.state === 'on' ? t('net.bar.on') : stateLabel(m), ' ', h('code', {}, m.address)),
     h('span', { class: 'fm-sp' }),
+    space,
+    importer,
     web,
     m.state === 'on' ? disconnect : null);
+}
+
+/** '1,2 GB' */
+function bytes(n) {
+  const units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
+  let v = n, u = 0;
+  while (v >= 1024 && u < units.length - 1) { v /= 1024; u++; }
+  return `${u ? v.toLocaleString(undefined, { maximumFractionDigits: 1 }) : v} ${units[u]}`;
+}
+
+/**
+ * Importing from a connection whose provider has an importer (Google Photos): where the copies go
+ * (a folder of lilOS, ~/Immagini/Google Foto by default), the provider's page in a new tab to pick,
+ * then the copy, which the kernel does (Trasferimento dati shows it).
+ */
+export function importDialog(browser, m) {
+  const net = network();
+  const protocol = protocolOf(m);
+  if (!net?.imports || !protocol?.importer) return;
+  const win = new Window({ title: net.text(protocol.importer.label).replace(/…$/, ''), icon: 'download', width: 440, height: 380, minWidth: 340, minHeight: 300 });
+  // The system's Immagini folder (its name is the same in every language), or the home
+  const defaultParent = () => fs.resolve(`~/${PICTURES}`)?.id ?? fs.root;
+  let folder = null;   // the chosen folder (null: ~/Immagini/Google Foto, made when needed)
+  const where = h('code', { class: 'fm-net-where' });
+  const showWhere = () => { where.textContent = folder ? fs.path(folder) : `~/${PICTURES}/${net.text(protocol.label)}`; };
+  const change = h('button', { class: 'ctl-btn', type: 'button' }, t('net.import.change'));
+  const pick = h('button', { class: 'ctl-btn primary', type: 'button' }, icon('globe'), t('net.import.pick'));
+  const go = h('button', { class: 'ctl-btn primary', type: 'button', disabled: true }, icon('download'), t('net.import.go'));
+  const status = h('p', { class: 'fm-net-status', role: 'status' });
+  const say = (msg, bad = false) => { status.textContent = msg; status.classList.toggle('bad', bad); };
+  let done = null, waiting = null;
+
+  change.addEventListener('click', async () => {
+    const node = await pickFile(browser.openWindow, { kind: 'folder', title: t('net.import.where') });
+    if (node) { folder = node.id; showWhere(); }
+  });
+  pick.addEventListener('click', () => {
+    waiting?.abort();
+    const controller = waiting = new AbortController();
+    let importId = null;
+    done = null;
+    go.disabled = true;
+    say(t('net.import.opening'));
+    net.openWeb(async () => {
+      const started = await net.imports.start(m.id);
+      importId = started.id;
+      return started.url;
+    }).then(async () => {
+      say(t('net.import.waiting'));
+      for (;;) {
+        if (controller.signal.aborted) return;
+        const s = await net.imports.status(m.id, importId, { wait: true });
+        if (controller.signal.aborted) return;
+        if (s.status === 'pending') continue;
+        if (s.status === 'error') return say(s.error ?? t('net.import.failed'), true);
+        if (!s.count) return say(t('net.import.none'), true);
+        done = s;
+        go.disabled = false;
+        return say(t('net.import.picked', { count: s.count }));
+      }
+    }).catch(err => {
+      if (err.code === 'secret_required') { askSignIn(browser, m); return say(''); }
+      say(err.message, true);
+    });
+  });
+  go.addEventListener('click', async () => {
+    if (!done) return;
+    go.disabled = true;
+    try {
+      let target = folder;
+      if (!target) {
+        // ~/Immagini/Google Foto: made if missing
+        const parent = defaultParent();
+        const name = net.text(protocol.label);
+        target = fs.children(parent).find(n => n.type === 'folder' && n.name === name)?.id ?? fs.create(parent, { type: 'folder', name }).id;
+      }
+      await net.imports.copy(m.id, done.path, target);
+      win.emit('close');
+      browser.go(target);
+    } catch (err) {
+      go.disabled = false;
+      say(err.message, true);
+    }
+  });
+  win.on('destroy', () => waiting?.abort());
+  showWhere();
+  win.body.append(h('div', { class: 'fm-net-dialog' },
+    h('div', { class: 'fm-net-body' },
+      h('div', { class: 'fm-net-row' }, h('label', {}, t('net.import.where')), h('div', { class: 'fm-net-pick' }, where, change)),
+      h('div', { class: 'fm-net-row' }, h('label', {}, t('net.import.step')), h('div', {}, pick), h('small', {}, t('net.import.hint'))),
+      status),
+    h('div', { class: 'fm-net-foot' }, h('span', { class: 'fm-sp' }),
+      h('button', { class: 'ctl-btn', type: 'button', onclick: () => win.emit('close') }, t('net.cancel')), go)));
+  browser.openWindow(win);
 }
 
 /**
@@ -215,16 +335,18 @@ function protocolFields(browser, protocol, { initial = {}, editing = !!initial.h
  */
 function signInRow(browser, protocol, f, values, signin, changed) {
   const status = h('small', { class: 'fm-net-wait', role: 'status' });
+  const paste = pasteBox(status);
   let controller = null, buttons = [];
   const go = () => {
     controller?.abort();
     controller = new AbortController();
     const others = Object.fromEntries(Object.entries(values).filter(([k]) => k !== f.key));
-    const asked = sdk.net.signIn(protocol.id, others, { signal: controller.signal });
+    const manual = !!sdk.net.signInByHand?.(protocol);
+    const asked = sdk.net.signIn(protocol.id, others, { signal: controller.signal, ...(manual && { manual: true, askAddress: paste.ask(controller.signal) }) });
     for (const b of buttons) b.disabled = true;
     cancel.hidden = false;
     status.classList.remove('bad');
-    status.textContent = t('net.signin.waiting');
+    status.textContent = manual ? '' : t('net.signin.waiting');
     asked.then(({ signin: id, account }) => {
       signin.id = id;
       values[f.key] = account;
@@ -232,6 +354,7 @@ function signInRow(browser, protocol, f, values, signin, changed) {
     }, err => {
       for (const b of buttons) b.disabled = false;
       cancel.hidden = true;
+      paste.el.hidden = true;
       status.textContent = err.code === 'canceled' ? '' : err.code === 'blocked' ? t('net.signin.blocked') : err.message;
       status.classList.toggle('bad', err.code !== 'canceled');
     });
@@ -243,11 +366,37 @@ function signInRow(browser, protocol, f, values, signin, changed) {
     buttons = [other];
     return h('div', { class: 'fm-net-row' }, label,
       h('div', { class: 'fm-net-account' }, icon(signin.id ? 'check' : 'user'), h('span', { class: 'fm-net-who' }, values[f.key]), other, cancel),
-      status);
+      paste.el, status);
   }
   const button = h('button', { class: 'ctl-btn primary fm-signin', type: 'button', onclick: go }, icon('user'), text(f.button) || t('net.signin.button'));
   buttons = [button];
-  return h('div', { class: 'fm-net-row' }, label, h('div', { class: 'fm-net-pick' }, button, cancel), f.hint ? h('small', {}, text(f.hint)) : null, status);
+  return h('div', { class: 'fm-net-row' }, label, h('div', { class: 'fm-net-pick' }, button, cancel), f.hint ? h('small', {}, text(f.hint)) : null, paste.el, status);
+}
+
+/**
+ * The box of a sign-in by hand: the provider's page is in a new tab; at the end the browser shows
+ * a page that does not open, and its address is pasted here. ask(signal) is the askAddress the
+ * SDK's net.signIn wants: it shows the box (with the error of the last address, if any) and
+ * resolves with what is pasted, or null when the sign-in is canceled.
+ */
+function pasteBox(status) {
+  const input = h('input', { class: 'ctl-text', type: 'text', spellcheck: 'false', autocomplete: 'off', placeholder: 'http://127.0.0.1:53682/?state=…&code=…', 'aria-label': t('net.signin.paste.label') });
+  const go = h('button', { class: 'ctl-btn primary', type: 'button' }, t('net.signin.paste.go'));
+  const el = h('div', { class: 'fm-net-paste', hidden: true },
+    h('small', {}, t('net.signin.paste.text')),
+    h('div', { class: 'fm-net-pick' }, input, go));
+  const ask = signal => error => new Promise(resolve => {
+    el.hidden = false;
+    status.textContent = error ?? '';
+    status.classList.toggle('bad', !!error);
+    input.value = '';
+    requestAnimationFrame(() => input.focus());
+    const finish = value => { go.onclick = null; input.onkeydown = null; resolve(value); };
+    go.onclick = () => finish(input.value.trim() || null);
+    input.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); finish(input.value.trim() || null); } };
+    signal.addEventListener('abort', () => finish(null), { once: true });
+  });
+  return { el, ask };
 }
 
 function fieldRow(browser, f, store, { editing, onShares, changed }) {
@@ -261,7 +410,8 @@ function fieldRow(browser, f, store, { editing, onShares, changed }) {
     return h('label', { class: 'fm-net-check' }, input, text(f.label));
   }
   if (f.type === 'select') {
-    input = h('select', { id, class: 'ctl-select' }, ...(f.options ?? []).map(o => h('option', { value: String(o.value), selected: o.value === store[f.key] }, text(o.label))));
+    // Disabled options are shown («coming»), not chosen
+    input = h('select', { id, class: 'ctl-select' }, ...(f.options ?? []).map(o => h('option', { value: String(o.value), selected: o.value === store[f.key], disabled: !!o.disabled }, text(o.label))));
     input.addEventListener('change', () => set(f.options.find(o => String(o.value) === input.value)?.value));
   } else if (f.type === 'textarea') {
     input = h('textarea', { id, class: 'ctl-text', rows: '3', spellcheck: 'false', placeholder: f.placeholder ?? '' });
@@ -316,8 +466,11 @@ export function connectDialog(browser, m = null, { initial = null, onConnected =
   let protocol = net.protocols.find(p => p.id === (m?.protocol ?? initial?.protocol)) ?? net.protocols[0];
   let connected = false;
   let fields = null, trust = null;
+  // The protocols in their groups (servers, cloud, local network), in their order
+  const option = p => h('option', { value: p.id, selected: p.id === protocol.id }, text(p.label));
+  const groups = GROUPS.map(g => [g, net.protocols.filter(p => (p.group ?? 'server') === g)]).filter(([, list]) => list.length);
   const select = h('select', { class: 'ctl-select', id: 'fm-net-protocol', disabled: !!m },
-    ...net.protocols.map(p => h('option', { value: p.id, selected: p.id === protocol.id }, text(p.label))));
+    ...(groups.length > 1 ? groups.map(([g, list]) => h('optgroup', { label: t(`net.group.${g}`) }, ...list.map(option))) : net.protocols.map(option)));
   const name = h('input', { class: 'ctl-text', type: 'text', spellcheck: 'false', value: m?.name ?? initial?.name ?? '' });
   const nameHint = h('small');
   const remember = h('input', { type: 'checkbox', checked: m ? m.remembered : true });
@@ -457,22 +610,25 @@ export function askSignIn(browser, m) {
   const protocol = net?.protocols.find(p => p.id === m.protocol);
   if (!protocol || !net.signIn) return Promise.resolve(false);
   return new Promise(resolve => {
-    const win = new Window({ title: t('net.signin.again.title', { name: m.name }), icon: 'user', width: 400, height: 250, minWidth: 320, minHeight: 200 });
+    const win = new Window({ title: t('net.signin.again.title', { name: m.name }), icon: 'user', width: 420, height: 300, minWidth: 320, minHeight: 200 });
     const field = protocol.fields.find(f => f.type === 'signin');
     const status = h('p', { class: 'fm-net-status', role: 'status' });
+    const paste = pasteBox(status);
     const go = h('button', { class: 'ctl-btn primary', type: 'button' }, icon('user'), text(field?.button) || t('net.signin.button'));
     let done = false, controller = null;
     const finish = value => { if (done) return; done = true; controller?.abort(); resolve(value); win.emit('close'); };
     go.addEventListener('click', () => {
       controller?.abort();
       controller = new AbortController();
-      const asked = net.signIn(protocol.id, m.values, { signal: controller.signal });
+      const manual = !!net.signInByHand?.(protocol);
+      const asked = net.signIn(protocol.id, m.values, { signal: controller.signal, ...(manual && { manual: true, askAddress: paste.ask(controller.signal) }) });
       go.disabled = true;
       status.classList.remove('bad');
-      status.textContent = t('net.signin.waiting');
+      status.textContent = manual ? '' : t('net.signin.waiting');
       asked.then(({ signin }) => net.connect(m.id, { signin, remember: m.remembered }))
         .then(() => finish(true), err => {
           go.disabled = false;
+          paste.el.hidden = true;
           if (err.code === 'canceled') { status.textContent = ''; return; }
           status.textContent = err.code === 'blocked' ? t('net.signin.blocked') : err.message;
           status.classList.add('bad');
@@ -483,6 +639,7 @@ export function askSignIn(browser, m) {
       h('div', { class: 'fm-net-body' },
         h('p', {}, t('net.signin.again.text', { account: m.values?.[field?.key] ?? m.address })),
         h('div', {}, go),
+        paste.el,
         status),
       h('div', { class: 'fm-net-foot' }, h('span', { class: 'fm-sp' }),
         h('button', { class: 'ctl-btn', type: 'button', onclick: () => finish(false) }, t('net.later')))));

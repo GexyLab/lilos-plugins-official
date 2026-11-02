@@ -53,6 +53,8 @@ export const countLabel = n => t('count.items', { n, count: num(n) });
 
 export function sizeLabel(n) {
   if (n.type === 'folder') return countLabel(n.trashed ? n.inside : fs.children(n.id).length);
+  // A document of a connection with no bytes of its own (Google's): no size
+  if (n.type === 'file' && n.net && n.web) return '—';
   return n.type === 'file' ? formatBytes(n.size ?? 0) : '—';
 }
 
