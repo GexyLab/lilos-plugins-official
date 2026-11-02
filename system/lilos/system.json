@@ -1,13 +1,13 @@
 {
   "name": "lilos",
-  "version": "1.12.0",
+  "version": "1.13.0",
   "kernel": 1,
   "sdk": [
     "1",
     "2"
   ],
   "node": 22,
-  "commit": "c2ae5753eda2857428ef312ed52088c7ba5b4997",
+  "commit": "ad1664d1c28825e47d07a9906879f6cf16b750b7",
   "date": "2026-11-02",
   "files": {
     "package.json": "sha256-+eIoEoTo8Q1ydUjHGd993yoTtyp85aX5Sc7P3UtKB5Y=",
@@ -19,7 +19,7 @@
     "system/kernel/src/cli.js": "sha256-CCwKTvH0DnzKfKIn/mBGPgMGAFECeLTZVqKxse6K/Ys=",
     "system/kernel/src/errors-BOOa0cH_.js": "sha256-brr0hQXx0CdiqNCGS0FhoyWXphm8zEV8uPD55QezAG8=",
     "system/kernel/src/install.js": "sha256-TJeEU3WU97300pO967WkvQpAh8UD8V5RRFoa4IGa87M=",
-    "system/kernel/src/main.js": "sha256-jI8BpuKjzK1QSdKAHc1PHW516Wpbl0HaCpOcW5sCMJ8=",
+    "system/kernel/src/main.js": "sha256-EEZkLUTmupkbo78DMJz+uH7zDQ6wSQxZTQsH8fU4ez8=",
     "system/kernel/src/manifest-BZhLG9dj.js": "sha256-zHlxmNQwb3DhTR0dukDK9ikEf/rb6J87xAdrCqkhMPU=",
     "system/kernel/src/modulePackage-BOAENtkS.js": "sha256-gxkbjXMEF8kJSiVYyebDJ7ZsTiGKffbweE1i+ZudCi4=",
     "system/kernel/src/modulePackage-Db9EzNN8.js": "sha256-9EGMbJ2m830K70sYSpH/Y1cwaPvYpIPAh8Y5C6hab5o=",
@@ -37,12 +37,12 @@
     "web/assets/boot-BZmrVO6-.css": "sha256-RHbGmezBEQge+sIYvKxlN8vUYcOd+puRYwRzAyFf5Xk=",
     "web/assets/boot-DgglAVE7.js": "sha256-wVgQVaeO/BGRUlCQCSQfPkqgbAEme30XMa7tM0+SyrE=",
     "web/assets/index-4vTdv2dU.css": "sha256-LWqrOu9V3ovKinE9DJfpgqI5Wuf53ZCep39tcxwK43M=",
-    "web/assets/index-Ddy7lYXf.js": "sha256-jXSFxnGFn0qaGGE4lg36nOemsPWNc4Ilm5w35cVw3nE=",
-    "web/assets/system-B71oS1cA.css": "sha256-O+iilQcqGH7ArE02HgUIwzsApHwO4LV1jv+Ub1VXzAU=",
-    "web/assets/system-C31su8_u.js": "sha256-V7O88eO85qITE7UP24nIuQu/pCQqJxPGrMLEHgtoekA=",
+    "web/assets/index-BC1eIA7N.js": "sha256-idD63H+Sx2RxgxWyKTI5Tyhv/dIZ1m0pAHzr1Ii+0Sk=",
+    "web/assets/system-DWuOq28I.css": "sha256-8Fu4cyYXZ7D2a3ky8VFi72KmMp2OQG268BsPaA/pDlU=",
+    "web/assets/system-Ehaiyf65.js": "sha256-ZcNtBuuxv/TlbnWx0DMiizSdqD5s18UGuoYCJVs/LE0=",
     "web/favicon.svg": "sha256-79XhGd7Mhuct5Q4XQ5QnMYkI6NOXEZcwROrWH9/9aiA=",
     "web/host/sdk.js": "sha256-Zjw9accf1uY2ueeZQ5jwZTT8+5qkdM487NkE0nAE0Rw=",
-    "web/host/system.js": "sha256-mLyb2gEY+01AVX8bhDpixXiZEEz0kLGWYwSCGsQWdLM=",
-    "web/index.html": "sha256-CqkZBomvAoo4q2LyN9l5PDXLe41oRW3FQoiEc3cgaRs="
+    "web/host/system.js": "sha256-KR0E7M2SxwbNegIcrz3dbc+7z2lFZKlkQoUiQEBmp0s=",
+    "web/index.html": "sha256-cpRAlEw2arzxv8/qwsdVk4ksqb65GsskaS7Y8sMyo4M="
   }
 }

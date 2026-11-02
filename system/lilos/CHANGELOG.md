@@ -1,5 +1,13 @@
 # Changelog di lilOS
 
+## 1.13.0 — 2026-11-02
+
+- **Collegamenti sulla scrivania**: nel File Manager, tasto destro su un file o una cartella (anche di un server della Rete) o su una connessione → «Aggiungi un collegamento al desktop». L'icona è quella dell'originale con una piccola catena; il collegamento segue l'originale se lo sposti o lo rinomini
+- **Nuovo → Collegamento…** sulla scrivania (e «Nuovo collegamento…» nel File Manager): scrivi un percorso di lilOS (`~/Documenti/Note.txt`), un indirizzo con il protocollo (`sftp://utente@server/cartella`, `smb://server/condivisione/cartella`, `ftp://`, `ftps://`, `webdavs://`…) o una pagina web (`https://…`, si apre in una nuova scheda). Le cartelle si separano sempre con `/`. Senza una connessione a quel server si apre «Connetti a un server» già compilato
+- Se l'originale non c'è più (nel cestino, eliminato, sparito dal server, connessione rimossa) un messaggio dice perché e il collegamento viene segnato come rotto, con una croce rossa; il segno sparisce quando l'originale torna
+- Nel File Manager le sezioni Collegamenti, Tag e Rete della barra laterale si comprimono con il triangolo a sinistra del titolo
+- Per gli sviluppatori: nodi `link` di `fs` (SDK 0.7.0) e funzioni dei collegamenti in `@lilos/system`
+
 ## 1.12.0 — 2026-11-02
 
 - Nuova app **Terminale remoto** (dall'AppStore): terminali SSH, Telnet, rlogin e SUPDUP in schede, con la connessione rapida (`ssh utente@server`), gli host salvati in cartelle e le password cifrate nel kernel. Una password non salvata la chiede il terminale stesso, come fa `ssh`
