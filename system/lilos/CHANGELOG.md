@@ -1,5 +1,11 @@
 # Changelog di lilOS
 
+## 1.21.1 — 2026-11-02
+
+- I comandi del Terminale pianificati «in lilOS» (e le operazioni «Servizio di un'app») possono durare fino al **Tempo massimo** dell'operazione: prima si fermavano sempre dopo 60 secondi. Servono il Terminale 1.7.0 e il modulo services-isolate 1.2.0; con il modulo vecchio l'errore dice di aggiornarlo
+- **Annulla**, e il tempo massimo che scade, fermano davvero il comando, come Ctrl+C: prima la corsa risultava annullata ma il comando continuava a lavorare
+- Nello Storico una corsa annullata o scaduta tiene quello che il comando aveva scritto fino a lì (modulo scheduler 1.0.1, incluso in lilOS)
+
 ## 1.21.0 — 2026-11-02
 
 - **Dipendenze tra pacchetti**: un'app dichiara i moduli del kernel e le altre app di cui ha bisogno (obbligatori o facoltativi). Installandola o aggiornandola, l'AppStore 1.9.0 mostra cosa si installa insieme e chiede il consenso; il kernel installa tutto nell'ordine giusto e, se qualcosa fallisce, toglie quello che aveva appena installato. Dopo aver installato o rimosso moduli l'AppStore chiede se riavviare il kernel adesso o più tardi
