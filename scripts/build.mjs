@@ -5,13 +5,17 @@
  * The translations (src/<id>/locales.json, see lilOS's SDK i18n.js) go to apps/<id>/locales.json,
  * named by `locales` in the manifest; the build stops if a language lacks keys of English.
  * It also stops if the credits of the Control Panel miss a library (scripts/credits.mjs).
+ * Services (entry points of kind 'service') run in the kernel's isolate, where nothing can be
+ * imported: src/<id>/services/*.js are copied as they are; src/<id>/kernel/<name>.js are bundled
+ * with what they import into dist/<name>.js, with '@lilos/sdk' and '@lilos/system' taken from
+ * src/<id>/kernel/sdk.js and system.js (what the app gives the code it shares with its windows).
  *
  *   npm run build
  */
 import { build } from 'vite';
 import { createHash } from 'node:crypto';
 import { copyFileSync, existsSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
-import { join, relative, sep } from 'node:path';
+import { join, relative, sep, resolve as resolvePath } from 'node:path';
 import { appConfig } from '../vite.config.js';
 import { checkCredits } from './credits.mjs';
 
@@ -54,6 +58,21 @@ for (const { id, entry } of APPS.filter(a => !process.argv[2] || process.argv.sl
   // Services (entry points of kind 'service') run in the kernel's isolate: modules without imports, copied as they are
   const services = join('src', id, 'services');
   if (existsSync(services)) for (const f of readdirSync(services).filter(f => f.endsWith('.js'))) copyFileSync(join(services, f), join(pkg, 'dist', f));
+  // …or bundled into one module (src/<id>/kernel/<name>.js, except sdk.js and system.js)
+  const kernelDir = join('src', id, 'kernel');
+  if (existsSync(kernelDir)) {
+    for (const f of readdirSync(kernelDir).filter(f => f.endsWith('.js') && !['sdk.js', 'system.js', 'kfs.js'].includes(f))) {
+      await build({
+        configFile: false, logLevel: 'warn',
+        resolve: { alias: { '@lilos/sdk': resolvePath(kernelDir, 'sdk.js'), '@lilos/system': resolvePath(kernelDir, 'system.js') } },
+        build: {
+          outDir: join(pkg, 'dist'), emptyOutDir: false, target: 'es2022', minify: true, copyPublicDir: false,
+          lib: { entry: resolvePath(kernelDir, f), formats: ['es'], fileName: () => f },
+          rollupOptions: { output: { inlineDynamicImports: true } },
+        },
+      });
+    }
+  }
   const locales = join('src', id, 'locales.json');
   if (existsSync(locales)) {
     checkLocales(id, JSON.parse(readFileSync(locales, 'utf8')));

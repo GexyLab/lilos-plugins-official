@@ -324,7 +324,7 @@
       "opt.notifyNever": "Never",
       "opt.runAs": "Run as",
       "opt.me": "Me ({name})",
-      "opt.systemHint": "The system has no home: only reminders to the admins, services chosen for everyone, web requests without files, commands on SSH hosts.",
+      "opt.systemHint": "The system has no home: only reminders to the admins, services chosen for everyone and web requests without files.",
       "opt.otherHint": "It runs as that person, with their files and connections; they get a notification.",
       "opt.enabled": "Turn it on now"
     }
@@ -654,7 +654,7 @@
       "opt.notifyNever": "Mai",
       "opt.runAs": "Esegui come",
       "opt.me": "Me ({name})",
-      "opt.systemHint": "Il sistema non ha una home: solo promemoria agli amministratori, servizi scelti per tutti, richieste web senza file, comandi su host SSH.",
+      "opt.systemHint": "Il sistema non ha una home: solo promemoria agli amministratori, servizi scelti per tutti e richieste web senza file.",
       "opt.otherHint": "Gira come quella persona, con i suoi file e le sue connessioni; riceve una notifica.",
       "opt.enabled": "Attiva subito"
     }
