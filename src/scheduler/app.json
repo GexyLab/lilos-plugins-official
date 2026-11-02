@@ -10,7 +10,7 @@
   "sdk": "2",
   "system": true,
   "required": true,
-  "lilos": ">=1.21.0",
+  "lilos": ">=1.22.0",
   "entrypoints": {
     "main": { "kind": "window" },
     "edit": { "kind": "window", "label": "Edit an operation" },
@@ -18,6 +18,9 @@
     "history": { "kind": "window", "label": "History" },
     "open": { "kind": "window", "label": "Open what a reminder says" }
   },
+  "dependencies": [
+    { "module": "scheduler", "reason": "Runs the operations in the kernel, also with lilOS closed" }
+  ],
   "permissions": ["fs.write:~", "ui.menus"],
   "contributes": {
     "window": { "width": 1120, "height": 620 },

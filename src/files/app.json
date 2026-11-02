@@ -17,6 +17,18 @@
   "newLink": { "kind": "window", "label": "New link", "window": { "width": 520, "height": 290 }, "params": {
     "folder": {"type": "folder", "label": "Folder", "description": "Where the link is made"}
   } } },
+  "dependencies": [
+    { "module": "netfs-sftp", "optional": true, "reason": "SFTP connections in Network" },
+    { "module": "netfs-ftp", "optional": true, "reason": "FTP and FTPS connections in Network" },
+    { "module": "netfs-webdav", "optional": true, "reason": "WebDAV connections in Network" },
+    { "module": "netfs-smb", "optional": true, "reason": "Windows shares (SMB) in Network" },
+    { "module": "netfs-nfs", "optional": true, "reason": "NFS shares in Network" },
+    { "module": "netfs-onedrive", "optional": true, "reason": "OneDrive in Network" },
+    { "module": "netfs-gdrive", "optional": true, "reason": "Google Drive in Network" },
+    { "module": "netfs-gphotos", "optional": true, "reason": "Google Photos in Network" },
+    { "module": "netfs-s3", "optional": true, "reason": "Amazon S3 and compatible storage in Network" },
+    { "module": "netfs-azblob", "optional": true, "reason": "Azure Blob Storage in Network" }
+  ],
   "permissions": ["fs.write:~", "fs.workspaces", "tags.write", "desktop.items", "ui.shortcuts"],
   "contributes": {
     "window": { "width": 1000, "height": 520 },

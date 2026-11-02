@@ -1,6 +1,6 @@
 {
   "id": "files",
-  "version": "1.15.0",
+  "version": "1.16.0",
   "kind": "local",
   "name": "File Manager",
   "description": "Browse, search and organize files and folders: tags, links, desktop links, trash, info and preview.",
@@ -43,6 +43,58 @@
       }
     }
   },
+  "dependencies": [
+    {
+      "module": "netfs-sftp",
+      "optional": true,
+      "reason": "SFTP connections in Network"
+    },
+    {
+      "module": "netfs-ftp",
+      "optional": true,
+      "reason": "FTP and FTPS connections in Network"
+    },
+    {
+      "module": "netfs-webdav",
+      "optional": true,
+      "reason": "WebDAV connections in Network"
+    },
+    {
+      "module": "netfs-smb",
+      "optional": true,
+      "reason": "Windows shares (SMB) in Network"
+    },
+    {
+      "module": "netfs-nfs",
+      "optional": true,
+      "reason": "NFS shares in Network"
+    },
+    {
+      "module": "netfs-onedrive",
+      "optional": true,
+      "reason": "OneDrive in Network"
+    },
+    {
+      "module": "netfs-gdrive",
+      "optional": true,
+      "reason": "Google Drive in Network"
+    },
+    {
+      "module": "netfs-gphotos",
+      "optional": true,
+      "reason": "Google Photos in Network"
+    },
+    {
+      "module": "netfs-s3",
+      "optional": true,
+      "reason": "Amazon S3 and compatible storage in Network"
+    },
+    {
+      "module": "netfs-azblob",
+      "optional": true,
+      "reason": "Azure Blob Storage in Network"
+    }
+  ],
   "permissions": [
     "fs.write:~",
     "fs.workspaces",
@@ -196,7 +248,7 @@
   "locales": "locales.json",
   "files": {
     "dist/index-DCrpzGcy.css": "sha256-sVXS8jqu8+QBfzSAQMDhK/LkFP78iB+rm5I6TAsQBmo=",
-    "dist/index.js": "sha256-s7o7JpjMalMeIx8kBEQirxl1nCjnD3MPG7iZ8fpF9ys=",
-    "locales.json": "sha256-0WsM2tIWoa4wMUGwR8vMOGUGVk4twK+zJdC1DujHGDY="
+    "dist/index.js": "sha256-lnaZoNyByhd5JGN+B0Slwkq/tTUC9z2L7/lwCauOfO8=",
+    "locales.json": "sha256-2qvdLDRg7E6B3wBou2VIAkUzX+dfztdptkWO6kMzTM0="
   }
 }

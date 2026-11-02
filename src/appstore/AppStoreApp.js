@@ -1,4 +1,4 @@
-import { Window, h, icon, appIcon, apps, repositories, kernelModules, kernel, fs, settings, storage, toast, actionButton, busyButton, messageBox, textField, toggle } from '@lilos/sdk';
+import { Window, h, icon, appIcon, apps, repositories, kernelModules, packages, kernel, fs, settings, storage, toast, actionButton, busyButton, messageBox, textField, toggle } from '@lilos/sdk';
 import * as sdk from '@lilos/sdk';   // `locale`: missing in older lilOS, so not imported by name
 import { describePermission, launch, needsGrant, compareVersions } from '@lilos/system';
 // Namespace import: lilOS versions without services (before the kernel's services) still load the AppStore
@@ -68,11 +68,12 @@ export default function AppStore() {
 
   /** Runs one change at a time; buttons are off meanwhile. */
   async function act(label, fn, done) {
-    if (state.busy) return;
+    if (state.busy) return undefined;
     state.busy = label;
     render();
+    let result;
     try {
-      const result = await fn();
+      result = await fn();
       const text = typeof done === 'function' ? done(result) : done;
       if (text) toast(text, { timeout: 5000 });
       await load({ quiet: true });
@@ -82,6 +83,7 @@ export default function AppStore() {
       state.busy = null;
       render();
     }
+    return result;
   }
 
   /** The AppStore's own service (Updates), as Control Panel → Startup → Services shows it, or null without services. */
@@ -202,7 +204,7 @@ export default function AppStore() {
     const offered = entry?.manifest.version ?? null;
     const here = !!have && (!entry || sameRepo(have.source, repo));
     return {
-      key: `app:${repo?.id ?? '-'}:${manifest.id}`, kind: 'app', id: manifest.id, name: shown.name,
+      key: `app:${repo?.id ?? '-'}:${manifest.id}`, kind: 'app', id: manifest.id, name: shown.name, shown,
       description: shown.description ?? '', icon: manifest.icon ?? APP_ICON, publisher: manifest.publisher?.name ?? '',
       category: APP_CATEGORIES.has(manifest.category) ? manifest.category : 'other',
       repo, entry, have, manifest, readme: entry?.readme ?? null, readmeTruncated: !!entry?.readmeTruncated,
@@ -301,12 +303,16 @@ export default function AppStore() {
 
   /**
    * A question over the window, with Cancel and one button that confirms: true when it is pressed.
-   * text: lines; content: what the app adds under them. A destructive answer is not the one of Enter.
+   * Without `confirm` only one button, labelled `cancel`. text: lines; content: what the app adds
+   * under them (lists, ticks). A destructive answer is not the one of Enter.
    */
-  async function ask({ title, text, content = null, confirm: { label, primary = false, danger = false } }) {
+  async function ask({ title, text, content = null, confirm = null, cancel = null, kind = null, width = 440 }) {
+    const buttons = confirm
+      ? [cancel ? { value: 'cancel', label: cancel } : 'cancel', { value: 'yes', label: confirm.label, primary: confirm.primary, danger: confirm.danger }]
+      : [{ value: 'cancel', label: cancel, primary: true }];
     const answer = await messageBox(win, {
-      icon: danger ? 'warning' : null, title, text: text.join('\n\n'), content, width: 440,
-      buttons: ['cancel', { value: 'yes', label, primary, danger }], default: danger ? 'cancel' : 'yes',
+      icon: kind ?? (confirm?.danger ? 'warning' : null), title, text: text.join('\n\n'), content, width, buttons,
+      default: confirm && !confirm.danger ? 'yes' : 'cancel',
     });
     return answer === 'yes';
   }
@@ -324,34 +330,192 @@ export default function AppStore() {
     return ok ? { grant: asked, allowUnsigned: !official } : null;
   }
 
-  /** Asks before uninstalling an app: it goes for every user, with its settings and data. */
-  const confirmUninstall = item => ask({
-    title: t('confirm.uninstallTitle', { name: item.name }),
-    text: [t('confirm.uninstall', { name: item.name }), t('confirm.uninstallFiles')],
-    confirm: { label: t('action.uninstall'), danger: true },
-  });
-
-  /** What installing or updating a module did, and the modules it took the place of (lilOS ≥ 1.21.0: result.replaced). */
+  /** What installing or updating a module did, and the modules it took the place of (result.replaced). */
   const moduleDone = (result, text) => (result?.replaced?.length ? `${text} ${t('done.moduleReplaced', { names: result.replaced.join(', ') })}` : text);
 
   /** Where a package of a catalog is installed from. */
   const sourceOf = ({ repo, entry }) => ({ type: 'git', url: repo.url, path: entry.path, ref: state.catalogs.get(repo.id)?.ref });
 
-  async function install(item) {
-    const { repo } = item;
-    const source = sourceOf(item);
-    if (item.kind === 'module') {
-      const answer = await confirmInstall({ title: t('confirm.installTitle', { name: item.name }), name: item.name, official: repo.official, kernelModule: true });
-      if (answer) act('install', () => kernelModules.install(source, { allowUnsigned: answer.allowUnsigned }), r => moduleDone(r, t('done.moduleInstalled', { name: item.name })));
-      return;
-    }
-    const answer = await confirmInstall({ title: t('confirm.installTitle', { name: item.name }), name: item.name, permissions: item.manifest.permissions, official: repo.official });
-    if (answer) act('install', () => apps.install(source, answer), t('done.appInstalled', { name: item.name }));
+  // ---------- Dependencies: what a package needs comes with it (packages) ----------
+
+  const depKey = d => (d.module !== undefined ? `module:${d.module}` : `app:${d.app}`);
+  /** An app's manifest in the user's language (with its translations, when there are some). */
+  const localized = (manifest, locales) => (locales ? sdk.locale?.manifest(manifest, locales) : sdk.locale?.manifest(manifest)) || manifest;
+  const installedAppName = id => { const app = apps.get(id); return app ? localized(app.manifest).name : id; };
+  const stepName = step => (step.kind === 'app' && step.manifest ? localized(step.manifest, step.locales).name : step.name);
+  const stepAction = step => (step.action === 'install' ? t('deps.install', { version: step.version }) : t('deps.update', { from: step.from, version: step.version }));
+  const kindWord = kind => (kind === 'module' ? t('deps.kindModule') : t('deps.kindApp'));
+  const repoText = url => { const repo = state.repos.find(r => sameRepo({ url }, r)); return repo ? repoName(repo) : url; };
+
+  /**
+   * Asks before installing (or updating) a package that needs others: what it may do, what comes with
+   * it, what may come with it (optional: the admin ticks it), what cannot be had (then it cannot go
+   * in). Resolves with packages.install's answers ({ root, steps }), or null.
+   */
+  async function confirmPlan({ title, name, plan, official, kernelModule = false, permissions = [], rootDeps = null }) {
+    const asked = needsGrant(permissions);
+    const required = plan.steps.filter(s => !s.optional);
+    const choices = plan.steps.filter(s => s.choice);
+    const blocking = plan.problems.filter(p => !p.optional);
+    const unavailable = plan.problems.filter(p => p.optional);
+    const ticked = new Set();
+    const byKey = new Map(plan.steps.map(s => [s.key, s]));
+    // What an optional choice brings with it (needed only through optional dependencies)
+    const brings = step => {
+      const out = [];
+      const walk = s => s.needs.forEach(key => {
+        const next = byKey.get(key);
+        if (next && next.optional && !next.choice && !out.includes(next)) { out.push(next); walk(next); }
+      });
+      walk(step);
+      return out;
+    };
+    // The reasons, in the user's language: from the manifest of the package that needs it
+    const deps = new Map([[plan.root.key, rootDeps ?? plan.root.manifest?.dependencies ?? []],
+      ...plan.steps.filter(s => s.manifest).map(s => [s.key, localized(s.manifest, s.locales).dependencies ?? []])]);
+    const reasons = step => step.neededBy.map(by => {
+      const reason = (deps.get(by.key) ?? []).find(d => depKey(d) === step.key)?.reason ?? by.reason;
+      const who = by.key === plan.root.key ? name : stepName(byKey.get(by.key) ?? by);
+      return h('span', { class: 'as-dep-why' }, reason ? t('deps.whyReason', { name: who, reason }) : t('deps.why', { name: who }));
+    });
+    const row = (step, control = null) => h('li', { class: 'as-dep' },
+      control,
+      appIcon(step.icon ?? (step.kind === 'module' ? MODULE_ICON : APP_ICON)),
+      h('div', { class: 'as-dep-text' },
+        h('b', {}, stepName(step), ' ', h('span', { class: 'as-dep-action' }, stepAction(step))),
+        h('span', { class: 'as-dep-sub' }, [kindWord(step.kind), repoText(step.repo.url)].join(' · ')),
+        ...reasons(step),
+        step.permissions.length ? h('ul', {}, ...step.permissions.map(p => h('li', {}, describePermission(p)))) : null,
+        step.verified ? null : h('span', { class: 'as-dep-warning' }, step.kind === 'module' ? t('deps.unverifiedModule') : t('deps.unverifiedApp')),
+        ...(control ? brings(step).map(s => h('span', { class: 'as-dep-sub' }, t('deps.brings', { name: stepName(s), kind: kindWord(s.kind) }))) : [])));
+    const tick = step => {
+      const box = h('input', { type: 'checkbox', 'aria-label': t('deps.tick', { name: stepName(step) }) });
+      box.addEventListener('change', () => (box.checked ? ticked.add(step.key) : ticked.delete(step.key)));
+      return box;
+    };
+    const steps = () => {
+      const out = {};
+      const add = s => { out[s.key] = { grant: s.permissions, allowUnsigned: !s.verified }; };
+      required.forEach(add);
+      for (const s of choices) if (ticked.has(s.key)) [s, ...brings(s)].forEach(add);
+      return out;
+    };
+    const unverified = !official || required.some(s => !s.verified);
+    const ok = await ask({
+      title, width: 520,
+      text: [kernelModule ? t('confirm.kernelModule', { name }) : t('confirm.mayDo', { name })],
+      content: h('div', { class: 'as-ask' },
+        !kernelModule && asked.length ? h('ul', {}, ...asked.map(p => h('li', {}, describePermission(p)))) : null,
+        !kernelModule && !asked.length ? h('p', {}, t('permissions.none')) : null,
+        official ? null : h('p', { class: 'as-warning' }, t('confirm.unverified')),
+        blocking.length ? h('div', { class: 'as-dep-blocked', role: 'alert' }, h('b', {}, t('deps.cannot', { name })), h('ul', {}, ...blocking.map(p => h('li', {}, p.message)))) : null,
+        required.length ? h('h3', { class: 'as-dep-title' }, t('deps.required')) : null,
+        required.length ? h('ul', { class: 'as-deps' }, ...required.map(s => row(s))) : null,
+        choices.length ? h('h3', { class: 'as-dep-title' }, t('deps.optional')) : null,
+        choices.length ? h('ul', { class: 'as-deps' }, ...choices.map(s => row(s, tick(s)))) : null,
+        unavailable.length ? h('p', { class: 'as-dep-sub', title: unavailable.map(p => p.message).join('\n') }, t('deps.unavailable', { list: unavailable.map(p => p.id).join(', ') })) : null,
+        plan.restartRequired ? h('p', { class: 'as-dep-sub' }, t('deps.restartNote')) : null),
+      cancel: blocking.length ? t('action.close') : null,
+      confirm: blocking.length ? null : { label: unverified ? t('action.installAnyway') : t('action.install'), primary: !unverified, danger: unverified },
+    });
+    return ok ? { root: { grant: asked, allowUnsigned: !official }, steps: steps() } : null;
   }
 
-  /** What updating needs from the user (new permissions, the warning): null when they said no. */
+  /** After modules were installed (or removed): they start (or stop) with the kernel's restart, now or later. */
+  async function offerRestart(name, { removed = false } = {}) {
+    if (!isAdmin) return;
+    const now = await ask({
+      title: t('restart.askTitle'),
+      text: [removed ? t('restart.askRemovedLead', { name }) : t('restart.askLead', { name }), t('restart.askHint')],
+      confirm: { label: t('action.restartNow'), primary: true }, cancel: t('action.later'),
+    });
+    if (now) restartKernel();
+  }
+
+  /** Runs fn with the buttons off (the one pressed spinning) and nothing reloaded after: its result, or null after saying what went wrong. */
+  async function busy(fn) {
+    if (state.busy) return null;
+    state.busy = 'plan';
+    render();
+    try {
+      return await fn();
+    } catch (err) {
+      toast(err.message, { timeout: 7000 });
+      return null;
+    } finally {
+      state.busy = null;
+      render();
+    }
+  }
+
+  /** The plan of an install or update (packages.plan), or null after saying why it could not be made. */
+  async function planFor(target) {
+    try {
+      return await packages.plan(target);
+    } catch (err) {
+      toast(err.message, { timeout: 7000 });
+      return null;
+    }
+  }
+
+  /**
+   * What installing a package from a catalog needs from the admin: its plan with what comes with it,
+   * or (nothing comes with it) the usual question. { target, answer } | { source, answer }, or null.
+   * inAct: already inside act() (Update all): the plan is read without busy(). trusted: an official
+   * package with nothing coming with it goes in without asking (as official updates do).
+   */
+  async function askInstall(item, { inAct = false, trusted = false } = {}) {
+    const { repo } = item;
+    const source = sourceOf(item);
+    const isModule = item.kind === 'module';
+    const target = { install: { kind: item.kind, source } };
+    const plan = inAct ? await planFor(target) : await busy(() => planFor(target));
+    if (!plan) return null;
+    if (plan.steps.length || plan.problems.length) {
+      const answer = await confirmPlan({
+        title: t('confirm.installTitle', { name: item.name }), name: item.name, plan, official: repo.official, kernelModule: isModule,
+        permissions: item.manifest?.permissions, rootDeps: item.shown?.dependencies,
+      });
+      return answer && { target, answer };
+    }
+    if (trusted && repo.official) return { source, answer: { grant: needsGrant(item.manifest?.permissions), allowUnsigned: false } };
+    const answer = await confirmInstall({
+      title: t('confirm.installTitle', { name: item.name }), name: item.name, official: repo.official,
+      ...(isModule ? { kernelModule: true } : { permissions: item.manifest.permissions }),
+    });
+    return answer && { source, answer };
+  }
+
+  /** Installs what askInstall agreed: the package's own result, with restartRequired and what came with it. */
+  const runInstall = (item, how) => (how.target
+    ? packages.install(how.target, how.answer).then(out => ({ ...out.result, installed: out.installed, restartRequired: out.restartRequired }))
+    : item.kind === 'module' ? kernelModules.install(how.source, { allowUnsigned: how.answer.allowUnsigned }) : apps.install(how.source, how.answer));
+
+  async function install(item) {
+    const how = await askInstall(item);
+    if (!how) return;
+    const name = item.name;
+    const r = await act('install', () => runInstall(item, how), out => (how.target ? moduleDone(out, t('deps.installed', { name, n: out.installed.length }))
+      : item.kind === 'module' ? moduleDone(out, t('done.moduleInstalled', { name })) : t('done.appInstalled', { name })));
+    if (r?.restartRequired) offerRestart(name);
+  }
+
+  /** What updating needs from the user (what comes with it, new permissions, the warning): null when they said no. */
   async function askUpdate(item) {
     const official = !!item.repo?.official;
+    // What the new version needs and is missing comes with it
+    if (item.kind === 'app' || item.kind === 'module') {
+      const target = { update: { kind: item.kind, id: item.id } };
+      const plan = await planFor(target);
+      if (!plan) return null;
+      if (plan.steps.length || plan.problems.length) {
+        const answers = await confirmPlan({
+          title: t('confirm.updateTitle', { name: item.name }), name: item.name, plan, official, kernelModule: item.kind === 'module',
+          permissions: plan.root.permissions, rootDeps: item.entry?.locales ? localized(plan.root.manifest ?? item.manifest, item.entry.locales).dependencies : null,
+        });
+        return answers && { plan: target, answers };
+      }
+    }
     if (item.kind === 'module') {
       return official || await confirmInstall({ title: t('confirm.updateTitle', { name: item.name }), name: item.name, official, kernelModule: true }) ? { allowUnsigned: !official } : null;
     }
@@ -360,7 +524,9 @@ export default function AppStore() {
     return confirmInstall({ title: t('confirm.updateTitle', { name: item.name }), name: item.name, permissions: added, official });
   }
 
-  const runUpdate = (item, answer) => (item.kind === 'module' ? kernelModules.update(item.id, answer) : apps.update(item.id, answer));
+  const runUpdate = (item, answer) => (answer.plan
+    ? packages.install(answer.plan, answer.answers).then(out => ({ ...out.result, restartRequired: out.restartRequired }))
+    : item.kind === 'module' ? kernelModules.update(item.id, answer) : apps.update(item.id, answer));
 
   /**
    * Updates apps through lilOS (updateApps): it says what will close, lets the windows save, puts
@@ -386,11 +552,15 @@ export default function AppStore() {
   }
 
   async function update(item) {
-    const answer = await askUpdate(item);
-    if (!answer) return;
     const isModule = item.kind === 'module', name = item.name;
-    act('update', () => (isModule ? runUpdate(item, answer) : updateOne(item, () => runUpdate(item, answer))), r => (!r ? null : r.unchanged ? (isModule ? t('done.moduleUpToDate', { name }) : t('done.appUpToDate', { name }))
+    const r = await act('update', async () => {
+      const answer = await askUpdate(item);
+      if (!answer) return null;
+      return isModule ? runUpdate(item, answer) : updateOne(item, () => runUpdate(item, answer));
+    }, r => (!r ? null : r.unchanged ? (isModule ? t('done.moduleUpToDate', { name }) : t('done.appUpToDate', { name }))
       : isModule ? moduleDone(r, t('done.moduleUpdated', { name, version: r.version })) : t('done.appUpdated', { name, version: r.version })));
+    // Only when this update brought modules with it (a module's own update: the banner)
+    if (r?.restartRequired && !isModule) offerRestart(name);
   }
 
   /** lilOS goes last, with its own question: it is not an app (no manifest) and starts after the restart. */
@@ -403,14 +573,14 @@ export default function AppStore() {
       for (const item of items) {
         if (item === lilos) continue;
         if (item.replacedBy) {
-          // The module that takes its place, installed once even when it replaces several
+          // The module that takes its place (with what it needs), installed once even when it replaces several
           const by = item.replacedBy;
           if (replacing.has(by.name)) continue;
           replacing.add(by.name);
-          const official = !!by.repo.official;
-          if (!official && !await confirmInstall({ title: t('confirm.installTitle', { name: by.name }), name: by.name, official, kernelModule: true })) continue;
+          const how = await askInstall(by, { inAct: true, trusted: true });
+          if (!how) continue;
           try {
-            await kernelModules.install(sourceOf(by), { allowUnsigned: !official });
+            await runInstall(by, how);
             done++;
           } catch (err) {
             toast(`${by.name}: ${err.message}`, { timeout: 7000 });
@@ -445,10 +615,61 @@ export default function AppStore() {
     }, done => t('done.updatedCount', { n: done }));
   }
 
+  /**
+   * Asks before removing a package; an app goes for every user, with its settings and data. Packages
+   * installed only for it that nothing else needs are listed, ticked, and go with it.
+   * Resolves with { also: [keys] }, or null.
+   */
+  async function confirmRemoval(item, unneeded) {
+    const isModule = item.kind === 'module';
+    const also = new Set(unneeded.map(u => u.key));
+    const row = u => {
+      const label = u.kind === 'app' ? installedAppName(u.id) : u.name;
+      const box = h('input', { type: 'checkbox', 'aria-label': t('deps.alsoRemove', { name: label }) });
+      box.checked = true;
+      box.addEventListener('change', () => (box.checked ? also.add(u.key) : also.delete(u.key)));
+      return h('li', { class: 'as-dep' }, box, h('div', { class: 'as-dep-text' },
+        h('b', {}, label, ' ', h('span', { class: 'as-dep-action' }, u.version)),
+        h('span', { class: 'as-dep-sub' }, kindWord(u.kind))));
+    };
+    const ok = await ask({
+      title: isModule ? t('confirm.removeTitle', { name: item.name }) : t('confirm.uninstallTitle', { name: item.name }), width: unneeded.length ? 480 : 440,
+      text: isModule ? [t('confirm.removeModule', { name: item.name })] : [t('confirm.uninstall', { name: item.name }), t('confirm.uninstallFiles')],
+      content: unneeded.length ? h('div', { class: 'as-ask' },
+        h('h3', { class: 'as-dep-title' }, t('deps.unneededTitle')),
+        h('p', { class: 'as-dep-sub' }, t('deps.unneededHint')),
+        h('ul', { class: 'as-deps' }, ...unneeded.map(row))) : null,
+      confirm: { label: isModule ? t('action.remove') : t('action.uninstall'), danger: true },
+    });
+    return ok ? { also: [...also] } : null;
+  }
+
   async function remove(item) {
-    const name = item.name;
-    if (item.kind === 'module') act('remove', () => kernelModules.remove(item.id), r => (r.kept.length ? t('done.moduleRemovedDataKept', { name }) : t('done.moduleRemoved', { name })));
-    else if (await confirmUninstall(item)) act('remove', () => apps.uninstall(item.id), t('done.appRemoved', { name }));
+    const name = item.name, isModule = item.kind === 'module';
+    const info = await busy(() => packages.removal(item.kind, item.id));
+    if (!info) return;
+    // Another installed package needs it: it stays until that one goes
+    if (info.blockedBy.length) {
+      const list = info.blockedBy.map(b => (b.kind === 'app' ? installedAppName(b.id) : b.name)).join(', ');
+      await ask({
+        title: isModule ? t('confirm.removeTitle', { name }) : t('confirm.uninstallTitle', { name }), kind: 'info',
+        text: [t('deps.blocked', { name, list }), t('deps.blockedHint', { n: info.blockedBy.length })],
+        cancel: t('action.close'),
+      });
+      return;
+    }
+    // A module that leaves nothing behind goes without a question (as before dependencies)
+    if (isModule && !info.unneeded.length) {
+      act('remove', () => kernelModules.remove(item.id), r => (r.kept.length ? t('done.moduleRemovedDataKept', { name }) : t('done.moduleRemoved', { name })));
+      return;
+    }
+    const answer = await confirmRemoval(item, info.unneeded);
+    if (!answer) return;
+    const r = await act('remove', () => packages.remove(item.kind, item.id, answer), out => (out.removed.length > 1
+      ? t(isModule ? 'deps.moduleRemovedWith' : 'deps.appRemovedWith', { name, n: out.removed.length - 1 })
+      : isModule ? t('done.moduleRemoved', { name }) : t('done.appRemoved', { name })));
+    // Modules taken away stop with the kernel's restart: as after installing, now or later
+    if (r?.restartRequired) offerRestart(name, { removed: true });
   }
 
   /** Apps an administrator can take away: installed from here, and not needed by lilOS. */
@@ -676,6 +897,8 @@ export default function AppStore() {
       ? (item.replacedBy ? t('status.replacedBy', { name: item.replacedBy.name }) : !item.have.enabled ? t('moduleState.removed') : item.have.running !== item.have.enabled ? (item.have.running ? t('moduleState.oldUntilRestart', { version: item.have.running }) : t('moduleState.nextStart')) : t('moduleState.inUse'))
       : null;
     const permissions = needsGrant(item.manifest?.permissions);
+    const dependencies = (isModule ? item.module?.dependencies : item.shown?.dependencies ?? item.manifest?.dependencies) ?? [];
+    const unmet = item.here && !isModule ? apps.get(item.id)?.unmet ?? [] : [];
     footerText.textContent = `${item.name} ${item.offered ?? item.installed}`;
     return h('div', { class: 'as-detail' },
       backButton(tab.label),
@@ -691,6 +914,9 @@ export default function AppStore() {
             item.elsewhere ? h('span', { class: 'as-state' }, isModule ? t('status.installedElsewhereModule') : t('status.installedElsewhereApp')) : null),
           actions.length ? h('div', { class: 'as-detail-actions' }, ...actions) : null)),
       item.repo && !item.repo.official && !item.here ? h('div', { class: 'as-banner' }, icon('info'), h('span', {}, t('detail.unofficialWarning'))) : null,
+      unmet.length ? h('div', { class: 'as-banner' }, icon('warning'),
+        h('span', {}, unmet.every(u => u.why === 'restart') ? t('deps.unmetRestart', { name: item.name, list: unmet.map(u => u.id).join(', ') }) : t('deps.unmetMissing', { name: item.name, list: unmet.map(u => u.id).join(', ') })),
+        isAdmin && unmet.some(u => u.why === 'restart') ? button(t('action.restartKernel'), restartKernel, { primary: true, key: 'unmet' }) : null) : null,
       h('div', { class: 'as-facts' },
         fact(t('detail.version'), item.offered ?? item.installed),
         fact(installedWord(item), item.installed ?? '—'),
@@ -701,12 +927,37 @@ export default function AppStore() {
         ? h('div', { class: 'as-perm' }, h('h3', {}, icon('info'), t('detail.warning')), h('p', {}, t('detail.moduleWarning')))
         : h('div', { class: 'as-perm' }, h('h3', {}, icon('shield'), t('detail.mayDo')),
           permissions.length ? h('ul', {}, ...permissions.map(p => h('li', {}, icon('check'), describePermission(p)))) : h('p', { class: 'as-muted' }, t('permissions.none'))),
+      dependencies.length ? dependencyList(dependencies) : null,
       h('div', { class: 'as-readme-title' }, icon('file'), 'README.md'),
       item.readme ? h('article', { class: 'as-readme' }, ...renderMarkdown(item.readme)) : null,
       item.readme && item.readmeTruncated ? h('p', { class: 'as-readme-cut' }, t('readme.truncated'), ' ',
         h('button', { class: 'as-link', onclick: e => downloadReadme(item, e.currentTarget) }, icon('download'), t('readme.download'))) : null,
       item.readme ? null
         : h('p', { class: 'as-muted' }, item.repo ? t('readme.none') : t('readme.notFromRepo')));
+  }
+
+  /** «Needs»: the dependencies of a package, and whether they are there (modules: for admins). */
+  function dependencyList(dependencies) {
+    const status = d => {
+      if (d.app !== undefined) {
+        const app = apps.get(d.app);
+        return app ? { ok: true, text: t('deps.stateInstalled', { version: app.version }) } : { ok: false, text: t('deps.stateMissing') };
+      }
+      if (!isAdmin) return null;
+      const m = state.modules.find(x => x.name === d.module && x.enabled);
+      return !m ? { ok: false, text: t('deps.stateMissing') }
+        : { ok: true, text: m.running === m.enabled ? t('deps.stateInstalled', { version: m.enabled }) : t('deps.stateRestart') };
+    };
+    return h('div', { class: 'as-perm' }, h('h3', {}, icon('link'), t('deps.title')),
+      h('ul', {}, ...dependencies.map(d => {
+        const now = status(d);
+        return h('li', {}, icon(now && !now.ok ? 'info' : 'check'),
+          h('span', {}, h('b', {}, d.app !== undefined ? installedAppName(d.app) : d.module),
+            d.version ? ` ${d.version}` : '', ` · ${kindWord(d.module !== undefined ? 'module' : 'app')}`,
+            d.optional ? ` · ${t('deps.optionalTag')}` : '',
+            d.reason ? h('span', { class: 'as-muted' }, ` — ${d.reason}`) : null,
+            now ? h('span', { class: 'as-muted' }, ` (${now.text})`) : null));
+      })));
   }
 
   /** «Controlla gli aggiornamenti»: the AppStore's operation in the scheduler (with lilOS ≥ 1.19.0). */

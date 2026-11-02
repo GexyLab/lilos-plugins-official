@@ -1,6 +1,6 @@
 {
   "id": "terminal",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "kind": "local",
   "name": "Terminal",
   "description": "A bash-like shell over the files of lilOS, in tabs and panes side by side, and remote sessions: SSH, Telnet, rlogin and SUPDUP, with saved hosts, .term links and sessions that keep running when the window is closed.",
@@ -42,6 +42,28 @@
       "label": "Shell for the Scheduler"
     }
   },
+  "dependencies": [
+    {
+      "module": "term-ssh",
+      "optional": true,
+      "reason": "Remote sessions over SSH, and Terminal commands on saved SSH hosts"
+    },
+    {
+      "module": "term-telnet",
+      "optional": true,
+      "reason": "Remote sessions over Telnet"
+    },
+    {
+      "module": "term-rlogin",
+      "optional": true,
+      "reason": "Remote sessions over rlogin"
+    },
+    {
+      "module": "term-supdup",
+      "optional": true,
+      "reason": "Remote sessions over SUPDUP"
+    }
+  ],
   "permissions": [
     "fs.write:~",
     "tags.write",
@@ -205,8 +227,8 @@
   "locales": "locales.json",
   "files": {
     "dist/index-Ljiteq9c.css": "sha256-nyi/jlg1fYcJ9gF1wPaMzKly5IgrMa+Eht6fKre+MHM=",
-    "dist/index.js": "sha256-qPyN0Cz7N4pRHkK7H+4g3biBd7x/Y/J/wPpIEtNgG1Y=",
-    "dist/shell.js": "sha256-yo1lEmA/EVAx4POplG9QINwhCsy924Ps77K0PV3D7gU=",
-    "locales.json": "sha256-9HWxzNQnkv5hR07tYE/cfrtuvpVjdZ1TqEFToAS0jBw="
+    "dist/index.js": "sha256-SU/hxLePCNWzvHsvfd9qpEd+jwC/pBiGZodIXYKDYE0=",
+    "dist/shell.js": "sha256-L0h1Vbn68rLYviehaWSuo1VYxSyYjsri60KEkb5vMFU=",
+    "locales.json": "sha256-lSgQJ1Pm8/2hf78bEmsHjwQAVOySKtJtt0Zb6XjbBrs="
   }
 }

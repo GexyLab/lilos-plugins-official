@@ -1,5 +1,20 @@
 # Changelog di lilOS
 
+## 1.21.0 — 2026-11-02
+
+- **Dipendenze tra pacchetti**: un'app dichiara i moduli del kernel e le altre app di cui ha bisogno (obbligatori o facoltativi). Installandola o aggiornandola, l'AppStore 1.9.0 mostra cosa si installa insieme e chiede il consenso; il kernel installa tutto nell'ordine giusto e, se qualcosa fallisce, toglie quello che aveva appena installato. Dopo aver installato o rimosso moduli l'AppStore chiede se riavviare il kernel adesso o più tardi
+- Un pacchetto che serve a un altro non si rimuove (il messaggio dice a chi serve); disinstallando un'app, l'AppStore propone di togliere anche quello che era stato installato solo per lei
+- Un'app che aspetta un suo modulo (installato, attivo dopo il riavvio del kernel) non parte e spiega perché
+- Per gli sviluppatori: SDK 0.13.0 con `packages`, campo `dependencies` nel manifesto delle app e in `module.json` (decisione D69)
+
+## 1.20.2 — 2026-11-02
+
+- Passando a un altro workspace non compare più la notifica «Workspace «nome»»: il cambio lo fai tu e il pulsante del workspace mostra già dove sei. Restano le notifiche quando elimini un workspace o arrivi al massimo di 20
+
+## 1.20.1 — 2026-11-02
+
+- I comandi dei moduli dalla riga di comando (`npm run kernel:cli -- users-basic add <nome> --admin`, `passwd`, `list`, `remove`) funzionano di nuovo: si fermavano subito con l'errore «The "path" argument must be of type string». lilOS in uso non cambia
+
 ## 1.20.0 — 2026-11-02
 
 - **Tutti i workspace nella barra delle applicazioni**: accanto al logo, invece del solo workspace attuale, un pulsante per ogni workspace in fila (pallino e nome). Quello in cui sei è evidenziato, un clic su un altro ti ci porta, la freccia dopo l'ultimo (o il clic destro) apre il menu dei workspace. Si sceglie dal menu dei workspace (**Mostra tutti i workspace**) o dal Pannello di controllo 1.17.0 → Workspace → Tutti; di serie resta solo l'attuale
