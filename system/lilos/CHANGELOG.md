@@ -1,5 +1,14 @@
 # Changelog di lilOS
 
+## 1.15.0 — 2026-11-02
+
+- Nuova app **Automata**, da installare dall'AppStore: registra quello che fai in lilOS e lo rifà quando vuoi, anche su altri file. Avvii la registrazione, lavori come sempre e ogni operazione diventa un **passo**; Ctrl Z toglie anche il passo annullato
+- Si registrano le operazioni con un senso, non i clic: creare, rinominare, spostare (anche trascinando), copiare, cestinare, eliminare e ripristinare file e cartelle, i tag, aprire file e app, chiudere finestre, cambiare workspace e impostazioni, spostare o riordinare le icone della scrivania. E, nelle app, Photo (ridimensiona, ritaglia, salva, converti), File Manager (cartella, ricerca, ordine, vista), Terminale (una riga di comando), Zip (comprimi, estrai), FileCrypt (cifra, decifra, blocca) ed Editor (salva)
+- Per ogni passo: eseguirlo o no, **chiedere conferma** prima, e per ogni campo usare il valore registrato, **chiederlo** al momento del passo o comporlo con un **modello** (`{nome}`, `{est}`, `{data}`, `{ora}`, `{n}`, `{cartella}`). Le password non si salvano mai: si chiedono sempre
+- Un'automazione si avvia da Automata, dal menu dei file (sottomenu **Automazioni**, anche «Registra partendo da qui»), con una scorciatoia o dal Terminale (`automata list`, `automata run <nome> [file…] [--yes]`); su più file i passi si ripetono per ciascuno. Le automazioni sono file `.automata` nella cartella **Automazioni** della home
+- Durante una registrazione la barra delle applicazioni mostra **REC** con il numero dei passi
+- Per gli sviluppatori: l'SDK 0.9.0 ha `automation`, il manifesto `contributes.automation`, le app isolate `lilos.automation.record`; nuovo evento `desk.place`
+
 ## 1.14.0 — 2026-11-02
 
 - Cinque nuovi protocolli in **Connetti a un server**, da installare dall'AppStore (scheda Kernel): **Google Drive** (netfs-gdrive), **Google Foto** (netfs-gphotos), **Amazon S3 e compatibili** (netfs-s3: AWS, Cloudflare R2, Backblaze B2, Wasabi, MinIO o un altro indirizzo), **Azure Blob Storage** (netfs-azblob) e **NFS** (netfs-nfs, NFSv3). Ogni connessione è una cartella in `~/Rete`, con i trasferimenti nel kernel come per gli altri protocolli. Le installazioni nuove non li hanno già: li installa un amministratore
