@@ -191,18 +191,21 @@ const driver = {
 
 function session(client, stream, info) {
   const data = [], closed = [];
-  let pending = [], code = null, gone = false;
+  let pending = [], code = null, signal = null, gone = null;
   const output = chunk => (data.length ? data.forEach(fn => fn(chunk)) : pending.push(chunk));
   stream.on('data', output);
   stream.stderr?.on('data', output);
-  stream.on('exit', c => { code = c; });
-  const end = reason => {
+  // The server's exit-status (a number) or exit-signal (null and the signal's name, 'KILL')
+  stream.on('exit', (c, name) => { code = Number.isInteger(c) ? c : null; signal = code === null && name ? String(name).replace(/^SIG/, '') : null; });
+  // `code`/`signal` too, for those that want the exit status (the kernel's exec): both null when
+  // the server told nothing (the connection was cut, or close() from here)
+  const end = (reason, last = {}) => {
     if (gone) return;
-    gone = true;
-    closed.forEach(fn => fn({ reason }));
+    gone = { reason, code: null, signal: null, ...last };
+    closed.forEach(fn => fn(gone));
     client.end();
   };
-  stream.on('close', () => end(code === null || code === 0 ? '' : `Uscita con codice ${code}`));
+  stream.on('close', () => end(signal ? `Terminata dal segnale SIG${signal}` : code === null || code === 0 ? '' : `Uscita con codice ${code}`, { code, signal }));
   client.on('close', () => end('Connessione persa'));
   client.on('error', err => end(`Connessione persa: ${err.message}`));
   return {
@@ -213,7 +216,8 @@ function session(client, stream, info) {
       pending.forEach(fn);
       pending = [];
     },
-    onClose(fn) { closed.push(fn); },
+    // A quick command can end before anyone listens (in the same packet that opened it)
+    onClose(fn) { if (gone) queueMicrotask(() => fn(gone)); else closed.push(fn); },
     write(bytes) { stream.write(bytes); },
     resize(cols, rows) { stream.setWindow(rows, cols, 0, 0); },
     pause() { stream.pause(); },
