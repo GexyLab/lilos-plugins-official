@@ -1,1 +1,0 @@
-export{n as checkSystem}from"./systemPackage-Dwt8xh3K.js";
