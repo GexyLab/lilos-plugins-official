@@ -1,5 +1,9 @@
 # Changelog di lilOS
 
+## 1.20.1 — 2026-11-02
+
+- I comandi dei moduli dalla riga di comando (`npm run kernel:cli -- users-basic add <nome> --admin`, `passwd`, `list`, `remove`) funzionano di nuovo: si fermavano subito con l'errore «The "path" argument must be of type string». lilOS in uso non cambia
+
 ## 1.20.0 — 2026-11-02
 
 - **Tutti i workspace nella barra delle applicazioni**: accanto al logo, invece del solo workspace attuale, un pulsante per ogni workspace in fila (pallino e nome). Quello in cui sei è evidenziato, un clic su un altro ti ci porta, la freccia dopo l'ultimo (o il clic destro) apre il menu dei workspace. Si sceglie dal menu dei workspace (**Mostra tutti i workspace**) o dal Pannello di controllo 1.17.0 → Workspace → Tutti; di serie resta solo l'attuale
