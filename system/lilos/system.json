@@ -1,19 +1,19 @@
 {
   "name": "lilos",
-  "version": "1.16.0",
+  "version": "1.17.0",
   "kernel": 1,
   "sdk": [
     "1",
     "2"
   ],
   "node": 22,
-  "commit": "6773b5f7dd8f131e506ba403c05e318ad35ecb39",
+  "commit": "362999c223d241900d75845378ccce0cc63006e6",
   "date": "2026-11-02",
   "files": {
     "package.json": "sha256-+eIoEoTo8Q1ydUjHGd993yoTtyp85aX5Sc7P3UtKB5Y=",
     "system/kernel/cli.js": "sha256-uChZB5gGE/qRlBt4EpusC2mlqwJ1xIGBbMN7Dsiobkk=",
     "system/kernel/config.json": "sha256-DYB8rHVtqt9GugZR+TP6qa1l3Rop0YVNjujmD98mi48=",
-    "system/kernel/package.json": "sha256-6Umh5U9ozB3Q7XihuEFjjIe6V5yEZhlKAeLDdTaazz8=",
+    "system/kernel/package.json": "sha256-1LRzv0ZPO8VjsS3NFzBTjdiTqbc467/FxXq59hFFrZw=",
     "system/kernel/run.js": "sha256-qi8Fh58ZHaAPD6dmVTLh00OGSztPEpGeuYgnAaM2ARU=",
     "system/kernel/setup.js": "sha256-2lSOimKVGF79uQq54uUy+EWbrgK+FKKjCbLRLOuGzAw=",
     "system/kernel/src/cli.js": "sha256-3wxMH779FE031kMLcg80fPk0Wc+tZNqFDNjiyNeupGg=",
@@ -37,12 +37,12 @@
     "web/assets/boot-BZmrVO6-.css": "sha256-RHbGmezBEQge+sIYvKxlN8vUYcOd+puRYwRzAyFf5Xk=",
     "web/assets/boot-DgglAVE7.js": "sha256-wVgQVaeO/BGRUlCQCSQfPkqgbAEme30XMa7tM0+SyrE=",
     "web/assets/index-4vTdv2dU.css": "sha256-LWqrOu9V3ovKinE9DJfpgqI5Wuf53ZCep39tcxwK43M=",
-    "web/assets/index-DX87oAWq.js": "sha256-JnbjyO3hjbeJiOJs21dK7agxHyVqtHNSrlHHIsh/vPU=",
+    "web/assets/index-DkDYWEBz.js": "sha256-Czhx3/IREpYKFv//8QrQYcJnq5drFwtLaV5T3Ibml+k=",
+    "web/assets/system-B2eeN-sZ.js": "sha256-rIDkB+JJwvT8GNYZEpeOYKWobmVWuZPDE33gHsKCjqw=",
     "web/assets/system-Bub1s0UC.css": "sha256-lvovSfbwFkh+A6tzsP3NRUzHWXocM3zJ9e3NsUjRoo8=",
-    "web/assets/system-CtXIisnC.js": "sha256-tkreqgGXYF4YGojB3jf/Bb5C05aPoamk1bXrk0IGm8U=",
-    "web/favicon.svg": "sha256-79XhGd7Mhuct5Q4XQ5QnMYkI6NOXEZcwROrWH9/9aiA=",
+    "web/favicon.svg": "sha256-r3jTdppNnZqHg9IVDTIoTyY/z5lWZ1rFlXPIotk9dvQ=",
     "web/host/sdk.js": "sha256-FidV644yfqOXOoW25hoMxahapZ2QWJ3ln7tQ73JdbuY=",
     "web/host/system.js": "sha256-3DKj11UjcSDoorC4wyId8lEffcqa7pBCojaNUeq6pLE=",
-    "web/index.html": "sha256-2EpQ29PVjwy2NrwjvamMyY9eugrqiGlONpmne7obMnY="
+    "web/index.html": "sha256-WW2M/OfpvIaFcOqrIcNcFWWM2HLr4MUvrbifW44nBQc="
   }
 }

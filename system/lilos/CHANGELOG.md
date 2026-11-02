@@ -1,5 +1,13 @@
 # Changelog di lilOS
 
+## 1.17.0 — 2026-11-02
+
+- Le automazioni di **Automata** (1.1.0) possono partire da sole: **a un'ora** (scegliendo i giorni, e se lilOS era chiuso a quell'ora anche al prossimo accesso), **ogni tot minuti**, **quando entri** o **quando arrivano file in una cartella** (creati, spostati o copiati lì, anche solo con certe estensioni). Si imposta in Automata → Avvio, «Quando parte da sola»
+- Partono solo mentre lilOS è aperto, in una scheda sola anche con più schede aperte. Un'automazione che chiede qualcosa si apre nella finestra di Automata; le altre girano da sole e una notifica dice com'è andata
+- La scorciatoia di un'automazione lavora su quello che hai selezionato nel **File Manager** (1.15.0), non solo sulla scrivania
+- Quando un passo chiede un gruppo di file se ne possono scegliere più d'uno: file e cartelle, aggiunti e tolti uno per uno
+- **Editor** 1.5.0: **Trova e sostituisci** (Ctrl F, Ctrl H: maiuscole, parola intera, espressioni regolari; «Sostituisci tutto» si annulla con un Ctrl Z) e **Salva con nome…** (Ctrl Maiusc S); un documento nuovo chiede dove salvarlo. Tutti e due si possono registrare in un'automazione
+
 ## 1.16.0 — 2026-11-02
 
 - **Terminale 1.4.0** (dall'AppStore): la finestra si divide in **riquadri**, affiancati o uno sopra l'altro, quanti ne vuoi, ognuno con le sue schede. **Dividi a destra** e **Dividi in basso** sono nel menu della scheda; oppure si trascina una scheda sul bordo di un terminale. I separatori si trascinano, il doppio clic rende le misure uguali
