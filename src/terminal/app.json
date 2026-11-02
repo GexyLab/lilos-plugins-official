@@ -1,6 +1,6 @@
 {
   "id": "terminal",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "kind": "local",
   "name": "Terminal",
   "description": "A bash-like shell over the files of lilOS, in tabs and panes side by side, and remote sessions: SSH, Telnet, rlogin and SUPDUP, with saved hosts, .term links and sessions that keep running when the window is closed.",
@@ -18,6 +18,12 @@
     "filePreview": { "kind": "background", "label": "Previews of .term links" },
     "shell": { "kind": "service", "file": "dist/shell.js", "label": "Shell for the Scheduler" }
   },
+  "dependencies": [
+    { "module": "term-ssh", "optional": true, "reason": "Remote sessions over SSH, and Terminal commands on saved SSH hosts" },
+    { "module": "term-telnet", "optional": true, "reason": "Remote sessions over Telnet" },
+    { "module": "term-rlogin", "optional": true, "reason": "Remote sessions over rlogin" },
+    { "module": "term-supdup", "optional": true, "reason": "Remote sessions over SUPDUP" }
+  ],
   "permissions": ["fs.write:~", "tags.write", "term", "ui.menus", "ui.shortcuts", "background"],
   "contributes": {
     "window": { "width": 760, "height": 460 },

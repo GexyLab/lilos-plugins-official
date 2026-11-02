@@ -1,6 +1,6 @@
 {
   "id": "scheduler",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "kind": "local",
   "name": "Scheduler",
   "description": "Operations at a date and time or repeated, also with lilOS closed: reminders, backups of folders, web requests, Terminal commands, apps' services, opening apps and files, automations.",
@@ -18,6 +18,9 @@
     "history": { "kind": "window", "label": "History" },
     "open": { "kind": "window", "label": "Open what a reminder says" }
   },
+  "dependencies": [
+    { "module": "scheduler", "reason": "Runs the operations in the kernel, also with lilOS closed" }
+  ],
   "permissions": ["fs.write:~", "ui.menus"],
   "contributes": {
     "window": { "width": 1120, "height": 620 },

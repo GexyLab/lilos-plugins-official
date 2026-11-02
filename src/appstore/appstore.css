@@ -116,8 +116,22 @@
 .appstore .as-row input { width: min(280px, 40vw); }
 
 /* Install dialog */
-.as-dialog { display: flex; flex-direction: column; gap: 10px; height: 100%; padding: 18px 20px 16px; font-size: 12.5px; line-height: 1.5; overflow: auto; }
+.as-dialog { display: flex; flex-direction: column; height: 100%; font-size: 12.5px; line-height: 1.5; overflow: hidden; }
+.as-dialog-content { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 10px; padding: 18px 20px 12px; overflow: auto; }
 .as-dialog-lead { font-weight: 500; }
 .as-dialog ul { margin: 0; padding-left: 18px; color: var(--text); }
 .as-warning { padding: 8px 10px; border: 1px solid var(--notice-border); border-radius: var(--radius-sm); background: var(--notice-bg); color: var(--notice-text); }
-.as-dialog-buttons { margin-top: auto; display: flex; gap: 8px; justify-content: flex-end; }
+.as-dialog-buttons { flex: none; display: flex; gap: 8px; justify-content: flex-end; padding: 4px 20px 16px; }
+
+/* Dependencies in the install and removal dialogs */
+.as-dialog .as-dep-title { margin: 4px 0 0; color: var(--faint); font-size: 10.5px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
+.as-dialog .as-deps { list-style: none; display: flex; flex-direction: column; gap: 6px; margin: 0; padding: 0; }
+.as-dialog .as-dep { display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); }
+.as-dialog .as-dep > input[type="checkbox"] { flex: none; margin: 7px 0 0; }
+.as-dialog .as-dep .app-icon { flex: none; width: 28px; height: 28px; border-radius: 7px; }
+.as-dialog .as-dep-text { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.as-dialog .as-dep-text ul { margin: 2px 0 0; padding-left: 16px; }
+.as-dialog .as-dep-action { color: var(--dim); font-weight: 400; }
+.as-dialog .as-dep-sub, .as-dialog .as-dep-why { color: var(--dim); font-size: 11.5px; }
+.as-dialog .as-dep-warning { color: var(--notice-text); font-size: 11.5px; }
+.as-dialog .as-dep-blocked { padding: 8px 10px; border: 1px solid var(--danger); border-radius: var(--radius-sm); color: var(--danger); }
