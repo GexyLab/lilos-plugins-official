@@ -44,9 +44,9 @@ export function createRecorder({ args } = {}) {
   const time = h('span', { class: 'rc-time' }, '00:00');
   const head = h('div', { class: 'rc-head' }, h('span', { class: 'rc-dot' }), h('b', {}, t('rec.recording')), time);
   const list = h('div', { class: 'rc-list', role: 'log', 'aria-live': 'polite', 'aria-label': t('rec.steps') });
-  const pause = h('button', { class: 'au-btn', type: 'button' });
-  const discard = h('button', { class: 'au-btn', type: 'button' }, icon('x'), t('rec.discard'));
-  const finish = h('button', { class: 'au-btn stop', type: 'button' }, icon('stop'), t('rec.finish'));
+  const pause = h('button', { class: 'ctl-btn', type: 'button' });
+  const discard = h('button', { class: 'ctl-btn', type: 'button' }, icon('x'), t('rec.discard'));
+  const finish = h('button', { class: 'ctl-btn stop', type: 'button' }, icon('stop'), t('rec.finish'));
   const root = h('div', { class: 'rc' }, head, list, h('div', { class: 'rc-foot' }, pause, discard, finish));
   win.body.append(root);
 

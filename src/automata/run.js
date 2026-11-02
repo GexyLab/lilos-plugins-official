@@ -1,6 +1,7 @@
-import { Window, h, icon, fs, automation, notifications } from '@lilos/sdk';
+import { Window, h, icon, fs, automation, notifications, checkbox } from '@lilos/sdk';
 import * as system from '@lilos/system';
 import { t } from './i18n.js';
+import { paramControl } from '../shared/paramsForm.js';
 import { engine, load } from './store.js';
 import { actionLabel, paramLabel, appColor, appGlyph, valueText, homePath } from './describe.js';
 
@@ -25,8 +26,8 @@ export function createRun({ args, openWindow } = {}) {
   const top = h('div', { class: 'rn-top' });
   const list = h('div', { class: 'rn-list', role: 'list' });
   const panel = h('div', { class: 'rn-panel', hidden: true });
-  const pause = h('button', { class: 'au-btn', type: 'button' });
-  const stop = h('button', { class: 'au-btn danger', type: 'button' }, icon('stop'), t('run.stop'));
+  const pause = h('button', { class: 'ctl-btn', type: 'button' });
+  const stop = h('button', { class: 'ctl-btn danger', type: 'button' }, icon('stop'), t('run.stop'));
   const foot = h('div', { class: 'rn-foot' }, pause, h('span', { class: 'au-grow' }), stop);
   const root = h('div', { class: 'rn' }, top, list, panel, foot);
   win.body.append(root);
@@ -57,76 +58,39 @@ export function createRun({ args, openWindow } = {}) {
   const stepHead = (kind, title, sub) => h('div', { class: 'rn-ask-head' }, h('span', { class: `rn-bub ${kind}` }, icon(kind === 'ak' ? 'pencil' : 'help')), h('div', {}, h('b', {}, title), h('small', {}, sub)));
   const itemName = id => (id && fs.exists(id) ? fs.get(id).name : '');
 
-  /** An input for a value asked: by the type of the param. */
-  function inputFor(p, value, label) {
-    if (p.type === 'boolean') {
-      const el = h('input', { type: 'checkbox', checked: !!value, 'aria-label': label });
-      return { el: h('label', { class: 'au-check' }, el, h('span', {}, label)), get: () => el.checked, labelled: true };
-    }
-    if (p.type === 'choice') {
-      const el = h('select', { class: 'au-select', 'aria-label': label }, p.options.map(o => h('option', { value: String(o.value), selected: o.value === value }, o.label)));
-      return { el, get: () => p.options.find(o => String(o.value) === el.value)?.value };
-    }
-    if (p.type === 'files') {
-      // Several: the ones proposed, then added or taken away one by one (files or folders)
-      const chosen = (Array.isArray(value) ? value : value ? [value] : []).filter(id => fs.exists(id));
-      const list = h('div', { class: 'rn-chosen' });
-      const draw = () => list.replaceChildren(...(chosen.length ? chosen.map((id, i) => h('div', { class: 'rn-line' },
-        icon(fs.get(id)?.type === 'folder' ? 'folder' : 'file'), h('code', {}, homePath(id)),
-        h('button', { class: 'au-icon', type: 'button', title: t('run.removeItem'), 'aria-label': t('run.removeItem', { name: fs.get(id)?.name ?? '' }), onclick: () => { chosen.splice(i, 1); draw(); } }, icon('x'))))
-        : [h('span', { class: 'au-hint' }, t('value.empty'))]));
-      const add = kind => async () => {
-        const node = await system.pickFile?.(openWindow, { kind, title: label });
-        if (node && !chosen.includes(node.id)) { chosen.push(node.id); draw(); }
-      };
-      draw();
-      return {
-        el: h('div', { class: 'rn-many' }, list, h('div', { class: 'rn-actions' },
-          h('button', { class: 'au-btn', type: 'button', onclick: add('file') }, icon('plus'), t('run.addFile')),
-          h('button', { class: 'au-btn', type: 'button', onclick: add('folder') }, icon('folder'), t('run.addFolder')))),
-        get: () => [...chosen],
-        check: () => (chosen.length ? '' : t('run.noneChosen')),
-      };
-    }
-    if (p.type === 'file' || p.type === 'folder') {
-      let chosen = Array.isArray(value) ? value[0] : value;
-      const name = h('span', { class: 'rn-path' }, chosen ? homePath(chosen) : t('value.empty'));
-      const pick = h('button', { class: 'au-btn', type: 'button' }, t('run.choose'));
-      pick.addEventListener('click', async () => {
-        const node = await system.pickFile?.(openWindow, { kind: p.type === 'folder' ? 'folder' : 'file', title: label });
-        if (node) { chosen = node.id; name.textContent = homePath(node.id); }
-      });
-      return { el: h('div', { class: 'rn-pick' }, name, pick), get: () => chosen };
-    }
-    const el = h('input', { class: 'au-input', type: p.type === 'secret' ? 'password' : p.type === 'number' ? 'number' : 'text', 'aria-label': label, autocomplete: 'off' });
-    if (p.type !== 'secret' && value != null) el.value = String(value);
-    if (p.type === 'number') { if (Number.isFinite(p.min)) el.min = p.min; if (Number.isFinite(p.max)) el.max = p.max; }
-    return { el, get: () => (p.type === 'number' ? Number(el.value) : el.value), check: () => (p.type === 'number' && (el.value === '' || !Number.isFinite(Number(el.value)) || (Number.isFinite(p.min) && Number(el.value) < p.min) || (Number.isFinite(p.max) && Number(el.value) > p.max)) ? t('run.badNumber') : '') };
-  }
+  /**
+   * A control for a value asked, by the type of the param (the shared paramControl). Several
+   * files and numbers are always needed, as before; a choice has no empty entry.
+   */
+  const inputFor = (p, value, label) => paramControl(
+    p.type === 'files' || p.type === 'number' ? { ...p, required: true } : p,
+    (p.type === 'file' || p.type === 'folder') && Array.isArray(value) ? value[0] : value,
+    { t, label, empty: false, pickFile: options => system.pickFile?.(openWindow, options) ?? null },
+  );
 
   const ui = {
     ask: ({ step, index, item, fields }) => {
       const inputs = fields.map(f => ({ f, ...inputFor(f.param, f.value, f.question) }));
-      const remember = h('input', { type: 'checkbox' });
+      let remember = false;
       const many = (control.items ?? 0) > 1;
       const fail = h('p', { class: 'au-error', role: 'alert' });
-      const go = h('button', { class: 'au-btn primary', type: 'button' }, t('run.continue'));
+      const go = h('button', { class: 'ctl-btn primary', type: 'button' }, t('run.continue'));
       go.addEventListener('click', () => {
-        const problem = inputs.map(i => i.check?.()).find(Boolean);
+        const problem = inputs.map(i => i.check()).find(Boolean);
         if (problem) return void (fail.textContent = problem);
-        answer({ values: Object.fromEntries(inputs.map(i => [i.f.name, i.get()])), remember: remember.checked });
+        answer({ values: Object.fromEntries(inputs.map(i => [i.f.name, i.get()])), remember });
       });
       panel.onkeydown = e => { if (e.key === 'Enter' && e.target.tagName === 'INPUT' && e.target.type !== 'checkbox') go.click(); };
       return askPanel([
         stepHead('ak', actionLabel(step.action), [t('run.stepOf', { n: index + 1, total: control.total }), itemName(item)].filter(Boolean).join(' · ')),
-        ...inputs.map(i => (i.labelled ? i.el : h('label', { class: 'au-q' }, h('span', {}, i.f.question), i.el,
-          i.f.param.type !== 'secret' && i.f.value != null ? h('small', { class: 'au-hint' }, t('run.recorded', { value: valueText(step.action, i.f.name, i.f.param, i.f.value) })) : null))),
-        many && !fields.some(f => f.param.type === 'secret') ? h('label', { class: 'au-check' }, remember, h('span', {}, t('run.remember'))) : null,
+        ...inputs.map(i => h('div', { class: 'au-q' }, h('span', {}, i.f.question), i.el,
+          i.f.param.type !== 'secret' && i.f.value != null ? h('small', { class: 'au-hint' }, t('run.recorded', { value: valueText(step.action, i.f.name, i.f.param, i.f.value) })) : null)),
+        many && !fields.some(f => f.param.type === 'secret') ? checkbox({ value: false, label: t('run.remember'), onChange: v => { remember = v; } }) : null,
         fail,
       ].filter(Boolean), [
-        h('button', { class: 'au-btn danger', type: 'button', onclick: () => answer('stop') }, t('run.stop')),
+        h('button', { class: 'ctl-btn danger', type: 'button', onclick: () => answer('stop') }, t('run.stop')),
         h('span', { class: 'au-grow' }),
-        h('button', { class: 'au-btn', type: 'button', onclick: () => answer('skip') }, t('run.skip')),
+        h('button', { class: 'ctl-btn', type: 'button', onclick: () => answer('skip') }, t('run.skip')),
         go,
       ]);
     },
@@ -139,20 +103,20 @@ export function createRun({ args, openWindow } = {}) {
         stepHead('cf', t('run.confirm', { step: actionLabel(step.action) }), [t('run.stepOf', { n: index + 1, total: control.total }), itemName(item)].filter(Boolean).join(' · ')),
         h('div', { class: 'rn-preview' }, lines),
       ], [
-        h('button', { class: 'au-btn danger', type: 'button', onclick: () => answer('stop') }, t('run.stopAll')),
+        h('button', { class: 'ctl-btn danger', type: 'button', onclick: () => answer('stop') }, t('run.stopAll')),
         h('span', { class: 'au-grow' }),
-        h('button', { class: 'au-btn', type: 'button', onclick: () => answer('skip') }, t('run.skip')),
-        h('button', { class: 'au-btn primary', type: 'button', onclick: () => answer('run') }, icon('play'), t('run.run')),
+        h('button', { class: 'ctl-btn', type: 'button', onclick: () => answer('skip') }, t('run.skip')),
+        h('button', { class: 'ctl-btn primary', type: 'button', onclick: () => answer('run') }, icon('play'), t('run.run')),
       ]);
     },
     failed: ({ step, index, error }) => askPanel([
       stepHead('cf', t('run.failed', { step: actionLabel(step.action) }), t('run.stepOf', { n: index + 1, total: control.total })),
       h('p', { class: 'au-error' }, error.message),
     ], [
-      h('button', { class: 'au-btn danger', type: 'button', onclick: () => answer('stop') }, t('run.stop')),
+      h('button', { class: 'ctl-btn danger', type: 'button', onclick: () => answer('stop') }, t('run.stop')),
       h('span', { class: 'au-grow' }),
-      h('button', { class: 'au-btn', type: 'button', onclick: () => answer('skip') }, t('run.skip')),
-      h('button', { class: 'au-btn primary', type: 'button', onclick: () => answer('retry') }, t('run.retry')),
+      h('button', { class: 'ctl-btn', type: 'button', onclick: () => answer('skip') }, t('run.skip')),
+      h('button', { class: 'ctl-btn primary', type: 'button', onclick: () => answer('retry') }, t('run.retry')),
     ]),
     progress: e => progress(e),
   };
@@ -260,8 +224,8 @@ export function createRun({ args, openWindow } = {}) {
   function chooseItems() {
     const chosen = [];
     const names = h('div', { class: 'rn-chosen' });
-    const go = h('button', { class: 'au-btn primary', type: 'button', disabled: true }, icon('play'), t('run.start'));
-    const add = h('button', { class: 'au-btn', type: 'button' }, icon('plus'), doc.input === 'folder' ? t('run.chooseFolder') : t('run.addFile'));
+    const go = h('button', { class: 'ctl-btn primary', type: 'button', disabled: true }, icon('play'), t('run.start'));
+    const add = h('button', { class: 'ctl-btn', type: 'button' }, icon('plus'), doc.input === 'folder' ? t('run.chooseFolder') : t('run.addFile'));
     const redraw = () => {
       names.replaceChildren(...chosen.map(id => h('div', { class: 'rn-line' }, icon(doc.input === 'folder' ? 'folder' : 'file'), h('code', {}, homePath(id)))));
       go.disabled = !chosen.length;
@@ -277,7 +241,7 @@ export function createRun({ args, openWindow } = {}) {
       answer = v => { answer = null; panel.hidden = true; panel.replaceChildren(); resolve(v); };
       go.addEventListener('click', () => answer([...chosen]));
       panel.replaceChildren(h('p', {}, doc.input === 'folder' ? t('run.needFolder') : t('run.needFiles')), names,
-        h('div', { class: 'rn-actions' }, add, h('span', { class: 'au-grow' }), h('button', { class: 'au-btn', type: 'button', onclick: () => answer(null) }, t('action.cancel')), go));
+        h('div', { class: 'rn-actions' }, add, h('span', { class: 'au-grow' }), h('button', { class: 'ctl-btn', type: 'button', onclick: () => answer(null) }, t('action.cancel')), go));
       panel.hidden = false;
       add.focus();
     });

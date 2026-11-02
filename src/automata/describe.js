@@ -35,12 +35,7 @@ const GLYPHS = {
 };
 
 /** '~/Documenti/a.txt' for a node, '' if gone. */
-export function homePath(id) {
-  if (!id || !fs.exists(id)) return '';
-  const path = fs.path(id);
-  const home = fs.path(fs.root);
-  return path === home ? '~' : path.startsWith(`${home}/`) ? `~${path.slice(home.length)}` : path;
-}
+export const homePath = id => (id && fs.exists(id) ? fs.tildePath(id) ?? '' : '');
 
 /** A reference of a saved step in words. */
 export function refText(ref) {

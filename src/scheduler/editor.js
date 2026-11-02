@@ -1,6 +1,7 @@
-import { Window, h, icon, fs, schedule, session, messageBox } from '@lilos/sdk';
+import { Window, h, icon, fs, schedule, session, messageBox, textField, checkbox, selectField, segmented, radios } from '@lilos/sdk';
 import * as system from '@lilos/system';
 import { t, i18n } from './i18n.js';
+import { paramsForm } from '../shared/paramsForm.js';
 import { KINDS, kindOf, whatText, nodeLabel, placeOf, browserZone, localNow, when as whenText } from './model.js';
 
 /** replaceChildren without the nulls and falses (h() skips them, the DOM would write them). */
@@ -16,7 +17,8 @@ const fill = (el, ...kids) => el.replaceChildren(...kids.flat(Infinity).filter(k
  *   createEditorWindow({ args, openWindow })                the 'edit' and 'create' entry points:
  *     args { id }                                           an operation to change
  *     args { files: [id], action }                          from the menu of a file or folder (Pianifica…)
- *     args { when: { once } | rule, what?, name? }          from another app (a calendar's free slot)
+ *     args { when: { once } | rule, what?, name? }          from another app (a calendar's free slot;
+ *                                                           Automata: what { type: 'automation', file })
  */
 const UNITS = ['minute', 'hour', 'day', 'week', 'month', 'year'];
 const DAYS = [1, 2, 3, 4, 5, 6, 7];
@@ -46,7 +48,11 @@ function prefillFrom(a) {
     else out.what = { type: 'open', file: node.id, label };
     out.name = node.name;
   }
-  if (plain(a.what)) out.what = a.what;
+  // Another app's proposal (Automata: { type: 'automation', file, label }); the kernel checks it again
+  if (plain(a.what) && KINDS.some(k => k.type === a.what.type)) {
+    out.what = a.what;
+    if (a.what.type === 'automation' && typeof a.what.file === 'string' && !a.what.label) out.what = { ...a.what, label: nodeLabel(a.what.file) };
+  }
   if (typeof a.name === 'string') out.name = a.name;
   if (typeof a.from === 'string') out.from = a.from;
   if (plain(a.when)) out.when = a.when;
@@ -156,28 +162,30 @@ function editorWindow({ id = null, copy = null, prefill = {} }, openWindow) {
 
   // ---------- Drawing ----------
 
-  const field = (label, control, hint) => h('label', { class: 'ed-field' }, h('span', { class: 'ed-label' }, label), control, hint ? h('small', { class: 'ed-hint' }, hint) : null);
-  const input = (value, onChange, attrs = {}) => {
-    const el = h('input', { class: 'ed-input', value: value ?? '', ...attrs });
-    el.addEventListener(attrs.type === 'checkbox' ? 'change' : 'input', () => onChange(attrs.type === 'checkbox' ? el.checked : el.value));
-    if (attrs.type === 'checkbox') el.checked = !!value;
+  // A <label> only around one input: a group of buttons or radios inside one would take its clicks
+  const field = (label, control, hint) => h(control?.matches?.('input, select, textarea') ? 'label' : 'div', { class: 'ed-field' },
+    h('span', { class: 'ed-label' }, label), control, hint ? h('small', { class: 'ed-hint' }, hint) : null);
+  // The SDK's controls; text fields change the draft at each key (the side follows)
+  const input = (value, onChange, { small = false, ...options } = {}) => textField({ ...options, value: value ?? '', onInput: onChange, className: small ? 'ed-small' : '' });
+  const area = (value, onChange, { rows, mono = false, placeholder = null, maxLength = null } = {}) => {
+    const el = h('textarea', { class: `ctl-text${mono ? ' mono' : ''}`, rows, placeholder, maxlength: maxLength, spellcheck: 'false' });
+    el.value = value ?? '';
+    el.addEventListener('input', () => onChange(el.value));
     return el;
   };
-  const select = (value, options, onChange, label) => {
-    const el = h('select', { class: 'ed-input', 'aria-label': label }, options.map(o => h('option', { value: String(o.value), selected: String(o.value) === String(value), disabled: !!o.disabled }, o.label)));
-    el.addEventListener('change', () => onChange(el.value));
+  // aria: the name of a check box drawn without its label (the field's says it)
+  const check = (value, onChange, label, aria = null) => {
+    const el = checkbox({ value, onChange, label });
+    if (aria) el.querySelector('input').setAttribute('aria-label', aria);
     return el;
   };
-  const seg = (value, options, onChange) => h('div', { class: 'ed-seg', role: 'group' }, options.map(o => h('button', { type: 'button', 'aria-pressed': String(o.value === value), disabled: !!o.disabled, onclick: () => onChange(o.value) }, o.label)));
-  const radio = (name, value, options, onChange) => h('div', { class: 'ed-radios', role: 'radiogroup' }, options.map(o => {
-    const el = h('input', { type: 'radio', name, value: o.value, checked: o.value === value });
-    el.addEventListener('change', () => { if (el.checked) onChange(o.value); });
-    return h('label', { class: 'ed-radio' }, el, h('span', {}, o.label));
-  }));
+  const select = (value, options, onChange, label) => selectField({ value: String(value), options: options.map(o => ({ ...o, value: String(o.value) })), onChange, label });
+  const seg = (value, options, onChange) => segmented({ value, options, onChange });
+  const radio = (value, options, onChange) => radios({ value, options, onChange });
   const pick = async (kind, title, exts = null) => system.pickFile(openWindow, { kind, title, ...(exts && { exts }) });
   const placeButton = (place, title, onPick) => h('div', { class: 'ed-place' },
-    h('span', { class: 'ed-input ed-path' }, icon(place?.mount ? 'globe' : 'folder'), place?.label || h('span', { class: 'ed-ph' }, t('editor.choose'))),
-    h('button', { class: 'sc-btn', type: 'button', onclick: async () => { const node = await pick('folder', title); if (node) onPick(placeOf(node.id)); } }, t('editor.choose')));
+    h('span', { class: 'ctl-text ed-path' }, icon(place?.mount ? 'globe' : 'folder'), place?.label || h('span', { class: 'ed-ph' }, t('editor.choose'))),
+    h('button', { class: 'ctl-btn', type: 'button', onclick: async () => { const node = await pick('folder', title); if (node) onPick(placeOf(node.id)); } }, t('editor.choose')));
 
   function draw() {
     const names = [t('step.what'), t('step.when'), t('step.options')];
@@ -189,11 +197,11 @@ function editorWindow({ id = null, copy = null, prefill = {} }, openWindow) {
     fill(mainEl, ...(prefill.from ? [h('p', { class: 'ed-warn' }, icon('info'), t('editor.proposedBy', { app: system.getApp(prefill.from)?.name ?? prefill.from }))] : []), ...[stepWhat, stepWhen, stepOptions][step]());
     drawSide();
     errEl.textContent = error;
-    const back = h('button', { class: 'sc-btn', type: 'button', disabled: step === 0, onclick: () => { step--; draw(); } }, t('editor.back'));
+    const back = h('button', { class: 'ctl-btn', type: 'button', disabled: step === 0, onclick: () => { step--; draw(); } }, t('editor.back'));
     const next = step < 2
-      ? h('button', { class: 'sc-btn vio', type: 'button', onclick: () => { if (step === 0 && !draft.name.trim()) draft.name = suggestName(); step++; draw(); } }, t('editor.next'))
-      : h('button', { class: 'sc-btn vio', type: 'button', onclick: save }, icon('check'), editing ? t('editor.save') : t('editor.create'));
-    fill(foot, back, h('span', { class: 'sc-grow' }), h('button', { class: 'sc-btn', type: 'button', onclick: () => win.emit('close') }, t('editor.cancel')), next);
+      ? h('button', { class: 'ctl-btn vio', type: 'button', onclick: () => { if (step === 0 && !draft.name.trim()) draft.name = suggestName(); step++; draw(); } }, t('editor.next'))
+      : h('button', { class: 'ctl-btn vio', type: 'button', onclick: save }, icon('check'), editing ? t('editor.save') : t('editor.create'));
+    fill(foot, back, h('span', { class: 'sc-grow' }), h('button', { class: 'ctl-btn', type: 'button', onclick: () => win.emit('close') }, t('editor.cancel')), next);
   }
 
   const redraw = () => draw();
@@ -228,15 +236,15 @@ function editorWindow({ id = null, copy = null, prefill = {} }, openWindow) {
       const openKind = w.open?.file !== undefined ? 'file' : w.open?.app ? 'app' : 'none';
       const apps = system.installedApps().filter(a => a.id !== 'scheduler');
       return [
-        field(t('notify.text'), (() => { const el = h('textarea', { class: 'ed-input', rows: 3, maxlength: 300 }); el.value = w.text; el.addEventListener('input', () => { w.text = el.value; sideOnly(); }); return el; })()),
+        field(t('notify.text'), area(w.text, v => { w.text = v; sideOnly(); }, { rows: 3, maxLength: 300 })),
         field(t('notify.level'), select(w.level, ['info', 'success', 'warning', 'error'].map(v => ({ value: v, label: t(`level.${v}`) })), v => { w.level = v; })),
         field(t('notify.open'), seg(openKind, [{ value: 'none', label: t('notify.openNone') }, { value: 'file', label: t('notify.openFile') }, { value: 'app', label: t('notify.openApp') }], v => {
           w.open = v === 'none' ? null : v === 'file' ? { file: undefined, label: '' } : { app: apps[0]?.id ?? '', entry: 'main', args: null };
           redraw();
         })),
         openKind === 'file' ? field(t('notify.file'), h('div', { class: 'ed-place' },
-          h('span', { class: 'ed-input ed-path' }, icon('file'), w.open.label || h('span', { class: 'ed-ph' }, t('editor.choose'))),
-          h('button', { class: 'sc-btn', type: 'button', onclick: async () => { const node = await pick('file', t('notify.file')); if (node) { w.open = { file: node.id, label: nodeLabel(node.id) }; redraw(); } } }, t('editor.choose')))) : null,
+          h('span', { class: 'ctl-text ed-path' }, icon('file'), w.open.label || h('span', { class: 'ed-ph' }, t('editor.choose'))),
+          h('button', { class: 'ctl-btn', type: 'button', onclick: async () => { const node = await pick('file', t('notify.file')); if (node) { w.open = { file: node.id, label: nodeLabel(node.id) }; redraw(); } } }, t('editor.choose')))) : null,
         openKind === 'app' ? field(t('notify.app'), select(w.open.app, apps.map(a => ({ value: a.id, label: a.name })), v => { w.open = { app: v, entry: 'main', args: null }; })) : null,
       ];
     }
@@ -250,7 +258,9 @@ function editorWindow({ id = null, copy = null, prefill = {} }, openWindow) {
           Object.assign(w, { app, entry, params: {} });
           redraw();
         })),
-        ...(service?.params ? Object.entries(service.params).map(([name, p]) => paramField(w, name, p)) : [h('p', { class: 'ed-hint' }, t('service.noParams'))]),
+        service?.params && Object.keys(service.params).length
+          ? paramsForm(service.params, w.params, { t, pathAs: 'tilde', live: true, pickFile: options => pick(options.kind, options.title), onChange: next => { w.params = next; } }).el
+          : h('p', { class: 'ed-hint' }, t('service.noParams')),
         h('p', { class: 'ed-hint' }, t('service.hint')),
       ];
     }
@@ -259,7 +269,7 @@ function editorWindow({ id = null, copy = null, prefill = {} }, openWindow) {
         h('div', { class: 'ed-two' },
           field(t('copy.from'), placeButton(w.from, t('copy.from'), p => { w.from = p; redraw(); })),
           field(t('copy.to'), placeButton(w.to, t('copy.to'), p => { w.to = p; redraw(); }))),
-        field(t('copy.how'), radio('copy-mode', w.mode, [
+        field(t('copy.how'), radio(w.mode, [
           { value: 'versions', label: t('copy.versions', { keep: w.keep }) },
           { value: 'update', label: t('copy.update') },
           { value: 'mirror', label: t('copy.mirror') },
@@ -278,36 +288,36 @@ function editorWindow({ id = null, copy = null, prefill = {} }, openWindow) {
           redraw();
         })),
         ssh ? field(t('command.host'), select(w.host, catalog.hosts.map(x => ({ value: x.id, label: `${x.name} · ${x.address}` })), v => { w.host = v; w.hostLabel = catalog.hosts.find(x => x.id === v)?.name ?? ''; })) : null,
-        field(t('command.lines'), (() => { const el = h('textarea', { class: 'ed-input mono', rows: 6, spellcheck: 'false', placeholder: t('command.placeholder') }); el.value = w.lines; el.addEventListener('input', () => { w.lines = el.value; sideOnly(); }); return el; })(), ssh ? t('command.sshHint') : t('command.hint')),
+        field(t('command.lines'), area(w.lines, v => { w.lines = v; sideOnly(); }, { rows: 6, mono: true, placeholder: t('command.placeholder') }), ssh ? t('command.sshHint') : t('command.hint')),
         ssh ? null : field(t('command.cwd'), h('div', { class: 'ed-place' },
-          h('span', { class: 'ed-input ed-path' }, icon('folder'), w.cwdLabel || '~'),
-          h('button', { class: 'sc-btn', type: 'button', onclick: async () => { const node = await pick('folder', t('command.cwd')); if (node) { w.cwd = node.id; w.cwdLabel = nodeLabel(node.id); redraw(); } } }, t('editor.choose')))),
+          h('span', { class: 'ctl-text ed-path' }, icon('folder'), w.cwdLabel || '~'),
+          h('button', { class: 'ctl-btn', type: 'button', onclick: async () => { const node = await pick('folder', t('command.cwd')); if (node) { w.cwd = node.id; w.cwdLabel = nodeLabel(node.id); redraw(); } } }, t('editor.choose')))),
         saveToField(w, ['replace', 'append']),
       ];
     }
     if (w.type === 'web') {
       const headers = h('div', { class: 'ed-headers' }, w.headers.map((hd, i) => h('div', { class: 'ed-header' },
-        input(hd.name, v => { hd.name = v; }, { placeholder: t('web.headerName'), 'aria-label': t('web.headerName') }),
+        input(hd.name, v => { hd.name = v; }, { placeholder: t('web.headerName'), label: t('web.headerName') }),
         hd.secret && hd.set && hd.value === undefined
-          ? h('span', { class: 'ed-input ed-secret' }, '••••••••', h('button', { class: 'sc-link', type: 'button', onclick: () => { hd.value = ''; hd.set = false; redraw(); } }, t('web.change')))
-          : input(hd.value ?? '', v => { hd.value = v; }, { placeholder: t('web.headerValue'), 'aria-label': t('web.headerValue'), type: hd.secret ? 'password' : 'text', autocomplete: 'off' }),
-        h('label', { class: 'ed-check', title: t('web.secretHint') }, input(hd.secret, v => { hd.secret = v; redraw(); }, { type: 'checkbox' }), icon('lock'), t('web.secret')),
+          ? h('span', { class: 'ctl-text ed-secret' }, '••••••••', h('button', { class: 'sc-link', type: 'button', onclick: () => { hd.value = ''; hd.set = false; redraw(); } }, t('web.change')))
+          : input(hd.value ?? '', v => { hd.value = v; }, { placeholder: t('web.headerValue'), label: t('web.headerValue'), type: hd.secret ? 'password' : 'text' }),
+        Object.assign(check(hd.secret, v => { hd.secret = v; redraw(); }, [icon('lock'), t('web.secret')]), { title: t('web.secretHint') }),
         h('button', { class: 'sc-icon', type: 'button', title: t('web.removeHeader'), 'aria-label': t('web.removeHeader'), onclick: () => { w.headers.splice(i, 1); redraw(); } }, icon('x')))));
       const statusValue = typeof w.expect.status === 'number' ? 'n' : w.expect.status;
       return [
         h('div', { class: 'ed-url' },
           select(w.method, ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE'].map(m => ({ value: m, label: m })), v => { w.method = v; if (v === 'GET' || v === 'HEAD') w.body = { kind: 'none' }; redraw(); }, t('web.method')),
-          input(w.url, v => { w.url = v.trim(); sideOnly(); }, { type: 'url', 'aria-label': t('web.url'), placeholder: 'https://…', spellcheck: 'false' })),
-        field(t('web.headers'), h('div', {}, headers, h('button', { class: 'sc-btn', type: 'button', onclick: () => { w.headers.push({ name: '', value: '', secret: false }); redraw(); } }, icon('plus'), t('web.addHeader')))),
+          input(w.url, v => { w.url = v.trim(); sideOnly(); }, { type: 'url', label: t('web.url'), placeholder: 'https://…' })),
+        field(t('web.headers'), h('div', {}, headers, h('button', { class: 'ctl-btn', type: 'button', onclick: () => { w.headers.push({ name: '', value: '', secret: false }); redraw(); } }, icon('plus'), t('web.addHeader')))),
         w.method !== 'GET' && w.method !== 'HEAD' ? field(t('web.body'), h('div', {},
           select(w.body.kind, ['none', 'text', 'json', 'form'].map(k => ({ value: k, label: t(`web.body.${k}`) })), v => { w.body = v === 'none' ? { kind: 'none' } : { kind: v, text: w.body.text ?? '' }; redraw(); }, t('web.body')),
-          w.body.kind !== 'none' ? (() => { const el = h('textarea', { class: 'ed-input mono', rows: 4, spellcheck: 'false' }); el.value = w.body.text ?? ''; el.addEventListener('input', () => { w.body.text = el.value; }); return el; })() : null)) : null,
+          w.body.kind !== 'none' ? area(w.body.text, v => { w.body.text = v; }, { rows: 4, mono: true }) : null)) : null,
         h('div', { class: 'ed-two' },
           field(t('web.status'), h('div', { class: 'ed-line' },
             select(statusValue, [{ value: '2xx', label: '200–299' }, { value: 'any', label: t('web.anyStatus') }, { value: 'n', label: t('web.exactStatus') }], v => { w.expect.status = v === 'n' ? 200 : v; redraw(); }, t('web.status')),
-            statusValue === 'n' ? input(w.expect.status, v => { w.expect.status = Number(v) || 200; }, { type: 'number', min: 100, max: 599, class: 'ed-input ed-small' }) : null)),
+            statusValue === 'n' ? input(w.expect.status, v => { w.expect.status = Number(v) || 200; }, { type: 'number', min: 100, max: 599, small: true }) : null)),
           field(t('web.contains'), input(w.expect.contains ?? '', v => { w.expect.contains = v || null; }, { placeholder: t('web.containsPh') }))),
-        field(t('web.timeout'), h('div', { class: 'ed-line' }, input(w.timeoutS, v => { w.timeoutS = Math.max(1, Math.min(300, Number(v) || 30)); }, { type: 'number', min: 1, max: 300, class: 'ed-input ed-small' }), h('span', {}, t('web.seconds')))),
+        field(t('web.timeout'), h('div', { class: 'ed-line' }, input(w.timeoutS, v => { w.timeoutS = Math.max(1, Math.min(300, Number(v) || 30)); }, { type: 'number', min: 1, max: 300, small: true }), h('span', {}, t('web.seconds')))),
         saveToField(w, ['replace', 'dated']),
         h('p', { class: 'ed-hint' }, t('web.hint')),
       ];
@@ -324,46 +334,27 @@ function editorWindow({ id = null, copy = null, prefill = {} }, openWindow) {
         kind === 'app'
           ? field(t('open.app'), select(w.app, apps.map(a => ({ value: a.id, label: a.name })), v => { w.app = v; w.label = apps.find(a => a.id === v)?.name ?? v; sideOnly(); }))
           : field(t('open.file'), h('div', { class: 'ed-place' },
-            h('span', { class: 'ed-input ed-path' }, icon('file'), w.label || h('span', { class: 'ed-ph' }, t('editor.choose'))),
-            h('button', { class: 'sc-btn', type: 'button', onclick: async () => { const node = await pick('file', t('open.file')); if (node) { w.file = node.id; w.label = nodeLabel(node.id); redraw(); } } }, t('editor.choose')))),
+            h('span', { class: 'ctl-text ed-path' }, icon('file'), w.label || h('span', { class: 'ed-ph' }, t('editor.choose'))),
+            h('button', { class: 'ctl-btn', type: 'button', onclick: async () => { const node = await pick('file', t('open.file')); if (node) { w.file = node.id; w.label = nodeLabel(node.id); redraw(); } } }, t('editor.choose')))),
         h('p', { class: 'ed-warn' }, icon('window'), t('open.browserHint')),
       ];
     }
     // automation
     return [
       field(t('automation.file'), h('div', { class: 'ed-place' },
-        h('span', { class: 'ed-input ed-path' }, icon('automation'), w.label || h('span', { class: 'ed-ph' }, t('editor.choose'))),
-        h('button', { class: 'sc-btn', type: 'button', onclick: async () => { const node = await pick('file', t('automation.file'), ['automata']); if (node) { w.file = node.id; w.label = nodeLabel(node.id); redraw(); } } }, t('editor.choose')))),
+        h('span', { class: 'ctl-text ed-path' }, icon('automation'), w.label || h('span', { class: 'ed-ph' }, t('editor.choose'))),
+        h('button', { class: 'ctl-btn', type: 'button', onclick: async () => { const node = await pick('file', t('automation.file'), ['automata']); if (node) { w.file = node.id; w.label = nodeLabel(node.id); redraw(); } } }, t('editor.choose')))),
       h('p', { class: 'ed-warn' }, icon('window'), t('automation.hint')),
     ];
-  }
-
-  function paramField(w, name, p) {
-    const value = Object.hasOwn(w.params, name) ? w.params[name] : p.default;
-    const set = v => { if (v === '' || v === null || v === undefined) delete w.params[name]; else w.params[name] = v; };
-    let control;
-    if (p.type === 'boolean') control = input(value === true, v => set(v), { type: 'checkbox' });
-    else if (p.type === 'choice') control = select(value ?? '', [{ value: '', label: '—' }, ...p.options.map(o => ({ value: String(o.value), label: o.label }))], v => set(v === '' ? null : p.options.find(o => String(o.value) === v)?.value));
-    else if (p.type === 'number') control = input(value ?? '', v => set(v === '' ? null : Number(v)), { type: 'number', min: p.min, max: p.max });
-    else if (p.type === 'file' || p.type === 'folder') {
-      const shown = input(value ?? '', v => set(v.trim()), { placeholder: '~/…' });
-      control = h('div', { class: 'ed-place' }, shown, h('button', { class: 'sc-btn', type: 'button', onclick: async () => {
-        const node = await pick(p.type, p.label);
-        if (!node) return;
-        shown.value = nodeLabel(node.id);
-        set(shown.value);
-      } }, t('editor.choose')));
-    } else control = input(value ?? '', v => set(v), {});
-    return field(p.label, control, p.description);
   }
 
   function saveToField(w, modes) {
     const on = !!w.saveTo;
     return field(t('saveTo.title'), h('div', { class: 'ed-saveto' },
-      h('label', { class: 'ed-check' }, input(on, v => { w.saveTo = v ? { folder: 'root', label: '~', name: w.type === 'web' ? 'risposta.txt' : 'output.txt', mode: modes[0] } : null; redraw(); }, { type: 'checkbox' }), t(w.type === 'web' ? 'saveTo.web' : 'saveTo.command')),
+      check(on, v => { w.saveTo = v ? { folder: 'root', label: '~', name: w.type === 'web' ? 'risposta.txt' : 'output.txt', mode: modes[0] } : null; redraw(); }, t(w.type === 'web' ? 'saveTo.web' : 'saveTo.command')),
       on ? h('div', { class: 'ed-line' },
-        h('button', { class: 'sc-btn', type: 'button', onclick: async () => { const node = await pick('folder', t('saveTo.folder')); if (node && !fs.isRemote?.(node.id)) { w.saveTo.folder = node.id === fs.root ? 'root' : node.id; w.saveTo.label = nodeLabel(node.id); redraw(); } } }, icon('folder'), w.saveTo.label || '~'),
-        input(w.saveTo.name, v => { w.saveTo.name = v.trim(); }, { 'aria-label': t('saveTo.name') }),
+        h('button', { class: 'ctl-btn', type: 'button', onclick: async () => { const node = await pick('folder', t('saveTo.folder')); if (node && !fs.isRemote?.(node.id)) { w.saveTo.folder = node.id === fs.root ? 'root' : node.id; w.saveTo.label = nodeLabel(node.id); redraw(); } } }, icon('folder'), w.saveTo.label || '~'),
+        input(w.saveTo.name, v => { w.saveTo.name = v.trim(); }, { label: t('saveTo.name') }),
         select(w.saveTo.mode, modes.map(m => ({ value: m, label: t(`saveTo.${m}`) })), v => { w.saveTo.mode = v; }, t('saveTo.mode'))) : null));
   }
 
@@ -383,11 +374,11 @@ function editorWindow({ id = null, copy = null, prefill = {} }, openWindow) {
         field(t('when.date'), input(f.once.slice(0, 10), v => { f.once = `${v}T${f.once.slice(11)}`; sideOnly(); }, { type: 'date' })),
         field(t('when.time'), input(f.once.slice(11), v => { f.once = `${f.once.slice(0, 10)}T${v}`; sideOnly(); }, { type: 'time' }))));
     } else if (f.mode === 'cron') {
-      parts.push(field(t('when.cronField'), input(f.cron, v => { f.cron = v; sideOnly(); }, { class: 'ed-input mono', spellcheck: 'false' }), t('when.cronHint')));
+      parts.push(field(t('when.cronField'), input(f.cron, v => { f.cron = v; sideOnly(); }, { mono: true }), t('when.cronHint')));
     } else {
       const unit = f.every.unit;
       parts.push(field(t('when.every'), h('div', { class: 'ed-line' },
-        input(f.every.n, v => { f.every.n = Math.max(1, Number(v) || 1); sideOnly(); }, { type: 'number', min: 1, class: 'ed-input ed-small', 'aria-label': t('when.n') }),
+        input(f.every.n, v => { f.every.n = Math.max(1, Number(v) || 1); sideOnly(); }, { type: 'number', min: 1, small: true, label: t('when.n') }),
         select(unit, UNITS.map(u => ({ value: u, label: t(`unit.${u}`, { n: f.every.n }) })), v => { f.every.unit = v; redraw(); }, t('when.unit')))));
       if (unit === 'week' || unit === 'minute' || unit === 'hour') {
         parts.push(field(unit === 'week' ? t('when.on') : t('when.onlyDays'), h('div', { class: 'ed-days', role: 'group' }, DAYS.map(d => h('button', {
@@ -397,25 +388,25 @@ function editorWindow({ id = null, copy = null, prefill = {} }, openWindow) {
       }
       if (unit === 'minute' || unit === 'hour') {
         parts.push(field(t('when.between'), h('div', { class: 'ed-line' },
-          input(!!f.between, v => { f.between = v ? ['09:00', '18:00'] : null; redraw(); }, { type: 'checkbox', 'aria-label': t('when.between') }),
-          f.between ? input(f.between[0], v => { f.between[0] = v; sideOnly(); }, { type: 'time', 'aria-label': t('when.from') }) : null,
+          check(!!f.between, v => { f.between = v ? ['09:00', '18:00'] : null; redraw(); }, null, t('when.between')),
+          f.between ? input(f.between[0], v => { f.between[0] = v; sideOnly(); }, { type: 'time', label: t('when.from') }) : null,
           f.between ? h('span', {}, t('when.to')) : null,
-          f.between ? input(f.between[1], v => { f.between[1] = v; sideOnly(); }, { type: 'time', 'aria-label': t('when.until') }) : null)));
+          f.between ? input(f.between[1], v => { f.between[1] = v; sideOnly(); }, { type: 'time', label: t('when.until') }) : null)));
       } else {
         if (unit === 'month' || unit === 'year') {
           const m = f.monthly;
           parts.push(field(t('when.onDay'), h('div', { class: 'ed-line' },
             unit === 'year' ? select(f.month, Array.from({ length: 12 }, (_, i) => ({ value: i + 1, label: i18n.date(Date.UTC(2000, i, 1), { month: 'long', timeZone: 'UTC' }) })), v => { f.month = Number(v); sideOnly(); }, t('when.month')) : null,
             select(m.kind, [{ value: 'day', label: t('when.dayN') }, { value: 'last', label: t('when.lastDay') }, { value: 'nth', label: t('when.nthWeekday') }], v => { m.kind = v; redraw(); }, t('when.onDay')),
-            m.kind === 'day' ? input(m.day, v => { m.day = Math.max(1, Math.min(31, Number(v) || 1)); sideOnly(); }, { type: 'number', min: 1, max: 31, class: 'ed-input ed-small' }) : null,
+            m.kind === 'day' ? input(m.day, v => { m.day = Math.max(1, Math.min(31, Number(v) || 1)); sideOnly(); }, { type: 'number', min: 1, max: 31, small: true }) : null,
             m.kind === 'nth' ? select(m.nth, [1, 2, 3, 4, 5, -1].map(n => ({ value: n, label: t(`nth.${n}`) })), v => { m.nth = Number(v); sideOnly(); }, t('when.nth')) : null,
             m.kind === 'nth' ? select(m.weekday, DAYS.map(d => ({ value: d, label: t(`day.${d}`) })), v => { m.weekday = Number(v); sideOnly(); }, t('when.weekday')) : null)));
         }
         parts.push(field(t('when.at'), h('div', { class: 'ed-times' },
           f.times.map((time, i) => h('span', { class: 'ed-chip' },
-            input(time, v => { f.times[i] = v; sideOnly(); }, { type: 'time', 'aria-label': t('when.time') }),
+            input(time, v => { f.times[i] = v; sideOnly(); }, { type: 'time', label: t('when.time') }),
             f.times.length > 1 ? h('button', { class: 'sc-icon', type: 'button', 'aria-label': t('when.removeTime'), onclick: () => { f.times.splice(i, 1); redraw(); } }, icon('x')) : null)),
-          h('button', { class: 'sc-btn', type: 'button', onclick: () => { f.times.push('12:00'); redraw(); } }, icon('plus'), t('when.addTime')))));
+          h('button', { class: 'ctl-btn', type: 'button', onclick: () => { f.times.push('12:00'); redraw(); } }, icon('plus'), t('when.addTime')))));
       }
     }
     if (f.mode !== 'once') {
@@ -423,9 +414,9 @@ function editorWindow({ id = null, copy = null, prefill = {} }, openWindow) {
         field(t('when.start'), input(f.start, v => { f.start = v; sideOnly(); }, { type: 'datetime-local' })),
         field(t('when.zone'), zoneSelect(f))));
       parts.push(field(t('when.end'), h('div', { class: 'ed-line' },
-        radio('end', f.endKind, [{ value: 'never', label: t('when.never') }, { value: 'date', label: t('when.onDate') }, { value: 'count', label: t('when.after') }], v => { f.endKind = v; redraw(); }),
-        f.endKind === 'date' ? input(f.end || f.start.slice(0, 10), v => { f.end = v; sideOnly(); }, { type: 'date', 'aria-label': t('when.onDate') }) : null,
-        f.endKind === 'count' ? input(f.count, v => { f.count = Math.max(1, Number(v) || 1); sideOnly(); }, { type: 'number', min: 1, class: 'ed-input ed-small', 'aria-label': t('when.after') }) : null,
+        radio(f.endKind, [{ value: 'never', label: t('when.never') }, { value: 'date', label: t('when.onDate') }, { value: 'count', label: t('when.after') }], v => { f.endKind = v; redraw(); }),
+        f.endKind === 'date' ? input(f.end || f.start.slice(0, 10), v => { f.end = v; sideOnly(); }, { type: 'date', label: t('when.onDate') }) : null,
+        f.endKind === 'count' ? input(f.count, v => { f.count = Math.max(1, Number(v) || 1); sideOnly(); }, { type: 'number', min: 1, small: true, label: t('when.after') }) : null,
         f.endKind === 'count' ? h('span', {}, t('when.times')) : null)));
     } else parts.push(field(t('when.zone'), zoneSelect(f)));
     return parts;
@@ -445,16 +436,16 @@ function editorWindow({ id = null, copy = null, prefill = {} }, openWindow) {
     const o = draft.options;
     const browser = kindOf(draft.what.type).where === 'browser';
     const out = [
-      field(t('opt.name'), input(draft.name, v => { draft.name = v; }, { maxlength: 120 })),
-      field(t('opt.missed'), radio('missed', o.missed, [{ value: 'once', label: t('opt.missedOnce') }, { value: 'skip', label: t('opt.missedSkip') }], v => { o.missed = v; })),
-      browser ? field(t('opt.closed'), h('label', { class: 'ed-check' }, input(o.ask, v => { o.ask = v; }, { type: 'checkbox' }), t('opt.ask'))) : null,
-      field(t('opt.overlap'), radio('overlap', o.overlap, [{ value: 'skip', label: t('opt.overlapSkip') }, { value: 'queue', label: t('opt.overlapQueue') }, { value: 'parallel', label: t('opt.overlapParallel') }], v => { o.overlap = v; })),
+      field(t('opt.name'), input(draft.name, v => { draft.name = v; }, { maxLength: 120 })),
+      field(t('opt.missed'), radio(o.missed, [{ value: 'once', label: t('opt.missedOnce') }, { value: 'skip', label: t('opt.missedSkip') }], v => { o.missed = v; })),
+      browser ? field(t('opt.closed'), check(o.ask, v => { o.ask = v; }, t('opt.ask'))) : null,
+      field(t('opt.overlap'), radio(o.overlap, [{ value: 'skip', label: t('opt.overlapSkip') }, { value: 'queue', label: t('opt.overlapQueue') }, { value: 'parallel', label: t('opt.overlapParallel') }], v => { o.overlap = v; })),
       h('div', { class: 'ed-two' },
-        field(t('opt.timeout'), h('div', { class: 'ed-line' }, input(o.timeoutMin, v => { o.timeoutMin = Math.max(1, Math.min(1440, Number(v) || 60)); }, { type: 'number', min: 1, max: 1440, class: 'ed-input ed-small' }), h('span', {}, t('opt.minutes')))),
+        field(t('opt.timeout'), h('div', { class: 'ed-line' }, input(o.timeoutMin, v => { o.timeoutMin = Math.max(1, Math.min(1440, Number(v) || 60)); }, { type: 'number', min: 1, max: 1440, small: true }), h('span', {}, t('opt.minutes')))),
         field(t('opt.retries'), h('div', { class: 'ed-line' },
-          input(o.retries, v => { o.retries = Math.max(0, Math.min(5, Number(v) || 0)); }, { type: 'number', min: 0, max: 5, class: 'ed-input ed-small' }), h('span', {}, t('opt.timesEvery')),
-          input(o.retryMin, v => { o.retryMin = Math.max(1, Math.min(1440, Number(v) || 5)); }, { type: 'number', min: 1, max: 1440, class: 'ed-input ed-small' }), h('span', {}, t('opt.minutes'))))),
-      field(t('opt.notify'), radio('notify', o.notify, [{ value: 'error', label: t('opt.notifyError') }, { value: 'always', label: t('opt.notifyAlways') }, { value: 'never', label: t('opt.notifyNever') }], v => { o.notify = v; })),
+          input(o.retries, v => { o.retries = Math.max(0, Math.min(5, Number(v) || 0)); }, { type: 'number', min: 0, max: 5, small: true }), h('span', {}, t('opt.timesEvery')),
+          input(o.retryMin, v => { o.retryMin = Math.max(1, Math.min(1440, Number(v) || 5)); }, { type: 'number', min: 1, max: 1440, small: true }), h('span', {}, t('opt.minutes'))))),
+      field(t('opt.notify'), radio(o.notify, [{ value: 'error', label: t('opt.notifyError') }, { value: 'always', label: t('opt.notifyAlways') }, { value: 'never', label: t('opt.notifyNever') }], v => { o.notify = v; })),
     ];
     if (admin && !editing) {
       const users = catalog.users.filter(u => u.id !== session.user?.id);
@@ -464,7 +455,7 @@ function editorWindow({ id = null, copy = null, prefill = {} }, openWindow) {
         ...users.map(u => ({ value: u.id, label: u.name || u.username })),
       ], v => { draft.owner = v || null; redraw(); }, t('opt.runAs')), draft.owner === '*' ? t('opt.systemHint') : draft.owner ? t('opt.otherHint') : null));
     }
-    out.push(h('label', { class: 'ed-check' }, input(draft.enabled, v => { draft.enabled = v; }, { type: 'checkbox' }), t('opt.enabled')));
+    out.push(check(draft.enabled, v => { draft.enabled = v; }, t('opt.enabled')));
     return out;
   }
 

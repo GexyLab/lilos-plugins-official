@@ -20,7 +20,7 @@ export async function save(id, doc) {
 /** A new file for an automation, in ~/Automazioni; resolves with its id. */
 export async function create(doc) {
   const folder = engine().folder();
-  const base = (doc.name || t('newName')).replace(/[/\\:*?"<>|]+/g, '-').trim() || t('newName');
+  const base = fs.cleanName(doc.name || t('newName'), { portable: true }) || t('newName');
   const node = fs.create(folder.id, { type: 'file', name: fs.uniqueName(folder.id, `${base}.automata`) });
   await save(node.id, doc);
   return node.id;

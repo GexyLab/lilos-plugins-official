@@ -22,14 +22,8 @@ export const STATE_GLYPH = { ok: 'check', error: 'error', skipped: 'arrowRight',
 /** The tz of this browser: new operations follow it. */
 export const browserZone = () => Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
 
-/** '~/Documenti' for a node of the home, its connection's path for one of Rete. */
-export function nodeLabel(id) {
-  if (id === 'root' || id === fs.root) return '~';
-  const node = fs.get(id);
-  if (!node) return '';
-  const path = fs.path(id);
-  return path.startsWith(fs.home) ? `~${path.slice(fs.home.length)}` : path;
-}
+/** '~/Documenti' for a node ('root': the home), '' if it is gone. */
+export const nodeLabel = id => (id === 'root' ? '~' : fs.tildePath(id) ?? '');
 
 /** A folder as an operation keeps it: { home, label } or { mount, path, label }. */
 export function placeOf(id) {

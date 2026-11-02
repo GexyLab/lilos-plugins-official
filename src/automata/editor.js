@@ -1,27 +1,27 @@
-import { Window, h, icon, fs, automation, messageBox, comboFromEvent, shortcuts, openMenu } from '@lilos/sdk';
+import { Window, h, icon, fs, automation, messageBox, shortcuts, schedule, openMenu, toggle, checkbox, segmented, selectField, textField } from '@lilos/sdk';
 import * as system from '@lilos/system';
 import { t, i18n } from './i18n.js';
 import { engine, library, load, save, tell } from './store.js';
 import { actionOf, actionLabel, paramLabel, appName, appColor, appGlyph, stepChips, valueText, refText, brokenRefs } from './describe.js';
+import { LEGACY, canPlan, plansOf, planNew, planEdit, moveTriggers } from './plans.js';
 
 /**
  * Automata's main window: the user's automations on the left, the steps of the chosen one in the
  * middle (on, ask first, ask the values), the options of the selected step on the right.
- * Every change is saved in the automation's file right away.
+ * Every change is saved in the automation's file right away. At a time or every few minutes it
+ * starts from Pianificazione (plans.js): the launch dialog lists those operations.
  */
 const SAVE_MS = 400;
 const NODE_TYPES = ['file', 'files', 'folder'];
 const plain = v => !!v && typeof v === 'object' && !Array.isArray(v);
-const TRIGGER_GLYPHS = { time: 'calendar', every: 'redo', login: 'user', folder: 'folderOpen' };
+const TRIGGER_GLYPHS = { login: 'user', folder: 'folderOpen' };
 
-/** A trigger in a few words ('08:30 · lun mar mer', 'ogni 30 min', 'in ~/Download'). */
-function triggerText(tr) {
-  if (tr.type === 'every') return t('trigger.chipEvery', { n: tr.minutes });
-  if (tr.type === 'login') return t('trigger.chipLogin');
-  if (tr.type === 'folder') return t('trigger.chipFolder', { path: refText(tr.folder) });
-  const monday = new Date(2026, 10, 2);
-  const days = tr.days.length && tr.days.length < 7 ? tr.days.map(d => i18n.date(new Date(monday.getTime() + (d - 1) * 864e5), { weekday: 'short' })).join(' ') : t('trigger.everyDay');
-  return `${tr.at} · ${days}`;
+/** A trigger in a few words ('all’accesso', 'file in ~/Download'). */
+const triggerText = tr => (tr.type === 'login' ? t('trigger.chipLogin') : t('trigger.chipFolder', { path: refText(tr.folder) }));
+
+/** An operation of Pianificazione in a few words ('Ogni giorno alle 08:30'). */
+function planText(task) {
+  try { return schedule.describe(task.when); } catch { return task.name; }
 }
 
 export function createEditor({ args, openWindow } = {}) {
@@ -31,6 +31,7 @@ export function createEditor({ args, openWindow } = {}) {
   let selected = 0;
   let saveTimer = null;
   let error = '';
+  let plans = [];          // Pianificazione's operations that run it
 
   const side = h('nav', { class: 'au-side', 'aria-label': t('side.label') });
   const main = h('div', { class: 'au-main' });
@@ -63,11 +64,24 @@ export function createEditor({ args, openWindow } = {}) {
     doc = null;
     error = '';
     selected = 0;
+    plans = [];
     if (id) {
+      // Old triggers at a time go to Pianificazione before the file is shown (and saved again)
+      await moveTriggers(library().list().filter(e => e.id === id)).catch(() => {});
       try { doc = await load(id); } catch (err) { error = t('error.open', { error: err.message }); }
     }
     win.setTitle(doc ? `Automata — ${doc.name}` : 'Automata');
     draw();
+    loadPlans();
+  }
+
+  async function loadPlans() {
+    const id = current;
+    const list = await plansOf(id).catch(() => []);
+    if (id !== current) return;
+    plans = list;
+    if (doc) drawMain();
+    win.emit('plans');
   }
 
   // ---------- Left: the automations ----------
@@ -75,7 +89,7 @@ export function createEditor({ args, openWindow } = {}) {
   function drawSide() {
     const list = library().list();
     side.replaceChildren(
-      h('button', { class: 'au-btn rec', type: 'button', onclick: () => system.launch('automata', {}, 'recorder') }, icon('record'), t('side.record')),
+      h('button', { class: 'ctl-btn rec', type: 'button', onclick: () => system.launch('automata', {}, 'recorder') }, icon('record'), t('side.record')),
       h('h6', {}, t('side.title')),
       h('div', { class: 'au-list', role: 'listbox', 'aria-label': t('side.title') },
         list.map(e => h('button', {
@@ -84,7 +98,7 @@ export function createEditor({ args, openWindow } = {}) {
         }, icon(e.input === 'none' ? 'automation' : e.input === 'folder' ? 'folder' : 'file'),
         h('span', { class: 'au-two' }, h('span', {}, e.name), h('small', {}, [
           t('side.steps', { n: e.steps }),
-          e.launch.shortcut ? ` · ${e.launch.shortcut}` : '',
+          e.launch.shortcut ? ` · ${shortcuts.format(e.launch.shortcut)}` : '',
         ].join(''))))),
       ),
       ...(list.length ? [] : [h('p', { class: 'au-hint' }, t('side.none'))]),
@@ -102,7 +116,7 @@ export function createEditor({ args, openWindow } = {}) {
         icon('automation'),
         h('h2', {}, t('welcome.title')),
         h('p', {}, t('welcome.text')),
-        h('button', { class: 'au-btn primary', type: 'button', onclick: () => system.launch('automata', {}, 'recorder') }, icon('record'), t('side.record'))));
+        h('button', { class: 'ctl-btn primary', type: 'button', onclick: () => system.launch('automata', {}, 'recorder') }, icon('record'), t('side.record'))));
     }
     const name = h('input', { class: 'au-name', value: doc.name, 'aria-label': t('head.name'), maxlength: 80, spellcheck: 'false' });
     name.addEventListener('change', () => { doc.name = name.value.trim() || doc.name; win.setTitle(`Automata — ${doc.name}`); changed('none'); drawSide(); });
@@ -125,8 +139,8 @@ export function createEditor({ args, openWindow } = {}) {
     main.replaceChildren(
       h('header', { class: 'au-head' },
         h('div', { class: 'au-l1' }, name,
-          h('button', { class: 'au-btn', type: 'button', onclick: () => system.launch('automata', { append: current }, 'recorder') }, icon('record'), t('head.recordMore')),
-          h('button', { class: 'au-btn primary', type: 'button', onclick: () => run() }, icon('play'), t('head.run')),
+          h('button', { class: 'ctl-btn', type: 'button', onclick: () => system.launch('automata', { append: current }, 'recorder') }, icon('record'), t('head.recordMore')),
+          h('button', { class: 'ctl-btn primary', type: 'button', onclick: () => run() }, icon('play'), t('head.run')),
           more),
         desc,
         h('div', { class: 'au-chips' }, launchChips())),
@@ -135,9 +149,9 @@ export function createEditor({ args, openWindow } = {}) {
         h('span'), h('span', {}, t('col.step'))),
       stepList(),
       h('footer', { class: 'au-foot' },
-        h('button', { class: 'au-btn', type: 'button', disabled: !doc.steps.length, onclick: () => run({ from: selected }) }, icon('play'), t('foot.fromHere')),
-        h('button', { class: 'au-btn', type: 'button', disabled: !doc.steps.length, onclick: () => run({ from: selected, only: true }) }, icon('arrowRight'), t('foot.only')),
-        h('button', { class: 'au-btn', type: 'button', onclick: launchDialog }, icon('gear'), t('foot.launch')),
+        h('button', { class: 'ctl-btn', type: 'button', disabled: !doc.steps.length, onclick: () => run({ from: selected }) }, icon('play'), t('foot.fromHere')),
+        h('button', { class: 'ctl-btn', type: 'button', disabled: !doc.steps.length, onclick: () => run({ from: selected, only: true }) }, icon('arrowRight'), t('foot.only')),
+        h('button', { class: 'ctl-btn', type: 'button', onclick: launchDialog }, icon('gear'), t('foot.launch')),
         h('span', { class: 'au-grow' }),
         h('span', { class: 'au-hint' }, t('foot.hint'))),
     );
@@ -147,10 +161,15 @@ export function createEditor({ args, openWindow } = {}) {
     const chips = [];
     const input = { none: t('input.none'), files: t('input.files'), folder: t('input.folder') }[doc.input];
     chips.push(h('span', { class: 'au-chip in' }, icon(doc.input === 'none' ? 'automation' : 'file'), t('chip.input', { what: input })));
-    if (doc.launch.shortcut) chips.push(h('span', { class: 'au-chip' }, icon('keyboard'), h('kbd', {}, doc.launch.shortcut)));
+    if (doc.launch.shortcut) chips.push(h('span', { class: 'au-chip' }, icon('keyboard'), h('kbd', {}, shortcuts.format(doc.launch.shortcut))));
     if (doc.launch.menu) chips.push(h('span', { class: 'au-chip' }, icon('list'), doc.launch.ext.length ? t('chip.menuExt', { ext: doc.launch.ext.join(', ') }) : t('chip.menu')));
     if (doc.launch.command) chips.push(h('span', { class: 'au-chip' }, icon('terminal'), `automata run ${doc.launch.command}`));
-    for (const tr of doc.launch.triggers ?? []) chips.push(h('span', { class: 'au-chip auto' }, icon(TRIGGER_GLYPHS[tr.type]), triggerText(tr)));
+    for (const tr of doc.launch.triggers ?? []) {
+      if (TRIGGER_GLYPHS[tr.type]) chips.push(h('span', { class: 'au-chip auto' }, icon(TRIGGER_GLYPHS[tr.type]), triggerText(tr)));
+    }
+    for (const task of plans) {
+      chips.push(h('button', { class: `au-chip auto${task.enabled ? '' : ' off'}`, type: 'button', title: t('plan.edit'), onclick: () => planEdit(task.id) }, icon('clock'), planText(task)));
+    }
     return chips;
   }
 
@@ -278,11 +297,7 @@ export function createEditor({ args, openWindow } = {}) {
     const step = doc?.steps[selected];
     if (!step) return detail.replaceChildren(h('p', { class: 'au-hint pad' }, doc ? t('detail.none') : ''));
     const def = actionOf(step);
-    const sw = (on, title, hint, onChange) => {
-      const b = h('button', { class: `au-switch${on ? ' on' : ''}`, type: 'button', role: 'switch', 'aria-checked': String(on), 'aria-label': title });
-      b.addEventListener('click', () => onChange(!on));
-      return h('div', { class: 'au-sw-row' }, b, h('div', {}, h('b', {}, title), h('small', {}, hint)));
-    };
+    const sw = (on, title, hint, onChange) => h('div', { class: 'au-sw-row' }, toggle({ value: on, label: title, onChange }), h('div', {}, h('b', {}, title), h('small', {}, hint)));
     const parts = [
       h('div', { class: 'au-dh' }, badge(step), h('div', {}, h('b', {}, def ? actionLabel(step.action) : step.action), h('small', {}, t('detail.from', { n: selected + 1, app: appName(def?.app) })))),
       sw(step.enabled, t('detail.on'), t('detail.onHint'), v => { step.enabled = v; changed('steps'); }),
@@ -296,9 +311,10 @@ export function createEditor({ args, openWindow } = {}) {
       if (first.length) parts.push(h('div', { class: 'au-sec' }, icon('pencil'), t('detail.changed')), ...first.map(n => field(step, n, def)));
       if (rest.length) parts.push(h('div', { class: 'au-sec' }, first.length ? t('detail.others') : t('detail.fields')), ...rest.map(n => field(step, n, def)));
     }
-    const onError = h('select', { class: 'au-select', 'aria-label': t('detail.onError') },
-      ['stop', 'skip', 'ask'].map(v => h('option', { value: v, selected: step.onError === v }, t(`onError.${v}`))));
-    onError.addEventListener('change', () => { step.onError = onError.value; changed('none'); });
+    const onError = selectField({
+      value: step.onError, label: t('detail.onError'), options: ['stop', 'skip', 'ask'].map(v => ({ value: v, label: t(`onError.${v}`) })),
+      onChange: v => { step.onError = v; changed('none'); },
+    });
     parts.push(h('div', { class: 'au-sec' }, t('detail.onError')), onError);
     detail.replaceChildren(h('div', { class: 'au-db' }, parts));
   }
@@ -316,25 +332,20 @@ export function createEditor({ args, openWindow } = {}) {
         h('span', { class: 'was' }, p.type === 'secret' ? t('field.secret') : [t('field.recorded', { value: valueText(step.action, name, p, value) }), was ? ` · ${t('field.was', { value: was })}` : ''].join(''))));
     if (!automation.askable.includes(p.type)) return card;
     const modes = p.type === 'secret' ? ['ask'] : p.type === 'text' ? ['use', 'template', 'ask'] : ['use', 'ask'];
-    const seg = h('div', { class: 'au-seg', role: 'radiogroup', 'aria-label': label });
-    for (const m of modes) {
-      const b = h('button', { type: 'button', role: 'radio', 'aria-checked': String(f.mode === m), class: m === 'ask' ? 'ask' : '' },
-        m === 'use' ? t('mode.use', { value: shorten(valueText(step.action, name, p, value)) }) : t(`mode.${m}`));
-      b.addEventListener('click', () => {
+    card.append(segmented({
+      value: f.mode, label, className: 'wide',
+      options: modes.map(m => ({ value: m, class: m === 'ask' ? 'ask' : '', label: m === 'use' ? t('mode.use', { value: shorten(valueText(step.action, name, p, value)) }) : t(`mode.${m}`) })),
+      onChange: m => {
         step.fields[name] = { ...f, mode: m, ...(m === 'template' && !f.template && { template: '{nome}.{est}' }) };
         changed('steps');
-      });
-      seg.append(b);
-    }
-    card.append(seg);
+      },
+    }));
     if (f.mode === 'ask') {
-      const q = h('input', { class: 'au-input', value: f.question ?? '', placeholder: label, maxlength: 200, 'aria-label': t('field.question') });
-      q.addEventListener('change', () => { step.fields[name] = { ...step.fields[name], question: q.value.trim() }; changed('steps'); });
+      const q = textField({ value: f.question ?? '', placeholder: label, maxLength: 200, label: t('field.question'), onChange: v => { step.fields[name] = { ...step.fields[name], question: v.trim() }; changed('steps'); } });
       card.append(h('label', { class: 'au-q' }, h('span', {}, t('field.question')), q));
     }
     if (f.mode === 'template') {
-      const tpl = h('input', { class: 'au-input mono', value: f.template ?? '', maxlength: 255, 'aria-label': t('field.template') });
-      tpl.addEventListener('change', () => { step.fields[name] = { ...step.fields[name], template: tpl.value }; changed('steps'); });
+      const tpl = textField({ value: f.template ?? '', maxLength: 255, mono: true, label: t('field.template'), onChange: v => { step.fields[name] = { ...step.fields[name], template: v }; changed('steps'); } });
       const tokens = ['{nome}', '{est}', '{data}', '{ora}', '{n}', '{cartella}'].map(tok => h('button', {
         class: 'au-tok', type: 'button', title: t(`token.${tok.slice(1, -1)}`),
         onclick: () => { tpl.value += tok; tpl.dispatchEvent(new Event('change')); },
@@ -368,25 +379,24 @@ export function createEditor({ args, openWindow } = {}) {
     const many = Array.isArray(value) && value.length > 1;
     if (many) card.append(h('div', { class: 'au-hint' }, valueText(step.action, name, p, value)));
     else {
-      const select = h('select', { class: 'au-select', 'aria-label': label }, sources.map(s => h('option', { value: s.key, selected: s.key === keyOf(one) }, s.label)));
-      select.addEventListener('change', () => {
-        const s = sources.find(x => x.key === select.value);
-        // Keep the fixed one, to go back to it
-        if (fixed) step.recordedFixed = { ...step.recordedFixed, [name ?? '_file']: fixed };
-        const v = p.type === 'files' ? [s.value] : s.value;
-        if (name) step.params[name] = v; else step.file = v;
-        changed('steps');
-      });
-      card.append(select);
+      card.append(selectField({
+        value: keyOf(one), label, options: sources.map(s => ({ value: s.key, label: s.label })),
+        onChange: key => {
+          const s = sources.find(x => x.key === key);
+          // Keep the fixed one, to go back to it
+          if (fixed) step.recordedFixed = { ...step.recordedFixed, [name ?? '_file']: fixed };
+          const v = p.type === 'files' ? [s.value] : s.value;
+          if (name) step.params[name] = v; else step.file = v;
+          changed('steps');
+        },
+      }));
     }
     if (name && automation.askable.includes(p.type)) {
-      const seg = h('div', { class: 'au-seg', role: 'radiogroup', 'aria-label': label });
-      for (const m of ['use', 'ask']) {
-        const b = h('button', { type: 'button', role: 'radio', 'aria-checked': String(f.mode === m), class: m === 'ask' ? 'ask' : '' }, m === 'use' ? t('mode.useRef') : t('mode.ask'));
-        b.addEventListener('click', () => { step.fields[name] = { ...f, mode: m }; changed('steps'); });
-        seg.append(b);
-      }
-      card.append(seg);
+      card.append(segmented({
+        value: f.mode, label, className: 'wide',
+        options: [{ value: 'use', label: t('mode.useRef') }, { value: 'ask', label: t('mode.ask'), class: 'ask' }],
+        onChange: m => { step.fields[name] = { ...f, mode: m }; changed('steps'); },
+      }));
     }
     return card;
   }
@@ -401,116 +411,140 @@ export function createEditor({ args, openWindow } = {}) {
 
   // ---------- Launch, run, remove ----------
 
+  /** How it starts: what it works on, the files menu, a shortcut, the Terminal, the times, by itself. */
   function launchDialog() {
     if (!doc) return;
     const draft = structuredClone({ input: doc.input, launch: { ...doc.launch, triggers: doc.launch.triggers ?? [] } });
-    const overlay = h('div', { class: 'au-overlay', role: 'dialog', 'aria-modal': 'true', 'aria-label': t('launch.title', { name: doc.name }) });
-    const close = () => { overlay.remove(); refocus(); };
-    const inputSeg = h('div', { class: 'au-seg wide', role: 'radiogroup', 'aria-label': t('launch.input') });
-    for (const v of ['none', 'files', 'folder']) {
-      const b = h('button', { type: 'button', role: 'radio', 'aria-checked': String(draft.input === v) }, t(`input.${v}`));
-      b.addEventListener('click', () => {
-        draft.input = v;
-        // The files menu starts it on what was chosen: nothing to start it on, no entry
-        menuOn.disabled = v === 'none';
-        if (v === 'none') menuOn.checked = false;
-        inputSeg.querySelectorAll('button').forEach(x => x.setAttribute('aria-checked', String(x === b)));
-      });
-      inputSeg.append(b);
+    // Old triggers at a time not moved to Pianificazione yet (no kernel now): kept as they are
+    const legacy = draft.launch.triggers.filter(tr => LEGACY.includes(tr.type));
+    // The files menu starts it on what was chosen: nothing to start it on, no entry
+    let menu = draft.launch.menu && draft.input !== 'none';
+    const menuBox = h('div');
+    const drawMenu = () => {
+      const el = checkbox({ value: menu, disabled: draft.input === 'none', label: [h('b', {}, t('launch.menu')), h('small', {}, t('launch.menuHint'))], onChange: v => { menu = v; } });
+      el.classList.add('au-check');
+      menuBox.replaceChildren(el);
+    };
+    const inputSeg = segmented({
+      value: draft.input, label: t('launch.input'), className: 'wide',
+      options: ['none', 'files', 'folder'].map(v => ({ value: v, label: t(`input.${v}`) })),
+      onChange: v => { draft.input = v; if (v === 'none') menu = false; drawMenu(); drawPlans(); },
+    });
+    const ext = textField({ value: draft.launch.ext.join(', '), placeholder: 'jpg, png', label: t('launch.ext') });
+    const command = textField({ value: draft.launch.command, placeholder: 'web', maxLength: 40, mono: true, label: t('launch.command') });
+    const key = shortcutPicker(draft.launch.shortcut);
+    const triggers = triggerEditor(draft.launch.triggers.filter(tr => !LEGACY.includes(tr.type)));
+
+    // At a time or every few minutes: Pianificazione's operations, made and changed in its editor
+    const planBox = h('div', { class: 'au-plans' });
+    function drawPlans() {
+      if (!canPlan()) return planBox.replaceChildren(h('p', { class: 'au-hint' }, t('plan.unavailable')));
+      const ok = draft.input === 'none' && doc.input === 'none';
+      planBox.replaceChildren(
+        ...plans.map(task => h('div', { class: `au-plan${task.enabled ? '' : ' off'}` }, icon('clock'),
+          h('span', { class: 'au-two' }, h('span', {}, planText(task)),
+            h('small', {}, !task.enabled ? t('plan.paused') : task.next ? t('plan.next', { when: i18n.date(task.next, { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) }) : t('plan.done'))),
+          h('button', { class: 'au-icon', type: 'button', title: t('plan.edit'), 'aria-label': t('plan.editOf', { what: planText(task) }), onclick: () => planEdit(task.id) }, icon('pencil')))),
+        h('div', { class: 'au-l1 wrap' },
+          h('button', { class: 'ctl-btn', type: 'button', disabled: !ok, onclick: () => planNew(current, doc.name) }, icon('clock'), t('plan.new')),
+          ok ? null : h('small', { class: 'au-hint' }, t('plan.needsNone'))));
     }
-    const menuOn = h('input', { type: 'checkbox', checked: draft.launch.menu && draft.input !== 'none', disabled: draft.input === 'none' });
-    const ext = h('input', { class: 'au-input', value: draft.launch.ext.join(', '), placeholder: 'jpg, png', 'aria-label': t('launch.ext') });
-    let combo = draft.launch.shortcut;
-    const keyBtn = h('button', { class: 'au-btn key', type: 'button' }, combo || t('launch.noKey'));
-    keyBtn.addEventListener('click', () => { keyBtn.textContent = t('launch.press'); keyBtn.dataset.listening = '1'; });
-    keyBtn.addEventListener('keydown', e => {
-      if (!keyBtn.dataset.listening) return;
-      e.preventDefault();
-      e.stopPropagation();
-      if (e.key === 'Escape') { delete keyBtn.dataset.listening; keyBtn.textContent = combo || t('launch.noKey'); return; }
-      if (e.key === 'Backspace' || e.key === 'Delete') { combo = ''; delete keyBtn.dataset.listening; keyBtn.textContent = t('launch.noKey'); return; }
-      const c = comboFromEvent(e);
-      if (!c || !/^(Ctrl|Alt)\+/.test(c)) return;
-      const owner = shortcuts.owner?.(c, `automation.${current}`);
-      const problem = shortcuts.validate?.(c, `automation.${current}`) || (owner ? t('launch.keyTaken', { name: owner.label ?? owner }) : '');
-      if (problem) { keyBtn.textContent = problem; return; }
-      combo = c;
-      delete keyBtn.dataset.listening;
-      keyBtn.textContent = c;
-    });
-    const command = h('input', { class: 'au-input mono', value: draft.launch.command, placeholder: 'web', maxlength: 40, 'aria-label': t('launch.command') });
-    const triggers = triggerEditor(draft.launch.triggers);
-    const fail = h('p', { class: 'au-error', role: 'alert' });
-    const ok = h('button', { class: 'au-btn primary', type: 'button' }, t('action.save'));
-    ok.addEventListener('click', () => {
-      const exts = ext.value.split(/[\s,;]+/).map(x => x.replace(/^\./, '').toLowerCase()).filter(Boolean);
-      if (exts.some(x => !/^[a-z0-9]{1,10}$/.test(x))) return void (fail.textContent = t('launch.badExt'));
-      const cmd = command.value.trim().toLowerCase();
-      if (cmd && !/^[a-z][\w.-]{0,39}$/.test(cmd)) return void (fail.textContent = t('launch.badCommand'));
-      const taken = library().list().find(e => e.id !== current && cmd && e.launch.command === cmd);
-      if (taken) return void (fail.textContent = t('launch.commandTaken', { name: taken.name }));
-      const list = triggers.value();
-      if (list.some(tr => tr.type === 'folder' && !tr.folder)) return void (fail.textContent = t('trigger.noFolder'));
-      if (list.some(tr => tr.type !== 'folder') && draft.input !== 'none') return void (fail.textContent = t('trigger.needsNone'));
-      doc.input = draft.input;
-      doc.launch = { menu: menuOn.checked && draft.input !== 'none', ext: exts, shortcut: combo, command: cmd, triggers: list };
-      close();
-      changed();
-    });
-    overlay.append(h('div', { class: 'au-dialog' },
-      h('h3', {}, t('launch.title', { name: doc.name })),
+    drawMenu();
+    drawPlans();
+    const offPlans = win.on('plans', drawPlans);
+
+    const content = h('div', { class: 'au-launch' },
       h('div', { class: 'au-opt' }, h('div', { class: 'au-sec' }, t('launch.input')), inputSeg, h('p', { class: 'au-hint' }, t('launch.inputHint'))),
-      h('label', { class: 'au-check' }, menuOn, h('span', {}, h('b', {}, t('launch.menu')), h('small', {}, t('launch.menuHint')))),
+      menuBox,
       h('label', { class: 'au-q' }, h('span', {}, t('launch.ext')), ext),
-      h('div', { class: 'au-q' }, h('span', {}, t('launch.shortcut')), keyBtn, h('small', { class: 'au-hint' }, t('launch.shortcutHint'))),
+      h('div', { class: 'au-q' }, h('span', {}, t('launch.shortcut')), key.el, h('small', { class: 'au-hint' }, t('launch.shortcutHint'))),
       h('label', { class: 'au-q' }, h('span', {}, t('launch.command')), command, h('small', { class: 'au-hint' }, t('launch.commandHint'))),
-      h('div', { class: 'au-opt' }, h('div', { class: 'au-sec' }, t('trigger.title')), triggers.el, h('p', { class: 'au-hint' }, t('trigger.hint'))),
-      fail,
-      h('div', { class: 'au-dfoot' }, h('button', { class: 'au-btn', type: 'button', onclick: close }, t('action.cancel')), ok)));
-    overlay.addEventListener('keydown', e => { if (e.key === 'Escape' && !keyBtn.dataset.listening) { e.stopPropagation(); close(); } });
-    root.append(overlay);
-    overlay.querySelector('button[aria-checked="true"]')?.focus();
+      h('div', { class: 'au-opt' }, h('div', { class: 'au-sec' }, t('plan.title')), planBox, h('p', { class: 'au-hint' }, t('plan.hint'))),
+      h('div', { class: 'au-opt' }, h('div', { class: 'au-sec' }, t('trigger.title')), triggers.el, h('p', { class: 'au-hint' }, t('trigger.hint'))));
+
+    let next = null;
+    messageBox(win, {
+      title: t('launch.title', { name: doc.name }), content, width: 500,
+      buttons: ['cancel', { value: 'save', label: t('action.save'), primary: true }],
+      validate: () => {
+        const exts = ext.value.split(/[\s,;]+/).map(x => x.replace(/^\./, '').toLowerCase()).filter(Boolean);
+        if (exts.some(x => !/^[a-z0-9]{1,10}$/.test(x))) return t('launch.badExt');
+        const cmd = command.value.trim().toLowerCase();
+        if (cmd && !/^[a-z][\w.-]{0,39}$/.test(cmd)) return t('launch.badCommand');
+        const taken = library().list().find(e => e.id !== current && cmd && e.launch.command === cmd);
+        if (taken) return t('launch.commandTaken', { name: taken.name });
+        const list = triggers.value();
+        if (list.some(tr => tr.type === 'folder' && !tr.folder)) return t('trigger.noFolder');
+        if ([...legacy, ...list].some(tr => tr.type !== 'folder') && draft.input !== 'none') return t('trigger.needsNone');
+        next = { input: draft.input, launch: { menu: menu && draft.input !== 'none', ext: exts, shortcut: key.value(), command: cmd, triggers: [...legacy, ...list] } };
+        return true;
+      },
+    }).then(answer => {
+      key.stop();
+      offPlans();
+      if (answer === 'save' && next && doc) {
+        doc.input = next.input;
+        doc.launch = next.launch;
+        changed();
+      }
+      refocus();
+    });
+  }
+
+  /** The shortcut of the launch dialog: click, then press the keys (Esc gives up, Del takes it away). */
+  function shortcutPicker(initial) {
+    let combo = initial;
+    let stop = null;
+    const btn = h('button', { class: 'ctl-btn au-key', type: 'button' });
+    const show = text => { btn.textContent = text ?? (combo ? shortcuts.format(combo) : t('launch.noKey')); };
+    const outside = e => { if (e.target !== btn) end(); };
+    function end() {
+      stop?.();
+      stop = null;
+      btn.classList.remove('listening');
+      removeEventListener('pointerdown', outside, true);
+      show();
+    }
+    btn.addEventListener('click', () => {
+      if (stop) return;
+      btn.classList.add('listening');
+      show(t('launch.press'));
+      addEventListener('pointerdown', outside, true);
+      stop = shortcuts.record({
+        onPreview: held => show(held ? `${held} …` : t('launch.press')),
+        onCancel: end,
+        onCombo: c => {
+          if (!btn.isConnected) return end();
+          if (c === 'Backspace' || c === 'Delete') { combo = ''; return end(); }
+          if (!/^(Ctrl|Alt)\+/.test(c)) return show(t('launch.press'));
+          const owner = shortcuts.owner(c, `automation.${current}`);
+          const problem = shortcuts.validate(c, `automation.${current}`) || (owner ? t('launch.keyTaken', { name: owner.label }) : '');
+          if (problem) return show(problem);
+          combo = c;
+          end();
+        },
+      });
+    });
+    show();
+    return { el: btn, value: () => combo, stop: end };
   }
 
   /**
-   * The triggers of the launch dialog: one row per trigger, added from four buttons. Returns
-   * { el, value() → triggers as document.js wants them }.
+   * The triggers of the launch dialog: one row per trigger, added from two buttons (at sign-in,
+   * files arriving in a folder). Returns { el, value() → triggers as lilOS's document.js wants them }.
    */
   function triggerEditor(initial) {
-    const rows = initial.map(tr => ({ ...tr, days: [...(tr.days ?? [])] }));
+    const rows = initial.map(tr => ({ ...tr }));
     const el = h('div', { class: 'au-triggers' });
-    const monday = new Date(2026, 10, 2);   // a Monday: the names of the days in the system's language
-    const dayName = (d, style) => i18n.date(new Date(monday.getTime() + (d - 1) * 864e5), { weekday: style });
     const draw = () => {
       el.replaceChildren(...rows.map((tr, i) => {
         const remove = h('button', { class: 'au-icon', type: 'button', title: t('trigger.remove'), 'aria-label': t('trigger.remove'), onclick: () => { rows.splice(i, 1); draw(); } }, icon('x'));
         let body;
-        if (tr.type === 'time') {
-          const at = h('input', { class: 'au-input', type: 'time', value: tr.at ?? '08:00', 'aria-label': t('trigger.at') });
-          at.addEventListener('change', () => { tr.at = at.value; });
-          tr.at = at.value;
-          const days = h('div', { class: 'au-days', role: 'group', 'aria-label': t('trigger.days') }, [1, 2, 3, 4, 5, 6, 7].map(d => {
-            const b = h('button', { type: 'button', class: 'au-day', 'aria-pressed': String(tr.days.includes(d)), title: dayName(d, 'long'), 'aria-label': dayName(d, 'long') }, dayName(d, 'narrow'));
-            b.addEventListener('click', () => {
-              tr.days = tr.days.includes(d) ? tr.days.filter(x => x !== d) : [...tr.days, d].sort();
-              b.setAttribute('aria-pressed', String(tr.days.includes(d)));
-            });
-            return b;
-          }));
-          const catchUp = h('input', { type: 'checkbox', checked: tr.catchUp === true });
-          catchUp.addEventListener('change', () => { tr.catchUp = catchUp.checked; });
-          body = [h('div', { class: 'au-l1' }, icon('calendar'), h('b', {}, t('trigger.time')), at, days),
-            h('label', { class: 'au-check small' }, catchUp, h('span', {}, t('trigger.catchUp')))];
-        } else if (tr.type === 'every') {
-          const minutes = h('input', { class: 'au-input num', type: 'number', min: 5, max: 1440, value: tr.minutes ?? 30, 'aria-label': t('trigger.minutes') });
-          minutes.addEventListener('change', () => { tr.minutes = Math.max(5, Math.min(1440, Math.round(Number(minutes.value) || 30))); minutes.value = tr.minutes; });
-          tr.minutes ??= 30;
-          body = [h('div', { class: 'au-l1' }, icon(TRIGGER_GLYPHS.every), h('b', {}, t('trigger.every')), minutes, h('span', {}, t('trigger.minutesUnit')))];
-        } else if (tr.type === 'login') {
+        if (tr.type === 'login') {
           body = [h('div', { class: 'au-l1' }, icon('user'), h('b', {}, t('trigger.login')))];
         } else {
           const where = h('code', { class: 'au-where' }, tr.folder ? refText(tr.folder) : t('trigger.noFolderYet'));
-          const pick = h('button', { class: 'au-btn', type: 'button' }, t('trigger.chooseFolder'));
+          const pick = h('button', { class: 'ctl-btn', type: 'button' }, t('trigger.chooseFolder'));
           pick.addEventListener('click', async () => {
             const node = await system.pickFile?.(openWindow, { kind: 'folder', title: t('trigger.chooseFolder') });
             if (!node) return;
@@ -522,16 +556,15 @@ export function createEditor({ args, openWindow } = {}) {
         }
         return h('div', { class: 'au-trigger' }, h('div', { class: 'au-tbody' }, body), remove);
       }),
-      h('div', { class: 'au-l1 wrap' }, ['time', 'every', 'login', 'folder'].map(type => h('button', {
-        class: 'au-btn', type: 'button', disabled: rows.length >= 10,
-        onclick: () => { rows.push(type === 'time' ? { type, at: '08:00', days: [], catchUp: false } : type === 'every' ? { type, minutes: 30 } : { type }); draw(); },
+      h('div', { class: 'au-l1 wrap' }, ['login', 'folder'].map(type => h('button', {
+        class: 'ctl-btn', type: 'button', disabled: rows.length >= 10,
+        onclick: () => { rows.push({ type }); draw(); },
       }, icon('plus'), t(`trigger.add.${type}`)))));
     };
     draw();
     return {
       el,
-      value: () => rows.map(tr => (tr.type === 'time' ? { type: 'time', at: tr.at, days: tr.days, catchUp: !!tr.catchUp }
-        : tr.type === 'every' ? { type: 'every', minutes: tr.minutes } : tr.type === 'login' ? { type: 'login' } : { type: 'folder', folder: tr.folder ?? null })),
+      value: () => rows.map(tr => (tr.type === 'login' ? { type: 'login' } : { type: 'folder', folder: tr.folder ?? null })),
     };
   }
 
@@ -560,9 +593,13 @@ export function createEditor({ args, openWindow } = {}) {
 
   library().on('change', drawSide);
   const offActions = automation.on('actions', () => { if (doc) drawMain(); });
-  win.on('destroy', () => { library().off('change', drawSide); offActions(); });
+  // Pianificazione's operations changed (here, in its editor, in another page): the chips again
+  const offPlans = canPlan() ? schedule.on('change', () => { if (current) loadPlans(); }) : () => {};
+  win.on('destroy', () => { library().off('change', drawSide); offActions(); offPlans(); });
   win.on('launch', a => { if (a?.file) open(a.file); });
   win.getState = () => (current ? { file: current } : {});
-  library().ready().then(() => open(args?.file && fs.exists(args.file) ? args.file : library().list()[0]?.id ?? null));
+  library().ready()
+    .then(() => moveTriggers().catch(() => {}))
+    .then(() => open(args?.file && fs.exists(args.file) ? args.file : library().list()[0]?.id ?? null));
   return win;
 }
