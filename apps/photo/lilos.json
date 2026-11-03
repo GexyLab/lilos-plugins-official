@@ -1,6 +1,6 @@
 {
   "id": "photo",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "kind": "local",
   "name": "Photo",
   "description": "View and touch up images: drawing, text, cropping, resizing and conversion to PNG, JPEG or WebP.",
@@ -15,6 +15,7 @@
   },
   "sdk": "2",
   "system": true,
+  "lilos": ">=1.22.0",
   "entrypoints": {
     "main": {
       "kind": "window",
@@ -206,12 +207,12 @@
   },
   "entry": "dist/index.js",
   "styles": [
-    "dist/index-DqF2jp_v.css"
+    "dist/index-CxJk38Uc.css"
   ],
   "locales": "locales.json",
   "files": {
-    "dist/index-DqF2jp_v.css": "sha256-oS0F1fKhzl/FkJd+jrJN0LQYEA6u+UPHsDthL9/3zmE=",
-    "dist/index.js": "sha256-E5kTWKycuKGtADqPNX4qyQNboR0lb+K3PKVsPZrEspM=",
-    "locales.json": "sha256-lD6bCQYpu1Zi7hBsvf7cV++xKNGXKWmXwwhX1APHuow="
+    "dist/index-CxJk38Uc.css": "sha256-ubGAVhQkMJEJ8t+QOPdNVbPYGiO3uW9LVwTNOnEBZg4=",
+    "dist/index.js": "sha256-9TJiEue6io3BTF38cuRlE6jP62OrDvugIEoKyHl2I5M=",
+    "locales.json": "sha256-JUClFSqz6u9tB0wOjLVXsliPV4b8mO7HpfqO1Qb+E6g="
   }
 }

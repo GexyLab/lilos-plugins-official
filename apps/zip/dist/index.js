@@ -610,29 +610,22 @@ function Se(e, t, { folder: n = !1 } = {}) {
 	for (let e = 2; t.has(a.toLowerCase()); e++) a = `${i} ${e}${r ? `.${r}` : ""}`;
 	return t.add(a.toLowerCase()), a;
 }
-async function Ce(e) {
-	let t = (await e.files.info("~")).path;
-	return {
-		ref: (e) => e === t ? "~" : e.startsWith(`${t}/`) ? `~${e.slice(t.length)}` : Q("outside", e),
-		parent: (e) => e.slice(0, e.lastIndexOf("/")) || "~"
-	};
-}
-var we = async (e, t) => new Set((await e.files.list(t)).map((e) => e.name.toLowerCase())), Te = async (e, t) => new Uint8Array(await (await e.files.read(t, { bytes: !0 })).arrayBuffer()), Ee = (e) => new Date(Math.min(Math.max(Number.isFinite(e) ? e : Date.now(), Date.UTC(1980, 0, 2)), Date.UTC(2099, 11, 30)));
+var Ce = (e) => e.ref ?? Q("outside", e.path), we = (e) => e.slice(0, e.lastIndexOf("/")) || "~", Te = async (e, t) => new Uint8Array(await (await e.files.read(t, { bytes: !0 })).arrayBuffer()), Ee = (e) => new Date(Math.min(Math.max(Number.isFinite(e) ? e : Date.now(), Date.UTC(1980, 0, 2)), Date.UTC(2099, 11, 30)));
 async function De(e, t, { archiveName: n = "Archive", onProgress: r } = {}) {
-	let { ref: i, parent: a } = await Ce(e), o = (await Promise.all(t.map((t) => e.files.info(t)))).map((e) => ({
+	let i = (await Promise.all(t.map((t) => e.files.info(t)))).map((e) => ({
 		...e,
-		ref: i(e.path)
+		ref: Ce(e)
 	}));
-	if (!o.length) throw Q("nothing");
-	let s = a(o[0].ref), c = {}, l = 0, u = 0, d = async (t, n, i, a) => {
+	if (!i.length) throw Q("nothing");
+	let a = we(i[0].ref), o = {}, s = 0, c = 0, l = async (t, n, i, a) => {
 		if (i.type === "folder") {
 			let r = t[n] = {};
-			for (let t of await e.files.list(a)) (t.type === "file" || t.type === "folder") && await d(r, t.name, t, `${a}/${t.name}`);
+			for (let t of await e.files.list(a)) (t.type === "file" || t.type === "folder") && await l(r, t.name, t, `${a}/${t.name}`);
 		} else if (i.type === "file") {
-			if (++u > 1e4) throw Q("tooMany", ge);
-			if (l += i.size ?? 0, l > 268435456) throw Q("tooBig", he);
+			if (++c > 1e4) throw Q("tooMany", ge);
+			if (s += i.size ?? 0, s > 268435456) throw Q("tooBig", he);
 			r?.({
-				count: u,
+				count: c,
 				name: n
 			}), t[n] = [await Te(e, a).catch((e) => {
 				throw Q("read", `${n}: ${e?.message ?? e}`);
@@ -641,16 +634,17 @@ async function De(e, t, { archiveName: n = "Archive", onProgress: r } = {}) {
 				level: _e.has(ye(n).toLowerCase()) ? 0 : 6
 			}];
 		}
-	}, f = /* @__PURE__ */ new Set();
-	for (let e of o) await d(c, Se(e.name, f, { folder: e.type === "folder" }), e, e.ref);
-	let p = fe(c);
-	if (p.byteLength > 10485760) throw Q("resultTooBig", p.byteLength);
-	let m = o[0], h = Se(`${o.length === 1 ? m.type === "folder" ? m.name : be(m.name) : n}.zip`, await we(e, s)), g = `${s}/${h}`;
-	return await e.files.write(g, p), {
-		name: h,
-		ref: g,
-		count: u,
-		size: p.byteLength
+	}, u = /* @__PURE__ */ new Set();
+	for (let e of i) await l(o, Se(e.name, u, { folder: e.type === "folder" }), e, e.ref);
+	let d = fe(o);
+	if (d.byteLength > 10485760) throw Q("resultTooBig", d.byteLength);
+	let f = i[0], p = i.length === 1 ? f.type === "folder" ? f.name : be(f.name) : n, m = await e.files.write(`${a}/${p}.zip`, d, { unique: !0 });
+	return {
+		name: m.name,
+		ref: m.ref,
+		id: m.id,
+		count: c,
+		size: d.byteLength
 	};
 }
 function Oe(e) {
@@ -715,90 +709,148 @@ function Ae(e) {
 	};
 }
 async function je(e, t, { onProgress: n } = {}) {
-	let { ref: r, parent: i } = await Ce(e), a = await e.files.info(t);
-	if (a.type !== "file") throw Q("notZip", a.name);
-	let o = await Te(e, t).catch((e) => {
-		throw Q("read", `${a.name}: ${e?.message ?? e}`);
-	}), { entries: s, skipped: c } = Ae(o);
-	if (!s.length) throw Q(c.length ? "skippedAll" : "empty", a.name);
-	let l = new Set(s.map((e) => e.path[0].toLowerCase())).size === 1 && s.every((e) => e.path.length > 1 || e.folder), u = i(r(a.path)), d = Se(xe(l ? s[0].path[0] : be(a.name)) || "Archive", await we(e, u), { folder: !0 }), f = `${u}/${d}`, p = /* @__PURE__ */ new Map(), m = /* @__PURE__ */ new Map(), h = (e) => m.get(e) ?? m.set(e, /* @__PURE__ */ new Set()).get(e), g = (e) => {
-		let t = f;
+	let r = await e.files.info(t);
+	if (r.type !== "file") throw Q("notZip", r.name);
+	let i = await Te(e, t).catch((e) => {
+		throw Q("read", `${r.name}: ${e?.message ?? e}`);
+	}), { entries: a, skipped: o } = Ae(i);
+	if (!a.length) throw Q(o.length ? "skippedAll" : "empty", r.name);
+	let s = new Set(a.map((e) => e.path[0].toLowerCase())).size === 1 && a.every((e) => e.path.length > 1 || e.folder), c = we(Ce(r)), l = await e.files.mkdir(`${c}/${xe(s ? a[0].path[0] : be(r.name)) || "Archive"}`, { unique: !0 }), u = l.ref, d = /* @__PURE__ */ new Map(), f = /* @__PURE__ */ new Map(), p = (e) => f.get(e) ?? f.set(e, /* @__PURE__ */ new Set()).get(e), m = (e) => {
+		let t = u;
 		for (let n = 0; n < e.length; n++) {
 			let r = e.slice(0, n + 1).join("/").toLowerCase();
-			p.has(r) || p.set(r, `${t}/${Se(e[n], h(t), { folder: !0 })}`), t = p.get(r);
+			d.has(r) || d.set(r, `${t}/${Se(e[n], p(t), { folder: !0 })}`), t = d.get(r);
 		}
 		return t;
-	}, _ = /* @__PURE__ */ new Map();
-	for (let e of s) {
-		let t = l ? e.path.slice(1) : e.path;
-		if (e.folder) g(t);
+	}, h = /* @__PURE__ */ new Map();
+	for (let e of a) {
+		let t = s ? e.path.slice(1) : e.path;
+		if (e.folder) m(t);
 		else {
-			let n = g(t.slice(0, -1));
-			_.set(e.raw, `${n}/${Se(t.at(-1), h(n))}`);
+			let n = m(t.slice(0, -1));
+			h.set(e.raw, `${n}/${Se(t.at(-1), p(n))}`);
 		}
 	}
-	for (let t of [f, ...p.values()]) await e.files.mkdir(t);
-	let v = 0, y = pe(o, { filter: (e) => _.has(e.name) });
-	for (let [t, r] of Object.entries(y)) {
-		let i = _.get(t);
+	for (let t of d.values()) await e.files.mkdir(t);
+	let g = 0, _ = pe(i, { filter: (e) => h.has(e.name) });
+	for (let [t, r] of Object.entries(_)) {
+		let i = h.get(t);
 		n?.({
-			count: v + 1,
+			count: g + 1,
 			name: i.slice(i.lastIndexOf("/") + 1)
-		}), await e.files.write(i, r), v++;
+		}), await e.files.write(i, r), g++;
 	}
 	return {
-		name: d,
-		ref: f,
-		count: v,
-		skipped: c
+		name: l.name,
+		ref: u,
+		id: l.id,
+		count: g,
+		skipped: o
 	};
 }
-// src/zip/ui.js
+// src/shared/sandbox/dom.js
 function $(e, t = {}, ...n) {
 	let r = document.createElement(e);
 	for (let [e, n] of Object.entries(t ?? {})) n != null && n !== !1 && (e === "class" ? r.className = n : e.startsWith("on") && typeof n == "function" ? r.addEventListener(e.slice(2), n) : e in r && typeof n != "string" ? r[e] = n : r.setAttribute(e, n === !0 ? "" : String(n)));
-	return r.append(...n.flat().filter((e) => e != null && e !== !1).map((e) => e instanceof Node ? e : document.createTextNode(String(e)))), r;
+	return r.append(...n.flat(Infinity).filter((e) => e != null && e !== !1).map((e) => e instanceof Node ? e : document.createTextNode(String(e)))), r;
 }
-var Me = "\n  :host, body { margin: 0; }\n  .zp { box-sizing: border-box; height: 100%; overflow: hidden; padding: 18px 20px; display: flex; flex-direction: column; gap: 12px; color: var(--text); font: 13px/1.45 var(--font, system-ui); }\n  .zp * { box-sizing: border-box; }\n  .zp h1 { font-size: 15px; font-weight: 600; margin: 0; overflow-wrap: anywhere; }\n  .zp p { margin: 0; color: var(--dim); }\n  .zp .hint { font-size: 12px; }\n  .zp .list { flex: 1; min-height: 60px; overflow: auto; list-style: none; margin: 0; padding: 0; border: 1px solid var(--border); border-radius: var(--radius-sm, 6px); }\n  .zp .list li { display: flex; align-items: center; gap: 10px; padding: 5px 10px; }\n  .zp .list li + li { border-top: 1px solid var(--border); }\n  .zp .list .name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }\n  .zp .list .folder .name { color: var(--dim); }\n  .zp .list .size { color: var(--dim); font-size: 12px; font-variant-numeric: tabular-nums; white-space: nowrap; }\n  .zp .list .more { color: var(--dim); font-style: italic; }\n  .zp .empty { padding: 12px 10px; color: var(--dim); border: 1px solid var(--border); border-radius: var(--radius-sm, 6px); }\n  .zp .row { display: flex; gap: 8px; align-items: center; justify-content: flex-end; flex-wrap: wrap; }\n  .zp button { font: inherit; padding: 6px 14px; border-radius: var(--radius-sm, 6px); border: 1px solid var(--border); background: var(--surface); color: var(--text); cursor: pointer; }\n  .zp button:hover:not(:disabled) { background: var(--hover); }\n  .zp button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }\n  .zp button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }\n  .zp button.primary:hover:not(:disabled) { filter: brightness(1.08); background: var(--accent); }\n  .zp button:disabled { opacity: .55; cursor: default; }\n  .zp [aria-busy=\"true\"] { cursor: progress; }\n  .zp .error { color: var(--danger, #d64545); }\n  .zp .warn { padding: 8px 10px; border-radius: var(--radius-sm, 6px); background: color-mix(in srgb, #e0a030 14%, transparent); color: var(--text); }\n  .zp .ok { color: var(--text); }\n", Ne = 500;
-function Pe(e, t) {
-	let n = [
-		"B",
-		"KB",
-		"MB",
-		"GB"
-	], r = 0;
-	for (; t >= 1024 && r < n.length - 1;) t /= 1024, r++;
-	return `${e.number(t, { maximumFractionDigits: r && t < 10 ? 1 : 0 })} ${n[r]}`;
+function Me(e, { gap: t = 12, overflow: n = "hidden" } = {}) {
+	let r = `.${e}`;
+	return `
+  :host, body { margin: 0; }
+  ${r} { box-sizing: border-box; height: 100%; overflow: ${n}; padding: 18px 20px; display: flex; flex-direction: column; gap: ${t}px; color: var(--text); font: 13px/1.45 var(--font, system-ui); }
+  ${r} * { box-sizing: border-box; }
+  ${r} h1 { font-size: 15px; font-weight: 600; margin: 0; overflow-wrap: anywhere; }
+  ${r} p { margin: 0; color: var(--dim); }
+  ${r} .hint { font-size: 12px; color: var(--dim); }
+  ${r} .row { display: flex; gap: 8px; align-items: center; justify-content: flex-end; flex-wrap: wrap; }
+  ${r} button { font: inherit; padding: 6px 14px; border-radius: var(--radius-sm, 6px); border: 1px solid var(--border); background: var(--surface); color: var(--text); cursor: pointer; }
+  ${r} button:hover:not(:disabled) { background: var(--hover); }
+  ${r} button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  ${r} button.primary:hover:not(:disabled) { filter: brightness(1.08); background: var(--accent); }
+  ${r} button:disabled { opacity: .55; cursor: default; }
+  ${r} input, ${r} select { font: inherit; color: var(--text); background: var(--field-bg, var(--surface)); border: 1px solid var(--border); border-radius: var(--radius-sm, 6px); padding: 7px 9px; }
+  ${r} button:focus-visible, ${r} input:focus-visible, ${r} select:focus-visible, ${r} summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+  ${r} [aria-busy="true"] { cursor: progress; }
+  ${r} .error { color: var(--danger, #d64545); }
+  ${r} .warn { padding: 8px 10px; border-radius: var(--radius-sm, 6px); background: color-mix(in srgb, #e0a030 14%, transparent); color: var(--text); }
+  ${r} ul { list-style: none; margin: 0; padding: 0; border: 1px solid var(--border); border-radius: var(--radius-sm, 6px); }
+  ${r} li { display: flex; align-items: center; gap: 10px; padding: 6px 10px; }
+  ${r} li + li { border-top: 1px solid var(--border); }
+  ${r} li .name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  ${r} .empty { padding: 12px 10px; color: var(--dim); }
+`;
 }
-function Fe(e, t) {
-	let n = (t, n) => e.locale.i18n.t(t, n), r = t?.message, i = typeof t?.detail == "number" ? Pe(e.locale.i18n, t.detail) : String(t?.detail ?? "");
-	return [
-		"nothing",
-		"tooMany",
-		"tooBig",
-		"resultTooBig",
-		"read",
-		"corrupt",
-		"empty",
-		"skippedAll",
-		"notZip",
-		"outside"
-	].includes(r) ? n(`error.${r}`, {
-		detail: i,
-		limit: Pe(e.locale.i18n, me),
-		max: t.detail
-	}) : n("error.generic", { error: r ?? String(t) });
-}
-var Ie = async (e, t) => (await e.files.info(t)).id;
-async function Le(e, t, n, r) {
+// src/zip/ui.js
+var Ne = Me("zp") + "\n  .zp .list { flex: 1; min-height: 60px; overflow: auto; }\n  .zp .list li { padding: 5px 10px; }\n  .zp .list .folder .name { color: var(--dim); }\n  .zp .list .size { color: var(--dim); font-size: 12px; font-variant-numeric: tabular-nums; white-space: nowrap; }\n  .zp .list .more { color: var(--dim); font-style: italic; }\n  .zp .empty { border: 1px solid var(--border); border-radius: var(--radius-sm, 6px); }\n  .zp .ok { color: var(--text); }\n", Pe = (e) => e?.file ?? (Array.isArray(e?.files) ? e.files[0] : null) ?? null;
+async function Fe(e, t, n) {
 	try {
-		e.automation && await e.automation.record(t, {
-			params: n,
-			result: await Ie(e, r)
-		});
+		await e.automation?.record(t, n);
 	} catch {}
 }
-function Re(e, t) {
+var Ie = (e, t) => e.on("locale", t);
+function Le(e, t, { style: n, className: r }, i) {
+	n && t.append($("style", {}, n));
+	let a = $("div", { class: r });
+	t.append(a);
+	let o = () => i(a);
+	return {
+		box: a,
+		redraw: o,
+		off: Ie(e, o)
+	};
+}
+function Re(e, t, n, r = {}) {
+	let i = t?.message, a = Array.isArray(n) ? n.includes(i) ? `error.${i}` : null : n && Object.hasOwn(n, i) ? n[i] : null;
+	return a ? e(a, {
+		detail: String(t?.detail ?? ""),
+		...r
+	}) : e("error.generic", { error: i ?? String(t) });
+}
+function ze(e, { automation: t = {}, actions: n = {}, onError: r = null, other: i = null, explainError: a = (e) => e?.message ?? String(e) } = {}) {
+	e.handle(async (e) => {
+		if (e?.automation) {
+			let { action: n, params: r } = e.automation, i = typeof n == "string" && Object.hasOwn(t, n) ? t[n] : null;
+			if (!i) throw Error("unknown");
+			try {
+				return await i(r && typeof r == "object" ? r : {}, e);
+			} catch (e) {
+				throw e?.message === "unknown" ? e : Error(a(e));
+			}
+		}
+		let o = typeof e?.action == "string" && Object.hasOwn(n, e.action) ? n[e.action] : null;
+		if (o) try {
+			return await o(Array.isArray(e.files) ? e.files : [], e);
+		} catch (t) {
+			if (!r) throw t;
+			return r(t, e);
+		}
+		if (i) return i(e);
+		throw Error("unknown");
+	});
+}
+// src/zip/ZipApp.js
+var Be = 500, Ve = [
+	"nothing",
+	"tooMany",
+	"tooBig",
+	"resultTooBig",
+	"read",
+	"corrupt",
+	"empty",
+	"skippedAll",
+	"notZip",
+	"outside"
+];
+function He(e, t) {
+	let n = (t, n) => e.locale.i18n.t(t, n), r = (t) => e.locale.formatBytes(t);
+	return Re(n, t, Ve, {
+		...typeof t?.detail == "number" && { detail: r(t.detail) },
+		limit: r(me),
+		max: t?.detail
+	});
+}
+function Ue(e, t) {
 	if (!t.length) return "";
 	let n = t.slice(0, 3).map((e) => e.name).join(", ");
 	return e("skipped", {
@@ -806,138 +858,141 @@ function Re(e, t) {
 		names: t.length > 3 ? `${n}, …` : n
 	});
 }
-async function ze({ lilos: e, root: t, args: n }) {
-	let r = (t, n) => e.locale.i18n.t(t, n);
-	t.append($("style", {}, Me));
-	let i = $("div", { class: "zp" });
-	t.append(i);
-	let a = null, o = null, s = null, c = "", l = null, u = !1, d = (e) => {
-		a = e?.file ?? (Array.isArray(e?.files) ? e.files[0] : null) ?? null, o = s = l = null, c = "";
-	}, f = () => {
-		if (!a) return e.window.setTitle("Zip"), i.replaceChildren($("h1", {}, "Zip"), $("p", {}, r("main.intro")), $("p", { class: "hint" }, r("main.limits", { limit: Pe(e.locale.i18n, me) })));
-		if (e.window.setTitle(o?.name ?? "Zip"), c) return i.replaceChildren($("h1", {}, o?.name ?? ""), $("div", {
+async function We({ lilos: e, root: t, args: n }) {
+	let r = (t, n) => e.locale.i18n.t(t, n), i = (t) => e.locale.formatBytes(t), { box: a, off: o } = Le(e, t, {
+		style: Ne,
+		className: "zp"
+	}, () => m()), s = null, c = null, l = null, u = "", d = null, f = !1, p = (e) => {
+		s = Pe(e), c = l = d = null, u = "";
+	}, m = () => {
+		if (!s) return e.window.setTitle("Zip"), a.replaceChildren($("h1", {}, "Zip"), $("p", {}, r("main.intro")), $("p", { class: "hint" }, r("main.limits", { limit: i(me) })));
+		if (e.window.setTitle(c?.name ?? "Zip"), u) return a.replaceChildren($("h1", {}, c?.name ?? ""), $("div", {
 			class: "error",
 			role: "alert"
-		}, c));
-		if (!s) return i.replaceChildren($("p", {
+		}, u));
+		if (!l) return a.replaceChildren($("p", {
 			class: "hint",
 			"aria-busy": "true"
 		}, r("main.reading")));
-		let t = s.entries.filter((e) => !e.folder), n = t.reduce((e, t) => e + t.size, 0), d = $("button", {
+		let t = l.entries.filter((e) => !e.folder), n = t.reduce((e, t) => e + t.size, 0), o = $("button", {
 			type: "button",
 			class: "primary",
-			disabled: u || !s.entries.length,
-			"aria-busy": u ? "true" : "false",
-			onclick: p
-		}, r(u ? "main.extracting" : "main.extract"));
-		i.replaceChildren(...[
-			$("h1", {}, o.name),
+			disabled: f || !l.entries.length,
+			"aria-busy": f ? "true" : "false",
+			onclick: h
+		}, r(f ? "main.extracting" : "main.extract"));
+		a.replaceChildren(...[
+			$("h1", {}, c.name),
 			$("p", {}, r("main.summary", {
 				n: t.length,
-				size: Pe(e.locale.i18n, n),
-				packed: Pe(e.locale.i18n, o.size)
+				size: i(n),
+				packed: i(c.size)
 			})),
-			s.entries.length ? $("ul", {
+			l.entries.length ? $("ul", {
 				class: "list",
 				"aria-label": r("main.content")
-			}, ...s.entries.slice(0, Ne).map((t) => $("li", { class: t.folder ? "folder" : "" }, $("span", {
+			}, ...l.entries.slice(0, Be).map((e) => $("li", { class: e.folder ? "folder" : "" }, $("span", {
 				class: "name",
-				title: t.path.join("/")
-			}, t.path.join("/") + (t.folder ? "/" : "")), $("span", { class: "size" }, t.folder ? "" : Pe(e.locale.i18n, t.size)))), s.entries.length > Ne && $("li", { class: "more" }, r("main.more", { n: s.entries.length - Ne }))) : $("div", { class: "empty" }, r("main.empty")),
-			s.skipped.length > 0 && $("p", { class: "warn" }, Re(r, s.skipped)),
-			l && $("p", {
+				title: e.path.join("/")
+			}, e.path.join("/") + (e.folder ? "/" : "")), $("span", { class: "size" }, e.folder ? "" : i(e.size)))), l.entries.length > Be && $("li", { class: "more" }, r("main.more", { n: l.entries.length - Be }))) : $("div", { class: "empty" }, r("main.empty")),
+			l.skipped.length > 0 && $("p", { class: "warn" }, Ue(r, l.skipped)),
+			d && $("p", {
 				class: "ok",
 				role: "status"
-			}, l),
+			}, d),
 			$("div", { class: "row" }, $("button", {
 				type: "button",
 				onclick: () => e.window.close()
-			}, r("common.close")), d)
+			}, r("common.close")), o)
 		].filter(Boolean));
 	};
-	async function p() {
-		if (!u) {
-			u = !0, l = null, f();
+	async function h() {
+		if (!f) {
+			f = !0, d = null, m();
 			try {
-				let t = await je(e, a);
-				l = [r("done.unzip", {
+				let t = await je(e, s);
+				d = [r("done.unzip", {
 					name: t.name,
 					n: t.count
-				}), Re(r, t.skipped)].filter(Boolean).join(" "), e.ui.notify({
-					text: l,
+				}), Ue(r, t.skipped)].filter(Boolean).join(" "), e.ui.notify({
+					text: d,
 					level: "success"
-				}), await Le(e, "zip.unzip", { file: a }, t.ref);
+				}), await Fe(e, "zip.unzip", {
+					params: { file: s },
+					result: t.id
+				});
 			} catch (t) {
-				c = Fe(e, t);
+				u = He(e, t);
 			}
-			u = !1, f();
+			f = !1, m();
 		}
 	}
-	let m = async () => {
-		if (f(), a) {
+	let g = async () => {
+		if (m(), s) {
 			try {
-				o = await e.files.info(a), s = Ae(new Uint8Array(await (await e.files.read(a, { bytes: !0 })).arrayBuffer()));
+				c = await e.files.info(s), l = Ae(new Uint8Array(await (await e.files.read(s, { bytes: !0 })).arrayBuffer()));
 			} catch (t) {
-				c = Fe(e, t);
+				u = He(e, t);
 			}
-			f();
+			m();
 		}
 	};
-	d(n);
-	let h = e.on("launch", (e) => {
-		d(e), m();
-	}), g = e.on("locale", f);
-	return await m(), () => {
-		h(), g();
+	p(n);
+	let _ = e.on("launch", (e) => {
+		p(e), g();
+	});
+	return await g(), () => {
+		_(), o();
 	};
 }
-async function Be({ lilos: e }) {
-	let t = (t, n) => e.locale.i18n.t(t, n);
-	async function n({ action: n, params: r }) {
-		try {
-			if (n === "zip.zip") return await Ie(e, (await De(e, Array.isArray(r?.items) ? r.items : [], { archiveName: t("archive.name") })).ref);
-			if (n === "zip.unzip" && typeof r?.file == "string") return await Ie(e, (await je(e, r.file)).ref);
-		} catch (t) {
-			throw Error(Fe(e, t));
-		}
-		throw Error("unknown");
-	}
-	e.handle(async (r) => {
-		if (r?.automation) return n(r.automation);
-		let i = Array.isArray(r?.files) ? r.files : [];
-		try {
-			if (r?.action === "zip.zip") {
-				let n = await De(e, i, { archiveName: t("archive.name") });
+async function Ge({ lilos: e }) {
+	let t = (t, n) => e.locale.i18n.t(t, n), n = (t) => e.locale.formatBytes(t), r = (n) => De(e, n, { archiveName: t("archive.name") });
+	ze(e, {
+		automation: {
+			"zip.zip": async (e) => (await r(Array.isArray(e.items) ? e.items : [])).id,
+			"zip.unzip": async (t) => {
+				if (typeof t.file != "string") throw Error("unknown");
+				return (await je(e, t.file)).id;
+			}
+		},
+		actions: {
+			"zip.zip": async (i) => {
+				let a = await r(i);
 				return await e.ui.notify({
 					text: t("done.zip", {
-						name: n.name,
-						n: n.count,
-						size: Pe(e.locale.i18n, n.size)
+						name: a.name,
+						n: a.count,
+						size: n(a.size)
 					}),
 					level: "success"
-				}), await Le(e, "zip.zip", { items: i }, n.ref), { name: n.name };
-			}
-			if (r?.action === "zip.unzip") {
-				let n = [];
-				for (let r of i) {
-					let i = await je(e, r);
-					n.push(i.name), await e.ui.notify({
+				}), await Fe(e, "zip.zip", {
+					params: { items: i },
+					result: a.id
+				}), { name: a.name };
+			},
+			"zip.unzip": async (n) => {
+				let r = [];
+				for (let i of n) {
+					let n = await je(e, i);
+					r.push(n.name), await e.ui.notify({
 						text: [t("done.unzip", {
-							name: i.name,
-							n: i.count
-						}), Re(t, i.skipped)].filter(Boolean).join(" "),
-						level: i.skipped.length ? "warning" : "success"
-					}), await Le(e, "zip.unzip", { file: r }, i.ref);
+							name: n.name,
+							n: n.count
+						}), Ue(t, n.skipped)].filter(Boolean).join(" "),
+						level: n.skipped.length ? "warning" : "success"
+					}), await Fe(e, "zip.unzip", {
+						params: { file: i },
+						result: n.id
+					});
 				}
-				return { names: n };
+				return { names: r };
 			}
-		} catch (t) {
-			return await e.ui.notify({
-				text: Fe(e, t),
-				level: "error"
-			}), { error: t?.message ?? String(t) };
-		}
-		throw Error("unknown");
+		},
+		onError: async (t) => (await e.ui.notify({
+			text: He(e, t),
+			level: "error"
+		}), { error: t?.message ?? String(t) }),
+		explainError: (t) => He(e, t)
 	});
 }
-export { ze as main, Be as work };
+export { We as main, Ge as work };

@@ -1,9 +1,9 @@
 import * as e from "/host/sdk.js";
-import { UndoStack as t, Window as n, appIcon as r, fileType as i, fs as a, h as o, history as s, icon as c, openMenu as l, session as u, settings as d, shortcuts as f, splitName as p, storage as m, tags as h, toast as g, trackDrag as _ } from "/host/sdk.js";
-import * as v from "/host/system.js";
-import { DESK_NAME as y, SYSTEM_FOLDERS as b, addTarget as x, confirmRemove as S, describeWorkspace as C, dragItems as w, dropZone as T, getApp as E, handleCommand as ee, itemIcon as D, launch as te, linkEntry as ne, links as O, markItem as k, movableInto as A, moveInto as j, onWorkspacesChange as re, openFile as M, pickFile as ie, recordCreated as ae, removeNodes as oe, renameNode as se, restoreNodes as ce, setTag as le, showProperties as ue, tagDots as de, tagSubmenu as fe } from "/host/system.js";
+import { UndoStack as t, Window as n, appIcon as r, fileType as i, formatBytes as a, fs as o, h as s, history as c, icon as l, messageBox as u, openMenu as d, resizeHandle as f, session as p, settings as m, shortcuts as h, splitName as g, storage as _, tags as v, toast as y, trackDrag as b } from "/host/sdk.js";
+import * as x from "/host/system.js";
+import { DESK_NAME as S, SYSTEM_FOLDERS as C, addTarget as w, confirmEmptyTrash as ee, confirmPurge as te, confirmRemove as T, describeWorkspace as E, dragItems as D, dropZone as O, getApp as k, handleCommand as A, itemIcon as j, launch as ne, linkEntry as re, links as M, markItem as ie, movableInto as ae, moveInto as oe, nodeFacts as se, onWorkspacesChange as ce, openFile as le, pickFile as ue, recordCreated as de, removeNodes as fe, renameNode as pe, restoreNodes as me, setTag as he, showProperties as ge, tagDots as _e, tagSubmenu as ve } from "/host/system.js";
 // src/shared/i18n.js
-function pe(t, n) {
+function ye(t, n) {
 	if (e.locale) return e.locale.forApp(t).i18n;
 	let r = {
 		...n.en.strings,
@@ -22,96 +22,87 @@ function pe(t, n) {
 		number: (e, t) => new Intl.NumberFormat("it-IT", t).format(e)
 	};
 }
-var { t: N } = pe("files", {
-	en: /* @__PURE__ */ JSON.parse("{\"strings\":{\"@name\":\"File Manager\",\"@description\":\"Browse, search and organize files and folders: tags, links, desktop links, trash, info and preview.\",\"@commands.files.info.label\":\"Show or hide the info panel\",\"@commands.files.preview.label\":\"Show or hide the preview\",\"@commands.files.address.label\":\"Type a path\",\"@entrypoints.main.params.folder.label\":\"Folder\",\"@entrypoints.main.params.folder.description\":\"The folder it shows when it opens\",\"@entrypoints.newLink.label\":\"New link\",\"@entrypoints.newLink.params.folder.label\":\"Folder\",\"@entrypoints.newLink.params.folder.description\":\"Where the link is made\",\"menu.newLink\":\"New link…\",\"type.linkWeb\":\"Link to a web page\",\"newLink.title\":\"New link\",\"newLink.address\":\"Path or address\",\"newLink.address.placeholder\":\"~/Documenti/Note.txt or sftp://server/folder\",\"newLink.address.hint\":\"A path of lilOS, or an address with its protocol: sftp://user@server/folder, smb://server/share/folder, webdavs://server/folder, https://… for a web page. Folders are always separated by /.\",\"newLink.browse\":\"Browse…\",\"newLink.browseFile\":\"A file…\",\"newLink.browseFolder\":\"A folder…\",\"newLink.pickFile\":\"Choose the file of the link\",\"newLink.pickFolder\":\"Choose the folder of the link\",\"newLink.name\":\"Name\",\"newLink.make\":\"Create\",\"newLink.checking\":\"Looking for it on the server…\",\"newLink.error.empty\":\"Write a path or an address\",\"newLink.error.backslash\":\"Use / to separate folders, for SMB too: smb://server/share/folder\",\"newLink.error.slashes\":\"An address starts with its protocol and //, for example sftp://server/folder\",\"newLink.error.password\":\"Don’t write the password in the address: the connection asks for it\",\"newLink.error.host\":\"The server in the address is not valid\",\"newLink.error.path\":\"The path in the address is not valid\",\"newLink.error.noPath\":\"“{path}” does not exist\",\"newLink.error.notLinkable\":\"A link points to a file or a folder\",\"newLink.error.protocol\":\"No module of lilOS knows the protocol {protocol}: an administrator can add it from the AppStore → Kernel\",\"newLink.error.noConnection\":\"Without a connection to that server the link can’t be made\",\"newLink.error.otherFolder\":\"The connection “{name}” opens another folder: the address is outside it\",\"newLink.error.noRemote\":\"“{path}” does not exist on “{name}”\",\"newLink.error.noName\":\"Write a name\",\"newLink.error.folderGone\":\"The folder of the link is not there any more\",\"@automation.files.go.label\":\"Go to a folder\",\"@automation.files.go.params.folder.label\":\"Folder\",\"@automation.files.search.label\":\"Search the folder\",\"@automation.files.search.params.query.label\":\"Search for\",\"@automation.files.sort.label\":\"Sort\",\"@automation.files.sort.params.by.label\":\"Sort by\",\"@automation.files.sort.params.by.options.name.label\":\"Name\",\"@automation.files.sort.params.by.options.modified.label\":\"Modified\",\"@automation.files.sort.params.by.options.size.label\":\"Size\",\"@automation.files.sort.params.by.options.type.label\":\"Type\",\"@automation.files.sort.params.by.options.workspace.label\":\"Workspace\",\"@automation.files.sort.params.by.options.location.label\":\"Location\",\"@automation.files.sort.params.by.options.deleted.label\":\"Deleted\",\"@automation.files.sort.params.by.options.origin.label\":\"Original location\",\"@automation.files.sort.params.direction.label\":\"Order\",\"@automation.files.sort.params.direction.options.asc.label\":\"Ascending\",\"@automation.files.sort.params.direction.options.desc.label\":\"Descending\",\"@automation.files.view.label\":\"Change the view\",\"@automation.files.view.params.mode.label\":\"View\",\"@automation.files.view.params.mode.options.list.label\":\"List\",\"@automation.files.view.params.mode.options.grid.label\":\"Icons\",\"@automation.files.view.params.mode.options.thumbs.label\":\"Previews\",\"@dependencies.netfs-sftp.reason\":\"SFTP connections in Network\",\"@dependencies.netfs-ftp.reason\":\"FTP and FTPS connections in Network\",\"@dependencies.netfs-webdav.reason\":\"WebDAV connections in Network\",\"@dependencies.netfs-smb.reason\":\"Windows shares (SMB) in Network\",\"@dependencies.netfs-nfs.reason\":\"NFS shares in Network\",\"@dependencies.netfs-onedrive.reason\":\"OneDrive in Network\",\"@dependencies.netfs-gdrive.reason\":\"Google Drive in Network\",\"@dependencies.netfs-gphotos.reason\":\"Google Photos in Network\",\"@dependencies.netfs-s3.reason\":\"Amazon S3 and compatible storage in Network\",\"@dependencies.netfs-azblob.reason\":\"Azure Blob Storage in Network\",\"toolbar.back\":\"Back (Alt ←)\",\"toolbar.forward\":\"Forward (Alt →)\",\"toolbar.up\":\"Parent folder (Alt ↑)\",\"toolbar.path\":\"Path\",\"toolbar.address\":\"Path: type a folder and press Enter\",\"toolbar.search\":\"Search this folder\",\"toolbar.searchIn\":\"Search {name}\",\"view.list\":\"List view\",\"view.grid\":\"Icon view\",\"view.thumbs\":\"Preview view\",\"view.menu\":\"View\",\"list.label\":\"Folder contents\",\"list.more\":\"and {count} more\",\"rename.label\":\"New name\",\"create.folderName\":\"New folder\",\"create.fileName\":\"New file.txt\",\"panel.info.title\":\"Info\",\"panel.info.show\":\"Show the info panel\",\"panel.info.hide\":\"Hide the info panel\",\"panel.info.resize\":\"Info panel width\",\"panel.info.close\":\"Close the info panel\",\"panel.preview.title\":\"Preview\",\"panel.preview.show\":\"Show the preview\",\"panel.preview.hide\":\"Hide the preview\",\"panel.preview.resize\":\"Preview panel width\",\"panel.preview.close\":\"Close the preview panel\",\"place.home\":\"Home\",\"place.trash\":\"Trash\",\"place.tag\":\"Tag “{name}”\",\"side.label\":\"Places\",\"side.links\":\"Links\",\"side.tags\":\"Tags\",\"side.tagHidden\":\"{name}: invisible tag, its items are hidden elsewhere\",\"side.unlinkTitle\":\"Remove the link (the file stays)\",\"link.remove\":\"Remove the link to “{name}”\",\"side.collapse\":\"Collapse {name}\",\"side.expand\":\"Expand {name}\",\"link.notFound\":\"Not found\",\"link.mountGone\":\"Removed connection\",\"column.name\":\"Name\",\"column.modified\":\"Modified\",\"column.deleted\":\"Deleted\",\"column.size\":\"Size\",\"column.type\":\"Type\",\"column.workspace\":\"Workspace\",\"column.origin\":\"Original location\",\"column.location\":\"Location\",\"column.resize\":\"Width of the “{name}” column\",\"column.resizeTitle\":\"Drag to resize, double-click to fit the content\",\"columns.menu\":\"Columns\",\"columns.fitAll\":\"Fit all columns to their content\",\"columns.reset\":\"Default columns\",\"tree.expand\":\"Show contents here\",\"tree.expandAll\":\"Show contents with all subfolders\",\"tree.collapse\":\"Hide contents\",\"tree.collapseAll\":\"Close all folders\",\"tree.expandTitle\":\"Show contents (Alt-click: with subfolders)\",\"tree.collapseTitle\":\"Hide contents\",\"tile.deleted\":\"Deleted: {date}\",\"tile.origin\":\"Original location: {place}\",\"tile.location\":\"Location: {place}\",\"tile.tags\":\"Tags: {names}\",\"trash.restoresTo\":\"Goes back to {place} when restored\",\"trash.keptForever\":\"Items stay until you delete them\",\"trash.keptDays\":{\"one\":\"Deleted permanently after {count} day\",\"other\":\"Deleted permanently after {count} days\"},\"type.folder\":\"Folder\",\"type.app\":\"App\",\"type.appLink\":\"Link to an app\",\"type.linkFolder\":\"Link to a folder\",\"type.linkFile\":\"Link to a file\",\"owner.unknown\":\"Unknown\",\"owner.shared\":\"Shared\",\"owner.removed\":\"{name} (deleted)\",\"owner.label\":\"Workspace: {name}\",\"count.items\":{\"zero\":\"Empty\",\"one\":\"{count} item\",\"other\":\"{count} items\"},\"empty.noMatch\":\"No items match “{query}”\",\"empty.trash\":\"The trash is empty\",\"empty.tag\":\"No items have this tag. Add it from the right-click menu → Tag.\",\"empty.folder\":\"This folder is empty\",\"status.items\":{\"one\":\"{count} item\",\"other\":\"{count} items\"},\"status.selected\":{\"one\":\"{count} selected\",\"other\":\"{count} selected\"},\"status.tag\":\"All items with this tag\",\"status.tagHidden\":\"Invisible tag: these items are hidden elsewhere\",\"message.hiddenByTag\":\"“{name}” is hidden by an invisible tag\",\"message.restoreToOpen\":\"To open it, restore it (right-click → Restore)\",\"message.systemFolders\":\"System folders can’t be deleted\",\"message.noPath\":\"“{path}” doesn’t exist\",\"message.typePath\":\"Type the path of a folder, such as {path}\",\"error.notFile\":\"Not a file\",\"error.rename\":\"Can’t rename “{name}”\",\"error.deskLink\":\"Can’t add the link to the desktop\",\"error.createFolder\":\"Can’t create the folder\",\"error.createFile\":\"Can’t create the file\",\"error.delete\":\"Can’t delete\",\"error.pathNotFound\":\"Path not found\",\"error.folderNotFound\":\"Folder not found\",\"error.folderNotFoundText\":\"The folder to open no longer exists: showing {place} instead.\",\"error.tagNotFound\":\"Tag not found\",\"error.tagNotFoundText\":\"The tag to show no longer exists: showing {place} instead.\",\"automation.noFolder\":\"The folder is not there any more\",\"automation.noColumn\":\"This folder has no such column to sort by\",\"automation.noView\":\"Unknown view\",\"toast.restored\":\"Restored “{name}” to {place}\",\"toast.restoredMany\":\"Restored {count} items to {place}\",\"toast.restoredManyPlaces\":\"Restored {count} items to {folders} folders\",\"toast.unlinked\":\"Link to “{name}” removed\",\"toast.linksAdded\":{\"one\":\"Link added\",\"other\":\"{count} links added\"},\"toast.deskLinks\":{\"one\":\"Link added to the desktop\",\"other\":\"{count} links added to the desktop\"},\"toast.trashed\":{\"one\":\"Moved to the trash\",\"other\":\"{count} items moved to the trash\"},\"confirm.purge\":\"Delete “{name}” permanently\",\"confirm.purgeMany\":\"Delete {count} items permanently\",\"confirm.emptyTrash\":{\"one\":\"Delete the item in the trash permanently\",\"other\":\"Delete all {count} items in the trash permanently\"},\"confirm.cancel\":\"Cancel\",\"menu.open\":\"Open\",\"menu.openMany\":\"Open {count} items\",\"menu.openWith\":\"Open with…\",\"menu.openInEditor\":\"Open in Editor\",\"menu.reveal\":\"Show in folder\",\"menu.unlink\":\"Remove the link\",\"menu.deskLink\":\"Add a link to the desktop\",\"menu.rename\":\"Rename\",\"menu.untag\":\"Remove the tag “{name}”\",\"menu.info\":\"Info\",\"menu.properties\":\"Properties…\",\"menu.delete\":\"Delete\",\"menu.deleteMany\":\"Delete {count} items\",\"menu.restore\":\"Restore\",\"menu.restoreMany\":\"Restore {count} items\",\"menu.restoreAll\":\"Restore all\",\"menu.purge\":\"Delete permanently…\",\"menu.emptyTrash\":\"Empty the trash…\",\"menu.manageTags\":\"Manage tags…\",\"menu.newFolder\":\"New folder\",\"menu.newTextFile\":\"New text file\",\"info.folderHint\":\"Nothing selected: here is the open folder.\",\"info.general\":\"General\",\"info.organization\":\"Organization\",\"info.attributes\":\"Attributes\",\"info.text\":\"Text\",\"info.items\":\"Items\",\"info.type\":\"Type\",\"info.types\":\"Types\",\"info.app\":\"App\",\"info.linkTarget\":\"Points to\",\"info.linkState\":\"State\",\"info.linkBroken\":\"Broken: the original was not found the last time\",\"info.appMissing\":\"{id} (not installed)\",\"info.size\":\"Size\",\"info.bytesDetail\":\"{size} ({count} bytes)\",\"info.contents\":\"Contents\",\"info.contentsTotal\":\"{items}, {total} in all\",\"info.insideFolders\":{\"one\":\"{count} item in the folders\",\"other\":\"{count} items in the folders\"},\"info.deleted\":\"Deleted\",\"info.lastDeleted\":\"Last deleted\",\"info.origin\":\"Original location\",\"info.path\":\"Path\",\"info.location\":\"Location\",\"info.manyFolders\":\"{count} different folders\",\"info.created\":\"Created\",\"info.modified\":\"Modified\",\"info.oldest\":\"Oldest\",\"info.newest\":\"Newest\",\"info.workspace\":\"Workspace\",\"info.tags\":\"Tags\",\"info.common\":\"In common\",\"info.none\":\"None\",\"info.tagHidden\":\"{name} (invisible tag)\",\"info.tagKind\":\"Tag\",\"info.retention\":\"Retention\",\"info.visibility\":\"Visibility\",\"info.visible\":\"Visible\",\"info.invisible\":\"Invisible: its items are hidden elsewhere\",\"info.lines\":\"Lines\",\"info.words\":\"Words\",\"info.chars\":\"Characters\",\"info.folders\":{\"one\":\"{count} folder\",\"other\":\"{count} folders\"},\"info.files\":{\"one\":\"{count} file\",\"other\":\"{count} files\"},\"info.apps\":{\"one\":\"{count} app\",\"other\":\"{count} apps\"},\"note.system\":\"System item: it can’t be renamed or deleted\",\"note.private\":\"Private: visible only in its workspace\",\"note.hidden\":\"Hidden by an invisible tag\",\"note.linked\":\"In the sidebar (Links)\",\"selection.count\":\"{count} items selected\",\"preview.none\":\"Nothing selected\",\"preview.selectFile\":\"Select a file to see its contents\",\"preview.oneAtATime\":\"The preview shows one item at a time\",\"preview.trashed\":\"In the trash\",\"preview.restoreToSee\":\"Restore it to see its contents\",\"preview.loading\":\"Loading…\",\"preview.readError\":\"Can’t read the file\",\"preview.open\":\"Open\",\"preview.launch\":\"Launch\",\"preview.emptyFile\":\"Empty file\",\"preview.emptyFolder\":\"Empty folder\",\"preview.imageAlt\":\"Preview of {name}\",\"preview.unavailable\":\"No preview available\",\"preview.notText\":\"The file doesn’t contain text\",\"preview.contentsOf\":\"Contents of {name}\",\"preview.cut\":\"Showing the first {shown} of {total} characters: open the file to see all of it\",\"preview.childTitle\":\"{name} — double-click to open\",\"preview.appMissing\":\"App not installed\",\"preview.byApp\":\"Preview made by {app}\",\"net.section\":\"Network\",\"net.add\":\"Connect to a server…\",\"net.none\":\"No connections\",\"net.state.on\":\"Connected\",\"net.state.connecting\":\"Connecting…\",\"net.state.off\":\"Not connected\",\"net.state.error\":\"Cannot connect\",\"net.menu.open\":\"Open\",\"net.menu.connect\":\"Connect\",\"net.menu.disconnect\":\"Disconnect\",\"net.menu.edit\":\"Edit connection…\",\"net.menu.remove\":\"Remove connection\",\"net.remove.title\":\"Remove the connection «{name}»?\",\"net.remove.text\":\"Its folder leaves Network and its saved password is deleted. The files on the server stay where they are.\",\"net.bar.on\":\"Connected to\",\"net.loading\":\"Reading the folder from the server…\",\"net.notRead\":\"The folder could not be read from the server\",\"net.error.title\":\"Network\",\"net.error.read\":\"Cannot read «{name}»\",\"net.preview.big\":\"Not shown: the file is on a server and is bigger than 1 MB\",\"net.trust.title\":\"Confirm the server of «{name}»\",\"net.trust.ssh\":\"This is the first time lilOS connects to this server, or its key changed. Key fingerprint:\\n{fingerprint}\\n\\nContinue only if it matches the server's.\",\"net.trust.tls\":\"The server's certificate is not valid (self-signed, expired or for another name). Certificate fingerprint:\\n{fingerprint}\\n\\nContinue only if you trust this server.\",\"net.trust.first\":\"Server to confirm.\",\"net.trust.key\":\"Key fingerprint:\",\"net.trust.cert\":\"The certificate is not valid. Its fingerprint:\",\"net.trust.check\":\"Confirm only if it matches the server's.\",\"net.trust.go\":\"Confirm and connect\",\"net.connect.title\":\"Connect to a server\",\"net.edit.title\":\"Connection «{name}»\",\"net.protocol\":\"Protocol\",\"net.name\":\"Folder name in Network\",\"net.name.hint\":\"It will be {path}\",\"net.remember\":\"Remember the password (kept encrypted by lilOS)\",\"net.auto\":\"Connect when I sign in\",\"net.test\":\"Try\",\"net.testing\":\"Trying…\",\"net.test.ok\":\"It works: the server answers and the folder can be read\",\"net.connecting\":\"Connecting…\",\"net.connect.go\":\"Connect\",\"net.save\":\"Save and connect\",\"net.cancel\":\"Cancel\",\"net.later\":\"Later\",\"net.remember.signin\":\"Remember the sign-in (lilOS keeps it encrypted)\",\"net.web.open\":\"Open in the browser\",\"net.web.only\":\"It opens only on the provider's site\",\"net.web.copiedAs\":\"It opens on the provider's site; copied out, it becomes a {ext} file\",\"net.space.of\":\"{used} of {total} used\",\"net.space.used\":\"{used} used\",\"net.group.server\":\"Servers\",\"net.group.cloud\":\"Cloud\",\"net.group.local\":\"Local network\",\"net.signin.paste.text\":\"Sign in in the tab that opened. At the end the browser shows a page that does not open: copy its whole address from the address bar and paste it here.\",\"net.signin.paste.label\":\"Address of the page that did not open\",\"net.signin.paste.go\":\"Continue\",\"net.import.where\":\"Where to copy them\",\"net.import.change\":\"Change…\",\"net.import.step\":\"Pick photos and videos\",\"net.import.pick\":\"Pick in a new tab\",\"net.import.hint\":\"Google's page opens in a new tab: select up to 2000 items and press Done. The copy must start within an hour.\",\"net.import.opening\":\"Opening the page to pick…\",\"net.import.waiting\":\"Waiting for your choice in the other tab…\",\"net.import.picked\":\"{count} items picked: press Import\",\"net.import.none\":\"Nothing was picked\",\"net.import.failed\":\"Import failed\",\"net.import.go\":\"Import\",\"message.noRename\":\"«{name}» can’t be renamed here\",\"message.noRemove\":\"These items can’t be removed here\",\"net.signin.button\":\"Sign in\",\"net.signin.waiting\":\"Finish signing in in the window that opened…\",\"net.signin.blocked\":\"The browser blocked the sign-in window: allow pop-ups for lilOS and try again\",\"net.signin.other\":\"Use another account\",\"net.signin.again.title\":\"Sign in again to «{name}»\",\"net.signin.again.text\":\"The provider asks to sign in again for {account}.\",\"net.notReady.title\":\"{name} is not ready on this lilOS yet\",\"net.notReady.settings\":\"Open the settings\",\"office.open.word\":\"Open in Word online\",\"office.open.excel\":\"Open in Excel online\",\"office.open.powerpoint\":\"Open in PowerPoint online\",\"office.upload\":\"Upload to OneDrive and open\",\"office.none\":\"Connect OneDrive first (Rete → +)\",\"office.pick\":\"Upload to:\",\"office.uploaded\":\"«{name}» is on {folder}: what you change in Office is saved there\",\"office.again\":\"Signed in again: try once more\",\"office.failed\":\"«{name}» not uploaded\",\"office.exists.title\":\"File already on OneDrive\",\"office.exists.text\":\"There is already «{name}» in {folder}. Replace it with this one (what was changed online is lost), or keep both?\",\"office.exists.keep\":\"Keep both\",\"office.exists.replace\":\"Replace\",\"net.missing\":\"Missing: {fields}\",\"net.secret.unchanged\":\"unchanged\",\"net.file.browse\":\"Browse…\",\"net.file.none\":\"No file chosen\",\"net.file.chosen\":\"File chosen\",\"net.shares.list\":\"List…\",\"net.shares.none\":\"The server shares nothing you can see\",\"net.password.title\":\"Password for «{name}»\",\"net.password.text\":\"lilOS needs the password to connect to {address}.\",\"net.password.wrong\":\"The user or the password is not right\",\"net.trust.changed.title\":\"The server of «{name}» CHANGED its key\",\"net.trust.changed\":\"The key or certificate of this server is not the one you confirmed. Someone may be pretending to be the server: continue only if you know it was changed on purpose.\\n\\nBefore: {previous}\\nNow: {fingerprint}\"}}"),
-	it: /* @__PURE__ */ JSON.parse("{\"strings\":{\"@name\":\"File Manager\",\"@description\":\"Sfoglia, cerca e organizza file e cartelle: tag, collegamenti, collegamenti sul desktop, cestino, informazioni e anteprima.\",\"@commands.files.info.label\":\"Mostra o nascondi le informazioni\",\"@commands.files.preview.label\":\"Mostra o nascondi l’anteprima\",\"@commands.files.address.label\":\"Scrivi un percorso\",\"@entrypoints.main.params.folder.label\":\"Cartella\",\"@entrypoints.main.params.folder.description\":\"La cartella che mostra all’apertura\",\"@entrypoints.newLink.label\":\"Nuovo collegamento\",\"@entrypoints.newLink.params.folder.label\":\"Cartella\",\"@entrypoints.newLink.params.folder.description\":\"Dove si crea il collegamento\",\"menu.newLink\":\"Nuovo collegamento…\",\"type.linkWeb\":\"Collegamento a una pagina web\",\"newLink.title\":\"Nuovo collegamento\",\"newLink.address\":\"Percorso o indirizzo\",\"newLink.address.placeholder\":\"~/Documenti/Note.txt o sftp://server/cartella\",\"newLink.address.hint\":\"Un percorso di lilOS, o un indirizzo con il protocollo: sftp://utente@server/cartella, smb://server/condivisione/cartella, webdavs://server/cartella, https://… per una pagina web. Le cartelle si separano sempre con /.\",\"newLink.browse\":\"Sfoglia…\",\"newLink.browseFile\":\"Un file…\",\"newLink.browseFolder\":\"Una cartella…\",\"newLink.pickFile\":\"Scegli il file del collegamento\",\"newLink.pickFolder\":\"Scegli la cartella del collegamento\",\"newLink.name\":\"Nome\",\"newLink.make\":\"Crea\",\"newLink.checking\":\"Lo cerco sul server…\",\"newLink.error.empty\":\"Scrivi un percorso o un indirizzo\",\"newLink.error.backslash\":\"Usa / per separare le cartelle, anche per SMB: smb://server/condivisione/cartella\",\"newLink.error.slashes\":\"Un indirizzo comincia con il protocollo e //, per esempio sftp://server/cartella\",\"newLink.error.password\":\"Non scrivere la password nell’indirizzo: la chiede la connessione\",\"newLink.error.host\":\"Il server nell’indirizzo non è valido\",\"newLink.error.path\":\"Il percorso nell’indirizzo non è valido\",\"newLink.error.noPath\":\"«{path}» non esiste\",\"newLink.error.notLinkable\":\"Un collegamento punta a un file o a una cartella\",\"newLink.error.protocol\":\"Nessun modulo di lilOS conosce il protocollo {protocol}: un amministratore può aggiungerlo dall’AppStore → Kernel\",\"newLink.error.noConnection\":\"Senza una connessione a quel server il collegamento non si può creare\",\"newLink.error.otherFolder\":\"La connessione «{name}» apre un’altra cartella: l’indirizzo è fuori da quella\",\"newLink.error.noRemote\":\"«{path}» non esiste su «{name}»\",\"newLink.error.noName\":\"Scrivi un nome\",\"newLink.error.folderGone\":\"La cartella del collegamento non c’è più\",\"@automation.files.go.label\":\"Vai a una cartella\",\"@automation.files.go.params.folder.label\":\"Cartella\",\"@automation.files.search.label\":\"Cerca nella cartella\",\"@automation.files.search.params.query.label\":\"Cerca\",\"@automation.files.sort.label\":\"Ordina\",\"@automation.files.sort.params.by.label\":\"Ordina per\",\"@automation.files.sort.params.by.options.name.label\":\"Nome\",\"@automation.files.sort.params.by.options.modified.label\":\"Modificato\",\"@automation.files.sort.params.by.options.size.label\":\"Dimensione\",\"@automation.files.sort.params.by.options.type.label\":\"Tipo\",\"@automation.files.sort.params.by.options.workspace.label\":\"Workspace\",\"@automation.files.sort.params.by.options.location.label\":\"Posizione\",\"@automation.files.sort.params.by.options.deleted.label\":\"Eliminato\",\"@automation.files.sort.params.by.options.origin.label\":\"Posizione originale\",\"@automation.files.sort.params.direction.label\":\"Ordine\",\"@automation.files.sort.params.direction.options.asc.label\":\"Crescente\",\"@automation.files.sort.params.direction.options.desc.label\":\"Decrescente\",\"@automation.files.view.label\":\"Cambia vista\",\"@automation.files.view.params.mode.label\":\"Vista\",\"@automation.files.view.params.mode.options.list.label\":\"Elenco\",\"@automation.files.view.params.mode.options.grid.label\":\"Icone\",\"@automation.files.view.params.mode.options.thumbs.label\":\"Anteprime\",\"@dependencies.netfs-sftp.reason\":\"Connessioni SFTP in Rete\",\"@dependencies.netfs-ftp.reason\":\"Connessioni FTP e FTPS in Rete\",\"@dependencies.netfs-webdav.reason\":\"Connessioni WebDAV in Rete\",\"@dependencies.netfs-smb.reason\":\"Condivisioni di Windows (SMB) in Rete\",\"@dependencies.netfs-nfs.reason\":\"Condivisioni NFS in Rete\",\"@dependencies.netfs-onedrive.reason\":\"OneDrive in Rete\",\"@dependencies.netfs-gdrive.reason\":\"Google Drive in Rete\",\"@dependencies.netfs-gphotos.reason\":\"Google Foto in Rete\",\"@dependencies.netfs-s3.reason\":\"Amazon S3 e archivi compatibili in Rete\",\"@dependencies.netfs-azblob.reason\":\"Azure Blob Storage in Rete\",\"toolbar.back\":\"Indietro (Alt ←)\",\"toolbar.forward\":\"Avanti (Alt →)\",\"toolbar.up\":\"Cartella superiore (Alt ↑)\",\"toolbar.path\":\"Percorso\",\"toolbar.address\":\"Percorso: scrivi una cartella e premi Invio\",\"toolbar.search\":\"Cerca nella cartella\",\"toolbar.searchIn\":\"Cerca in {name}\",\"view.list\":\"Vista elenco\",\"view.grid\":\"Vista a icone\",\"view.thumbs\":\"Vista anteprime\",\"view.menu\":\"Vista\",\"list.label\":\"Contenuto della cartella\",\"list.more\":\"e altri {count}\",\"rename.label\":\"Nuovo nome\",\"create.folderName\":\"Nuova cartella\",\"create.fileName\":\"Nuovo file.txt\",\"panel.info.title\":\"Informazioni\",\"panel.info.show\":\"Mostra le informazioni\",\"panel.info.hide\":\"Nascondi le informazioni\",\"panel.info.resize\":\"Larghezza del pannello delle informazioni\",\"panel.info.close\":\"Chiudi il pannello delle informazioni\",\"panel.preview.title\":\"Anteprima\",\"panel.preview.show\":\"Mostra l’anteprima\",\"panel.preview.hide\":\"Nascondi l’anteprima\",\"panel.preview.resize\":\"Larghezza del pannello dell’anteprima\",\"panel.preview.close\":\"Chiudi il pannello dell’anteprima\",\"place.home\":\"Home\",\"place.trash\":\"Cestino\",\"place.tag\":\"Tag «{name}»\",\"side.label\":\"Risorse\",\"side.links\":\"Collegamenti\",\"side.tags\":\"Tag\",\"side.tagHidden\":\"{name}: tag invisibile, i suoi elementi sono nascosti altrove\",\"side.unlinkTitle\":\"Elimina il collegamento (il file resta)\",\"link.remove\":\"Elimina il collegamento a «{name}»\",\"side.collapse\":\"Comprimi {name}\",\"side.expand\":\"Espandi {name}\",\"link.notFound\":\"Non trovato\",\"link.mountGone\":\"Connessione rimossa\",\"column.name\":\"Nome\",\"column.modified\":\"Modificato\",\"column.deleted\":\"Eliminato\",\"column.size\":\"Dimensione\",\"column.type\":\"Tipo\",\"column.workspace\":\"Workspace\",\"column.origin\":\"Posizione originale\",\"column.location\":\"Posizione\",\"column.resize\":\"Larghezza della colonna «{name}»\",\"column.resizeTitle\":\"Trascina per ridimensionare, doppio clic per adattare al contenuto\",\"columns.menu\":\"Colonne\",\"columns.fitAll\":\"Adatta tutte le colonne al contenuto\",\"columns.reset\":\"Ripristina le colonne\",\"tree.expand\":\"Mostra il contenuto qui\",\"tree.expandAll\":\"Mostra il contenuto con tutte le sottocartelle\",\"tree.collapse\":\"Nascondi il contenuto\",\"tree.collapseAll\":\"Chiudi tutte le cartelle\",\"tree.expandTitle\":\"Mostra il contenuto (Alt+clic: anche le sottocartelle)\",\"tree.collapseTitle\":\"Nascondi il contenuto\",\"tile.deleted\":\"Eliminato: {date}\",\"tile.origin\":\"Posizione originale: {place}\",\"tile.location\":\"Posizione: {place}\",\"tile.tags\":\"Tag: {names}\",\"trash.restoresTo\":\"Ripristinando torna in {place}\",\"trash.keptForever\":\"Gli elementi restano finché non li elimini\",\"trash.keptDays\":{\"one\":\"Eliminati definitivamente dopo {count} giorno\",\"other\":\"Eliminati definitivamente dopo {count} giorni\"},\"type.folder\":\"Cartella\",\"type.app\":\"App\",\"type.appLink\":\"Collegamento a un’app\",\"type.linkFolder\":\"Collegamento a una cartella\",\"type.linkFile\":\"Collegamento a un file\",\"owner.unknown\":\"Sconosciuto\",\"owner.shared\":\"Condiviso\",\"owner.removed\":\"{name} (eliminato)\",\"owner.label\":\"Workspace: {name}\",\"count.items\":{\"zero\":\"Vuota\",\"one\":\"{count} elemento\",\"other\":\"{count} elementi\"},\"empty.noMatch\":\"Nessun elemento corrisponde a «{query}»\",\"empty.trash\":\"Il cestino è vuoto\",\"empty.tag\":\"Nessun elemento ha questo tag. Si assegna dal menu del tasto destro → Tag.\",\"empty.folder\":\"Questa cartella è vuota\",\"status.items\":{\"one\":\"{count} elemento\",\"other\":\"{count} elementi\"},\"status.selected\":{\"one\":\"{count} selezionato\",\"other\":\"{count} selezionati\"},\"status.tag\":\"Tutti gli elementi con questo tag\",\"status.tagHidden\":\"Tag invisibile: questi elementi sono nascosti altrove\",\"message.hiddenByTag\":\"«{name}» è nascosto da un tag invisibile\",\"message.restoreToOpen\":\"Per aprirlo, ripristinalo (clic destro → Ripristina)\",\"message.systemFolders\":\"Le cartelle di sistema non si possono eliminare\",\"message.noPath\":\"«{path}» non esiste\",\"message.typePath\":\"Scrivi il percorso di una cartella, come {path}\",\"error.notFile\":\"Non è un file\",\"error.rename\":\"Impossibile rinominare «{name}»\",\"error.deskLink\":\"Impossibile aggiungere il collegamento al desktop\",\"error.createFolder\":\"Impossibile creare la cartella\",\"error.createFile\":\"Impossibile creare il file\",\"error.delete\":\"Impossibile eliminare\",\"error.pathNotFound\":\"Percorso non trovato\",\"error.folderNotFound\":\"Cartella non trovata\",\"error.folderNotFoundText\":\"La cartella da aprire non esiste più: al suo posto c’è {place}.\",\"error.tagNotFound\":\"Tag non trovato\",\"error.tagNotFoundText\":\"Il tag da mostrare non esiste più: al suo posto c’è {place}.\",\"automation.noFolder\":\"La cartella non c’è più\",\"automation.noColumn\":\"Questa cartella non ha una colonna per cui ordinare così\",\"automation.noView\":\"Vista sconosciuta\",\"toast.restored\":\"Ripristinato «{name}» in {place}\",\"toast.restoredMany\":\"Ripristinati {count} elementi in {place}\",\"toast.restoredManyPlaces\":\"Ripristinati {count} elementi in {folders} cartelle\",\"toast.unlinked\":\"Collegamento a «{name}» eliminato\",\"toast.linksAdded\":{\"one\":\"Collegamento aggiunto\",\"other\":\"{count} collegamenti aggiunti\"},\"toast.deskLinks\":{\"one\":\"Collegamento aggiunto al desktop\",\"other\":\"{count} collegamenti aggiunti al desktop\"},\"toast.trashed\":{\"one\":\"Spostato nel cestino\",\"other\":\"{count} elementi spostati nel cestino\"},\"confirm.purge\":\"Elimina definitivamente «{name}»\",\"confirm.purgeMany\":\"Elimina definitivamente {count} elementi\",\"confirm.emptyTrash\":{\"one\":\"Elimina definitivamente l’elemento nel cestino\",\"other\":\"Elimina definitivamente tutti i {count} elementi nel cestino\"},\"confirm.cancel\":\"Annulla\",\"menu.open\":\"Apri\",\"menu.openMany\":\"Apri {count} elementi\",\"menu.openWith\":\"Apri con…\",\"menu.openInEditor\":\"Apri nell’Editor\",\"menu.reveal\":\"Mostra nella cartella\",\"menu.unlink\":\"Elimina il collegamento\",\"menu.deskLink\":\"Aggiungi un collegamento al desktop\",\"menu.rename\":\"Rinomina\",\"menu.untag\":\"Togli il tag «{name}»\",\"menu.info\":\"Informazioni\",\"menu.properties\":\"Proprietà…\",\"menu.delete\":\"Elimina\",\"menu.deleteMany\":\"Elimina {count} elementi\",\"menu.restore\":\"Ripristina\",\"menu.restoreMany\":\"Ripristina {count} elementi\",\"menu.restoreAll\":\"Ripristina tutto\",\"menu.purge\":\"Elimina definitivamente…\",\"menu.emptyTrash\":\"Svuota il cestino…\",\"menu.manageTags\":\"Gestisci i tag…\",\"menu.newFolder\":\"Nuova cartella\",\"menu.newTextFile\":\"Nuovo file di testo\",\"info.folderHint\":\"Nessun elemento selezionato: ecco la cartella aperta.\",\"info.general\":\"Generali\",\"info.organization\":\"Organizzazione\",\"info.attributes\":\"Attributi\",\"info.text\":\"Testo\",\"info.items\":\"Elementi\",\"info.type\":\"Tipo\",\"info.types\":\"Tipi\",\"info.app\":\"App\",\"info.linkTarget\":\"Originale\",\"info.linkState\":\"Stato\",\"info.linkBroken\":\"Rotto: l’originale non è stato trovato l’ultima volta\",\"info.appMissing\":\"{id} (non installata)\",\"info.size\":\"Dimensione\",\"info.bytesDetail\":\"{size} ({count} byte)\",\"info.contents\":\"Contenuto\",\"info.contentsTotal\":\"{items}, {total} in tutto\",\"info.insideFolders\":{\"one\":\"{count} elemento nelle cartelle\",\"other\":\"{count} elementi nelle cartelle\"},\"info.deleted\":\"Eliminato\",\"info.lastDeleted\":\"Ultima eliminazione\",\"info.origin\":\"Posizione originale\",\"info.path\":\"Percorso\",\"info.location\":\"Posizione\",\"info.manyFolders\":\"{count} cartelle diverse\",\"info.created\":\"Creato\",\"info.modified\":\"Modificato\",\"info.oldest\":\"Meno recente\",\"info.newest\":\"Più recente\",\"info.workspace\":\"Workspace\",\"info.tags\":\"Tag\",\"info.common\":\"In comune\",\"info.none\":\"Nessuno\",\"info.tagHidden\":\"{name} (tag invisibile)\",\"info.tagKind\":\"Tag\",\"info.retention\":\"Conservazione\",\"info.visibility\":\"Visibilità\",\"info.visible\":\"Visibile\",\"info.invisible\":\"Invisibile: i suoi elementi sono nascosti altrove\",\"info.lines\":\"Righe\",\"info.words\":\"Parole\",\"info.chars\":\"Caratteri\",\"info.folders\":{\"one\":\"{count} cartella\",\"other\":\"{count} cartelle\"},\"info.files\":{\"one\":\"{count} file\",\"other\":\"{count} file\"},\"info.apps\":{\"one\":\"{count} app\",\"other\":\"{count} app\"},\"note.system\":\"Di sistema: non si rinomina e non si elimina\",\"note.private\":\"Privata: si vede solo nel suo workspace\",\"note.hidden\":\"Nascosto da un tag invisibile\",\"note.linked\":\"Nella barra laterale (Collegamenti)\",\"selection.count\":\"{count} elementi selezionati\",\"preview.none\":\"Nessun elemento selezionato\",\"preview.selectFile\":\"Seleziona un file per vederne il contenuto\",\"preview.oneAtATime\":\"L’anteprima mostra un elemento alla volta\",\"preview.trashed\":\"Nel cestino\",\"preview.restoreToSee\":\"Ripristinalo per vederne il contenuto\",\"preview.loading\":\"Caricamento…\",\"preview.readError\":\"Impossibile leggere il file\",\"preview.open\":\"Apri\",\"preview.launch\":\"Avvia\",\"preview.emptyFile\":\"File vuoto\",\"preview.emptyFolder\":\"Cartella vuota\",\"preview.imageAlt\":\"Anteprima di {name}\",\"preview.unavailable\":\"Anteprima non disponibile\",\"preview.notText\":\"Il file non contiene testo\",\"preview.contentsOf\":\"Contenuto di {name}\",\"preview.cut\":\"Mostrati i primi {shown} caratteri su {total}: apri il file per vederlo tutto\",\"preview.childTitle\":\"{name} — doppio clic per aprire\",\"preview.appMissing\":\"App non installata\",\"preview.byApp\":\"Anteprima creata da {app}\",\"net.section\":\"Rete\",\"net.add\":\"Connetti a un server…\",\"net.none\":\"Nessuna connessione\",\"net.state.on\":\"Connessa\",\"net.state.connecting\":\"Connessione in corso…\",\"net.state.off\":\"Non connessa\",\"net.state.error\":\"Non si connette\",\"net.menu.open\":\"Apri\",\"net.menu.connect\":\"Connetti\",\"net.menu.disconnect\":\"Disconnetti\",\"net.menu.edit\":\"Modifica connessione…\",\"net.menu.remove\":\"Rimuovi connessione\",\"net.remove.title\":\"Rimuovere la connessione «{name}»?\",\"net.remove.text\":\"La sua cartella esce da Rete e la password salvata viene cancellata. I file sul server restano dove sono.\",\"net.bar.on\":\"Connesso a\",\"net.loading\":\"Lettura della cartella dal server…\",\"net.notRead\":\"Non è stato possibile leggere la cartella dal server\",\"net.error.title\":\"Rete\",\"net.error.read\":\"Non si legge «{name}»\",\"net.preview.big\":\"Non mostrato: il file è su un server ed è più grande di 1 MB\",\"net.trust.title\":\"Conferma il server di «{name}»\",\"net.trust.ssh\":\"È la prima volta che lilOS si collega a questo server, oppure la sua chiave è cambiata. Impronta della chiave:\\n{fingerprint}\\n\\nContinua solo se corrisponde a quella del server.\",\"net.trust.tls\":\"Il certificato del server non è valido (fatto da sé, scaduto o per un altro nome). Impronta del certificato:\\n{fingerprint}\\n\\nContinua solo se ti fidi di questo server.\",\"net.trust.first\":\"Server da confermare.\",\"net.trust.key\":\"Impronta della chiave:\",\"net.trust.cert\":\"Il certificato non è valido. La sua impronta:\",\"net.trust.check\":\"Conferma solo se corrisponde a quella del server.\",\"net.trust.go\":\"Conferma e connetti\",\"net.connect.title\":\"Connetti a un server\",\"net.edit.title\":\"Connessione «{name}»\",\"net.protocol\":\"Protocollo\",\"net.name\":\"Nome della cartella in Rete\",\"net.name.hint\":\"Sarà {path}\",\"net.remember\":\"Ricorda la password (lilOS la tiene cifrata)\",\"net.auto\":\"Connetti all’accesso\",\"net.test\":\"Prova\",\"net.testing\":\"Prova in corso…\",\"net.test.ok\":\"Funziona: il server risponde e la cartella si legge\",\"net.connecting\":\"Connessione in corso…\",\"net.connect.go\":\"Connetti\",\"net.save\":\"Salva e connetti\",\"net.cancel\":\"Annulla\",\"net.later\":\"Più tardi\",\"net.remember.signin\":\"Ricorda l’accesso (lilOS lo tiene cifrato)\",\"net.web.open\":\"Apri nel browser\",\"net.web.only\":\"Si apre solo sul sito del fornitore\",\"net.web.copiedAs\":\"Si apre sul sito del fornitore; copiato fuori diventa un file {ext}\",\"net.space.of\":\"{used} di {total} usati\",\"net.space.used\":\"{used} usati\",\"net.group.server\":\"Server\",\"net.group.cloud\":\"Cloud\",\"net.group.local\":\"Rete locale\",\"net.signin.paste.text\":\"Accedi nella scheda che si è aperta. Alla fine il browser mostra una pagina che non si apre: copia tutto il suo indirizzo dalla barra degli indirizzi e incollalo qui.\",\"net.signin.paste.label\":\"Indirizzo della pagina che non si è aperta\",\"net.signin.paste.go\":\"Continua\",\"net.import.where\":\"Dove copiarle\",\"net.import.change\":\"Cambia…\",\"net.import.step\":\"Scegli foto e video\",\"net.import.pick\":\"Scegli in una nuova scheda\",\"net.import.hint\":\"La pagina di Google si apre in una nuova scheda: seleziona fino a 2000 elementi e premi Fine. La copia va avviata entro un’ora.\",\"net.import.opening\":\"Apertura della pagina per scegliere…\",\"net.import.waiting\":\"In attesa della tua scelta nell’altra scheda…\",\"net.import.picked\":\"{count} elementi scelti: premi Importa\",\"net.import.none\":\"Non hai scelto niente\",\"net.import.failed\":\"Importazione non riuscita\",\"net.import.go\":\"Importa\",\"message.noRename\":\"«{name}» qui non si rinomina\",\"message.noRemove\":\"Questi elementi qui non si eliminano\",\"net.signin.button\":\"Accedi\",\"net.signin.waiting\":\"Completa l’accesso nella finestra che si è aperta…\",\"net.signin.blocked\":\"Il browser ha bloccato la finestra di accesso: consenti le finestre a comparsa per lilOS e riprova\",\"net.signin.other\":\"Usa un altro account\",\"net.signin.again.title\":\"Accedi di nuovo a «{name}»\",\"net.signin.again.text\":\"Il fornitore chiede di ripetere l’accesso per {account}.\",\"net.notReady.title\":\"{name} non è ancora pronto su questo lilOS\",\"net.notReady.settings\":\"Apri le impostazioni\",\"office.open.word\":\"Apri in Word online\",\"office.open.excel\":\"Apri in Excel online\",\"office.open.powerpoint\":\"Apri in PowerPoint online\",\"office.upload\":\"Carica su OneDrive e apri\",\"office.none\":\"Prima collega OneDrive (Rete → +)\",\"office.pick\":\"Carica su:\",\"office.uploaded\":\"«{name}» è su {folder}: quello che cambi in Office si salva lì\",\"office.again\":\"Accesso rifatto: riprova\",\"office.failed\":\"«{name}» non caricato\",\"office.exists.title\":\"File già su OneDrive\",\"office.exists.text\":\"In {folder} c’è già «{name}». Lo sostituisci con questo (quello che è stato cambiato online si perde) o li tieni entrambi?\",\"office.exists.keep\":\"Tieni entrambi\",\"office.exists.replace\":\"Sostituisci\",\"net.missing\":\"Mancano: {fields}\",\"net.secret.unchanged\":\"invariata\",\"net.file.browse\":\"Sfoglia…\",\"net.file.none\":\"Nessun file scelto\",\"net.file.chosen\":\"File scelto\",\"net.shares.list\":\"Elenca…\",\"net.shares.none\":\"Il server non condivide niente che tu possa vedere\",\"net.password.title\":\"Password di «{name}»\",\"net.password.text\":\"lilOS ha bisogno della password per connettersi a {address}.\",\"net.password.wrong\":\"Utente o password non giusti\",\"net.trust.changed.title\":\"Il server di «{name}» ha CAMBIATO chiave\",\"net.trust.changed\":\"La chiave o il certificato di questo server non è quello che avevi confermato. Qualcuno potrebbe fingersi il server: continua solo se sai che è stato cambiato apposta.\\n\\nPrima: {previous}\\nOra: {fingerprint}\"}}")
-}), P = (e) => e.toLocaleString(u.locale), F = (e) => e.type === "folder" ? N("type.folder") : e.type === "app" ? N("type.app") : e.type === "link" ? N({
+var { t: N } = ye("files", {
+	en: /* @__PURE__ */ JSON.parse("{\"strings\":{\"@name\":\"File Manager\",\"@description\":\"Browse, search and organize files and folders: tags, links, desktop links, trash, info and preview.\",\"@commands.files.info.label\":\"Show or hide the info panel\",\"@commands.files.preview.label\":\"Show or hide the preview\",\"@commands.files.address.label\":\"Type a path\",\"@entrypoints.main.params.folder.label\":\"Folder\",\"@entrypoints.main.params.folder.description\":\"The folder it shows when it opens\",\"@entrypoints.newLink.label\":\"New link\",\"@entrypoints.newLink.params.folder.label\":\"Folder\",\"@entrypoints.newLink.params.folder.description\":\"Where the link is made\",\"menu.newLink\":\"New link…\",\"type.linkWeb\":\"Link to a web page\",\"newLink.title\":\"New link\",\"newLink.address\":\"Path or address\",\"newLink.address.placeholder\":\"~/Documenti/Note.txt or sftp://server/folder\",\"newLink.address.hint\":\"A path of lilOS, or an address with its protocol: sftp://user@server/folder, smb://server/share/folder, webdavs://server/folder, https://… for a web page. Folders are always separated by /.\",\"newLink.browse\":\"Browse…\",\"newLink.browseFile\":\"A file…\",\"newLink.browseFolder\":\"A folder…\",\"newLink.pickFile\":\"Choose the file of the link\",\"newLink.pickFolder\":\"Choose the folder of the link\",\"newLink.name\":\"Name\",\"newLink.make\":\"Create\",\"newLink.checking\":\"Looking for it on the server…\",\"newLink.error.empty\":\"Write a path or an address\",\"newLink.error.backslash\":\"Use / to separate folders, for SMB too: smb://server/share/folder\",\"newLink.error.slashes\":\"An address starts with its protocol and //, for example sftp://server/folder\",\"newLink.error.password\":\"Don’t write the password in the address: the connection asks for it\",\"newLink.error.host\":\"The server in the address is not valid\",\"newLink.error.path\":\"The path in the address is not valid\",\"newLink.error.noPath\":\"“{path}” does not exist\",\"newLink.error.notLinkable\":\"A link points to a file or a folder\",\"newLink.error.protocol\":\"No module of lilOS knows the protocol {protocol}: an administrator can add it from the AppStore → Kernel\",\"newLink.error.noConnection\":\"Without a connection to that server the link can’t be made\",\"newLink.error.otherFolder\":\"The connection “{name}” opens another folder: the address is outside it\",\"newLink.error.noRemote\":\"“{path}” does not exist on “{name}”\",\"newLink.error.noName\":\"Write a name\",\"newLink.error.folderGone\":\"The folder of the link is not there any more\",\"@automation.files.go.label\":\"Go to a folder\",\"@automation.files.go.params.folder.label\":\"Folder\",\"@automation.files.search.label\":\"Search the folder\",\"@automation.files.search.params.query.label\":\"Search for\",\"@automation.files.sort.label\":\"Sort\",\"@automation.files.sort.params.by.label\":\"Sort by\",\"@automation.files.sort.params.by.options.name.label\":\"Name\",\"@automation.files.sort.params.by.options.modified.label\":\"Modified\",\"@automation.files.sort.params.by.options.size.label\":\"Size\",\"@automation.files.sort.params.by.options.type.label\":\"Type\",\"@automation.files.sort.params.by.options.workspace.label\":\"Workspace\",\"@automation.files.sort.params.by.options.location.label\":\"Location\",\"@automation.files.sort.params.by.options.deleted.label\":\"Deleted\",\"@automation.files.sort.params.by.options.origin.label\":\"Original location\",\"@automation.files.sort.params.direction.label\":\"Order\",\"@automation.files.sort.params.direction.options.asc.label\":\"Ascending\",\"@automation.files.sort.params.direction.options.desc.label\":\"Descending\",\"@automation.files.view.label\":\"Change the view\",\"@automation.files.view.params.mode.label\":\"View\",\"@automation.files.view.params.mode.options.list.label\":\"List\",\"@automation.files.view.params.mode.options.grid.label\":\"Icons\",\"@automation.files.view.params.mode.options.thumbs.label\":\"Previews\",\"@dependencies.ssh.reason\":\"SFTP connections in Network (and SSH sessions in Terminal)\",\"@dependencies.netfs-ftp.reason\":\"FTP and FTPS connections in Network\",\"@dependencies.netfs-webdav.reason\":\"WebDAV connections in Network\",\"@dependencies.netfs-smb.reason\":\"Windows shares (SMB) in Network\",\"@dependencies.netfs-nfs.reason\":\"NFS shares in Network\",\"@dependencies.netfs-onedrive.reason\":\"OneDrive in Network\",\"@dependencies.netfs-google.reason\":\"Google Drive and Google Photos in Network\",\"@dependencies.netfs-s3.reason\":\"Amazon S3 and compatible storage in Network\",\"@dependencies.netfs-azblob.reason\":\"Azure Blob Storage in Network\",\"toolbar.back\":\"Back (Alt ←)\",\"toolbar.forward\":\"Forward (Alt →)\",\"toolbar.up\":\"Parent folder (Alt ↑)\",\"toolbar.path\":\"Path\",\"toolbar.address\":\"Path: type a folder and press Enter\",\"toolbar.search\":\"Search this folder\",\"toolbar.searchIn\":\"Search {name}\",\"view.list\":\"List view\",\"view.grid\":\"Icon view\",\"view.thumbs\":\"Preview view\",\"view.menu\":\"View\",\"list.label\":\"Folder contents\",\"list.more\":\"and {count} more\",\"rename.label\":\"New name\",\"create.folderName\":\"New folder\",\"create.fileName\":\"New file.txt\",\"panel.info.title\":\"Info\",\"panel.info.show\":\"Show the info panel\",\"panel.info.hide\":\"Hide the info panel\",\"panel.info.resize\":\"Info panel width\",\"panel.info.close\":\"Close the info panel\",\"panel.preview.title\":\"Preview\",\"panel.preview.show\":\"Show the preview\",\"panel.preview.hide\":\"Hide the preview\",\"panel.preview.resize\":\"Preview panel width\",\"panel.preview.close\":\"Close the preview panel\",\"place.home\":\"Home\",\"place.trash\":\"Trash\",\"place.tag\":\"Tag “{name}”\",\"side.label\":\"Places\",\"side.links\":\"Links\",\"side.tags\":\"Tags\",\"side.tagHidden\":\"{name}: invisible tag, its items are hidden elsewhere\",\"side.unlinkTitle\":\"Remove the link (the file stays)\",\"link.remove\":\"Remove the link to “{name}”\",\"side.collapse\":\"Collapse {name}\",\"side.expand\":\"Expand {name}\",\"link.notFound\":\"Not found\",\"link.mountGone\":\"Removed connection\",\"column.name\":\"Name\",\"column.modified\":\"Modified\",\"column.deleted\":\"Deleted\",\"column.size\":\"Size\",\"column.type\":\"Type\",\"column.workspace\":\"Workspace\",\"column.origin\":\"Original location\",\"column.location\":\"Location\",\"column.resize\":\"Width of the “{name}” column\",\"column.resizeTitle\":\"Drag to resize, double-click to fit the content\",\"columns.menu\":\"Columns\",\"columns.fitAll\":\"Fit all columns to their content\",\"columns.reset\":\"Default columns\",\"tree.expand\":\"Show contents here\",\"tree.expandAll\":\"Show contents with all subfolders\",\"tree.collapse\":\"Hide contents\",\"tree.collapseAll\":\"Close all folders\",\"tree.expandTitle\":\"Show contents (Alt-click: with subfolders)\",\"tree.collapseTitle\":\"Hide contents\",\"tile.deleted\":\"Deleted: {date}\",\"tile.origin\":\"Original location: {place}\",\"tile.location\":\"Location: {place}\",\"tile.tags\":\"Tags: {names}\",\"trash.restoresTo\":\"Goes back to {place} when restored\",\"trash.keptForever\":\"Items stay until you delete them\",\"trash.keptDays\":{\"one\":\"Deleted permanently after {count} day\",\"other\":\"Deleted permanently after {count} days\"},\"type.folder\":\"Folder\",\"type.app\":\"App\",\"type.linkFolder\":\"Link to a folder\",\"type.linkFile\":\"Link to a file\",\"owner.unknown\":\"Unknown\",\"owner.shared\":\"Shared\",\"owner.removed\":\"{name} (deleted)\",\"owner.label\":\"Workspace: {name}\",\"count.items\":{\"zero\":\"Empty\",\"one\":\"{count} item\",\"other\":\"{count} items\"},\"empty.noMatch\":\"No items match “{query}”\",\"empty.trash\":\"The trash is empty\",\"empty.tag\":\"No items have this tag. Add it from the right-click menu → Tag.\",\"empty.folder\":\"This folder is empty\",\"status.items\":{\"one\":\"{count} item\",\"other\":\"{count} items\"},\"status.selected\":{\"one\":\"{count} selected\",\"other\":\"{count} selected\"},\"status.tag\":\"All items with this tag\",\"status.tagHidden\":\"Invisible tag: these items are hidden elsewhere\",\"message.hiddenByTag\":\"“{name}” is hidden by an invisible tag\",\"message.restoreToOpen\":\"To open it, restore it (right-click → Restore)\",\"message.systemFolders\":\"System folders can’t be deleted\",\"message.noPath\":\"“{path}” doesn’t exist\",\"message.typePath\":\"Type the path of a folder, such as {path}\",\"error.notFile\":\"Not a file\",\"error.rename\":\"Can’t rename “{name}”\",\"error.deskLink\":\"Can’t add the link to the desktop\",\"error.createFolder\":\"Can’t create the folder\",\"error.createFile\":\"Can’t create the file\",\"error.delete\":\"Can’t delete\",\"error.pathNotFound\":\"Path not found\",\"error.folderNotFound\":\"Folder not found\",\"error.folderNotFoundText\":\"The folder to open no longer exists: showing {place} instead.\",\"error.tagNotFound\":\"Tag not found\",\"error.tagNotFoundText\":\"The tag to show no longer exists: showing {place} instead.\",\"automation.noFolder\":\"The folder is not there any more\",\"automation.noColumn\":\"This folder has no such column to sort by\",\"automation.noView\":\"Unknown view\",\"toast.restored\":\"Restored “{name}” to {place}\",\"toast.restoredMany\":\"Restored {count} items to {place}\",\"toast.restoredManyPlaces\":\"Restored {count} items to {folders} folders\",\"toast.unlinked\":\"Link to “{name}” removed\",\"toast.linksAdded\":{\"one\":\"Link added\",\"other\":\"{count} links added\"},\"toast.deskLinks\":{\"one\":\"Link added to the desktop\",\"other\":\"{count} links added to the desktop\"},\"toast.trashed\":{\"one\":\"Moved to the trash\",\"other\":\"{count} items moved to the trash\"},\"menu.open\":\"Open\",\"menu.openMany\":\"Open {count} items\",\"menu.openWith\":\"Open with…\",\"menu.openInEditor\":\"Open in Editor\",\"menu.reveal\":\"Show in folder\",\"menu.unlink\":\"Remove the link\",\"menu.deskLink\":\"Add a link to the desktop\",\"menu.rename\":\"Rename\",\"menu.untag\":\"Remove the tag “{name}”\",\"menu.info\":\"Info\",\"menu.properties\":\"Properties…\",\"menu.delete\":\"Delete\",\"menu.deleteMany\":\"Delete {count} items\",\"menu.restore\":\"Restore\",\"menu.restoreMany\":\"Restore {count} items\",\"menu.restoreAll\":\"Restore all\",\"menu.purge\":\"Delete permanently…\",\"menu.emptyTrash\":\"Empty the trash…\",\"menu.manageTags\":\"Manage tags…\",\"menu.newFolder\":\"New folder\",\"menu.newTextFile\":\"New text file\",\"info.folderHint\":\"Nothing selected: here is the open folder.\",\"info.general\":\"General\",\"info.organization\":\"Organization\",\"info.attributes\":\"Attributes\",\"info.text\":\"Text\",\"info.items\":\"Items\",\"info.types\":\"Types\",\"info.size\":\"Size\",\"info.bytesDetail\":\"{size} ({count} bytes)\",\"info.contents\":\"Contents\",\"info.contentsTotal\":\"{items}, {total} in all\",\"info.insideFolders\":{\"one\":\"{count} item in the folders\",\"other\":\"{count} items in the folders\"},\"info.lastDeleted\":\"Last deleted\",\"info.location\":\"Location\",\"info.manyFolders\":\"{count} different folders\",\"info.oldest\":\"Oldest\",\"info.newest\":\"Newest\",\"info.workspace\":\"Workspace\",\"info.tags\":\"Tags\",\"info.common\":\"In common\",\"info.none\":\"None\",\"info.tagHidden\":\"{name} (invisible tag)\",\"info.tagKind\":\"Tag\",\"info.retention\":\"Retention\",\"info.visibility\":\"Visibility\",\"info.visible\":\"Visible\",\"info.invisible\":\"Invisible: its items are hidden elsewhere\",\"info.lines\":\"Lines\",\"info.words\":\"Words\",\"info.chars\":\"Characters\",\"info.folders\":{\"one\":\"{count} folder\",\"other\":\"{count} folders\"},\"info.files\":{\"one\":\"{count} file\",\"other\":\"{count} files\"},\"info.apps\":{\"one\":\"{count} app\",\"other\":\"{count} apps\"},\"note.system\":\"System item: it can’t be renamed or deleted\",\"note.private\":\"Private: visible only in its workspace\",\"note.hidden\":\"Hidden by an invisible tag\",\"note.linked\":\"In the sidebar (Links)\",\"selection.count\":\"{count} items selected\",\"preview.none\":\"Nothing selected\",\"preview.selectFile\":\"Select a file to see its contents\",\"preview.oneAtATime\":\"The preview shows one item at a time\",\"preview.trashed\":\"In the trash\",\"preview.restoreToSee\":\"Restore it to see its contents\",\"preview.loading\":\"Loading…\",\"preview.readError\":\"Can’t read the file\",\"preview.open\":\"Open\",\"preview.launch\":\"Launch\",\"preview.emptyFile\":\"Empty file\",\"preview.emptyFolder\":\"Empty folder\",\"preview.imageAlt\":\"Preview of {name}\",\"preview.unavailable\":\"No preview available\",\"preview.notText\":\"The file doesn’t contain text\",\"preview.contentsOf\":\"Contents of {name}\",\"preview.cut\":\"Showing the first {shown} of {total} characters: open the file to see all of it\",\"preview.childTitle\":\"{name} — double-click to open\",\"preview.appMissing\":\"App not installed\",\"preview.byApp\":\"Preview made by {app}\",\"net.section\":\"Network\",\"net.add\":\"Connect to a server…\",\"net.none\":\"No connections\",\"net.state.on\":\"Connected\",\"net.state.connecting\":\"Connecting…\",\"net.state.off\":\"Not connected\",\"net.state.error\":\"Cannot connect\",\"net.menu.open\":\"Open\",\"net.menu.connect\":\"Connect\",\"net.menu.disconnect\":\"Disconnect\",\"net.menu.edit\":\"Edit connection…\",\"net.menu.remove\":\"Remove connection\",\"net.remove.title\":\"Remove the connection «{name}»?\",\"net.remove.text\":\"Its folder leaves Network and its saved password is deleted. The files on the server stay where they are.\",\"net.bar.on\":\"Connected to\",\"net.loading\":\"Reading the folder from the server…\",\"net.notRead\":\"The folder could not be read from the server\",\"net.error.title\":\"Network\",\"net.error.read\":\"Cannot read «{name}»\",\"net.preview.big\":\"Not shown: the file is on a server and is bigger than 1 MB\",\"net.connect.title\":\"Connect to a server\",\"net.edit.title\":\"Connection «{name}»\",\"net.protocol\":\"Protocol\",\"net.name\":\"Folder name in Network\",\"net.name.hint\":\"It will be {path}\",\"net.remember\":\"Remember the password (kept encrypted by lilOS)\",\"net.auto\":\"Connect when I sign in\",\"net.test\":\"Try\",\"net.testing\":\"Trying…\",\"net.test.ok\":\"It works: the server answers and the folder can be read\",\"net.connecting\":\"Connecting…\",\"net.connect.go\":\"Connect\",\"net.save\":\"Save and connect\",\"net.cancel\":\"Cancel\",\"net.later\":\"Later\",\"net.remember.signin\":\"Remember the sign-in (lilOS keeps it encrypted)\",\"net.web.open\":\"Open in the browser\",\"net.web.only\":\"It opens only on the provider's site\",\"net.web.copiedAs\":\"It opens on the provider's site; copied out, it becomes a {ext} file\",\"net.space.of\":\"{used} of {total} used\",\"net.space.used\":\"{used} used\",\"net.group.server\":\"Servers\",\"net.group.cloud\":\"Cloud\",\"net.group.local\":\"Local network\",\"net.signin.paste.text\":\"Sign in in the tab that opened. At the end the browser shows a page that does not open: copy its whole address from the address bar and paste it here.\",\"net.signin.paste.label\":\"Address of the page that did not open\",\"net.signin.paste.go\":\"Continue\",\"net.import.where\":\"Where to copy them\",\"net.import.change\":\"Change…\",\"net.import.step\":\"Pick photos and videos\",\"net.import.pick\":\"Pick in a new tab\",\"net.import.hint\":\"Google's page opens in a new tab: select up to 2000 items and press Done. The copy must start within an hour.\",\"net.import.opening\":\"Opening the page to pick…\",\"net.import.waiting\":\"Waiting for your choice in the other tab…\",\"net.import.picked\":\"{count} items picked: press Import\",\"net.import.none\":\"Nothing was picked\",\"net.import.failed\":\"Import failed\",\"net.import.go\":\"Import\",\"message.noRename\":\"«{name}» can’t be renamed here\",\"message.noRemove\":\"These items can’t be removed here\",\"net.signin.button\":\"Sign in\",\"net.signin.waiting\":\"Finish signing in in the window that opened…\",\"net.signin.blocked\":\"The browser blocked the sign-in window: allow pop-ups for lilOS and try again\",\"net.signin.other\":\"Use another account\",\"net.signin.again.title\":\"Sign in again to «{name}»\",\"net.signin.again.text\":\"The provider asks to sign in again for {account}.\",\"net.notReady.title\":\"{name} is not ready on this lilOS yet\",\"net.notReady.settings\":\"Open the settings\",\"office.open.word\":\"Open in Word online\",\"office.open.excel\":\"Open in Excel online\",\"office.open.powerpoint\":\"Open in PowerPoint online\",\"office.upload\":\"Upload to OneDrive and open\",\"office.none\":\"Connect OneDrive first (Rete → +)\",\"office.pick\":\"Upload to:\",\"office.uploaded\":\"«{name}» is on {folder}: what you change in Office is saved there\",\"office.again\":\"Signed in again: try once more\",\"office.failed\":\"«{name}» not uploaded\",\"office.exists.title\":\"File already on OneDrive\",\"office.exists.text\":\"There is already «{name}» in {folder}. Replace it with this one (what was changed online is lost), or keep both?\",\"office.exists.keep\":\"Keep both\",\"office.exists.replace\":\"Replace\",\"net.missing\":\"Missing: {fields}\",\"net.shares.list\":\"List…\",\"net.shares.none\":\"The server shares nothing you can see\",\"net.password.title\":\"Password for «{name}»\",\"net.password.text\":\"lilOS needs the password to connect to {address}.\",\"net.password.wrong\":\"The user or the password is not right\"}}"),
+	it: /* @__PURE__ */ JSON.parse("{\"strings\":{\"@name\":\"File Manager\",\"@description\":\"Sfoglia, cerca e organizza file e cartelle: tag, collegamenti, collegamenti sul desktop, cestino, informazioni e anteprima.\",\"@commands.files.info.label\":\"Mostra o nascondi le informazioni\",\"@commands.files.preview.label\":\"Mostra o nascondi l’anteprima\",\"@commands.files.address.label\":\"Scrivi un percorso\",\"@entrypoints.main.params.folder.label\":\"Cartella\",\"@entrypoints.main.params.folder.description\":\"La cartella che mostra all’apertura\",\"@entrypoints.newLink.label\":\"Nuovo collegamento\",\"@entrypoints.newLink.params.folder.label\":\"Cartella\",\"@entrypoints.newLink.params.folder.description\":\"Dove si crea il collegamento\",\"menu.newLink\":\"Nuovo collegamento…\",\"type.linkWeb\":\"Collegamento a una pagina web\",\"newLink.title\":\"Nuovo collegamento\",\"newLink.address\":\"Percorso o indirizzo\",\"newLink.address.placeholder\":\"~/Documenti/Note.txt o sftp://server/cartella\",\"newLink.address.hint\":\"Un percorso di lilOS, o un indirizzo con il protocollo: sftp://utente@server/cartella, smb://server/condivisione/cartella, webdavs://server/cartella, https://… per una pagina web. Le cartelle si separano sempre con /.\",\"newLink.browse\":\"Sfoglia…\",\"newLink.browseFile\":\"Un file…\",\"newLink.browseFolder\":\"Una cartella…\",\"newLink.pickFile\":\"Scegli il file del collegamento\",\"newLink.pickFolder\":\"Scegli la cartella del collegamento\",\"newLink.name\":\"Nome\",\"newLink.make\":\"Crea\",\"newLink.checking\":\"Lo cerco sul server…\",\"newLink.error.empty\":\"Scrivi un percorso o un indirizzo\",\"newLink.error.backslash\":\"Usa / per separare le cartelle, anche per SMB: smb://server/condivisione/cartella\",\"newLink.error.slashes\":\"Un indirizzo comincia con il protocollo e //, per esempio sftp://server/cartella\",\"newLink.error.password\":\"Non scrivere la password nell’indirizzo: la chiede la connessione\",\"newLink.error.host\":\"Il server nell’indirizzo non è valido\",\"newLink.error.path\":\"Il percorso nell’indirizzo non è valido\",\"newLink.error.noPath\":\"«{path}» non esiste\",\"newLink.error.notLinkable\":\"Un collegamento punta a un file o a una cartella\",\"newLink.error.protocol\":\"Nessun modulo di lilOS conosce il protocollo {protocol}: un amministratore può aggiungerlo dall’AppStore → Kernel\",\"newLink.error.noConnection\":\"Senza una connessione a quel server il collegamento non si può creare\",\"newLink.error.otherFolder\":\"La connessione «{name}» apre un’altra cartella: l’indirizzo è fuori da quella\",\"newLink.error.noRemote\":\"«{path}» non esiste su «{name}»\",\"newLink.error.noName\":\"Scrivi un nome\",\"newLink.error.folderGone\":\"La cartella del collegamento non c’è più\",\"@automation.files.go.label\":\"Vai a una cartella\",\"@automation.files.go.params.folder.label\":\"Cartella\",\"@automation.files.search.label\":\"Cerca nella cartella\",\"@automation.files.search.params.query.label\":\"Cerca\",\"@automation.files.sort.label\":\"Ordina\",\"@automation.files.sort.params.by.label\":\"Ordina per\",\"@automation.files.sort.params.by.options.name.label\":\"Nome\",\"@automation.files.sort.params.by.options.modified.label\":\"Modificato\",\"@automation.files.sort.params.by.options.size.label\":\"Dimensione\",\"@automation.files.sort.params.by.options.type.label\":\"Tipo\",\"@automation.files.sort.params.by.options.workspace.label\":\"Workspace\",\"@automation.files.sort.params.by.options.location.label\":\"Posizione\",\"@automation.files.sort.params.by.options.deleted.label\":\"Eliminato\",\"@automation.files.sort.params.by.options.origin.label\":\"Posizione originale\",\"@automation.files.sort.params.direction.label\":\"Ordine\",\"@automation.files.sort.params.direction.options.asc.label\":\"Crescente\",\"@automation.files.sort.params.direction.options.desc.label\":\"Decrescente\",\"@automation.files.view.label\":\"Cambia vista\",\"@automation.files.view.params.mode.label\":\"Vista\",\"@automation.files.view.params.mode.options.list.label\":\"Elenco\",\"@automation.files.view.params.mode.options.grid.label\":\"Icone\",\"@automation.files.view.params.mode.options.thumbs.label\":\"Anteprime\",\"@dependencies.ssh.reason\":\"Connessioni SFTP in Rete (e sessioni SSH nel Terminale)\",\"@dependencies.netfs-ftp.reason\":\"Connessioni FTP e FTPS in Rete\",\"@dependencies.netfs-webdav.reason\":\"Connessioni WebDAV in Rete\",\"@dependencies.netfs-smb.reason\":\"Condivisioni di Windows (SMB) in Rete\",\"@dependencies.netfs-nfs.reason\":\"Condivisioni NFS in Rete\",\"@dependencies.netfs-onedrive.reason\":\"OneDrive in Rete\",\"@dependencies.netfs-google.reason\":\"Google Drive e Google Foto in Rete\",\"@dependencies.netfs-s3.reason\":\"Amazon S3 e archivi compatibili in Rete\",\"@dependencies.netfs-azblob.reason\":\"Azure Blob Storage in Rete\",\"toolbar.back\":\"Indietro (Alt ←)\",\"toolbar.forward\":\"Avanti (Alt →)\",\"toolbar.up\":\"Cartella superiore (Alt ↑)\",\"toolbar.path\":\"Percorso\",\"toolbar.address\":\"Percorso: scrivi una cartella e premi Invio\",\"toolbar.search\":\"Cerca nella cartella\",\"toolbar.searchIn\":\"Cerca in {name}\",\"view.list\":\"Vista elenco\",\"view.grid\":\"Vista a icone\",\"view.thumbs\":\"Vista anteprime\",\"view.menu\":\"Vista\",\"list.label\":\"Contenuto della cartella\",\"list.more\":\"e altri {count}\",\"rename.label\":\"Nuovo nome\",\"create.folderName\":\"Nuova cartella\",\"create.fileName\":\"Nuovo file.txt\",\"panel.info.title\":\"Informazioni\",\"panel.info.show\":\"Mostra le informazioni\",\"panel.info.hide\":\"Nascondi le informazioni\",\"panel.info.resize\":\"Larghezza del pannello delle informazioni\",\"panel.info.close\":\"Chiudi il pannello delle informazioni\",\"panel.preview.title\":\"Anteprima\",\"panel.preview.show\":\"Mostra l’anteprima\",\"panel.preview.hide\":\"Nascondi l’anteprima\",\"panel.preview.resize\":\"Larghezza del pannello dell’anteprima\",\"panel.preview.close\":\"Chiudi il pannello dell’anteprima\",\"place.home\":\"Home\",\"place.trash\":\"Cestino\",\"place.tag\":\"Tag «{name}»\",\"side.label\":\"Risorse\",\"side.links\":\"Collegamenti\",\"side.tags\":\"Tag\",\"side.tagHidden\":\"{name}: tag invisibile, i suoi elementi sono nascosti altrove\",\"side.unlinkTitle\":\"Elimina il collegamento (il file resta)\",\"link.remove\":\"Elimina il collegamento a «{name}»\",\"side.collapse\":\"Comprimi {name}\",\"side.expand\":\"Espandi {name}\",\"link.notFound\":\"Non trovato\",\"link.mountGone\":\"Connessione rimossa\",\"column.name\":\"Nome\",\"column.modified\":\"Modificato\",\"column.deleted\":\"Eliminato\",\"column.size\":\"Dimensione\",\"column.type\":\"Tipo\",\"column.workspace\":\"Workspace\",\"column.origin\":\"Posizione originale\",\"column.location\":\"Posizione\",\"column.resize\":\"Larghezza della colonna «{name}»\",\"column.resizeTitle\":\"Trascina per ridimensionare, doppio clic per adattare al contenuto\",\"columns.menu\":\"Colonne\",\"columns.fitAll\":\"Adatta tutte le colonne al contenuto\",\"columns.reset\":\"Ripristina le colonne\",\"tree.expand\":\"Mostra il contenuto qui\",\"tree.expandAll\":\"Mostra il contenuto con tutte le sottocartelle\",\"tree.collapse\":\"Nascondi il contenuto\",\"tree.collapseAll\":\"Chiudi tutte le cartelle\",\"tree.expandTitle\":\"Mostra il contenuto (Alt+clic: anche le sottocartelle)\",\"tree.collapseTitle\":\"Nascondi il contenuto\",\"tile.deleted\":\"Eliminato: {date}\",\"tile.origin\":\"Posizione originale: {place}\",\"tile.location\":\"Posizione: {place}\",\"tile.tags\":\"Tag: {names}\",\"trash.restoresTo\":\"Ripristinando torna in {place}\",\"trash.keptForever\":\"Gli elementi restano finché non li elimini\",\"trash.keptDays\":{\"one\":\"Eliminati definitivamente dopo {count} giorno\",\"other\":\"Eliminati definitivamente dopo {count} giorni\"},\"type.folder\":\"Cartella\",\"type.app\":\"App\",\"type.linkFolder\":\"Collegamento a una cartella\",\"type.linkFile\":\"Collegamento a un file\",\"owner.unknown\":\"Sconosciuto\",\"owner.shared\":\"Condiviso\",\"owner.removed\":\"{name} (eliminato)\",\"owner.label\":\"Workspace: {name}\",\"count.items\":{\"zero\":\"Vuota\",\"one\":\"{count} elemento\",\"other\":\"{count} elementi\"},\"empty.noMatch\":\"Nessun elemento corrisponde a «{query}»\",\"empty.trash\":\"Il cestino è vuoto\",\"empty.tag\":\"Nessun elemento ha questo tag. Si assegna dal menu del tasto destro → Tag.\",\"empty.folder\":\"Questa cartella è vuota\",\"status.items\":{\"one\":\"{count} elemento\",\"other\":\"{count} elementi\"},\"status.selected\":{\"one\":\"{count} selezionato\",\"other\":\"{count} selezionati\"},\"status.tag\":\"Tutti gli elementi con questo tag\",\"status.tagHidden\":\"Tag invisibile: questi elementi sono nascosti altrove\",\"message.hiddenByTag\":\"«{name}» è nascosto da un tag invisibile\",\"message.restoreToOpen\":\"Per aprirlo, ripristinalo (clic destro → Ripristina)\",\"message.systemFolders\":\"Le cartelle di sistema non si possono eliminare\",\"message.noPath\":\"«{path}» non esiste\",\"message.typePath\":\"Scrivi il percorso di una cartella, come {path}\",\"error.notFile\":\"Non è un file\",\"error.rename\":\"Impossibile rinominare «{name}»\",\"error.deskLink\":\"Impossibile aggiungere il collegamento al desktop\",\"error.createFolder\":\"Impossibile creare la cartella\",\"error.createFile\":\"Impossibile creare il file\",\"error.delete\":\"Impossibile eliminare\",\"error.pathNotFound\":\"Percorso non trovato\",\"error.folderNotFound\":\"Cartella non trovata\",\"error.folderNotFoundText\":\"La cartella da aprire non esiste più: al suo posto c’è {place}.\",\"error.tagNotFound\":\"Tag non trovato\",\"error.tagNotFoundText\":\"Il tag da mostrare non esiste più: al suo posto c’è {place}.\",\"automation.noFolder\":\"La cartella non c’è più\",\"automation.noColumn\":\"Questa cartella non ha una colonna per cui ordinare così\",\"automation.noView\":\"Vista sconosciuta\",\"toast.restored\":\"Ripristinato «{name}» in {place}\",\"toast.restoredMany\":\"Ripristinati {count} elementi in {place}\",\"toast.restoredManyPlaces\":\"Ripristinati {count} elementi in {folders} cartelle\",\"toast.unlinked\":\"Collegamento a «{name}» eliminato\",\"toast.linksAdded\":{\"one\":\"Collegamento aggiunto\",\"other\":\"{count} collegamenti aggiunti\"},\"toast.deskLinks\":{\"one\":\"Collegamento aggiunto al desktop\",\"other\":\"{count} collegamenti aggiunti al desktop\"},\"toast.trashed\":{\"one\":\"Spostato nel cestino\",\"other\":\"{count} elementi spostati nel cestino\"},\"menu.open\":\"Apri\",\"menu.openMany\":\"Apri {count} elementi\",\"menu.openWith\":\"Apri con…\",\"menu.openInEditor\":\"Apri nell’Editor\",\"menu.reveal\":\"Mostra nella cartella\",\"menu.unlink\":\"Elimina il collegamento\",\"menu.deskLink\":\"Aggiungi un collegamento al desktop\",\"menu.rename\":\"Rinomina\",\"menu.untag\":\"Togli il tag «{name}»\",\"menu.info\":\"Informazioni\",\"menu.properties\":\"Proprietà…\",\"menu.delete\":\"Elimina\",\"menu.deleteMany\":\"Elimina {count} elementi\",\"menu.restore\":\"Ripristina\",\"menu.restoreMany\":\"Ripristina {count} elementi\",\"menu.restoreAll\":\"Ripristina tutto\",\"menu.purge\":\"Elimina definitivamente…\",\"menu.emptyTrash\":\"Svuota il cestino…\",\"menu.manageTags\":\"Gestisci i tag…\",\"menu.newFolder\":\"Nuova cartella\",\"menu.newTextFile\":\"Nuovo file di testo\",\"info.folderHint\":\"Nessun elemento selezionato: ecco la cartella aperta.\",\"info.general\":\"Generali\",\"info.organization\":\"Organizzazione\",\"info.attributes\":\"Attributi\",\"info.text\":\"Testo\",\"info.items\":\"Elementi\",\"info.types\":\"Tipi\",\"info.size\":\"Dimensione\",\"info.bytesDetail\":\"{size} ({count} byte)\",\"info.contents\":\"Contenuto\",\"info.contentsTotal\":\"{items}, {total} in tutto\",\"info.insideFolders\":{\"one\":\"{count} elemento nelle cartelle\",\"other\":\"{count} elementi nelle cartelle\"},\"info.lastDeleted\":\"Ultima eliminazione\",\"info.location\":\"Posizione\",\"info.manyFolders\":\"{count} cartelle diverse\",\"info.oldest\":\"Meno recente\",\"info.newest\":\"Più recente\",\"info.workspace\":\"Workspace\",\"info.tags\":\"Tag\",\"info.common\":\"In comune\",\"info.none\":\"Nessuno\",\"info.tagHidden\":\"{name} (tag invisibile)\",\"info.tagKind\":\"Tag\",\"info.retention\":\"Conservazione\",\"info.visibility\":\"Visibilità\",\"info.visible\":\"Visibile\",\"info.invisible\":\"Invisibile: i suoi elementi sono nascosti altrove\",\"info.lines\":\"Righe\",\"info.words\":\"Parole\",\"info.chars\":\"Caratteri\",\"info.folders\":{\"one\":\"{count} cartella\",\"other\":\"{count} cartelle\"},\"info.files\":{\"one\":\"{count} file\",\"other\":\"{count} file\"},\"info.apps\":{\"one\":\"{count} app\",\"other\":\"{count} app\"},\"note.system\":\"Di sistema: non si rinomina e non si elimina\",\"note.private\":\"Privata: si vede solo nel suo workspace\",\"note.hidden\":\"Nascosto da un tag invisibile\",\"note.linked\":\"Nella barra laterale (Collegamenti)\",\"selection.count\":\"{count} elementi selezionati\",\"preview.none\":\"Nessun elemento selezionato\",\"preview.selectFile\":\"Seleziona un file per vederne il contenuto\",\"preview.oneAtATime\":\"L’anteprima mostra un elemento alla volta\",\"preview.trashed\":\"Nel cestino\",\"preview.restoreToSee\":\"Ripristinalo per vederne il contenuto\",\"preview.loading\":\"Caricamento…\",\"preview.readError\":\"Impossibile leggere il file\",\"preview.open\":\"Apri\",\"preview.launch\":\"Avvia\",\"preview.emptyFile\":\"File vuoto\",\"preview.emptyFolder\":\"Cartella vuota\",\"preview.imageAlt\":\"Anteprima di {name}\",\"preview.unavailable\":\"Anteprima non disponibile\",\"preview.notText\":\"Il file non contiene testo\",\"preview.contentsOf\":\"Contenuto di {name}\",\"preview.cut\":\"Mostrati i primi {shown} caratteri su {total}: apri il file per vederlo tutto\",\"preview.childTitle\":\"{name} — doppio clic per aprire\",\"preview.appMissing\":\"App non installata\",\"preview.byApp\":\"Anteprima creata da {app}\",\"net.section\":\"Rete\",\"net.add\":\"Connetti a un server…\",\"net.none\":\"Nessuna connessione\",\"net.state.on\":\"Connessa\",\"net.state.connecting\":\"Connessione in corso…\",\"net.state.off\":\"Non connessa\",\"net.state.error\":\"Non si connette\",\"net.menu.open\":\"Apri\",\"net.menu.connect\":\"Connetti\",\"net.menu.disconnect\":\"Disconnetti\",\"net.menu.edit\":\"Modifica connessione…\",\"net.menu.remove\":\"Rimuovi connessione\",\"net.remove.title\":\"Rimuovere la connessione «{name}»?\",\"net.remove.text\":\"La sua cartella esce da Rete e la password salvata viene cancellata. I file sul server restano dove sono.\",\"net.bar.on\":\"Connesso a\",\"net.loading\":\"Lettura della cartella dal server…\",\"net.notRead\":\"Non è stato possibile leggere la cartella dal server\",\"net.error.title\":\"Rete\",\"net.error.read\":\"Non si legge «{name}»\",\"net.preview.big\":\"Non mostrato: il file è su un server ed è più grande di 1 MB\",\"net.connect.title\":\"Connetti a un server\",\"net.edit.title\":\"Connessione «{name}»\",\"net.protocol\":\"Protocollo\",\"net.name\":\"Nome della cartella in Rete\",\"net.name.hint\":\"Sarà {path}\",\"net.remember\":\"Ricorda la password (lilOS la tiene cifrata)\",\"net.auto\":\"Connetti all’accesso\",\"net.test\":\"Prova\",\"net.testing\":\"Prova in corso…\",\"net.test.ok\":\"Funziona: il server risponde e la cartella si legge\",\"net.connecting\":\"Connessione in corso…\",\"net.connect.go\":\"Connetti\",\"net.save\":\"Salva e connetti\",\"net.cancel\":\"Annulla\",\"net.later\":\"Più tardi\",\"net.remember.signin\":\"Ricorda l’accesso (lilOS lo tiene cifrato)\",\"net.web.open\":\"Apri nel browser\",\"net.web.only\":\"Si apre solo sul sito del fornitore\",\"net.web.copiedAs\":\"Si apre sul sito del fornitore; copiato fuori diventa un file {ext}\",\"net.space.of\":\"{used} di {total} usati\",\"net.space.used\":\"{used} usati\",\"net.group.server\":\"Server\",\"net.group.cloud\":\"Cloud\",\"net.group.local\":\"Rete locale\",\"net.signin.paste.text\":\"Accedi nella scheda che si è aperta. Alla fine il browser mostra una pagina che non si apre: copia tutto il suo indirizzo dalla barra degli indirizzi e incollalo qui.\",\"net.signin.paste.label\":\"Indirizzo della pagina che non si è aperta\",\"net.signin.paste.go\":\"Continua\",\"net.import.where\":\"Dove copiarle\",\"net.import.change\":\"Cambia…\",\"net.import.step\":\"Scegli foto e video\",\"net.import.pick\":\"Scegli in una nuova scheda\",\"net.import.hint\":\"La pagina di Google si apre in una nuova scheda: seleziona fino a 2000 elementi e premi Fine. La copia va avviata entro un’ora.\",\"net.import.opening\":\"Apertura della pagina per scegliere…\",\"net.import.waiting\":\"In attesa della tua scelta nell’altra scheda…\",\"net.import.picked\":\"{count} elementi scelti: premi Importa\",\"net.import.none\":\"Non hai scelto niente\",\"net.import.failed\":\"Importazione non riuscita\",\"net.import.go\":\"Importa\",\"message.noRename\":\"«{name}» qui non si rinomina\",\"message.noRemove\":\"Questi elementi qui non si eliminano\",\"net.signin.button\":\"Accedi\",\"net.signin.waiting\":\"Completa l’accesso nella finestra che si è aperta…\",\"net.signin.blocked\":\"Il browser ha bloccato la finestra di accesso: consenti le finestre a comparsa per lilOS e riprova\",\"net.signin.other\":\"Usa un altro account\",\"net.signin.again.title\":\"Accedi di nuovo a «{name}»\",\"net.signin.again.text\":\"Il fornitore chiede di ripetere l’accesso per {account}.\",\"net.notReady.title\":\"{name} non è ancora pronto su questo lilOS\",\"net.notReady.settings\":\"Apri le impostazioni\",\"office.open.word\":\"Apri in Word online\",\"office.open.excel\":\"Apri in Excel online\",\"office.open.powerpoint\":\"Apri in PowerPoint online\",\"office.upload\":\"Carica su OneDrive e apri\",\"office.none\":\"Prima collega OneDrive (Rete → +)\",\"office.pick\":\"Carica su:\",\"office.uploaded\":\"«{name}» è su {folder}: quello che cambi in Office si salva lì\",\"office.again\":\"Accesso rifatto: riprova\",\"office.failed\":\"«{name}» non caricato\",\"office.exists.title\":\"File già su OneDrive\",\"office.exists.text\":\"In {folder} c’è già «{name}». Lo sostituisci con questo (quello che è stato cambiato online si perde) o li tieni entrambi?\",\"office.exists.keep\":\"Tieni entrambi\",\"office.exists.replace\":\"Sostituisci\",\"net.missing\":\"Mancano: {fields}\",\"net.shares.list\":\"Elenca…\",\"net.shares.none\":\"Il server non condivide niente che tu possa vedere\",\"net.password.title\":\"Password di «{name}»\",\"net.password.text\":\"lilOS ha bisogno della password per connettersi a {address}.\",\"net.password.wrong\":\"Utente o password non giusti\"}}")
+}), P = (e) => e.toLocaleString(p.locale), F = (e) => e.type === "folder" ? N("type.folder") : e.type === "app" ? N("type.app") : e.type === "link" ? N({
 	folder: "type.linkFolder",
 	web: "type.linkWeb"
 }[e.link?.kind] ?? "type.linkFile") : i(e.name).label;
-function me(t) {
+function be(t) {
 	let n = t.link ?? {};
-	return n.kind === "web" ? n.url : n.home ? a.exists(n.home) ? a.path(n.home) : N("link.notFound") : `${e.net?.mount(n.mount)?.name ?? N("link.mountGone")}: ${n.path}`;
+	return n.kind === "web" ? n.url : n.home ? o.exists(n.home) ? o.path(n.home) : N("link.notFound") : `${e.net?.mount(n.mount)?.name ?? N("link.mountGone")}: ${n.path}`;
 }
-var I = (e) => e.id === a.root ? N("place.home") : e.name, L = (e) => e.parent === a.root ? N("place.home") : a.path(e.parent);
-function he(e) {
+var I = (e) => e.id === o.root ? N("place.home") : e.name, L = (e) => e.parent === o.root ? N("place.home") : o.path(e.parent);
+function xe(e) {
 	let t = e.trashed.from;
-	return a.exists(t) && t !== a.root ? a.path(t) : N("place.home");
+	return o.exists(t) && t !== o.root ? o.path(t) : N("place.home");
 }
 function R(e) {
-	let t = C(e.workspace);
+	let t = E(e.workspace);
 	return t ? t.removed ? N("owner.removed", { name: t.name }) : t.name : e.workspace ? N("owner.unknown") : N("owner.shared");
 }
-function ge(e) {
-	let t = C(e.workspace), n = o("span", {
+function Se(e) {
+	let t = E(e.workspace), n = s("span", {
 		class: "ws-owner-dot",
 		"aria-hidden": "true"
 	});
-	return t && (n.style.background = t.color), o("span", {
+	return t && (n.style.background = t.color), s("span", {
 		class: [
 			"ws-owner",
 			!t && "shared",
 			t?.removed && "removed"
 		].filter(Boolean).join(" "),
 		title: N("owner.label", { name: R(e) })
-	}, n, o("span", {}, R(e)));
-}
-function _e(e) {
-	if (e < 1024) return `${e} B`;
-	let t = [
-		"KB",
-		"MB",
-		"GB"
-	], n = e, r = -1;
-	do
-		n /= 1024, r++;
-	while (n >= 1024 && r < t.length - 1);
-	return `${n.toLocaleString(u.locale, { maximumFractionDigits: 1 })} ${t[r]}`;
+	}, n, s("span", {}, R(e)));
 }
 var z = (e) => N("count.items", {
 	n: e,
 	count: P(e)
 });
-function ve(e) {
-	return e.type === "folder" ? z(e.trashed ? e.inside : a.children(e.id).length) : e.type === "file" && e.net && e.web ? "—" : e.type === "file" ? _e(e.size ?? 0) : "—";
+function Ce(e) {
+	return e.type === "folder" ? z(e.trashed ? e.inside : o.children(e.id).length) : e.type === "file" && e.net && e.web ? "—" : e.type === "file" ? a(e.size ?? 0) : "—";
 }
-function ye() {
-	let e = d.get("trashRetention");
+function we() {
+	let e = m.get("trashRetention");
 	return e <= 0 ? N("trash.keptForever") : N("trash.keptDays", {
 		n: e,
 		count: P(e)
 	});
 }
-var B = (e) => new Date(e).toLocaleString(u.locale, {
+var B = (e) => new Date(e).toLocaleString(p.locale, {
 	day: "2-digit",
 	month: "2-digit",
 	year: "numeric",
 	hour: "2-digit",
 	minute: "2-digit"
-}), be = "files-panels", xe = 720, Se = class {
+}), Te = "files-panels", Ee = 720, De = class {
 	open;
 	width;
-	constructor({ key: e, title: t, resizeLabel: n, closeLabel: r, width: i, open: a = !1, room: s, onLayout: l, signal: u }) {
-		this.key = e, this.defaultWidth = i, this.room = s, this.onLayout = l;
-		let d = m.get(be, {})?.[e];
-		this.open = typeof d?.open == "boolean" ? d.open : a, this.width = Number.isFinite(d?.width) ? Ce(d.width, 180, xe) : i, this.split = o("div", {
-			class: "fm-split",
-			role: "separator",
-			tabindex: "0",
-			"aria-orientation": "vertical",
-			"aria-label": n,
-			"aria-valuemin": 180
-		}), this.body = o("div", { class: "fm-panel-body" }), this.el = o("aside", {
+	constructor({ key: e, title: t, resizeLabel: n, closeLabel: r, width: i, open: a = !1, room: o, onLayout: c }) {
+		this.key = e, this.room = o, this.onLayout = c;
+		let u = _.get(Te, {})?.[e];
+		this.open = typeof u?.open == "boolean" ? u.open : a, this.width = Number.isFinite(u?.width) ? Oe(u.width, 180, Ee) : i, this.body = s("div", { class: "fm-panel-body" }), this.el = s("aside", {
 			class: `fm-panel fm-panel-${e}`,
 			"aria-label": t,
 			hidden: !this.open
-		}, this.split, o("div", { class: "fm-panel-head" }, o("span", { class: "fm-panel-title" }, t), o("button", {
+		}), this.split = f({
+			get: () => this.el.offsetWidth,
+			set: (e, t) => this.resize(e, t),
+			min: 180,
+			max: () => this.#e(),
+			reset: i,
+			invert: !0,
+			label: n,
+			host: this.el,
+			className: "at-start"
+		}), this.el.append(this.split, s("div", { class: "fm-panel-head" }, s("span", { class: "fm-panel-title" }, t), s("button", {
 			class: "fm-btn",
 			type: "button",
 			title: r,
 			"aria-label": r,
 			onclick: () => this.setOpen(!1)
-		}, c("x"))), this.body), this.#e(u);
+		}, l("x"))), this.body);
 	}
 	setOpen(e) {
 		this.open !== !!e && (this.open = !!e, this.el.hidden = !this.open, this.#t(), this.onLayout());
@@ -123,36 +114,17 @@ var B = (e) => new Date(e).toLocaleString(u.locale, {
 		return this.open ? this.el.offsetWidth : 0;
 	}
 	show(e) {
-		this.el.style.width = `${e}px`, this.split.setAttribute("aria-valuenow", e), this.split.setAttribute("aria-valuemax", Math.max(180, Math.min(xe, this.room())));
+		this.el.style.width = `${e}px`;
 	}
 	resize(e, t = !0) {
-		this.width = Math.round(Ce(e, 180, Math.max(180, Math.min(xe, this.room())))), t && this.#t(), this.onLayout();
+		this.width = Math.round(Oe(e, 180, this.#e())), t && this.#t(), this.onLayout();
 	}
-	#e(e) {
-		this.split.addEventListener("pointerdown", (e) => {
-			if (e.button !== 0) return;
-			e.preventDefault();
-			let t = this.el.offsetWidth;
-			this.el.classList.add("resizing"), _(e, {
-				threshold: 0,
-				onMove: (e) => this.resize(t - e, !1),
-				onEnd: () => {
-					this.el.classList.remove("resizing"), this.#t();
-				}
-			});
-		}, { signal: e }), this.split.addEventListener("dblclick", () => this.resize(this.defaultWidth), { signal: e }), this.split.addEventListener("keydown", (e) => {
-			let t = e.shiftKey ? 48 : 16, n = this.el.offsetWidth, r = {
-				ArrowLeft: n + t,
-				ArrowRight: n - t,
-				Home: 180,
-				End: Infinity
-			}[e.key];
-			r !== void 0 && (e.preventDefault(), this.resize(r));
-		}, { signal: e });
+	#e() {
+		return Math.max(180, Math.min(Ee, this.room()));
 	}
 	#t() {
-		let e = m.get(be, {});
-		m.set(be, {
+		let e = _.get(Te, {});
+		_.set(Te, {
 			...e && typeof e == "object" ? e : {},
 			[this.key]: {
 				open: this.open,
@@ -160,77 +132,55 @@ var B = (e) => new Date(e).toLocaleString(u.locale, {
 			}
 		});
 	}
-}, Ce = (e, t, n) => Math.max(t, Math.min(e, n)), we = 1e5, Te = 5 << 20, Ee = 30, De = 200, V = (e) => e < 1024 ? _e(e) : N("info.bytesDetail", {
-	size: _e(e),
+}, Oe = (e, t, n) => Math.max(t, Math.min(e, n)), ke = 1e5, Ae = 5 << 20, je = 30, Me = 200, Ne = (e) => e < 1024 ? a(e) : N("info.bytesDetail", {
+	size: a(e),
 	count: P(e)
-});
-function Oe(e) {
-	let t = 0;
-	for (let n of a.children(e)) t += n.type === "folder" ? Oe(n.id) : n.size ?? 0;
-	return t;
-}
-var ke = (e) => e.trashed ? e.bytes ?? 0 : e.type === "folder" ? Oe(e.id) : e.size ?? 0, Ae = (e) => e?.type === "file" && !e.trashed, je = (e) => `${e.id}:${e.modified}:${e.size ?? 0}`;
-function Me(e) {
-	let t = e.map((e) => h.get(e)).filter(Boolean);
-	return t.length ? o("span", { class: "fm-chips" }, t.map((e) => o("span", {
+}), Pe = (e) => o.usage(e.id)?.bytes ?? e.bytes ?? e.size ?? 0, Fe = /* @__PURE__ */ new Set(["workspace", "tags"]), Ie = (e) => e?.type === "file" && !e.trashed, Le = (e) => `${e.id}:${e.modified}:${e.size ?? 0}`;
+function Re(e) {
+	let t = e.map((e) => v.get(e)).filter(Boolean);
+	return t.length ? s("span", { class: "fm-chips" }, t.map((e) => s("span", {
 		class: "fm-chip",
 		title: e.visible ? e.name : N("info.tagHidden", { name: e.name })
-	}, o("span", {
+	}, s("span", {
 		class: "tag-dot",
 		style: { background: e.color },
 		"aria-hidden": "true"
 	}), e.name))) : N("info.none");
 }
-var H = (e) => o("dl", { class: "fm-facts" }, e.filter(Boolean).flatMap(([e, t, n]) => [o("dt", {}, e), o("dd", { class: n }, t)])), U = (e, ...t) => o("section", { class: "fm-info-section" }, o("h6", {}, e), ...t);
-function Ne(e, t, n) {
-	return o("div", { class: "fm-info-head" }, o("span", { class: "fm-info-icon" }, e), o("div", { class: "fm-info-titles" }, o("div", {
+var V = (e) => s("dl", { class: "fm-facts" }, e.filter(Boolean).flatMap(([e, t, n]) => [s("dt", {}, e), s("dd", { class: n }, t)])), H = (e, ...t) => s("section", { class: "fm-info-section" }, s("h6", {}, e), ...t);
+function ze(e, t, n) {
+	return s("div", { class: "fm-info-head" }, s("span", { class: "fm-info-icon" }, e), s("div", { class: "fm-info-titles" }, s("div", {
 		class: "fm-info-name",
 		title: t
-	}, t), n && o("div", { class: "fm-info-kind" }, n)));
+	}, t), n && s("div", { class: "fm-info-kind" }, n)));
 }
-function Pe({ nodes: e, place: t, text: n }) {
-	return e.length > 1 ? Ie(e) : e.length === 1 ? Fe(e[0], n) : t.trash ? Le() : t.tag ? Re(t.tag) : o("div", {}, o("p", { class: "fm-info-hint" }, N("info.folderHint")), Fe(t.node, n));
+function Be({ nodes: e, place: t, text: n }) {
+	return e.length > 1 ? He(e) : e.length === 1 ? Ve(e[0], n) : t.trash ? Ue() : t.tag ? We(t.tag) : s("div", {}, s("p", { class: "fm-info-hint" }, N("info.folderHint")), Ve(t.node, n));
 }
-function Fe(e, t) {
-	let { ext: n } = i(e.name), r = e.type === "app" ? E(e.app) : null, s = [[N("info.type"), e.type === "file" && n ? `${F(e)} (.${n})` : e.type === "app" ? N("type.appLink") : F(e)], e.type === "app" && [N("info.app"), r ? r.name : N("info.appMissing", { id: e.app })]];
-	if (e.type === "file" && s.push([N("info.size"), V(e.size ?? 0)]), e.type === "link" && (s.push([
-		N("info.linkTarget"),
-		me(e),
-		"mono"
-	]), e.link?.broken && s.push([N("info.linkState"), N("info.linkBroken")])), e.type === "folder") {
-		let t = e.trashed ? null : a.children(e.id).length, n = e.trashed ? e.inside : a.count(e.id);
-		s.push([N("info.contents"), t === null || n === t ? z(n) : N("info.contentsTotal", {
-			items: z(t),
-			total: P(n)
-		})]), s.push([N("info.size"), V(ke(e))]);
-	}
-	e.trashed ? s.push([N("info.deleted"), B(e.trashed.at)], [
-		N("info.origin"),
-		he(e),
-		"mono"
-	]) : s.push([
-		N("info.path"),
-		a.path(e.id),
-		"mono"
-	]), s.push([N("info.created"), B(e.created)], [N("info.modified"), B(e.modified)]);
-	let c = [
+function Ve(e, t) {
+	let n = se(e), r = n.filter((e) => !Fe.has(e.key)).map((e) => e.key === "size" ? [e.label, Ne(e.bytes)] : [
+		e.label,
+		e.value,
+		e.mono ? "mono" : null
+	]), i = n.filter((e) => Fe.has(e.key)).map((t) => t.key === "workspace" ? [t.label, Se(e)] : [t.label, Re(t.tags.map((e) => e.id))]), a = [
 		e.system && N("note.system"),
 		e.private && N("note.private"),
-		!e.trashed && a.isHidden(e.id) && N("note.hidden"),
-		!e.trashed && O.has(e.id) && N("note.linked")
-	].filter(Boolean), l = o("div", {}, Ne(D(e), I(e), F(e)), U(N("info.general"), H(s)), U(N("info.organization"), H([[N("info.workspace"), ge(e)], [N("info.tags"), Me(e.tags ?? [])]])), c.length ? U(N("info.attributes"), o("ul", { class: "fm-notes" }, c.map((e) => o("li", {}, e)))) : null);
-	if (Ae(e) && (e.size ?? 0) <= Te) {
-		let n = o("dd", {}, "…"), r = o("dd", {}, "…"), i = o("dd", {}, "…");
-		l.append(U(N("info.text"), o("dl", { class: "fm-facts" }, o("dt", {}, N("info.lines")), n, o("dt", {}, N("info.words")), r, o("dt", {}, N("info.chars")), i))), t(e).then((e) => {
+		!e.trashed && o.isHidden(e.id) && N("note.hidden"),
+		!e.trashed && M.has(e.id) && N("note.linked")
+	].filter(Boolean), c = s("div", {}, ze(j(e), I(e), F(e)), H(N("info.general"), V(r)), H(N("info.organization"), V(i)), a.length ? H(N("info.attributes"), s("ul", { class: "fm-notes" }, a.map((e) => s("li", {}, e)))) : null);
+	if (Ie(e) && (e.size ?? 0) <= Ae) {
+		let n = s("dd", {}, "…"), r = s("dd", {}, "…"), i = s("dd", {}, "…"), a = H(N("info.text"), s("dl", { class: "fm-facts" }, s("dt", {}, N("info.lines")), n, s("dt", {}, N("info.words")), r, s("dt", {}, N("info.chars")), i));
+		c.append(a), t(e).then((e) => {
+			if (e.slice(0, 8e3).includes("\0")) return a.remove();
 			n.textContent = P(e ? e.split("\n").length : 0), r.textContent = P(e.trim() ? e.trim().split(/\s+/).length : 0), i.textContent = P([...e].length);
 		}, () => {
 			n.textContent = r.textContent = i.textContent = "—";
 		});
 	}
-	return l;
+	return c;
 }
-function Ie(e) {
-	let t = (t) => e.filter((e) => e.type === t).length, n = t("folder"), r = t("file"), i = t("app"), s = [
+function He(e) {
+	let t = (t) => e.filter((e) => e.type === t).length, n = t("folder"), r = t("file"), i = t("app"), a = [
 		n && N("info.folders", {
 			n,
 			count: P(n)
@@ -243,11 +193,11 @@ function Ie(e) {
 			n: i,
 			count: P(i)
 		})
-	].filter(Boolean).join(", "), c = e.reduce((e, t) => e + (t.type === "folder" ? t.trashed ? t.inside : a.count(t.id) : 0), 0), l = /* @__PURE__ */ new Map();
+	].filter(Boolean).join(", "), c = e.reduce((e, t) => e + (t.type === "folder" ? t.trashed ? t.inside : o.count(t.id) : 0), 0), l = /* @__PURE__ */ new Map();
 	for (let t of e) l.set(F(t), (l.get(F(t)) ?? 0) + 1);
-	let u = new Set(e.map((e) => e.parent)), d = e.map((e) => e.modified), f = [...new Set(e.map(R))], p = [...new Set(e.flatMap((e) => e.tags ?? []))], m = p.filter((t) => e.every((e) => e.tags?.includes(t))), h = e.every((e) => e.trashed), g = o("span", { class: "fm-info-stack" }, e.slice(0, 3).map((e) => o("span", {}, D(e))));
-	return o("div", {}, Ne(g, N("selection.count", { count: P(e.length) }), s), U(N("info.general"), H([
-		[N("info.size"), V(e.reduce((e, t) => e + ke(t), 0))],
+	let u = new Set(e.map((e) => e.parent)), d = e.map((e) => e.modified), f = [...new Set(e.map(R))], p = [...new Set(e.flatMap((e) => e.tags ?? []))], m = p.filter((t) => e.every((e) => e.tags?.includes(t))), h = e.every((e) => e.trashed), g = s("span", { class: "fm-info-stack" }, e.slice(0, 3).map((e) => s("span", {}, j(e))));
+	return s("div", {}, ze(g, N("selection.count", { count: P(e.length) }), a), H(N("info.general"), V([
+		[N("info.size"), Ne(e.reduce((e, t) => e + Pe(t), 0))],
 		c > 0 && [N("info.contents"), N("info.insideFolders", {
 			n: c,
 			count: P(c)
@@ -260,132 +210,132 @@ function Ie(e) {
 		],
 		[N("info.oldest"), B(Math.min(...d))],
 		[N("info.newest"), B(Math.max(...d))]
-	])), U(N("info.organization"), H([
+	])), H(N("info.organization"), V([
 		[N("info.workspace"), f.join(", ")],
-		[N("info.tags"), Me(p)],
-		p.length > 0 && [N("info.common"), Me(m)]
-	])), U(N("info.items"), o("ul", { class: "fm-names" }, e.slice(0, Ee).map((e) => o("li", { title: e.name }, o("span", { class: "fm-icon" }, D(e)), o("span", {}, e.name))), e.length > Ee ? o("li", { class: "more" }, N("list.more", { count: P(e.length - Ee) })) : null)));
+		[N("info.tags"), Re(p)],
+		p.length > 0 && [N("info.common"), Re(m)]
+	])), H(N("info.items"), s("ul", { class: "fm-names" }, e.slice(0, je).map((e) => s("li", { title: e.name }, s("span", { class: "fm-icon" }, j(e)), s("span", {}, e.name))), e.length > je ? s("li", { class: "more" }, N("list.more", { count: P(e.length - je) })) : null)));
 }
-function Le() {
-	let e = a.trashed(), t = e.reduce((e, t) => e + 1 + t.inside, 0);
-	return o("div", {}, Ne(o("span", { class: "fm-info-glyph" }, c("trash")), N("place.trash"), z(e.length)), U(N("info.general"), H([
+function Ue() {
+	let e = o.trashed(), t = e.reduce((e, t) => e + 1 + t.inside, 0);
+	return s("div", {}, ze(s("span", { class: "fm-info-glyph" }, l("trash")), N("place.trash"), z(e.length)), H(N("info.general"), V([
 		[N("info.contents"), e.length ? N("info.contentsTotal", {
 			items: z(e.length),
 			total: P(t)
 		}) : z(0)],
-		[N("info.size"), V(e.reduce((e, t) => e + (t.bytes ?? 0), 0))],
+		[N("info.size"), Ne(e.reduce((e, t) => e + (t.bytes ?? 0), 0))],
 		e.length > 0 && [N("info.lastDeleted"), B(e[0].trashed.at)],
-		[N("info.retention"), ye()]
+		[N("info.retention"), we()]
 	])));
 }
-function Re(e) {
-	let t = a.tagged(e.id);
-	return o("div", {}, Ne(o("span", {
+function We(e) {
+	let t = o.tagged(e.id);
+	return s("div", {}, ze(s("span", {
 		class: "tag-dot fm-info-tag",
 		style: { background: e.color },
 		"aria-hidden": "true"
-	}), e.name, N("info.tagKind")), U(N("info.general"), H([
+	}), e.name, N("info.tagKind")), H(N("info.general"), V([
 		[N("info.items"), z(t.length)],
-		[N("info.size"), V(t.reduce((e, t) => e + ke(t), 0))],
+		[N("info.size"), Ne(t.reduce((e, t) => e + Pe(t), 0))],
 		[N("info.visibility"), e.visible ? N("info.visible") : N("info.invisible")]
 	])));
 }
-var ze = class {
+var Ge = class {
 	#e = null;
 	#t = null;
 	constructor(e, { text: t, open: n }) {
 		this.body = e, this.text = t, this.open = n;
 	}
 	update(e) {
-		let t = e.length === 1 ? e[0] : null, n = t ? `${je(t)}:${t.name}:${t.type === "folder" && !t.trashed ? a.children(t.id).map((e) => e.id + e.name).join() : ""}` : `${e.length}`;
+		let t = e.length === 1 ? e[0] : null, n = t ? `${Le(t)}:${t.name}:${t.type === "folder" && !t.trashed ? o.children(t.id).map((e) => e.id + e.name).join() : ""}` : `${e.length}`;
 		if (n === this.#e) return;
-		if (this.#e = n, this.#d(), !t) return this.#u(e.length ? W("list", N("selection.count", { count: P(e.length) }), N("preview.oneAtATime")) : W("file", N("preview.none"), N("preview.selectFile")));
-		if (t.trashed) return this.#u(this.#n(t), W("trash", N("preview.trashed"), N("preview.restoreToSee")));
+		if (this.#e = n, this.#d(), !t) return this.#u(e.length ? U("list", N("selection.count", { count: P(e.length) }), N("preview.oneAtATime")) : U("file", N("preview.none"), N("preview.selectFile")));
+		if (t.trashed) return this.#u(this.#n(t), U("trash", N("preview.trashed"), N("preview.restoreToSee")));
 		if (t.type === "folder") return this.#u(this.#n(t), this.#s(t));
 		if (t.type === "app") return this.#u(this.#n(t), this.#l(t));
 		if (t.type === "link") return this.#u(this.#n(t), this.#c(t));
-		let r = o("div", { class: "fm-preview-wait" }, N("preview.loading"));
+		let r = s("div", { class: "fm-preview-wait" }, N("preview.loading"));
 		this.#u(this.#n(t), r);
 		let i = (e) => {
 			this.#e === n && r.replaceWith(e());
 		};
 		this.#a(t).then((e) => {
 			if (this.#e === n) return e ? i(() => this.#o(t, e)) : this.text(t).then((e) => i(() => this.#r(t, e)));
-		}).catch((e) => i(() => W("x", N("preview.readError"), e?.message ?? "")));
+		}).catch((e) => i(() => U("x", N("preview.readError"), e?.message ?? "")));
 	}
 	destroy() {
 		this.#d();
 	}
 	#n(e) {
 		let t = e.trashed ? null : e.type === "app" ? N("preview.launch") : N("preview.open");
-		return o("div", { class: "fm-preview-head" }, o("span", { class: "fm-icon" }, D(e)), o("span", {
+		return s("div", { class: "fm-preview-head" }, s("span", { class: "fm-icon" }, j(e)), s("span", {
 			class: "fm-preview-name",
 			title: e.name
-		}, I(e)), t && o("button", {
+		}, I(e)), t && s("button", {
 			class: "fm-preview-open",
 			type: "button",
 			onclick: () => this.open(e)
 		}, t));
 	}
 	#r(e, t) {
-		if (!t) return W("file", N("preview.emptyFile"), "");
+		if (!t) return U("file", N("preview.emptyFile"), "");
 		let { ext: n } = i(e.name);
-		return n === "svg" && /^\s*(<\?xml[^>]*>\s*)?(<!--[\s\S]*?-->\s*)*<svg[\s>]/i.test(t) ? (this.#t = URL.createObjectURL(new Blob([t], { type: "image/svg+xml" })), o("div", { class: "fm-preview-image" }, o("img", {
+		return n === "svg" && /^\s*(<\?xml[^>]*>\s*)?(<!--[\s\S]*?-->\s*)*<svg[\s>]/i.test(t) ? (this.#t = URL.createObjectURL(new Blob([t], { type: "image/svg+xml" })), s("div", { class: "fm-preview-image" }, s("img", {
 			src: this.#t,
 			alt: N("preview.imageAlt", { name: e.name })
-		}))) : t.slice(0, 8e3).includes("\0") ? W("file", N("preview.unavailable"), N("preview.notText")) : this.#i(e, t);
+		}))) : t.slice(0, 8e3).includes("\0") ? U("file", N("preview.unavailable"), N("preview.notText")) : this.#i(e, t);
 	}
 	#i(e, t, n = null) {
-		let r = t.length > we;
-		return o("div", { class: "fm-preview-textwrap" }, o("pre", {
+		let r = t.length > ke;
+		return s("div", { class: "fm-preview-textwrap" }, s("pre", {
 			class: "fm-preview-text",
 			tabindex: "0",
 			"aria-label": N("preview.contentsOf", { name: e.name })
-		}, r ? t.slice(0, we) : t), r ? o("div", { class: "fm-preview-note" }, N("preview.cut", {
-			shown: P(we),
+		}, r ? t.slice(0, ke) : t), r ? s("div", { class: "fm-preview-note" }, N("preview.cut", {
+			shown: P(ke),
 			total: P(t.length)
 		})) : null, n);
 	}
 	#a(e) {
-		return typeof v.filePreview == "function" ? v.filePreview(e).catch((t) => (console.warn(`[files] anteprima di ${e.name}:`, t), null)) : Promise.resolve(null);
+		return typeof x.filePreview == "function" ? x.filePreview(e).catch((t) => (console.warn(`[files] anteprima di ${e.name}:`, t), null)) : Promise.resolve(null);
 	}
 	#o(e, t) {
-		let n = o("div", { class: "fm-preview-note" }, [N("preview.byApp", { app: E(t.app)?.name ?? t.app }), t.note].filter(Boolean).join(" · "));
-		if (typeof t.text == "string") return t.text ? this.#i(e, t.text, n) : W("file", N("preview.emptyFile"), "");
+		let n = s("div", { class: "fm-preview-note" }, [N("preview.byApp", { app: k(t.app)?.name ?? t.app }), t.note].filter(Boolean).join(" · "));
+		if (typeof t.text == "string") return t.text ? this.#i(e, t.text, n) : U("file", N("preview.emptyFile"), "");
 		let r;
-		return t.image instanceof Blob ? (this.#t = URL.createObjectURL(t.image), r = o("div", { class: "fm-preview-image" }, o("img", {
+		return t.image instanceof Blob ? (this.#t = URL.createObjectURL(t.image), r = s("div", { class: "fm-preview-image" }, s("img", {
 			src: this.#t,
 			alt: N("preview.imageAlt", { name: e.name })
-		}))) : (r = o("iframe", {
+		}))) : (r = s("iframe", {
 			class: "fm-preview-frame",
 			sandbox: "",
 			referrerpolicy: "no-referrer",
 			title: N("preview.contentsOf", { name: e.name })
-		}), r.srcdoc = t.html), o("div", { class: "fm-preview-textwrap" }, r, n);
+		}), r.srcdoc = t.html), s("div", { class: "fm-preview-textwrap" }, r, n);
 	}
 	#s(e) {
-		let t = a.children(e.id);
-		if (!t.length) return W("folder", N("preview.emptyFolder"), "");
+		let t = o.children(e.id);
+		if (!t.length) return U("folder", N("preview.emptyFolder"), "");
 		let n = {
 			folder: 0,
 			file: 1,
 			app: 1,
 			link: 1
 		};
-		return t.sort((e, t) => n[e.type] - n[t.type] || e.name.localeCompare(t.name, u.locale, { numeric: !0 })), o("ul", {
+		return t.sort((e, t) => n[e.type] - n[t.type] || e.name.localeCompare(t.name, p.locale, { numeric: !0 })), s("ul", {
 			class: "fm-preview-list",
 			"aria-label": N("preview.contentsOf", { name: e.name })
-		}, t.slice(0, De).map((e) => o("li", {
+		}, t.slice(0, Me).map((e) => s("li", {
 			title: N("preview.childTitle", { name: e.name }),
 			ondblclick: () => this.open(e)
-		}, o("span", { class: "fm-icon" }, D(e)), o("span", { class: "fm-label" }, e.name))), t.length > De ? o("li", { class: "more" }, N("list.more", { count: P(t.length - De) })) : null);
+		}, s("span", { class: "fm-icon" }, j(e)), s("span", { class: "fm-label" }, e.name))), t.length > Me ? s("li", { class: "more" }, N("list.more", { count: P(t.length - Me) })) : null);
 	}
 	#c(e) {
-		return o("div", { class: "fm-preview-app" }, D(e), o("strong", {}, F(e)), o("span", { class: "fm-preview-link" }, me(e)));
+		return s("div", { class: "fm-preview-app" }, j(e), s("strong", {}, F(e)), s("span", { class: "fm-preview-link" }, be(e)));
 	}
 	#l(e) {
-		let t = E(e.app);
-		return t ? o("div", { class: "fm-preview-app" }, r(t), o("strong", {}, t.name)) : W("x", N("preview.appMissing"), e.app);
+		let t = k(e.app);
+		return t ? s("div", { class: "fm-preview-app" }, r(t), s("strong", {}, t.name)) : U("x", N("preview.appMissing"), e.app);
 	}
 	#u(...e) {
 		this.body.replaceChildren(...e);
@@ -394,11 +344,11 @@ var ze = class {
 		this.#t && URL.revokeObjectURL(this.#t), this.#t = null;
 	}
 };
-function W(e, t, n) {
-	return o("div", { class: "fm-preview-empty" }, c(e), o("strong", {}, t), n ? o("span", {}, n) : null);
+function U(e, t, n) {
+	return s("div", { class: "fm-preview-empty" }, l(e), s("strong", {}, t), n ? s("span", {}, n) : null);
 }
 // src/files/columns.js
-var Be = "files-columns", Ve = 1600, He = 160, Ue = {
+var Ke = "files-columns", qe = 1600, Je = 160, Ye = {
 	modified: 128,
 	deleted: 128,
 	size: 92,
@@ -406,31 +356,31 @@ var Be = "files-columns", Ve = 1600, He = 160, Ue = {
 	workspace: 124,
 	origin: 160,
 	location: 160
-}, We = class {
+}, Xe = class {
 	widths = {};
 	hidden = /* @__PURE__ */ new Set();
 	constructor() {
-		let e = m.get(Be, {}), t = e && typeof e.widths == "object" ? e.widths : {};
-		for (let [e, n] of Object.entries(t ?? {})) (Object.hasOwn(Ue, e) || e === "name") && Number.isFinite(n) && (this.widths[e] = Ge(Math.round(n), 48, Ve));
-		Array.isArray(e?.hidden) && e.hidden.filter((e) => Object.hasOwn(Ue, e)).forEach((e) => this.hidden.add(e));
+		let e = _.get(Ke, {}), t = e && typeof e.widths == "object" ? e.widths : {};
+		for (let [e, n] of Object.entries(t ?? {})) (Object.hasOwn(Ye, e) || e === "name") && Number.isFinite(n) && (this.widths[e] = Ze(Math.round(n), 48, qe));
+		Array.isArray(e?.hidden) && e.hidden.filter((e) => Object.hasOwn(Ye, e)).forEach((e) => this.hidden.add(e));
 	}
 	shown(e) {
 		return e.filter((e) => e.key === "name" || !this.hidden.has(e.key));
 	}
 	width(e) {
-		return this.widths[e] ?? Ue[e];
+		return this.widths[e] ?? Ye[e];
 	}
 	layout(e, t = null) {
-		let n = this.widths.name == null && t !== "name", r = e.map((e) => e.key === t ? "max-content" : e.key === "name" && n ? `minmax(${He}px, 1fr)` : `${this.width(e.key)}px`);
+		let n = this.widths.name == null && t !== "name", r = e.map((e) => e.key === t ? "max-content" : e.key === "name" && n ? `minmax(${Je}px, 1fr)` : `${this.width(e.key)}px`);
 		n || r.push("minmax(0, 1fr)");
-		let i = e.reduce((e, r) => e + (r.key === t ? 0 : r.key === "name" && n ? He : this.width(r.key)), 0);
+		let i = e.reduce((e, r) => e + (r.key === t ? 0 : r.key === "name" && n ? Je : this.width(r.key)), 0);
 		return {
 			template: r.join(" "),
 			min: `${i}px`
 		};
 	}
 	resize(e, t, n = !0) {
-		this.widths[e] = Ge(Math.round(t), 48, Ve), n && this.save();
+		this.widths[e] = Ze(Math.round(t), 48, qe), n && this.save();
 	}
 	setHidden(e, t) {
 		e !== "name" && (t ? this.hidden.add(e) : this.hidden.delete(e), this.save());
@@ -439,22 +389,204 @@ var Be = "files-columns", Ve = 1600, He = 160, Ue = {
 		this.widths = {}, this.hidden.clear(), this.save();
 	}
 	save() {
-		m.set(Be, {
+		_.set(Ke, {
 			widths: this.widths,
 			hidden: [...this.hidden]
 		});
 	}
-}, Ge = (e, t, n) => Math.max(t, Math.min(e, n)), G = () => e.net?.available ? e.net : null;
-function K(e) {
-	let t = a.get(e)?.net;
-	return t ? G()?.mount(t) ?? null : null;
+}, Ze = (e, t, n) => Math.max(t, Math.min(e, n)), { h: W, uid: Qe, toggle: $e, textField: et, actionButton: tt, fs: nt } = e, rt = (e, t) => !e.when || Object.entries(e.when).every(([e, n]) => Array.isArray(n) ? n.includes(t[e]) : t[e] === n), G = (t) => e.net?.text?.(t) ?? (typeof t == "string" ? t : ""), it = (e) => e.secret || e.type === "password";
+function at(e, t) {
+	for (let n of e) !it(n) && n.type !== "signin" && t[n.key] === void 0 && n.default !== void 0 && (t[n.key] = n.default);
+	return t;
 }
-var Ke = {
+function ot(e, t) {
+	let n = {};
+	for (let r of e) {
+		if (it(r) || r.type === "signin" || r.type === "file" || !rt(r, t)) continue;
+		let e = t[r.key];
+		e !== void 0 && e !== "" && e !== null && (n[r.key] = e);
+	}
+	return n;
+}
+var st = (e, t) => (e.options ?? []).find((e) => String(e.value) === t)?.value;
+function ct(e, t, n, r = {}) {
+	return W("select", {
+		class: "ctl-select",
+		...r
+	}, ...(e.options ?? []).map((e) => W("option", {
+		value: String(e.value),
+		selected: e.value === t,
+		disabled: !!e.disabled
+	}, n(e.label))));
+}
+var lt = (e) => e.required ? W("span", {
+	class: "sh-field-req",
+	"aria-hidden": "true"
+}, " *") : null;
+function ut(e, { t, values: n = {}, text: r = G, editing: i = !1, only: a = null, pairs: o = [], pickFile: s = null, filePlaceholder: c = "", signin: l = null, extra: u = null, after: d = null, onChange: f = null } = {}) {
+	let p = at(e, { ...n }), m = {}, h = {}, g = W("div", { class: "sh-fields" }), _ = W("div", { class: "sh-fields-after" }), v = "", y = () => e.filter((e) => (a !== "secret" || e.secret) && rt(e, p) && (e.type !== "signin" || l)), b = () => {
+		f?.(p), y().map((e) => e.key).join("\n") === v ? x() : C();
+	}, x = () => {
+		let e = d ? [d(p)].flat(Infinity).filter(Boolean) : [];
+		_.replaceChildren(...e), _.hidden = !e.length;
+	};
+	function S(e) {
+		if (e.type === "signin") return l(e, {
+			values: p,
+			changed: b
+		});
+		let n = e.secret ? m : p, a = `sh-f-${e.key}-${Qe()}`, o = W("label", { for: a }, r(e.label), lt(e)), d = e.hint ? W("small", { class: "sh-field-hint" }, r(e.hint)) : null, g = (t) => {
+			t === "" || t == null ? delete n[e.key] : n[e.key] = t, b();
+		}, _;
+		if (e.type === "checkbox") return _ = W("input", {
+			id: a,
+			type: "checkbox",
+			checked: n[e.key] === !0,
+			dataset: { key: e.key }
+		}), _.addEventListener("change", () => g(_.checked)), W("div", { class: "sh-field" }, W("label", { class: "sh-field-check" }, _, r(e.label)), d);
+		if (e.type === "select") {
+			if (n[e.key] === void 0) {
+				let t = (e.options ?? []).find((e) => !e.disabled);
+				t && (n[e.key] = t.value);
+			}
+			_ = ct(e, n[e.key], r, {
+				id: a,
+				dataset: { key: e.key }
+			}), _.addEventListener("change", () => g(st(e, _.value)));
+		} else if (e.type === "textarea") _ = W("textarea", {
+			id: a,
+			class: "ctl-text",
+			rows: "3",
+			spellcheck: "false",
+			placeholder: e.placeholder ?? "",
+			dataset: { key: e.key }
+		}), _.value = n[e.key] ?? "", _.addEventListener("input", () => g(_.value));
+		else if (e.type === "file") {
+			_ = W("input", {
+				id: a,
+				class: "ctl-text",
+				type: "text",
+				spellcheck: "false",
+				autocomplete: "off",
+				dataset: { key: e.key },
+				placeholder: i && e.secret ? t("shared.fields.unchanged") : e.placeholder ?? c
+			}), _.value = h[e.key] ?? "";
+			let n = (t) => {
+				t.trim() ? h[e.key] = t.trim() : delete h[e.key], f?.(p);
+			};
+			_.addEventListener("input", () => n(_.value));
+			let l = s && tt({
+				label: t("shared.fields.browse"),
+				onClick: async () => {
+					let t = await s({
+						kind: "file",
+						title: r(e.label)
+					});
+					t && (_.value = nt.tildePath(t.id), n(_.value));
+				}
+			});
+			return W("div", { class: "sh-field" }, o, l ? W("div", { class: "sh-field-pick" }, _, l) : _, d);
+		} else {
+			let r = e.type === "password" ? "password" : e.type === "number" ? "number" : "text";
+			_ = W("input", {
+				id: a,
+				class: "ctl-text",
+				type: r,
+				spellcheck: "false",
+				autocomplete: r === "password" ? "new-password" : "off",
+				dataset: { key: e.key },
+				placeholder: e.secret && i ? t("shared.fields.unchanged") : e.placeholder ?? "",
+				min: e.min === void 0 ? null : String(e.min),
+				max: e.max === void 0 ? null : String(e.max)
+			}), _.value = n[e.key] ?? "", _.addEventListener("input", () => g(r === "number" ? _.value === "" ? "" : Number(_.value) : _.value));
+		}
+		let v = u?.(e, {
+			input: _,
+			set: (e) => {
+				_.value = e ?? "", g(e);
+			}
+		});
+		return W("div", { class: "sh-field" }, o, v ? W("div", { class: "sh-field-pick" }, _, v) : _, d);
+	}
+	function C() {
+		let e = g.contains(document.activeElement) ? document.activeElement.dataset?.key : null, t = y();
+		v = t.map((e) => e.key).join("\n");
+		let n = [];
+		for (let e = 0; e < t.length; e++) {
+			let r = t[e], i = t[e + 1];
+			i && o.some(([e, t]) => e === r.key && t === i.key) ? (n.push(W("div", { class: "sh-field-pair" }, S(r), S(i))), e++) : n.push(S(r));
+		}
+		g.replaceChildren(...n, _), x(), e && g.querySelector(`[data-key="${CSS.escape(e)}"]`)?.focus();
+	}
+	C();
+	let w = async (e) => {
+		let n = {};
+		for (let r of y()) {
+			if (r.type !== "file" || !!r.secret !== e || !h[r.key]) continue;
+			let i = h[r.key], a = nt.resolve(i.startsWith("~") || i.startsWith("/") ? i : `~/${i}`);
+			if (a?.type !== "file") throw Error(t("shared.fields.noSuchFile", { path: i }));
+			n[r.key] = await nt.read(a.id);
+		}
+		return n;
+	};
+	return {
+		el: g,
+		values: () => ot(e, p),
+		secret: async () => ({
+			...Object.fromEntries(Object.entries(m).filter(([e]) => y().some((t) => t.key === e))),
+			...await w(!0)
+		}),
+		read: async () => {
+			let [t, n] = await Promise.all([w(!1), w(!0)]), r = Object.fromEntries(Object.entries(m).filter(([e]) => y().some((t) => t.key === e)));
+			return {
+				values: {
+					...ot(e, p),
+					...t
+				},
+				secret: {
+					...r,
+					...n
+				}
+			};
+		},
+		missing: (e = !0) => y().filter((t) => t.required && (t.type === "file" ? (!t.secret || e) && !h[t.key] : t.secret ? e && !m[t.key] : p[t.key] === void 0 || p[t.key] === "")).map((e) => r(e.label)),
+		all: () => p,
+		focus: () => g.querySelector("input, select, textarea, button")?.focus(),
+		redraw: C
+	};
+}
+// src/shared/trustPrompt.js
+function dt(e, t, { t: n, name: r = t?.host ?? "" } = {}) {
+	if (!t?.fingerprint) return Object.assign(Promise.resolve(!1), { close() {} });
+	let i = t.changed === !0, a = t.kind === "tls", o = [
+		n(i ? "shared.trust.changedText" : a ? "shared.trust.firstTls" : "shared.trust.first"),
+		"",
+		...t.host ? [`${n("shared.trust.server")}: ${t.host}`] : [],
+		`${n(a ? "shared.trust.certificate" : "shared.trust.key")}: ${t.text || t.fingerprint}`,
+		...i && t.previous ? [`${n("shared.trust.previous")}: ${t.previous}`] : [],
+		"",
+		n(i ? "shared.trust.askChanged" : "shared.trust.ask")
+	], s = u(e, {
+		icon: i ? "error" : "warning",
+		title: n(i ? "shared.trust.changedTitle" : "shared.trust.title", { name: r }),
+		text: o.join("\n"),
+		buttons: ["cancel", "continue"],
+		default: "cancel"
+	}), c = s.then((e) => e === "continue");
+	return c.close = () => s.close(null), c;
+}
+// src/files/network.js
+var K = () => e.net?.available ? e.net : null;
+function q(e) {
+	let t = o.get(e)?.net;
+	return t ? K()?.mount(t) ?? null : null;
+}
+var ft = {
 	on: "net.state.on",
 	connecting: "net.state.connecting",
 	off: "net.state.off",
 	error: "net.state.error"
-}, qe = (e) => N(Ke[e.state] ?? "net.state.off") + (e.state === "error" && e.error ? `: ${e.error}` : ""), Je = {
+}, pt = (e) => N(ft[e.state] ?? "net.state.off") + (e.state === "error" && e.error ? `: ${e.error}` : ""), mt = {
 	ftp: "FTP",
 	ftps: "FTPS",
 	sftp: "SFTP",
@@ -466,58 +598,58 @@ var Ke = {
 	s3: "S3",
 	azblob: "AZ",
 	nfs: "NFS"
-}, Ye = [
+}, ht = [
 	"server",
 	"cloud",
 	"local"
-], Xe = "Immagini";
-function Ze(e) {
+], gt = "Immagini";
+function _t(e) {
 	if (!e?.net) return [];
-	let t = (e) => G()?.text(e) ?? "", n = [];
-	return e.web && n.push(o("span", {
+	let t = (e) => K()?.text(e) ?? "", n = [];
+	return e.web && n.push(s("span", {
 		class: "fm-chip web",
 		title: e.exportAs ? N("net.web.copiedAs", { ext: `.${e.exportAs}` }) : N("net.web.only")
-	}, t(e.web))), e.badge && n.push(o("span", { class: "fm-chip" }, t(e.badge))), n;
+	}, t(e.web))), e.badge && n.push(s("span", { class: "fm-chip" }, t(e.badge))), n;
 }
-var q = (e) => e ? G()?.protocols.find((t) => t.id === e.protocol) ?? null : null, Qe = (e) => !!e?.fields.some((e) => e.type === "signin"), $e = (e) => Je[e] ?? e.toUpperCase().slice(0, 5);
-function et(e, { active: t, reteFolder: n }) {
-	let r = G();
+var J = (e) => e ? K()?.protocols.find((t) => t.id === e.protocol) ?? null : null, vt = (e) => !!e?.fields.some((e) => e.type === "signin"), yt = (e) => mt[e] ?? e.toUpperCase().slice(0, 5);
+function bt(e, { active: t, reteFolder: n }) {
+	let r = K();
 	if (!r) return [];
-	let i = o("button", {
+	let i = s("button", {
 		class: "fm-side-add",
 		type: "button",
 		title: N("net.add"),
 		"aria-label": N("net.add"),
-		onclick: () => mt(e)
-	}, c("plus")), a = n ? o("button", {
+		onclick: () => jt(e)
+	}, l("plus")), a = n ? s("button", {
 		class: "fm-side-title",
 		type: "button",
 		onclick: () => e.go(n)
-	}, N("net.section")) : o("span", {}, N("net.section")), s = r.mounts().sort((e, t) => e.name.localeCompare(t.name)).map((n) => {
-		let i = r.mountNode(n.id), a = t === i, s = o("button", {
+	}, N("net.section")) : s("span", {}, N("net.section")), o = r.mounts().sort((e, t) => e.name.localeCompare(t.name)).map((n) => {
+		let i = r.mountNode(n.id), a = t === i, o = s("button", {
 			class: a ? "fm-place fm-mount on" : "fm-place fm-mount",
 			type: "button",
 			"aria-current": a ? "true" : null,
-			title: `${n.address} · ${qe(n)}`,
+			title: `${n.address} · ${pt(n)}`,
 			onclick: () => e.go(i)
-		}, o("span", {
+		}, s("span", {
 			class: `fm-dot ${n.state}`,
 			"aria-hidden": "true"
-		}), o("span", { class: "fm-mount-name" }, n.name), o("span", { class: "fm-proto" }, $e(n.protocol)));
-		return s.dataset.folder = i, s.addEventListener("contextmenu", (t) => {
-			t.preventDefault(), tt(e, n, t.clientX, t.clientY);
-		}), s;
+		}), s("span", { class: "fm-mount-name" }, n.name), s("span", { class: "fm-proto" }, yt(n.protocol)));
+		return o.dataset.folder = i, o.addEventListener("contextmenu", (t) => {
+			t.preventDefault(), xt(e, n, t.clientX, t.clientY);
+		}), o;
 	});
-	return [o("section", {
+	return [s("section", {
 		class: "fm-side-net",
 		"aria-label": N("net.section")
-	}, o("h6", { class: "fm-side-head" }, a, i), ...s.length ? s : [o("p", { class: "fm-side-none" }, N("net.none"))])];
+	}, s("h6", { class: "fm-side-head" }, a, i), ...o.length ? o : [s("p", { class: "fm-side-none" }, N("net.none"))])];
 }
-function tt(e, t, n, r) {
-	let i = G();
+function xt(e, t, n, r) {
+	let i = K();
 	if (!i) return;
 	let a = i.mountNode(t.id);
-	l(n, r, [
+	d(n, r, [
 		{
 			label: N("net.menu.open"),
 			icon: "open",
@@ -535,9 +667,9 @@ function tt(e, t, n, r) {
 		{
 			label: N("net.menu.edit"),
 			icon: "pencil",
-			action: () => mt(e, t)
+			action: () => jt(e, t)
 		},
-		v.canLinkOnDesk?.([a]) && {
+		x.canLinkOnDesk?.([a]) && {
 			label: N("menu.deskLink"),
 			icon: "link",
 			action: () => e.addDeskLinks([a])
@@ -547,83 +679,71 @@ function tt(e, t, n, r) {
 			label: N("net.menu.remove"),
 			icon: "trash",
 			danger: !0,
-			action: () => nt(e, t)
+			action: () => St(e, t)
 		}
 	].filter(Boolean));
 }
-async function nt(t, n) {
-	(e.messageBox ? await e.messageBox(t.win, {
+async function St(e, t) {
+	await u(e.win, {
 		icon: "warning",
-		title: N("net.remove.title", { name: n.name }),
+		title: N("net.remove.title", { name: t.name }),
 		text: N("net.remove.text"),
 		buttons: ["continue", "cancel"]
-	}) : "continue") === "continue" && G()?.remove(n.id).catch((e) => t.netError(e));
+	}) === "continue" && K()?.remove(t.id).catch((t) => e.netError(t));
 }
-function rt(t, n) {
-	let r = K(n);
+function Ct(t, n) {
+	let r = q(n);
 	if (!r) return null;
-	let i = o("button", {
+	let i = s("button", {
 		class: "ctl-btn",
 		type: "button",
-		onclick: () => G().disconnect(r.id).catch((e) => t.netError(e))
-	}, c("x"), N("net.menu.disconnect")), a = q(r), s = r.state === "on" && a?.links && e.net.openWeb ? o("button", {
+		onclick: () => K().disconnect(r.id).catch((e) => t.netError(e))
+	}, l("x"), N("net.menu.disconnect")), o = J(r), c = r.state === "on" && o?.links && e.net.openWeb ? s("button", {
 		class: "ctl-btn",
 		type: "button",
-		onclick: () => ot(t, n)
-	}, c("globe"), N("net.web.open")) : null, l = r.state === "on" && a?.importer && e.net.imports ? o("button", {
+		onclick: () => Tt(t, n)
+	}, l("globe"), N("net.web.open")) : null, u = r.state === "on" && o?.importer && e.net.imports ? s("button", {
 		class: "ctl-btn",
 		type: "button",
-		onclick: () => at(t, r)
-	}, c("download"), G().text(a.importer.label)) : null, u = o("span", { class: "fm-mountbar-space" });
-	return r.state === "on" && a?.space && e.net.space && e.net.space(r.id).then((e) => {
-		e && (u.textContent = e.total ? N("net.space.of", {
-			used: it(e.used),
-			total: it(e.total)
-		}) : N("net.space.used", { used: it(e.used) }));
-	}, () => {}), o("div", { class: `fm-mountbar ${r.state}` }, c(r.state === "on" ? "lock" : "globe"), o("span", { class: "fm-mountbar-text" }, r.state === "on" ? N("net.bar.on") : qe(r), " ", o("code", {}, r.address)), o("span", { class: "fm-sp" }), u, l, s, r.state === "on" ? i : null);
+		onclick: () => wt(t, r)
+	}, l("download"), K().text(o.importer.label)) : null, d = s("span", { class: "fm-mountbar-space" });
+	return r.state === "on" && o?.space && e.net.space && e.net.space(r.id).then((e) => {
+		e && (d.textContent = e.total ? N("net.space.of", {
+			used: a(e.used),
+			total: a(e.total)
+		}) : N("net.space.used", { used: a(e.used) }));
+	}, () => {}), s("div", { class: `fm-mountbar ${r.state}` }, l(r.state === "on" ? "lock" : "globe"), s("span", { class: "fm-mountbar-text" }, r.state === "on" ? N("net.bar.on") : pt(r), " ", s("code", {}, r.address)), s("span", { class: "fm-sp" }), d, u, c, r.state === "on" ? i : null);
 }
-function it(e) {
-	let t = [
-		"B",
-		"KB",
-		"MB",
-		"GB",
-		"TB",
-		"PB"
-	], n = e, r = 0;
-	for (; n >= 1024 && r < t.length - 1;) n /= 1024, r++;
-	return `${r ? n.toLocaleString(void 0, { maximumFractionDigits: 1 }) : n} ${t[r]}`;
-}
-function at(e, t) {
-	let r = G(), i = q(t);
+function wt(e, t) {
+	let r = K(), i = J(t);
 	if (!r?.imports || !i?.importer) return;
-	let s = new n({
+	let a = new n({
 		title: r.text(i.importer.label).replace(/…$/, ""),
 		icon: "download",
 		width: 440,
 		height: 380,
 		minWidth: 340,
 		minHeight: 300
-	}), l = () => a.resolve(`~/${Xe}`)?.id ?? a.root, u = null, d = o("code", { class: "fm-net-where" }), f = () => {
-		d.textContent = u ? a.path(u) : `~/${Xe}/${r.text(i.label)}`;
-	}, p = o("button", {
+	}), c = () => o.resolve(`~/${gt}`)?.id ?? o.root, u = null, d = s("code", { class: "fm-net-where" }), f = () => {
+		d.textContent = u ? o.path(u) : `~/${gt}/${r.text(i.label)}`;
+	}, p = s("button", {
 		class: "ctl-btn",
 		type: "button"
-	}, N("net.import.change")), m = o("button", {
+	}, N("net.import.change")), m = s("button", {
 		class: "ctl-btn primary",
 		type: "button"
-	}, c("globe"), N("net.import.pick")), h = o("button", {
+	}, l("globe"), N("net.import.pick")), h = s("button", {
 		class: "ctl-btn primary",
 		type: "button",
 		disabled: !0
-	}, c("download"), N("net.import.go")), g = o("p", {
+	}, l("download"), N("net.import.go")), g = s("p", {
 		class: "fm-net-status",
 		role: "status"
 	}), _ = (e, t = !1) => {
 		g.textContent = e, g.classList.toggle("bad", t);
 	}, v = null, y = null;
 	p.addEventListener("click", async () => {
-		let t = await ie(e.openWindow, {
+		let t = await ue(e.openWindow, {
 			kind: "folder",
 			title: N("net.import.where")
 		});
@@ -642,7 +762,7 @@ function at(e, t) {
 				if (e.status !== "pending") return e.status === "error" ? _(e.error ?? N("net.import.failed"), !0) : e.count ? (v = e, h.disabled = !1, _(N("net.import.picked", { count: e.count }))) : _(N("net.import.none"), !0);
 			}
 		}).catch((n) => {
-			if (n.code === "secret_required") return ht(e, t), _("");
+			if (n.code === "secret_required") return Mt(e, t), _("");
 			_(n.message, !0);
 		});
 	}), h.addEventListener("click", async () => {
@@ -651,40 +771,40 @@ function at(e, t) {
 			try {
 				let n = u;
 				if (!n) {
-					let e = l(), t = r.text(i.label);
-					n = a.children(e).find((e) => e.type === "folder" && e.name === t)?.id ?? a.create(e, {
+					let e = c(), t = r.text(i.label);
+					n = o.children(e).find((e) => e.type === "folder" && e.name === t)?.id ?? o.create(e, {
 						type: "folder",
 						name: t
 					}).id;
 				}
-				await r.imports.copy(t.id, v.path, n), s.emit("close"), e.go(n);
+				await r.imports.copy(t.id, v.path, n), a.emit("close"), e.go(n);
 			} catch (e) {
 				h.disabled = !1, _(e.message, !0);
 			}
 		}
-	}), s.on("destroy", () => y?.abort()), f(), s.body.append(o("div", { class: "fm-net-dialog" }, o("div", { class: "fm-net-body" }, o("div", { class: "fm-net-row" }, o("label", {}, N("net.import.where")), o("div", { class: "fm-net-pick" }, d, p)), o("div", { class: "fm-net-row" }, o("label", {}, N("net.import.step")), o("div", {}, m), o("small", {}, N("net.import.hint"))), g), o("div", { class: "fm-net-foot" }, o("span", { class: "fm-sp" }), o("button", {
+	}), a.on("destroy", () => y?.abort()), f(), a.body.append(s("div", { class: "fm-net-dialog" }, s("div", { class: "fm-net-body" }, s("div", { class: "sh-field" }, s("label", {}, N("net.import.where")), s("div", { class: "sh-field-pick" }, d, p)), s("div", { class: "sh-field" }, s("label", {}, N("net.import.step")), s("div", {}, m), s("small", { class: "sh-field-hint" }, N("net.import.hint"))), g), s("div", { class: "fm-net-foot" }, s("span", { class: "fm-sp" }), s("button", {
 		class: "ctl-btn",
 		type: "button",
-		onclick: () => s.emit("close")
-	}, N("net.cancel")), h))), e.openWindow(s);
+		onclick: () => a.emit("close")
+	}, N("net.cancel")), h))), e.openWindow(a);
 }
-function ot(t, n) {
-	let r = K(n);
-	r && e.net?.openWeb && e.net.openWeb(() => e.net.link(r.id, a.netPath(n))).catch((e) => e.code === "secret_required" ? ht(t, r) : t.netError(e));
+function Tt(t, n) {
+	let r = q(n);
+	r && e.net?.openWeb && e.net.openWeb(() => e.net.link(r.id, o.netPath(n))).catch((e) => e.code === "secret_required" ? Mt(t, r) : t.netError(e));
 }
-async function st(e, t) {
-	if (!G() || !a.isRemote?.(t)) return !0;
+async function Et(e, t) {
+	if (!K() || !o.isRemote?.(t)) return !0;
 	for (;;) try {
-		return await a.refresh(t), !0;
+		return await o.refresh(t), !0;
 	} catch (n) {
-		let r = K(t);
-		if (!r || !a.exists(t)) return !1;
+		let r = q(t);
+		if (!r || !o.exists(t)) return !1;
 		if (n.code === "secret_required") {
-			if (!(n.details?.reason === "signin" || Qe(q(r)) ? await ht(e, r) : await gt(e, r, n.details?.reason === "auth"))) return !1;
+			if (!(n.details?.reason === "signin" || vt(J(r)) ? await Mt(e, r) : await Nt(e, r, n.details?.reason === "auth"))) return !1;
 			continue;
 		}
 		if (n.code === "untrusted") {
-			if (!await ct(e, r.id, r.name, n.details?.trust)) return !1;
+			if (!await Dt(e, r.id, r.name, n.details?.trust)) return !1;
 			continue;
 		}
 		if (await e.netError(n, {
@@ -693,110 +813,109 @@ async function st(e, t) {
 		}) !== "retry") return !1;
 	}
 }
-async function ct(t, n, r, i) {
-	if (!i?.fingerprint || !e.messageBox) return !1;
-	let a = i.changed === !0;
-	if (await e.messageBox(t.win, {
-		icon: a ? "error" : "warning",
-		title: N(a ? "net.trust.changed.title" : "net.trust.title", { name: r }),
-		text: N(a ? "net.trust.changed" : i.kind === "ssh" ? "net.trust.ssh" : "net.trust.tls", {
-			fingerprint: i.text ?? i.fingerprint,
-			previous: i.previous ?? ""
-		}),
-		buttons: ["continue", "cancel"],
-		default: "cancel"
-	}) !== "continue") return !1;
+async function Dt(e, t, n, r) {
+	if (!await dt(e.win, r, {
+		t: N,
+		name: n
+	})) return !1;
 	try {
-		return await G().connect(n, { trust: i.fingerprint }), !0;
-	} catch (e) {
-		return e.code === "secret_required" || e.code === "untrusted" || (await t.netError(e), !1);
+		return await K().connect(t, { trust: r.fingerprint }), !0;
+	} catch (t) {
+		return t.code === "secret_required" || t.code === "untrusted" || (await e.netError(t), !1);
 	}
 }
-var J = (e) => G()?.text(e) ?? (typeof e == "string" ? e : ""), lt = (e, t) => !e.when || Object.entries(e.when).every(([e, n]) => Array.isArray(n) ? n.includes(t[e]) : t[e] === n);
-function ut(e, t, { initial: n = {}, editing: r = !!n.host, only: i = null, onShares: a = null, onChange: s = null } = {}) {
-	let c = { ...n }, l = {}, u = { id: null };
-	for (let e of t.fields) c[e.key] === void 0 && e.default !== void 0 && !e.secret && (c[e.key] = e.default);
-	let d = [], f = o("div", { class: "fm-net-fields" }), p = () => {
-		d.length = 0;
-		for (let n of t.fields) (i !== "secret" || n.secret) && lt(n, c) && (n.type === "signin" ? d.push(dt(e, t, n, c, u, () => {
-			s?.(), p();
-		})) : d.push(pt(e, n, n.secret ? l : c, {
-			editing: r && n.secret,
-			onShares: a,
-			changed: () => {
-				s?.(), t.fields.some((e) => e.when) && p();
+function Ot(e, t, { initial: n = {}, editing: r = !1, only: i = null, onShares: a = null, onChange: o = null } = {}) {
+	let c = { id: null };
+	return {
+		...ut(t.fields, {
+			t: N,
+			values: n,
+			editing: r,
+			only: i,
+			onChange: o,
+			pickFile: (t) => ue(e.openWindow, t),
+			signin: (e, { values: n, changed: r }) => kt(t, e, n, c, r),
+			extra: (e, { set: t }) => {
+				if (e.key !== "share" || !a) return null;
+				let n = s("button", {
+					class: "ctl-btn",
+					type: "button"
+				}, N("net.shares.list"));
+				return n.addEventListener("click", () => a(n, t)), n;
 			}
-		})));
-		f.replaceChildren(...d);
-	};
-	return p(), {
-		el: f,
-		values: () => Object.fromEntries(Object.entries(c).filter(([e]) => t.fields.some((t) => t.key === e && !t.secret && t.type !== "signin" && lt(t, c)))),
-		secret: () => ({ ...l }),
-		signin: () => u.id,
-		missing: (e = !0) => t.fields.filter((t) => t.required && lt(t, c) && (t.type === "signin" ? !u.id && !c[t.key] : t.secret ? e && !l[t.key] : c[t.key] === void 0 || c[t.key] === "")).map((e) => J(e.label)),
-		focus: () => f.querySelector("input, select, textarea")?.focus()
+		}),
+		signin: () => c.id
 	};
 }
-function dt(t, n, r, i, a, s) {
-	let l = o("small", {
+function kt(t, n, r, i, a) {
+	let o = s("div", { class: "sh-field" }), c = s("small", {
 		class: "fm-net-wait",
 		role: "status"
-	}), u = ft(l), d = null, f = [], p = () => {
+	}), u = At(c), d = null, f = [], p = () => {
 		d?.abort(), d = new AbortController();
-		let t = Object.fromEntries(Object.entries(i).filter(([e]) => e !== r.key)), o = !!e.net.signInByHand?.(n), c = e.net.signIn(n.id, t, {
+		let o = Object.fromEntries(Object.entries(r).filter(([e]) => e !== n.key)), s = !!e.net.signInByHand?.(t), l = e.net.signIn(t.id, o, {
 			signal: d.signal,
-			...o && {
+			...s && {
 				manual: !0,
 				askAddress: u.ask(d.signal)
 			}
 		});
 		for (let e of f) e.disabled = !0;
-		m.hidden = !1, l.classList.remove("bad"), l.textContent = o ? "" : N("net.signin.waiting"), c.then(({ signin: e, account: t }) => {
-			a.id = e, i[r.key] = t, s();
+		m.hidden = !1, c.classList.remove("bad"), c.textContent = s ? "" : N("net.signin.waiting"), l.then(({ signin: e, account: t }) => {
+			i.id = e, r[n.key] = t, h(), a();
 		}, (e) => {
 			for (let e of f) e.disabled = !1;
-			m.hidden = !0, u.el.hidden = !0, l.textContent = e.code === "canceled" ? "" : e.code === "blocked" ? N("net.signin.blocked") : e.message, l.classList.toggle("bad", e.code !== "canceled");
+			m.hidden = !0, u.el.hidden = !0, c.textContent = e.code === "canceled" ? "" : e.code === "blocked" ? N("net.signin.blocked") : e.message, c.classList.toggle("bad", e.code !== "canceled");
 		});
-	}, m = o("button", {
+	}, m = s("button", {
 		class: "ctl-btn",
 		type: "button",
 		hidden: !0,
 		onclick: () => d?.abort()
-	}, N("net.cancel")), h = o("label", {}, J(r.label), r.required ? o("span", {
-		class: "fm-req",
-		"aria-hidden": "true"
-	}, " *") : null);
-	if (i[r.key]) {
-		let e = o("button", {
-			class: "ctl-btn",
+	}, N("net.cancel")), h = () => {
+		m.hidden = !0;
+		let e = s("label", {}, G(n.label), n.required ? s("span", {
+			class: "sh-field-req",
+			"aria-hidden": "true"
+		}, " *") : null);
+		if (r[n.key]) {
+			let t = s("button", {
+				class: "ctl-btn",
+				type: "button",
+				onclick: p
+			}, N("net.signin.other"));
+			return f = [t], o.replaceChildren(e, s("div", { class: "fm-net-account" }, l(i.id ? "check" : "user"), s("span", { class: "fm-net-who" }, r[n.key]), t, m), u.el, c);
+		}
+		let t = s("button", {
+			class: "ctl-btn primary fm-signin",
 			type: "button",
 			onclick: p
-		}, N("net.signin.other"));
-		return f = [e], o("div", { class: "fm-net-row" }, h, o("div", { class: "fm-net-account" }, c(a.id ? "check" : "user"), o("span", { class: "fm-net-who" }, i[r.key]), e, m), u.el, l);
-	}
-	let g = o("button", {
-		class: "ctl-btn primary fm-signin",
-		type: "button",
-		onclick: p
-	}, c("user"), J(r.button) || N("net.signin.button"));
-	return f = [g], o("div", { class: "fm-net-row" }, h, o("div", { class: "fm-net-pick" }, g, m), r.hint ? o("small", {}, J(r.hint)) : null, u.el, l);
+		}, l("user"), G(n.button) || N("net.signin.button"));
+		f = [t], o.replaceChildren(...[
+			e,
+			s("div", { class: "sh-field-pick" }, t, m),
+			n.hint ? s("small", { class: "sh-field-hint" }, G(n.hint)) : null,
+			u.el,
+			c
+		].filter(Boolean));
+	};
+	return h(), o;
 }
-function ft(e) {
-	let t = o("input", {
+function At(e) {
+	let t = s("input", {
 		class: "ctl-text",
 		type: "text",
 		spellcheck: "false",
 		autocomplete: "off",
 		placeholder: "http://127.0.0.1:53682/?state=…&code=…",
 		"aria-label": N("net.signin.paste.label")
-	}), n = o("button", {
+	}), n = s("button", {
 		class: "ctl-btn primary",
 		type: "button"
-	}, N("net.signin.paste.go")), r = o("div", {
+	}, N("net.signin.paste.go")), r = s("div", {
 		class: "fm-net-paste",
 		hidden: !0
-	}, o("small", {}, N("net.signin.paste.text")), o("div", { class: "fm-net-pick" }, t, n));
+	}, s("small", {}, N("net.signin.paste.text")), s("div", { class: "sh-field-pick" }, t, n));
 	return {
 		el: r,
 		ask: (i) => (a) => new Promise((o) => {
@@ -810,307 +929,223 @@ function ft(e) {
 		})
 	};
 }
-function pt(e, t, n, { editing: r, onShares: i, changed: s }) {
-	let c = `fm-net-${t.key}-${Math.random().toString(36).slice(2, 7)}`, l = o("label", { for: c }, J(t.label), t.required ? o("span", {
-		class: "fm-req",
-		"aria-hidden": "true"
-	}, " *") : null), u = (e) => {
-		e === "" || e === void 0 ? delete n[t.key] : n[t.key] = e, s();
-	}, d;
-	if (t.type === "checkbox") return d = o("input", {
-		id: c,
-		type: "checkbox",
-		checked: n[t.key] === !0
-	}), d.addEventListener("change", () => u(d.checked)), o("label", { class: "fm-net-check" }, d, J(t.label));
-	if (t.type === "select") d = o("select", {
-		id: c,
-		class: "ctl-select"
-	}, ...(t.options ?? []).map((e) => o("option", {
-		value: String(e.value),
-		selected: e.value === n[t.key],
-		disabled: !!e.disabled
-	}, J(e.label)))), d.addEventListener("change", () => u(t.options.find((e) => String(e.value) === d.value)?.value));
-	else if (t.type === "textarea") d = o("textarea", {
-		id: c,
-		class: "ctl-text",
-		rows: "3",
-		spellcheck: "false",
-		placeholder: t.placeholder ?? ""
-	}), d.value = n[t.key] ?? "", d.addEventListener("input", () => u(d.value));
-	else if (t.type === "file") {
-		let i = o("span", { class: "fm-net-file" }, n[t.key] ? N("net.file.chosen") : N(r ? "net.secret.unchanged" : "net.file.none"));
-		return d = o("button", {
-			id: c,
-			class: "ctl-btn",
-			type: "button"
-		}, N("net.file.browse")), d.addEventListener("click", async () => {
-			let n = await ie(e.openWindow, { title: J(t.label) });
-			if (n) try {
-				u(await a.read(n.id)), i.textContent = n.name;
-			} catch (t) {
-				e.netError(t);
-			}
-		}), o("div", { class: "fm-net-row" }, l, o("div", { class: "fm-net-pick" }, i, d), t.hint ? o("small", {}, J(t.hint)) : null);
-	} else {
-		let e = t.type === "password" ? "password" : t.type === "number" ? "number" : "text";
-		d = o("input", {
-			id: c,
-			class: "ctl-text",
-			type: e,
-			spellcheck: "false",
-			autocomplete: t.type === "password" ? "new-password" : "off",
-			placeholder: t.secret && r ? N("net.secret.unchanged") : t.placeholder ?? "",
-			...t.min !== void 0 && { min: String(t.min) },
-			...t.max !== void 0 && { max: String(t.max) }
-		}), d.value = n[t.key] ?? "", d.addEventListener("input", () => u(e === "number" ? d.value === "" ? "" : Number(d.value) : d.value));
-	}
-	let f = [l];
-	if (t.key === "share" && i) {
-		let e = o("button", {
-			class: "ctl-btn",
-			type: "button"
-		}, N("net.shares.list"));
-		e.addEventListener("click", () => i(e, (e) => {
-			d.value = e, u(e);
-		})), f.push(o("div", { class: "fm-net-pick" }, d, e));
-	} else f.push(d);
-	return t.hint && f.push(o("small", {}, J(t.hint))), o("div", { class: "fm-net-row" }, ...f);
-}
-function mt(e, t = null, { initial: r = null, onConnected: i = null, onClosed: a = null } = {}) {
-	let s = G();
-	if (!s) return;
-	let u = new n({
+function jt(e, t = null, { initial: r = null, onConnected: i = null, onClosed: a = null } = {}) {
+	let o = K();
+	if (!o) return;
+	let c = new n({
 		title: t ? N("net.edit.title", { name: t.name }) : N("net.connect.title"),
 		icon: "globe",
 		width: 460,
 		height: 660,
 		minWidth: 360,
 		minHeight: 360
-	}), d = s.protocols.find((e) => e.id === (t?.protocol ?? r?.protocol)) ?? s.protocols[0], f = !1, p = null, m = null, h = (e) => o("option", {
+	}), u = o.protocols.find((e) => e.id === (t?.protocol ?? r?.protocol)) ?? o.protocols[0], f = !1, p = null, m = null, h = (e) => s("option", {
 		value: e.id,
-		selected: e.id === d.id
-	}, J(e.label)), g = Ye.map((e) => [e, s.protocols.filter((t) => (t.group ?? "server") === e)]).filter(([, e]) => e.length), _ = o("select", {
+		selected: e.id === u.id
+	}, G(e.label)), g = ht.map((e) => [e, o.protocols.filter((t) => (t.group ?? "server") === e)]).filter(([, e]) => e.length), _ = s("select", {
 		class: "ctl-select",
 		id: "fm-net-protocol",
 		disabled: !!t
-	}, ...g.length > 1 ? g.map(([e, t]) => o("optgroup", { label: N(`net.group.${e}`) }, ...t.map(h))) : s.protocols.map(h)), v = o("input", {
+	}, ...g.length > 1 ? g.map(([e, t]) => s("optgroup", { label: N(`net.group.${e}`) }, ...t.map(h))) : o.protocols.map(h)), v = s("input", {
 		class: "ctl-text",
 		type: "text",
+		id: "fm-net-name",
 		spellcheck: "false",
 		value: t?.name ?? r?.name ?? ""
-	}), y = o("small"), b = o("input", {
+	}), y = s("small", { class: "sh-field-hint" }), b = s("input", {
 		type: "checkbox",
 		checked: !t || t.remembered
-	}), x = o("span", {}, N("net.remember")), S = o("input", {
+	}), x = s("span", {}, N("net.remember")), S = s("input", {
 		type: "checkbox",
 		checked: !!t?.auto
-	}), C = o("div"), w = o("div", {
-		class: "fm-net-note",
-		hidden: !0,
-		role: "alert"
-	}), T = o("p", {
+	}), C = s("div"), w = s("p", {
 		class: "fm-net-status",
 		role: "status"
-	}), E = o("button", {
+	}), ee = s("button", {
 		class: "ctl-btn",
 		type: "button"
-	}, N("net.test")), ee = o("button", {
+	}, N("net.test")), te = s("button", {
 		class: "ctl-btn",
 		type: "button",
-		onclick: () => u.emit("close")
-	}, N("net.cancel")), D = o("button", {
+		onclick: () => c.emit("close")
+	}, N("net.cancel")), T = s("button", {
 		class: "ctl-btn primary",
 		type: "button"
-	}, N(t ? "net.save" : "net.connect.go")), ne = !!t, O = () => {
+	}, N(t ? "net.save" : "net.connect.go")), E = !!t, D = () => {
 		y.textContent = v.value.trim() ? N("net.name.hint", { path: `~/Rete/${v.value.trim()}` }) : "";
+	}, O = () => {
+		E || (v.value = p.values().host ?? (vt(u) ? G(u.label) : ""), D());
 	}, k = (e, t = !1) => {
-		T.textContent = e, T.classList.toggle("bad", t);
+		w.textContent = e, w.classList.toggle("bad", t);
 	}, A = () => {
-		m = null, w.hidden = !0, D.textContent = N(t ? "net.save" : "net.connect.go");
-		let n = d.notReady;
-		E.disabled = D.disabled = !!n, n ? (p = ut(e, {
-			...d,
+		m = null;
+		let n = u.notReady;
+		ee.disabled = T.disabled = !!n, n ? (p = Ot(e, {
+			...u,
 			fields: []
-		}), C.replaceChildren(o("div", { class: "fm-net-note" }, o("b", {}, N("net.notReady.title", { name: J(d.label) })), o("span", {}, J(n)), o("div", {}, o("button", {
+		}), C.replaceChildren(s("div", { class: "fm-net-note" }, s("b", {}, N("net.notReady.title", { name: G(u.label) })), s("span", {}, G(n)), s("div", {}, s("button", {
 			class: "ctl-btn",
 			type: "button",
-			onclick: () => te("settings", { tab: d.id })
-		}, c("gear"), N("net.notReady.settings")))))) : (!ne && Qe(d) && (v.value = J(d.label), O()), x.textContent = N(Qe(d) ? "net.remember.signin" : "net.remember"), p = ut(e, d, {
-			initial: t?.values ?? (d.id === r?.protocol ? r.values : {}),
+			onclick: () => ne("settings", { tab: u.id })
+		}, l("gear"), N("net.notReady.settings")))))) : (x.textContent = N(vt(u) ? "net.remember.signin" : "net.remember"), p = Ot(e, u, {
+			initial: t?.values ?? (u.id === r?.protocol ? r.values : {}),
 			editing: !!t,
-			onShares: d.canListShares ? re : null,
+			onShares: u.canListShares ? M : null,
 			onChange: () => {
-				ne || (v.value = p.values().host ?? (Qe(d) ? J(d.label) : ""), O()), m && (m = null, w.hidden = !0, D.textContent = N(t ? "net.save" : "net.connect.go"));
+				O(), m = null;
 			}
-		}), C.replaceChildren(p.el));
-	}, j = () => ({
-		protocol: d.id,
-		values: p.values(),
-		...m && { trust: m.fingerprint },
-		...p.signin() && { signin: p.signin() }
-	});
-	async function re(e, t) {
+		}), O(), C.replaceChildren(p.el));
+	}, j = async () => {
+		let { values: e, secret: t } = await p.read();
+		return [{
+			protocol: u.id,
+			values: e,
+			...m && { trust: m.fingerprint },
+			...p.signin() && { signin: p.signin() }
+		}, t];
+	}, re = async (e) => await dt(c, e, {
+		t: N,
+		name: v.value.trim() || e?.host
+	}) ? (m = e, !0) : !1;
+	async function M(e, t) {
+		e.disabled = !0;
 		try {
-			e.disabled = !0;
-			let n = await s.shares(j(), p.secret()), r = e.getBoundingClientRect();
-			if (!n.length) return k(N("net.shares.none"));
-			l(r.left, r.bottom, n.map((e) => ({
-				label: e,
-				icon: "folder",
-				action: () => t(e)
-			})));
-		} catch (e) {
-			if (e.code === "untrusted") return M(e.details?.trust);
-			k(e.message, !0);
+			for (;;) try {
+				let n = await o.shares(...await j()), r = e.getBoundingClientRect();
+				if (!n.length) return k(N("net.shares.none"));
+				d(r.left, r.bottom, n.map((e) => ({
+					label: e,
+					icon: "folder",
+					action: () => t(e)
+				})));
+				return;
+			} catch (e) {
+				if (e.code === "untrusted" && await re(e.details?.trust)) continue;
+				return k(e.code === "untrusted" ? "" : e.message, !0);
+			}
 		} finally {
 			e.disabled = !1;
 		}
 	}
-	let M = (e) => {
-		e?.fingerprint && (m = e, w.replaceChildren(o("b", {}, N("net.trust.first")), " ", N(e.kind === "ssh" ? "net.trust.key" : "net.trust.cert"), o("code", {}, e.text ?? e.fingerprint), o("span", {}, N("net.trust.check"))), w.hidden = !1, D.textContent = N("net.trust.go"), k(""));
-	};
 	_.addEventListener("change", () => {
-		d = s.protocols.find((e) => e.id === _.value), A();
+		u = o.protocols.find((e) => e.id === _.value), A();
 	}), v.addEventListener("input", () => {
-		ne = !!v.value.trim(), O();
-	}), E.addEventListener("click", async () => {
+		E = !!v.value.trim(), D();
+	}), ee.addEventListener("click", async () => {
 		let e = p.missing(!t);
 		if (e.length) return k(N("net.missing", { fields: e.join(", ") }), !0);
-		k(N("net.testing"));
-		try {
-			await s.test(j(), p.secret()), k(N("net.test.ok"));
+		for (k(N("net.testing"));;) try {
+			return await o.test(...await j()), k(N("net.test.ok"));
 		} catch (e) {
-			if (e.code === "untrusted") return M(e.details?.trust);
-			k(e.message, !0);
+			if (e.code === "untrusted" && await re(e.details?.trust)) continue;
+			return k(e.code === "untrusted" ? "" : e.message, !0);
 		}
-	}), D.addEventListener("click", async () => {
+	}), T.addEventListener("click", async () => {
 		let n = p.missing(!t || !t.remembered);
 		if (v.value.trim() || n.unshift(N("net.name")), n.length) return k(N("net.missing", { fields: n.join(", ") }), !0);
-		D.disabled = !0, k(N("net.connecting"));
+		T.disabled = !0, k(N("net.connecting"));
 		try {
-			let n = {
+			let [n, r] = await j(), a = {
 				name: v.value.trim(),
-				...j(),
+				...n,
 				auto: S.checked,
 				remember: b.checked
-			}, r = t ? await s.update(t.id, n, p.secret()) : await s.create(n, p.secret());
-			t = r;
-			try {
-				await s.connect(r.id, m ? { trust: m.fingerprint } : {});
+			}, s = t ? await o.update(t.id, a, r) : await o.create(a, r);
+			for (t = s;;) try {
+				await o.connect(s.id, m ? { trust: m.fingerprint } : {});
+				break;
 			} catch (e) {
-				if (e.code === "untrusted") {
-					M(e.details?.trust);
-					return;
-				}
-				if (e.code === "secret_required") {
-					k(e.message, !0);
-					return;
-				}
-				k(e.message, !0);
-				return;
+				if (e.code === "untrusted" && await re(e.details?.trust)) continue;
+				return k(e.code === "untrusted" ? "" : e.message, !0);
 			}
-			f = !0, u.emit("close"), i ? i(r) : e.go(s.mountNode(r.id));
+			f = !0, c.emit("close"), i ? i(s) : e.go(o.mountNode(s.id));
 		} catch (e) {
 			k(e.message, !0);
 		} finally {
-			D.disabled = !1;
+			T.disabled = !1;
 		}
-	}), a && u.on("destroy", () => {
+	}), a && c.on("destroy", () => {
 		f || a();
-	}), A(), O(), u.body.append(o("div", { class: "fm-net-dialog" }, o("div", { class: "fm-net-body" }, o("div", { class: "fm-net-row" }, o("label", { for: "fm-net-protocol" }, N("net.protocol")), _), C, o("div", { class: "fm-net-row" }, o("label", {}, N("net.name")), v, y), o("label", { class: "fm-net-check" }, b, x), o("label", { class: "fm-net-check" }, S, N("net.auto")), w, T), o("div", { class: "fm-net-foot" }, E, o("span", { class: "fm-sp" }), ee, D))), e.openWindow(u), requestAnimationFrame(() => p.focus());
+	}), A(), D(), c.body.append(s("div", { class: "fm-net-dialog" }, s("div", { class: "fm-net-body" }, s("div", { class: "sh-field" }, s("label", { for: "fm-net-protocol" }, N("net.protocol")), _), C, s("div", { class: "sh-field" }, s("label", { for: "fm-net-name" }, N("net.name")), v, y), s("label", { class: "sh-field-check" }, b, x), s("label", { class: "sh-field-check" }, S, N("net.auto")), w), s("div", { class: "fm-net-foot" }, ee, s("span", { class: "fm-sp" }), te, T))), e.openWindow(c), requestAnimationFrame(() => p.focus());
 }
-function ht(e, t) {
-	let r = G(), i = r?.protocols.find((e) => e.id === t.protocol);
-	return !i || !r.signIn ? Promise.resolve(!1) : new Promise((a) => {
-		let s = new n({
-			title: N("net.signin.again.title", { name: t.name }),
-			icon: "user",
-			width: 420,
-			height: 300,
-			minWidth: 320,
-			minHeight: 200
-		}), l = i.fields.find((e) => e.type === "signin"), u = o("p", {
-			class: "fm-net-status",
-			role: "status"
-		}), d = ft(u), f = o("button", {
-			class: "ctl-btn primary",
-			type: "button"
-		}, c("user"), J(l?.button) || N("net.signin.button")), p = !1, m = null, h = (e) => {
-			p || (p = !0, m?.abort(), a(e), s.emit("close"));
-		};
-		f.addEventListener("click", () => {
-			m?.abort(), m = new AbortController();
-			let e = !!r.signInByHand?.(i), n = r.signIn(i.id, t.values, {
-				signal: m.signal,
-				...e && {
-					manual: !0,
-					askAddress: d.ask(m.signal)
-				}
-			});
-			f.disabled = !0, u.classList.remove("bad"), u.textContent = e ? "" : N("net.signin.waiting"), n.then(({ signin: e }) => r.connect(t.id, {
-				signin: e,
-				remember: t.remembered
-			})).then(() => h(!0), (e) => {
-				f.disabled = !1, d.el.hidden = !0, e.code === "canceled" ? u.textContent = "" : (u.textContent = e.code === "blocked" ? N("net.signin.blocked") : e.message, u.classList.add("bad"));
-			});
-		}), s.on("destroy", () => {
-			p || (p = !0, m?.abort(), a(!1));
-		}), s.body.append(o("div", { class: "fm-net-dialog" }, o("div", { class: "fm-net-body" }, o("p", {}, N("net.signin.again.text", { account: t.values?.[l?.key] ?? t.address })), o("div", {}, f), d.el, u), o("div", { class: "fm-net-foot" }, o("span", { class: "fm-sp" }), o("button", {
-			class: "ctl-btn",
-			type: "button",
-			onclick: () => h(!1)
-		}, N("net.later"))))), e.openWindow(s), requestAnimationFrame(() => f.focus());
+async function Mt(e, t) {
+	let n = K(), r = n?.protocols.find((e) => e.id === t.protocol);
+	if (!r || !n.signIn) return !1;
+	let i = r.fields.find((e) => e.type === "signin"), a = s("p", {
+		class: "fm-net-status",
+		role: "status"
+	}), o = At(a), c = s("button", {
+		class: "ctl-btn primary",
+		type: "button"
+	}, l("user"), G(i?.button) || N("net.signin.button")), d = null, f = u(e.win, {
+		icon: "info",
+		title: N("net.signin.again.title", { name: t.name }),
+		text: N("net.signin.again.text", { account: t.values?.[i?.key] ?? t.address }),
+		content: s("div", { class: "fm-net-signin" }, s("div", {}, c), o.el, a),
+		buttons: [{
+			value: "cancel",
+			label: N("net.later")
+		}]
 	});
-}
-function gt(e, t, r = !1) {
-	let i = G(), a = i?.protocols.find((e) => e.id === t.protocol);
-	return a ? new Promise((s) => {
-		let c = new n({
-			title: N("net.password.title", { name: t.name }),
-			icon: "lock",
-			width: 380,
-			height: 300,
-			minWidth: 320,
-			minHeight: 220
-		}), l = ut(e, a, {
-			initial: t.values,
-			only: "secret"
-		}), u = o("input", {
-			type: "checkbox",
-			checked: t.remembered
-		}), d = o("p", {
-			class: "fm-net-status bad",
-			role: "status"
-		}, r ? N("net.password.wrong") : ""), f = o("button", {
-			class: "ctl-btn primary",
-			type: "button"
-		}, N("net.connect.go")), p = !1, m = (e) => {
-			p || (p = !0, s(e), c.emit("close"));
-		}, h = async () => {
-			f.disabled = !0, d.textContent = "";
-			try {
-				await i.connect(t.id, {
-					secret: l.secret(),
-					remember: u.checked
-				}), m(!0);
-			} catch (e) {
-				if (e.code === "untrusted") return m(!0);
-				d.textContent = e.message, f.disabled = !1;
+	c.addEventListener("click", () => {
+		d?.abort(), d = new AbortController();
+		let e = !!n.signInByHand?.(r), i = n.signIn(r.id, t.values, {
+			signal: d.signal,
+			...e && {
+				manual: !0,
+				askAddress: o.ask(d.signal)
 			}
-		};
-		f.addEventListener("click", h), l.el.addEventListener("keydown", (e) => {
-			e.key === "Enter" && (e.preventDefault(), h());
-		}), c.on("destroy", () => {
-			p || (p = !0, s(!1));
-		}), c.body.append(o("div", { class: "fm-net-dialog" }, o("div", { class: "fm-net-body" }, o("p", {}, N("net.password.text", { address: t.address })), l.el, o("label", { class: "fm-net-check" }, u, N("net.remember")), d), o("div", { class: "fm-net-foot" }, o("span", { class: "fm-sp" }), o("button", {
-			class: "ctl-btn",
-			type: "button",
-			onclick: () => m(!1)
-		}, N("net.cancel")), f))), e.openWindow(c), requestAnimationFrame(() => l.focus());
-	}) : Promise.resolve(!1);
+		});
+		c.disabled = !0, a.classList.remove("bad"), a.textContent = e ? "" : N("net.signin.waiting"), i.then(({ signin: e }) => n.connect(t.id, {
+			signin: e,
+			remember: t.remembered
+		})).then(() => f.close("connected"), (e) => {
+			c.disabled = !1, o.el.hidden = !0, e.code === "canceled" ? a.textContent = "" : (a.textContent = e.code === "blocked" ? N("net.signin.blocked") : e.message, a.classList.add("bad"));
+		});
+	}), c.focus();
+	let p = await f;
+	return d?.abort(), p === "connected";
+}
+async function Nt(e, t, n = !1) {
+	let r = K(), i = r?.protocols.find((e) => e.id === t.protocol);
+	if (!i) return !1;
+	let a = Ot(e, i, {
+		initial: t.values,
+		only: "secret"
+	}), o = u(e.win, {
+		icon: n ? "warning" : "info",
+		title: N("net.password.title", { name: t.name }),
+		text: [n && N("net.password.wrong"), N("net.password.text", { address: t.address })].filter(Boolean).join("\n\n"),
+		content: a.el,
+		fields: [{
+			name: "remember",
+			type: "checkbox",
+			label: N("net.remember"),
+			value: t.remembered
+		}],
+		buttons: ["cancel", {
+			value: "connect",
+			label: N("net.connect.go"),
+			primary: !0
+		}],
+		validate: async ({ remember: e }) => {
+			try {
+				await r.connect(t.id, {
+					secret: await a.secret(),
+					remember: e
+				});
+			} catch (e) {
+				if (e.code !== "untrusted") return e.message;
+			}
+			return !0;
+		}
+	});
+	a.focus();
+	let { button: s } = await o;
+	return s === "connect";
 }
 // src/files/office.js
-var _t = {
+var Pt = {
 	word: [
 		"doc",
 		"docx",
@@ -1139,119 +1174,115 @@ var _t = {
 		"potx",
 		"odp"
 	]
-}, vt = "onedrive", yt = {
+}, Ft = "onedrive", It = {
 	mount: null,
 	folder: "/lilOS",
 	ifExists: "ask",
 	doubleClick: !0
 };
-function bt() {
-	let e = m.get(vt, {}) ?? {};
+function Lt() {
+	let e = _.get(Ft, {}) ?? {};
 	return {
 		mount: typeof e.mount == "string" ? e.mount : null,
-		folder: typeof e.folder == "string" && e.folder.trim() ? e.folder.trim() : yt.folder,
+		folder: typeof e.folder == "string" && e.folder.trim() ? e.folder.trim() : It.folder,
 		ifExists: [
 			"ask",
 			"replace",
 			"keep"
-		].includes(e.ifExists) ? e.ifExists : yt.ifExists,
+		].includes(e.ifExists) ? e.ifExists : It.ifExists,
 		doubleClick: e.doubleClick !== !1
 	};
 }
-function xt(e) {
+function Rt(e) {
 	if (e?.type !== "file") return null;
-	let t = p(e.name)[1].toLowerCase();
-	return Object.keys(_t).find((e) => _t[e].includes(t)) ?? null;
+	let t = g(e.name)[1].toLowerCase();
+	return Object.keys(Pt).find((e) => Pt[e].includes(t)) ?? null;
 }
-function St() {
-	let e = G();
-	return e?.putHome ? e.mounts().filter((e) => q(e)?.office) : [];
+function zt() {
+	let e = K();
+	return e?.putHome ? e.mounts().filter((e) => J(e)?.office) : [];
 }
-var Ct = (e) => !!e?.net && !!q(K(e.id))?.office;
-function wt(e, t) {
-	return !xt(t) || !Ct(t) || !bt().doubleClick || v.appFor?.(p(t.name)[1].toLowerCase()) ? !1 : (ot(e, t.id), !0);
+var Bt = (e) => !!e?.net && !!J(q(e.id))?.office;
+function Vt(e, t) {
+	return !Rt(t) || !Bt(t) || !Lt().doubleClick || x.appFor?.(g(t.name)[1].toLowerCase()) ? !1 : (Tt(e, t.id), !0);
 }
-function Tt(e, t) {
-	if (t.length !== 1 || !G()) return [];
-	let n = t[0], r = xt(n);
-	return n.net ? q(K(n.id))?.links ? [{
-		label: r && Ct(n) ? N(`office.open.${r}`) : N("net.web.open"),
+function Ht(e, t) {
+	if (t.length !== 1 || !K()) return [];
+	let n = t[0], r = Rt(n);
+	return n.net ? J(q(n.id))?.links ? [{
+		label: r && Bt(n) ? N(`office.open.${r}`) : N("net.web.open"),
 		icon: "globe",
-		action: () => ot(e, n.id)
-	}] : [] : !r || !St().length ? [] : [{
+		action: () => Tt(e, n.id)
+	}] : [] : !r || !zt().length ? [] : [{
 		label: N("office.upload"),
 		icon: "arrowUp",
-		action: () => Et(e, n)
+		action: () => Ut(e, n)
 	}];
 }
-function Et(t, n, { mount: r = null, ifExists: i = null } = {}) {
-	let a = St(), o = bt(), s = r ?? a.find((e) => e.id === o.mount) ?? (a.length === 1 ? a[0] : null);
+function Ut(t, n, { mount: r = null, ifExists: i = null } = {}) {
+	let a = zt(), o = Lt(), s = r ?? a.find((e) => e.id === o.mount) ?? (a.length === 1 ? a[0] : null);
 	if (!s) {
 		if (!a.length) return void t.netError(Error(N("office.none")));
 		let e = t.list.querySelector(`[data-id="${CSS.escape(n.id)}"]`)?.getBoundingClientRect();
-		l(e ? e.left + 40 : innerWidth / 2, e ? e.bottom : innerHeight / 2, [{
+		d(e ? e.left + 40 : innerWidth / 2, e ? e.bottom : innerHeight / 2, [{
 			label: N("office.pick"),
 			disabled: !0
 		}, ...a.map((e) => ({
 			label: e.name,
 			icon: "globe",
-			action: () => Et(t, n, { mount: e })
+			action: () => Ut(t, n, { mount: e })
 		}))]);
 		return;
 	}
-	let c = G(), u = i ?? o.ifExists, d = null;
-	c.openWeb(async () => (d = await c.putHome(s.id, n.id, o.folder, u), c.link(s.id, d.path))).then(() => {
+	let c = K(), l = i ?? o.ifExists, u = null;
+	c.openWeb(async () => (u = await c.putHome(s.id, n.id, o.folder, l), c.link(s.id, u.path))).then(() => {
 		e.notifications?.send({
 			app: "files",
 			text: N("office.uploaded", {
-				name: d.name,
+				name: u.name,
 				folder: `${s.name}${o.folder === "/" ? "" : o.folder}`
 			})
 		}).catch(() => {});
 	}, async (e) => {
-		if (e.code === "conflict" && e.details?.exists) return Dt(t, n, s, e.details.name);
-		e.code === "secret_required" ? await ht(t, s) && t.netError(Error(N("office.again"))) : t.netError(e, { title: N("office.failed", { name: n.name }) });
+		if (e.code === "conflict" && e.details?.exists) return Wt(t, n, s, e.details.name);
+		e.code === "secret_required" ? await Mt(t, s) && t.netError(Error(N("office.again"))) : t.netError(e, { title: N("office.failed", { name: n.name }) });
 	});
 }
-function Dt(e, t, r, i) {
-	let a = new n({
-		title: N("office.exists.title"),
+async function Wt(e, t, n, r) {
+	let i = await u(e.win, {
 		icon: "warning",
-		width: 420,
-		height: 220,
-		minWidth: 320,
-		minHeight: 180
-	}), s = (n) => {
-		a.emit("close"), n && Et(e, t, {
-			mount: r,
-			ifExists: n
-		});
-	};
-	a.body.append(o("div", { class: "fm-net-dialog" }, o("div", { class: "fm-net-body" }, o("p", {}, N("office.exists.text", {
-		name: i,
-		folder: bt().folder
-	}))), o("div", { class: "fm-net-foot" }, o("button", {
-		class: "ctl-btn",
-		type: "button",
-		onclick: () => s(null)
-	}, N("net.cancel")), o("span", { class: "fm-sp" }), o("button", {
-		class: "ctl-btn",
-		type: "button",
-		onclick: () => s("keep")
-	}, N("office.exists.keep")), o("button", {
-		class: "ctl-btn primary",
-		type: "button",
-		onclick: () => s("replace")
-	}, c("arrowUp"), N("office.exists.replace"))))), e.openWindow(a);
+		title: N("office.exists.title"),
+		text: N("office.exists.text", {
+			name: r,
+			folder: Lt().folder
+		}),
+		buttons: [
+			"cancel",
+			{
+				value: "keep",
+				label: N("office.exists.keep")
+			},
+			{
+				value: "replace",
+				label: N("office.exists.replace"),
+				icon: "arrowUp",
+				primary: !0
+			}
+		]
+	});
+	(i === "keep" || i === "replace") && Ut(e, t, {
+		mount: n,
+		ifExists: i
+	});
 }
 // src/files/newLink.js
-var Ot = {
+var Gt = {
 	webdav: "http",
 	dav: "http",
 	webdavs: "https",
 	davs: "https"
-}, kt = /* @__PURE__ */ new Set(["http", "https"]), Y = class extends Error {};
-function At(e) {
+}, Kt = /* @__PURE__ */ new Set(["http", "https"]), Y = class extends Error {};
+function qt(e) {
 	let t = e.trim();
 	if (!t) throw new Y(N("newLink.error.empty"));
 	if (t.includes("\\")) throw new Y(N("newLink.error.backslash"));
@@ -1280,31 +1311,31 @@ function At(e) {
 		folder: a.endsWith("/")
 	} };
 }
-var X = (e) => Ot[e] || kt.has(e) ? {
+var X = (e) => Gt[e] || Kt.has(e) ? {
 	id: "webdav",
-	http: Ot[e] ?? e
+	http: Gt[e] ?? e
 } : {
 	id: e,
 	http: null
 };
-function jt(e, t) {
+function Jt(e, t) {
 	if (e.port) return e.port;
 	let { id: n, http: r } = X(e.scheme);
 	return n === "webdav" ? r === "https" ? 443 : 80 : t?.fields?.find((e) => e.key === "port")?.default ?? null;
 }
-function Mt(e) {
-	let t = G();
+function Yt(e) {
+	let t = K();
 	if (!t) return null;
 	let n = X(e.scheme), r = t.protocols.find((e) => e.id === n.id), i = null;
 	for (let a of t.mounts()) {
 		if (a.protocol !== n.id) continue;
 		let t;
 		try {
-			t = At(a.address).url;
+			t = qt(a.address).url;
 		} catch {
 			continue;
 		}
-		if (!t || n.http && X(t.scheme).http !== n.http || t.host !== e.host || jt(t, r) !== jt(e, r)) continue;
+		if (!t || n.http && X(t.scheme).http !== n.http || t.host !== e.host || Jt(t, r) !== Jt(e, r)) continue;
 		let o = (e) => e.split(";").pop().toLowerCase();
 		if (e.user && o(t.user) !== o(e.user)) continue;
 		let s = (e, t) => a.protocol === "smb" ? e.toLowerCase() === t.toLowerCase() : e === t;
@@ -1319,7 +1350,7 @@ function Mt(e) {
 		path: i.path
 	};
 }
-function Nt(e) {
+function Xt(e) {
 	let { id: t, http: n } = X(e.scheme), r = e.host.includes(":") && !e.host.startsWith("[") ? `[${e.host}]` : e.host, i = {};
 	if (t === "webdav") {
 		let t = e.folder ? e.segs : e.segs.slice(0, -1);
@@ -1331,169 +1362,188 @@ function Nt(e) {
 		name: e.host
 	};
 }
-function Pt(e) {
+function Zt(e) {
 	if (e.local) return e.local.replace(/\/+$/, "").split("/").pop().replace(/^~$/, "") || "";
 	let { url: t } = e;
 	return t.segs.at(-1) ?? t.host;
 }
-function Ft({ folder: t, openWindow: r, onMade: i = null }) {
-	let s = new n({
+function Qt({ folder: e, openWindow: t, onMade: r = null }) {
+	let i = new n({
 		title: N("newLink.title"),
 		icon: "link",
 		width: 520,
 		height: 290,
 		minWidth: 380,
 		minHeight: 260
-	}), c = {
-		win: s,
-		openWindow: r,
-		netError: (t, { retry: n = !1, title: r = N("net.error.title") } = {}) => e.messageBox ? e.messageBox(s, {
+	}), a = {
+		win: i,
+		openWindow: t,
+		netError: (e, { retry: t = !1, title: n = N("net.error.title") } = {}) => u(i, {
 			icon: "error",
-			title: r,
-			text: t?.message ?? String(t),
-			buttons: n ? ["retry", "cancel"] : ["ok"]
-		}) : Promise.resolve(null),
+			title: n,
+			text: e?.message ?? String(e),
+			buttons: t ? ["retry", "cancel"] : ["ok"]
+		}),
 		go: () => {}
-	}, u = o("input", {
+	}, c = s("input", {
 		class: "ctl-text",
 		type: "text",
 		id: "fm-link-address",
 		spellcheck: "false",
 		autocomplete: "off",
 		placeholder: N("newLink.address.placeholder")
-	}), d = o("input", {
+	}), l = s("input", {
 		class: "ctl-text",
 		type: "text",
 		id: "fm-link-name",
 		spellcheck: "false",
 		autocomplete: "off"
-	}), f = o("p", {
+	}), f = s("p", {
 		class: "fm-net-status",
 		role: "status"
-	}), p = o("button", {
+	}), p = s("button", {
 		class: "ctl-btn",
 		type: "button"
-	}, N("newLink.browse")), m = o("button", {
+	}, N("newLink.browse")), m = s("button", {
 		class: "ctl-btn",
 		type: "button",
-		onclick: () => s.emit("close")
-	}, N("net.cancel")), h = o("button", {
+		onclick: () => i.emit("close")
+	}, N("net.cancel")), h = s("button", {
 		class: "ctl-btn primary",
 		type: "button"
-	}, N("newLink.make")), g = !1, _ = !1, y = (e, t = !1) => {
+	}, N("newLink.make")), g = !1, _ = !1, v = (e, t = !1) => {
 		f.textContent = e, f.classList.toggle("bad", t);
 	};
-	u.addEventListener("input", () => {
-		if (y(""), !g) try {
-			d.value = Pt(At(u.value));
+	c.addEventListener("input", () => {
+		if (v(""), !g) try {
+			l.value = Zt(qt(c.value));
 		} catch {
-			d.value = "";
+			l.value = "";
 		}
-	}), d.addEventListener("input", () => {
-		g = !!d.value.trim();
+	}), l.addEventListener("input", () => {
+		g = !!l.value.trim();
 	});
-	for (let e of [u, d]) e.addEventListener("keydown", (e) => {
-		e.stopPropagation(), e.key === "Enter" && (e.preventDefault(), x()), e.key === "Escape" && (e.preventDefault(), s.emit("close"));
+	for (let e of [c, l]) e.addEventListener("keydown", (e) => {
+		e.stopPropagation(), e.key === "Enter" && (e.preventDefault(), b()), e.key === "Escape" && (e.preventDefault(), i.emit("close"));
 	});
 	p.addEventListener("click", () => {
-		let e = p.getBoundingClientRect(), t = async (e) => {
-			let t = await ie(r, {
+		let e = p.getBoundingClientRect(), n = async (e) => {
+			let n = await ue(t, {
 				kind: e,
 				title: N(e === "folder" ? "newLink.pickFolder" : "newLink.pickFile")
 			});
-			t && (u.value = a.path(t.id), u.dispatchEvent(new Event("input")), u.focus());
+			n && (c.value = o.path(n.id), c.dispatchEvent(new Event("input")), c.focus());
 		};
-		l(e.left, e.bottom, [{
+		d(e.left, e.bottom, [{
 			label: N("newLink.browseFile"),
 			icon: "file",
-			action: () => t("file")
+			action: () => n("file")
 		}, {
 			label: N("newLink.browseFolder"),
 			icon: "folder",
-			action: () => t("folder")
+			action: () => n("folder")
 		}]);
 	});
-	async function b(e) {
+	async function y(e) {
 		if (e.local) {
-			let t = a.resolve(e.local);
-			if (!t) return void y(N("newLink.error.noPath", { path: e.local }), !0);
-			let n = v.linkTo(t.id);
-			return n ? { link: n } : void y(N("newLink.error.notLinkable"), !0);
+			let t = o.resolve(e.local);
+			if (!t) return void v(N("newLink.error.noPath", { path: e.local }), !0);
+			let n = x.linkTo(t.id);
+			return n ? { link: n } : void v(N("newLink.error.notLinkable"), !0);
 		}
-		let { url: t } = e, n = Mt(t);
-		if (!n && kt.has(t.scheme)) return { link: {
-			url: u.value.trim(),
+		let { url: t } = e, n = Yt(t);
+		if (!n && Kt.has(t.scheme)) return { link: {
+			url: c.value.trim(),
 			kind: "web"
 		} };
-		let r = G(), { id: i } = X(t.scheme);
-		if (!r?.protocols.some((e) => e.id === i)) return void y(N("newLink.error.protocol", { protocol: t.scheme }), !0);
+		let r = K(), { id: s } = X(t.scheme);
+		if (!r?.protocols.some((e) => e.id === s)) return void v(N("newLink.error.protocol", { protocol: t.scheme }), !0);
 		if (!n) {
-			let e = await new Promise((e) => mt(c, null, {
-				initial: Nt(t),
+			let e = await new Promise((e) => jt(a, null, {
+				initial: Xt(t),
 				onConnected: e,
 				onClosed: () => e(null)
 			}));
-			if (!e) return void y(N("newLink.error.noConnection"), !0);
-			if (n = Mt(t), !n) return void y(N("newLink.error.otherFolder", { name: e.name }), !0);
+			if (!e) return void v(N("newLink.error.noConnection"), !0);
+			if (n = Yt(t), !n) return void v(N("newLink.error.otherFolder", { name: e.name }), !0);
 		}
-		y(N("newLink.checking"));
-		let o = await v.locateLink({
+		v(N("newLink.checking"));
+		let l = await x.locateLink({
 			mount: n.mount.id,
 			path: n.path
 		}, {
-			win: s,
-			read: (e) => st(c, e)
+			win: i,
+			read: (e) => Et(a, e)
 		});
-		if (o.stop) return void y("");
-		if (o.missing) return void y(N("newLink.error.noRemote", {
+		if (l.stop) return void v("");
+		if (l.missing) return void v(N("newLink.error.noRemote", {
 			path: n.path,
 			name: n.mount.name
 		}), !0);
-		let l = o.node;
+		let u = l.node;
 		return { link: {
 			mount: n.mount.id,
-			path: a.netPath(l.id) ?? n.path,
-			kind: l.type === "folder" ? "folder" : "file"
+			path: o.netPath(u.id) ?? n.path,
+			kind: u.type === "folder" ? "folder" : "file"
 		} };
 	}
-	async function x() {
+	async function b() {
 		if (_) return;
-		let e;
+		let t;
 		try {
-			e = At(u.value);
+			t = qt(c.value);
 		} catch (e) {
 			if (!(e instanceof Y)) throw e;
-			return y(e.message, !0), u.focus();
+			return v(e.message, !0), c.focus();
 		}
-		if (d.value.trim() || (d.value = Pt(e)), !d.value.trim()) return y(N("newLink.error.noName"), !0), d.focus();
+		if (l.value.trim() || (l.value = Zt(t)), !l.value.trim()) return v(N("newLink.error.noName"), !0), l.focus();
 		_ = h.disabled = !0;
 		try {
-			let n = await b(e);
+			let n = await y(t);
 			if (!n) return;
-			if (!a.exists(t)) return y(N("newLink.error.folderGone"), !0);
-			let r = a.create(t, {
+			if (!o.exists(e)) return v(N("newLink.error.folderGone"), !0);
+			let a = o.create(e, {
 				type: "link",
-				name: d.value.trim(),
+				name: l.value.trim(),
 				link: n.link
 			});
-			i?.(r.id), s.emit("close");
+			r?.(a.id), i.emit("close");
 		} catch (e) {
-			y(e.message, !0);
+			v(e.message, !0);
 		} finally {
 			_ = h.disabled = !1;
 		}
 	}
-	return h.addEventListener("click", x), s.body.append(o("div", { class: "fm-net-dialog" }, o("div", { class: "fm-net-body" }, o("div", { class: "fm-net-row" }, o("label", { for: "fm-link-address" }, N("newLink.address")), o("div", { class: "fm-net-pick" }, u, p), o("small", {}, N("newLink.address.hint"))), o("div", { class: "fm-net-row" }, o("label", { for: "fm-link-name" }, N("newLink.name")), d), f), o("div", { class: "fm-net-foot" }, o("span", { class: "fm-sp" }), m, h))), requestAnimationFrame(() => u.focus()), s;
+	return h.addEventListener("click", b), i.body.append(s("div", { class: "fm-net-dialog" }, s("div", { class: "fm-net-body" }, s("div", { class: "sh-field" }, s("label", { for: "fm-link-address" }, N("newLink.address")), s("div", { class: "sh-field-pick" }, c, p), s("small", { class: "sh-field-hint" }, N("newLink.address.hint"))), s("div", { class: "sh-field" }, s("label", { for: "fm-link-name" }, N("newLink.name")), l), f), s("div", { class: "fm-net-foot" }, s("span", { class: "fm-sp" }), m, h))), requestAnimationFrame(() => c.focus()), i;
+}
+// src/shared/text.js
+var $t = (e) => String(e).replace(/\s+/g, " ").trim();
+// src/shared/inlineRename.js
+function en(e, t, { onDone: n = null } = {}) {
+	return new Promise((r) => {
+		e.focus();
+		let i = t.type === "file" ? t.name.lastIndexOf(".") : -1;
+		e.setSelectionRange(0, i > 0 ? i : t.name.length);
+		let a = !1, o = (i) => {
+			if (a) return;
+			a = !0;
+			let o = $t(e.value), s = i && o && o !== t.name ? o : null;
+			n?.(s), r(s);
+		};
+		e.addEventListener("keydown", (e) => {
+			e.stopPropagation(), e.key === "Enter" && (e.preventDefault(), o(!0)), e.key === "Escape" && (e.preventDefault(), o(!1));
+		}), e.addEventListener("blur", () => o(!0));
+	});
 }
 // src/files/FilesApp.js
-var Z = () => e.automation ?? null, It = 1e3, Lt = 1 << 20, Rt = 260, zt = "files-view", Bt = "files-side-folded", Vt = [
+var Z = () => e.automation ?? null, tn = 1e3, nn = 1 << 20, rn = 260, an = "files-view", on = "files-side-folded", sn = [
 	"list",
 	"grid",
 	"thumbs"
-], Ht = 112, Ut = {
+], cn = 112, ln = {
 	grid: 92,
 	thumbs: 140
-}, Q = a.trashRoot, Wt = () => [
+}, Q = o.trashRoot, un = () => [
 	{
 		key: "name",
 		label: N("column.name")
@@ -1515,7 +1565,7 @@ var Z = () => e.automation ?? null, It = 1e3, Lt = 1 << 20, Rt = 260, zt = "file
 		key: "workspace",
 		label: N("column.workspace")
 	}
-], Gt = () => [
+], dn = () => [
 	{
 		key: "name",
 		label: N("column.name")
@@ -1537,7 +1587,7 @@ var Z = () => e.automation ?? null, It = 1e3, Lt = 1 << 20, Rt = 260, zt = "file
 		key: "origin",
 		label: N("column.origin")
 	}
-], $ = "tag:", Kt = () => [
+], $ = "tag:", fn = () => [
 	{
 		key: "name",
 		label: N("column.name")
@@ -1554,14 +1604,14 @@ var Z = () => e.automation ?? null, It = 1e3, Lt = 1 << 20, Rt = 260, zt = "file
 		key: "workspace",
 		label: N("column.workspace")
 	}
-], qt = (e) => typeof e == "string" && e.startsWith($) ? h.get(e.slice(4)) : null, Jt = (e) => e.some((e) => a.exists(e) && !a.get(e).system);
-function Yt(e) {
-	return e?.trash || e?.folder === Q ? Q : typeof e?.tag == "string" && h.get(e.tag) ? $ + e.tag : qt(e?.folder) || e?.folder && a.exists(e.folder) ? e.folder : null;
+], pn = (e) => typeof e == "string" && e.startsWith($) ? v.get(e.slice(4)) : null, mn = (e) => e.some((e) => o.exists(e) && !o.get(e).system);
+function hn(e) {
+	return e?.trash || e?.folder === Q ? Q : typeof e?.tag == "string" && v.get(e.tag) ? $ + e.tag : pn(e?.folder) || e?.folder && o.exists(e.folder) ? e.folder : null;
 }
-function Xt(e) {
-	return Yt(e) ? null : typeof e?.tag == "string" || typeof e?.folder == "string" && e.folder.startsWith($) ? "tag" : e?.folder ? "folder" : null;
+function gn(e) {
+	return hn(e) ? null : typeof e?.tag == "string" || typeof e?.folder == "string" && e.folder.startsWith($) ? "tag" : e?.folder ? "folder" : null;
 }
-function Zt({ args: e, openWindow: t } = {}) {
+function _n({ args: e, openWindow: t } = {}) {
 	let r = new n({
 		title: N("@name"),
 		icon: "folder",
@@ -1569,33 +1619,33 @@ function Zt({ args: e, openWindow: t } = {}) {
 		height: 520,
 		minWidth: 520,
 		minHeight: 300
-	}), i = new en(r, t);
-	i.go(Yt(e) ?? a.root, !1);
-	let o = Xt(e);
-	return o ? requestAnimationFrame(() => i.notFound(o)) : e?.link && requestAnimationFrame(() => i.followLink(e.link)), r.on("launch", (e) => {
-		let t = Yt(e);
+	}), i = new bn(r, t);
+	i.go(hn(e) ?? o.root, !1);
+	let a = gn(e);
+	return a ? requestAnimationFrame(() => i.notFound(a)) : e?.link && requestAnimationFrame(() => i.followLink(e.link)), r.on("launch", (e) => {
+		let t = hn(e);
 		if (t) i.go(t, !0, !1);
-		else if (Xt(e)) return i.notFound(Xt(e));
+		else if (gn(e)) return i.notFound(gn(e));
 		e?.link && i.followLink(e.link);
 	}), r.getState = () => ({ folder: i.folder }), r.selection = () => i.selected, r;
 }
-function Qt({ args: e, openWindow: t } = {}) {
-	return Ft({
-		folder: e?.folder && a.get(e.folder)?.type === "folder" && !a.isRemote?.(e.folder) ? e.folder : a.root,
+function vn({ args: e, openWindow: t } = {}) {
+	return Qt({
+		folder: e?.folder && o.get(e.folder)?.type === "folder" && !o.isRemote?.(e.folder) ? e.folder : o.root,
 		openWindow: t ?? (() => {})
 	});
 }
-var $t = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase(), en = class {
-	folder = a.root;
+var yn = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase(), bn = class {
+	folder = o.root;
 	#e = [];
 	#t = [];
-	#n = Vt.includes(m.get(zt)) ? m.get(zt) : "list";
-	#r = new Set([].concat(m.get(Bt) ?? []).filter((e) => typeof e == "string"));
+	#n = sn.includes(_.get(an)) ? _.get(an) : "list";
+	#r = new Set([].concat(_.get(on) ?? []).filter((e) => typeof e == "string"));
 	#i = {
 		key: "name",
 		dir: 1
 	};
-	#a = new We();
+	#a = new Xe();
 	#o = "";
 	#s = "";
 	#c = 0;
@@ -1620,19 +1670,19 @@ var $t = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 	history = new t();
 	constructor(t, n) {
 		this.win = t, this.openWindow = n ?? (() => {});
-		let r = (e, t, n) => o("button", {
+		let r = (e, t, n) => s("button", {
 			class: "fm-btn",
 			type: "button",
 			title: t,
 			"aria-label": t,
 			onclick: n
-		}, c(e));
-		this.backBtn = r("arrowLeft", N("toolbar.back"), () => this.back()), this.forwardBtn = r("arrowRight", N("toolbar.forward"), () => this.forward()), this.upBtn = r("arrowUp", N("toolbar.up"), () => this.up()), this.crumbs = o("nav", {
+		}, l(e));
+		this.backBtn = r("arrowLeft", N("toolbar.back"), () => this.back()), this.forwardBtn = r("arrowRight", N("toolbar.forward"), () => this.forward()), this.upBtn = r("arrowUp", N("toolbar.up"), () => this.up()), this.crumbs = s("nav", {
 			class: "fm-path",
 			"aria-label": N("toolbar.path")
 		}), this.crumbs.addEventListener("click", (e) => {
 			e.target.closest("button") || this.editAddress();
-		}), this.address = o("input", {
+		}), this.address = s("input", {
 			class: "fm-path fm-address",
 			type: "text",
 			spellcheck: "false",
@@ -1643,30 +1693,29 @@ var $t = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 			e.stopPropagation(), e.key === "Enter" && (e.preventDefault(), this.#C()), e.key === "Escape" && (e.preventDefault(), this.#S(!0));
 		}), this.address.addEventListener("blur", () => {
 			this.#v || this.#S(!1);
-		}), this.newBtn = r("folderPlus", N("menu.newFolder"), () => this.create("folder")), this.listBtn = r("list", N("view.list"), () => this.setView("list")), this.gridBtn = r("grid", N("view.grid"), () => this.setView("grid")), this.thumbsBtn = r("image", N("view.thumbs"), () => this.setView("thumbs")), this.previewBtn = r("sidebar", "", () => this.preview.toggle()), this.infoBtn = r("info", "", () => this.info.toggle()), this.search = o("input", {
+		}), this.newBtn = r("folderPlus", N("menu.newFolder"), () => this.create("folder")), this.listBtn = r("list", N("view.list"), () => this.setView("list")), this.gridBtn = r("grid", N("view.grid"), () => this.setView("grid")), this.thumbsBtn = r("image", N("view.thumbs"), () => this.setView("thumbs")), this.previewBtn = r("sidebar", "", () => this.preview.toggle()), this.infoBtn = r("info", "", () => this.info.toggle()), this.search = s("input", {
 			type: "text",
 			spellcheck: "false",
 			"aria-label": N("toolbar.search")
 		}), this.search.addEventListener("input", () => {
-			this.#o = $t(this.search.value.trim()), this.render(), clearTimeout(this.#c), this.#c = setTimeout(() => this.#fe(), It);
+			this.#o = yn(this.search.value.trim()), this.render(), clearTimeout(this.#c), this.#c = setTimeout(() => this.#fe(), tn);
 		}), this.search.addEventListener("keydown", (e) => {
 			e.key === "Enter" && this.#fe(), e.key === "Escape" && this.search.value && (e.stopPropagation(), this.search.value = "", this.#o = "", this.render(), this.#fe()), e.key === "ArrowDown" && (e.preventDefault(), this.list.focus());
-		}), this.side = o("aside", {
+		}), this.side = s("aside", {
 			class: "fm-side",
 			"aria-label": N("side.label")
-		}), this.list = o("div", {
+		}), this.list = s("div", {
 			class: "fm-list",
 			role: "listbox",
 			tabindex: "0",
 			"aria-multiselectable": "true",
 			"aria-label": N("list.label")
-		}), this.mountSlot = o("div", { class: "fm-mountslot" }), this.statusLeft = o("span"), this.statusRight = o("span", { class: "fm-status-right" });
-		let i = (e, n, r, i) => new Se({
+		}), this.mountSlot = s("div", { class: "fm-mountslot" }), this.statusLeft = s("span"), this.statusRight = s("span", { class: "fm-status-right" });
+		let i = (e, t, n, r) => new De({
 			key: e,
-			...n,
-			width: r,
-			open: i,
-			signal: t.signal,
+			...t,
+			width: n,
+			open: r,
 			room: () => this.#O() - (e === "info" ? this.preview : this.info).shown,
 			onLayout: () => {
 				this.#k(), this.#E();
@@ -1680,29 +1729,29 @@ var $t = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 			title: N("panel.info.title"),
 			resizeLabel: N("panel.info.resize"),
 			closeLabel: N("panel.info.close")
-		}, 260, !0), this.previewView = new ze(this.preview.body, {
+		}, 260, !0), this.previewView = new Ge(this.preview.body, {
 			text: (e) => this.#D(e),
 			open: (e) => this.open(e)
-		}), this.main = o("div", { class: "fm" }, this.side, o("div", { class: "fm-main" }, this.mountSlot, this.list, o("div", { class: "fm-status" }, this.statusLeft, this.statusRight)), this.preview.el, this.info.el), t.body.append(o("div", { class: "fm-toolbar" }, this.backBtn, this.forwardBtn, this.upBtn, this.crumbs, this.address, this.newBtn, o("span", { class: "fm-sep" }), this.listBtn, this.gridBtn, this.thumbsBtn, o("span", { class: "fm-sep" }), this.previewBtn, this.infoBtn, o("label", { class: "fm-search" }, c("search"), this.search)), this.main);
-		let l = new ResizeObserver(() => this.#k());
-		l.observe(this.main), this.#te(), T(this.list, { target: (e, t, n, r) => this.#I(r) }), this.gap = o("div", {
+		}), this.main = s("div", { class: "fm" }, this.side, s("div", { class: "fm-main" }, this.mountSlot, this.list, s("div", { class: "fm-status" }, this.statusLeft, this.statusRight)), this.preview.el, this.info.el), t.body.append(s("div", { class: "fm-toolbar" }, this.backBtn, this.forwardBtn, this.upBtn, this.crumbs, this.address, this.newBtn, s("span", { class: "fm-sep" }), this.listBtn, this.gridBtn, this.thumbsBtn, s("span", { class: "fm-sep" }), this.previewBtn, this.infoBtn, s("label", { class: "fm-search" }, l("search"), this.search)), this.main);
+		let a = new ResizeObserver(() => this.#k());
+		a.observe(this.main), this.#te(), O(this.list, { target: (e, t, n, r) => this.#I(r) }), this.gap = s("div", {
 			class: "fm-gap",
 			"aria-hidden": "true"
-		}), T(this.side, { target: (e, t, n, r) => this.#F(e, t, n, r) });
-		let u = a.on("change", (e) => this.#he(e)), d = O.on("change", () => {
+		}), O(this.side, { target: (e, t, n, r) => this.#F(e, t, n, r) });
+		let u = o.on("change", (e) => this.#he(e)), d = M.on("change", () => {
 			this.#se(this.folder) && this.render();
-		}), f = a.on("scope", () => {
+		}), f = o.on("scope", () => {
 			this.#se(this.folder) && this.render();
-		}), p = re(() => {
+		}), p = ce(() => {
 			this.#se(this.folder) && this.render();
-		}), m = a.on("trash", () => {
+		}), m = o.on("trash", () => {
 			this.inTrash && (this.#g = "", this.render());
-		}), g = G() ? e.net.on("mounts", () => {
+		}), h = K() ? e.net.on("mounts", () => {
 			this.#se(this.folder) && this.render();
-		}) : () => {}, _ = h.on("change", () => {
-			if (this.folder.startsWith?.($) && !this.inTag) return this.go(a.root, !1);
+		}) : () => {}, g = v.on("change", () => {
+			if (this.folder.startsWith?.($) && !this.inTag) return this.go(o.root, !1);
 			this.#se(this.folder) && this.render();
-		}), v = x({
+		}), _ = w({
 			isActive: () => t.active,
 			selectionSize: () => this.#f.size,
 			open: () => this.openSelected(),
@@ -1710,22 +1759,22 @@ var $t = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 			remove: () => this.remove([...this.#f]),
 			selectAll: () => this.#ee(this.#l.map((e) => e.id)),
 			deselect: () => this.#ee([])
-		}), y = s.attach(t.el, this.history), b = [
-			ee("files.info", {
+		}), y = c.attach(t.el, this.history), b = [
+			A("files.info", {
 				isActive: () => t.active,
 				run: () => this.info.toggle()
 			}),
-			ee("files.preview", {
+			A("files.preview", {
 				isActive: () => t.active,
 				run: () => this.preview.toggle()
 			}),
-			ee("files.address", {
+			A("files.address", {
 				isActive: () => t.active,
 				run: () => this.editAddress()
 			})
 		];
 		t.on("destroy", () => {
-			u(), d(), f(), p(), m(), _(), g(), v(), y(), b.forEach((e) => e()), l.disconnect(), this.previewView.destroy(), clearTimeout(this.#c);
+			u(), d(), f(), p(), m(), g(), h(), _(), y(), b.forEach((e) => e()), a.disconnect(), this.previewView.destroy(), clearTimeout(this.#c);
 		}), this.#pe();
 	}
 	get inTrash() {
@@ -1735,30 +1784,30 @@ var $t = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 		return this.inTrash ? [] : [...this.#f];
 	}
 	get inTag() {
-		return qt(this.folder);
+		return pn(this.folder);
 	}
 	get tree() {
 		return this.#n === "list" && !this.inTrash;
 	}
 	go(e, t = !0, n = t) {
-		if (e !== Q && !qt(e) && a.get(e)?.type !== "folder") return;
+		if (e !== Q && !pn(e) && o.get(e)?.type !== "folder") return;
 		t && e !== this.folder && (this.#e.push(this.folder), this.#t = []);
 		let r = this.folder;
 		this.folder = e, this.#f.clear(), this.#h = null, this.#g = "", this.search.value = "", this.#o = "", clearTimeout(this.#c), this.#s = "";
-		let i = a.ancestors(r).find((t) => t.parent === e);
-		this.#m = i?.id ?? null, i && this.#f.add(i.id), this.#p = this.#m, this.render(), this.list.scrollTop = 0, a.isRemote?.(e) && this.#x(e), n && e !== r && this.#de();
+		let i = o.ancestors(r).find((t) => t.parent === e);
+		this.#m = i?.id ?? null, i && this.#f.add(i.id), this.#p = this.#m, this.render(), this.list.scrollTop = 0, o.isRemote?.(e) && this.#x(e), n && e !== r && this.#de();
 	}
 	async #x(e) {
 		this.#ue(N("net.loading"));
-		let t = await st(this, e);
+		let t = await Et(this, e);
 		this.folder === e && this.#g === N("net.loading") && this.#ue(t ? "" : N("net.notRead"));
 	}
 	netError(e, { retry: t = !1, title: n = N("net.error.title") } = {}) {
 		return this.#me(n, e?.message ?? String(e), t ? ["retry", "cancel"] : ["ok"]);
 	}
 	reveal(e) {
-		let t = a.get(e);
-		t && (this.go(t.parent), a.isHidden(e) ? this.#ue(N("message.hiddenByTag", { name: t.name })) : this.#ee([e], e));
+		let t = o.get(e);
+		t && (this.go(t.parent), o.isHidden(e) ? this.#ue(N("message.hiddenByTag", { name: t.name })) : this.#ee([e], e));
 	}
 	back() {
 		this.#le(this.#e, this.#t);
@@ -1767,72 +1816,72 @@ var $t = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 		this.#le(this.#t, this.#e);
 	}
 	up() {
-		let e = a.get(this.folder)?.parent;
+		let e = o.get(this.folder)?.parent;
 		e && this.go(e);
 	}
 	editAddress() {
-		this.address.hidden && (this.address.value = this.inTrash || this.inTag ? `${a.home}/` : a.path(this.folder), this.#w(!1), this.crumbs.hidden = !0, this.address.hidden = !1), this.address.focus(), this.address.select();
+		this.address.hidden && (this.address.value = this.inTrash || this.inTag ? `${o.home}/` : o.path(this.folder), this.#w(!1), this.crumbs.hidden = !0, this.address.hidden = !1), this.address.focus(), this.address.select();
 	}
 	#S(e) {
 		this.address.hidden || (this.address.hidden = !0, this.crumbs.hidden = !1, this.#g && this.#g === this.#_ && this.#ue(""), e && this.list.focus());
 	}
 	async #C() {
-		let t = this.address.value.trim().replace(/\\/g, "/"), n = t ? a.resolve(t) : null;
-		if (!n && t && e.messageBox) {
+		let e = this.address.value.trim().replace(/\\/g, "/"), t = e ? o.resolve(e) : null;
+		if (!t && e) {
 			this.#w(!0), this.#v = !0;
-			let e = await this.#me(N("error.pathNotFound"), N("message.noPath", { path: t }), ["retry", "cancel"]);
-			if (this.#v = !1, e !== "retry") return this.#S(!0);
+			let t = await this.#me(N("error.pathNotFound"), N("message.noPath", { path: e }), ["retry", "cancel"]);
+			if (this.#v = !1, t !== "retry") return this.#S(!0);
 			this.address.focus(), this.address.setSelectionRange(this.address.value.length, this.address.value.length);
 		} else {
-			if (!n) return this.#w(!0), this.#_ = t ? N("message.noPath", { path: t }) : N("message.typePath", { path: a.path(this.inTrash || this.inTag ? a.root : this.folder) }), this.#ue(this.#_);
-			this.#S(!0), n.type === "folder" ? this.go(n.id) : this.reveal(n.id);
+			if (!t) return this.#w(!0), this.#_ = e ? N("message.noPath", { path: e }) : N("message.typePath", { path: o.path(this.inTrash || this.inTag ? o.root : this.folder) }), this.#ue(this.#_);
+			this.#S(!0), t.type === "folder" ? this.go(t.id) : this.reveal(t.id);
 		}
 	}
 	#w(e) {
 		this.address.classList.toggle("bad", e), this.address.setAttribute("aria-invalid", String(e));
 	}
 	setView(e) {
-		e !== this.#n && Z()?.record("files.view", { params: { mode: e } }), this.#n = e, m.set(zt, e), this.render();
+		e !== this.#n && Z()?.record("files.view", { params: { mode: e } }), this.#n = e, _.set(an, e), this.render();
 	}
 	open(e) {
 		if (e.type === "folder") return this.go(e.id);
-		if (e.type === "app") return te(e.app);
+		if (e.type === "app") return ne(e.app);
 		if (e.type === "link") return this.#T(e);
-		if (e.net && e.web) return ot(this, e.id);
-		wt(this, e) || M(e);
+		if (e.net && e.web) return Tt(this, e.id);
+		Vt(this, e) || le(e);
 	}
 	async #T(e) {
-		if (e.link?.kind === "web") return v.openWebLink?.(e.link.url);
-		let t = await v.findLinkTarget?.(e, {
+		if (e.link?.kind === "web") return x.openWebLink?.(e.link.url);
+		let t = await x.findLinkTarget?.(e, {
 			win: this.win,
-			read: (e) => st(this, e)
+			read: (e) => Et(this, e)
 		});
 		t && this.open(t);
 	}
 	followLink(e) {
-		let t = a.get(e);
+		let t = o.get(e);
 		t?.type === "link" && this.#T(t);
 	}
 	newLink() {
 		if (this.inTrash || this.inTag) return;
 		let e = this.folder;
-		this.openWindow(Ft({
+		this.openWindow(Qt({
 			folder: e,
 			openWindow: this.openWindow,
 			onMade: (t) => {
-				ae(this.history, t), this.folder === e && this.#ee([t], t);
+				de(this.history, t), this.folder === e && this.#ee([t], t);
 			}
 		}));
 	}
 	addDeskLinks(e) {
 		let t;
 		try {
-			t = v.addDeskLinks(e);
+			t = x.addDeskLinks(e);
 		} catch (e) {
 			this.#me(N("error.deskLink"), e.message);
 			return;
 		}
-		t.forEach((e) => ae(this.history, e)), t.length && g(N("toast.deskLinks", {
+		t.forEach((e) => de(this.history, e)), t.length && y(N("toast.deskLinks", {
 			n: t.length,
 			count: P(t.length)
 		}));
@@ -1847,7 +1896,7 @@ var $t = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 		this.#o &&= (this.search.value = "", "");
 		let t;
 		try {
-			t = a.create(this.folder, {
+			t = o.create(this.folder, {
 				type: e,
 				name: N(e === "folder" ? "create.folderName" : "create.fileName")
 			});
@@ -1858,54 +1907,44 @@ var $t = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 		this.#ee([t.id]), this.rename(t.id, !0);
 	}
 	rename(e, t = !1) {
-		let n = a.get(e);
+		let n = o.get(e);
 		if (!n || n.system) return;
 		if (n.noRename) return this.#ue(N("message.noRename", { name: n.name }));
 		this.#h = e, this.render();
 		let r = this.list.querySelector(".fm-rename");
-		if (!r) return;
-		r.focus();
-		let i = n.type === "file" ? n.name.lastIndexOf(".") : -1;
-		r.setSelectionRange(0, i > 0 ? i : n.name.length);
-		let o = !1, s = (i) => {
-			if (o) return;
-			o = !0, this.#h = null;
-			let s = r.value.replace(/\s+/g, " ").trim();
-			if (i && s && s !== n.name && a.exists(e)) try {
-				se(t ? null : this.history, e, s);
+		r && en(r, n, { onDone: (r) => {
+			if (this.#h = null, r && o.exists(e)) try {
+				pe(t ? null : this.history, e, r);
 			} catch (t) {
 				this.#me(N("error.rename", { name: n.name }), t.message, ["retry", "cancel"]).then((t) => {
-					t === "retry" && a.exists(e) && this.rename(e);
+					t === "retry" && o.exists(e) && this.rename(e);
 				});
 			}
-			t && ae(this.history, e), this.render(), this.list.focus();
-		};
-		r.addEventListener("keydown", (e) => {
-			e.stopPropagation(), e.key === "Enter" && (e.preventDefault(), s(!0)), e.key === "Escape" && (e.preventDefault(), s(!1));
-		}), r.addEventListener("blur", () => s(!0));
+			t && de(this.history, e), this.render(), this.list.focus();
+		} });
 	}
 	setOpen(e, t, n = !1) {
 		let r = [e];
-		if (n) for (let e = 0; e < r.length; e++) r.push(...a.children(r[e]).filter((e) => e.type === "folder").map((e) => e.id));
-		if (r.forEach((e) => t ? this.#u.add(e) : this.#u.delete(e)), t && r.filter((e) => a.isRemote?.(e)).forEach((e) => st(this, e)), !t) {
-			let t = (t) => t != null && t !== e && a.isInside(t, e);
+		if (n) for (let e = 0; e < r.length; e++) r.push(...o.children(r[e]).filter((e) => e.type === "folder").map((e) => e.id));
+		if (r.forEach((e) => t ? this.#u.add(e) : this.#u.delete(e)), t && r.filter((e) => o.isRemote?.(e)).forEach((e) => Et(this, e)), !t) {
+			let t = (t) => t != null && t !== e && o.isInside(t, e);
 			t(this.#m) && (this.#m = e), t(this.#p) && (this.#p = e), [...this.#f].some(t) && (this.#f = new Set([...this.#f].filter((e) => !t(e)).concat(e)));
 		}
 		this.render();
 	}
 	remove(e) {
 		if (this.inTrash) return this.purge(e);
-		let t = e.filter((e) => !a.get(e)?.system && !a.get(e)?.noRemove);
-		if (!t.length) return void this.#me(N("error.delete"), e.some((e) => a.get(e)?.noRemove) ? N("message.noRemove") : N("message.systemFolders"));
+		let t = e.filter((e) => !o.get(e)?.system && !o.get(e)?.noRemove);
+		if (!t.length) return void this.#me(N("error.delete"), e.some((e) => o.get(e)?.noRemove) ? N("message.noRemove") : N("message.systemFolders"));
 		let { x: n, y: r } = this.#ce(t[0]);
-		S(t, n, r, this.history);
+		T(t, n, r, this.history);
 	}
 	restore(e) {
-		let t = ce(this.history, e);
+		let t = me(this.history, e);
 		if (!t.length) return;
-		let n = [...new Set(t.map((e) => e.parent === a.root ? N("place.home") : a.path(e.parent)))], r = P(t.length);
-		g(t.length === 1 ? N("toast.restored", {
-			name: a.get(t[0].id).name,
+		let n = [...new Set(t.map((e) => e.parent === o.root ? N("place.home") : o.path(e.parent)))], r = P(t.length);
+		y(t.length === 1 ? N("toast.restored", {
+			name: o.get(t[0].id).name,
 			place: n[0]
 		}) : n.length === 1 ? N("toast.restoredMany", {
 			count: r,
@@ -1918,33 +1957,11 @@ var $t = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 	purge(e) {
 		let t = this.#l.filter((t) => e.includes(t.id));
 		if (!t.length) return;
-		let n = t.length === 1 ? N("confirm.purge", { name: t[0].name }) : N("confirm.purgeMany", { count: P(t.length) }), { x: r, y: i } = this.#ce(t[0].id);
-		l(r, i, [{
-			label: n,
-			icon: "trash",
-			danger: !0,
-			action: () => a.purge(t.map((e) => e.id))
-		}, {
-			label: N("confirm.cancel"),
-			icon: "x",
-			action: () => {}
-		}]);
+		let { x: n, y: r } = this.#ce(t[0].id);
+		te(t.map((e) => e.id), n, r);
 	}
 	empty(e, t) {
-		let n = a.trashed().length;
-		n && l(e, t, [{
-			label: N("confirm.emptyTrash", {
-				n,
-				count: P(n)
-			}),
-			icon: "trash",
-			danger: !0,
-			action: () => a.purgeTrash()
-		}, {
-			label: N("confirm.cancel"),
-			icon: "x",
-			action: () => {}
-		}]);
+		ee(e, t);
 	}
 	render() {
 		let e = this.inTag, t = this.inTrash ? {
@@ -1955,17 +1972,17 @@ var $t = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 			id: this.folder,
 			name: N("place.tag", { name: e.name }),
 			parent: null
-		} : a.get(this.folder);
+		} : o.get(this.folder);
 		if (!t) return;
 		this.win.setTitle(I(t), N("@name")), this.#A(t), this.#j();
-		let n = !this.inTrash && !e && G() ? rt(this, this.folder) : null;
+		let n = !this.inTrash && !e && K() ? Ct(this, this.folder) : null;
 		this.mountSlot.replaceChildren(...n ? [n] : []);
-		let r = this.inTrash ? a.trashed() : e ? a.tagged(e.id) : a.children(this.folder);
+		let r = this.inTrash ? o.trashed() : e ? o.tagged(e.id) : o.children(this.folder);
 		this.#d.clear(), this.#l = this.#q(r);
 		let i = new Set(this.#l.map((e) => e.id));
 		this.#f = new Set([...this.#f].filter((e) => i.has(e))), i.has(this.#m) || (this.#m = this.#l[0]?.id ?? null);
-		let s = this.list.scrollTop;
-		this.list.classList.toggle("grid", this.#n !== "list"), this.list.classList.toggle("thumbs", this.#n === "thumbs"), this.list.classList.toggle("tree", this.tree), this.list.setAttribute("role", this.tree ? "tree" : "listbox"), this.#l.length ? this.#n === "list" ? (this.#z(), this.list.replaceChildren(this.#W(), ...this.#l.map((e) => this.#G(e)))) : this.list.replaceChildren(...this.#l.map((e) => this.#X(e))) : this.list.replaceChildren(o("div", { class: "fm-empty" }, this.#o ? N("empty.noMatch", { query: this.search.value.trim() }) : this.inTrash ? N("empty.trash") : N(e ? "empty.tag" : "empty.folder"))), this.list.scrollTop = s, this.list.setAttribute("aria-activedescendant", this.#m ? `fm-${this.#m}` : "");
+		let a = this.list.scrollTop;
+		this.list.classList.toggle("grid", this.#n !== "list"), this.list.classList.toggle("thumbs", this.#n === "thumbs"), this.list.classList.toggle("tree", this.tree), this.list.setAttribute("role", this.tree ? "tree" : "listbox"), this.#l.length ? this.#n === "list" ? (this.#z(), this.list.replaceChildren(this.#W(), ...this.#l.map((e) => this.#G(e)))) : this.list.replaceChildren(...this.#l.map((e) => this.#X(e))) : this.list.replaceChildren(s("div", { class: "fm-empty" }, this.#o ? N("empty.noMatch", { query: this.search.value.trim() }) : this.inTrash ? N("empty.trash") : N(e ? "empty.tag" : "empty.folder"))), this.list.scrollTop = a, this.list.setAttribute("aria-activedescendant", this.#m ? `fm-${this.#m}` : "");
 		let c = r.length, l = this.#f.size;
 		this.statusLeft.textContent = N("status.items", {
 			n: c,
@@ -1973,7 +1990,7 @@ var $t = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 		}) + (l ? ` · ${N("status.selected", {
 			n: l,
 			count: P(l)
-		})}` : ""), this.statusRight.textContent = this.#g || (this.inTrash ? ye() : e ? e.visible ? N("status.tag") : N("status.tagHidden") : a.path(this.folder)), this.statusRight.classList.toggle("msg", !!this.#g), this.#E();
+		})}` : ""), this.statusRight.textContent = this.#g || (this.inTrash ? we() : e ? e.visible ? N("status.tag") : N("status.tagHidden") : o.path(this.folder)), this.statusRight.classList.toggle("msg", !!this.#g), this.#E();
 	}
 	#E() {
 		let e = [[
@@ -1990,16 +2007,16 @@ var $t = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 			N("panel.info.hide")
 		]];
 		for (let [t, n, r, i, a] of e) {
-			let e = f.label(r), o = `${n.open ? a : i}${e ? ` (${e})` : ""}`;
+			let e = h.label(r), o = `${n.open ? a : i}${e ? ` (${e})` : ""}`;
 			t.title = o, t.setAttribute("aria-label", o), t.setAttribute("aria-pressed", String(n.open)), t.classList.toggle("on", n.open);
 		}
 		if (!this.info.open && !this.preview.open) return;
 		let t = this.#l.filter((e) => this.#f.has(e.id));
 		if (this.preview.open && this.previewView.update(t), this.info.open) {
-			let e = this.inTag, n = this.inTrash ? { trash: !0 } : e ? { tag: e } : { node: a.get(this.folder) };
+			let e = this.inTag, n = this.inTrash ? { trash: !0 } : e ? { tag: e } : { node: o.get(this.folder) };
 			if (!n.trash && !n.tag && !n.node) return;
 			let r = this.info.body, i = r.scrollTop;
-			r.replaceChildren(Pe({
+			r.replaceChildren(Be({
 				nodes: t,
 				place: n,
 				text: (e) => this.#D(e)
@@ -2007,16 +2024,16 @@ var $t = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 		}
 	}
 	#D(e) {
-		if (!Ae(e)) return Promise.reject(Error(N("error.notFile")));
-		if (e.net && (e.size ?? 0) > Lt) return Promise.reject(Error(N("net.preview.big")));
-		let t = je(e);
+		if (!Ie(e)) return Promise.reject(Error(N("error.notFile")));
+		if (e.net && (e.size ?? 0) > nn) return Promise.reject(Error(N("net.preview.big")));
+		let t = Le(e);
 		return this.#b.key !== t && (this.#b = {
 			key: t,
-			text: a.read(e.id)
+			text: o.read(e.id)
 		}), this.#b.text;
 	}
 	#O() {
-		return this.main.clientWidth - this.side.offsetWidth - Rt;
+		return this.main.clientWidth - this.side.offsetWidth - rn;
 	}
 	#k() {
 		let e = [this.preview, this.info].filter((e) => e.open);
@@ -2032,73 +2049,73 @@ var $t = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 			[this.thumbsBtn, "thumbs"]
 		]) e.classList.toggle("on", this.#n === t), e.setAttribute("aria-pressed", String(this.#n === t));
 		this.search.placeholder = N("toolbar.searchIn", { name: I(e) });
-		let t = this.inTrash || this.inTag ? [e] : a.ancestors(this.folder);
+		let t = this.inTrash || this.inTag ? [e] : o.ancestors(this.folder);
 		this.crumbs.replaceChildren(...t.flatMap((e, n) => {
-			let r = n === t.length - 1 ? o("span", {
+			let r = n === t.length - 1 ? s("span", {
 				class: "fm-crumb current",
 				"aria-current": "page"
-			}, I(e)) : o("button", {
+			}, I(e)) : s("button", {
 				class: "fm-crumb",
 				type: "button",
 				onclick: () => this.go(e.id)
 			}, I(e));
-			return a.exists(e.id) && k(r, e), n ? [o("span", {
+			return o.exists(e.id) && ie(r, e), n ? [s("span", {
 				class: "fm-crumb-sep",
 				"aria-hidden": "true"
 			}, "›"), r] : [r];
 		}));
 	}
 	#j() {
-		let e = a.children(a.root), t = new Set(a.ancestors(this.folder).map((e) => e.id)), n = [{
+		let e = o.children(o.root), t = new Set(o.ancestors(this.folder).map((e) => e.id)), n = [{
 			key: "root",
-			id: a.root,
+			id: o.root,
 			name: N("place.home"),
 			glyph: "home"
-		}, ...b.map((t) => ({
+		}, ...C.map((t) => ({
 			...t,
 			id: e.find((e) => e.name === t.name && e.system)?.id,
 			glyph: t.icon
 		})).filter((e) => e.id).map((e) => ({
 			...e,
-			key: e.name === y ? "desk" : e.id
-		}))], r = a.ancestors(this.folder).find((e) => e.mount)?.id ?? null, i = this.inTrash || this.inTag ? this.folder : r ? null : [...n].reverse().find((e) => t.has(e.id))?.id, s = (e) => o("button", {
+			key: e.name === S ? "desk" : e.id
+		}))], r = o.ancestors(this.folder).find((e) => e.mount)?.id ?? null, i = this.inTrash || this.inTag ? this.folder : r ? null : [...n].reverse().find((e) => t.has(e.id))?.id, a = (e) => s("button", {
 			class: e.id === i ? "fm-place on" : "fm-place",
 			type: "button",
 			"aria-current": e.id === i ? "true" : null,
 			onclick: () => this.go(e.id)
-		}, c(e.glyph), o("span", {}, e.name)), u = (e) => {
+		}, l(e.glyph), s("span", {}, e.name)), c = (e) => {
 			let t = $ + e.id;
-			return o("button", {
+			return s("button", {
 				class: t === i ? "fm-place fm-tag on" : "fm-place fm-tag",
 				type: "button",
 				"aria-current": t === i ? "true" : null,
 				title: e.visible ? e.name : N("side.tagHidden", { name: e.name }),
 				onclick: () => this.go(t)
-			}, o("span", {
+			}, s("span", {
 				class: "tag-dot",
 				style: { background: e.color },
 				"aria-hidden": "true"
-			}), o("span", {}, e.name), e.visible ? null : c("eyeOff"));
-		}, d = h.list(), f = n.map((e) => e.key);
+			}), s("span", {}, e.name), e.visible ? null : l("eyeOff"));
+		}, u = v.list(), f = n.map((e) => e.key);
 		this.#y = {
 			defaults: f,
 			desk: n.find((e) => e.key === "desk")?.id
 		};
 		let p = (e, t, { node: n, folder: r } = {}) => (t.dataset.entry = e, r && (t.dataset.folder = r), t.addEventListener("pointerdown", (e) => {
-			e.button === 0 && !e.target.closest(".fm-link-x") && w(e, {
+			e.button === 0 && !e.target.closest(".fm-link-x") && D(e, {
 				ids: [n],
 				stack: this.history
 			});
 		}), t), m = (e) => {
-			let t = e.id === this.folder, n = () => this.#N(e), r = o("button", {
+			let t = e.id === this.folder, n = () => this.#N(e), r = s("button", {
 				class: t ? "fm-place fm-link on" : "fm-place fm-link",
 				type: "button",
 				"aria-current": t ? "true" : null,
 				title: `${L(e)} › ${e.name}`,
 				onclick: () => this.open(e)
-			}, o("span", { class: "fm-link-icon" }, D(e)), o("span", {}, e.name));
+			}, s("span", { class: "fm-link-icon" }, j(e)), s("span", {}, e.name));
 			r.addEventListener("contextmenu", (t) => {
-				t.preventDefault(), l(t.clientX, t.clientY, [
+				t.preventDefault(), d(t.clientX, t.clientY, [
 					{
 						label: N("menu.open"),
 						icon: "open",
@@ -2119,80 +2136,80 @@ var $t = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 			}), r.addEventListener("keydown", (e) => {
 				e.key === "Delete" && (e.preventDefault(), e.stopPropagation(), n());
 			});
-			let i = o("button", {
+			let i = s("button", {
 				class: "fm-link-x",
 				type: "button",
 				title: N("side.unlinkTitle"),
 				"aria-label": N("link.remove", { name: e.name }),
 				onclick: n
-			}, c("x"));
-			return p(e.id, o("div", { class: "fm-link-row" }, r, i), {
+			}, l("x"));
+			return p(e.id, s("div", { class: "fm-link-row" }, r, i), {
 				node: e.id,
 				folder: e.type === "folder" ? e.id : null
 			});
-		}, g = (e) => {
+		}, h = (e) => {
 			let t = n.find((t) => t.key === e);
-			if (t) return p(e, s(t), {
+			if (t) return p(e, a(t), {
 				node: t.id,
 				folder: t.id
 			});
-			let r = a.get(e);
+			let r = o.get(e);
 			return r ? m(r) : [];
-		}, _ = s({
+		}, g = a({
 			id: Q,
 			name: N("place.trash"),
 			glyph: "trash"
 		});
-		_.dataset.trash = "";
-		let x = e.find((e) => e.system && e.name === v.NETWORK_NAME)?.id ?? null, S = (e) => o("h6", { class: "fm-side-head" }, o("span", { class: "fm-side-label" }, e));
-		this.side.replaceChildren(this.#M("links", N("side.links"), o("section", {
+		g.dataset.trash = "";
+		let _ = e.find((e) => e.system && e.name === x.NETWORK_NAME)?.id ?? null, y = (e) => s("h6", { class: "fm-side-head" }, s("span", { class: "fm-side-label" }, e));
+		this.side.replaceChildren(this.#M("links", N("side.links"), s("section", {
 			class: "fm-side-links",
 			"aria-label": N("side.links")
-		}, S(N("side.links")), ...O.arrange(f).flatMap(g))), ...d.length ? [this.#M("tags", N("side.tags"), o("section", {
+		}, y(N("side.links")), ...M.arrange(f).flatMap(h))), ...u.length ? [this.#M("tags", N("side.tags"), s("section", {
 			class: "fm-side-tags",
 			"aria-label": N("side.tags")
-		}, S(N("side.tags")), ...d.map(u)))] : [], ...et(this, {
+		}, y(N("side.tags")), ...u.map(c)))] : [], ...bt(this, {
 			active: r,
-			reteFolder: x
-		}).map((e) => this.#M("net", N("net.section"), e)), o("hr", { class: "fm-side-sep" }), _, this.gap);
+			reteFolder: _
+		}).map((e) => this.#M("net", N("net.section"), e)), s("hr", { class: "fm-side-sep" }), g, this.gap);
 	}
 	#M(e, t, n) {
-		let r = !this.#r.has(e), i = n.querySelector(":scope > h6"), a = N(r ? "side.collapse" : "side.expand", { name: t }), s = () => {
-			r ? this.#r.add(e) : this.#r.delete(e), m.set(Bt, [...this.#r]), this.#j(), this.side.querySelector(`[data-fold="${e}"]`)?.focus();
+		let r = !this.#r.has(e), i = n.querySelector(":scope > h6"), a = N(r ? "side.collapse" : "side.expand", { name: t }), o = () => {
+			r ? this.#r.add(e) : this.#r.delete(e), _.set(on, [...this.#r]), this.#j(), this.side.querySelector(`[data-fold="${e}"]`)?.focus();
 		};
-		return i.prepend(o("button", {
+		return i.prepend(s("button", {
 			class: r ? "fm-side-fold open" : "fm-side-fold",
 			type: "button",
 			dataset: { fold: e },
 			title: a,
 			"aria-label": a,
 			"aria-expanded": String(r),
-			onclick: s
-		})), i.querySelector(".fm-side-label")?.addEventListener("click", s), n.classList.toggle("folded", !r), n;
+			onclick: o
+		})), i.querySelector(".fm-side-label")?.addEventListener("click", o), n.classList.toggle("folded", !r), n;
 	}
 	#N(e) {
-		let { defaults: t } = this.#y, n = O.arrange(t).indexOf(e.id);
-		n < 0 || (O.remove(e.id), this.history.push({
+		let { defaults: t } = this.#y, n = M.arrange(t).indexOf(e.id);
+		n < 0 || (M.remove(e.id), this.history.push({
 			label: N("link.remove", { name: e.name }),
-			undo: () => O.place([e.id], n, t),
-			redo: () => O.remove(e.id)
-		}), g(N("toast.unlinked", { name: e.name })), this.list.focus());
+			undo: () => M.place([e.id], n, t),
+			redo: () => M.remove(e.id)
+		}), y(N("toast.unlinked", { name: e.name })), this.list.focus());
 	}
 	#P(e) {
-		return e === a.root ? "root" : e === this.#y.desk ? "desk" : a.exists(e) ? e : null;
+		return e === o.root ? "root" : e === this.#y.desk ? "desk" : o.exists(e) ? e : null;
 	}
 	#F(e, t, n, r) {
 		let i = e?.closest?.("[data-trash]");
-		if (i) return Jt(r) ? {
+		if (i) return mn(r) ? {
 			el: i,
 			run: (e, t) => this.#L(r, t)
 		} : null;
 		let a = e?.closest?.(".fm-mount");
 		if (a) {
-			let e = A(r, a.dataset.folder);
+			let e = ae(r, a.dataset.folder);
 			return e && {
 				el: a,
-				run: (t, n) => j(n, e, a.dataset.folder)
+				run: (t, n) => oe(n, e, a.dataset.folder)
 			};
 		}
 		let o = this.side.querySelector(".fm-side-links");
@@ -2201,10 +2218,10 @@ var $t = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 		if (c && s.includes(c)) {
 			let e = c.getBoundingClientRect(), t = Math.min(8, e.height / 4), { folder: i } = c.dataset;
 			if (i && n > e.top + t && n < e.bottom - t) {
-				let e = A(r, i);
+				let e = ae(r, i);
 				return e && {
 					el: c,
-					run: (t, n) => j(n, e, i)
+					run: (t, n) => oe(n, e, i)
 				};
 			}
 		}
@@ -2214,13 +2231,13 @@ var $t = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 		});
 		l < 0 && (l = s.length);
 		let u = [...new Set(r.map((e) => this.#P(e)).filter(Boolean))], { defaults: d } = this.#y;
-		if (!O.changes(u, l, d)) return null;
+		if (!M.changes(u, l, d)) return null;
 		let f = this.side.getBoundingClientRect(), p = l < s.length ? s[l].getBoundingClientRect().top : s[s.length - 1].getBoundingClientRect().bottom;
 		return this.gap.style.top = `${p - f.top + this.side.scrollTop}px`, {
 			el: this.gap,
 			run: () => {
-				let e = O.place(u, l, d);
-				e && g(N("toast.linksAdded", {
+				let e = M.place(u, l, d);
+				e && y(N("toast.linksAdded", {
 					n: e,
 					count: P(e)
 				}));
@@ -2228,26 +2245,26 @@ var $t = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 		};
 	}
 	#I(e) {
-		if (this.inTrash) return Jt(e) ? {
+		if (this.inTrash) return mn(e) ? {
 			el: this.list,
 			run: (t, n) => this.#L(e, n)
 		} : null;
 		if (this.inTag) return null;
-		let t = A(e, this.folder);
+		let t = ae(e, this.folder);
 		return t && {
 			el: this.list,
-			run: (e, n) => j(n, t, this.folder)
+			run: (e, n) => oe(n, t, this.folder)
 		};
 	}
 	#L(e, t) {
-		let n = e.filter((e) => !a.get(e)?.system).length;
-		oe(t, e), g(N("toast.trashed", {
+		let n = e.filter((e) => !o.get(e)?.system).length;
+		fe(t, e), y(N("toast.trashed", {
 			n,
 			count: P(n)
 		}));
 	}
 	#R() {
-		return (this.inTrash ? Gt : this.inTag ? Kt : Wt)();
+		return (this.inTrash ? dn : this.inTag ? fn : un)();
 	}
 	#z(e = null) {
 		let { template: t, min: n } = this.#a.layout(this.#a.shown(this.#R()), e);
@@ -2295,7 +2312,7 @@ var $t = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 		];
 	}
 	#U(e) {
-		let t = o("span", {
+		let t = s("span", {
 			class: "fm-grip",
 			role: "separator",
 			tabindex: "-1",
@@ -2307,7 +2324,7 @@ var $t = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 			if (t.button !== 0) return;
 			t.preventDefault();
 			let r = n();
-			this.list.classList.add("resizing"), _(t, {
+			this.list.classList.add("resizing"), b(t, {
 				threshold: 0,
 				onMove: (t) => {
 					this.#a.resize(e.key, r + t, !1), this.#z();
@@ -2326,11 +2343,11 @@ var $t = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 	}
 	#W() {
 		let e = this.#a.shown(this.#R());
-		return o("div", {
+		return s("div", {
 			class: "fm-head",
 			role: "presentation"
 		}, e.map((e) => {
-			let t = this.#i.key === e.key, n = o("button", {
+			let t = this.#i.key === e.key, n = s("button", {
 				class: [
 					"fm-col",
 					e.num && "num",
@@ -2348,11 +2365,11 @@ var $t = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 						direction: this.#i.dir > 0 ? "asc" : "desc"
 					} });
 				}
-			}, e.label, t ? o("span", {
+			}, e.label, t ? s("span", {
 				class: "fm-arrow",
 				"aria-hidden": "true"
 			}, this.#i.dir > 0 ? "▲" : "▼") : null);
-			return o("div", {
+			return s("div", {
 				class: "fm-th",
 				dataset: { col: e.key }
 			}, n, this.#U(e));
@@ -2361,17 +2378,17 @@ var $t = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 	#G(e) {
 		let t = this.#Y(e);
 		return this.tree && (t.name.prepend(this.#K(e)), t.name.style.setProperty("--fm-depth", this.#d.get(e.id) ?? 0)), this.#Q(e, "fm-row", ...this.#a.shown(this.#R()).map((e) => {
-			let n = t[e.key] ?? o("span");
+			let n = t[e.key] ?? s("span");
 			return n.dataset.col = e.key, n;
 		}));
 	}
 	#K(e) {
-		if (e.type !== "folder") return o("span", {
+		if (e.type !== "folder") return s("span", {
 			class: "fm-twisty",
 			"aria-hidden": "true"
 		});
 		let t = this.#u.has(e.id);
-		return o("span", {
+		return s("span", {
 			class: t ? "fm-twisty open" : "fm-twisty",
 			dataset: { twisty: e.id },
 			"aria-hidden": "true",
@@ -2381,7 +2398,7 @@ var $t = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 	#q(e, t = 0, n = []) {
 		for (let r of this.#$(e)) {
 			let e = n.length;
-			n.push(r), this.#d.set(r.id, t), this.#J(r) && this.#q(a.children(r.id), t + 1, n), this.#o && n.length === e + 1 && !$t(r.name).includes(this.#o) && n.pop();
+			n.push(r), this.#d.set(r.id, t), this.#J(r) && this.#q(o.children(r.id), t + 1, n), this.#o && n.length === e + 1 && !yn(r.name).includes(this.#o) && n.pop();
 		}
 		return n;
 	}
@@ -2390,27 +2407,27 @@ var $t = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 	}
 	#Y(e) {
 		if (e.trashed) {
-			let t = he(e);
+			let t = xe(e);
 			return {
-				name: o("span", { class: "fm-name" }, o("span", { class: "fm-icon" }, D(e)), this.#Z(e)),
-				deleted: o("span", {}, B(e.trashed.at)),
-				size: o("span", { class: "num" }, ve(e)),
-				type: o("span", {}, F(e)),
-				origin: o("span", { title: N("trash.restoresTo", { place: t }) }, t)
+				name: s("span", { class: "fm-name" }, s("span", { class: "fm-icon" }, j(e)), this.#Z(e)),
+				deleted: s("span", {}, B(e.trashed.at)),
+				size: s("span", { class: "num" }, Ce(e)),
+				type: s("span", {}, F(e)),
+				origin: s("span", { title: N("trash.restoresTo", { place: t }) }, t)
 			};
 		}
 		let t = this.inTag ? L(e) : "";
 		return {
-			name: o("span", { class: "fm-name" }, o("span", { class: "fm-icon" }, D(e)), this.#Z(e), de(e)),
-			modified: o("span", {}, B(e.modified)),
-			size: o("span", { class: "num" }, ve(e)),
-			type: o("span", {}, F(e)),
-			workspace: ge(e),
-			location: o("span", { title: t }, t)
+			name: s("span", { class: "fm-name" }, s("span", { class: "fm-icon" }, j(e)), this.#Z(e), _e(e)),
+			modified: s("span", {}, B(e.modified)),
+			size: s("span", { class: "num" }, Ce(e)),
+			type: s("span", {}, F(e)),
+			workspace: Se(e),
+			location: s("span", { title: t }, t)
 		};
 	}
 	#X(e) {
-		let t = D(e, this.#n === "thumbs" && !e.trashed ? { preview: Ht } : void 0), n = this.#Q(e, "fm-tile", o("span", { class: "fm-tile-icon" }, t, de(e, "fm-tile-tags")), this.#Z(e)), r = (e.tags ?? []).map((e) => h.get(e)?.name).filter(Boolean), i = e.trashed ? [N("tile.deleted", { date: B(e.trashed.at) }), N("tile.origin", { place: he(e) })] : [
+		let t = j(e, this.#n === "thumbs" && !e.trashed ? { preview: cn } : void 0), n = this.#Q(e, "fm-tile", s("span", { class: "fm-tile-icon" }, t, _e(e, "fm-tile-tags")), this.#Z(e)), r = (e.tags ?? []).map((e) => v.get(e)?.name).filter(Boolean), i = e.trashed ? [N("tile.deleted", { date: B(e.trashed.at) }), N("tile.origin", { place: xe(e) })] : [
 			this.inTag && N("tile.location", { place: L(e) }),
 			N("owner.label", { name: R(e) }),
 			r.length && N("tile.tags", { names: r.join(", ") })
@@ -2418,24 +2435,24 @@ var $t = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 		return n.title = [e.name, ...i.filter(Boolean)].join("\n"), n;
 	}
 	#Z(e) {
-		if (this.#h === e.id) return o("input", {
+		if (this.#h === e.id) return s("input", {
 			class: "fm-rename",
 			type: "text",
 			value: e.name,
 			spellcheck: "false",
 			"aria-label": N("rename.label")
 		});
-		let t = Ze(e);
-		return t.length ? o("span", { class: "fm-label-chips" }, o("span", {
+		let t = _t(e);
+		return t.length ? s("span", { class: "fm-label-chips" }, s("span", {
 			class: "fm-label",
 			title: e.name
-		}, e.name), ...t) : o("span", {
+		}, e.name), ...t) : s("span", {
 			class: "fm-label",
 			title: e.name
 		}, e.name);
 	}
 	#Q(e, t, ...n) {
-		let r = this.#f.has(e.id), i = this.tree && t === "fm-row", a = o("div", {
+		let r = this.#f.has(e.id), i = this.tree && t === "fm-row", a = s("div", {
 			class: [
 				t,
 				r && "selected",
@@ -2448,10 +2465,10 @@ var $t = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 			"aria-level": i ? String((this.#d.get(e.id) ?? 0) + 1) : null,
 			"aria-expanded": i && e.type === "folder" ? String(this.#u.has(e.id)) : null
 		}, ...n);
-		return e.trashed ? a : k(a, e);
+		return e.trashed ? a : ie(a, e);
 	}
 	#$(e) {
-		let { key: t, dir: n } = this.#i, r = (e) => t === "type" ? F(e) : t === "workspace" ? R(e) : t === "size" ? e.type === "folder" ? e.trashed ? e.inside : a.children(e.id).length : e.size ?? 0 : t === "modified" ? e.modified : t === "deleted" ? e.trashed?.at ?? e.modified : t === "origin" && e.trashed ? he(e) : t === "location" ? L(e) : e.name, i = {
+		let { key: t, dir: n } = this.#i, r = (e) => t === "type" ? F(e) : t === "workspace" ? R(e) : t === "size" ? e.type === "folder" ? e.trashed ? e.inside : o.children(e.id).length : e.size ?? 0 : t === "modified" ? e.modified : t === "deleted" ? e.trashed?.at ?? e.modified : t === "origin" && e.trashed ? xe(e) : t === "location" ? L(e) : e.name, i = {
 			folder: 0,
 			file: 1,
 			app: 1,
@@ -2460,7 +2477,7 @@ var $t = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 		return [...e].sort((e, t) => {
 			if (i[e.type] !== i[t.type]) return i[e.type] - i[t.type];
 			let a = r(e), o = r(t);
-			return ((typeof a == "number" ? a - o : String(a).localeCompare(String(o), u.locale, { numeric: !0 })) || e.name.localeCompare(t.name, u.locale, { numeric: !0 })) * n;
+			return ((typeof a == "number" ? a - o : String(a).localeCompare(String(o), p.locale, { numeric: !0 })) || e.name.localeCompare(t.name, p.locale, { numeric: !0 })) * n;
 		});
 	}
 	#ee(e, t = e[e.length - 1] ?? this.#m) {
@@ -2480,15 +2497,15 @@ var $t = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 				e.ctrlKey || e.metaKey || e.shiftKey || this.#ee([]);
 				return;
 			}
-			let i = r.dataset.id, o = this.#l.map((e) => e.id), s = !1;
-			if (e.shiftKey && this.#p && o.includes(this.#p)) {
-				let [t, n] = [o.indexOf(this.#p), o.indexOf(i)].sort((e, t) => e - t), r = o.slice(t, n + 1);
+			let i = r.dataset.id, a = this.#l.map((e) => e.id), s = !1;
+			if (e.shiftKey && this.#p && a.includes(this.#p)) {
+				let [t, n] = [a.indexOf(this.#p), a.indexOf(i)].sort((e, t) => e - t), r = a.slice(t, n + 1);
 				this.#ee(e.ctrlKey || e.metaKey ? [.../* @__PURE__ */ new Set([...this.#f, ...r])] : r, i);
 			} else if (e.ctrlKey || e.metaKey) {
 				let e = new Set(this.#f);
 				e.has(i) ? e.delete(i) : e.add(i), this.#p = i, this.#ee([...e], i);
 			} else this.#p = i, this.#f.has(i) ? s = this.#f.size > 1 : this.#ee([i], i);
-			this.inTrash && !a.isTrashed || !this.#f.has(i) || w(e, {
+			this.inTrash && !o.isTrashed || !this.#f.has(i) || D(e, {
 				ids: [...this.#f],
 				stack: this.history,
 				onEnd: ({ moved: e }) => {
@@ -2499,10 +2516,10 @@ var $t = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 			let n = t(e);
 			if (!n || e.target.closest(".fm-rename, [data-twisty]")) return;
 			if (this.inTrash) return this.openSelected();
-			let r = a.get(n.dataset.id);
+			let r = o.get(n.dataset.id);
 			r && this.open(r);
 		}, { signal: e }), this.list.addEventListener("contextmenu", (e) => {
-			if (e.preventDefault(), e.target.closest(".fm-head")) return l(e.clientX, e.clientY, this.#H());
+			if (e.preventDefault(), e.target.closest(".fm-head")) return d(e.clientX, e.clientY, this.#H());
 			let n = t(e);
 			if (!n) return this.#ae(e);
 			this.#f.has(n.dataset.id) || this.#ee([n.dataset.id], n.dataset.id), this.#oe(e);
@@ -2554,7 +2571,7 @@ var $t = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 		this.#p = e, this.#ee([e], e), this.list.querySelector(`#fm-${CSS.escape(e)}`)?.scrollIntoView({ block: "nearest" });
 	}
 	#ie(e) {
-		let t = this.#n !== "list", n = t ? Math.max(1, Math.floor(this.list.clientWidth / Ut[this.#n])) : 1;
+		let t = this.#n !== "list", n = t ? Math.max(1, Math.floor(this.list.clientWidth / ln[this.#n])) : 1;
 		return {
 			ArrowDown: n,
 			ArrowUp: -n,
@@ -2570,7 +2587,7 @@ var $t = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 		let t = {
 			label: N("view.menu"),
 			icon: "grid",
-			items: Vt.map((e) => ({
+			items: sn.map((e) => ({
 				label: N(`view.${e}`),
 				icon: this.#n === e ? "check" : null,
 				action: () => this.setView(e)
@@ -2588,12 +2605,12 @@ var $t = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 		};
 		if (this.inTrash) {
 			let r = !this.#l.length;
-			return l(e.clientX, e.clientY, [
+			return d(e.clientX, e.clientY, [
 				{
 					label: N("menu.restoreAll"),
 					icon: "undo",
 					disabled: r,
-					action: () => this.restore(a.trashed().map((e) => e.id))
+					action: () => this.restore(o.trashed().map((e) => e.id))
 				},
 				{
 					label: N("menu.emptyTrash"),
@@ -2607,19 +2624,19 @@ var $t = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 				n
 			].filter(Boolean));
 		}
-		if (this.inTag) return l(e.clientX, e.clientY, [
+		if (this.inTag) return d(e.clientX, e.clientY, [
 			{
 				label: N("menu.manageTags"),
 				icon: "gear",
-				action: () => te("settings", { tab: "tags" })
+				action: () => ne("settings", { tab: "tags" })
 			},
 			"-",
 			t,
 			n,
 			r
 		].filter(Boolean));
-		let i = v.locateLink && !a.isRemote?.(this.folder);
-		l(e.clientX, e.clientY, [
+		let i = x.locateLink && !o.isRemote?.(this.folder);
+		d(e.clientX, e.clientY, [
 			{
 				label: N("menu.newFolder"),
 				icon: "folderPlus",
@@ -2645,7 +2662,7 @@ var $t = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 		let t = this.#l.filter((e) => this.#f.has(e.id)), n = t.length > 1, r = P(t.length);
 		if (this.inTrash) {
 			let i = t.map((e) => e.id);
-			return l(e.clientX, e.clientY, [
+			return d(e.clientX, e.clientY, [
 				{
 					label: n ? N("menu.restoreMany", { count: r }) : N("menu.restore"),
 					icon: "undo",
@@ -2654,35 +2671,35 @@ var $t = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 				{
 					label: N("menu.info"),
 					icon: "info",
-					shortcut: f.label("files.info"),
+					shortcut: h.label("files.info"),
 					action: () => this.info.setOpen(!0)
 				},
 				"-",
 				{
 					label: N("menu.purge"),
 					icon: "trash",
-					shortcut: f.label("items.delete"),
+					shortcut: h.label("items.delete"),
 					danger: !0,
 					action: () => this.purge(i)
 				}
 			]);
 		}
 		if (!n && t[0].mount) {
-			let n = K(t[0].id);
-			if (n) return tt(this, n, e.clientX, e.clientY);
+			let n = q(t[0].id);
+			if (n) return xt(this, n, e.clientX, e.clientY);
 		}
-		let i = t.some((e) => e.system), a = t.some((e) => e.net), o = t.map((e) => e.id), s = this.inTag, c = !n && this.tree && t[0].type === "folder" && t[0], u = c && this.#u.has(c.id);
-		l(e.clientX, e.clientY, [
+		let i = t.some((e) => e.system), a = t.some((e) => e.net), o = t.map((e) => e.id), s = this.inTag, c = !n && this.tree && t[0].type === "folder" && t[0], l = c && this.#u.has(c.id);
+		d(e.clientX, e.clientY, [
 			{
 				label: n ? N("menu.openMany", { count: r }) : N("menu.open"),
 				icon: "open",
-				shortcut: f.label("items.open"),
+				shortcut: h.label("items.open"),
 				action: () => this.openSelected()
 			},
 			c && {
-				label: N(u ? "tree.collapse" : "tree.expand"),
-				icon: u ? "minus" : "plus",
-				action: () => this.setOpen(c.id, !u)
+				label: N(l ? "tree.collapse" : "tree.expand"),
+				icon: l ? "minus" : "plus",
+				action: () => this.setOpen(c.id, !l)
 			},
 			c && {
 				label: N("tree.expandAll"),
@@ -2692,13 +2709,13 @@ var $t = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 			!n && t[0].type === "file" && {
 				label: N("menu.openWith"),
 				icon: "open",
-				action: () => M(t[0], { choose: !0 })
+				action: () => le(t[0], { choose: !0 })
 			},
-			...Tt(this, t),
+			...Ht(this, t),
 			!n && t[0].type === "folder" && {
 				label: N("menu.openInEditor"),
 				icon: "code",
-				action: () => te("editor", { folder: t[0].id })
+				action: () => ne("editor", { folder: t[0].id })
 			},
 			s && !n && {
 				label: N("menu.reveal"),
@@ -2708,18 +2725,18 @@ var $t = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 			{
 				label: N("menu.rename"),
 				icon: "pencil",
-				shortcut: f.label("items.rename"),
+				shortcut: h.label("items.rename"),
 				disabled: n || i || t[0].noRename,
 				action: () => this.rename(t[0].id)
 			},
-			!a && fe(o),
+			!a && ve(o),
 			s && {
 				label: N("menu.untag", { name: s.name }),
 				icon: "x",
-				action: () => le(o, s.id, !1)
+				action: () => he(o, s.id, !1)
 			},
-			!a && ne(o),
-			v.canLinkOnDesk?.(o) && {
+			!a && re(o),
+			x.canLinkOnDesk?.(o) && {
 				label: N("menu.deskLink"),
 				icon: "link",
 				action: () => this.addDeskLinks(o)
@@ -2727,20 +2744,20 @@ var $t = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 			{
 				label: N("menu.info"),
 				icon: "info",
-				shortcut: f.label("files.info"),
+				shortcut: h.label("files.info"),
 				action: () => this.info.setOpen(!0)
 			},
 			!n && {
 				label: N("menu.properties"),
 				icon: "info",
-				action: () => ue(t[0].id)
+				action: () => ge(t[0].id)
 			},
-			...v.appActionEntries?.(o, { separator: !0 }) ?? [],
+			...x.appActionEntries?.(o, { separator: !0 }) ?? [],
 			"-",
 			{
-				label: t.every((e) => e.removeLabel) ? G()?.text(t[0].removeLabel) : n ? N("menu.deleteMany", { count: r }) : N("menu.delete"),
+				label: t.every((e) => e.removeLabel) ? K()?.text(t[0].removeLabel) : n ? N("menu.deleteMany", { count: r }) : N("menu.delete"),
 				icon: "trash",
-				shortcut: f.label("items.delete"),
+				shortcut: h.label("items.delete"),
 				danger: !0,
 				disabled: i || t.every((e) => e.noRemove),
 				action: () => this.remove(t.map((e) => e.id))
@@ -2748,7 +2765,7 @@ var $t = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 		].filter(Boolean));
 	}
 	#se(e) {
-		return e === Q || !!qt(e) || a.exists(e);
+		return e === Q || !!pn(e) || o.exists(e);
 	}
 	#ce(e) {
 		let t = this.list.querySelector(`[data-id="${CSS.escape(e)}"]`)?.getBoundingClientRect();
@@ -2770,7 +2787,7 @@ var $t = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 		this.#g = e, this.render();
 	}
 	#de() {
-		a.get(this.folder)?.type === "folder" && Z()?.record("files.go", { params: { folder: this.folder } });
+		o.get(this.folder)?.type === "folder" && Z()?.record("files.go", { params: { folder: this.folder } });
 	}
 	#fe() {
 		clearTimeout(this.#c);
@@ -2785,10 +2802,10 @@ var $t = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 			file: () => null
 		};
 		e.handle("files.go", ({ folder: e }) => {
-			if (a.get(e)?.type !== "folder") throw Error(N("automation.noFolder"));
+			if (o.get(e)?.type !== "folder") throw Error(N("automation.noFolder"));
 			this.go(e);
 		}, t), e.handle("files.search", ({ query: e = "" }) => {
-			this.search.value = e, this.#o = $t(e.trim()), this.#s = e.trim(), this.render();
+			this.search.value = e, this.#o = yn(e.trim()), this.#s = e.trim(), this.render();
 		}, t), e.handle("files.sort", ({ by: e, direction: t }) => {
 			if (!this.#R().some((t) => t.key === e)) throw Error(N("automation.noColumn"));
 			this.#i = {
@@ -2796,31 +2813,30 @@ var $t = (e) => String(e).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 				dir: t === "desc" ? -1 : 1
 			}, this.render();
 		}, t), e.handle("files.view", ({ mode: e }) => {
-			if (!Vt.includes(e)) throw Error(N("automation.noView"));
+			if (!sn.includes(e)) throw Error(N("automation.noView"));
 			this.setView(e);
 		}, t);
 	}
-	async #me(t, n = "", r = ["ok"]) {
-		if (!e.messageBox) return this.#ue(n ? `${t}: ${n}` : t), null;
-		let i = await e.messageBox(this.win, {
+	async #me(e, t = "", n = ["ok"]) {
+		let r = await u(this.win, {
 			icon: "error",
-			title: t,
-			text: n,
-			buttons: r
+			title: e,
+			text: t,
+			buttons: n
 		});
-		return this.list.isConnected && !this.win.el.contains(document.activeElement) && this.list.focus(), i;
+		return this.list.isConnected && !this.win.el.contains(document.activeElement) && this.list.focus(), r;
 	}
 	notFound(e) {
 		let t = N("place.home");
 		this.#me(N(e === "tag" ? "error.tagNotFound" : "error.folderNotFound"), N(e === "tag" ? "error.tagNotFoundText" : "error.folderNotFoundText", { place: t }));
 	}
 	#he(e) {
-		let t = e.node && O.has(e.node.id);
+		let t = e.node && M.has(e.node.id);
 		if (this.inTrash) return t ? this.render() : void 0;
 		if (this.inTag) return this.render();
-		if (e.type === "remove" && e.ids.includes(this.folder)) return this.go(e.parent && a.exists(e.parent) ? e.parent : a.root, !1);
-		let n = (e) => e === this.folder || this.#u.has(e), r = n(e.parent) || n(e.from), i = e.type !== "remove" && a.isInside(this.folder, e.node.id), o = [e.parent, e.from].some((e) => e && a.exists(e) && n(a.get(e).parent));
-		(r || i || o || t) && (r && e.type !== "rename" && (this.#g = ""), this.render());
+		if (e.type === "remove" && e.ids.includes(this.folder)) return this.go(e.parent && o.exists(e.parent) ? e.parent : o.root, !1);
+		let n = (e) => e === this.folder || this.#u.has(e), r = n(e.parent) || n(e.from), i = e.type !== "remove" && o.isInside(this.folder, e.node.id), a = [e.parent, e.from].some((e) => e && o.exists(e) && n(o.get(e).parent));
+		(r || i || a || t) && (r && e.type !== "rename" && (this.#g = ""), this.render());
 	}
 };
-export { Zt as default, Qt as newLink };
+export { _n as default, vn as newLink };

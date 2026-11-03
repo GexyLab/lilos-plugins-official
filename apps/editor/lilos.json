@@ -1,6 +1,6 @@
 {
   "id": "editor",
-  "version": "1.5.1",
+  "version": "1.6.0",
   "kind": "local",
   "name": "Editor",
   "description": "Text and code editor with tabs, syntax highlighting, suggestions and checking of JSON, CSS and HTML.",
@@ -14,6 +14,7 @@
     "name": "lilOS"
   },
   "sdk": "2",
+  "lilos": ">=1.22.0",
   "system": true,
   "entrypoints": {
     "main": {
@@ -218,7 +219,7 @@
   },
   "entry": "dist/index.js",
   "styles": [
-    "dist/index-DQHACDF4.css"
+    "dist/index-mA2F2Uzi.css"
   ],
   "locales": "locales.json",
   "files": {
@@ -231,8 +232,8 @@
     "dist/github-light-BNubH2n_.js": "sha256-jXyVGTRpCh8/Pl+L8HcUIb1rpKmw0LQMRjQ8ht59XI4=",
     "dist/html-B15Ssl5e.js": "sha256-PJMtOy7kJUfJFSHO8t7GbBYoT2yH+aK8FYcA23r21Rk=",
     "dist/html.worker-X9Fc__8d.js": "sha256-jFf7ptUItSrts9eQ7N//iO01MztcEqg6xqw6BMaDFJk=",
-    "dist/index-DQHACDF4.css": "sha256-QUnJSnG771hl+Cul5k3FMKfR4MZsedBxZLY18hkSGVM=",
-    "dist/index.js": "sha256-4WCYS4OMJllkLYeLT/4CIx45c5f0DUhuekmJo07uq/g=",
+    "dist/index-mA2F2Uzi.css": "sha256-lG8Wmhbq/4efU3QfJbHo/xvnLL+2x/1KuLqpiWZGeYE=",
+    "dist/index.js": "sha256-gddUUAcmBO9ruGNlkzQXk2YsQoNGnBskLGSI2TGnUks=",
     "dist/javascript-BSjxD7Ei.js": "sha256-s8CfycJSC1caXhuX6szihKZYWf7x7I2GYsoIuFpm4IQ=",
     "dist/json-CWJmcBQn.js": "sha256-dVtXsP0tUNXlIISVsZ7QnwwXlVjM7mKTz5hRYVuq03M=",
     "dist/json.worker-B3saI9fz.js": "sha256-BGs4zSqxY8hdyWDK4v0jTG79BA3Qp8G00azIsfKM83g=",
@@ -262,6 +263,6 @@
     "dist/web-tree-sitter-DoPK4l5c.js": "sha256-7K+bnFwHSgKdzQhkdorj73593h2Z49ADsQn+h3d8/fY=",
     "dist/xml-D0f8rgW-.js": "sha256-cm+7flrmzmSI3f440/y68CAeYL14EsA77y9rz+kOPG8=",
     "dist/yaml-CcAIbj8h.js": "sha256-YJayirpdTRH4e3BlU6cu0ocMhodswcZ5fS6iV20/Xtc=",
-    "locales.json": "sha256-KcXS9bo27/lzVjaPDW8yx2vpsHlLiThCJajFVl6ByFc="
+    "locales.json": "sha256-4DBLIcrpcDFoOzRuHYXY/1TTDBYACjdAu7O8y3xM//Y="
   }
 }

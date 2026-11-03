@@ -1,6 +1,6 @@
 {
   "id": "filecrypt",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "kind": "local",
   "name": "FileCrypt",
   "description": "Encrypt single files with a password. Encrypted files keep their name, open in their own app once unlocked and save encrypted again.",
@@ -14,6 +14,7 @@
     "name": "lilOS"
   },
   "sdk": "2",
+  "lilos": ">=1.22.0",
   "entrypoints": {
     "main": {
       "kind": "window"
@@ -212,7 +213,7 @@
   "entry": "dist/index.js",
   "locales": "locales.json",
   "files": {
-    "dist/index.js": "sha256-TEZmvvF078EIuHP84yd8pm8uAcvnhR8s84zXUWOS1yk=",
-    "locales.json": "sha256-EAqCaE8ngfjY1IR6/cu4xWpPu/DE7UFJabXBrYYOoiA="
+    "dist/index.js": "sha256-NRtBcNs0azLXsISWsdVHVIheJAEXOBPavriHN0wUQH4=",
+    "locales.json": "sha256-iJQaBlCJ/sqXo+a3FCzrF5cCOtnxhP9X6+oHdYy5kLs="
   }
 }

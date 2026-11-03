@@ -1,6 +1,6 @@
 {
   "id": "calculator",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "kind": "local",
   "name": "Calculator",
   "description": "A simple desk calculator: addition, subtraction, multiplication, division, percentage, square and square root.",
@@ -14,6 +14,7 @@
     "name": "lilOS"
   },
   "sdk": "2",
+  "lilos": ">=1.22.0",
   "entrypoints": {
     "main": {
       "kind": "window"
@@ -28,7 +29,7 @@
   "entry": "dist/index.js",
   "locales": "locales.json",
   "files": {
-    "dist/index.js": "sha256-DvO194VpUAbwlmsp4Hx0ol9iU2Pb8ZXJrBjjMqfESvQ=",
+    "dist/index.js": "sha256-U/oZpMPGjJhBkHbqJ4hpm8yn7ZwfrQi2gQn6VEF7FL8=",
     "locales.json": "sha256-T9guwsDwM0LKLDnrjIquppF7ESJ8rchw3S5/XOXk1xU="
   }
 }

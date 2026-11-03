@@ -1,6 +1,6 @@
 {
   "id": "settings",
-  "version": "1.17.0",
+  "version": "1.18.0",
   "kind": "local",
   "name": "Control Panel",
   "description": "Appearance, language, desk, user page, workspaces, notifications, tags, shortcuts, file types, startup services and apps, storage.",
@@ -16,6 +16,7 @@
   "sdk": "1",
   "system": true,
   "required": true,
+  "lilos": ">=1.22.0",
   "entrypoints": {
     "main": {
       "kind": "window",
@@ -69,6 +70,22 @@
               "label": "OneDrive"
             },
             {
+              "value": "microsoft",
+              "label": "Microsoft app"
+            },
+            {
+              "value": "google",
+              "label": "Google project"
+            },
+            {
+              "value": "microsoft",
+              "label": "Microsoft app"
+            },
+            {
+              "value": "google",
+              "label": "Google project"
+            },
+            {
               "value": "storage",
               "label": "Storage"
             },
@@ -89,12 +106,12 @@
   ],
   "entry": "dist/index.js",
   "styles": [
-    "dist/index-DDYEYHuU.css"
+    "dist/index-C6OzsIY4.css"
   ],
   "locales": "locales.json",
   "files": {
-    "dist/index-DDYEYHuU.css": "sha256-wRevVCcY2uY3N9YDk+kTvElNtwDxA2vtHvY4iUQm9Xw=",
-    "dist/index.js": "sha256-5kqmnSPEaeRu9TF0pr9eZqaV0LMVLVzjkr3XKUxUOFw=",
-    "locales.json": "sha256-w07Yh3s0eyWMVjskZ9MR/Aw7oRmATcwW5O7W8TU+XXw="
+    "dist/index-C6OzsIY4.css": "sha256-hk9Q2amPcItdML/ZnBGEg4kL+fnuPH06z20PCtagHgg=",
+    "dist/index.js": "sha256-HPYwzCzzUKiFmXm5OnsOqBhtbrTMP7fjSjNQ4pvczOg=",
+    "locales.json": "sha256-P/dyXePxu7JEK2MwtVUf2N/4impijxsHhXZNZyx9mDs="
   }
 }

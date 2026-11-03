@@ -1,1 +1,0 @@
-export{n as checkSystem}from"./systemPackage-CJLTUcw6.js";

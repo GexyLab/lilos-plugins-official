@@ -168,11 +168,15 @@ function d(e, t) {
 	let n = d(e.arg, t), r = typeof e.arg == "number" && e.arg >= 0;
 	return e.fn === "sqrt" ? `√(${n})` : e.fn === "sqr" ? r ? `${n}²` : `(${n})²` : `−(${n})`;
 }
-var f = (e, t) => e.map((e) => typeof e == "string" ? u(e) : d(e, t)).join(" "), p = (e, t = {}, ...n) => {
+var f = (e, t) => e.map((e) => typeof e == "string" ? u(e) : d(e, t)).join(" ");
+// src/shared/sandbox/dom.js
+function p(e, t = {}, ...n) {
 	let r = document.createElement(e);
-	for (let [e, n] of Object.entries(t)) n != null && n !== !1 && (e === "class" ? r.className = n : e.startsWith("on") ? r.addEventListener(e.slice(2), n) : r.setAttribute(e, n === !0 ? "" : String(n)));
-	return r.append(...n.filter((e) => e != null)), r;
-}, m = [
+	for (let [e, n] of Object.entries(t ?? {})) n != null && n !== !1 && (e === "class" ? r.className = n : e.startsWith("on") && typeof n == "function" ? r.addEventListener(e.slice(2), n) : e in r && typeof n != "string" ? r[e] = n : r.setAttribute(e, n === !0 ? "" : String(n)));
+	return r.append(...n.flat(Infinity).filter((e) => e != null && e !== !1).map((e) => e instanceof Node ? e : document.createTextNode(String(e)))), r;
+}
+// src/shared/sandbox/app.js
+var m = (e, t) => e.on("locale", t), h = [
 	[
 		"%",
 		"%",
@@ -314,7 +318,7 @@ var f = (e, t) => e.map((e) => typeof e == "string" ? u(e) : d(e, t)).join(" "),
 		"key.equals",
 		"keyname.enter"
 	]
-], h = {
+], g = {
 	...Object.fromEntries("0123456789".split("").map((e) => [e, e])),
 	".": ".",
 	",": ".",
@@ -334,34 +338,34 @@ var f = (e, t) => e.map((e) => typeof e == "string" ? u(e) : d(e, t)).join(" "),
 	Backspace: "back",
 	Delete: "ce",
 	Escape: "c"
-}, g = "<svg viewBox=\"0 0 24 24\" width=\"16\" height=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><rect x=\"8\" y=\"8\" width=\"12\" height=\"12\" rx=\"2\"/><path d=\"M16 8V5.5A1.5 1.5 0 0 0 14.5 4h-9A1.5 1.5 0 0 0 4 5.5v9A1.5 1.5 0 0 0 5.5 16H8\"/></svg>";
-function _({ lilos: e, root: t }) {
+}, _ = "<svg viewBox=\"0 0 24 24\" width=\"16\" height=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><rect x=\"8\" y=\"8\" width=\"12\" height=\"12\" rx=\"2\"/><path d=\"M16 8V5.5A1.5 1.5 0 0 0 14.5 4h-9A1.5 1.5 0 0 0 4 5.5v9A1.5 1.5 0 0 0 5.5 16H8\"/></svg>";
+function v({ lilos: e, root: t }) {
 	let n = () => e.locale.i18n, r = (e, t) => n().t(e, t), a = new i(), c = o(e.locale.code ?? n().lang);
-	t.append(p("style", {}, v));
+	t.append(p("style", {}, y));
 	let u = p("div", { class: "expr" }), d = p("div", {
 		class: "value",
 		role: "status",
 		"aria-atomic": "true"
-	}), _ = p("button", {
+	}), v = p("button", {
 		type: "button",
 		class: "copy",
 		tabindex: "-1",
-		onclick: () => w()
+		onclick: () => T()
 	});
-	_.innerHTML = g;
-	let y = p("div", {
+	v.innerHTML = _;
+	let b = p("div", {
 		class: "keys",
 		role: "group"
-	}), b = p("div", {
+	}), x = p("div", {
 		class: "calc",
 		tabindex: "-1"
-	}, p("div", { class: "screen" }, _, u, d), y);
-	t.append(b);
-	function x() {
-		y.setAttribute("aria-label", r("keypad")), _.title = r("tip", {
+	}, p("div", { class: "screen" }, v, u, d), b);
+	t.append(x);
+	function S() {
+		b.setAttribute("aria-label", r("keypad")), v.title = r("tip", {
 			label: r("copy"),
 			keys: "Ctrl+C"
-		}), _.setAttribute("aria-label", r("copy")), y.replaceChildren(...m.map(([e, t, n, i, a]) => {
+		}), v.setAttribute("aria-label", r("copy")), b.replaceChildren(...h.map(([e, t, n, i, a]) => {
 			let o = i ? r(i) : null, s = a?.startsWith("keyname.") ? r(a) : a;
 			return p("button", {
 				type: "button",
@@ -372,21 +376,21 @@ function _({ lilos: e, root: t }) {
 					label: o,
 					keys: s
 				}),
-				onclick: () => C(e)
+				onclick: () => w(e)
 			}, t ?? c.decimal);
 		}));
 	}
-	function S() {
+	function C() {
 		let e = a.view();
 		u.textContent = e.error ? "" : f(e.expr, c);
 		let t = e.error ? r(`error.${e.error}`) : e.text === null ? l(e.value, c) : s(e.text, c);
-		d.textContent = t, d.classList.toggle("error", !!e.error), d.style.setProperty("--len", String(Math.max(t.length, 9))), _.disabled = !!e.error;
-		for (let t of y.querySelectorAll(".op")) t.classList.toggle("armed", t.dataset.key === e.op);
+		d.textContent = t, d.classList.toggle("error", !!e.error), d.style.setProperty("--len", String(Math.max(t.length, 9))), v.disabled = !!e.error;
+		for (let t of b.querySelectorAll(".op")) t.classList.toggle("armed", t.dataset.key === e.op);
 	}
-	function C(e) {
-		a.press(e) && S();
+	function w(e) {
+		a.press(e) && C();
 	}
-	async function w() {
+	async function T() {
 		let t = a.view();
 		if (!t.error) try {
 			await e.clipboard.write(l(t.value, c, { group: !1 }).replace("−", "-")), await e.ui.toast(r("copied"));
@@ -394,22 +398,22 @@ function _({ lilos: e, root: t }) {
 			await e.ui.toast(r("copyFailed")), console.warn(t);
 		}
 	}
-	function T(e) {
-		let t = y.querySelector(`[data-key="${CSS.escape(e)}"]`);
+	function E(e) {
+		let t = b.querySelector(`[data-key="${CSS.escape(e)}"]`);
 		t && (t.classList.add("hit"), setTimeout(() => t.classList.remove("hit"), 120));
 	}
-	b.addEventListener("keydown", (e) => {
-		if ((e.ctrlKey || e.metaKey) && !e.altKey && e.key.toLowerCase() === "c") return e.preventDefault(), e.stopPropagation(), w();
+	x.addEventListener("keydown", (e) => {
+		if ((e.ctrlKey || e.metaKey) && !e.altKey && e.key.toLowerCase() === "c") return e.preventDefault(), e.stopPropagation(), T();
 		if (e.ctrlKey || e.metaKey || e.altKey) return;
-		let t = Object.hasOwn(h, e.key) ? h[e.key] : null;
-		t && (e.preventDefault(), e.stopPropagation(), T(t), C(t));
-	}), b.addEventListener("pointerdown", (e) => {
-		e.target.closest("button") || requestAnimationFrame(() => b.focus());
+		let t = Object.hasOwn(g, e.key) ? g[e.key] : null;
+		t && (e.preventDefault(), e.stopPropagation(), E(t), w(t));
+	}), x.addEventListener("pointerdown", (e) => {
+		e.target.closest("button") || requestAnimationFrame(() => x.focus());
 	});
-	let E = e.on("locale", () => {
-		c = o(e.locale.code ?? n().lang), x(), S();
+	let D = m(e, () => {
+		c = o(e.locale.code ?? n().lang), S(), C();
 	});
-	return x(), S(), requestAnimationFrame(() => b.focus()), () => E?.();
+	return S(), C(), requestAnimationFrame(() => x.focus()), () => D?.();
 }
-var v = "\n  :host { display: block; height: 100%; }\n  html, body { height: 100%; margin: 0; }\n  .calc { box-sizing: border-box; height: 100%; display: flex; flex-direction: column; gap: 8px; padding: 10px; color: var(--text); font: 14px/1.3 var(--font, system-ui); container-type: size; outline: none; user-select: none; -webkit-user-select: none; }\n  .calc * { box-sizing: border-box; }\n  .screen { position: relative; display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-end; gap: 2px; padding: 8px 6px 4px; flex: 0 0 auto; min-height: clamp(64px, 24cqh, 140px); }\n  .expr { min-height: 1.3em; max-width: 100%; color: var(--dim); font-size: clamp(12px, 3.6cqh, 16px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: right; }\n  .value { max-width: 100%; font-size: clamp(18px, min(calc(160cqw / var(--len, 9)), 11cqh), 54px); font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; user-select: text; -webkit-user-select: text; }\n  .value.error { font-weight: 500; font-size: clamp(14px, min(7cqw, 7cqh), 28px); color: var(--danger, #d64545); white-space: normal; text-align: right; }\n  .copy { position: absolute; top: 4px; left: 2px; display: grid; place-items: center; width: 28px; height: 28px; padding: 0; border: 0; border-radius: var(--radius-sm, 6px); background: none; color: var(--dim); cursor: pointer; opacity: .7; }\n  .copy:hover:not(:disabled) { background: var(--hover); color: var(--text); opacity: 1; }\n  .copy:disabled { opacity: .3; cursor: default; }\n  .keys { flex: 1; min-height: 0; display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: 1fr; gap: 4px; }\n  .key { min-width: 0; min-height: 0; padding: 0; border: 1px solid var(--border); border-radius: var(--radius-sm, 6px); font: inherit; font-size: clamp(13px, min(6cqw, 4.2cqh), 24px); color: var(--text); background: var(--chrome, var(--surface)); cursor: pointer; transition: background .08s, filter .08s; }\n  .key:hover { background: var(--hover); }\n  .key:active, .key.hit { filter: brightness(.9); }\n  .key:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }\n  .key.num { font-weight: 600; background: var(--field-bg, var(--surface)); }\n  .key.num:hover { background: var(--hover); }\n  .key.fn { color: var(--dim); }\n  .key.op { font-size: clamp(15px, min(7cqw, 5cqh), 28px); color: var(--accent); }\n  .key.op.armed { background: var(--accent-soft, var(--hover)); border-color: var(--accent); }\n  .key.eq { background: var(--accent); border-color: var(--accent); color: #fff; font-size: clamp(15px, min(7cqw, 5cqh), 28px); }\n  .key.eq:hover { background: var(--accent); filter: brightness(1.08); }\n  .key.eq:active, .key.eq.hit { filter: brightness(.92); }\n  .key.wide { grid-column: span 2; }\n";
-export { _ as main };
+var y = "\n  :host { display: block; height: 100%; }\n  html, body { height: 100%; margin: 0; }\n  .calc { box-sizing: border-box; height: 100%; display: flex; flex-direction: column; gap: 8px; padding: 10px; color: var(--text); font: 14px/1.3 var(--font, system-ui); container-type: size; outline: none; user-select: none; -webkit-user-select: none; }\n  .calc * { box-sizing: border-box; }\n  .screen { position: relative; display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-end; gap: 2px; padding: 8px 6px 4px; flex: 0 0 auto; min-height: clamp(64px, 24cqh, 140px); }\n  .expr { min-height: 1.3em; max-width: 100%; color: var(--dim); font-size: clamp(12px, 3.6cqh, 16px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: right; }\n  .value { max-width: 100%; font-size: clamp(18px, min(calc(160cqw / var(--len, 9)), 11cqh), 54px); font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; user-select: text; -webkit-user-select: text; }\n  .value.error { font-weight: 500; font-size: clamp(14px, min(7cqw, 7cqh), 28px); color: var(--danger, #d64545); white-space: normal; text-align: right; }\n  .copy { position: absolute; top: 4px; left: 2px; display: grid; place-items: center; width: 28px; height: 28px; padding: 0; border: 0; border-radius: var(--radius-sm, 6px); background: none; color: var(--dim); cursor: pointer; opacity: .7; }\n  .copy:hover:not(:disabled) { background: var(--hover); color: var(--text); opacity: 1; }\n  .copy:disabled { opacity: .3; cursor: default; }\n  .keys { flex: 1; min-height: 0; display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: 1fr; gap: 4px; }\n  .key { min-width: 0; min-height: 0; padding: 0; border: 1px solid var(--border); border-radius: var(--radius-sm, 6px); font: inherit; font-size: clamp(13px, min(6cqw, 4.2cqh), 24px); color: var(--text); background: var(--chrome, var(--surface)); cursor: pointer; transition: background .08s, filter .08s; }\n  .key:hover { background: var(--hover); }\n  .key:active, .key.hit { filter: brightness(.9); }\n  .key:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }\n  .key.num { font-weight: 600; background: var(--field-bg, var(--surface)); }\n  .key.num:hover { background: var(--hover); }\n  .key.fn { color: var(--dim); }\n  .key.op { font-size: clamp(15px, min(7cqw, 5cqh), 28px); color: var(--accent); }\n  .key.op.armed { background: var(--accent-soft, var(--hover)); border-color: var(--accent); }\n  .key.eq { background: var(--accent); border-color: var(--accent); color: #fff; font-size: clamp(15px, min(7cqw, 5cqh), 28px); }\n  .key.eq:hover { background: var(--accent); filter: brightness(1.08); }\n  .key.eq:active, .key.eq.hit { filter: brightness(.92); }\n  .key.wide { grid-column: span 2; }\n";
+export { v as main };

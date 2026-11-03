@@ -1,5 +1,16 @@
 # Changelog di lilOS
 
+## 1.22.0 — 2026-11-03
+
+- **Sicurezza** (con più utenti): i moduli di Rete e del Terminale si collegano solo agli indirizzi che il kernel ha controllato, invece di risolvere di nuovo il nome del server da soli (*DNS rebinding*). Vale con i moduli aggiornati (repository ufficiale v1.51.0). Aggiorna subito lilOS e i moduli se più persone usano lo stesso lilOS
+- **Un'app Microsoft e un progetto Google per tutto**: si impostano una volta nel Pannello di controllo 1.18.0 (**App Microsoft**, **Progetto Google**) e servono OneDrive, Azure Blob, Google Drive e Google Foto; il kernel fa l'accesso e rinnova i token. Le impostazioni che erano nei moduli vengono spostate da sole
+- **Un server confermato vale per Rete e Terminale**: la chiave di un server SSH o un certificato si confermano una volta sola
+- **Moduli che ne sostituiscono altri**: **ssh** prende il posto di term-ssh e netfs-sftp, **netfs-google** di netfs-gdrive e netfs-gphotos; installandoli il kernel sposta impostazioni, segreti e connessioni e toglie i vecchi. L'AppStore 1.10.0 li mostra negli aggiornamenti
+- **Automata**: le partenze a un'ora e ogni pochi minuti sono operazioni della Pianificazione (anche a lilOS chiuso); Automata 1.2.0 sposta da sola quelle che ci sono. Un'automazione pianificata gira senza aprire finestre se non chiede niente
+- La finestra Proprietà, le conferme di eliminazione e i nomi dei tipi di file seguono la lingua di lilOS; le dimensioni sono scritte allo stesso modo ovunque
+- Correzioni: niente «false» in «Recenti e frequenti» del menu di avvio; i pulsanti nascosti dei dialoghi restano nascosti; le etichette lunghe dei pulsanti a segmenti finiscono con «…»
+- Per gli sviluppatori: SDK 0.14.0 (`messageBox` con contenuto, pulsanti e campi, anche per le app isolate; `formatBytes`; `fs.usage`, `fs.tildePath`, `fs.cleanName`; `resizeHandle`; controlli più completi); per i moduli `ctx.lookup`, `ctx.paths`, `ctx.jsonStore`, `ctx.tokens` con `oauth`, `replaces` (decisione D70)
+
 ## 1.21.1 — 2026-11-02
 
 - I comandi del Terminale pianificati «in lilOS» (e le operazioni «Servizio di un'app») possono durare fino al **Tempo massimo** dell'operazione: prima si fermavano sempre dopo 60 secondi. Servono il Terminale 1.7.0 e il modulo services-isolate 1.2.0; con il modulo vecchio l'errore dice di aggiornarlo

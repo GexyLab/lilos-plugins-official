@@ -1,1 +1,0 @@
-export{n as adoptModule,r as checkModule,a as installDependencies,o as writeModule}from"./modulePackage-DuxHvqGk.js";

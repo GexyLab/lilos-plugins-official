@@ -61,17 +61,15 @@
       "@automation.files.view.params.mode.options.list.label": "List",
       "@automation.files.view.params.mode.options.grid.label": "Icons",
       "@automation.files.view.params.mode.options.thumbs.label": "Previews",
-      "@dependencies.netfs-sftp.reason": "SFTP connections in Network",
+      "@dependencies.ssh.reason": "SFTP connections in Network (and SSH sessions in Terminal)",
       "@dependencies.netfs-ftp.reason": "FTP and FTPS connections in Network",
       "@dependencies.netfs-webdav.reason": "WebDAV connections in Network",
       "@dependencies.netfs-smb.reason": "Windows shares (SMB) in Network",
       "@dependencies.netfs-nfs.reason": "NFS shares in Network",
       "@dependencies.netfs-onedrive.reason": "OneDrive in Network",
-      "@dependencies.netfs-gdrive.reason": "Google Drive in Network",
-      "@dependencies.netfs-gphotos.reason": "Google Photos in Network",
+      "@dependencies.netfs-google.reason": "Google Drive and Google Photos in Network",
       "@dependencies.netfs-s3.reason": "Amazon S3 and compatible storage in Network",
       "@dependencies.netfs-azblob.reason": "Azure Blob Storage in Network",
-
       "toolbar.back": "Back (Alt ←)",
       "toolbar.forward": "Forward (Alt →)",
       "toolbar.up": "Parent folder (Alt ↑)",
@@ -88,7 +86,6 @@
       "rename.label": "New name",
       "create.folderName": "New folder",
       "create.fileName": "New file.txt",
-
       "panel.info.title": "Info",
       "panel.info.show": "Show the info panel",
       "panel.info.hide": "Hide the info panel",
@@ -99,7 +96,6 @@
       "panel.preview.hide": "Hide the preview",
       "panel.preview.resize": "Preview panel width",
       "panel.preview.close": "Close the preview panel",
-
       "place.home": "Home",
       "place.trash": "Trash",
       "place.tag": "Tag “{name}”",
@@ -113,7 +109,6 @@
       "side.expand": "Expand {name}",
       "link.notFound": "Not found",
       "link.mountGone": "Removed connection",
-
       "column.name": "Name",
       "column.modified": "Modified",
       "column.deleted": "Deleted",
@@ -133,36 +128,43 @@
       "tree.collapseAll": "Close all folders",
       "tree.expandTitle": "Show contents (Alt-click: with subfolders)",
       "tree.collapseTitle": "Hide contents",
-
       "tile.deleted": "Deleted: {date}",
       "tile.origin": "Original location: {place}",
       "tile.location": "Location: {place}",
       "tile.tags": "Tags: {names}",
       "trash.restoresTo": "Goes back to {place} when restored",
       "trash.keptForever": "Items stay until you delete them",
-      "trash.keptDays": { "one": "Deleted permanently after {count} day", "other": "Deleted permanently after {count} days" },
-
+      "trash.keptDays": {
+        "one": "Deleted permanently after {count} day",
+        "other": "Deleted permanently after {count} days"
+      },
       "type.folder": "Folder",
       "type.app": "App",
-      "type.appLink": "Link to an app",
       "type.linkFolder": "Link to a folder",
       "type.linkFile": "Link to a file",
       "owner.unknown": "Unknown",
       "owner.shared": "Shared",
       "owner.removed": "{name} (deleted)",
       "owner.label": "Workspace: {name}",
-      "count.items": { "zero": "Empty", "one": "{count} item", "other": "{count} items" },
-
+      "count.items": {
+        "zero": "Empty",
+        "one": "{count} item",
+        "other": "{count} items"
+      },
       "empty.noMatch": "No items match “{query}”",
       "empty.trash": "The trash is empty",
       "empty.tag": "No items have this tag. Add it from the right-click menu → Tag.",
       "empty.folder": "This folder is empty",
-
-      "status.items": { "one": "{count} item", "other": "{count} items" },
-      "status.selected": { "one": "{count} selected", "other": "{count} selected" },
+      "status.items": {
+        "one": "{count} item",
+        "other": "{count} items"
+      },
+      "status.selected": {
+        "one": "{count} selected",
+        "other": "{count} selected"
+      },
       "status.tag": "All items with this tag",
       "status.tagHidden": "Invisible tag: these items are hidden elsewhere",
-
       "message.hiddenByTag": "“{name}” is hidden by an invisible tag",
       "message.restoreToOpen": "To open it, restore it (right-click → Restore)",
       "message.systemFolders": "System folders can’t be deleted",
@@ -182,20 +184,22 @@
       "automation.noFolder": "The folder is not there any more",
       "automation.noColumn": "This folder has no such column to sort by",
       "automation.noView": "Unknown view",
-
       "toast.restored": "Restored “{name}” to {place}",
       "toast.restoredMany": "Restored {count} items to {place}",
       "toast.restoredManyPlaces": "Restored {count} items to {folders} folders",
       "toast.unlinked": "Link to “{name}” removed",
-      "toast.linksAdded": { "one": "Link added", "other": "{count} links added" },
-      "toast.deskLinks": { "one": "Link added to the desktop", "other": "{count} links added to the desktop" },
-      "toast.trashed": { "one": "Moved to the trash", "other": "{count} items moved to the trash" },
-
-      "confirm.purge": "Delete “{name}” permanently",
-      "confirm.purgeMany": "Delete {count} items permanently",
-      "confirm.emptyTrash": { "one": "Delete the item in the trash permanently", "other": "Delete all {count} items in the trash permanently" },
-      "confirm.cancel": "Cancel",
-
+      "toast.linksAdded": {
+        "one": "Link added",
+        "other": "{count} links added"
+      },
+      "toast.deskLinks": {
+        "one": "Link added to the desktop",
+        "other": "{count} links added to the desktop"
+      },
+      "toast.trashed": {
+        "one": "Moved to the trash",
+        "other": "{count} items moved to the trash"
+      },
       "menu.open": "Open",
       "menu.openMany": "Open {count} items",
       "menu.openWith": "Open with…",
@@ -217,33 +221,24 @@
       "menu.manageTags": "Manage tags…",
       "menu.newFolder": "New folder",
       "menu.newTextFile": "New text file",
-
       "info.folderHint": "Nothing selected: here is the open folder.",
       "info.general": "General",
       "info.organization": "Organization",
       "info.attributes": "Attributes",
       "info.text": "Text",
       "info.items": "Items",
-      "info.type": "Type",
       "info.types": "Types",
-      "info.app": "App",
-      "info.linkTarget": "Points to",
-      "info.linkState": "State",
-      "info.linkBroken": "Broken: the original was not found the last time",
-      "info.appMissing": "{id} (not installed)",
       "info.size": "Size",
       "info.bytesDetail": "{size} ({count} bytes)",
       "info.contents": "Contents",
       "info.contentsTotal": "{items}, {total} in all",
-      "info.insideFolders": { "one": "{count} item in the folders", "other": "{count} items in the folders" },
-      "info.deleted": "Deleted",
+      "info.insideFolders": {
+        "one": "{count} item in the folders",
+        "other": "{count} items in the folders"
+      },
       "info.lastDeleted": "Last deleted",
-      "info.origin": "Original location",
-      "info.path": "Path",
       "info.location": "Location",
       "info.manyFolders": "{count} different folders",
-      "info.created": "Created",
-      "info.modified": "Modified",
       "info.oldest": "Oldest",
       "info.newest": "Newest",
       "info.workspace": "Workspace",
@@ -259,15 +254,23 @@
       "info.lines": "Lines",
       "info.words": "Words",
       "info.chars": "Characters",
-      "info.folders": { "one": "{count} folder", "other": "{count} folders" },
-      "info.files": { "one": "{count} file", "other": "{count} files" },
-      "info.apps": { "one": "{count} app", "other": "{count} apps" },
+      "info.folders": {
+        "one": "{count} folder",
+        "other": "{count} folders"
+      },
+      "info.files": {
+        "one": "{count} file",
+        "other": "{count} files"
+      },
+      "info.apps": {
+        "one": "{count} app",
+        "other": "{count} apps"
+      },
       "note.system": "System item: it can’t be renamed or deleted",
       "note.private": "Private: visible only in its workspace",
       "note.hidden": "Hidden by an invisible tag",
       "note.linked": "In the sidebar (Links)",
       "selection.count": "{count} items selected",
-
       "preview.none": "Nothing selected",
       "preview.selectFile": "Select a file to see its contents",
       "preview.oneAtATime": "The preview shows one item at a time",
@@ -307,14 +310,6 @@
       "net.error.title": "Network",
       "net.error.read": "Cannot read «{name}»",
       "net.preview.big": "Not shown: the file is on a server and is bigger than 1 MB",
-      "net.trust.title": "Confirm the server of «{name}»",
-      "net.trust.ssh": "This is the first time lilOS connects to this server, or its key changed. Key fingerprint:\n{fingerprint}\n\nContinue only if it matches the server's.",
-      "net.trust.tls": "The server's certificate is not valid (self-signed, expired or for another name). Certificate fingerprint:\n{fingerprint}\n\nContinue only if you trust this server.",
-      "net.trust.first": "Server to confirm.",
-      "net.trust.key": "Key fingerprint:",
-      "net.trust.cert": "The certificate is not valid. Its fingerprint:",
-      "net.trust.check": "Confirm only if it matches the server's.",
-      "net.trust.go": "Confirm and connect",
       "net.connect.title": "Connect to a server",
       "net.edit.title": "Connection «{name}»",
       "net.protocol": "Protocol",
@@ -377,17 +372,28 @@
       "office.exists.keep": "Keep both",
       "office.exists.replace": "Replace",
       "net.missing": "Missing: {fields}",
-      "net.secret.unchanged": "unchanged",
-      "net.file.browse": "Browse…",
-      "net.file.none": "No file chosen",
-      "net.file.chosen": "File chosen",
       "net.shares.list": "List…",
       "net.shares.none": "The server shares nothing you can see",
       "net.password.title": "Password for «{name}»",
       "net.password.text": "lilOS needs the password to connect to {address}.",
       "net.password.wrong": "The user or the password is not right",
-      "net.trust.changed.title": "The server of «{name}» CHANGED its key",
-      "net.trust.changed": "The key or certificate of this server is not the one you confirmed. Someone may be pretending to be the server: continue only if you know it was changed on purpose.\n\nBefore: {previous}\nNow: {fingerprint}"
+      "shared.fields.unchanged": "unchanged",
+      "shared.fields.browse": "Browse…",
+      "shared.fields.noSuchFile": "{path}: no such file",
+      "shared.fields.secretSet": "Set (type to replace it)",
+      "shared.fields.secretEmpty": "Not set",
+      "shared.fields.secretRemove": "Remove",
+      "shared.trust.title": "Confirm the server «{name}»",
+      "shared.trust.changedTitle": "The server «{name}» CHANGED its key",
+      "shared.trust.first": "This is the first time lilOS connects to this server, or its key changed. Check that the key fingerprint is the server's (whoever runs it can tell you).",
+      "shared.trust.firstTls": "The certificate of this server is not valid (self-signed, expired, for another name or not signed by a known authority). Check its fingerprint before going on.",
+      "shared.trust.changedText": "Warning: it may not be your server. Its key or certificate is not the one you confirmed: it may have been reinstalled, or someone may be in between. Go on only if you know why it changed.",
+      "shared.trust.server": "Server",
+      "shared.trust.key": "Key fingerprint",
+      "shared.trust.certificate": "Certificate fingerprint",
+      "shared.trust.previous": "Confirmed before",
+      "shared.trust.ask": "Continue only if it is your server.",
+      "shared.trust.askChanged": "Continue only to trust the new key."
     }
   },
   "it": {
@@ -452,17 +458,15 @@
       "@automation.files.view.params.mode.options.list.label": "Elenco",
       "@automation.files.view.params.mode.options.grid.label": "Icone",
       "@automation.files.view.params.mode.options.thumbs.label": "Anteprime",
-      "@dependencies.netfs-sftp.reason": "Connessioni SFTP in Rete",
+      "@dependencies.ssh.reason": "Connessioni SFTP in Rete (e sessioni SSH nel Terminale)",
       "@dependencies.netfs-ftp.reason": "Connessioni FTP e FTPS in Rete",
       "@dependencies.netfs-webdav.reason": "Connessioni WebDAV in Rete",
       "@dependencies.netfs-smb.reason": "Condivisioni di Windows (SMB) in Rete",
       "@dependencies.netfs-nfs.reason": "Condivisioni NFS in Rete",
       "@dependencies.netfs-onedrive.reason": "OneDrive in Rete",
-      "@dependencies.netfs-gdrive.reason": "Google Drive in Rete",
-      "@dependencies.netfs-gphotos.reason": "Google Foto in Rete",
+      "@dependencies.netfs-google.reason": "Google Drive e Google Foto in Rete",
       "@dependencies.netfs-s3.reason": "Amazon S3 e archivi compatibili in Rete",
       "@dependencies.netfs-azblob.reason": "Azure Blob Storage in Rete",
-
       "toolbar.back": "Indietro (Alt ←)",
       "toolbar.forward": "Avanti (Alt →)",
       "toolbar.up": "Cartella superiore (Alt ↑)",
@@ -479,7 +483,6 @@
       "rename.label": "Nuovo nome",
       "create.folderName": "Nuova cartella",
       "create.fileName": "Nuovo file.txt",
-
       "panel.info.title": "Informazioni",
       "panel.info.show": "Mostra le informazioni",
       "panel.info.hide": "Nascondi le informazioni",
@@ -490,7 +493,6 @@
       "panel.preview.hide": "Nascondi l’anteprima",
       "panel.preview.resize": "Larghezza del pannello dell’anteprima",
       "panel.preview.close": "Chiudi il pannello dell’anteprima",
-
       "place.home": "Home",
       "place.trash": "Cestino",
       "place.tag": "Tag «{name}»",
@@ -504,7 +506,6 @@
       "side.expand": "Espandi {name}",
       "link.notFound": "Non trovato",
       "link.mountGone": "Connessione rimossa",
-
       "column.name": "Nome",
       "column.modified": "Modificato",
       "column.deleted": "Eliminato",
@@ -524,36 +525,43 @@
       "tree.collapseAll": "Chiudi tutte le cartelle",
       "tree.expandTitle": "Mostra il contenuto (Alt+clic: anche le sottocartelle)",
       "tree.collapseTitle": "Nascondi il contenuto",
-
       "tile.deleted": "Eliminato: {date}",
       "tile.origin": "Posizione originale: {place}",
       "tile.location": "Posizione: {place}",
       "tile.tags": "Tag: {names}",
       "trash.restoresTo": "Ripristinando torna in {place}",
       "trash.keptForever": "Gli elementi restano finché non li elimini",
-      "trash.keptDays": { "one": "Eliminati definitivamente dopo {count} giorno", "other": "Eliminati definitivamente dopo {count} giorni" },
-
+      "trash.keptDays": {
+        "one": "Eliminati definitivamente dopo {count} giorno",
+        "other": "Eliminati definitivamente dopo {count} giorni"
+      },
       "type.folder": "Cartella",
       "type.app": "App",
-      "type.appLink": "Collegamento a un’app",
       "type.linkFolder": "Collegamento a una cartella",
       "type.linkFile": "Collegamento a un file",
       "owner.unknown": "Sconosciuto",
       "owner.shared": "Condiviso",
       "owner.removed": "{name} (eliminato)",
       "owner.label": "Workspace: {name}",
-      "count.items": { "zero": "Vuota", "one": "{count} elemento", "other": "{count} elementi" },
-
+      "count.items": {
+        "zero": "Vuota",
+        "one": "{count} elemento",
+        "other": "{count} elementi"
+      },
       "empty.noMatch": "Nessun elemento corrisponde a «{query}»",
       "empty.trash": "Il cestino è vuoto",
       "empty.tag": "Nessun elemento ha questo tag. Si assegna dal menu del tasto destro → Tag.",
       "empty.folder": "Questa cartella è vuota",
-
-      "status.items": { "one": "{count} elemento", "other": "{count} elementi" },
-      "status.selected": { "one": "{count} selezionato", "other": "{count} selezionati" },
+      "status.items": {
+        "one": "{count} elemento",
+        "other": "{count} elementi"
+      },
+      "status.selected": {
+        "one": "{count} selezionato",
+        "other": "{count} selezionati"
+      },
       "status.tag": "Tutti gli elementi con questo tag",
       "status.tagHidden": "Tag invisibile: questi elementi sono nascosti altrove",
-
       "message.hiddenByTag": "«{name}» è nascosto da un tag invisibile",
       "message.restoreToOpen": "Per aprirlo, ripristinalo (clic destro → Ripristina)",
       "message.systemFolders": "Le cartelle di sistema non si possono eliminare",
@@ -573,20 +581,22 @@
       "automation.noFolder": "La cartella non c’è più",
       "automation.noColumn": "Questa cartella non ha una colonna per cui ordinare così",
       "automation.noView": "Vista sconosciuta",
-
       "toast.restored": "Ripristinato «{name}» in {place}",
       "toast.restoredMany": "Ripristinati {count} elementi in {place}",
       "toast.restoredManyPlaces": "Ripristinati {count} elementi in {folders} cartelle",
       "toast.unlinked": "Collegamento a «{name}» eliminato",
-      "toast.linksAdded": { "one": "Collegamento aggiunto", "other": "{count} collegamenti aggiunti" },
-      "toast.deskLinks": { "one": "Collegamento aggiunto al desktop", "other": "{count} collegamenti aggiunti al desktop" },
-      "toast.trashed": { "one": "Spostato nel cestino", "other": "{count} elementi spostati nel cestino" },
-
-      "confirm.purge": "Elimina definitivamente «{name}»",
-      "confirm.purgeMany": "Elimina definitivamente {count} elementi",
-      "confirm.emptyTrash": { "one": "Elimina definitivamente l’elemento nel cestino", "other": "Elimina definitivamente tutti i {count} elementi nel cestino" },
-      "confirm.cancel": "Annulla",
-
+      "toast.linksAdded": {
+        "one": "Collegamento aggiunto",
+        "other": "{count} collegamenti aggiunti"
+      },
+      "toast.deskLinks": {
+        "one": "Collegamento aggiunto al desktop",
+        "other": "{count} collegamenti aggiunti al desktop"
+      },
+      "toast.trashed": {
+        "one": "Spostato nel cestino",
+        "other": "{count} elementi spostati nel cestino"
+      },
       "menu.open": "Apri",
       "menu.openMany": "Apri {count} elementi",
       "menu.openWith": "Apri con…",
@@ -608,33 +618,24 @@
       "menu.manageTags": "Gestisci i tag…",
       "menu.newFolder": "Nuova cartella",
       "menu.newTextFile": "Nuovo file di testo",
-
       "info.folderHint": "Nessun elemento selezionato: ecco la cartella aperta.",
       "info.general": "Generali",
       "info.organization": "Organizzazione",
       "info.attributes": "Attributi",
       "info.text": "Testo",
       "info.items": "Elementi",
-      "info.type": "Tipo",
       "info.types": "Tipi",
-      "info.app": "App",
-      "info.linkTarget": "Originale",
-      "info.linkState": "Stato",
-      "info.linkBroken": "Rotto: l’originale non è stato trovato l’ultima volta",
-      "info.appMissing": "{id} (non installata)",
       "info.size": "Dimensione",
       "info.bytesDetail": "{size} ({count} byte)",
       "info.contents": "Contenuto",
       "info.contentsTotal": "{items}, {total} in tutto",
-      "info.insideFolders": { "one": "{count} elemento nelle cartelle", "other": "{count} elementi nelle cartelle" },
-      "info.deleted": "Eliminato",
+      "info.insideFolders": {
+        "one": "{count} elemento nelle cartelle",
+        "other": "{count} elementi nelle cartelle"
+      },
       "info.lastDeleted": "Ultima eliminazione",
-      "info.origin": "Posizione originale",
-      "info.path": "Percorso",
       "info.location": "Posizione",
       "info.manyFolders": "{count} cartelle diverse",
-      "info.created": "Creato",
-      "info.modified": "Modificato",
       "info.oldest": "Meno recente",
       "info.newest": "Più recente",
       "info.workspace": "Workspace",
@@ -650,15 +651,23 @@
       "info.lines": "Righe",
       "info.words": "Parole",
       "info.chars": "Caratteri",
-      "info.folders": { "one": "{count} cartella", "other": "{count} cartelle" },
-      "info.files": { "one": "{count} file", "other": "{count} file" },
-      "info.apps": { "one": "{count} app", "other": "{count} app" },
+      "info.folders": {
+        "one": "{count} cartella",
+        "other": "{count} cartelle"
+      },
+      "info.files": {
+        "one": "{count} file",
+        "other": "{count} file"
+      },
+      "info.apps": {
+        "one": "{count} app",
+        "other": "{count} app"
+      },
       "note.system": "Di sistema: non si rinomina e non si elimina",
       "note.private": "Privata: si vede solo nel suo workspace",
       "note.hidden": "Nascosto da un tag invisibile",
       "note.linked": "Nella barra laterale (Collegamenti)",
       "selection.count": "{count} elementi selezionati",
-
       "preview.none": "Nessun elemento selezionato",
       "preview.selectFile": "Seleziona un file per vederne il contenuto",
       "preview.oneAtATime": "L’anteprima mostra un elemento alla volta",
@@ -698,14 +707,6 @@
       "net.error.title": "Rete",
       "net.error.read": "Non si legge «{name}»",
       "net.preview.big": "Non mostrato: il file è su un server ed è più grande di 1 MB",
-      "net.trust.title": "Conferma il server di «{name}»",
-      "net.trust.ssh": "È la prima volta che lilOS si collega a questo server, oppure la sua chiave è cambiata. Impronta della chiave:\n{fingerprint}\n\nContinua solo se corrisponde a quella del server.",
-      "net.trust.tls": "Il certificato del server non è valido (fatto da sé, scaduto o per un altro nome). Impronta del certificato:\n{fingerprint}\n\nContinua solo se ti fidi di questo server.",
-      "net.trust.first": "Server da confermare.",
-      "net.trust.key": "Impronta della chiave:",
-      "net.trust.cert": "Il certificato non è valido. La sua impronta:",
-      "net.trust.check": "Conferma solo se corrisponde a quella del server.",
-      "net.trust.go": "Conferma e connetti",
       "net.connect.title": "Connetti a un server",
       "net.edit.title": "Connessione «{name}»",
       "net.protocol": "Protocollo",
@@ -768,17 +769,28 @@
       "office.exists.keep": "Tieni entrambi",
       "office.exists.replace": "Sostituisci",
       "net.missing": "Mancano: {fields}",
-      "net.secret.unchanged": "invariata",
-      "net.file.browse": "Sfoglia…",
-      "net.file.none": "Nessun file scelto",
-      "net.file.chosen": "File scelto",
       "net.shares.list": "Elenca…",
       "net.shares.none": "Il server non condivide niente che tu possa vedere",
       "net.password.title": "Password di «{name}»",
       "net.password.text": "lilOS ha bisogno della password per connettersi a {address}.",
       "net.password.wrong": "Utente o password non giusti",
-      "net.trust.changed.title": "Il server di «{name}» ha CAMBIATO chiave",
-      "net.trust.changed": "La chiave o il certificato di questo server non è quello che avevi confermato. Qualcuno potrebbe fingersi il server: continua solo se sai che è stato cambiato apposta.\n\nPrima: {previous}\nOra: {fingerprint}"
+      "shared.fields.unchanged": "invariata",
+      "shared.fields.browse": "Sfoglia…",
+      "shared.fields.noSuchFile": "{path}: file inesistente",
+      "shared.fields.secretSet": "Impostato (scrivi per sostituirlo)",
+      "shared.fields.secretEmpty": "Non impostato",
+      "shared.fields.secretRemove": "Togli",
+      "shared.trust.title": "Conferma il server «{name}»",
+      "shared.trust.changedTitle": "Il server «{name}» ha CAMBIATO chiave",
+      "shared.trust.first": "È la prima volta che lilOS si collega a questo server, oppure la sua chiave è cambiata. Controlla che l’impronta della chiave sia quella del server (te la dà chi lo gestisce).",
+      "shared.trust.firstTls": "Il certificato di questo server non è valido (fatto da sé, scaduto, per un altro nome o non firmato da un’autorità nota). Controlla l’impronta prima di andare avanti.",
+      "shared.trust.changedText": "Attenzione: potrebbe non essere il tuo server. La sua chiave o il suo certificato non è quello che avevi confermato: può essere stato reinstallato, oppure qualcuno si è messo in mezzo. Vai avanti solo se sai perché è cambiato.",
+      "shared.trust.server": "Server",
+      "shared.trust.key": "Impronta della chiave",
+      "shared.trust.certificate": "Impronta del certificato",
+      "shared.trust.previous": "Confermata prima",
+      "shared.trust.ask": "Continua solo se è il tuo server.",
+      "shared.trust.askChanged": "Continua solo per fidarti della nuova chiave."
     }
   }
 }

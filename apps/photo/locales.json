@@ -195,8 +195,7 @@
       "format.generic": "Image",
       "format.png.note": "PNG: lossless, with transparency.",
       "format.jpeg.note": "JPEG: smaller, good for photos; transparent areas become white.",
-      "format.webp.note": "WebP: small, with transparency.",
-      "size.bytes": { "one": "{n} byte", "other": "{n} bytes" }
+      "format.webp.note": "WebP: small, with transparency."
     }
   },
   "it": {
@@ -395,8 +394,7 @@
       "format.generic": "Immagine",
       "format.png.note": "PNG: senza perdita di qualità, con la trasparenza.",
       "format.jpeg.note": "JPEG: più leggero, adatto alle foto; le parti trasparenti diventano bianche.",
-      "format.webp.note": "WebP: leggero e con la trasparenza.",
-      "size.bytes": { "one": "{n} byte", "other": "{n} byte" }
+      "format.webp.note": "WebP: leggero e con la trasparenza."
     }
   }
 }

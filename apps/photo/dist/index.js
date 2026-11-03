@@ -1,8 +1,8 @@
 import * as e from "/host/sdk.js";
-import { UndoStack as t, Window as n, actionButton as r, fs as i, h as a, history as o, icon as s, isEditing as c, segmented as l, selectField as u, slider as d, svg as f, toast as p, toggle as m } from "/host/sdk.js";
-import { handleCommand as h, launch as g, pickFile as _ } from "/host/system.js";
+import { UndoStack as t, Window as n, actionButton as r, formatBytes as i, fs as a, h as o, history as s, icon as c, isEditing as l, messageBox as u, segmented as d, selectField as f, slider as p, svg as m, toast as h, toggle as g } from "/host/sdk.js";
+import { handleCommand as _, launch as v, pickFile as y } from "/host/system.js";
 // src/photo/glyphs.js
-var v = {
+var b = {
 	upload: "<path d=\"M12 16V5M7 9.5l5-5 5 5M5 20h14\"/>",
 	hand: "<path d=\"M8 13V5.5a1.5 1.5 0 0 1 3 0V12M11 11V4.5a1.5 1.5 0 0 1 3 0V12M14 11.5V6a1.5 1.5 0 0 1 3 0v8.5a6.5 6.5 0 0 1-6.5 6.5h-.8a6 6 0 0 1-4.6-2.2L3.6 15a1.5 1.5 0 0 1 2.3-1.9L8 15.5\"/>",
 	brush: "<path d=\"M19.5 3.5l1 1-8.8 9.8-2-2z\"/><path d=\"M9.7 12.3c-2.2-.4-4.2 1-4.2 3.4 0 1.6-.8 2.6-2 3.3 3.8 1.1 8.4.3 8.2-4.7\"/>",
@@ -11,9 +11,9 @@ var v = {
 	resize: "<path d=\"M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7\"/>",
 	convert: "<path d=\"M4 8h13l-3.5-3.5M20 16H7l3.5 3.5\"/>",
 	actual: "<rect x=\"4\" y=\"4\" width=\"16\" height=\"16\" rx=\"2\"/><path d=\"M11 9l2-1.5V16\"/>"
-}, y = (e) => v[e] ? f("0 0 24 24", "ico", v[e]) : s(e);
+}, x = (e) => b[e] ? m("0 0 24 24", "ico", b[e]) : c(e);
 // src/shared/i18n.js
-function b(t, n) {
+function S(t, n) {
 	if (e.locale) return e.locale.forApp(t).i18n;
 	let r = {
 		...n.en.strings,
@@ -32,8 +32,7 @@ function b(t, n) {
 		number: (e, t) => new Intl.NumberFormat("it-IT", t).format(e)
 	};
 }
-// src/photo/i18n.js
-var x = b("photo", {
+var { t: C } = S("photo", {
 	en: { strings: {
 		"@name": "Photo",
 		"@description": "View and touch up images: drawing, text, cropping, resizing and conversion to PNG, JPEG or WebP.",
@@ -211,11 +210,7 @@ var x = b("photo", {
 		"format.generic": "Image",
 		"format.png.note": "PNG: lossless, with transparency.",
 		"format.jpeg.note": "JPEG: smaller, good for photos; transparent areas become white.",
-		"format.webp.note": "WebP: small, with transparency.",
-		"size.bytes": {
-			one: "{n} byte",
-			other: "{n} bytes"
-		}
+		"format.webp.note": "WebP: small, with transparency."
 	} },
 	it: { strings: {
 		"@name": "Photo",
@@ -394,13 +389,167 @@ var x = b("photo", {
 		"format.generic": "Immagine",
 		"format.png.note": "PNG: senza perdita di qualità, con la trasparenza.",
 		"format.jpeg.note": "JPEG: più leggero, adatto alle foto; le parti trasparenti diventano bianche.",
-		"format.webp.note": "WebP: leggero e con la trasparenza.",
-		"size.bytes": {
-			one: "{n} byte",
-			other: "{n} byte"
-		}
+		"format.webp.note": "WebP: leggero e con la trasparenza."
 	} }
-}), { t: S } = x, C = [
+}), w = {
+	window: {
+		width: 900,
+		height: 620
+	},
+	fileTypes: [
+		"png",
+		"jpg",
+		"jpeg",
+		"gif",
+		"webp",
+		"bmp",
+		"avif",
+		"ico",
+		"svg"
+	],
+	commands: [{
+		id: "photo.save",
+		label: "Save",
+		keys: ["Ctrl+S"]
+	}, {
+		id: "photo.open",
+		label: "Open an image",
+		keys: ["Ctrl+O"]
+	}],
+	automation: [
+		{
+			id: "photo.resize",
+			label: "Resize the image",
+			target: "window",
+			params: {
+				width: {
+					type: "number",
+					label: "Width",
+					min: 1
+				},
+				height: {
+					type: "number",
+					label: "Height",
+					min: 1
+				},
+				unit: {
+					type: "choice",
+					label: "Unit",
+					options: [{
+						value: "pixels",
+						label: "Pixels"
+					}, {
+						value: "percent",
+						label: "Percent"
+					}]
+				},
+				keepRatio: {
+					type: "boolean",
+					label: "Keep proportions",
+					description: "The height follows the width and the proportions of each image"
+				},
+				quality: {
+					type: "choice",
+					label: "Quality",
+					options: [
+						{
+							value: "high",
+							label: "High"
+						},
+						{
+							value: "medium",
+							label: "Medium, faster"
+						},
+						{
+							value: "pixel",
+							label: "Crisp pixels"
+						}
+					]
+				}
+			}
+		},
+		{
+			id: "photo.crop",
+			label: "Crop the image",
+			target: "window",
+			params: {
+				x: {
+					type: "number",
+					label: "Left",
+					description: "Pixels from the left edge",
+					min: 0
+				},
+				y: {
+					type: "number",
+					label: "Top",
+					description: "Pixels from the top edge",
+					min: 0
+				},
+				width: {
+					type: "number",
+					label: "Width",
+					min: 1
+				},
+				height: {
+					type: "number",
+					label: "Height",
+					min: 1
+				}
+			}
+		},
+		{
+			id: "photo.saveAs",
+			label: "Convert and save a copy",
+			target: "window",
+			result: "file",
+			params: {
+				format: {
+					type: "choice",
+					label: "Format",
+					options: [
+						{
+							value: "png",
+							label: "PNG"
+						},
+						{
+							value: "jpeg",
+							label: "JPEG"
+						},
+						{
+							value: "webp",
+							label: "WebP"
+						}
+					]
+				},
+				quality: {
+					type: "number",
+					label: "Quality",
+					description: "From 10 to 100, for JPEG and WebP",
+					min: 10,
+					max: 100
+				},
+				name: {
+					type: "text",
+					label: "Name",
+					maxLength: 255
+				},
+				folder: {
+					type: "folder",
+					label: "Folder"
+				},
+				open: {
+					type: "boolean",
+					label: "Open the copy after saving"
+				}
+			}
+		},
+		{
+			id: "photo.save",
+			label: "Save the image",
+			target: "window"
+		}
+	]
+}, T = [
 	{
 		id: "png",
 		label: "PNG",
@@ -408,7 +557,7 @@ var x = b("photo", {
 		ext: "png",
 		lossy: !1,
 		get note() {
-			return S("format.png.note");
+			return C("format.png.note");
 		}
 	},
 	{
@@ -418,7 +567,7 @@ var x = b("photo", {
 		ext: "jpg",
 		lossy: !0,
 		get note() {
-			return S("format.jpeg.note");
+			return C("format.jpeg.note");
 		}
 	},
 	{
@@ -428,25 +577,15 @@ var x = b("photo", {
 		ext: "webp",
 		lossy: !0,
 		get note() {
-			return S("format.webp.note");
+			return C("format.webp.note");
 		}
 	}
-], w = [
-	"png",
-	"jpg",
-	"jpeg",
-	"gif",
-	"webp",
-	"bmp",
-	"avif",
-	"ico",
-	"svg"
-], T = {
+], E = w.fileTypes, D = {
 	png: "png",
 	jpg: "jpeg",
 	jpeg: "jpeg",
 	webp: "webp"
-}, E = {
+}, O = {
 	png: "PNG",
 	jpg: "JPEG",
 	jpeg: "JPEG",
@@ -456,104 +595,79 @@ var x = b("photo", {
 	avif: "AVIF",
 	ico: "ICO",
 	svg: "SVG"
-}, D = (e) => (/\.([^.]+)$/.exec(e)?.[1] ?? "").toLowerCase(), O = (e) => E[D(e)] ?? (D(e).toUpperCase() || S("format.generic"));
-function k(e) {
-	let t = C.find((t) => t.id === T[D(e)]);
-	return t && j(t) ? t : null;
-}
-var A = /* @__PURE__ */ new Map();
+}, k = (e) => (/\.([^.]+)$/.exec(e)?.[1] ?? "").toLowerCase(), A = (e) => O[k(e)] ?? (k(e).toUpperCase() || C("format.generic"));
 function j(e) {
-	if (!A.has(e.id)) {
-		let t = document.createElement("canvas");
-		t.width = t.height = 1, A.set(e.id, t.toDataURL(e.type).startsWith(`data:${e.type}`));
-	}
-	return A.get(e.id);
+	let t = T.find((t) => t.id === D[k(e)]);
+	return t && N(t) ? t : null;
 }
-function M(e, t) {
+var M = /* @__PURE__ */ new Map();
+function N(e) {
+	if (!M.has(e.id)) {
+		let t = document.createElement("canvas");
+		t.width = t.height = 1, M.set(e.id, t.toDataURL(e.type).startsWith(`data:${e.type}`));
+	}
+	return M.get(e.id);
+}
+function P(e, t) {
 	let n = document.createElement("canvas");
 	return n.width = Math.max(1, Math.round(e)), n.height = Math.max(1, Math.round(t)), n;
 }
-function N(e) {
-	let t = M(e.width, e.height);
+function F(e) {
+	let t = P(e.width, e.height);
 	return t.getContext("2d").drawImage(e, 0, 0), t;
 }
-async function P(e) {
+async function I(e) {
 	let t = URL.createObjectURL(e);
 	try {
 		let e = new Image();
 		e.src = t, await e.decode();
-		let n = e.naturalWidth || 300, r = e.naturalHeight || 150, i = M(n, r);
+		let n = e.naturalWidth || 300, r = e.naturalHeight || 150, i = P(n, r);
 		return i.getContext("2d").drawImage(e, 0, 0, n, r), i;
 	} finally {
 		URL.revokeObjectURL(t);
 	}
 }
-function F(e, t, n = .92) {
+function L(e, t, n = .92) {
 	let r = e;
 	if (t.id === "jpeg") {
-		r = M(e.width, e.height);
+		r = P(e.width, e.height);
 		let t = r.getContext("2d");
 		t.fillStyle = "#fff", t.fillRect(0, 0, r.width, r.height), t.drawImage(e, 0, 0);
 	}
 	return new Promise((e, i) => {
-		r.toBlob((t) => t ? e(t) : i(Error(S("error.tooLarge"))), t.type, t.lossy ? n : void 0);
+		r.toBlob((t) => t ? e(t) : i(Error(C("error.tooLarge"))), t.type, t.lossy ? n : void 0);
 	});
 }
-function I(e, t, n, r = "high") {
+function R(e, t, n, r = "high") {
 	t = Math.max(1, Math.round(t)), n = Math.max(1, Math.round(n));
 	let i = e;
 	if (r === "high") for (; i.width / 2 >= t && i.height / 2 >= n;) {
-		let e = M(i.width / 2, i.height / 2), t = e.getContext("2d");
+		let e = P(i.width / 2, i.height / 2), t = e.getContext("2d");
 		t.imageSmoothingQuality = "high", t.drawImage(i, 0, 0, e.width, e.height), i = e;
 	}
-	let a = M(t, n), o = a.getContext("2d");
+	let a = P(t, n), o = a.getContext("2d");
 	return o.imageSmoothingEnabled = r !== "pixel", r !== "pixel" && (o.imageSmoothingQuality = r === "high" ? "high" : "medium"), o.drawImage(i, 0, 0, t, n), a;
 }
 function ee(e, { x: t, y: n, width: r, height: i }) {
-	let a = M(r, i);
+	let a = P(r, i);
 	return a.getContext("2d").drawImage(e, Math.round(t), Math.round(n), a.width, a.height, 0, 0, a.width, a.height), a;
 }
-function L(e) {
-	return Number.isFinite(e) ? e < 1024 ? S("size.bytes", { n: e }) : e < 1048576 ? `${Math.round(e / 1024)} KB` : `${x.number(e / 1024 / 1024, {
-		minimumFractionDigits: 1,
-		maximumFractionDigits: 1,
-		useGrouping: !1
-	})} MB` : "";
-}
 // src/photo/dialogs.js
-function R(e, { title: t, symbol: n, rows: i, okLabel: o, collect: s, focus: c }) {
-	return new Promise((l) => {
-		let u = document.activeElement, d = (e) => {
-			m.remove(), u?.focus?.(), l(e);
-		}, f = () => {
-			let e = s();
-			e !== void 0 && d(e);
-		}, p = a("div", {
-			class: "ph-dialog",
-			role: "dialog",
-			"aria-modal": "true",
-			"aria-label": t
-		}, a("div", { class: "ph-dialog-head" }, y(n), a("span", {}, t)), a("div", { class: "ph-dialog-body" }, i), a("div", { class: "ph-dialog-foot" }, r({
-			label: S("action.cancel"),
-			onClick: () => d(null)
-		}), r({
-			label: o,
-			primary: !0,
-			onClick: f
-		}))), m = a("div", { class: "ph-scrim" }, p);
-		m.addEventListener("keydown", (e) => {
-			if (e.stopPropagation(), e.key === "Escape") d(null);
-			else if (e.key === "Enter" && e.target.matches("input:not([type=\"checkbox\"]):not([type=\"range\"])")) e.preventDefault(), f();
-			else if (e.key === "Tab") {
-				let t = [...p.querySelectorAll("button:not(:disabled), input:not(:disabled), select")].filter((e) => e.tabIndex !== -1), n = t.indexOf(document.activeElement);
-				e.shiftKey && n <= 0 ? (e.preventDefault(), t.at(-1)?.focus()) : !e.shiftKey && n === t.length - 1 && (e.preventDefault(), t[0]?.focus());
-			}
-		}), m.addEventListener("pointerdown", (e) => {
-			e.target === m && e.preventDefault();
-		}), e.append(m), (c ?? p.querySelector("input, button"))?.focus();
+async function z(e, { title: t, rows: n, okLabel: r, collect: i, focus: a }) {
+	let s, c = u(e, {
+		title: t,
+		width: 380,
+		content: o("div", { class: "ph-sheet" }, n),
+		buttons: ["cancel", {
+			value: "ok",
+			label: r,
+			primary: !0
+		}],
+		validate: () => (s = i(), s !== void 0)
 	});
+	return a?.focus(), await c === "ok" ? s : null;
 }
-var z = (e, ...t) => a("div", { class: "ph-row" }, a("span", { class: "ph-row-label" }, e), ...t), B = (e, t) => a("input", {
+var B = (e, ...t) => o("div", { class: "ph-row" }, o("span", { class: "ph-row-label" }, e), ...t), V = (e, t) => o("input", {
 	class: "ph-number",
 	type: "number",
 	min: 1,
@@ -561,183 +675,191 @@ var z = (e, ...t) => a("div", { class: "ph-row" }, a("span", { class: "ph-row-la
 	value: e,
 	"aria-label": t
 });
-function V(e, { width: t, height: n }) {
-	let r = "px", i = !0, o = B(t, S("resize.width")), s = B(n, S("resize.height")), c = a("span", { class: "ph-unit" }, "px"), d = a("span", { class: "ph-unit" }, "px"), f = a("div", { class: "ph-hint" }), p = a("button", {
+function te(e, { width: t, height: n }) {
+	let r = "px", i = !0, a = V(t, C("resize.width")), s = V(n, C("resize.height")), c = o("span", { class: "ph-unit" }, "px"), l = o("span", { class: "ph-unit" }, "px"), u = o("div", { class: "ph-hint" }), p = o("button", {
 		class: "ph-lock",
 		type: "button",
 		"aria-pressed": "true",
-		title: S("resize.keepRatio"),
-		"aria-label": S("resize.keepRatio"),
+		title: C("resize.keepRatio"),
+		"aria-label": C("resize.keepRatio"),
 		onclick: () => {
 			i = !i, p.setAttribute("aria-pressed", String(i)), i && _("w");
 		}
-	}, y("link")), m = "high", h = () => {
-		let e = Number(o.value), i = Number(s.value);
+	}, x("link")), m = "high", h = () => {
+		let e = Number(a.value), i = Number(s.value);
 		return r === "px" ? [Math.round(e), Math.round(i)] : [Math.round(t * e / 100), Math.round(n * i / 100)];
 	}, g = () => {
 		let [e, r] = h();
-		f.textContent = e > 0 && r > 0 ? S("resize.result", {
+		u.textContent = e > 0 && r > 0 ? C("resize.result", {
 			width: t,
 			height: n,
 			newWidth: e,
 			newHeight: r
-		}) : S("resize.missing");
+		}) : C("resize.missing");
 	}, _ = (e) => {
-		i && (r === "%" ? (e === "w" ? s : o).value = (e === "w" ? o : s).value : e === "w" ? s.value = Math.max(1, Math.round(Number(o.value) * n / t)) : o.value = Math.max(1, Math.round(Number(s.value) * t / n))), g();
+		i && (r === "%" ? (e === "w" ? s : a).value = (e === "w" ? a : s).value : e === "w" ? s.value = Math.max(1, Math.round(Number(a.value) * n / t)) : a.value = Math.max(1, Math.round(Number(s.value) * t / n))), g();
 	};
-	o.addEventListener("input", () => _("w")), s.addEventListener("input", () => _("h"));
-	let v = l({
+	a.addEventListener("input", () => _("w")), s.addEventListener("input", () => _("h"));
+	let v = d({
 		value: "px",
-		label: S("resize.unit"),
+		label: C("resize.unit"),
 		options: [{
 			value: "px",
-			label: S("resize.pixels")
+			label: C("resize.pixels")
 		}, {
 			value: "%",
-			label: S("resize.percent")
+			label: C("resize.percent")
 		}],
 		onChange: (e) => {
-			let [i, a] = h();
-			r = e, c.textContent = d.textContent = e, o.value = e === "px" ? i : Math.round(i / t * 100), s.value = e === "px" ? a : Math.round(a / n * 100), g();
+			let [i, o] = h();
+			r = e, c.textContent = l.textContent = e, a.value = e === "px" ? i : Math.round(i / t * 100), s.value = e === "px" ? o : Math.round(o / n * 100), g();
 		}
 	});
-	return g(), R(e, {
-		title: S("resize.title"),
-		symbol: "resize",
-		okLabel: S("resize.ok"),
-		focus: o,
+	return g(), z(e, {
+		title: C("resize.title"),
+		okLabel: C("resize.ok"),
+		focus: a,
 		rows: [
-			z(S("resize.unit"), v),
-			a("div", { class: "ph-row" }, a("span", { class: "ph-row-label" }, S("resize.size")), a("div", { class: "ph-size" }, a("label", { class: "ph-size-field" }, o, c), p, a("label", { class: "ph-size-field" }, s, d))),
-			z(S("resize.quality"), u({
+			B(C("resize.unit"), v),
+			o("div", { class: "ph-row" }, o("span", { class: "ph-row-label" }, C("resize.size")), o("div", { class: "ph-size" }, o("label", { class: "ph-size-field" }, a, c), p, o("label", { class: "ph-size-field" }, s, l))),
+			B(C("resize.quality"), f({
 				value: m,
-				label: S("resize.quality"),
+				label: C("resize.quality"),
 				options: [
 					{
 						value: "high",
-						label: S("resize.quality.high")
+						label: C("resize.quality.high")
 					},
 					{
 						value: "medium",
-						label: S("resize.quality.medium")
+						label: C("resize.quality.medium")
 					},
 					{
 						value: "pixel",
-						label: S("resize.quality.pixel")
+						label: C("resize.quality.pixel")
 					}
 				],
 				onChange: (e) => {
 					m = e;
 				}
 			})),
-			f
+			u
 		],
 		collect: () => {
-			let [e, a] = h();
-			if (!(e > 0 && a > 0) || e > 16384 || a > 16384) {
-				f.textContent = S("resize.outOfRange");
+			let [e, o] = h();
+			if (!(e > 0 && o > 0) || e > 16384 || o > 16384) {
+				u.textContent = C("resize.outOfRange");
 				return;
 			}
-			if (e === t && a === n) return null;
+			if (e === t && o === n) return null;
 			let c = r === "%", l = {
-				width: c ? Number(o.value) : e,
-				height: c ? Number(s.value) : a,
+				width: c ? Number(a.value) : e,
+				height: c ? Number(s.value) : o,
 				unit: c ? "percent" : "pixels",
 				keepRatio: i,
 				quality: m
 			};
 			return {
 				width: e,
-				height: a,
+				height: o,
 				quality: m,
 				asked: l
 			};
 		}
 	});
 }
-function H(e, t, { name: n, folder: r, format: o = "png", title: s = S("convert.title"), okLabel: c = S("action.save") }) {
-	let u = C.filter(j), f = u.find((e) => e.id === o) ?? u[0], p = r, h = 90, g = !0, v = n.replace(/\.[^.]+$/, "") || S("file.defaultName"), b = a("input", {
+function ne(e, t, { name: n, folder: r, format: i = "png", title: s = C("convert.title"), okLabel: c = C("action.save") }) {
+	let l = T.filter(N), u = l.find((e) => e.id === i) ?? l[0], f = r, m = 90, h = !0, _ = n.replace(/\.[^.]+$/, "") || C("file.defaultName"), v = o("input", {
 		class: "ph-text",
 		type: "text",
 		spellcheck: "false",
-		"aria-label": S("convert.fileName")
+		"aria-label": C("convert.fileName")
 	});
-	b.value = `${v}.${f.ext}`;
-	let x = a("div", { class: "ph-hint" }), w = z(S("convert.quality"), d({
-		value: h,
+	v.value = `${_}.${u.ext}`;
+	let b = o("div", { class: "ph-hint" }), S = B(C("convert.quality"), p({
+		value: m,
 		min: 10,
 		max: 100,
 		unit: "%",
-		label: S("convert.quality"),
+		label: C("convert.quality"),
 		onChange: (e) => {
-			h = e;
+			m = e;
 		}
-	})), T = w.querySelector("input");
-	T.addEventListener("input", () => {
-		h = Number(T.value);
+	})), w = S.querySelector("input");
+	w.addEventListener("input", () => {
+		m = Number(w.value);
 	});
-	let E = a("span", { class: "ph-folder-name" }), D = a("button", {
+	let E = o("span", { class: "ph-folder-name" }), D = o("button", {
 		class: "ph-folder",
 		type: "button",
 		onclick: async () => {
-			let e = await _(t, {
+			let e = await y(t, {
 				kind: "folder",
-				title: S("convert.pickFolder.title"),
-				text: S("convert.pickFolder.text")
+				title: C("convert.pickFolder.title"),
+				text: C("convert.pickFolder.text")
 			});
-			e && (p = e.id, O());
+			e && (f = e.id, O());
 		}
-	}, y("folder"), E), O = () => {
-		let e = i.get(p);
-		E.textContent = e ? p === i.root ? S("folder.home") : e.name : S("convert.chooseFolder"), D.title = e ? i.path(p) : "";
+	}, x("folder"), E), O = () => {
+		let e = a.get(f);
+		E.textContent = e ? f === a.root ? C("folder.home") : e.name : C("convert.chooseFolder"), D.title = e ? a.path(f) : "";
 	}, k = () => {
-		w.classList.toggle("off", !f.lossy), T.disabled = !f.lossy, x.textContent = f.note;
+		S.classList.toggle("off", !u.lossy), w.disabled = !u.lossy, b.textContent = u.note;
 	};
-	return O(), k(), R(e, {
+	return O(), k(), z(e, {
 		title: s,
-		symbol: "convert",
 		okLabel: c,
-		focus: b,
+		focus: v,
 		rows: [
-			z(S("convert.format"), l({
-				value: f.id,
-				label: S("convert.format"),
-				options: u.map((e) => ({
+			B(C("convert.format"), d({
+				value: u.id,
+				label: C("convert.format"),
+				options: l.map((e) => ({
 					value: e.id,
 					label: e.label
 				})),
 				onChange: (e) => {
-					f = u.find((t) => t.id === e), b.value = `${b.value.replace(/\.[^.]+$/, "") || v}.${f.ext}`, k();
+					u = l.find((t) => t.id === e), v.value = `${v.value.replace(/\.[^.]+$/, "") || _}.${u.ext}`, k();
 				}
 			})),
-			w,
-			z(S("convert.name"), b),
-			a("div", { class: "ph-row" }, a("span", { class: "ph-row-label" }, S("convert.folder")), D),
-			a("div", { class: "ph-row" }, a("span", { class: "ph-row-label" }, S("convert.openAfter")), m({
-				value: g,
-				label: S("convert.openAfterLabel"),
+			S,
+			B(C("convert.name"), v),
+			o("div", { class: "ph-row" }, o("span", { class: "ph-row-label" }, C("convert.folder")), D),
+			o("div", { class: "ph-row" }, o("span", { class: "ph-row-label" }, C("convert.openAfter")), g({
+				value: h,
+				label: C("convert.openAfterLabel"),
 				onChange: (e) => {
-					g = e;
+					h = e;
 				}
 			})),
-			x
+			b
 		],
 		collect: () => {
-			let e = i.get(p), t = b.value.trim();
-			if (!e || e.type !== "folder") x.textContent = S("convert.noFolder");
-			else if (!t || t.includes("/")) x.textContent = S("convert.badName"), b.focus();
+			let e = a.get(f), t = v.value.trim();
+			if (!e || e.type !== "folder") b.textContent = C("convert.noFolder");
+			else if (!t || t.includes("/")) b.textContent = C("convert.badName"), v.focus();
 			else return {
-				format: f,
-				quality: h / 100,
+				format: u,
+				quality: m / 100,
 				name: t,
-				folder: p,
-				open: g
+				folder: f,
+				open: h
 			};
 		}
 	});
 }
+var H = 2048, U = 1024, re = (e, t = U) => Number.isFinite(e) ? Math.min(H, Math.max(16, Math.round(e))) : t;
+function ie(e, t, { size: n = U } = {}) {
+	e.handle(async (e) => typeof e?.file == "string" ? t(e.file, re(e.size, n)) : null);
+}
+async function ae(e, t = .85) {
+	let n = e;
+	typeof n?.toBlob != "function" && (n = document.createElement("canvas"), n.width = Math.max(1, e.width), n.height = Math.max(1, e.height), n.getContext("2d").drawImage(e, 0, 0));
+	let r = (e) => new Promise((r) => n.toBlob(r, e, t)), i = await r("image/webp");
+	return i?.type === "image/webp" ? i : r("image/png");
+}
 // src/photo/preview.js
-var U = 1024, te = 16, ne = 2048, re = {
+var oe = {
 	png: "image/png",
 	jpg: "image/jpeg",
 	jpeg: "image/jpeg",
@@ -748,88 +870,87 @@ var U = 1024, te = 16, ne = 2048, re = {
 	ico: "image/x-icon",
 	svg: "image/svg+xml"
 };
-function ie({ lilos: e }) {
-	e.handle(async (t) => {
-		if (typeof t?.file != "string") return null;
-		let n = await e.files.info(t.file), r = D(n.name);
-		if (!w.includes(r) || !n.size) return null;
-		let i = await e.files.read(t.file, { bytes: !0 }), a;
+function se({ lilos: e }) {
+	ie(e, async (t, n) => {
+		let r = await e.files.info(t), i = k(r.name);
+		if (!E.includes(i) || !r.size) return null;
+		let a = await e.files.read(t, { bytes: !0 }), o;
 		try {
-			a = await P(new Blob([i], { type: re[r] }));
+			o = await I(new Blob([a], { type: oe[i] }));
 		} catch {
 			return null;
 		}
-		let o = Number.isFinite(t.size) ? Math.min(ne, Math.max(te, Math.round(t.size))) : U, s = Math.min(1, o / Math.max(a.width, a.height)), c = s < 1 ? I(a, a.width * s, a.height * s) : a, l = C.find((e) => e.id === "webp");
-		return { image: await F(c, j(l) ? l : C[0], .85) };
+		let s = Math.min(1, n / Math.max(o.width, o.height));
+		return { image: await ae(s < 1 ? R(o, o.width * s, o.height * s) : o) };
 	});
 }
 // src/photo/PhotoApp.js
 var W = () => [
 	{
 		value: "#ffffff",
-		label: S("color.white")
+		label: C("color.white")
 	},
 	{
 		value: "#1f2328",
-		label: S("color.black")
+		label: C("color.black")
 	},
 	{
 		value: "#e5484d",
-		label: S("color.red")
+		label: C("color.red")
 	},
 	{
 		value: "#f2994a",
-		label: S("color.orange")
+		label: C("color.orange")
 	},
 	{
 		value: "#f2c94c",
-		label: S("color.yellow")
+		label: C("color.yellow")
 	},
 	{
 		value: "#30a46c",
-		label: S("color.green")
+		label: C("color.green")
 	},
 	{
 		value: "#3b6ef5",
-		label: S("color.blue")
+		label: C("color.blue")
 	},
 	{
 		value: "#7c5cdb",
-		label: S("color.purple")
+		label: C("color.purple")
 	}
 ], G = [
 	{
 		value: "sans",
-		label: () => S("font.sans"),
+		label: () => C("font.sans"),
 		css: "system-ui, \"Segoe UI\", Roboto, sans-serif"
 	},
 	{
 		value: "serif",
-		label: () => S("font.serif"),
+		label: () => C("font.serif"),
 		css: "Georgia, \"Times New Roman\", serif"
 	},
 	{
 		value: "mono",
-		label: () => S("font.mono"),
+		label: () => C("font.mono"),
 		css: "ui-monospace, Consolas, \"Courier New\", monospace"
 	},
 	{
 		value: "hand",
-		label: () => S("font.hand"),
+		label: () => C("font.hand"),
 		css: "\"Segoe Print\", \"Bradley Hand\", \"Comic Sans MS\", cursive"
 	}
-], ae = () => [
+], ce = () => [
 	{
 		value: "free",
-		label: S("ratio.free")
+		label: C("ratio.free")
 	},
 	{
 		value: "image",
-		label: S("ratio.image")
+		label: C("ratio.image")
 	},
 	{
 		value: "1",
-		label: S("ratio.square")
+		label: C("ratio.square")
 	},
 	{
 		value: "4/3",
@@ -858,25 +979,25 @@ var W = () => [
 ], K = [
 	{
 		id: "view",
-		label: () => S("tool.view"),
+		label: () => C("tool.view"),
 		key: "V",
 		glyph: "hand"
 	},
 	{
 		id: "brush",
-		label: () => S("tool.brush"),
+		label: () => C("tool.brush"),
 		key: "B",
 		glyph: "brush"
 	},
 	{
 		id: "text",
-		label: () => S("tool.text"),
+		label: () => C("tool.text"),
 		key: "T",
 		glyph: "text"
 	},
 	{
 		id: "crop",
-		label: () => S("tool.crop"),
+		label: () => C("tool.crop"),
 		key: "C",
 		glyph: "crop"
 	}
@@ -897,8 +1018,8 @@ var W = () => [
 	8,
 	12,
 	16
-], J = 1.2, oe = 20, Y = 16384, X = () => e.automation ?? null;
-function se({ args: e, openWindow: t } = {}) {
+], J = 1.2, le = 20, Y = 16384, X = () => e.automation ?? null;
+function ue({ args: e, openWindow: t } = {}) {
 	let r = new n({
 		title: "Photo",
 		icon: "image",
@@ -906,15 +1027,15 @@ function se({ args: e, openWindow: t } = {}) {
 		height: 620,
 		minWidth: 560,
 		minHeight: 360
-	}), a = new le(r, t);
-	return e?.file && i.exists(e.file) ? a.open(e.file) : a.render(), r.on("launch", (e) => {
-		e?.file && i.exists(e.file) && a.open(e.file);
-	}), r.canClose = () => a.confirmDiscard(), r.getState = () => ({ file: a.fileId }), r;
+	}), i = new fe(r, t);
+	return e?.file && a.exists(e.file) ? i.open(e.file) : i.render(), r.on("launch", (e) => {
+		e?.file && a.exists(e.file) && i.open(e.file);
+	}), r.canClose = () => i.confirmDiscard(), r.getState = () => ({ file: i.fileId }), r;
 }
-var Z = (e, t, n) => Math.min(n, Math.max(t, e)), ce = (e, t) => e.name.localeCompare(t.name, void 0, {
+var Z = (e, t, n) => Math.min(n, Math.max(t, e)), de = (e, t) => e.name.localeCompare(t.name, void 0, {
 	numeric: !0,
 	sensitivity: "base"
-}), Q = (e) => w.includes(D(e)), le = class {
+}), Q = (e) => E.includes(k(e)), fe = class {
 	fileId = null;
 	name = "";
 	canvas = null;
@@ -944,28 +1065,28 @@ var Z = (e, t, n) => Math.min(n, Math.max(t, e)), ce = (e, t) => e.name.localeCo
 	#p = null;
 	#m = "";
 	constructor(e, n) {
-		this.win = e, this.openWindow = n ?? (() => {}), this.stack = new t({ limit: oe });
-		let { signal: r } = e, c = (e, t, n) => a("button", {
+		this.win = e, this.openWindow = n ?? (() => {}), this.stack = new t({ limit: le });
+		let { signal: r } = e, i = (e, t, n) => o("button", {
 			class: "ph-btn",
 			type: "button",
 			title: t,
 			"aria-label": t,
 			onclick: n
-		}, y(e));
-		this.undoBtn = c("undo", S("toolbar.undo"), () => this.stack.undo()), this.redoBtn = c("redo", S("toolbar.redo"), () => this.stack.redo()), this.saveBtn = c("save", S("toolbar.save"), () => this.save()), this.downloadBtn = c("download", S("toolbar.download"), () => this.download()), this.revealBtn = c("folder", S("toolbar.reveal"), () => this.reveal()), this.toolBtns = K.map((e) => {
-			let t = c(e.glyph, S("toolbar.tool", {
+		}, x(e));
+		this.undoBtn = i("undo", C("toolbar.undo"), () => this.stack.undo()), this.redoBtn = i("redo", C("toolbar.redo"), () => this.stack.redo()), this.saveBtn = i("save", C("toolbar.save"), () => this.save()), this.downloadBtn = i("download", C("toolbar.download"), () => this.download()), this.revealBtn = i("folder", C("toolbar.reveal"), () => this.reveal()), this.toolBtns = K.map((e) => {
+			let t = i(e.glyph, C("toolbar.tool", {
 				label: e.label(),
 				key: e.key
 			}), () => this.setTool(e.id));
 			return t.dataset.tool = e.id, t;
 		});
-		let l = (e, t, n, r) => a("button", {
+		let l = (e, t, n, r) => o("button", {
 			class: "ph-btn ph-labelled",
 			type: "button",
 			title: n,
 			onclick: r
-		}, y(e), a("span", {}, t));
-		this.resizeBtn = l("resize", S("toolbar.resize"), S("toolbar.resize.title"), () => this.resize()), this.convertBtn = l("convert", S("toolbar.convert"), S("toolbar.convert.title"), () => this.convert()), this.fileInput = a("input", {
+		}, x(e), o("span", {}, t));
+		this.resizeBtn = l("resize", C("toolbar.resize"), C("toolbar.resize.title"), () => this.resize()), this.convertBtn = l("convert", C("toolbar.convert"), C("toolbar.convert.title"), () => this.convert()), this.fileInput = o("input", {
 			type: "file",
 			accept: "image/*,.svg",
 			multiple: !0,
@@ -977,14 +1098,14 @@ var Z = (e, t, n) => Math.min(n, Math.max(t, e)), ce = (e, t) => e.name.localeCo
 			brush: this.#W(),
 			text: this.#G(),
 			crop: this.#K()
-		}, this.banner = a("div", {
+		}, this.banner = o("div", {
 			class: "ph-banner",
 			role: "alertdialog",
 			hidden: !0
-		}), this.overlay = a("canvas", {
+		}), this.overlay = o("canvas", {
 			class: "ph-overlay",
 			"aria-hidden": "true"
-		}), this.cropFrame = a("div", {
+		}), this.cropFrame = o("div", {
 			class: "ph-crop",
 			hidden: !0
 		}, ...[
@@ -996,46 +1117,46 @@ var Z = (e, t, n) => Math.min(n, Math.max(t, e)), ce = (e, t) => e.name.localeCo
 			"s",
 			"sw",
 			"w"
-		].map((e) => a("span", {
+		].map((e) => o("span", {
 			class: "ph-handle",
 			dataset: { handle: e }
-		})), this.cropSize = a("span", { class: "ph-crop-size" })), this.paper = a("div", { class: "ph-paper" }, this.overlay, this.cropFrame), this.stage = a("div", {
+		})), this.cropSize = o("span", { class: "ph-crop-size" })), this.paper = o("div", { class: "ph-paper" }, this.overlay, this.cropFrame), this.stage = o("div", {
 			class: "ph-stage",
 			tabindex: "0",
-			"aria-label": S("stage.label")
-		}, this.paper), this.prevBtn = a("button", {
+			"aria-label": C("stage.label")
+		}, this.paper), this.prevBtn = o("button", {
 			class: "ph-nav ph-prev",
 			type: "button",
-			title: S("nav.previous.title"),
-			"aria-label": S("nav.previous"),
+			title: C("nav.previous.title"),
+			"aria-label": C("nav.previous"),
 			onclick: () => this.step(-1)
-		}, s("arrowLeft")), this.nextBtn = a("button", {
+		}, c("arrowLeft")), this.nextBtn = o("button", {
 			class: "ph-nav ph-next",
 			type: "button",
-			title: S("nav.next.title"),
-			"aria-label": S("nav.next"),
+			title: C("nav.next.title"),
+			"aria-label": C("nav.next"),
 			onclick: () => this.step(1)
-		}, s("arrowRight")), this.empty = a("div", { class: "ph-empty" }), this.dropHint = a("div", {
+		}, c("arrowRight")), this.empty = o("div", { class: "ph-empty" }), this.dropHint = o("div", {
 			class: "ph-drop",
 			hidden: !0
-		}, y("upload"), a("span", {}, S("drop.hint"))), this.main = a("div", { class: "ph-main" }, this.stage, this.prevBtn, this.nextBtn, this.empty, this.dropHint), this.dims = a("span", { class: "ph-mono" }), this.info = a("span"), this.position = a("span"), this.state = a("span", { class: "ph-state" }), this.zoomLabel = a("button", {
+		}, x("upload"), o("span", {}, C("drop.hint"))), this.main = o("div", { class: "ph-main" }, this.stage, this.prevBtn, this.nextBtn, this.empty, this.dropHint), this.dims = o("span", { class: "ph-mono" }), this.info = o("span"), this.position = o("span"), this.state = o("span", { class: "ph-state" }), this.zoomLabel = o("button", {
 			class: "ph-zoom-value",
 			type: "button",
-			title: S("zoom.fitToWindow"),
+			title: C("zoom.fitToWindow"),
 			onclick: () => this.fitToWindow()
 		});
-		let u = (e, t, n) => a("button", {
+		let u = (e, t, n) => o("button", {
 			class: "ph-zoom-btn",
 			type: "button",
 			title: t,
 			"aria-label": t,
 			onclick: n
-		}, y(e));
-		e.body.classList.add("ph"), e.body.append(a("div", { class: "ph-toolbar" }, c("open", S("toolbar.open"), () => this.openFile()), c("upload", S("toolbar.import"), () => this.fileInput.click()), this.saveBtn, this.downloadBtn, a("span", { class: "ph-sep" }), this.undoBtn, this.redoBtn, a("span", { class: "ph-sep" }), a("span", {
+		}, x(e));
+		e.body.classList.add("ph"), e.body.append(o("div", { class: "ph-toolbar" }, i("open", C("toolbar.open"), () => this.openFile()), i("upload", C("toolbar.import"), () => this.fileInput.click()), this.saveBtn, this.downloadBtn, o("span", { class: "ph-sep" }), this.undoBtn, this.redoBtn, o("span", { class: "ph-sep" }), o("span", {
 			class: "ph-tools",
 			role: "group",
-			"aria-label": S("toolbar.tools")
-		}, this.toolBtns), a("span", { class: "ph-sep" }), this.resizeBtn, this.convertBtn, a("span", { class: "ph-grow" }), this.revealBtn, this.fileInput), ...Object.values(this.options), this.banner, this.main, a("div", { class: "ph-status" }, this.dims, this.info, this.position, this.state, a("span", { class: "ph-grow" }), u("minus", S("zoom.out"), () => this.zoomStep(-1)), this.zoomLabel, u("plus", S("zoom.in"), () => this.zoomStep(1)), u("fit", S("zoom.fit"), () => this.fitToWindow()), u("actual", S("zoom.actual"), () => this.zoomTo(1)))), this.paper.addEventListener("pointerdown", (e) => this.#T(e), { signal: r }), this.stage.addEventListener("pointerdown", (e) => this.#w(e), { signal: r }), this.stage.addEventListener("wheel", (e) => this.#R(e), {
+			"aria-label": C("toolbar.tools")
+		}, this.toolBtns), o("span", { class: "ph-sep" }), this.resizeBtn, this.convertBtn, o("span", { class: "ph-grow" }), this.revealBtn, this.fileInput), ...Object.values(this.options), this.banner, this.main, o("div", { class: "ph-status" }, this.dims, this.info, this.position, this.state, o("span", { class: "ph-grow" }), u("minus", C("zoom.out"), () => this.zoomStep(-1)), this.zoomLabel, u("plus", C("zoom.in"), () => this.zoomStep(1)), u("fit", C("zoom.fit"), () => this.fitToWindow()), u("actual", C("zoom.actual"), () => this.zoomTo(1)))), this.paper.addEventListener("pointerdown", (e) => this.#T(e), { signal: r }), this.stage.addEventListener("pointerdown", (e) => this.#w(e), { signal: r }), this.stage.addEventListener("wheel", (e) => this.#R(e), {
 			signal: r,
 			passive: !1
 		}), e.body.addEventListener("keydown", (e) => this.#z(e), { signal: r }), this.#B(r), addEventListener("beforeunload", (e) => {
@@ -1046,18 +1167,18 @@ var Z = (e, t, n) => Math.min(n, Math.max(t, e)), ce = (e, t) => e.name.localeCo
 		});
 		d.observe(this.stage);
 		let f = [
-			i.on("change", (e) => this.#v(e)),
-			i.on("scope", () => this.render()),
+			a.on("change", (e) => this.#v(e)),
+			a.on("scope", () => this.render()),
 			this.stack.on("change", () => this.render()),
-			h("photo.save", {
+			_("photo.save", {
 				isActive: () => e.active,
 				run: () => this.save()
 			}),
-			h("photo.open", {
+			_("photo.open", {
 				isActive: () => e.active,
 				run: () => this.openFile()
 			}),
-			o.attach(e.body, this.stack)
+			s.attach(e.body, this.stack)
 		];
 		e.on("destroy", () => {
 			f.forEach((e) => e()), d.disconnect();
@@ -1085,186 +1206,186 @@ var Z = (e, t, n) => Math.min(n, Math.max(t, e)), ce = (e, t) => e.name.localeCo
 		return !!this.canvas && this.#n !== this.#r;
 	}
 	get node() {
-		return this.fileId ? i.get(this.fileId) : null;
+		return this.fileId ? a.get(this.fileId) : null;
 	}
 	async open(e) {
-		let t = i.get(e);
-		if (!t || t.type !== "file" || e === this.fileId && this.canvas && !this.#e || !await this.confirmDiscard(S("confirm.unsaved.beforeOpen", {
+		let t = a.get(e);
+		if (!t || t.type !== "file" || e === this.fileId && this.canvas && !this.#e || !await this.confirmDiscard(C("confirm.unsaved.beforeOpen", {
 			name: this.name,
 			other: t.name
 		}))) return;
 		this.#j();
 		let n = ++this.#t;
-		this.#m = S("status.opening"), this.render();
-		let r = null, a = "";
+		this.#m = C("status.opening"), this.render();
+		let r = null, i = "";
 		try {
-			r = await P(await i.readBlob(e));
+			r = await I(await a.readBlob(e));
 		} catch (e) {
-			a = e?.name === "EncodingError" || e instanceof DOMException ? S("error.unsupported", { name: t.name }) : S("error.unreadable", {
+			i = e?.name === "EncodingError" || e instanceof DOMException ? C("error.unsupported", { name: t.name }) : C("error.unreadable", {
 				name: t.name,
 				error: e?.message ?? e
 			});
 		}
-		n === this.#t && (this.#m = "", this.fileId = e, this.name = t.name, this.#e = a, this.#y(r), this.stack.clear(), this.#n = this.#r = ++this.#i, this.#S(), this.#o = !0, this.render(), this.#s === "crop" && this.#N(), this.#L(), this.stage.focus({ preventScroll: !0 }));
+		n === this.#t && (this.#m = "", this.fileId = e, this.name = t.name, this.#e = i, this.#y(r), this.stack.clear(), this.#n = this.#r = ++this.#i, this.#S(), this.#o = !0, this.render(), this.#s === "crop" && this.#N(), this.#L(), this.stage.focus({ preventScroll: !0 }));
 	}
 	async openFile() {
-		let e = await _(this.openWindow, {
-			title: S("pick.open.title"),
-			exts: w
+		let e = await y(this.openWindow, {
+			title: C("pick.open.title"),
+			exts: E
 		});
 		e && this.open(e.id);
 	}
 	async importFiles(e) {
 		let t = e.filter((e) => Q(e.name) || e.type.startsWith("image/"));
-		if (e.length && !t.length) return p(e.length === 1 ? S("import.notImage", { name: e[0].name }) : S("import.noImages"));
+		if (e.length && !t.length) return h(e.length === 1 ? C("import.notImage", { name: e[0].name }) : C("import.noImages"));
 		if (!t.length) return;
-		let n = this.node && i.get(this.node.parent), r = n?.type === "folder" ? n : i.resolve("/Immagini") ?? i.get(i.root), a = null;
+		let n = this.node && a.get(this.node.parent), r = n?.type === "folder" ? n : a.resolve("/Immagini") ?? a.get(a.root), i = null;
 		for (let e of t) {
-			let t = Q(e.name) ? e.name : `${e.name || S("file.defaultName")}.${e.type.split("/")[1] ?? "png"}`, n = i.create(r.id, {
+			let t = Q(e.name) ? e.name : `${e.name || C("file.defaultName")}.${e.type.split("/")[1] ?? "png"}`, n = a.create(r.id, {
 				type: "file",
 				name: t
 			});
 			try {
-				await i.write(n.id, e), a ??= n;
+				await a.write(n.id, e), i ??= n;
 			} catch (t) {
-				i.remove(n.id), p(S("import.failed", {
+				a.remove(n.id), h(C("import.failed", {
 					name: e.name,
 					error: t?.message ?? t
 				}));
 			}
 		}
-		a && (p(S("import.done", {
+		i && (h(C("import.done", {
 			n: t.length,
-			folder: r.id === i.root ? S("folder.home") : r.name
-		})), this.open(a.id));
+			folder: r.id === a.root ? C("folder.home") : r.name
+		})), this.open(i.id));
 	}
 	async save() {
 		if (this.#A(), !this.canvas) return !1;
-		let e = this.node, t = e && k(e.name);
+		let e = this.node, t = e && j(e.name);
 		if (!t) return this.convert({
-			title: e ? S("save.cannotWrite", { format: O(e.name) }) : S("save.fileGone"),
-			okLabel: S("save.saveCopy"),
+			title: e ? C("save.cannotWrite", { format: A(e.name) }) : C("save.fileGone"),
+			okLabel: C("save.saveCopy"),
 			open: !0
 		});
 		try {
-			await i.write(e.id, await F(this.canvas, t));
+			await a.write(e.id, await L(this.canvas, t));
 		} catch (e) {
-			return p(`Non salvata: ${e?.message ?? e}`), !1;
+			return h(`Non salvata: ${e?.message ?? e}`), !1;
 		}
 		this.#r = this.#n, X()?.record("photo.save", { file: e.id });
-		let n = this.#m = S("status.saved");
+		let n = this.#m = C("status.saved");
 		return this.render(), setTimeout(() => {
 			this.#m === n && (this.#m = "", this.render());
 		}, 2e3), !0;
 	}
 	async saveInPlace() {
-		if (!this.canvas) throw Error(S("automation.noImage"));
+		if (!this.canvas) throw Error(C("automation.noImage"));
 		let e = this.node;
-		if (!e || !k(e.name)) throw Error(e ? S("save.cannotWrite", { format: O(e.name) }) : S("save.fileGone"));
-		if (!await this.save()) throw Error(S("automation.notSaved"));
+		if (!e || !j(e.name)) throw Error(e ? C("save.cannotWrite", { format: A(e.name) }) : C("save.fileGone"));
+		if (!await this.save()) throw Error(C("automation.notSaved"));
 	}
 	#h() {
-		let e = this.node, t = e && i.get(e.parent)?.type === "folder" ? e.parent : (i.resolve("/Immagini") ?? i.get(i.root)).id, n = e && k(e.name);
+		let e = this.node, t = e && a.get(e.parent)?.type === "folder" ? e.parent : (a.resolve("/Immagini") ?? a.get(a.root)).id, n = e && j(e.name);
 		return {
-			name: this.name || `${S("file.defaultName")}.png`,
+			name: this.name || `${C("file.defaultName")}.png`,
 			folder: t,
 			format: n?.id === "png" ? "jpeg" : "png"
 		};
 	}
 	async #g({ format: e, quality: t, name: n, folder: r }) {
-		let a = await F(this.canvas, e, t), o = i.create(r, {
+		let i = await L(this.canvas, e, t), o = a.create(r, {
 			type: "file",
 			name: n
 		});
 		try {
-			await i.write(o.id, a);
+			await a.write(o.id, i);
 		} catch (e) {
-			throw i.remove(o.id), e;
+			throw a.remove(o.id), e;
 		}
 		return {
 			copy: o,
-			blob: a
+			blob: i
 		};
 	}
 	async convert({ title: e, okLabel: t, open: n } = {}) {
 		if (this.#A(), !this.canvas) return !1;
-		let r = this.#h(), i = await H(this.win.body, this.openWindow, {
+		let r = this.#h(), a = await ne(this.win, this.openWindow, {
 			...r,
 			title: e,
 			okLabel: t
 		});
-		if (!i) return !1;
-		n !== void 0 && (i.open = n);
-		let a = this.fileId, o, s;
+		if (!a) return !1;
+		n !== void 0 && (a.open = n);
+		let o = this.fileId, s, c;
 		try {
-			({copy: o, blob: s} = await this.#g(i));
+			({copy: s, blob: c} = await this.#g(a));
 		} catch (e) {
-			return p(`Non salvata: ${e?.message ?? e}`), !1;
+			return h(`Non salvata: ${e?.message ?? e}`), !1;
 		}
-		let c = r.name.replace(/\.[^.]+$/, "") || S("file.defaultName");
+		let l = r.name.replace(/\.[^.]+$/, "") || C("file.defaultName");
 		return X()?.record("photo.saveAs", {
 			params: {
-				format: i.format.id,
-				quality: Math.round(i.quality * 100),
-				name: i.name,
-				folder: i.folder,
-				open: i.open
+				format: a.format.id,
+				quality: Math.round(a.quality * 100),
+				name: a.name,
+				folder: a.folder,
+				open: a.open
 			},
 			defaults: {
 				format: r.format,
 				quality: 90,
-				name: `${c}.${C.find((e) => e.id === r.format).ext}`,
+				name: `${l}.${T.find((e) => e.id === r.format).ext}`,
 				folder: r.folder,
 				open: !0
 			},
-			file: a,
-			result: o.id
-		}), i.open ? (this.#r = this.#n, await this.open(o.id)) : p(S("convert.saved", {
-			name: o.name,
-			size: L(s.size)
+			file: o,
+			result: s.id
+		}), a.open ? (this.#r = this.#n, await this.open(s.id)) : h(C("convert.saved", {
+			name: s.name,
+			size: i(c.size)
 		})), !0;
 	}
-	async saveCopy({ format: e, quality: t = 90, name: n, folder: r, open: a = !1 } = {}) {
-		if (this.#A(), !this.canvas) throw Error(S("automation.noImage"));
-		let o = this.#h(), s = C.find((t) => t.id === (e ?? o.format));
-		if (!s || !j(s)) throw Error(S("automation.badFormat"));
+	async saveCopy({ format: e, quality: t = 90, name: n, folder: r, open: i = !1 } = {}) {
+		if (this.#A(), !this.canvas) throw Error(C("automation.noImage"));
+		let o = this.#h(), s = T.find((t) => t.id === (e ?? o.format));
+		if (!s || !N(s)) throw Error(C("automation.badFormat"));
 		let c = r ?? o.folder;
-		if (i.get(c)?.type !== "folder") throw Error(S("convert.noFolder"));
-		let l = n?.trim() || `${o.name.replace(/\.[^.]+$/, "") || S("file.defaultName")}.${s.ext}`;
-		if (l.includes("/")) throw Error(S("convert.badName"));
+		if (a.get(c)?.type !== "folder") throw Error(C("convert.noFolder"));
+		let l = n?.trim() || `${o.name.replace(/\.[^.]+$/, "") || C("file.defaultName")}.${s.ext}`;
+		if (l.includes("/")) throw Error(C("convert.badName"));
 		let { copy: u } = await this.#g({
 			format: s,
 			quality: Z(Number(t) || 90, 10, 100) / 100,
 			name: l,
 			folder: c
 		});
-		return a && (this.#r = this.#n, await this.open(u.id)), u.id;
+		return i && (this.#r = this.#n, await this.open(u.id)), u.id;
 	}
 	async download() {
 		if (this.#A(), !this.canvas) return;
-		let e = this.node, t, n = this.name || `${S("file.defaultName")}.png`;
+		let e = this.node, t, n = this.name || `${C("file.defaultName")}.png`;
 		try {
-			if (e && !this.dirty) t = await i.readBlob(e.id);
+			if (e && !this.dirty) t = await a.readBlob(e.id);
 			else {
-				let e = k(n) ?? C[0];
-				k(n) || (n = `${n.replace(/\.[^.]+$/, "")}.png`), t = await F(this.canvas, e);
+				let e = j(n) ?? T[0];
+				j(n) || (n = `${n.replace(/\.[^.]+$/, "")}.png`), t = await L(this.canvas, e);
 			}
 		} catch (e) {
-			return p(S("error.notDownloaded", { error: e?.message ?? e }));
+			return h(C("error.notDownloaded", { error: e?.message ?? e }));
 		}
 		let r = URL.createObjectURL(t);
-		a("a", {
+		o("a", {
 			href: r,
 			download: n
 		}).click(), setTimeout(() => URL.revokeObjectURL(r), 3e4);
 	}
 	reveal() {
 		let e = this.node;
-		e && g("files", { folder: e.parent });
+		e && v("files", { folder: e.parent });
 	}
 	#_() {
 		let e = this.node;
-		return e ? i.children(e.parent).filter((e) => e.type === "file" && Q(e.name)).sort(ce) : [];
+		return e ? a.children(e.parent).filter((e) => e.type === "file" && Q(e.name)).sort(de) : [];
 	}
 	step(e) {
 		let t = this.#_(), n = t.findIndex((e) => e.id === this.fileId), r = t[n + e];
@@ -1275,16 +1396,16 @@ var Z = (e, t, n) => Math.min(n, Math.max(t, e)), ce = (e, t) => e.name.localeCo
 			let n = async (e) => {
 				this.banner.hidden = !0, this.banner.replaceChildren(), t(e === "save" ? await this.save() : e === "discard"), e === "cancel" && this.stage.focus();
 			}, i = r({
-				label: S("action.save"),
+				label: C("action.save"),
 				primary: !0,
 				onClick: () => n("save")
 			});
-			this.banner.replaceChildren(s("help"), a("span", { class: "ph-banner-text" }, e ?? S("confirm.unsaved", { name: this.name })), i, r({
-				label: S("confirm.discard"),
+			this.banner.replaceChildren(c("help"), o("span", { class: "ph-banner-text" }, e ?? C("confirm.unsaved", { name: this.name })), i, r({
+				label: C("confirm.discard"),
 				danger: !0,
 				onClick: () => n("discard")
 			}), r({
-				label: S("action.cancel"),
+				label: C("action.cancel"),
 				onClick: () => n("cancel")
 			})), this.banner.onkeydown = (e) => {
 				e.key === "Escape" && (e.stopPropagation(), n("cancel"));
@@ -1293,16 +1414,16 @@ var Z = (e, t, n) => Math.min(n, Math.max(t, e)), ce = (e, t) => e.name.localeCo
 	}
 	#v({ type: e, node: t, ids: n }) {
 		if (!this.fileId) return this.render();
-		(e === "rename" || e === "update") && t?.id === this.fileId && (this.name = t.name), e === "remove" && n?.includes(this.fileId) && (this.#m = S("status.fileGone")), this.render();
+		(e === "rename" || e === "update") && t?.id === this.fileId && (this.name = t.name), e === "remove" && n?.includes(this.fileId) && (this.#m = C("status.fileGone")), this.render();
 	}
 	#y(e) {
 		this.canvas?.remove(), this.canvas = e, e && (e.classList.add("ph-image"), this.paper.prepend(e), this.overlay.width = e.width, this.overlay.height = e.height);
 	}
 	#b(e, t) {
-		let n = N(this.canvas), r = this.#n, i = this.#n = ++this.#i, a = (e, t) => {
+		let n = F(this.canvas), r = this.#n, i = this.#n = ++this.#i, a = (e, t) => {
 			this.#j();
 			let n = e.width !== this.canvas?.width || e.height !== this.canvas?.height;
-			this.#y(N(e)), this.#n = t, this.#s === "crop" && this.#N(), n && (this.#o = !0), this.#L(), this.render();
+			this.#y(F(e)), this.#n = t, this.#s === "crop" && this.#N(), n && (this.#o = !0), this.#L(), this.render();
 		};
 		this.stack.push({
 			label: e,
@@ -1311,16 +1432,16 @@ var Z = (e, t, n) => Math.min(n, Math.max(t, e)), ce = (e, t) => e.name.localeCo
 		});
 	}
 	#x(e, t) {
-		let n = N(this.canvas);
+		let n = F(this.canvas);
 		this.#y(t), this.#o = !0, this.#b(e, n), this.#s === "crop" && this.#N(), this.#L(), this.render();
 	}
 	async resize() {
 		if (this.#A(), !this.canvas) return;
-		let { width: e, height: t } = this.canvas, n = await V(this.win.body, {
+		let { width: e, height: t } = this.canvas, n = await te(this.win, {
 			width: e,
 			height: t
 		});
-		n && (this.#x(S("history.resize"), I(this.canvas, n.width, n.height, n.quality)), X()?.record("photo.resize", {
+		n && (this.#x(C("history.resize"), R(this.canvas, n.width, n.height, n.quality)), X()?.record("photo.resize", {
 			params: n.asked,
 			defaults: {
 				width: e,
@@ -1333,10 +1454,10 @@ var Z = (e, t, n) => Math.min(n, Math.max(t, e)), ce = (e, t) => e.name.localeCo
 		}));
 	}
 	resizeTo({ width: e, height: t, unit: n = "pixels", keepRatio: r = !0, quality: i = "high" } = {}) {
-		if (this.#A(), !this.canvas) throw Error(S("automation.noImage"));
+		if (this.#A(), !this.canvas) throw Error(C("automation.noImage"));
 		let a = this.canvas.width, o = this.canvas.height, s, c;
-		if (n === "percent" ? (s = Math.round(a * e / 100), c = Math.round(o * (r ? e : t) / 100)) : (s = Math.round(e), c = r ? Math.max(1, Math.round(e * o / a)) : Math.round(t)), !(s > 0 && c > 0) || s > Y || c > Y) throw Error(S("resize.outOfRange"));
-		(s !== a || c !== o) && this.#x(S("history.resize"), I(this.canvas, s, c, [
+		if (n === "percent" ? (s = Math.round(a * e / 100), c = Math.round(o * (r ? e : t) / 100)) : (s = Math.round(e), c = r ? Math.max(1, Math.round(e * o / a)) : Math.round(t)), !(s > 0 && c > 0) || s > Y || c > Y) throw Error(C("resize.outOfRange"));
+		(s !== a || c !== o) && this.#x(C("history.resize"), R(this.canvas, s, c, [
 			"high",
 			"medium",
 			"pixel"
@@ -1384,7 +1505,7 @@ var Z = (e, t, n) => Math.min(n, Math.max(t, e)), ce = (e, t) => e.name.localeCo
 	}
 	#E(e) {
 		e.preventDefault();
-		let { size: t, opacity: n, mode: r } = this.#l, i = N(this.canvas), a = r === "eraser", o = (a ? this.canvas : this.overlay).getContext("2d");
+		let { size: t, opacity: n, mode: r } = this.#l, i = F(this.canvas), a = r === "eraser", o = (a ? this.canvas : this.overlay).getContext("2d");
 		o.save(), o.lineCap = o.lineJoin = "round", o.lineWidth = t, o.strokeStyle = o.fillStyle = this.#c, a && (o.globalCompositeOperation = "destination-out"), this.overlay.style.opacity = a ? "" : String(n / 100);
 		let s = this.#C(e);
 		o.beginPath(), o.arc(s.x, s.y, t / 2, 0, Math.PI * 2), o.fill();
@@ -1398,7 +1519,7 @@ var Z = (e, t, n) => Math.min(n, Math.max(t, e)), ce = (e, t) => e.name.localeCo
 				let e = this.canvas.getContext("2d");
 				e.save(), e.globalAlpha = n / 100, e.drawImage(this.overlay, 0, 0), e.restore(), o.clearRect(0, 0, this.overlay.width, this.overlay.height);
 			}
-			this.#b(S(a ? "history.erase" : "history.draw"), i), X()?.missed("photo", S("tool.brush")), this.render();
+			this.#b(C(a ? "history.erase" : "history.draw"), i), X()?.missed("photo", C("tool.brush")), this.render();
 		};
 		this.paper.setPointerCapture(e.pointerId), this.paper.addEventListener("pointermove", c), this.paper.addEventListener("pointerup", l), this.paper.addEventListener("pointercancel", l);
 	}
@@ -1407,10 +1528,10 @@ var Z = (e, t, n) => Math.min(n, Math.max(t, e)), ce = (e, t) => e.name.localeCo
 		return `${this.#u.bold ? 700 : 400} ${e}px ${t.css}`;
 	}
 	#O({ x: e, y: t }) {
-		let n = a("div", {
+		let n = o("div", {
 			class: "ph-textbox",
 			role: "textbox",
-			"aria-label": S("text.box"),
+			"aria-label": C("text.box"),
 			"aria-multiline": "true",
 			spellcheck: "false"
 		});
@@ -1439,8 +1560,8 @@ var Z = (e, t, n) => Math.min(n, Math.max(t, e)), ce = (e, t) => e.name.localeCo
 		if (!this.#p) return;
 		let { box: e, x: t, y: n } = this.#p, r = e.innerText.replace(/\n+$/, "").split("\n");
 		if (this.#j(), !r.some((e) => e.trim())) return;
-		let i = N(this.canvas), a = this.canvas.getContext("2d"), o = this.#u.size;
-		a.save(), a.font = this.#D(o), a.fillStyle = this.#c, a.textBaseline = "top", r.forEach((e, r) => a.fillText(e, t, n + o * .19999999999999996 / 2 + r * o * J)), a.restore(), this.#b(S("history.text"), i), X()?.missed("photo", S("tool.text")), this.render();
+		let i = F(this.canvas), a = this.canvas.getContext("2d"), o = this.#u.size;
+		a.save(), a.font = this.#D(o), a.fillStyle = this.#c, a.textBaseline = "top", r.forEach((e, r) => a.fillText(e, t, n + o * .19999999999999996 / 2 + r * o * J)), a.restore(), this.#b(C("history.text"), i), X()?.missed("photo", C("tool.text")), this.render();
 	}
 	#j() {
 		this.#p?.box.remove(), this.#p = null;
@@ -1471,7 +1592,7 @@ var Z = (e, t, n) => Math.min(n, Math.max(t, e)), ce = (e, t) => e.name.localeCo
 				...a,
 				x: Z(a.x + c, 0, n - a.width),
 				y: Z(a.y + l, 0, r - a.height)
-			} : t === "new" ? $(i.x, i.y, Z(s.x, 0, n), Z(s.y, 0, r), o, n, r) : ue(a, t, c, l, o, n, r), this.#F();
+			} : t === "new" ? $(i.x, i.y, Z(s.x, 0, n), Z(s.y, 0, r), o, n, r) : pe(a, t, c, l, o, n, r), this.#F();
 		}, c = () => {
 			this.paper.removeEventListener("pointermove", s), this.paper.removeEventListener("pointerup", c), this.paper.removeEventListener("pointercancel", c), (this.#f.width < 1 || this.#f.height < 1) && this.#N();
 		};
@@ -1503,16 +1624,16 @@ var Z = (e, t, n) => Math.min(n, Math.max(t, e)), ce = (e, t) => e.name.localeCo
 		});
 	}
 	cropTo({ x: e = 0, y: t = 0, width: n, height: r } = {}) {
-		if (!this.canvas) throw Error(S("automation.noImage"));
+		if (!this.canvas) throw Error(C("automation.noImage"));
 		let i = this.canvas.width, a = this.canvas.height;
-		if (e = Math.round(e), t = Math.round(t), !(e >= 0 && t >= 0 && e < i && t < a)) throw Error(S("automation.cropOutside"));
+		if (e = Math.round(e), t = Math.round(t), !(e >= 0 && t >= 0 && e < i && t < a)) throw Error(C("automation.cropOutside"));
 		let o = {
 			x: e,
 			y: t,
 			width: Z(Math.round(n ?? i - e), 1, i - e),
 			height: Z(Math.round(r ?? a - t), 1, a - t)
 		};
-		return o.width === i && o.height === a ? null : (this.#x(S("history.crop"), ee(this.canvas, o)), o);
+		return o.width === i && o.height === a ? null : (this.#x(C("history.crop"), ee(this.canvas, o)), o);
 	}
 	#I() {
 		if (!this.canvas) return 1;
@@ -1554,7 +1675,7 @@ var Z = (e, t, n) => Math.min(n, Math.max(t, e)), ce = (e, t) => e.name.localeCo
 		t ? this.zoomTo(this.#a * t, e.clientX, e.clientY) : this.zoomStep(e.deltaY < 0 ? 1 : -1, e.clientX, e.clientY);
 	}
 	#z(e) {
-		if (e.defaultPrevented || c() || e.target.closest?.(".ph-banner, .ph-scrim, select, input") || e.ctrlKey || e.metaKey || e.altKey) return;
+		if (e.defaultPrevented || l() || e.target.closest?.(".ph-banner, .msgbox-layer, select, input") || e.ctrlKey || e.metaKey || e.altKey) return;
 		let t = e.key.length === 1 ? e.key.toLowerCase() : e.key, n = K.find((e) => e.key.toLowerCase() === t), r = !0;
 		n ? this.setTool(n.id) : t === "+" || t === "=" ? this.zoomStep(1) : t === "-" ? this.zoomStep(-1) : t === "0" ? this.fitToWindow() : t === "1" ? this.zoomTo(1) : t === "ArrowLeft" && e.target.closest(".ph-main, .ph-toolbar") !== null ? this.step(-1) : t === "ArrowRight" && e.target.closest(".ph-main, .ph-toolbar") !== null ? this.step(1) : t === "Enter" && this.#s === "crop" && !e.target.closest("button") ? this.applyCrop() : t === "Escape" && this.#s === "crop" ? this.#N() : r = !1, r && e.preventDefault();
 	}
@@ -1567,18 +1688,18 @@ var Z = (e, t, n) => Math.min(n, Math.max(t, e)), ce = (e, t) => e.name.localeCo
 		}, { signal: e }), this.main.addEventListener("dragover", (e) => {
 			t(e) && (e.preventDefault(), e.dataTransfer.dropEffect = "copy");
 		}, { signal: e }), this.main.addEventListener("drop", (e) => {
-			t(e) && (e.preventDefault(), n = 0, this.dropHint.hidden = !0, this.confirmDiscard(S("confirm.unsaved.beforeImport", { name: this.name })).then((t) => {
+			t(e) && (e.preventDefault(), n = 0, this.dropHint.hidden = !0, this.confirmDiscard(C("confirm.unsaved.beforeImport", { name: this.name })).then((t) => {
 				t && this.importFiles([...e.dataTransfer.files]);
 			}));
 		}, { signal: e });
 	}
 	#V() {
-		let e = a("input", {
+		let e = o("input", {
 			type: "color",
 			class: "ph-swatch ph-custom",
-			title: S("color.custom.title"),
-			"aria-label": S("color.custom")
-		}), t = W(), n = t.map((e) => a("button", {
+			title: C("color.custom.title"),
+			"aria-label": C("color.custom")
+		}), t = W(), n = t.map((e) => o("button", {
 			class: "ph-swatch",
 			type: "button",
 			title: e.label,
@@ -1588,17 +1709,17 @@ var Z = (e, t, n) => Math.min(n, Math.max(t, e)), ce = (e, t) => e.name.localeCo
 		}));
 		return n.forEach((e, n) => {
 			e.dataset.color = t[n].value;
-		}), e.addEventListener("input", () => this.#H(e.value)), a("span", {
+		}), e.addEventListener("input", () => this.#H(e.value)), o("span", {
 			class: "ph-swatches",
 			role: "group",
-			"aria-label": S("option.color")
+			"aria-label": C("option.color")
 		}, n, e);
 	}
 	#H(e) {
 		this.#c = e, this.#q(), this.#k(), this.#p?.box.focus();
 	}
 	#U({ value: e, min: t, max: n, unit: r, label: i, onInput: a }) {
-		let o = d({
+		let o = p({
 			value: e,
 			min: t,
 			max: n,
@@ -1615,7 +1736,7 @@ var Z = (e, t, n) => Math.min(n, Math.max(t, e)), ce = (e, t) => e.name.localeCo
 			min: 1,
 			max: 200,
 			unit: " px",
-			label: S("brush.size"),
+			label: C("brush.size"),
 			onInput: (e) => {
 				this.#l.size = e, this.#l.chosen = !0;
 			}
@@ -1624,22 +1745,22 @@ var Z = (e, t, n) => Math.min(n, Math.max(t, e)), ce = (e, t) => e.name.localeCo
 			min: 5,
 			max: 100,
 			unit: "%",
-			label: S("brush.opacity"),
+			label: C("brush.opacity"),
 			onInput: (e) => {
 				this.#l.opacity = e;
 			}
-		}), this.opacityGroup = a("span", { class: "ph-option" }, a("span", { class: "ph-label" }, S("brush.opacity")), this.brushOpacity), a("div", {
+		}), this.opacityGroup = o("span", { class: "ph-option" }, o("span", { class: "ph-label" }, C("brush.opacity")), this.brushOpacity), o("div", {
 			class: "ph-options",
 			hidden: !0
-		}, a("span", { class: "ph-option" }, a("span", { class: "ph-label" }, S("option.color")), this.#V()), a("span", { class: "ph-option" }, a("span", { class: "ph-label" }, S("brush.size")), this.brushSize), this.opacityGroup, l({
+		}, o("span", { class: "ph-option" }, o("span", { class: "ph-label" }, C("option.color")), this.#V()), o("span", { class: "ph-option" }, o("span", { class: "ph-label" }, C("brush.size")), this.brushSize), this.opacityGroup, d({
 			value: "pen",
-			label: S("brush.mode"),
+			label: C("brush.mode"),
 			options: [{
 				value: "pen",
-				label: S("brush.pen")
+				label: C("brush.pen")
 			}, {
 				value: "eraser",
-				label: S("brush.eraser")
+				label: C("brush.eraser")
 			}],
 			onChange: (e) => {
 				this.#l.mode = e, this.#q();
@@ -1652,25 +1773,25 @@ var Z = (e, t, n) => Math.min(n, Math.max(t, e)), ce = (e, t) => e.name.localeCo
 			min: 8,
 			max: 400,
 			unit: " px",
-			label: S("text.size"),
+			label: C("text.size"),
 			onInput: (e) => {
 				this.#u.size = e, this.#u.chosen = !0, this.#k();
 			}
-		}), this.boldBtn = a("button", {
+		}), this.boldBtn = o("button", {
 			class: "ph-btn ph-bold",
 			type: "button",
-			title: S("text.bold"),
-			"aria-label": S("text.bold"),
+			title: C("text.bold"),
+			"aria-label": C("text.bold"),
 			"aria-pressed": "true",
 			onclick: () => {
 				this.#u.bold = !this.#u.bold, this.#q(), this.#k(), this.#p?.box.focus();
 			}
-		}, S("text.bold.letter")), a("div", {
+		}, C("text.bold.letter")), o("div", {
 			class: "ph-options",
 			hidden: !0
-		}, a("span", { class: "ph-option" }, a("span", { class: "ph-label" }, S("option.color")), this.#V()), a("span", { class: "ph-option" }, a("span", { class: "ph-label" }, S("text.font")), u({
+		}, o("span", { class: "ph-option" }, o("span", { class: "ph-label" }, C("option.color")), this.#V()), o("span", { class: "ph-option" }, o("span", { class: "ph-label" }, C("text.font")), f({
 			value: this.#u.font,
-			label: S("text.font"),
+			label: C("text.font"),
 			options: G.map((e) => ({
 				value: e.value,
 				label: e.label()
@@ -1678,25 +1799,25 @@ var Z = (e, t, n) => Math.min(n, Math.max(t, e)), ce = (e, t) => e.name.localeCo
 			onChange: (e) => {
 				this.#u.font = e, this.#k(), this.#p?.box.focus();
 			}
-		})), a("span", { class: "ph-option" }, a("span", { class: "ph-label" }, S("text.size")), this.textSize), this.boldBtn, a("span", { class: "ph-hint" }, S("text.hint")));
+		})), o("span", { class: "ph-option" }, o("span", { class: "ph-label" }, C("text.size")), this.textSize), this.boldBtn, o("span", { class: "ph-hint" }, C("text.hint")));
 	}
 	#K() {
 		return this.applyCropBtn = r({
-			label: S("crop.apply"),
+			label: C("crop.apply"),
 			primary: !0,
 			onClick: () => this.applyCrop()
-		}), a("div", {
+		}), o("div", {
 			class: "ph-options",
 			hidden: !0
-		}, a("span", { class: "ph-option" }, a("span", { class: "ph-label" }, S("crop.ratio")), u({
+		}, o("span", { class: "ph-option" }, o("span", { class: "ph-label" }, C("crop.ratio")), f({
 			value: this.#d,
-			label: S("crop.ratio"),
-			options: ae(),
+			label: C("crop.ratio"),
+			options: ce(),
 			onChange: (e) => {
 				this.#d = e, this.#N();
 			}
-		})), a("span", { class: "ph-hint" }, S("crop.hint")), a("span", { class: "ph-grow" }), r({
-			label: S("crop.whole"),
+		})), o("span", { class: "ph-hint" }, C("crop.hint")), o("span", { class: "ph-grow" }), r({
+			label: C("crop.whole"),
 			onClick: () => this.#N()
 		}), this.applyCropBtn);
 	}
@@ -1715,30 +1836,30 @@ var Z = (e, t, n) => Math.min(n, Math.max(t, e)), ce = (e, t) => e.name.localeCo
 			this.convertBtn,
 			...this.toolBtns
 		]) e.disabled = !t;
-		this.revealBtn.disabled = !e, this.undoBtn.disabled = !this.stack.canUndo, this.redoBtn.disabled = !this.stack.canRedo, this.undoBtn.title = this.stack.undoLabel ? S("toolbar.undo.named", { label: this.stack.undoLabel }) : S("toolbar.undo"), this.redoBtn.title = this.stack.redoLabel ? S("toolbar.redo.named", { label: this.stack.redoLabel }) : S("toolbar.redo");
+		this.revealBtn.disabled = !e, this.undoBtn.disabled = !this.stack.canUndo, this.redoBtn.disabled = !this.stack.canRedo, this.undoBtn.title = this.stack.undoLabel ? C("toolbar.undo.named", { label: this.stack.undoLabel }) : C("toolbar.undo"), this.redoBtn.title = this.stack.redoLabel ? C("toolbar.redo.named", { label: this.stack.redoLabel }) : C("toolbar.redo");
 		let n = this.#_(), r = n.findIndex((e) => e.id === this.fileId);
-		this.prevBtn.hidden = !t || r <= 0, this.nextBtn.hidden = !t || r === -1 || r >= n.length - 1, this.dims.textContent = t ? S("status.size", {
+		this.prevBtn.hidden = !t || r <= 0, this.nextBtn.hidden = !t || r === -1 || r >= n.length - 1, this.dims.textContent = t ? C("status.size", {
 			width: this.canvas.width,
 			height: this.canvas.height
-		}) : "", this.info.textContent = t && this.name ? [O(this.name), e && L(e.size ?? 0)].filter(Boolean).join(" · ") : "";
-		let a = e && i.get(e.parent), o = r + 1, s = n.length;
-		this.position.textContent = r === -1 || s <= 1 ? "" : a ? S("status.positionIn", {
-			index: o,
-			count: s,
-			folder: e.parent === i.root ? S("folder.home") : a.name
-		}) : S("status.position", {
-			index: o,
-			count: s
-		}), this.state.textContent = this.#m || (this.dirty ? S("status.modified") : ""), this.state.classList.toggle("dirty", !this.#m && this.dirty), this.zoomLabel.hidden = !t;
+		}) : "", this.info.textContent = t && this.name ? [A(this.name), e && i(e.size ?? 0)].filter(Boolean).join(" · ") : "";
+		let o = e && a.get(e.parent), s = r + 1, c = n.length;
+		this.position.textContent = r === -1 || c <= 1 ? "" : o ? C("status.positionIn", {
+			index: s,
+			count: c,
+			folder: e.parent === a.root ? C("folder.home") : o.name
+		}) : C("status.position", {
+			index: s,
+			count: c
+		}), this.state.textContent = this.#m || (this.dirty ? C("status.modified") : ""), this.state.classList.toggle("dirty", !this.#m && this.dirty), this.zoomLabel.hidden = !t;
 		for (let e of this.win.body.querySelectorAll(".ph-zoom-btn")) e.disabled = !t;
 	}
 	#J() {
-		let e = (e, t, n) => a("button", {
+		let e = (e, t, n) => o("button", {
 			class: "ctl-btn",
 			type: "button",
 			onclick: n
-		}, y(e), a("span", {}, t));
-		this.empty.replaceChildren(a("div", { class: "ph-empty-icon" }, s("image")), a("div", { class: "ph-empty-title" }, this.#t && this.#m ? S("status.opening") : this.#e ? S("empty.unavailable") : S("empty.title")), a("p", {}, this.#e || S("empty.text")), a("div", { class: "ph-empty-actions" }, e("open", S("empty.open"), () => this.openFile()), e("upload", S("toolbar.import"), () => this.fileInput.click())));
+		}, x(e), o("span", {}, t));
+		this.empty.replaceChildren(o("div", { class: "ph-empty-icon" }, c("image")), o("div", { class: "ph-empty-title" }, this.#t && this.#m ? C("status.opening") : this.#e ? C("empty.unavailable") : C("empty.title")), o("p", {}, this.#e || C("empty.text")), o("div", { class: "ph-empty-actions" }, e("open", C("empty.open"), () => this.openFile()), e("upload", C("toolbar.import"), () => this.fileInput.click())));
 	}
 };
 function $(e, t, n, r, i, a, o) {
@@ -1754,7 +1875,7 @@ function $(e, t, n, r, i, a, o) {
 		height: u
 	};
 }
-function ue(e, t, n, r, i, a, o) {
+function pe(e, t, n, r, i, a, o) {
 	let s = e.x, c = e.y, l = e.x + e.width, u = e.y + e.height;
 	if (t.includes("w") && (s = Z(s + n, 0, l - 1)), t.includes("e") && (l = Z(l + n, s + 1, a)), t.includes("n") && (c = Z(c + r, 0, u - 1)), t.includes("s") && (u = Z(u + r, c + 1, o)), !i) return {
 		x: s,
@@ -1781,4 +1902,4 @@ function ue(e, t, n, r, i, a, o) {
 		height: p
 	};
 }
-export { se as default, ie as filePreview };
+export { ue as default, se as filePreview };

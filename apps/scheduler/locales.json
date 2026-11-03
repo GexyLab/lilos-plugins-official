@@ -332,7 +332,24 @@
       "opt.me": "Me ({name})",
       "opt.systemHint": "The system has no home: only reminders to the admins, services chosen for everyone and web requests without files.",
       "opt.otherHint": "It runs as that person, with their files and connections; they get a notification.",
-      "opt.enabled": "Turn it on now"
+      "opt.enabled": "Turn it on now",
+      "shared.params.required": "This value is needed.",
+      "shared.params.badNumber": "Write a number.",
+      "shared.params.tooSmall": "At least {min}.",
+      "shared.params.tooBig": "At most {max}.",
+      "shared.params.secretKept": "•••••• (empty keeps it)",
+      "shared.params.gone": "(no longer exists)",
+      "shared.params.noFile": "No file",
+      "shared.params.noFolder": "No folder",
+      "shared.params.choose": "Choose…",
+      "shared.params.clear": "Remove",
+      "shared.params.clearOf": "Remove {name}",
+      "shared.params.remove": "Take away",
+      "shared.params.removeOf": "Take away {name}",
+      "shared.params.none": "None",
+      "shared.params.noneChosen": "Choose at least one item.",
+      "shared.params.addFile": "Add a file",
+      "shared.params.addFolder": "Add a folder"
     }
   },
   "it": {
@@ -668,7 +685,24 @@
       "opt.me": "Me ({name})",
       "opt.systemHint": "Il sistema non ha una home: solo promemoria agli amministratori, servizi scelti per tutti e richieste web senza file.",
       "opt.otherHint": "Gira come quella persona, con i suoi file e le sue connessioni; riceve una notifica.",
-      "opt.enabled": "Attiva subito"
+      "opt.enabled": "Attiva subito",
+      "shared.params.required": "Questo valore serve.",
+      "shared.params.badNumber": "Scrivi un numero.",
+      "shared.params.tooSmall": "Almeno {min}.",
+      "shared.params.tooBig": "Al massimo {max}.",
+      "shared.params.secretKept": "•••••• (vuoto lo lascia)",
+      "shared.params.gone": "(non c’è più)",
+      "shared.params.noFile": "Nessun file",
+      "shared.params.noFolder": "Nessuna cartella",
+      "shared.params.choose": "Scegli…",
+      "shared.params.clear": "Togli",
+      "shared.params.clearOf": "Togli {name}",
+      "shared.params.remove": "Togli",
+      "shared.params.removeOf": "Togli {name}",
+      "shared.params.none": "Nessuno",
+      "shared.params.noneChosen": "Scegli almeno un elemento.",
+      "shared.params.addFile": "Aggiungi un file",
+      "shared.params.addFolder": "Aggiungi una cartella"
     }
   }
 }

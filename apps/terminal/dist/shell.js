@@ -436,8 +436,8 @@ function ie(e, t) {
 }
 // src/terminal/i18n.js
 var A = ie("terminal", {
-	en: /* @__PURE__ */ JSON.parse("{\"strings\":{\"@name\":\"Terminal\",\"@description\":\"A bash-like shell over the files of lilOS, in tabs and panes side by side, and remote sessions: SSH, Telnet, rlogin and SUPDUP, with saved hosts, .term links and sessions that keep running when the window is closed.\",\"@entrypoints.main.params.cwd.label\":\"Folder\",\"@entrypoints.main.params.cwd.description\":\"The folder to open the terminal in\",\"@automation.terminal.run.label\":\"Run a command\",\"@automation.terminal.run.params.command.label\":\"Command\",\"@automation.terminal.run.params.folder.label\":\"Folder\",\"@automation.terminal.run.params.folder.description\":\"The working folder the command runs in\",\"@entrypoints.main.params.file.label\":\"Link\",\"@entrypoints.main.params.file.description\":\"A terminal link (.term) to open\",\"ui.title\":\"Terminal\",\"ui.commandLine\":\"Command line\",\"ui.welcome\":\"lilOS Terminal · \\\"help\\\" lists the commands\",\"automation.tooLong\":\"Command too long to record\",\"automation.noCommand\":\"No command to run\",\"automation.busy\":\"The terminal is busy with another command\",\"automation.noFolder\":\"The folder is not there any more\",\"automation.status\":\"The command ended with status {status}\",\"shell.defaultUser\":\"user\",\"shell.readonly\":\"{name}: readonly variable\",\"shell.cannotUnset\":\"{name}: cannot unset: readonly variable\",\"shell.badSubscript\":\"{index}: bad array subscript\",\"shell.unknownConstruct\":\"unknown construct: {type}\",\"shell.badRegex\":\"invalid regular expression\",\"shell.unaryExpected\":\"{op}: unary operator expected\",\"shell.integerExpected\":\"{value}: integer expression expected\",\"shell.binaryExpected\":\"{op}: binary operator expected\",\"shell.commandNotFound\":\"{name}: command not found\",\"shell.tooDeep\":\"{name}: maximum function nesting level exceeded\",\"shell.badFd\":\"{fd}: Bad file descriptor\",\"shell.fdExpected\":\"{target}: file descriptor expected\",\"shell.ambiguousRedirect\":\"{target}: ambiguous redirect\",\"shell.isAppLink\":\"{path}: is a link to an app\",\"err.noSuchFile\":\"{path}: No such file or directory\",\"err.isADirectory\":\"{path}: Is a directory\",\"err.notAFile\":\"{path}: Not a regular file\",\"err.missingParen\":\"`)' expected\",\"err.badIdentifier\":\"`{name}': not a valid identifier\",\"err.numericArgument\":\"{value}: numeric argument required\",\"err.tooManyArguments\":\"too many arguments\",\"err.notADirectory\":\"{path}: Not a directory\",\"err.notFound\":\"{name}: not found\",\"err.missingOperand\":\"missing operand\",\"err.unknownSubcommand\":\"unknown subcommand: '{sub}'\",\"parse.unexpectedEnd\":\"syntax error: unexpected end of input\",\"parse.unexpectedEndOfFile\":\"syntax error: unexpected end of file\",\"parse.nearEnd\":\"end of input\",\"parse.nearNewline\":\"`newline'\",\"parse.nearToken\":\"`{token}'\",\"parse.near\":\"syntax error near unexpected token {near}\",\"parse.nearExpected\":\"syntax error near unexpected token {near}: expected `{expected}'\",\"parse.badFunctionName\":\"invalid function name\",\"parse.parenAfterName\":\"expected `)' after the function name\",\"parse.aliasLoop\":\"aliases expanded too many times\",\"parse.missingTarget\":\"syntax error near unexpected token {near}: missing target of `{op}'\",\"parse.forBadName\":\"for: invalid variable name\",\"parse.caseNoWord\":\"case: missing word\",\"parse.condNear\":\"syntax error in conditional expression near {near}\",\"parse.condNoOperand\":\"syntax error in conditional expression: missing operand\",\"parse.condNoRegex\":\"syntax error in conditional expression: missing regular expression\",\"parse.badSubstitution\":\"bad substitution\",\"parse.badSubstitutionBrace\":\"bad substitution: missing `}'\",\"parse.backquotes\":\"syntax error in backquoted command substitution\",\"jobs.done\":\"Done\",\"jobs.interrupted\":\"Interrupt\",\"jobs.exit\":\"Exit {code}\",\"jobs.running\":\"Running\",\"help.usageLine\":\"Usage: {usage}\",\"help.usageShort\":\"usage: {usage}\",\"help.noHelp\":\"no help topics match `{name}'\",\"help.intro\":\"lilOS Terminal: a bash-like shell over the files of lilOS.\\n\\\"help command\\\" or \\\"command --help\\\" explains a command; \\\"help if\\\", \\\"help for\\\", \\\"help case\\\"… the syntax.\",\"help.syntaxList\":\"Syntax: {list}\",\"help.sh.summary\":\"Like bash.\",\"help.sh.usage\":\"sh [-c commands | script] [arguments…]\",\"help.bash.text\":\"\\\"bash script.sh a b\\\" runs the script with $1=a, $2=b; \\\"bash -c 'echo $1' name x\\\" runs the text; \\\"cat script.sh | bash\\\" reads the script from the input.\",\"help.bash.summary\":\"Runs a script or commands in a new shell.\",\"help.bash.usage\":\"bash [-c commands | script] [arguments…]\",\"help.sleep.summary\":\"Waits: 5 (seconds), 0.5, 2m, 1h.\",\"help.sleep.usage\":\"sleep duration…\",\"help.kill.summary\":\"Interrupts commands in the background.\",\"help.kill.usage\":\"kill [-signal] %job | pid…\",\"help.fg.summary\":\"Brings a command in the background to the foreground: it is waited for and Ctrl C interrupts it.\",\"help.wait.summary\":\"Waits for the commands in the background to finish (all of them, or the ones named).\",\"help.jobs.summary\":\"Lists the commands started in the background with &.\",\"help.clear.summary\":\"Clears the screen (Ctrl L too).\",\"help.help.summary\":\"Lists the commands, or explains the one named.\",\"help.help.usage\":\"help [command]\",\"help.history.summary\":\"Shows the commands given (the last n); -c clears the history.\",\"help.which.summary\":\"Tells where a command is.\",\"help.which.usage\":\"which name…\",\"help.command.summary\":\"Starts a command ignoring the functions with the same name; with -v tells what it would start.\",\"help.command.usage\":\"command [-v] name [arguments…]\",\"help.type.summary\":\"Tells what a name is: alias, keyword, function, command.\",\"help.type.usage\":\"type [-t] name…\",\"help.unalias.summary\":\"Removes aliases (all of them with -a).\",\"help.unalias.usage\":\"unalias [-a] name…\",\"help.alias.text\":\"Example: alias ll='ls -l'. Aliases work from the line after the one that defines them.\",\"help.alias.summary\":\"Defines or shows aliases (short names for commands).\",\"help.alias.usage\":\"alias [name[=value]…]\",\"help.eval.summary\":\"Runs the arguments, joined by spaces, as a command.\",\"help.eval.usage\":\"eval [arguments…]\",\"help.dot.summary\":\"Like source.\",\"help.dot.usage\":\". file [arguments…]\",\"help.source.summary\":\"Runs the commands of a file in this shell (variables, functions and aliases stay).\",\"help.source.usage\":\"source file [arguments…]\",\"help.read.text\":\"-r  backslashes stay as they are\\n-p  shows a prompt\\n-a  puts the words in an array\\n-d  reads up to this character instead of up to the newline\\n-s  does not show what is typed (for passwords)\\nStatus 1 at the end of the input.\",\"help.read.summary\":\"Reads a line and splits it into the variables named ($REPLY without names).\",\"help.read.usage\":\"read [-rs] [-p prompt] [-a array] [-d delim] [name…]\",\"help.continue.summary\":\"Goes on to the next round of the loop (or of the n-th enclosing loop).\",\"help.break.summary\":\"Exits the loop (or n loops).\",\"help.return.summary\":\"Exits the function (or the script read with source).\",\"help.return.usage\":\"return [status]\",\"help.exit.summary\":\"Closes the terminal (or exits the script) with a status.\",\"help.exit.usage\":\"exit [status]\",\"help.let.summary\":\"Computes arithmetic expressions (status 1 if the last one is 0).\",\"help.let.usage\":\"let expression…\",\"help.bracket.summary\":\"Like test, with a final \\\"]\\\".\",\"help.bracket.usage\":\"[ expression ]\",\"help.test.text\":\"Files: -e exists, -f is a file, -d is a directory, -s is not empty\\nText: -z empty, -n not empty, a = b, a != b\\nNumbers: -eq -ne -lt -le -gt -ge\\nCombined: ! not, -a and, -o or, ( … )\",\"help.test.summary\":\"Evaluates an expression: status 0 if true, 1 if false.\",\"help.test.usage\":\"test expression\",\"help.colon.summary\":\"Does nothing (status 0); the arguments are expanded anyway.\",\"help.colon.usage\":\": [arguments…]\",\"help.false.summary\":\"Does nothing, unsuccessfully (status 1).\",\"help.true.summary\":\"Does nothing, successfully (status 0).\",\"help.shift.summary\":\"Shifts the positional parameters: $2 becomes $1…\",\"help.set.text\":\"-e  exits at the first command that fails\\n-u  error when an unset variable is used\\n-x  shows the commands before running them\\n-f  no expansion of * and ?\\n-o pipefail  a pipeline fails if one of its commands fails\\n+e, +u… turn them off. Without arguments it shows every variable.\",\"help.set.summary\":\"Sets the options of the shell and the positional parameters ($1, $2…).\",\"help.set.usage\":\"set [-euxf] [-o option] [--] [arguments…]\",\"help.printenv.summary\":\"Shows the exported variables (or the value of the ones named).\",\"help.printenv.usage\":\"printenv [name…]\",\"help.env.summary\":\"Shows the exported variables, or starts a command with more variables.\",\"help.env.usage\":\"env [name=value…] [command [arguments…]]\",\"help.unset.summary\":\"Removes variables (or functions with -f).\",\"help.unset.usage\":\"unset [-fv] name…\",\"help.typeset.summary\":\"Like declare.\",\"help.typeset.usage\":\"typeset [-aprxifF] [name[=value]…]\",\"help.declare.text\":\"-a array, -x exported, -r read-only, -i integer (the value is computed), -p shows, -f shows the functions, -g global inside a function.\",\"help.declare.summary\":\"Declares variables and shows their attributes.\",\"help.declare.usage\":\"declare [-aprxifF] [name[=value]…]\",\"help.local.summary\":\"Variables visible only inside the function.\",\"help.local.usage\":\"local [-arx] name[=value]…\",\"help.readonly.summary\":\"Makes variables read-only.\",\"help.readonly.usage\":\"readonly [name[=value]…]\",\"help.export.text\":\"Without arguments it lists the exported variables. -n removes the export.\",\"help.export.summary\":\"Makes variables visible to the commands and scripts it starts.\",\"help.export.usage\":\"export [-n] [name[=value]…]\",\"help.printf.text\":\"The format is applied again while arguments are left. -v saves the result in a variable.\",\"help.printf.summary\":\"Writes the arguments according to a format (%s, %d, %5.2f, %x, %b, %q…).\",\"help.printf.usage\":\"printf [-v var] format [arguments…]\",\"help.echo.text\":\"-n  no final newline\\n-e  interprets \\\\n, \\\\t, \\\\\\\\, \\\\e… \\n-E  does not interpret them (default)\",\"help.echo.summary\":\"Writes the arguments, separated by a space.\",\"help.echo.usage\":\"echo [-neE] [text…]\",\"help.pwd.summary\":\"Shows the working directory.\",\"help.cd.text\":\"Without arguments it goes to the home ($HOME). \\\"cd -\\\" goes back to the previous directory ($OLDPWD).\",\"help.cd.summary\":\"Changes the working directory.\",\"help.cd.usage\":\"cd [dir]\",\"help.realpath.summary\":\"The full path.\",\"help.realpath.usage\":\"realpath [-m] path…\",\"help.dirname.summary\":\"The path without its last part.\",\"help.dirname.usage\":\"dirname path…\",\"help.basename.summary\":\"The last part of a path (without the suffix).\",\"help.basename.usage\":\"basename path [suffix]\",\"help.tree.summary\":\"Shows directories as a tree.\",\"help.tree.usage\":\"tree [-adf] [-L levels] [dir…]\",\"help.find.text\":\"Tests: -name pattern, -iname, -path, -type f|d|l, -empty, -size [+-]n[ckMG], -mtime [+-]days, -mmin, -newer file\\nActions: -print, -print0, -delete (to the trash), -exec command {} \\\\; or +\\nOptions: -maxdepth n, -mindepth n. Combined: ! (not), -o (or), ( … )\\nExample: find . -name \\\"*.txt\\\" -size +1k\",\"help.find.summary\":\"Searches for files and directories.\",\"help.find.usage\":\"find [path…] [expression]\",\"help.stat.text\":\"-c  format: %n name, %s size, %F type, %y modification date, %Y in seconds, %w %W creation, %i id\",\"help.stat.summary\":\"Shows the details of files and directories.\",\"help.stat.usage\":\"stat [-c format] path…\",\"help.rmdir.summary\":\"Removes empty directories (to the trash).\",\"help.rmdir.usage\":\"rmdir [-p] dir…\",\"help.rm.text\":\"-r  directories too, with their contents\\n-d  empty directories\\n-f  no error for what does not exist\\n--purge  deletes permanently, without the trash\\nWhat goes to the trash can be put back with \\\"trash restore\\\".\",\"help.rm.summary\":\"Moves files and directories to the trash (with --purge deletes them forever).\",\"help.rm.usage\":\"rm [-rfvd] [--purge] path…\",\"help.mv.text\":\"If the destination is a directory, it moves into it; otherwise it renames. An overwritten file goes to the trash.\\n-n  does not overwrite\\n-v  tells what it moves\",\"help.mv.summary\":\"Moves or renames files and directories.\",\"help.mv.usage\":\"mv [-nv] source… dest\",\"help.cp.text\":\"-r  copies directories too, with their contents\\n-n  does not overwrite existing files\\n-v  tells what it copies\",\"help.cp.summary\":\"Copies files and directories.\",\"help.cp.usage\":\"cp [-rnv] source… dest\",\"help.touch.summary\":\"Creates empty files, or updates the modification date of the ones that exist.\",\"help.mkdir.text\":\"-p  creates the intermediate directories too; no error if it already exists\",\"help.mkdir.summary\":\"Creates directories.\",\"help.mkdir.usage\":\"mkdir [-pv] dir…\",\"help.cat.text\":\"-n  numbers the lines\\n-b  numbers only the non-empty ones\\n-s  only one empty line in a row\\n-E  $ at the end of every line\",\"help.cat.summary\":\"Shows the contents of files (or of the input), one after the other.\",\"help.ls.text\":\"-l  details (type, size, date, tags)\\n-a  also the names starting with \\\".\\\"\\n-h  human-readable sizes (1.2K)\\n-t  by date, -S by size, -r reversed\\n-1  one per line\\n-d  the directory itself, not its contents\\n-R  subdirectories too\\n-F  / after directories, @ after links, * after scripts\",\"help.ls.summary\":\"Lists the contents of directories.\",\"help.ls.usage\":\"ls [-laAh1trSdRF] [path…]\",\"help.xargs.text\":\"-n N  at most N arguments at a time\\n-I {}  one command per line, with {} replaced by the line\\n-0  words separated by the null character (find -print0)\\n-d C  words separated by C\\n-t  shows the commands before starting them\\n-r  starts nothing if the input is empty\\nExample: find . -name \\\"*.tmp\\\" | xargs rm\",\"help.xargs.summary\":\"Starts a command with the words of the input as arguments.\",\"help.xargs.usage\":\"xargs [-n N] [-I {}] [-0] [-t] [command [arguments…]]\",\"help.yes.summary\":\"Repeats a line forever (y if not given): useful in a pipeline.\",\"help.yes.usage\":\"yes [text]\",\"help.seq.text\":\"-s S  separator (newline if not given)\\n-w  same width, padded with zeros\",\"help.seq.summary\":\"Writes a sequence of numbers.\",\"help.seq.usage\":\"seq [first [step]] last\",\"help.nl.summary\":\"Numbers the lines (non-empty ones, or all with -b a).\",\"help.rev.summary\":\"Writes every line reversed.\",\"help.tr.text\":\"tr a-z A-Z  to uppercase\\ntr -d '\\\\r'  removes Windows carriage returns\\ntr -s ' '  only one space in a row\\nClasses: [:upper:] [:lower:] [:digit:] [:alpha:] [:alnum:] [:space:] [:punct:]\",\"help.tr.summary\":\"Replaces or deletes characters.\",\"help.tr.usage\":\"tr [-dsc] set1 [set2]\",\"help.cut.text\":\"-f 1,3  fields 1 and 3 (separated by tab or by -d)\\n-d ,  the separator\\n-c 1-5  characters 1 to 5\\n-s  only the lines with the separator\",\"help.cut.summary\":\"Extracts columns from every line.\",\"help.cut.usage\":\"cut -f fields [-d separator] | -c characters [file…]\",\"help.tee.text\":\"-a  appends instead of overwriting\",\"help.tee.summary\":\"Copies the input both to the output and to files.\",\"help.uniq.text\":\"-c  with the number of repetitions\\n-d  only the repeated lines\\n-u  only the unique ones\\n-i  ignoring case\",\"help.uniq.summary\":\"Removes lines repeated one after the other (usually after sort).\",\"help.sort.text\":\"-r  reversed\\n-n  by number\\n-h  by human-readable size (2K, 1M)\\n-u  without duplicates\\n-f  ignoring case\\n-k N[,M]  by field N (up to M)\\n-t C  fields separated by C\\n-V  numbers inside the text (file2 before file10)\\n-o file  writes to the file\",\"help.sort.summary\":\"Sorts lines.\",\"help.sort.usage\":\"sort [-rnufhV] [-k field] [-t separator] [file…]\",\"help.grep.text\":\"-i  ignoring case\\n-v  the lines that do NOT match\\n-n  with the line number\\n-c  counts the lines\\n-l  only the names of the files\\n-r  searches in directories\\n-w  whole words, -x whole lines\\n-E  extended regular expressions (| + ? () without backslash)\\n-F  plain text, not a regular expression\\n-o  only the part that matches\\n-q  no output, only the status\\n-A N, -B N, -C N  lines of context after, before, around\\nStatus: 0 found, 1 not found, 2 error.\",\"help.grep.summary\":\"Searches for the lines that contain a pattern (regular expression).\",\"help.grep.usage\":\"grep [-ivnclrwxEFoqH] [-e pattern] pattern [file…]\",\"help.wc.text\":\"-l lines, -w words, -c bytes, -m characters, -L the longest line\",\"help.wc.summary\":\"Counts lines, words and bytes.\",\"help.tail.text\":\"-n N  the last N lines (-n +N: from line N on)\\n-c N  the last N characters\",\"help.tail.summary\":\"The last lines (10 if not given).\",\"help.tail.usage\":\"tail [-n lines] [-c bytes] [file…]\",\"help.head.text\":\"-n N  the first N lines (-n -N: all but the last N)\\n-c N  the first N characters\\n-5 is like -n 5\",\"help.head.summary\":\"The first lines (10 if not given).\",\"help.head.usage\":\"head [-n lines] [-c bytes] [file…]\",\"help.sed.text\":\"s/old/new/g  replaces (g: every time, i: ignoring case, p: prints)\\n3d, /re/d, 2,5d  deletes lines     -n …p  prints only the chosen ones\\ny/abc/xyz/  transliterates     a text, i text, c text  appends, inserts, changes\\n=  line number   q  quits   h H g G x  hold space   b t :label  jumps\\nAddresses: n, $, /re/, a,b, a,+n, ! to negate, { … } to group.\\n-n  does not print lines by itself    -E  extended regular expressions    -i  edits the files\\nExamples: sed 's/red/blue/g' notes.txt    sed -n '1,5p' file    sed -i '/^#/d' conf.txt\",\"help.sed.summary\":\"Edits text line by line (substitutions, deletions…).\",\"help.diff.text\":\"-u  unified format (with 3 lines of context; -U N for N)\\n-q  only tells whether they differ\\n-i  ignoring case\\n-w  ignoring spaces, -b ignoring how many there are\\n-B  ignoring empty lines\\n-s  tells also when they are identical\\n\\\"-\\\" is the input. Status: 0 same, 1 different, 2 error.\",\"help.diff.summary\":\"Shows the differences between two files.\",\"help.uname.summary\":\"The name of the operating system.\",\"help.hostname.summary\":\"The name of the system.\",\"help.whoami.summary\":\"The name of the user.\",\"help.date.text\":\"Format: %Y year, %m month, %d day, %H:%M:%S time, %A day of the week, %B month, %s seconds since 1970, %F = %Y-%m-%d, %T = %H:%M:%S\\n-d @1700000000, -d 2026-01-01, -d yesterday\\nExample: date +%F\",\"help.date.summary\":\"Date and time.\",\"help.date.usage\":\"date [-u] [-d date] [+format]\",\"help.apps.summary\":\"Lists the installed apps (id, name, version).\",\"help.tag.text\":\"tag                lists the tags\\ntag ls Work        the items with the tag\\ntag show file      the tags of an item\\ntag add Work f     puts the tag (creates it if missing)\\ntag rm Work f      removes it\\ntag new name color creates a tag\\ntag delete name    deletes a tag\",\"help.tag.summary\":\"The tags of lilOS: lists, assigns, removes.\",\"help.tag.usage\":\"tag [ls [tag…] | show path… | add tag path… | rm tag path… | new name [color] | delete tag…]\",\"help.trash.text\":\"trash              lists what is in the trash\\ntrash put file     moves to the trash (like rm -r)\\ntrash restore name puts back\\ntrash rm name      deletes permanently\\ntrash empty        empties the trash\",\"help.trash.summary\":\"The trash: lists, puts back, empties.\",\"help.trash.usage\":\"trash [list | put path… | restore name… | rm name… | empty]\",\"help.open.text\":\"open notes.txt   opens with the default app\\nopen .   opens the directory in the File Manager\\nopen -a editor notes.txt   with a given app\\nopen -a photo   starts an app\",\"help.open.summary\":\"Opens files and directories with their app (or with the one given).\",\"help.open.usage\":\"open [-a app] path…\",\"arith.tooDeep\":\"expression recursion level exceeded\",\"arith.syntax\":\"{expr}: syntax error in expression (error token is \\\"{token}\\\")\",\"arith.end\":\"end\",\"arith.missingBracket\":\"{expr}: missing `]'\",\"arith.operandExpected\":\"{expr}: syntax error: operand expected\",\"arith.badBase\":\"{value}: invalid arithmetic base\",\"arith.tooGreatForBase\":\"{value}: value too great for base\",\"arith.invalid\":\"invalid expression\",\"arith.divisionByZero\":\"division by 0\",\"arith.negativeExponent\":\"exponent less than 0\",\"arith.unknownOperator\":\"unknown operator {op}\",\"expand.braceTooLarge\":\"brace expansion too large\",\"expand.badSubstitution\":\"{name}: bad substitution\",\"expand.unbound\":\"{name}: unbound variable\",\"expand.cannotAssign\":\"{name}: cannot assign in this way\",\"expand.nullOrNotSet\":\"parameter null or not set\",\"expand.negativeSubstring\":\"{count}: substring expression < 0\",\"opt.invalid\":\"invalid option -- '{option}'\",\"opt.longNeedsArgument\":\"option '--{name}' requires an argument\",\"opt.needsArgument\":\"option requires an argument -- '{option}'\",\"opt.badNumber\":\"invalid number: '{value}'\",\"regex.unmatchedBracket\":\"Unmatched [ in regular expression\",\"regex.invalid\":\"invalid regular expression: {pattern}\",\"appCmd.summary\":\"A command of the {app} app.\",\"appCmd.usage\":\"{name} [arguments…]\",\"printf.badNumber\":\"{value}: invalid number\",\"test.argumentExpected\":\"argument expected\",\"test.unexpectedArgument\":\"{arg}: unexpected argument\",\"test.missingBracket\":\"missing `]'\",\"cd.oldpwdNotSet\":\"OLDPWD not set\",\"local.onlyInFunction\":\"can only be used in a function\",\"set.badOptionName\":\"{name}: invalid option name\",\"set.badOption\":\"{option}: invalid option\",\"let.noExpression\":\"expression expected\",\"return.onlyInFunction\":\"can only `return' from a function or sourced script\",\"loop.onlyInLoop\":\"only meaningful in a `for', `while', or `until' loop\",\"loop.badCount\":\"{n}: loop count out of range\",\"alias.badName\":\"`{name}': invalid alias name\",\"which.builtIn\":\"{name}: built into the Terminal\",\"wait.notAJob\":\"{spec}: not a job of this shell\",\"fg.noSuchJob\":\"{job}: no such job\",\"fg.current\":\"current\",\"kill.noSuchJob\":\"{spec}: no such job or process\",\"sleep.missing\":\"missing operand\",\"sleep.badDuration\":\"invalid time interval '{value}'\",\"source.noFile\":\"filename argument required\",\"bash.noCommand\":\"-c: option requires an argument\",\"bash.already\":\"You are already in bash: for a script type \\\"bash file.sh\\\" or \\\"source file.sh\\\".\",\"type.alias\":\"{name} is aliased to `{value}'\",\"type.keyword\":\"{name} is a shell keyword\",\"type.function\":\"{name} is a function\",\"type.builtin\":\"{name} is a shell builtin\",\"type.appCommand\":\"{name} is a command of the {app} app\",\"type.command\":\"{name} is a Terminal command\",\"type.file\":\"{name} is {path}\",\"syntax.topic.variables\":\"variables\",\"syntax.topic.redirections\":\"redirections\",\"syntax.if\":\"if commands; then commands; [elif commands; then commands;] [else commands;] fi\\nRuns the branch of the first \\\"if\\\"/\\\"elif\\\" whose commands succeed (status 0).\\n  if [ -f notes.txt ]; then echo found; else echo missing; fi\",\"syntax.for\":\"for name in words…; do commands; done\\nfor (( init; condition; step )); do commands; done\\n  for f in *.txt; do wc -l \\\"$f\\\"; done\\n  for ((i = 1; i <= 3; i++)); do echo $i; done\",\"syntax.while\":\"while commands; do commands; done   (until: as long as the commands do NOT succeed)\\n  n=0; while [ $n -lt 3 ]; do echo $n; n=$((n + 1)); done\\n  ls | while read -r name; do echo \\\"- $name\\\"; done\",\"syntax.until\":\"until commands; do commands; done: repeats as long as the commands do not succeed.\",\"syntax.case\":\"case word in pattern|pattern) commands;; … esac\\nPatterns use * ? [ ]. \\\";&\\\" goes on into the next branch, \\\";;&\\\" tries the following patterns too.\\n  case \\\"$f\\\" in *.txt) echo text;; *.png|*.jpg) echo image;; *) echo other;; esac\",\"syntax.function\":\"name() { commands; }   or   function name { commands; }\\nThe arguments are $1, $2…, $@; \\\"local\\\" creates variables of the function, \\\"return n\\\" exits.\\n  greet() { echo \\\"Hello, $1\\\"; }; greet Eugenio\",\"syntax.cond\":\"[[ expression ]]: test without word splitting or expansion of *.\\n  [[ $name == *.txt ]]      comparison with a pattern\\n  [[ $s =~ ^[0-9]+$ ]]      regular expression (groups in BASH_REMATCH)\\n  [[ -d dir && ! -e file ]] -e -f -d -s -z -n, && || ! ( )\",\"syntax.arith\":\"(( expression )): integer arithmetic; status 0 if the result is not 0.\\n  (( n++ )); (( n > 3 )) && echo big; echo $(( 2 ** 10 ))\",\"syntax.variables\":\"name=value (no spaces), $name or ${name}. Arrays: a=(x y z), ${a[0]}, ${a[@]}, ${#a[@]}.\\n${v:-default} ${v:=default} ${v:+alt} ${#v} ${v#prefix} ${v%suffix} ${v/from/to} ${v//from/to} ${v:start:length} ${v^^} ${v,,}\\nSpecial: $? status of the last command, $$ the shell, $! the last command in the background, $# $@ $* the arguments.\",\"syntax.redirections\":\"> file (overwrites), >> file (appends), < file (reads), 2> errors, 2>&1, &> file, <<EOF … EOF, <<< text, | pipe.\\n/dev/null discards everything.\",\"files.cannotAccess\":\"cannot access '{path}': No such file or directory\",\"files.cannotCreate\":\"cannot create '{path}': No such file or directory\",\"files.overwriteFolder\":\"cannot overwrite directory '{name}' with non-directory\",\"files.missingDestination\":\"missing destination file operand after '{path}'\",\"files.targetNotFolder\":\"target '{path}' is not a directory\",\"files.cannotStat\":\"cannot stat '{path}': No such file or directory\",\"files.cannotRemove\":\"cannot remove '{path}': {reason}\",\"files.quotedNoSuchFile\":\"'{path}': No such file or directory\",\"mkdir.notAFolder\":\"cannot create directory '{path}': '{name}' exists and is not a directory\",\"mkdir.exists\":\"cannot create directory '{path}': File exists\",\"mkdir.noParent\":\"cannot create directory '{path}': No such file or directory\",\"mkdir.created\":\"created directory '{path}'\",\"cp.overwriteFile\":\"cannot overwrite non-directory '{name}' with directory\",\"cp.verbose\":\"'{from}' -> '{to}'\",\"cp.omitting\":\"-r not specified; omitting directory '{path}'\",\"cp.intoItself\":\"cannot copy a directory, '{path}', into itself\",\"mv.system\":\"cannot move '{path}': it is a system folder\",\"mv.intoItself\":\"cannot move '{path}' to a subdirectory of itself\",\"mv.notEmpty\":\"cannot move '{path}' to '{name}': Directory not empty\",\"mv.verbose\":\"renamed '{from}' -> '{to}'\",\"reason.noSuchFile\":\"No such file or directory\",\"reason.isADirectory\":\"Is a directory\",\"reason.notADirectory\":\"Not a directory\",\"reason.notEmpty\":\"Directory not empty\",\"reason.system\":\"it is a system folder\",\"reason.containsSystem\":\"it contains system folders\",\"rm.home\":\"it is dangerous to operate on '{path}': it is the home\",\"rm.purged\":\"permanently deleted '{path}'\",\"rm.trashed\":\"moved to the trash '{path}'\",\"rmdir.removed\":\"removed directory '{path}'\",\"stat.folder\":\"directory\",\"stat.appLink\":\"link to the app {app}\",\"stat.file\":\"regular file\",\"stat.emptyFile\":\"regular empty file\",\"stat.type\":\"Type: {type}\",\"stat.path\":\"Path: {path}\",\"stat.items\":\"Items: {n} ({total} in all)\",\"stat.size\":\"Size: {size} bytes ({human})\",\"stat.created\":\"Created: {date}\",\"stat.modified\":\"Modified: {date}\",\"stat.tags\":\"Tags: {tags}\",\"stat.system\":\"System folder\",\"find.missingArgument\":\"missing argument to `{name}'\",\"find.badType\":\"unknown argument to -type: {type} (f, d or l)\",\"find.badSize\":\"invalid -size argument '{value}'\",\"find.badValue\":\"invalid argument '{value}' to {option}\",\"find.cannotFind\":\"cannot find '{path}'\",\"find.execEnd\":\"missing end of `-exec' (`;' or `+')\",\"find.execCommand\":\"missing command of `-exec'\",\"find.unknownPredicate\":\"unknown predicate `{name}'\",\"find.unexpected\":\"unexpected argument: '{arg}'\",\"tree.folders\":{\"one\":\"{n} directory\",\"other\":\"{n} directories\"},\"tree.files\":{\"one\":\"{n} file\",\"other\":\"{n} files\"},\"ls.date\":\"{month} {day}\",\"wc.total\":\"total\",\"grep.noPattern\":\"missing pattern\\nUsage: grep [options] pattern [file…]\",\"sort.badKey\":\"invalid key: '{key}'\",\"sort.disorder\":\"-:{n}: disorder: {line}\",\"cut.badList\":\"invalid list: '{spec}'\",\"cut.noList\":\"you must specify a list of fields (-f) or characters (-c)\",\"cut.badDelimiter\":\"the delimiter must be a single character\",\"tr.reverseRange\":\"range-endpoints of '{range}' are in reverse collating sequence order\",\"tr.missingSet2\":\"missing operand after '{set}'\",\"seq.badArgument\":\"invalid floating point argument: '{value}'\",\"seq.zeroStep\":\"invalid Zero increment value: '0'\",\"xargs.unmatchedDouble\":\"unmatched double quote\",\"xargs.unmatchedSingle\":\"unmatched single quote\",\"xargs.badCount\":\"value for -n option should be >= 1\",\"sed.at\":\"-e expression #1, char {pos}: {message}\",\"sed.unterminated\":\"unterminated `s' command\",\"sed.badAddress\":\"invalid address\",\"sed.missingAddress\":\"missing second address\",\"sed.missingCommand\":\"missing command\",\"sed.unexpectedBrace\":\"unexpected `}'\",\"sed.badDelimiter\":\"invalid delimiter for `s'\",\"sed.yLengths\":\"strings for `y' command are different lengths\",\"sed.noLabel\":\"\\\":\\\" lacks a label\",\"sed.unknownCommand\":\"unknown command: `{cmd}'\",\"sed.unmatchedBrace\":\"unmatched `{'\",\"sed.noSuchLabel\":\"can't find label for jump to `{label}'\",\"sed.noPreviousRegex\":\"no previous regular expression\",\"sed.cannotRead\":\"can't read {path}: No such file or directory\",\"sed.noScript\":\"missing script\\nUsage: sed [-n] [-E] [-i] script [file…]\",\"sed.noFiles\":\"no input files to edit with -i\",\"diff.missingOperand\":\"missing operand after '{arg}'\",\"diff.extraOperand\":\"extra operand '{arg}'\",\"diff.identical\":\"Files {a} and {b} are identical\",\"diff.differ\":\"Files {a} and {b} differ\",\"diff.tooBig\":\"the files are too different and too large to compare\",\"open.noApp\":\"app not found: '{app}' (see \\\"apps\\\")\",\"trash.notInTrash\":\"'{name}' is not in the trash\",\"trash.empty\":\"The trash is empty.\",\"trash.deletedFolder\":\"(deleted folder)\",\"trash.items\":{\"one\":\"{n} item\",\"other\":\"{n} items\"},\"trash.missingPut\":\"missing what to move to the trash\",\"trash.cannotTrash\":\"{path}: cannot be moved to the trash (system folder)\",\"trash.missingRestore\":\"missing the name of what to put back\",\"trash.restored\":\"restored to {path}\",\"trash.missingName\":\"missing name\",\"trash.purged\":{\"one\":\"permanently deleted {n} item\",\"other\":\"permanently deleted {n} items\"},\"trash.emptied\":{\"one\":\"Trash emptied ({n} item).\",\"other\":\"Trash emptied ({n} items).\"},\"trash.alreadyEmpty\":\"The trash was already empty.\",\"tag.noSuchTag\":\"no such tag: '{name}' (see \\\"tag ls\\\")\",\"tag.none\":\"No tags. Create one with \\\"tag new name\\\".\",\"tag.hidden\":\"hidden\",\"tag.noTags\":\"no tags\",\"tag.usageAddRm\":\"tag {sub} name file…\",\"tag.created\":\"created tag '{name}'\",\"tag.system\":\"{path}: system items have no tags\",\"tag.usageNew\":\"tag new name [color]\",\"tag.createdShown\":\"created tag {tag}\",\"tag.usageDelete\":\"tag delete name…\",\"date.formatC\":\"%a %b %e %H:%M:%S %Y\",\"date.formatX\":\"%m/%d/%y\",\"date.format\":\"%a %b %e %H:%M:%S %Z %Y\",\"date.invalid\":\"invalid date '{date}'\",\"@actions.terminal.sshHere.label\":\"Open SSH terminal here\",\"help.ssh.summary\":\"open an SSH session in a new tab\",\"help.ssh.usage\":\"ssh [-p port] [-l user] [user@]host [command] | ssh <saved host>\",\"help.telnet.summary\":\"open a Telnet session in a new tab\",\"help.telnet.usage\":\"telnet [-l user] host [port] | telnet <saved host>\",\"help.rlogin.summary\":\"open an rlogin session in a new tab\",\"help.rlogin.usage\":\"rlogin [-l user] host | rlogin <saved host>\",\"help.supdup.summary\":\"open a SUPDUP session in a new tab\",\"help.supdup.usage\":\"supdup host [port] | supdup <saved host>\",\"help.sessions.summary\":\"the remote sessions still running; with a number, shows one in a tab\",\"help.sessions.usage\":\"sessions [n]\",\"remote.cmd.unavailable\":\"remote sessions are not available (lilOS has no module for them)\",\"remote.cmd.noModule\":\"{name}: lilOS has no module for it (an administrator installs {module} from the AppStore, Kernel tab)\",\"remote.cmd.opened\":\"Opened in a new tab: {name}\",\"remote.cmd.noUser\":\"ssh: a user is needed: user@host or -l user\",\"remote.cmd.noSession\":\"no running session «{name}» (see «sessions»)\",\"remote.cmd.shown\":\"Shown in a tab: {name}\",\"remote.cmd.shownNow\":\"shown in a window\",\"remote.cmd.closesIn\":{\"one\":\"closes in {n} minute\",\"other\":\"closes in {n} minutes\"},\"remote.cmd.none\":\"No remote session is running.\",\"remote.cmd.resumeHint\":\"«sessions <n>» shows one in a tab\",\"remote.tabs\":\"Tabs\",\"remote.screen\":\"Remote terminal\",\"remote.newShell\":\"New shell\",\"remote.activity\":\"New output\",\"remote.closeTab\":\"Close tab\",\"remote.closeSession\":\"Close (ends the session)\",\"remote.closeNamed\":\"Close {name}\",\"remote.close\":\"Close\",\"remote.cancel\":\"Cancel\",\"remote.notRemote\":\"it is not in a network connection\",\"remote.notSftp\":\"the SSH terminal opens only on SFTP connections\",\"remote.cannotReconnect\":\"this session cannot be opened again from here: open it again from the File Manager\",\"remote.unavailable\":\"The remote sessions cannot be reached: {error}\",\"remote.noProtocols\":\"lilOS has no module for remote sessions. An administrator can install term-ssh, term-telnet, term-rlogin or term-supdup from the AppStore (Kernel tab).\",\"remote.side.label\":\"Hosts and remote sessions\",\"remote.side.toggle\":\"Show or hide the hosts\",\"remote.side.hosts\":\"Hosts\",\"remote.side.connect\":\"Connect\",\"remote.side.open\":\"A session is open on this host\",\"remote.side.none\":\"No saved hosts. «ssh user@server» opens a session; + saves a host.\",\"remote.side.running\":\"Still running\",\"remote.side.elsewhere\":\"in another window\",\"remote.side.closesIn\":{\"one\":\"closes in {n} minute\",\"other\":\"closes in {n} minutes\"},\"remote.side.resume\":\"Resume\",\"remote.taken\":\"The session was opened in another window\",\"remote.takeBack\":\"Show it here\",\"remote.lostLink\":\"The link with lilOS dropped\",\"remote.attachAgain\":\"Attach again\",\"remote.secure\":\"Encrypted\",\"remote.insecure\":\"Not encrypted\",\"remote.insecureHint\":\"What you type, passwords included, goes over the network in clear\",\"remote.cipher\":\"Cipher: {cipher}\",\"remote.state.new\":\"Waiting\",\"remote.state.connecting\":\"Connecting…\",\"remote.state.on\":\"Connected\",\"remote.state.closed\":\"Closed\",\"remote.find\":\"Find (Ctrl+Shift+F)\",\"remote.find.count\":\"{i} of {n}\",\"remote.find.none\":\"None\",\"remote.find.prev\":\"Previous (Shift+Enter)\",\"remote.find.next\":\"Next (Enter)\",\"remote.record\":\"Record the session in a file\",\"remote.recordStop\":\"Stop recording\",\"remote.keys\":\"Keys\",\"remote.keys.send\":\"Send to the server:\",\"remote.keys.copy\":\"Copy\",\"remote.keys.paste\":\"Paste: Ctrl+Shift+V\",\"remote.keys.clear\":\"Clear the history\",\"remote.keys.disconnect\":\"Disconnect\",\"remote.signal.break\":\"Send Break\",\"remote.signal.interrupt\":\"Interrupt process\",\"remote.signal.ayt\":\"Are you there?\",\"remote.reconnect\":\"Reconnect\",\"remote.closed\":\"Connection closed\",\"remote.closedWhy\":\"Connection closed: {reason}\",\"remote.trust.title\":\"Confirm the server {host}\",\"remote.trust.changedTitle\":\"The key of {host} changed\",\"remote.trust.first\":\"First connection to this server. Check that the key fingerprint is the server's (whoever runs it can tell you).\",\"remote.trust.firstTls\":\"The certificate of this server is not valid for its name or is not signed by a known authority. Check its fingerprint before going on.\",\"remote.trust.changedText\":\"Warning: it may not be your server. It shows a different key from the one you confirmed: it may have been reinstalled, or someone may be in between. Go on only if you know why it changed.\",\"remote.trust.server\":\"Server\",\"remote.trust.key\":\"Key\",\"remote.trust.certificate\":\"Certificate\",\"remote.trust.previous\":\"Key confirmed before\",\"remote.trust.ask\":\"Continue if it is your server.\",\"remote.trust.askChanged\":\"Continue only to trust the new key.\",\"remote.record.title\":\"Record the session\",\"remote.record.file\":\"File\",\"remote.record.hint\":\"A file in your home. It is written while you work; it stops at 8 MB.\",\"remote.record.colors\":\"Keep the color codes (to see it again as it was)\",\"remote.record.start\":\"Record\",\"remote.record.badPath\":\"The folder does not exist: write a path such as ~/Documenti/session.txt\",\"remote.record.exists\":\"«{name}» exists already: choose another name\",\"remote.record.full\":\"Recording stopped: «{path}» reached its size limit\",\"remote.record.failed\":\"The recording could not be saved: {error}\",\"remote.record.saved\":\"Session recorded in «{path}»\",\"remote.host.newTitle\":\"New host\",\"remote.host.editTitle\":\"Change the host\",\"remote.host.name\":\"Name\",\"remote.host.folder\":\"Folder\",\"remote.host.folderNone\":\"None\",\"remote.host.protocol\":\"Protocol\",\"remote.host.kept\":\"•••••• (saved: empty keeps it)\",\"remote.host.noProtocols\":\"No protocol available.\",\"remote.host.insecureTitle\":\"Connection not encrypted\",\"remote.host.insecureText\":\"What you type, passwords included, goes over the network in clear. Use it only on networks you trust or with devices that have no SSH.\",\"remote.host.remember\":\"Remember passwords and passphrases\",\"remote.host.keyUnreadable\":\"The key file cannot be read: {error}\",\"remote.host.advanced\":\"Advanced\",\"remote.host.term\":\"Terminal type\",\"remote.host.encoding\":\"Encoding\",\"remote.host.backspace\":\"Backspace sends\",\"remote.host.backspaceDel\":\"DEL (^?)\",\"remote.host.backspaceBs\":\"BS (^H)\",\"remote.host.delete\":\"Delete\",\"remote.host.save\":\"Save\",\"remote.host.saveConnect\":\"Save and connect\",\"@entrypoints.filePreview.label\":\"Previews of .term links\",\"@entrypoints.shell.label\":\"Shell for the Scheduler\",\"@commands.terminal.newShell.label\":\"New shell\",\"@commands.terminal.splitRight.label\":\"Split right\",\"@commands.terminal.splitDown.label\":\"Split down\",\"@commands.terminal.detach.label\":\"Detach tab into a new window\",\"@commands.terminal.broadcast.label\":\"Send input to all panes\",\"@commands.terminal.focusLeft.label\":\"Pane on the left\",\"@commands.terminal.focusRight.label\":\"Pane on the right\",\"@commands.terminal.focusUp.label\":\"Pane above\",\"@commands.terminal.focusDown.label\":\"Pane below\",\"@commands.terminal.previousTab.label\":\"Previous tab of the pane\",\"@commands.terminal.nextTab.label\":\"Next tab of the pane\",\"@commands.terminal.moveLeft.label\":\"Move tab to the left\",\"@commands.terminal.moveRight.label\":\"Move tab to the right\",\"@commands.terminal.moveUp.label\":\"Move tab up\",\"@commands.terminal.moveDown.label\":\"Move tab down\",\"@dependencies.term-ssh.reason\":\"Remote sessions over SSH, and Terminal commands on saved SSH hosts\",\"@dependencies.term-telnet.reason\":\"Remote sessions over Telnet\",\"@dependencies.term-rlogin.reason\":\"Remote sessions over rlogin\",\"@dependencies.term-supdup.reason\":\"Remote sessions over SUPDUP\",\"@dependencies.services-isolate.reason\":\"Scheduled Terminal commands in the kernel, with the operation's time limit and Cancel\",\"tabs.count\":{\"one\":\"{n} tab\",\"other\":\"{n} tabs\"},\"tabs.pane\":\"Pane {n} — {name}\",\"tabs.rename\":\"Rename…\",\"tabs.renameLabel\":\"Tab name\",\"tabs.renameHint\":\"Empty: the usual name (the folder, or the server).\",\"tabs.renameOk\":\"Rename\",\"tabs.duplicate\":\"Duplicate\",\"tabs.splitRight\":\"Split right\",\"tabs.splitDown\":\"Split down\",\"tabs.moveToPane\":\"Move to pane\",\"tabs.detach\":\"Detach into a new window\",\"tabs.moveToWindow\":\"Move to window\",\"tabs.newWindow\":\"New window\",\"tabs.saveTerm\":\"Save as link (.term)…\",\"tabs.addToDesk\":\"Add to desk\",\"tabs.copyAddress\":\"Copy address\",\"tabs.closeOthers\":\"Close other tabs\",\"tabs.closeRight\":\"Close tabs to the right\",\"grid.gutter\":\"Drag to resize the panes; double click: same size\",\"grid.broadcast\":\"Send input to all panes\",\"grid.broadcastOn\":\"Input to all panes\",\"grid.broadcastOff\":\"What you type goes to the tab shown in every pane. Click to turn it off.\",\"menu.title\":\"Terminal menu\",\"menu.openTerm\":\"Open link (.term)…\",\"menu.openTermTitle\":\"Open a terminal link\",\"drag.newWindow\":\"Drop to open {name} in a new window\",\"drag.pane\":\"Move to this pane\",\"drag.split.left\":\"New pane on the left\",\"drag.split.right\":\"New pane on the right\",\"drag.split.up\":\"New pane above\",\"drag.split.down\":\"New pane below\",\"file.invalid\":\"This is not a terminal link (.term) or it is damaged\",\"file.missing\":\"The link does not exist any more\",\"file.cannot\":\"This tab cannot become a link\",\"file.noFolder\":\"The folder {path} does not exist\",\"file.serverFolder\":\"The folder of the server must be a full path, such as /var/www\",\"file.exists\":\"There is already a file named {name} in that folder\",\"file.noPassword\":\"Type the password (or the key) to keep in the file\",\"file.onDesk\":\"{name} is on the desk\",\"file.saved\":\"Link saved: {path}\",\"file.saveTitle\":\"Save link\",\"file.name\":\"File name\",\"file.folder\":\"Folder\",\"file.change\":\"Change…\",\"file.pickFolder\":\"Where to save the link\",\"file.cwdLocal\":\"Start in the folder (optional)\",\"file.cwdRemote\":\"Folder of the server to start in (optional)\",\"file.command\":\"Command to run at the start (optional)\",\"file.commandRemote\":\"Command at start (optional)\",\"file.commandRemoteHint\":\"Runs instead of the shell of the server\",\"file.openAs\":\"When opened\",\"file.openDefault\":\"As in the Options ({how})\",\"file.keepPassword\":\"Keep the password in the file\",\"file.passwordSaved\":\"The password saved for this host goes in the file.\",\"file.passwordHint\":\"The password is encrypted: it works only for you, on this lilOS, for this server and user. For anyone else it is asked as usual.\",\"file.save\":\"Save\",\"file.command.title\":\"This link runs a command\",\"file.command.text\":\"«{name}» runs this command when it opens:\\n\\n{command}\\n\\nRun it only if you trust who made the link. Continue?\",\"options.open\":\"Options…\",\"options.title\":\"Terminal options\",\"options.tab.general\":\"General\",\"options.tab.generalDescription\":\"How Terminal opens links\",\"options.files\":\"Terminal links (.term)\",\"options.openTerm\":\"Open the links\",\"options.openTermDescription\":\"Where a .term file opens with a double click, when the file does not say it itself\",\"options.openTerm.window\":\"In a new window\",\"options.openTerm.tab\":\"In a tab of the open window\"}}"),
-	it: /* @__PURE__ */ JSON.parse("{\"strings\":{\"@name\":\"Terminale\",\"@description\":\"Una shell simile a bash sui file di lilOS, in schede e riquadri affiancati, e sessioni remote: SSH, Telnet, rlogin e SUPDUP, con host salvati, collegamenti .term e sessioni che restano aperte anche a finestra chiusa.\",\"@entrypoints.main.params.cwd.label\":\"Cartella\",\"@entrypoints.main.params.cwd.description\":\"La cartella in cui aprire il terminale\",\"@automation.terminal.run.label\":\"Esegui un comando\",\"@automation.terminal.run.params.command.label\":\"Comando\",\"@automation.terminal.run.params.folder.label\":\"Cartella\",\"@automation.terminal.run.params.folder.description\":\"La cartella di lavoro in cui gira il comando\",\"@entrypoints.main.params.file.label\":\"Collegamento\",\"@entrypoints.main.params.file.description\":\"Un collegamento al terminale (.term) da aprire\",\"ui.title\":\"Terminale\",\"ui.commandLine\":\"Riga di comando\",\"ui.welcome\":\"Terminale di lilOS · «help» elenca i comandi\",\"automation.tooLong\":\"Comando troppo lungo da registrare\",\"automation.noCommand\":\"Nessun comando da eseguire\",\"automation.busy\":\"Il terminale sta eseguendo un altro comando\",\"automation.noFolder\":\"La cartella non c’è più\",\"automation.status\":\"Il comando è finito con lo stato {status}\",\"shell.defaultUser\":\"utente\",\"shell.readonly\":\"{name}: variabile in sola lettura\",\"shell.cannotUnset\":\"{name}: impossibile eliminare: variabile in sola lettura\",\"shell.badSubscript\":\"{index}: indice dell’array non valido\",\"shell.unknownConstruct\":\"costrutto sconosciuto: {type}\",\"shell.badRegex\":\"espressione regolare non valida\",\"shell.unaryExpected\":\"{op}: operatore unario atteso\",\"shell.integerExpected\":\"{value}: è attesa un’espressione intera\",\"shell.binaryExpected\":\"{op}: operatore binario atteso\",\"shell.commandNotFound\":\"{name}: comando non trovato\",\"shell.tooDeep\":\"{name}: troppi livelli di ricorsione\",\"shell.badFd\":\"{fd}: descrittore di file errato\",\"shell.fdExpected\":\"{target}: è richiesto un descrittore di file\",\"shell.ambiguousRedirect\":\"{target}: redirezione ambigua\",\"shell.isAppLink\":\"{path}: è un collegamento a un’app\",\"err.noSuchFile\":\"{path}: file o cartella inesistente\",\"err.isADirectory\":\"{path}: è una cartella\",\"err.notAFile\":\"{path}: non è un file\",\"err.missingParen\":\"manca «)»\",\"err.badIdentifier\":\"«{name}»: identificatore non valido\",\"err.numericArgument\":\"{value}: è richiesto un argomento numerico\",\"err.tooManyArguments\":\"troppi argomenti\",\"err.notADirectory\":\"{path}: non è una cartella\",\"err.notFound\":\"{name}: non trovato\",\"err.missingOperand\":\"manca l’operando\",\"err.unknownSubcommand\":\"sottocomando sconosciuto: «{sub}»\",\"parse.unexpectedEnd\":\"errore di sintassi: fine del testo inattesa\",\"parse.unexpectedEndOfFile\":\"errore di sintassi: fine del file inattesa\",\"parse.nearEnd\":\"fine del testo\",\"parse.nearNewline\":\"a capo\",\"parse.nearToken\":\"«{token}»\",\"parse.near\":\"errore di sintassi vicino a {near}\",\"parse.nearExpected\":\"errore di sintassi vicino a {near}: atteso «{expected}»\",\"parse.badFunctionName\":\"nome di funzione non valido\",\"parse.parenAfterName\":\"atteso «)» dopo il nome della funzione\",\"parse.aliasLoop\":\"alias espansi troppe volte\",\"parse.missingTarget\":\"errore di sintassi vicino a {near}: manca la destinazione di «{op}»\",\"parse.forBadName\":\"for: nome di variabile non valido\",\"parse.caseNoWord\":\"case: manca la parola\",\"parse.condNear\":\"errore di sintassi in [[ vicino a {near}\",\"parse.condNoOperand\":\"errore di sintassi in [[: manca un operando\",\"parse.condNoRegex\":\"errore di sintassi in [[: manca l’espressione regolare\",\"parse.badSubstitution\":\"sostituzione errata\",\"parse.badSubstitutionBrace\":\"sostituzione errata: manca «}»\",\"parse.backquotes\":\"errore di sintassi tra gli apici inversi\",\"jobs.done\":\"Fatto\",\"jobs.interrupted\":\"Interrotto\",\"jobs.exit\":\"Uscita {code}\",\"jobs.running\":\"In esecuzione\",\"help.usageLine\":\"Uso: {usage}\",\"help.usageShort\":\"uso: {usage}\",\"help.noHelp\":\"nessun aiuto per «{name}»\",\"help.intro\":\"Terminale di lilOS: una shell come bash sui file di lilOS.\\n«help comando» o «comando --help» spiega un comando; «help if», «help for», «help case»… la sintassi.\",\"help.syntaxList\":\"Sintassi: {list}\",\"help.sh.summary\":\"Come bash.\",\"help.sh.usage\":\"sh [-c comandi | script] [argomenti…]\",\"help.bash.text\":\"«bash script.sh a b» esegue lo script con $1=a, $2=b; «bash -c 'echo $1' nome x» esegue il testo; «cat script.sh | bash» legge lo script dall’input.\",\"help.bash.summary\":\"Esegue uno script o dei comandi in una nuova shell.\",\"help.bash.usage\":\"bash [-c comandi | script] [argomenti…]\",\"help.sleep.summary\":\"Aspetta: 5 (secondi), 0.5, 2m, 1h.\",\"help.sleep.usage\":\"sleep durata…\",\"help.kill.summary\":\"Interrompe dei comandi in background.\",\"help.kill.usage\":\"kill [-segnale] %job | pid…\",\"help.fg.summary\":\"Porta in primo piano un comando in background: lo si aspetta e Ctrl C lo interrompe.\",\"help.wait.summary\":\"Aspetta che finiscano i comandi in background (tutti, o quelli indicati).\",\"help.jobs.summary\":\"Elenca i comandi avviati in background con &.\",\"help.clear.summary\":\"Pulisce lo schermo (anche Ctrl L).\",\"help.help.summary\":\"Elenca i comandi, o spiega quello indicato.\",\"help.help.usage\":\"help [comando]\",\"help.history.summary\":\"Mostra i comandi dati (gli ultimi n); -c cancella la cronologia.\",\"help.which.summary\":\"Dice dove si trova un comando.\",\"help.which.usage\":\"which nome…\",\"help.command.summary\":\"Avvia un comando ignorando le funzioni con lo stesso nome; con -v dice cosa avvierebbe.\",\"help.command.usage\":\"command [-v] nome [argomenti…]\",\"help.type.summary\":\"Dice cos’è un nome: alias, parola chiave, funzione, comando.\",\"help.type.usage\":\"type [-t] nome…\",\"help.unalias.summary\":\"Elimina degli alias (tutti con -a).\",\"help.unalias.usage\":\"unalias [-a] nome…\",\"help.alias.text\":\"Esempio: alias ll='ls -l'. Gli alias valgono dalla riga successiva a quella che li definisce.\",\"help.alias.summary\":\"Definisce o mostra gli alias (nomi brevi per comandi).\",\"help.alias.usage\":\"alias [nome[=valore]…]\",\"help.eval.summary\":\"Esegue gli argomenti, uniti da spazi, come un comando.\",\"help.eval.usage\":\"eval [argomenti…]\",\"help.dot.summary\":\"Come source.\",\"help.dot.usage\":\". file [argomenti…]\",\"help.source.summary\":\"Esegue i comandi di un file in questa shell (variabili, funzioni e alias restano).\",\"help.source.usage\":\"source file [argomenti…]\",\"help.read.text\":\"-r  le barre rovesciate restano come sono\\n-p  mostra un prompt\\n-a  mette le parole in un array\\n-d  legge fino a questo carattere invece che fino all’a capo\\n-s  non mostra ciò che si scrive (per le password)\\nStato 1 alla fine dell’input.\",\"help.read.summary\":\"Legge una riga e la divide nelle variabili indicate ($REPLY senza nomi).\",\"help.read.usage\":\"read [-rs] [-p prompt] [-a array] [-d delim] [nome…]\",\"help.continue.summary\":\"Passa al giro successivo del ciclo (o dell’n-esimo ciclo esterno).\",\"help.break.summary\":\"Esce dal ciclo (o da n cicli).\",\"help.return.summary\":\"Esce dalla funzione (o dallo script letto con source).\",\"help.return.usage\":\"return [stato]\",\"help.exit.summary\":\"Chiude il terminale (o esce dallo script) con uno stato.\",\"help.exit.usage\":\"exit [stato]\",\"help.let.summary\":\"Calcola espressioni aritmetiche (stato 1 se l’ultima vale 0).\",\"help.let.usage\":\"let espressione…\",\"help.bracket.summary\":\"Come test, con una «]» finale.\",\"help.bracket.usage\":\"[ espressione ]\",\"help.test.text\":\"File: -e esiste, -f è un file, -d è una cartella, -s non è vuoto\\nTesto: -z vuoto, -n non vuoto, a = b, a != b\\nNumeri: -eq -ne -lt -le -gt -ge\\nInsieme: ! negazione, -a e, -o o, ( … )\",\"help.test.summary\":\"Valuta un’espressione: stato 0 se vera, 1 se falsa.\",\"help.test.usage\":\"test espressione\",\"help.colon.summary\":\"Non fa niente (stato 0); gli argomenti vengono comunque espansi.\",\"help.colon.usage\":\": [argomenti…]\",\"help.false.summary\":\"Non fa niente, senza successo (stato 1).\",\"help.true.summary\":\"Non fa niente, con successo (stato 0).\",\"help.shift.summary\":\"Sposta i parametri posizionali: $2 diventa $1…\",\"help.set.text\":\"-e  esce al primo comando che fallisce\\n-u  errore se si usa una variabile non impostata\\n-x  mostra i comandi prima di eseguirli\\n-f  niente espansione di * e ?\\n-o pipefail  una pipe fallisce se fallisce uno dei suoi comandi\\n+e, +u… le disattivano. Senza argomenti mostra tutte le variabili.\",\"help.set.summary\":\"Imposta le opzioni della shell e i parametri posizionali ($1, $2…).\",\"help.set.usage\":\"set [-euxf] [-o opzione] [--] [argomenti…]\",\"help.printenv.summary\":\"Mostra le variabili esportate (o il valore di quelle indicate).\",\"help.printenv.usage\":\"printenv [nome…]\",\"help.env.summary\":\"Mostra le variabili esportate, o avvia un comando con variabili in più.\",\"help.env.usage\":\"env [nome=valore…] [comando [argomenti…]]\",\"help.unset.summary\":\"Elimina variabili (o funzioni con -f).\",\"help.unset.usage\":\"unset [-fv] nome…\",\"help.typeset.summary\":\"Come declare.\",\"help.typeset.usage\":\"typeset [-aprxifF] [nome[=valore]…]\",\"help.declare.text\":\"-a array, -x esportata, -r sola lettura, -i intero (il valore si calcola), -p mostra, -f mostra le funzioni, -g globale dentro una funzione.\",\"help.declare.summary\":\"Dichiara variabili e ne mostra gli attributi.\",\"help.declare.usage\":\"declare [-aprxifF] [nome[=valore]…]\",\"help.local.summary\":\"Variabili visibili solo dentro la funzione.\",\"help.local.usage\":\"local [-arx] nome[=valore]…\",\"help.readonly.summary\":\"Rende le variabili di sola lettura.\",\"help.readonly.usage\":\"readonly [nome[=valore]…]\",\"help.export.text\":\"Senza argomenti elenca le variabili esportate. -n toglie l’esportazione.\",\"help.export.summary\":\"Rende le variabili visibili ai comandi e agli script avviati.\",\"help.export.usage\":\"export [-n] [nome[=valore]…]\",\"help.printf.text\":\"Il formato si riapplica finché restano argomenti. -v salva il risultato in una variabile.\",\"help.printf.summary\":\"Scrive gli argomenti secondo un formato (%s, %d, %5.2f, %x, %b, %q…).\",\"help.printf.usage\":\"printf [-v var] formato [argomenti…]\",\"help.echo.text\":\"-n  senza a capo finale\\n-e  interpreta \\\\n, \\\\t, \\\\\\\\, \\\\e… \\n-E  non le interpreta (predefinito)\",\"help.echo.summary\":\"Scrive gli argomenti, separati da uno spazio.\",\"help.echo.usage\":\"echo [-neE] [testo…]\",\"help.pwd.summary\":\"Mostra la cartella di lavoro.\",\"help.cd.text\":\"Senza argomenti va nella home ($HOME). «cd -» torna alla cartella precedente ($OLDPWD).\",\"help.cd.summary\":\"Cambia la cartella di lavoro.\",\"help.cd.usage\":\"cd [cartella]\",\"help.realpath.summary\":\"Il percorso completo.\",\"help.realpath.usage\":\"realpath [-m] percorso…\",\"help.dirname.summary\":\"Il percorso senza l’ultima parte.\",\"help.dirname.usage\":\"dirname percorso…\",\"help.basename.summary\":\"L’ultima parte di un percorso (senza il suffisso).\",\"help.basename.usage\":\"basename percorso [suffisso]\",\"help.tree.summary\":\"Mostra le cartelle ad albero.\",\"help.tree.usage\":\"tree [-adf] [-L livelli] [cartella…]\",\"help.find.text\":\"Test: -name modello, -iname, -path, -type f|d|l, -empty, -size [+-]n[ckMG], -mtime [+-]giorni, -mmin, -newer file\\nAzioni: -print, -print0, -delete (nel cestino), -exec comando {} \\\\; oppure +\\nOpzioni: -maxdepth n, -mindepth n. Insieme: ! (negazione), -o (o), ( … )\\nEsempio: find . -name \\\"*.txt\\\" -size +1k\",\"help.find.summary\":\"Cerca file e cartelle.\",\"help.find.usage\":\"find [percorso…] [espressione]\",\"help.stat.text\":\"-c  formato: %n nome, %s dimensione, %F tipo, %y data di modifica, %Y in secondi, %w %W creazione, %i id\",\"help.stat.summary\":\"Mostra i dettagli di file e cartelle.\",\"help.stat.usage\":\"stat [-c formato] percorso…\",\"help.rmdir.summary\":\"Rimuove cartelle vuote (nel cestino).\",\"help.rmdir.usage\":\"rmdir [-p] cartella…\",\"help.rm.text\":\"-r  anche le cartelle, con il loro contenuto\\n-d  le cartelle vuote\\n-f  nessun errore per ciò che non esiste\\n--purge  elimina definitivamente, senza cestino\\nCiò che va nel cestino si rimette a posto con «trash restore».\",\"help.rm.summary\":\"Sposta file e cartelle nel cestino (con --purge li elimina per sempre).\",\"help.rm.usage\":\"rm [-rfvd] [--purge] percorso…\",\"help.mv.text\":\"Se la destinazione è una cartella, ci sposta dentro; altrimenti rinomina. Un file sovrascritto va nel cestino.\\n-n  non sovrascrive\\n-v  dice cosa sposta\",\"help.mv.summary\":\"Sposta o rinomina file e cartelle.\",\"help.mv.usage\":\"mv [-nv] origine… destinazione\",\"help.cp.text\":\"-r  copia anche le cartelle, con il loro contenuto\\n-n  non sovrascrive i file che esistono\\n-v  dice cosa copia\",\"help.cp.summary\":\"Copia file e cartelle.\",\"help.cp.usage\":\"cp [-rnv] origine… destinazione\",\"help.touch.summary\":\"Crea dei file vuoti, o aggiorna la data di modifica di quelli che esistono.\",\"help.mkdir.text\":\"-p  crea anche le cartelle intermedie; nessun errore se esiste già\",\"help.mkdir.summary\":\"Crea delle cartelle.\",\"help.mkdir.usage\":\"mkdir [-pv] cartella…\",\"help.cat.text\":\"-n  numera le righe\\n-b  numera solo quelle non vuote\\n-s  una sola riga vuota di fila\\n-E  $ alla fine di ogni riga\",\"help.cat.summary\":\"Mostra il contenuto dei file (o dell’input), uno dopo l’altro.\",\"help.ls.text\":\"-l  dettagli (tipo, dimensione, data, tag)\\n-a  anche i nomi che iniziano con «.»\\n-h  dimensioni leggibili (1,2K)\\n-t  per data, -S per dimensione, -r al contrario\\n-1  uno per riga\\n-d  la cartella stessa, non il contenuto\\n-R  anche le sottocartelle\\n-F  / dopo le cartelle, @ dopo i collegamenti, * dopo gli script\",\"help.ls.summary\":\"Elenca il contenuto delle cartelle.\",\"help.ls.usage\":\"ls [-laAh1trSdRF] [percorso…]\",\"help.xargs.text\":\"-n N  al massimo N argomenti per volta\\n-I {}  un comando per riga, con {} sostituito dalla riga\\n-0  parole separate dal carattere nullo (find -print0)\\n-d C  parole separate da C\\n-t  mostra i comandi prima di avviarli\\n-r  non avvia niente se l’input è vuoto\\nEsempio: find . -name \\\"*.tmp\\\" | xargs rm\",\"help.xargs.summary\":\"Avvia un comando con le parole dell’input come argomenti.\",\"help.xargs.usage\":\"xargs [-n N] [-I {}] [-0] [-t] [comando [argomenti…]]\",\"help.yes.summary\":\"Ripete una riga all’infinito (y se non indicata): utile in una pipe.\",\"help.yes.usage\":\"yes [testo]\",\"help.seq.text\":\"-s S  separatore (a capo se non indicato)\\n-w  stessa larghezza, con zeri davanti\",\"help.seq.summary\":\"Scrive una sequenza di numeri.\",\"help.seq.usage\":\"seq [primo [passo]] ultimo\",\"help.nl.summary\":\"Numera le righe (non vuote, o tutte con -b a).\",\"help.rev.summary\":\"Scrive ogni riga al contrario.\",\"help.tr.text\":\"tr a-z A-Z  in maiuscolo\\ntr -d '\\\\r'  elimina i ritorni a capo di Windows\\ntr -s ' '  un solo spazio di fila\\nClassi: [:upper:] [:lower:] [:digit:] [:alpha:] [:alnum:] [:space:] [:punct:]\",\"help.tr.summary\":\"Sostituisce o elimina caratteri.\",\"help.tr.usage\":\"tr [-dsc] insieme1 [insieme2]\",\"help.cut.text\":\"-f 1,3  i campi 1 e 3 (separati da tab o da -d)\\n-d ,  il separatore\\n-c 1-5  i caratteri da 1 a 5\\n-s  solo le righe con il separatore\",\"help.cut.summary\":\"Estrae colonne da ogni riga.\",\"help.cut.usage\":\"cut -f campi [-d separatore] | -c caratteri [file…]\",\"help.tee.text\":\"-a  aggiunge in fondo invece di sovrascrivere\",\"help.tee.summary\":\"Copia l’input sia sull’output sia nei file.\",\"help.uniq.text\":\"-c  con il numero di ripetizioni\\n-d  solo le righe ripetute\\n-u  solo quelle uniche\\n-i  senza distinguere maiuscole e minuscole\",\"help.uniq.summary\":\"Toglie le righe ripetute una dopo l’altra (di solito dopo sort).\",\"help.sort.text\":\"-r  al contrario\\n-n  per numero\\n-h  per dimensione leggibile (2K, 1M)\\n-u  senza doppioni\\n-f  senza distinguere maiuscole e minuscole\\n-k N[,M]  per il campo N (fino a M)\\n-t C  campi separati da C\\n-V  numeri dentro il testo (file2 prima di file10)\\n-o file  scrive nel file\",\"help.sort.summary\":\"Ordina le righe.\",\"help.sort.usage\":\"sort [-rnufhV] [-k campo] [-t separatore] [file…]\",\"help.grep.text\":\"-i  senza distinguere maiuscole e minuscole\\n-v  le righe che NON corrispondono\\n-n  con il numero di riga\\n-c  conta le righe\\n-l  solo i nomi dei file\\n-r  cerca nelle cartelle\\n-w  parole intere, -x righe intere\\n-E  espressioni regolari estese (| + ? () senza barra)\\n-F  testo semplice, non espressione regolare\\n-o  solo la parte che corrisponde\\n-q  nessun risultato, solo lo stato\\n-A N, -B N, -C N  righe di contesto dopo, prima, intorno\\nStato: 0 trovato, 1 non trovato, 2 errore.\",\"help.grep.summary\":\"Cerca le righe che contengono un modello (espressione regolare).\",\"help.grep.usage\":\"grep [-ivnclrwxEFoqH] [-e modello] modello [file…]\",\"help.wc.text\":\"-l righe, -w parole, -c byte, -m caratteri, -L la riga più lunga\",\"help.wc.summary\":\"Conta righe, parole e byte.\",\"help.tail.text\":\"-n N  le ultime N righe (-n +N: dalla riga N in poi)\\n-c N  gli ultimi N caratteri\",\"help.tail.summary\":\"Le ultime righe (10 se non indicato).\",\"help.tail.usage\":\"tail [-n righe] [-c byte] [file…]\",\"help.head.text\":\"-n N  le prime N righe (-n -N: tutte tranne le ultime N)\\n-c N  i primi N caratteri\\n-5 è come -n 5\",\"help.head.summary\":\"Le prime righe (10 se non indicato).\",\"help.head.usage\":\"head [-n righe] [-c byte] [file…]\",\"help.sed.text\":\"s/vecchio/nuovo/g  sostituisce (g: tutte le volte, i: senza maiuscole, p: stampa)\\n3d, /re/d, 2,5d  elimina righe     -n …p  stampa solo quelle scelte\\ny/abc/xyz/  traslittera     a testo, i testo, c testo  aggiunge, inserisce, cambia\\n=  numero di riga   q  esce   h H g G x  spazio di riserva   b t :etichetta  salti\\nIndirizzi: n, $, /re/, a,b, a,+n, ! per negare, { … } per raggruppare.\\n-n  non stampa le righe da sola    -E  espressioni regolari estese    -i  modifica i file\\nEsempi: sed 's/rosso/blu/g' note.txt    sed -n '1,5p' file    sed -i '/^#/d' conf.txt\",\"help.sed.summary\":\"Modifica il testo riga per riga (sostituzioni, cancellazioni…).\",\"help.diff.text\":\"-u  formato unificato (con 3 righe di contesto; -U N per N)\\n-q  dice solo se sono diversi\\n-i  senza distinguere maiuscole e minuscole\\n-w  ignorando gli spazi, -b ignorando quanti sono\\n-B  ignorando le righe vuote\\n-s  dice anche quando sono identici\\n«-» è l’input. Stato: 0 uguali, 1 diversi, 2 errore.\",\"help.diff.summary\":\"Mostra le differenze tra due file.\",\"help.uname.summary\":\"Il nome del sistema operativo.\",\"help.hostname.summary\":\"Il nome del sistema.\",\"help.whoami.summary\":\"Il nome dell’utente.\",\"help.date.text\":\"Formato: %Y anno, %m mese, %d giorno, %H:%M:%S ora, %A giorno della settimana, %B mese, %s secondi dal 1970, %F = %Y-%m-%d, %T = %H:%M:%S\\n-d @1700000000, -d 2026-01-01, -d ieri\\nEsempio: date +%F\",\"help.date.summary\":\"Data e ora.\",\"help.date.usage\":\"date [-u] [-d data] [+formato]\",\"help.apps.summary\":\"Elenca le app installate (id, nome, versione).\",\"help.tag.text\":\"tag                elenca i tag\\ntag ls Lavoro      gli elementi con il tag\\ntag show file      i tag di un elemento\\ntag add Lavoro f   mette il tag (lo crea se non c’è)\\ntag rm Lavoro f    lo toglie\\ntag new nome blu   crea un tag\\ntag delete nome    elimina un tag\",\"help.tag.summary\":\"I tag di lilOS: elenca, assegna, toglie.\",\"help.tag.usage\":\"tag [ls [tag…] | show percorso… | add tag percorso… | rm tag percorso… | new nome [colore] | delete tag…]\",\"help.trash.text\":\"trash              elenca ciò che è nel cestino\\ntrash put file     sposta nel cestino (come rm -r)\\ntrash restore nome rimette a posto\\ntrash rm nome      elimina definitivamente\\ntrash empty        svuota il cestino\",\"help.trash.summary\":\"Il cestino: elenca, rimette a posto, svuota.\",\"help.trash.usage\":\"trash [list | put percorso… | restore nome… | rm nome… | empty]\",\"help.open.text\":\"open note.txt   apre con l’app predefinita\\nopen .   apre la cartella nel File Manager\\nopen -a editor note.txt   con un’app precisa\\nopen -a photo   avvia un’app\",\"help.open.summary\":\"Apre file e cartelle con la loro app (o con quella indicata).\",\"help.open.usage\":\"open [-a app] percorso…\",\"arith.tooDeep\":\"espressione: troppi livelli di ricorsione\",\"arith.syntax\":\"{expr}: errore di sintassi nell’espressione (simbolo errato «{token}»)\",\"arith.end\":\"fine\",\"arith.missingBracket\":\"{expr}: manca «]»\",\"arith.operandExpected\":\"{expr}: errore di sintassi nell’espressione (operando atteso)\",\"arith.badBase\":\"{value}: base non valida\",\"arith.tooGreatForBase\":\"{value}: valore troppo grande per la base\",\"arith.invalid\":\"espressione non valida\",\"arith.divisionByZero\":\"divisione per zero\",\"arith.negativeExponent\":\"esponente negativo\",\"arith.unknownOperator\":\"operatore sconosciuto {op}\",\"expand.braceTooLarge\":\"espansione delle graffe troppo grande\",\"expand.badSubstitution\":\"{name}: sostituzione errata\",\"expand.unbound\":\"{name}: variabile non impostata\",\"expand.cannotAssign\":\"{name}: impossibile assegnare in questo modo\",\"expand.nullOrNotSet\":\"parametro nullo o non impostato\",\"expand.negativeSubstring\":\"{count}: espressione di sottostringa < 0\",\"opt.invalid\":\"opzione non valida -- «{option}»\",\"opt.longNeedsArgument\":\"l’opzione «--{name}» richiede un argomento\",\"opt.needsArgument\":\"l’opzione richiede un argomento -- «{option}»\",\"opt.badNumber\":\"numero non valido: «{value}»\",\"regex.unmatchedBracket\":\"«[» senza «]» nell’espressione regolare\",\"regex.invalid\":\"espressione regolare non valida: {pattern}\",\"appCmd.summary\":\"Comando dell’app {app}.\",\"appCmd.usage\":\"{name} [argomenti…]\",\"printf.badNumber\":\"{value}: è richiesto un numero\",\"test.argumentExpected\":\"manca un argomento\",\"test.unexpectedArgument\":\"{arg}: argomento inatteso\",\"test.missingBracket\":\"manca «]»\",\"cd.oldpwdNotSet\":\"OLDPWD non impostata\",\"local.onlyInFunction\":\"si può usare solo in una funzione\",\"set.badOptionName\":\"{name}: nome di opzione non valido\",\"set.badOption\":\"{option}: opzione non valida\",\"let.noExpression\":\"manca l’espressione\",\"return.onlyInFunction\":\"si può usare solo in una funzione o in uno script letto con source\",\"loop.onlyInLoop\":\"ha senso solo in un ciclo for, while o until\",\"loop.badCount\":\"{n}: numero di cicli non valido\",\"alias.badName\":\"«{name}»: nome di alias non valido\",\"which.builtIn\":\"{name}: comando integrato nel Terminale\",\"wait.notAJob\":\"{spec}: non è un job di questa shell\",\"fg.noSuchJob\":\"{job}: job inesistente\",\"fg.current\":\"attuale\",\"kill.noSuchJob\":\"{spec}: job o processo inesistente\",\"sleep.missing\":\"manca la durata\",\"sleep.badDuration\":\"durata non valida: «{value}»\",\"source.noFile\":\"manca il nome del file\",\"bash.noCommand\":\"-c: manca il testo dei comandi\",\"bash.already\":\"Sei già in bash: per uno script scrivi «bash file.sh» o «source file.sh».\",\"type.alias\":\"{name} è un alias di «{value}»\",\"type.keyword\":\"{name} è una parola chiave della shell\",\"type.function\":\"{name} è una funzione\",\"type.builtin\":\"{name} è un comando interno della shell\",\"type.appCommand\":\"{name} è un comando dell’app {app}\",\"type.command\":\"{name} è un comando del Terminale\",\"type.file\":\"{name} è {path}\",\"syntax.topic.variables\":\"variabili\",\"syntax.topic.redirections\":\"redirezioni\",\"syntax.if\":\"if comandi; then comandi; [elif comandi; then comandi;] [else comandi;] fi\\nEsegue il ramo del primo «if»/«elif» i cui comandi riescono (stato 0).\\n  if [ -f note.txt ]; then echo c’è; else echo manca; fi\",\"syntax.for\":\"for nome in parole…; do comandi; done\\nfor (( inizio; condizione; passo )); do comandi; done\\n  for f in *.txt; do wc -l \\\"$f\\\"; done\\n  for ((i = 1; i <= 3; i++)); do echo $i; done\",\"syntax.while\":\"while comandi; do comandi; done   (until: finché i comandi NON riescono)\\n  n=0; while [ $n -lt 3 ]; do echo $n; n=$((n + 1)); done\\n  ls | while read -r nome; do echo \\\"- $nome\\\"; done\",\"syntax.until\":\"until comandi; do comandi; done: ripete finché i comandi non riescono.\",\"syntax.case\":\"case parola in modello|modello) comandi;; … esac\\nI modelli usano * ? [ ]. «;&» prosegue nel ramo dopo, «;;&» prova anche i modelli successivi.\\n  case \\\"$f\\\" in *.txt) echo testo;; *.png|*.jpg) echo immagine;; *) echo altro;; esac\",\"syntax.function\":\"nome() { comandi; }   oppure   function nome { comandi; }\\nGli argomenti sono $1, $2…, $@; «local» crea variabili della funzione, «return n» esce.\\n  saluta() { echo \\\"Ciao, $1\\\"; }; saluta Eugenio\",\"syntax.cond\":\"[[ espressione ]]: test senza divisione in parole né espansione di *.\\n  [[ $nome == *.txt ]]      confronto con un modello\\n  [[ $s =~ ^[0-9]+$ ]]      espressione regolare (gruppi in BASH_REMATCH)\\n  [[ -d dir && ! -e file ]] -e -f -d -s -z -n, && || ! ( )\",\"syntax.arith\":\"(( espressione )): aritmetica intera; stato 0 se il risultato non è 0.\\n  (( n++ )); (( n > 3 )) && echo grande; echo $(( 2 ** 10 ))\",\"syntax.variables\":\"nome=valore (senza spazi), $nome o ${nome}. Array: a=(x y z), ${a[0]}, ${a[@]}, ${#a[@]}.\\n${v:-predefinito} ${v:=predefinito} ${v:+alt} ${#v} ${v#prefisso} ${v%suffisso} ${v/da/a} ${v//da/a} ${v:inizio:lunghezza} ${v^^} ${v,,}\\nSpeciali: $? stato dell’ultimo comando, $$ la shell, $! l’ultimo comando in background, $# $@ $* gli argomenti.\",\"syntax.redirections\":\"> file (sovrascrive), >> file (aggiunge), < file (legge), 2> errori, 2>&1, &> file, <<EOF … EOF, <<< testo, | pipe.\\n/dev/null scarta tutto.\",\"files.cannotAccess\":\"impossibile accedere a «{path}»: file o cartella inesistente\",\"files.cannotCreate\":\"impossibile creare «{path}»: file o cartella inesistente\",\"files.overwriteFolder\":\"impossibile sovrascrivere la cartella «{name}» con un file\",\"files.missingDestination\":\"manca la destinazione dopo «{path}»\",\"files.targetNotFolder\":\"la destinazione «{path}» non è una cartella\",\"files.cannotStat\":\"impossibile fare stat di «{path}»: file o cartella inesistente\",\"files.cannotRemove\":\"impossibile rimuovere «{path}»: {reason}\",\"files.quotedNoSuchFile\":\"«{path}»: file o cartella inesistente\",\"mkdir.notAFolder\":\"impossibile creare la cartella «{path}»: «{name}» esiste e non è una cartella\",\"mkdir.exists\":\"impossibile creare la cartella «{path}»: il file esiste\",\"mkdir.noParent\":\"impossibile creare la cartella «{path}»: file o cartella inesistente\",\"mkdir.created\":\"creata la cartella «{path}»\",\"cp.overwriteFile\":\"impossibile sovrascrivere «{name}», che non è una cartella, con una cartella\",\"cp.verbose\":\"«{from}» -> «{to}»\",\"cp.omitting\":\"-r non specificato; si omette la cartella «{path}»\",\"cp.intoItself\":\"impossibile copiare la cartella «{path}» dentro se stessa\",\"mv.system\":\"impossibile spostare «{path}»: è una cartella di sistema\",\"mv.intoItself\":\"impossibile spostare «{path}» in una sua sottocartella\",\"mv.notEmpty\":\"impossibile spostare «{path}» su «{name}»: la cartella non è vuota\",\"mv.verbose\":\"rinominato «{from}» -> «{to}»\",\"reason.noSuchFile\":\"file o cartella inesistente\",\"reason.isADirectory\":\"è una cartella\",\"reason.notADirectory\":\"non è una cartella\",\"reason.notEmpty\":\"la cartella non è vuota\",\"reason.system\":\"è una cartella di sistema\",\"reason.containsSystem\":\"contiene cartelle di sistema\",\"rm.home\":\"è pericoloso agire su «{path}»: è la home\",\"rm.purged\":\"eliminato definitivamente «{path}»\",\"rm.trashed\":\"spostato nel cestino «{path}»\",\"rmdir.removed\":\"rimossa la cartella «{path}»\",\"stat.folder\":\"cartella\",\"stat.appLink\":\"collegamento all’app {app}\",\"stat.file\":\"file\",\"stat.emptyFile\":\"file vuoto\",\"stat.type\":\"Tipo: {type}\",\"stat.path\":\"Percorso: {path}\",\"stat.items\":\"Elementi: {n} ({total} in tutto)\",\"stat.size\":\"Dimensione: {size} byte ({human})\",\"stat.created\":\"Creato: {date}\",\"stat.modified\":\"Modificato: {date}\",\"stat.tags\":\"Tag: {tags}\",\"stat.system\":\"Cartella di sistema\",\"find.missingArgument\":\"manca l’argomento di «{name}»\",\"find.badType\":\"tipo sconosciuto per -type: «{type}» (f, d o l)\",\"find.badSize\":\"dimensione non valida: «{value}»\",\"find.badValue\":\"valore non valido per {option}: «{value}»\",\"find.cannotFind\":\"impossibile trovare «{path}»\",\"find.execEnd\":\"manca la fine di «-exec» («;» o «+»)\",\"find.execCommand\":\"manca il comando di «-exec»\",\"find.unknownPredicate\":\"predicato sconosciuto: «{name}»\",\"find.unexpected\":\"argomento inatteso: «{arg}»\",\"tree.folders\":{\"one\":\"{n} cartella\",\"other\":\"{n} cartelle\"},\"tree.files\":{\"one\":\"{n} file\",\"other\":\"{n} file\"},\"ls.date\":\"{day} {month}\",\"wc.total\":\"totale\",\"grep.noPattern\":\"manca il modello da cercare\\nUso: grep [opzioni] modello [file…]\",\"sort.badKey\":\"chiave non valida: «{key}»\",\"sort.disorder\":\"-:{n}: disordine: {line}\",\"cut.badList\":\"elenco non valido: «{spec}»\",\"cut.noList\":\"indicare un elenco di campi (-f) o di caratteri (-c)\",\"cut.badDelimiter\":\"il delimitatore deve essere un solo carattere\",\"tr.reverseRange\":\"intervallo al contrario: «{range}»\",\"tr.missingSet2\":\"manca il secondo insieme dopo «{set}»\",\"seq.badArgument\":\"argomento non valido: «{value}»\",\"seq.zeroStep\":\"il passo non può essere 0\",\"xargs.unmatchedDouble\":\"virgolette doppie non chiuse\",\"xargs.unmatchedSingle\":\"virgolette singole non chiuse\",\"xargs.badCount\":\"il numero di argomenti deve essere almeno 1\",\"sed.at\":\"-e espressione #1, carattere {pos}: {message}\",\"sed.unterminated\":\"comando «s» non terminato\",\"sed.badAddress\":\"indirizzo non valido\",\"sed.missingAddress\":\"manca il secondo indirizzo\",\"sed.missingCommand\":\"manca il comando\",\"sed.unexpectedBrace\":\"«}» inatteso\",\"sed.badDelimiter\":\"delimitatore non valido per «s»\",\"sed.yLengths\":\"le stringhe di «y» hanno lunghezze diverse\",\"sed.noLabel\":\"«:» senza etichetta\",\"sed.unknownCommand\":\"comando sconosciuto: «{cmd}»\",\"sed.unmatchedBrace\":\"manca «}»\",\"sed.noSuchLabel\":\"etichetta inesistente per un salto: «{label}»\",\"sed.noPreviousRegex\":\"nessuna espressione regolare precedente\",\"sed.cannotRead\":\"impossibile leggere {path}: file o cartella inesistente\",\"sed.noScript\":\"manca lo script\\nUso: sed [-n] [-E] [-i] script [file…]\",\"sed.noFiles\":\"nessun file da modificare con -i\",\"diff.missingOperand\":\"manca un operando dopo «{arg}»\",\"diff.extraOperand\":\"operando in più: «{arg}»\",\"diff.identical\":\"I file {a} e {b} sono identici\",\"diff.differ\":\"I file {a} e {b} sono diversi\",\"diff.tooBig\":\"i file sono troppo diversi e troppo grandi da confrontare\",\"open.noApp\":\"app non trovata: «{app}» (vedi «apps»)\",\"trash.notInTrash\":\"«{name}» non è nel cestino\",\"trash.empty\":\"Il cestino è vuoto.\",\"trash.deletedFolder\":\"(cartella eliminata)\",\"trash.items\":{\"one\":\"{n} elemento\",\"other\":\"{n} elementi\"},\"trash.missingPut\":\"manca cosa mettere nel cestino\",\"trash.cannotTrash\":\"{path}: non si può cestinare (cartella di sistema)\",\"trash.missingRestore\":\"manca il nome di ciò che va rimesso a posto\",\"trash.restored\":\"rimesso in {path}\",\"trash.missingName\":\"manca il nome\",\"trash.purged\":{\"one\":\"eliminato definitivamente {n} elemento\",\"other\":\"eliminati definitivamente {n} elementi\"},\"trash.emptied\":{\"one\":\"Cestino svuotato ({n} elemento).\",\"other\":\"Cestino svuotato ({n} elementi).\"},\"trash.alreadyEmpty\":\"Il cestino era già vuoto.\",\"tag.noSuchTag\":\"tag inesistente: «{name}» (vedi «tag ls»)\",\"tag.none\":\"Nessun tag. Creane uno con «tag new nome».\",\"tag.hidden\":\"nascosto\",\"tag.noTags\":\"nessun tag\",\"tag.usageAddRm\":\"tag {sub} nome file…\",\"tag.created\":\"creato il tag «{name}»\",\"tag.system\":\"{path}: gli elementi di sistema non hanno tag\",\"tag.usageNew\":\"tag new nome [colore]\",\"tag.createdShown\":\"creato il tag {tag}\",\"tag.usageDelete\":\"tag delete nome…\",\"date.formatC\":\"%a %e %b %Y, %H:%M:%S\",\"date.formatX\":\"%d/%m/%Y\",\"date.format\":\"%a %e %b %Y, %H:%M:%S %Z\",\"date.invalid\":\"data non valida: «{date}»\",\"@actions.terminal.sshHere.label\":\"Apri terminale SSH qui\",\"help.ssh.summary\":\"apre una sessione SSH in una scheda nuova\",\"help.ssh.usage\":\"ssh [-p porta] [-l utente] [utente@]host [comando] | ssh <host salvato>\",\"help.telnet.summary\":\"apre una sessione Telnet in una scheda nuova\",\"help.telnet.usage\":\"telnet [-l utente] host [porta] | telnet <host salvato>\",\"help.rlogin.summary\":\"apre una sessione rlogin in una scheda nuova\",\"help.rlogin.usage\":\"rlogin [-l utente] host | rlogin <host salvato>\",\"help.supdup.summary\":\"apre una sessione SUPDUP in una scheda nuova\",\"help.supdup.usage\":\"supdup host [porta] | supdup <host salvato>\",\"help.sessions.summary\":\"le sessioni remote ancora aperte; con un numero, ne mostra una in una scheda\",\"help.sessions.usage\":\"sessions [n]\",\"remote.cmd.unavailable\":\"le sessioni remote non sono disponibili (lilOS non ha i loro moduli)\",\"remote.cmd.noModule\":\"{name}: lilOS non ha il suo modulo (un amministratore installa {module} dall’AppStore, scheda Kernel)\",\"remote.cmd.opened\":\"Aperta in una scheda nuova: {name}\",\"remote.cmd.noUser\":\"ssh: serve un utente: utente@host oppure -l utente\",\"remote.cmd.noSession\":\"nessuna sessione aperta «{name}» (vedi «sessions»)\",\"remote.cmd.shown\":\"Mostrata in una scheda: {name}\",\"remote.cmd.shownNow\":\"mostrata in una finestra\",\"remote.cmd.closesIn\":{\"one\":\"si chiude tra {n} minuto\",\"other\":\"si chiude tra {n} minuti\"},\"remote.cmd.none\":\"Nessuna sessione remota aperta.\",\"remote.cmd.resumeHint\":\"«sessions <n>» ne mostra una in una scheda\",\"remote.tabs\":\"Schede\",\"remote.screen\":\"Terminale remoto\",\"remote.newShell\":\"Nuova shell\",\"remote.activity\":\"Nuovo output\",\"remote.closeTab\":\"Chiudi scheda\",\"remote.closeSession\":\"Chiudi (termina la sessione)\",\"remote.closeNamed\":\"Chiudi {name}\",\"remote.close\":\"Chiudi\",\"remote.cancel\":\"Annulla\",\"remote.notRemote\":\"non è in una connessione di rete\",\"remote.notSftp\":\"il terminale SSH si apre solo sulle connessioni SFTP\",\"remote.cannotReconnect\":\"questa sessione non si riapre da qui: aprila di nuovo dal File Manager\",\"remote.unavailable\":\"Le sessioni remote non rispondono: {error}\",\"remote.noProtocols\":\"lilOS non ha moduli per le sessioni remote. Un amministratore può installare term-ssh, term-telnet, term-rlogin o term-supdup dall’AppStore (scheda Kernel).\",\"remote.side.label\":\"Host e sessioni remote\",\"remote.side.toggle\":\"Mostra o nascondi gli host\",\"remote.side.hosts\":\"Host\",\"remote.side.connect\":\"Connetti\",\"remote.side.open\":\"C’è una sessione aperta su questo host\",\"remote.side.none\":\"Nessun host salvato. «ssh utente@server» apre una sessione; + salva un host.\",\"remote.side.running\":\"Ancora attive\",\"remote.side.elsewhere\":\"in un’altra finestra\",\"remote.side.closesIn\":{\"one\":\"si chiude tra {n} minuto\",\"other\":\"si chiude tra {n} minuti\"},\"remote.side.resume\":\"Riprendi\",\"remote.taken\":\"La sessione è stata aperta in un’altra finestra\",\"remote.takeBack\":\"Mostrala qui\",\"remote.lostLink\":\"Il collegamento con lilOS si è interrotto\",\"remote.attachAgain\":\"Ricollega\",\"remote.secure\":\"Cifrata\",\"remote.insecure\":\"Non cifrata\",\"remote.insecureHint\":\"Quello che scrivi, password comprese, passa in chiaro sulla rete\",\"remote.cipher\":\"Cifratura: {cipher}\",\"remote.state.new\":\"In attesa\",\"remote.state.connecting\":\"Connessione…\",\"remote.state.on\":\"Connessa\",\"remote.state.closed\":\"Chiusa\",\"remote.find\":\"Cerca (Ctrl+Maiusc+F)\",\"remote.find.count\":\"{i} di {n}\",\"remote.find.none\":\"Nessuno\",\"remote.find.prev\":\"Precedente (Maiusc+Invio)\",\"remote.find.next\":\"Successivo (Invio)\",\"remote.record\":\"Registra la sessione in un file\",\"remote.recordStop\":\"Ferma la registrazione\",\"remote.keys\":\"Tasti\",\"remote.keys.send\":\"Manda al server:\",\"remote.keys.copy\":\"Copia\",\"remote.keys.paste\":\"Incolla: Ctrl+Maiusc+V\",\"remote.keys.clear\":\"Cancella lo storico\",\"remote.keys.disconnect\":\"Disconnetti\",\"remote.signal.break\":\"Invia Break\",\"remote.signal.interrupt\":\"Interrompi il processo\",\"remote.signal.ayt\":\"Ci sei? (AYT)\",\"remote.reconnect\":\"Riconnetti\",\"remote.closed\":\"Connessione chiusa\",\"remote.closedWhy\":\"Connessione chiusa: {reason}\",\"remote.trust.title\":\"Conferma il server {host}\",\"remote.trust.changedTitle\":\"La chiave di {host} è cambiata\",\"remote.trust.first\":\"Prima connessione a questo server. Controlla che l’impronta della chiave sia quella del server (te la dà chi lo gestisce).\",\"remote.trust.firstTls\":\"Il certificato di questo server non è valido per il suo nome o non è firmato da un’autorità nota. Controlla l’impronta prima di andare avanti.\",\"remote.trust.changedText\":\"Attenzione: potrebbe non essere il tuo server. Mostra una chiave diversa da quella che avevi confermato: può essere stato reinstallato, oppure qualcuno si è messo in mezzo. Vai avanti solo se sai perché è cambiata.\",\"remote.trust.server\":\"Server\",\"remote.trust.key\":\"Chiave\",\"remote.trust.certificate\":\"Certificato\",\"remote.trust.previous\":\"Chiave confermata prima\",\"remote.trust.ask\":\"Continua se è il tuo server.\",\"remote.trust.askChanged\":\"Continua solo per fidarti della nuova chiave.\",\"remote.record.title\":\"Registra la sessione\",\"remote.record.file\":\"File\",\"remote.record.hint\":\"Un file nella tua home. Viene scritto mentre lavori; si ferma a 8 MB.\",\"remote.record.colors\":\"Anche con i codici di colore (per rivederla com’era)\",\"remote.record.start\":\"Registra\",\"remote.record.badPath\":\"La cartella non esiste: scrivi un percorso come ~/Documenti/sessione.txt\",\"remote.record.exists\":\"«{name}» esiste già: scegli un altro nome\",\"remote.record.full\":\"Registrazione fermata: «{path}» ha raggiunto la dimensione massima\",\"remote.record.failed\":\"La registrazione non si salva: {error}\",\"remote.record.saved\":\"Sessione registrata in «{path}»\",\"remote.host.newTitle\":\"Nuovo host\",\"remote.host.editTitle\":\"Modifica l’host\",\"remote.host.name\":\"Nome\",\"remote.host.folder\":\"Cartella\",\"remote.host.folderNone\":\"Nessuna\",\"remote.host.protocol\":\"Protocollo\",\"remote.host.kept\":\"•••••• (salvata: vuota la lascia)\",\"remote.host.noProtocols\":\"Nessun protocollo disponibile.\",\"remote.host.insecureTitle\":\"Connessione non cifrata\",\"remote.host.insecureText\":\"Quello che scrivi, password comprese, passa in chiaro sulla rete. Usala solo su reti di cui ti fidi o con apparati che non hanno SSH.\",\"remote.host.remember\":\"Ricorda password e passphrase\",\"remote.host.keyUnreadable\":\"Il file della chiave non si legge: {error}\",\"remote.host.advanced\":\"Avanzate\",\"remote.host.term\":\"Tipo di terminale\",\"remote.host.encoding\":\"Codifica\",\"remote.host.backspace\":\"Backspace manda\",\"remote.host.backspaceDel\":\"DEL (^?)\",\"remote.host.backspaceBs\":\"BS (^H)\",\"remote.host.delete\":\"Elimina\",\"remote.host.save\":\"Salva\",\"remote.host.saveConnect\":\"Salva e connetti\",\"@entrypoints.filePreview.label\":\"Anteprime dei collegamenti .term\",\"@entrypoints.shell.label\":\"Shell per la Pianificazione\",\"@commands.terminal.newShell.label\":\"Nuova shell\",\"@commands.terminal.splitRight.label\":\"Dividi a destra\",\"@commands.terminal.splitDown.label\":\"Dividi in basso\",\"@commands.terminal.detach.label\":\"Stacca la scheda in una nuova finestra\",\"@commands.terminal.broadcast.label\":\"Invia l’input a tutti i riquadri\",\"@commands.terminal.focusLeft.label\":\"Riquadro a sinistra\",\"@commands.terminal.focusRight.label\":\"Riquadro a destra\",\"@commands.terminal.focusUp.label\":\"Riquadro sopra\",\"@commands.terminal.focusDown.label\":\"Riquadro sotto\",\"@commands.terminal.previousTab.label\":\"Scheda precedente del riquadro\",\"@commands.terminal.nextTab.label\":\"Scheda successiva del riquadro\",\"@commands.terminal.moveLeft.label\":\"Sposta la scheda a sinistra\",\"@commands.terminal.moveRight.label\":\"Sposta la scheda a destra\",\"@commands.terminal.moveUp.label\":\"Sposta la scheda in alto\",\"@commands.terminal.moveDown.label\":\"Sposta la scheda in basso\",\"@dependencies.term-ssh.reason\":\"Sessioni remote via SSH, e comandi del Terminale sugli host SSH salvati\",\"@dependencies.term-telnet.reason\":\"Sessioni remote via Telnet\",\"@dependencies.term-rlogin.reason\":\"Sessioni remote via rlogin\",\"@dependencies.term-supdup.reason\":\"Sessioni remote via SUPDUP\",\"@dependencies.services-isolate.reason\":\"Comandi del Terminale pianificati nel kernel, con il tempo massimo dell’operazione e Annulla\",\"tabs.count\":{\"one\":\"{n} scheda\",\"other\":\"{n} schede\"},\"tabs.pane\":\"Riquadro {n} — {name}\",\"tabs.rename\":\"Rinomina…\",\"tabs.renameLabel\":\"Nome della scheda\",\"tabs.renameHint\":\"Vuoto: il nome solito (la cartella, o il server).\",\"tabs.renameOk\":\"Rinomina\",\"tabs.duplicate\":\"Duplica\",\"tabs.splitRight\":\"Dividi a destra\",\"tabs.splitDown\":\"Dividi in basso\",\"tabs.moveToPane\":\"Sposta nel riquadro\",\"tabs.detach\":\"Stacca in una nuova finestra\",\"tabs.moveToWindow\":\"Sposta nella finestra\",\"tabs.newWindow\":\"Nuova finestra\",\"tabs.saveTerm\":\"Salva come collegamento (.term)…\",\"tabs.addToDesk\":\"Aggiungi alla scrivania\",\"tabs.copyAddress\":\"Copia indirizzo\",\"tabs.closeOthers\":\"Chiudi le altre schede\",\"tabs.closeRight\":\"Chiudi le schede a destra\",\"grid.gutter\":\"Trascina per cambiare la misura dei riquadri; doppio clic: uguali\",\"grid.broadcast\":\"Invia l’input a tutti i riquadri\",\"grid.broadcastOn\":\"Input a tutti i riquadri\",\"grid.broadcastOff\":\"Quello che scrivi va alla scheda mostrata in ogni riquadro. Clic per spegnerlo.\",\"menu.title\":\"Menu di Terminale\",\"menu.openTerm\":\"Apri un collegamento (.term)…\",\"menu.openTermTitle\":\"Apri un collegamento al terminale\",\"drag.newWindow\":\"Rilascia per aprire {name} in una finestra nuova\",\"drag.pane\":\"Sposta in questo riquadro\",\"drag.split.left\":\"Nuovo riquadro a sinistra\",\"drag.split.right\":\"Nuovo riquadro a destra\",\"drag.split.up\":\"Nuovo riquadro sopra\",\"drag.split.down\":\"Nuovo riquadro sotto\",\"file.invalid\":\"Non è un collegamento al terminale (.term) o è rovinato\",\"file.missing\":\"Il collegamento non esiste più\",\"file.cannot\":\"Questa scheda non può diventare un collegamento\",\"file.noFolder\":\"La cartella {path} non esiste\",\"file.serverFolder\":\"La cartella del server va scritta per intero, per esempio /var/www\",\"file.exists\":\"C’è già un file {name} in quella cartella\",\"file.noPassword\":\"Scrivi la password (o la chiave) da salvare nel file\",\"file.onDesk\":\"{name} è sulla scrivania\",\"file.saved\":\"Collegamento salvato: {path}\",\"file.saveTitle\":\"Salva collegamento\",\"file.name\":\"Nome del file\",\"file.folder\":\"Cartella\",\"file.change\":\"Cambia…\",\"file.pickFolder\":\"Dove salvare il collegamento\",\"file.cwdLocal\":\"Parti dalla cartella (facoltativo)\",\"file.cwdRemote\":\"Cartella del server in cui entrare (facoltativo)\",\"file.command\":\"Comando da eseguire all’avvio (facoltativo)\",\"file.commandRemote\":\"Comando all’avvio (facoltativo)\",\"file.commandRemoteHint\":\"Parte al posto della shell del server\",\"file.openAs\":\"All’apertura\",\"file.openDefault\":\"Come nelle Opzioni ({how})\",\"file.keepPassword\":\"Salva la password nel file\",\"file.passwordSaved\":\"Nel file va la password salvata per questo host.\",\"file.passwordHint\":\"La password è cifrata: vale solo per te, su questo lilOS, per questo server e utente. A chiunque altro viene chiesta come al solito.\",\"file.save\":\"Salva\",\"file.command.title\":\"Questo collegamento esegue un comando\",\"file.command.text\":\"«{name}» all’apertura esegue questo comando:\\n\\n{command}\\n\\nEseguilo solo se ti fidi di chi ha fatto il collegamento. Continuare?\",\"options.open\":\"Opzioni…\",\"options.title\":\"Opzioni di Terminale\",\"options.tab.general\":\"Generale\",\"options.tab.generalDescription\":\"Come Terminale apre i collegamenti\",\"options.files\":\"Collegamenti al terminale (.term)\",\"options.openTerm\":\"Apri i collegamenti\",\"options.openTermDescription\":\"Dove si apre un file .term con il doppio clic, quando il file non lo dice da sé\",\"options.openTerm.window\":\"In una finestra nuova\",\"options.openTerm.tab\":\"In una scheda della finestra aperta\"}}")
+	en: /* @__PURE__ */ JSON.parse("{\"strings\":{\"@name\":\"Terminal\",\"@description\":\"A bash-like shell over the files of lilOS, in tabs and panes side by side, and remote sessions: SSH, Telnet, rlogin and SUPDUP, with saved hosts, .term links and sessions that keep running when the window is closed.\",\"@entrypoints.main.params.cwd.label\":\"Folder\",\"@entrypoints.main.params.cwd.description\":\"The folder to open the terminal in\",\"@automation.terminal.run.label\":\"Run a command\",\"@automation.terminal.run.params.command.label\":\"Command\",\"@automation.terminal.run.params.folder.label\":\"Folder\",\"@automation.terminal.run.params.folder.description\":\"The working folder the command runs in\",\"@entrypoints.main.params.file.label\":\"Link\",\"@entrypoints.main.params.file.description\":\"A terminal link (.term) to open\",\"ui.title\":\"Terminal\",\"ui.commandLine\":\"Command line\",\"ui.welcome\":\"lilOS Terminal · \\\"help\\\" lists the commands\",\"automation.tooLong\":\"Command too long to record\",\"automation.noCommand\":\"No command to run\",\"automation.busy\":\"The terminal is busy with another command\",\"automation.noFolder\":\"The folder is not there any more\",\"automation.status\":\"The command ended with status {status}\",\"shell.defaultUser\":\"user\",\"shell.readonly\":\"{name}: readonly variable\",\"shell.cannotUnset\":\"{name}: cannot unset: readonly variable\",\"shell.badSubscript\":\"{index}: bad array subscript\",\"shell.unknownConstruct\":\"unknown construct: {type}\",\"shell.badRegex\":\"invalid regular expression\",\"shell.unaryExpected\":\"{op}: unary operator expected\",\"shell.integerExpected\":\"{value}: integer expression expected\",\"shell.binaryExpected\":\"{op}: binary operator expected\",\"shell.commandNotFound\":\"{name}: command not found\",\"shell.tooDeep\":\"{name}: maximum function nesting level exceeded\",\"shell.badFd\":\"{fd}: Bad file descriptor\",\"shell.fdExpected\":\"{target}: file descriptor expected\",\"shell.ambiguousRedirect\":\"{target}: ambiguous redirect\",\"shell.isAppLink\":\"{path}: is a link to an app\",\"err.noSuchFile\":\"{path}: No such file or directory\",\"err.isADirectory\":\"{path}: Is a directory\",\"err.notAFile\":\"{path}: Not a regular file\",\"err.missingParen\":\"`)' expected\",\"err.badIdentifier\":\"`{name}': not a valid identifier\",\"err.numericArgument\":\"{value}: numeric argument required\",\"err.tooManyArguments\":\"too many arguments\",\"err.notADirectory\":\"{path}: Not a directory\",\"err.notFound\":\"{name}: not found\",\"err.missingOperand\":\"missing operand\",\"err.unknownSubcommand\":\"unknown subcommand: '{sub}'\",\"parse.unexpectedEnd\":\"syntax error: unexpected end of input\",\"parse.unexpectedEndOfFile\":\"syntax error: unexpected end of file\",\"parse.nearEnd\":\"end of input\",\"parse.nearNewline\":\"`newline'\",\"parse.nearToken\":\"`{token}'\",\"parse.near\":\"syntax error near unexpected token {near}\",\"parse.nearExpected\":\"syntax error near unexpected token {near}: expected `{expected}'\",\"parse.badFunctionName\":\"invalid function name\",\"parse.parenAfterName\":\"expected `)' after the function name\",\"parse.aliasLoop\":\"aliases expanded too many times\",\"parse.missingTarget\":\"syntax error near unexpected token {near}: missing target of `{op}'\",\"parse.forBadName\":\"for: invalid variable name\",\"parse.caseNoWord\":\"case: missing word\",\"parse.condNear\":\"syntax error in conditional expression near {near}\",\"parse.condNoOperand\":\"syntax error in conditional expression: missing operand\",\"parse.condNoRegex\":\"syntax error in conditional expression: missing regular expression\",\"parse.badSubstitution\":\"bad substitution\",\"parse.badSubstitutionBrace\":\"bad substitution: missing `}'\",\"parse.backquotes\":\"syntax error in backquoted command substitution\",\"jobs.done\":\"Done\",\"jobs.interrupted\":\"Interrupt\",\"jobs.exit\":\"Exit {code}\",\"jobs.running\":\"Running\",\"help.usageLine\":\"Usage: {usage}\",\"help.usageShort\":\"usage: {usage}\",\"help.noHelp\":\"no help topics match `{name}'\",\"help.intro\":\"lilOS Terminal: a bash-like shell over the files of lilOS.\\n\\\"help command\\\" or \\\"command --help\\\" explains a command; \\\"help if\\\", \\\"help for\\\", \\\"help case\\\"… the syntax.\",\"help.syntaxList\":\"Syntax: {list}\",\"help.sh.summary\":\"Like bash.\",\"help.sh.usage\":\"sh [-c commands | script] [arguments…]\",\"help.bash.text\":\"\\\"bash script.sh a b\\\" runs the script with $1=a, $2=b; \\\"bash -c 'echo $1' name x\\\" runs the text; \\\"cat script.sh | bash\\\" reads the script from the input.\",\"help.bash.summary\":\"Runs a script or commands in a new shell.\",\"help.bash.usage\":\"bash [-c commands | script] [arguments…]\",\"help.sleep.summary\":\"Waits: 5 (seconds), 0.5, 2m, 1h.\",\"help.sleep.usage\":\"sleep duration…\",\"help.kill.summary\":\"Interrupts commands in the background.\",\"help.kill.usage\":\"kill [-signal] %job | pid…\",\"help.fg.summary\":\"Brings a command in the background to the foreground: it is waited for and Ctrl C interrupts it.\",\"help.wait.summary\":\"Waits for the commands in the background to finish (all of them, or the ones named).\",\"help.jobs.summary\":\"Lists the commands started in the background with &.\",\"help.clear.summary\":\"Clears the screen (Ctrl L too).\",\"help.help.summary\":\"Lists the commands, or explains the one named.\",\"help.help.usage\":\"help [command]\",\"help.history.summary\":\"Shows the commands given (the last n); -c clears the history.\",\"help.which.summary\":\"Tells where a command is.\",\"help.which.usage\":\"which name…\",\"help.command.summary\":\"Starts a command ignoring the functions with the same name; with -v tells what it would start.\",\"help.command.usage\":\"command [-v] name [arguments…]\",\"help.type.summary\":\"Tells what a name is: alias, keyword, function, command.\",\"help.type.usage\":\"type [-t] name…\",\"help.unalias.summary\":\"Removes aliases (all of them with -a).\",\"help.unalias.usage\":\"unalias [-a] name…\",\"help.alias.text\":\"Example: alias ll='ls -l'. Aliases work from the line after the one that defines them.\",\"help.alias.summary\":\"Defines or shows aliases (short names for commands).\",\"help.alias.usage\":\"alias [name[=value]…]\",\"help.eval.summary\":\"Runs the arguments, joined by spaces, as a command.\",\"help.eval.usage\":\"eval [arguments…]\",\"help.dot.summary\":\"Like source.\",\"help.dot.usage\":\". file [arguments…]\",\"help.source.summary\":\"Runs the commands of a file in this shell (variables, functions and aliases stay).\",\"help.source.usage\":\"source file [arguments…]\",\"help.read.text\":\"-r  backslashes stay as they are\\n-p  shows a prompt\\n-a  puts the words in an array\\n-d  reads up to this character instead of up to the newline\\n-s  does not show what is typed (for passwords)\\nStatus 1 at the end of the input.\",\"help.read.summary\":\"Reads a line and splits it into the variables named ($REPLY without names).\",\"help.read.usage\":\"read [-rs] [-p prompt] [-a array] [-d delim] [name…]\",\"help.continue.summary\":\"Goes on to the next round of the loop (or of the n-th enclosing loop).\",\"help.break.summary\":\"Exits the loop (or n loops).\",\"help.return.summary\":\"Exits the function (or the script read with source).\",\"help.return.usage\":\"return [status]\",\"help.exit.summary\":\"Closes the terminal (or exits the script) with a status.\",\"help.exit.usage\":\"exit [status]\",\"help.let.summary\":\"Computes arithmetic expressions (status 1 if the last one is 0).\",\"help.let.usage\":\"let expression…\",\"help.bracket.summary\":\"Like test, with a final \\\"]\\\".\",\"help.bracket.usage\":\"[ expression ]\",\"help.test.text\":\"Files: -e exists, -f is a file, -d is a directory, -s is not empty\\nText: -z empty, -n not empty, a = b, a != b\\nNumbers: -eq -ne -lt -le -gt -ge\\nCombined: ! not, -a and, -o or, ( … )\",\"help.test.summary\":\"Evaluates an expression: status 0 if true, 1 if false.\",\"help.test.usage\":\"test expression\",\"help.colon.summary\":\"Does nothing (status 0); the arguments are expanded anyway.\",\"help.colon.usage\":\": [arguments…]\",\"help.false.summary\":\"Does nothing, unsuccessfully (status 1).\",\"help.true.summary\":\"Does nothing, successfully (status 0).\",\"help.shift.summary\":\"Shifts the positional parameters: $2 becomes $1…\",\"help.set.text\":\"-e  exits at the first command that fails\\n-u  error when an unset variable is used\\n-x  shows the commands before running them\\n-f  no expansion of * and ?\\n-o pipefail  a pipeline fails if one of its commands fails\\n+e, +u… turn them off. Without arguments it shows every variable.\",\"help.set.summary\":\"Sets the options of the shell and the positional parameters ($1, $2…).\",\"help.set.usage\":\"set [-euxf] [-o option] [--] [arguments…]\",\"help.printenv.summary\":\"Shows the exported variables (or the value of the ones named).\",\"help.printenv.usage\":\"printenv [name…]\",\"help.env.summary\":\"Shows the exported variables, or starts a command with more variables.\",\"help.env.usage\":\"env [name=value…] [command [arguments…]]\",\"help.unset.summary\":\"Removes variables (or functions with -f).\",\"help.unset.usage\":\"unset [-fv] name…\",\"help.typeset.summary\":\"Like declare.\",\"help.typeset.usage\":\"typeset [-aprxifF] [name[=value]…]\",\"help.declare.text\":\"-a array, -x exported, -r read-only, -i integer (the value is computed), -p shows, -f shows the functions, -g global inside a function.\",\"help.declare.summary\":\"Declares variables and shows their attributes.\",\"help.declare.usage\":\"declare [-aprxifF] [name[=value]…]\",\"help.local.summary\":\"Variables visible only inside the function.\",\"help.local.usage\":\"local [-arx] name[=value]…\",\"help.readonly.summary\":\"Makes variables read-only.\",\"help.readonly.usage\":\"readonly [name[=value]…]\",\"help.export.text\":\"Without arguments it lists the exported variables. -n removes the export.\",\"help.export.summary\":\"Makes variables visible to the commands and scripts it starts.\",\"help.export.usage\":\"export [-n] [name[=value]…]\",\"help.printf.text\":\"The format is applied again while arguments are left. -v saves the result in a variable.\",\"help.printf.summary\":\"Writes the arguments according to a format (%s, %d, %5.2f, %x, %b, %q…).\",\"help.printf.usage\":\"printf [-v var] format [arguments…]\",\"help.echo.text\":\"-n  no final newline\\n-e  interprets \\\\n, \\\\t, \\\\\\\\, \\\\e… \\n-E  does not interpret them (default)\",\"help.echo.summary\":\"Writes the arguments, separated by a space.\",\"help.echo.usage\":\"echo [-neE] [text…]\",\"help.pwd.summary\":\"Shows the working directory.\",\"help.cd.text\":\"Without arguments it goes to the home ($HOME). \\\"cd -\\\" goes back to the previous directory ($OLDPWD).\",\"help.cd.summary\":\"Changes the working directory.\",\"help.cd.usage\":\"cd [dir]\",\"help.realpath.summary\":\"The full path.\",\"help.realpath.usage\":\"realpath [-m] path…\",\"help.dirname.summary\":\"The path without its last part.\",\"help.dirname.usage\":\"dirname path…\",\"help.basename.summary\":\"The last part of a path (without the suffix).\",\"help.basename.usage\":\"basename path [suffix]\",\"help.tree.summary\":\"Shows directories as a tree.\",\"help.tree.usage\":\"tree [-adf] [-L levels] [dir…]\",\"help.find.text\":\"Tests: -name pattern, -iname, -path, -type f|d|l, -empty, -size [+-]n[ckMG], -mtime [+-]days, -mmin, -newer file\\nActions: -print, -print0, -delete (to the trash), -exec command {} \\\\; or +\\nOptions: -maxdepth n, -mindepth n. Combined: ! (not), -o (or), ( … )\\nExample: find . -name \\\"*.txt\\\" -size +1k\",\"help.find.summary\":\"Searches for files and directories.\",\"help.find.usage\":\"find [path…] [expression]\",\"help.stat.text\":\"-c  format: %n name, %s size, %F type, %y modification date, %Y in seconds, %w %W creation, %i id\",\"help.stat.summary\":\"Shows the details of files and directories.\",\"help.stat.usage\":\"stat [-c format] path…\",\"help.rmdir.summary\":\"Removes empty directories (to the trash).\",\"help.rmdir.usage\":\"rmdir [-p] dir…\",\"help.rm.text\":\"-r  directories too, with their contents\\n-d  empty directories\\n-f  no error for what does not exist\\n--purge  deletes permanently, without the trash\\nWhat goes to the trash can be put back with \\\"trash restore\\\".\",\"help.rm.summary\":\"Moves files and directories to the trash (with --purge deletes them forever).\",\"help.rm.usage\":\"rm [-rfvd] [--purge] path…\",\"help.mv.text\":\"If the destination is a directory, it moves into it; otherwise it renames. An overwritten file goes to the trash.\\n-n  does not overwrite\\n-v  tells what it moves\",\"help.mv.summary\":\"Moves or renames files and directories.\",\"help.mv.usage\":\"mv [-nv] source… dest\",\"help.cp.text\":\"-r  copies directories too, with their contents\\n-n  does not overwrite existing files\\n-v  tells what it copies\",\"help.cp.summary\":\"Copies files and directories.\",\"help.cp.usage\":\"cp [-rnv] source… dest\",\"help.touch.summary\":\"Creates empty files, or updates the modification date of the ones that exist.\",\"help.mkdir.text\":\"-p  creates the intermediate directories too; no error if it already exists\",\"help.mkdir.summary\":\"Creates directories.\",\"help.mkdir.usage\":\"mkdir [-pv] dir…\",\"help.cat.text\":\"-n  numbers the lines\\n-b  numbers only the non-empty ones\\n-s  only one empty line in a row\\n-E  $ at the end of every line\",\"help.cat.summary\":\"Shows the contents of files (or of the input), one after the other.\",\"help.ls.text\":\"-l  details (type, size, date, tags)\\n-a  also the names starting with \\\".\\\"\\n-h  human-readable sizes (1.2K)\\n-t  by date, -S by size, -r reversed\\n-1  one per line\\n-d  the directory itself, not its contents\\n-R  subdirectories too\\n-F  / after directories, @ after links, * after scripts\",\"help.ls.summary\":\"Lists the contents of directories.\",\"help.ls.usage\":\"ls [-laAh1trSdRF] [path…]\",\"help.xargs.text\":\"-n N  at most N arguments at a time\\n-I {}  one command per line, with {} replaced by the line\\n-0  words separated by the null character (find -print0)\\n-d C  words separated by C\\n-t  shows the commands before starting them\\n-r  starts nothing if the input is empty\\nExample: find . -name \\\"*.tmp\\\" | xargs rm\",\"help.xargs.summary\":\"Starts a command with the words of the input as arguments.\",\"help.xargs.usage\":\"xargs [-n N] [-I {}] [-0] [-t] [command [arguments…]]\",\"help.yes.summary\":\"Repeats a line forever (y if not given): useful in a pipeline.\",\"help.yes.usage\":\"yes [text]\",\"help.seq.text\":\"-s S  separator (newline if not given)\\n-w  same width, padded with zeros\",\"help.seq.summary\":\"Writes a sequence of numbers.\",\"help.seq.usage\":\"seq [first [step]] last\",\"help.nl.summary\":\"Numbers the lines (non-empty ones, or all with -b a).\",\"help.rev.summary\":\"Writes every line reversed.\",\"help.tr.text\":\"tr a-z A-Z  to uppercase\\ntr -d '\\\\r'  removes Windows carriage returns\\ntr -s ' '  only one space in a row\\nClasses: [:upper:] [:lower:] [:digit:] [:alpha:] [:alnum:] [:space:] [:punct:]\",\"help.tr.summary\":\"Replaces or deletes characters.\",\"help.tr.usage\":\"tr [-dsc] set1 [set2]\",\"help.cut.text\":\"-f 1,3  fields 1 and 3 (separated by tab or by -d)\\n-d ,  the separator\\n-c 1-5  characters 1 to 5\\n-s  only the lines with the separator\",\"help.cut.summary\":\"Extracts columns from every line.\",\"help.cut.usage\":\"cut -f fields [-d separator] | -c characters [file…]\",\"help.tee.text\":\"-a  appends instead of overwriting\",\"help.tee.summary\":\"Copies the input both to the output and to files.\",\"help.uniq.text\":\"-c  with the number of repetitions\\n-d  only the repeated lines\\n-u  only the unique ones\\n-i  ignoring case\",\"help.uniq.summary\":\"Removes lines repeated one after the other (usually after sort).\",\"help.sort.text\":\"-r  reversed\\n-n  by number\\n-h  by human-readable size (2K, 1M)\\n-u  without duplicates\\n-f  ignoring case\\n-k N[,M]  by field N (up to M)\\n-t C  fields separated by C\\n-V  numbers inside the text (file2 before file10)\\n-o file  writes to the file\",\"help.sort.summary\":\"Sorts lines.\",\"help.sort.usage\":\"sort [-rnufhV] [-k field] [-t separator] [file…]\",\"help.grep.text\":\"-i  ignoring case\\n-v  the lines that do NOT match\\n-n  with the line number\\n-c  counts the lines\\n-l  only the names of the files\\n-r  searches in directories\\n-w  whole words, -x whole lines\\n-E  extended regular expressions (| + ? () without backslash)\\n-F  plain text, not a regular expression\\n-o  only the part that matches\\n-q  no output, only the status\\n-A N, -B N, -C N  lines of context after, before, around\\nStatus: 0 found, 1 not found, 2 error.\",\"help.grep.summary\":\"Searches for the lines that contain a pattern (regular expression).\",\"help.grep.usage\":\"grep [-ivnclrwxEFoqH] [-e pattern] pattern [file…]\",\"help.wc.text\":\"-l lines, -w words, -c bytes, -m characters, -L the longest line\",\"help.wc.summary\":\"Counts lines, words and bytes.\",\"help.tail.text\":\"-n N  the last N lines (-n +N: from line N on)\\n-c N  the last N characters\",\"help.tail.summary\":\"The last lines (10 if not given).\",\"help.tail.usage\":\"tail [-n lines] [-c bytes] [file…]\",\"help.head.text\":\"-n N  the first N lines (-n -N: all but the last N)\\n-c N  the first N characters\\n-5 is like -n 5\",\"help.head.summary\":\"The first lines (10 if not given).\",\"help.head.usage\":\"head [-n lines] [-c bytes] [file…]\",\"help.sed.text\":\"s/old/new/g  replaces (g: every time, i: ignoring case, p: prints)\\n3d, /re/d, 2,5d  deletes lines     -n …p  prints only the chosen ones\\ny/abc/xyz/  transliterates     a text, i text, c text  appends, inserts, changes\\n=  line number   q  quits   h H g G x  hold space   b t :label  jumps\\nAddresses: n, $, /re/, a,b, a,+n, ! to negate, { … } to group.\\n-n  does not print lines by itself    -E  extended regular expressions    -i  edits the files\\nExamples: sed 's/red/blue/g' notes.txt    sed -n '1,5p' file    sed -i '/^#/d' conf.txt\",\"help.sed.summary\":\"Edits text line by line (substitutions, deletions…).\",\"help.diff.text\":\"-u  unified format (with 3 lines of context; -U N for N)\\n-q  only tells whether they differ\\n-i  ignoring case\\n-w  ignoring spaces, -b ignoring how many there are\\n-B  ignoring empty lines\\n-s  tells also when they are identical\\n\\\"-\\\" is the input. Status: 0 same, 1 different, 2 error.\",\"help.diff.summary\":\"Shows the differences between two files.\",\"help.uname.summary\":\"The name of the operating system.\",\"help.hostname.summary\":\"The name of the system.\",\"help.whoami.summary\":\"The name of the user.\",\"help.date.text\":\"Format: %Y year, %m month, %d day, %H:%M:%S time, %A day of the week, %B month, %s seconds since 1970, %F = %Y-%m-%d, %T = %H:%M:%S\\n-d @1700000000, -d 2026-01-01, -d yesterday\\nExample: date +%F\",\"help.date.summary\":\"Date and time.\",\"help.date.usage\":\"date [-u] [-d date] [+format]\",\"help.apps.summary\":\"Lists the installed apps (id, name, version).\",\"help.tag.text\":\"tag                lists the tags\\ntag ls Work        the items with the tag\\ntag show file      the tags of an item\\ntag add Work f     puts the tag (creates it if missing)\\ntag rm Work f      removes it\\ntag new name color creates a tag\\ntag delete name    deletes a tag\",\"help.tag.summary\":\"The tags of lilOS: lists, assigns, removes.\",\"help.tag.usage\":\"tag [ls [tag…] | show path… | add tag path… | rm tag path… | new name [color] | delete tag…]\",\"help.trash.text\":\"trash              lists what is in the trash\\ntrash put file     moves to the trash (like rm -r)\\ntrash restore name puts back\\ntrash rm name      deletes permanently\\ntrash empty        empties the trash\",\"help.trash.summary\":\"The trash: lists, puts back, empties.\",\"help.trash.usage\":\"trash [list | put path… | restore name… | rm name… | empty]\",\"help.open.text\":\"open notes.txt   opens with the default app\\nopen .   opens the directory in the File Manager\\nopen -a editor notes.txt   with a given app\\nopen -a photo   starts an app\",\"help.open.summary\":\"Opens files and directories with their app (or with the one given).\",\"help.open.usage\":\"open [-a app] path…\",\"arith.tooDeep\":\"expression recursion level exceeded\",\"arith.syntax\":\"{expr}: syntax error in expression (error token is \\\"{token}\\\")\",\"arith.end\":\"end\",\"arith.missingBracket\":\"{expr}: missing `]'\",\"arith.operandExpected\":\"{expr}: syntax error: operand expected\",\"arith.badBase\":\"{value}: invalid arithmetic base\",\"arith.tooGreatForBase\":\"{value}: value too great for base\",\"arith.invalid\":\"invalid expression\",\"arith.divisionByZero\":\"division by 0\",\"arith.negativeExponent\":\"exponent less than 0\",\"arith.unknownOperator\":\"unknown operator {op}\",\"expand.braceTooLarge\":\"brace expansion too large\",\"expand.badSubstitution\":\"{name}: bad substitution\",\"expand.unbound\":\"{name}: unbound variable\",\"expand.cannotAssign\":\"{name}: cannot assign in this way\",\"expand.nullOrNotSet\":\"parameter null or not set\",\"expand.negativeSubstring\":\"{count}: substring expression < 0\",\"opt.invalid\":\"invalid option -- '{option}'\",\"opt.longNeedsArgument\":\"option '--{name}' requires an argument\",\"opt.needsArgument\":\"option requires an argument -- '{option}'\",\"opt.badNumber\":\"invalid number: '{value}'\",\"regex.unmatchedBracket\":\"Unmatched [ in regular expression\",\"regex.invalid\":\"invalid regular expression: {pattern}\",\"appCmd.summary\":\"A command of the {app} app.\",\"appCmd.usage\":\"{name} [arguments…]\",\"printf.badNumber\":\"{value}: invalid number\",\"test.argumentExpected\":\"argument expected\",\"test.unexpectedArgument\":\"{arg}: unexpected argument\",\"test.missingBracket\":\"missing `]'\",\"cd.oldpwdNotSet\":\"OLDPWD not set\",\"local.onlyInFunction\":\"can only be used in a function\",\"set.badOptionName\":\"{name}: invalid option name\",\"set.badOption\":\"{option}: invalid option\",\"let.noExpression\":\"expression expected\",\"return.onlyInFunction\":\"can only `return' from a function or sourced script\",\"loop.onlyInLoop\":\"only meaningful in a `for', `while', or `until' loop\",\"loop.badCount\":\"{n}: loop count out of range\",\"alias.badName\":\"`{name}': invalid alias name\",\"which.builtIn\":\"{name}: built into the Terminal\",\"wait.notAJob\":\"{spec}: not a job of this shell\",\"fg.noSuchJob\":\"{job}: no such job\",\"fg.current\":\"current\",\"kill.noSuchJob\":\"{spec}: no such job or process\",\"sleep.missing\":\"missing operand\",\"sleep.badDuration\":\"invalid time interval '{value}'\",\"source.noFile\":\"filename argument required\",\"bash.noCommand\":\"-c: option requires an argument\",\"bash.already\":\"You are already in bash: for a script type \\\"bash file.sh\\\" or \\\"source file.sh\\\".\",\"type.alias\":\"{name} is aliased to `{value}'\",\"type.keyword\":\"{name} is a shell keyword\",\"type.function\":\"{name} is a function\",\"type.builtin\":\"{name} is a shell builtin\",\"type.appCommand\":\"{name} is a command of the {app} app\",\"type.command\":\"{name} is a Terminal command\",\"type.file\":\"{name} is {path}\",\"syntax.topic.variables\":\"variables\",\"syntax.topic.redirections\":\"redirections\",\"syntax.if\":\"if commands; then commands; [elif commands; then commands;] [else commands;] fi\\nRuns the branch of the first \\\"if\\\"/\\\"elif\\\" whose commands succeed (status 0).\\n  if [ -f notes.txt ]; then echo found; else echo missing; fi\",\"syntax.for\":\"for name in words…; do commands; done\\nfor (( init; condition; step )); do commands; done\\n  for f in *.txt; do wc -l \\\"$f\\\"; done\\n  for ((i = 1; i <= 3; i++)); do echo $i; done\",\"syntax.while\":\"while commands; do commands; done   (until: as long as the commands do NOT succeed)\\n  n=0; while [ $n -lt 3 ]; do echo $n; n=$((n + 1)); done\\n  ls | while read -r name; do echo \\\"- $name\\\"; done\",\"syntax.until\":\"until commands; do commands; done: repeats as long as the commands do not succeed.\",\"syntax.case\":\"case word in pattern|pattern) commands;; … esac\\nPatterns use * ? [ ]. \\\";&\\\" goes on into the next branch, \\\";;&\\\" tries the following patterns too.\\n  case \\\"$f\\\" in *.txt) echo text;; *.png|*.jpg) echo image;; *) echo other;; esac\",\"syntax.function\":\"name() { commands; }   or   function name { commands; }\\nThe arguments are $1, $2…, $@; \\\"local\\\" creates variables of the function, \\\"return n\\\" exits.\\n  greet() { echo \\\"Hello, $1\\\"; }; greet Eugenio\",\"syntax.cond\":\"[[ expression ]]: test without word splitting or expansion of *.\\n  [[ $name == *.txt ]]      comparison with a pattern\\n  [[ $s =~ ^[0-9]+$ ]]      regular expression (groups in BASH_REMATCH)\\n  [[ -d dir && ! -e file ]] -e -f -d -s -z -n, && || ! ( )\",\"syntax.arith\":\"(( expression )): integer arithmetic; status 0 if the result is not 0.\\n  (( n++ )); (( n > 3 )) && echo big; echo $(( 2 ** 10 ))\",\"syntax.variables\":\"name=value (no spaces), $name or ${name}. Arrays: a=(x y z), ${a[0]}, ${a[@]}, ${#a[@]}.\\n${v:-default} ${v:=default} ${v:+alt} ${#v} ${v#prefix} ${v%suffix} ${v/from/to} ${v//from/to} ${v:start:length} ${v^^} ${v,,}\\nSpecial: $? status of the last command, $$ the shell, $! the last command in the background, $# $@ $* the arguments.\",\"syntax.redirections\":\"> file (overwrites), >> file (appends), < file (reads), 2> errors, 2>&1, &> file, <<EOF … EOF, <<< text, | pipe.\\n/dev/null discards everything.\",\"files.cannotAccess\":\"cannot access '{path}': No such file or directory\",\"files.cannotCreate\":\"cannot create '{path}': No such file or directory\",\"files.overwriteFolder\":\"cannot overwrite directory '{name}' with non-directory\",\"files.missingDestination\":\"missing destination file operand after '{path}'\",\"files.targetNotFolder\":\"target '{path}' is not a directory\",\"files.cannotStat\":\"cannot stat '{path}': No such file or directory\",\"files.cannotRemove\":\"cannot remove '{path}': {reason}\",\"files.quotedNoSuchFile\":\"'{path}': No such file or directory\",\"mkdir.notAFolder\":\"cannot create directory '{path}': '{name}' exists and is not a directory\",\"mkdir.exists\":\"cannot create directory '{path}': File exists\",\"mkdir.noParent\":\"cannot create directory '{path}': No such file or directory\",\"mkdir.created\":\"created directory '{path}'\",\"cp.overwriteFile\":\"cannot overwrite non-directory '{name}' with directory\",\"cp.verbose\":\"'{from}' -> '{to}'\",\"cp.omitting\":\"-r not specified; omitting directory '{path}'\",\"cp.intoItself\":\"cannot copy a directory, '{path}', into itself\",\"mv.system\":\"cannot move '{path}': it is a system folder\",\"mv.intoItself\":\"cannot move '{path}' to a subdirectory of itself\",\"mv.notEmpty\":\"cannot move '{path}' to '{name}': Directory not empty\",\"mv.verbose\":\"renamed '{from}' -> '{to}'\",\"reason.noSuchFile\":\"No such file or directory\",\"reason.isADirectory\":\"Is a directory\",\"reason.notADirectory\":\"Not a directory\",\"reason.notEmpty\":\"Directory not empty\",\"reason.system\":\"it is a system folder\",\"reason.containsSystem\":\"it contains system folders\",\"rm.home\":\"it is dangerous to operate on '{path}': it is the home\",\"rm.purged\":\"permanently deleted '{path}'\",\"rm.trashed\":\"moved to the trash '{path}'\",\"rmdir.removed\":\"removed directory '{path}'\",\"stat.folder\":\"directory\",\"stat.appLink\":\"link to the app {app}\",\"stat.file\":\"regular file\",\"stat.emptyFile\":\"regular empty file\",\"stat.type\":\"Type: {type}\",\"stat.path\":\"Path: {path}\",\"stat.items\":\"Items: {n} ({total} in all)\",\"stat.size\":\"Size: {size} bytes ({human})\",\"stat.created\":\"Created: {date}\",\"stat.modified\":\"Modified: {date}\",\"stat.tags\":\"Tags: {tags}\",\"stat.system\":\"System folder\",\"find.missingArgument\":\"missing argument to `{name}'\",\"find.badType\":\"unknown argument to -type: {type} (f, d or l)\",\"find.badSize\":\"invalid -size argument '{value}'\",\"find.badValue\":\"invalid argument '{value}' to {option}\",\"find.cannotFind\":\"cannot find '{path}'\",\"find.execEnd\":\"missing end of `-exec' (`;' or `+')\",\"find.execCommand\":\"missing command of `-exec'\",\"find.unknownPredicate\":\"unknown predicate `{name}'\",\"find.unexpected\":\"unexpected argument: '{arg}'\",\"tree.folders\":{\"one\":\"{n} directory\",\"other\":\"{n} directories\"},\"tree.files\":{\"one\":\"{n} file\",\"other\":\"{n} files\"},\"ls.date\":\"{month} {day}\",\"wc.total\":\"total\",\"grep.noPattern\":\"missing pattern\\nUsage: grep [options] pattern [file…]\",\"sort.badKey\":\"invalid key: '{key}'\",\"sort.disorder\":\"-:{n}: disorder: {line}\",\"cut.badList\":\"invalid list: '{spec}'\",\"cut.noList\":\"you must specify a list of fields (-f) or characters (-c)\",\"cut.badDelimiter\":\"the delimiter must be a single character\",\"tr.reverseRange\":\"range-endpoints of '{range}' are in reverse collating sequence order\",\"tr.missingSet2\":\"missing operand after '{set}'\",\"seq.badArgument\":\"invalid floating point argument: '{value}'\",\"seq.zeroStep\":\"invalid Zero increment value: '0'\",\"xargs.unmatchedDouble\":\"unmatched double quote\",\"xargs.unmatchedSingle\":\"unmatched single quote\",\"xargs.badCount\":\"value for -n option should be >= 1\",\"sed.at\":\"-e expression #1, char {pos}: {message}\",\"sed.unterminated\":\"unterminated `s' command\",\"sed.badAddress\":\"invalid address\",\"sed.missingAddress\":\"missing second address\",\"sed.missingCommand\":\"missing command\",\"sed.unexpectedBrace\":\"unexpected `}'\",\"sed.badDelimiter\":\"invalid delimiter for `s'\",\"sed.yLengths\":\"strings for `y' command are different lengths\",\"sed.noLabel\":\"\\\":\\\" lacks a label\",\"sed.unknownCommand\":\"unknown command: `{cmd}'\",\"sed.unmatchedBrace\":\"unmatched `{'\",\"sed.noSuchLabel\":\"can't find label for jump to `{label}'\",\"sed.noPreviousRegex\":\"no previous regular expression\",\"sed.cannotRead\":\"can't read {path}: No such file or directory\",\"sed.noScript\":\"missing script\\nUsage: sed [-n] [-E] [-i] script [file…]\",\"sed.noFiles\":\"no input files to edit with -i\",\"diff.missingOperand\":\"missing operand after '{arg}'\",\"diff.extraOperand\":\"extra operand '{arg}'\",\"diff.identical\":\"Files {a} and {b} are identical\",\"diff.differ\":\"Files {a} and {b} differ\",\"diff.tooBig\":\"the files are too different and too large to compare\",\"open.noApp\":\"app not found: '{app}' (see \\\"apps\\\")\",\"trash.notInTrash\":\"'{name}' is not in the trash\",\"trash.empty\":\"The trash is empty.\",\"trash.deletedFolder\":\"(deleted folder)\",\"trash.items\":{\"one\":\"{n} item\",\"other\":\"{n} items\"},\"trash.missingPut\":\"missing what to move to the trash\",\"trash.cannotTrash\":\"{path}: cannot be moved to the trash (system folder)\",\"trash.missingRestore\":\"missing the name of what to put back\",\"trash.restored\":\"restored to {path}\",\"trash.missingName\":\"missing name\",\"trash.purged\":{\"one\":\"permanently deleted {n} item\",\"other\":\"permanently deleted {n} items\"},\"trash.emptied\":{\"one\":\"Trash emptied ({n} item).\",\"other\":\"Trash emptied ({n} items).\"},\"trash.alreadyEmpty\":\"The trash was already empty.\",\"tag.noSuchTag\":\"no such tag: '{name}' (see \\\"tag ls\\\")\",\"tag.none\":\"No tags. Create one with \\\"tag new name\\\".\",\"tag.hidden\":\"hidden\",\"tag.noTags\":\"no tags\",\"tag.usageAddRm\":\"tag {sub} name file…\",\"tag.created\":\"created tag '{name}'\",\"tag.system\":\"{path}: system items have no tags\",\"tag.usageNew\":\"tag new name [color]\",\"tag.createdShown\":\"created tag {tag}\",\"tag.usageDelete\":\"tag delete name…\",\"date.formatC\":\"%a %b %e %H:%M:%S %Y\",\"date.formatX\":\"%m/%d/%y\",\"date.format\":\"%a %b %e %H:%M:%S %Z %Y\",\"date.invalid\":\"invalid date '{date}'\",\"@actions.terminal.sshHere.label\":\"Open SSH terminal here\",\"help.ssh.summary\":\"open an SSH session in a new tab\",\"help.ssh.usage\":\"ssh [-p port] [-l user] [user@]host [command] | ssh <saved host>\",\"help.telnet.summary\":\"open a Telnet session in a new tab\",\"help.telnet.usage\":\"telnet [-l user] host [port] | telnet <saved host>\",\"help.rlogin.summary\":\"open an rlogin session in a new tab\",\"help.rlogin.usage\":\"rlogin [-l user] host | rlogin <saved host>\",\"help.supdup.summary\":\"open a SUPDUP session in a new tab\",\"help.supdup.usage\":\"supdup host [port] | supdup <saved host>\",\"help.sessions.summary\":\"the remote sessions still running; with a number, shows one in a tab\",\"help.sessions.usage\":\"sessions [n]\",\"remote.cmd.unavailable\":\"remote sessions are not available (lilOS has no module for them)\",\"remote.cmd.noModule\":\"{name}: lilOS has no module for it (an administrator installs {module} from the AppStore, Kernel tab)\",\"remote.cmd.opened\":\"Opened in a new tab: {name}\",\"remote.cmd.noUser\":\"ssh: a user is needed: user@host or -l user\",\"remote.cmd.noSession\":\"no running session «{name}» (see «sessions»)\",\"remote.cmd.shown\":\"Shown in a tab: {name}\",\"remote.cmd.shownNow\":\"shown in a window\",\"remote.cmd.closesIn\":{\"one\":\"closes in {n} minute\",\"other\":\"closes in {n} minutes\"},\"remote.cmd.none\":\"No remote session is running.\",\"remote.cmd.resumeHint\":\"«sessions <n>» shows one in a tab\",\"remote.tabs\":\"Tabs\",\"remote.screen\":\"Remote terminal\",\"remote.newShell\":\"New shell\",\"remote.activity\":\"New output\",\"remote.closeTab\":\"Close tab\",\"remote.closeSession\":\"Close (ends the session)\",\"remote.closeNamed\":\"Close {name}\",\"remote.notRemote\":\"it is not in a network connection\",\"remote.notSftp\":\"the SSH terminal opens only on SFTP connections\",\"remote.cannotReconnect\":\"this session cannot be opened again from here: open it again from the File Manager\",\"remote.unavailable\":\"The remote sessions cannot be reached: {error}\",\"remote.noProtocols\":\"lilOS has no module for remote sessions. An administrator can install ssh, term-telnet, term-rlogin or term-supdup from the AppStore (Kernel tab).\",\"remote.side.label\":\"Hosts and remote sessions\",\"remote.side.toggle\":\"Show or hide the hosts\",\"remote.side.hosts\":\"Hosts\",\"remote.side.connect\":\"Connect\",\"remote.side.open\":\"A session is open on this host\",\"remote.side.none\":\"No saved hosts. «ssh user@server» opens a session; + saves a host.\",\"remote.side.running\":\"Still running\",\"remote.side.elsewhere\":\"in another window\",\"remote.side.closesIn\":{\"one\":\"closes in {n} minute\",\"other\":\"closes in {n} minutes\"},\"remote.side.resume\":\"Resume\",\"remote.taken\":\"The session was opened in another window\",\"remote.takeBack\":\"Show it here\",\"remote.lostLink\":\"The link with lilOS dropped\",\"remote.attachAgain\":\"Attach again\",\"remote.secure\":\"Encrypted\",\"remote.insecure\":\"Not encrypted\",\"remote.insecureHint\":\"What you type, passwords included, goes over the network in clear\",\"remote.cipher\":\"Cipher: {cipher}\",\"remote.state.new\":\"Waiting\",\"remote.state.connecting\":\"Connecting…\",\"remote.state.on\":\"Connected\",\"remote.state.closed\":\"Closed\",\"remote.find\":\"Find (Ctrl+Shift+F)\",\"remote.record\":\"Record the session in a file\",\"remote.recordStop\":\"Stop recording\",\"remote.keys\":\"Keys\",\"remote.keys.send\":\"Send to the server:\",\"remote.keys.copy\":\"Copy\",\"remote.keys.paste\":\"Paste: Ctrl+Shift+V\",\"remote.keys.clear\":\"Clear the history\",\"remote.keys.disconnect\":\"Disconnect\",\"remote.signal.break\":\"Send Break\",\"remote.signal.interrupt\":\"Interrupt process\",\"remote.signal.ayt\":\"Are you there?\",\"remote.reconnect\":\"Reconnect\",\"remote.closed\":\"Connection closed\",\"remote.closedWhy\":\"Connection closed: {reason}\",\"remote.record.title\":\"Record the session\",\"remote.record.file\":\"File\",\"remote.record.hint\":\"A file in your home. It is written while you work; it stops at 8 MB.\",\"remote.record.colors\":\"Keep the color codes (to see it again as it was)\",\"remote.record.start\":\"Record\",\"remote.record.badPath\":\"The folder does not exist: write a path such as ~/Documenti/session.txt\",\"remote.record.exists\":\"«{name}» exists already: choose another name\",\"remote.record.full\":\"Recording stopped: «{path}» reached its size limit\",\"remote.record.failed\":\"The recording could not be saved: {error}\",\"remote.record.saved\":\"Session recorded in «{path}»\",\"remote.host.newTitle\":\"New host\",\"remote.host.editTitle\":\"Change the host\",\"remote.host.name\":\"Name\",\"remote.host.folder\":\"Folder\",\"remote.host.folderNone\":\"None\",\"remote.host.protocol\":\"Protocol\",\"remote.host.noProtocols\":\"No protocol available.\",\"remote.host.insecureTitle\":\"Connection not encrypted\",\"remote.host.insecureText\":\"What you type, passwords included, goes over the network in clear. Use it only on networks you trust or with devices that have no SSH.\",\"remote.host.remember\":\"Remember passwords and passphrases\",\"remote.host.keyUnreadable\":\"The key file cannot be read: {error}\",\"remote.host.advanced\":\"Advanced\",\"remote.host.term\":\"Terminal type\",\"remote.host.encoding\":\"Encoding\",\"remote.host.backspace\":\"Backspace sends\",\"remote.host.backspaceDel\":\"DEL (^?)\",\"remote.host.backspaceBs\":\"BS (^H)\",\"remote.host.delete\":\"Delete\",\"remote.host.save\":\"Save\",\"remote.host.saveConnect\":\"Save and connect\",\"@entrypoints.filePreview.label\":\"Previews of .term links\",\"@entrypoints.shell.label\":\"Shell for the Scheduler\",\"@commands.terminal.newShell.label\":\"New shell\",\"@commands.terminal.splitRight.label\":\"Split right\",\"@commands.terminal.splitDown.label\":\"Split down\",\"@commands.terminal.detach.label\":\"Detach tab into a new window\",\"@commands.terminal.broadcast.label\":\"Send input to all panes\",\"@commands.terminal.focusLeft.label\":\"Pane on the left\",\"@commands.terminal.focusRight.label\":\"Pane on the right\",\"@commands.terminal.focusUp.label\":\"Pane above\",\"@commands.terminal.focusDown.label\":\"Pane below\",\"@commands.terminal.previousTab.label\":\"Previous tab of the pane\",\"@commands.terminal.nextTab.label\":\"Next tab of the pane\",\"@commands.terminal.moveLeft.label\":\"Move tab to the left\",\"@commands.terminal.moveRight.label\":\"Move tab to the right\",\"@commands.terminal.moveUp.label\":\"Move tab up\",\"@commands.terminal.moveDown.label\":\"Move tab down\",\"@dependencies.ssh.reason\":\"Remote sessions over SSH, and Terminal commands on saved SSH hosts\",\"@dependencies.term-telnet.reason\":\"Remote sessions over Telnet\",\"@dependencies.term-rlogin.reason\":\"Remote sessions over rlogin\",\"@dependencies.term-supdup.reason\":\"Remote sessions over SUPDUP\",\"@dependencies.services-isolate.reason\":\"Scheduled Terminal commands in the kernel, with the operation's time limit and Cancel\",\"tabs.count\":{\"one\":\"{n} tab\",\"other\":\"{n} tabs\"},\"tabs.pane\":\"Pane {n} — {name}\",\"tabs.rename\":\"Rename…\",\"tabs.renameLabel\":\"Tab name\",\"tabs.renameHint\":\"Empty: the usual name (the folder, or the server).\",\"tabs.renameOk\":\"Rename\",\"tabs.duplicate\":\"Duplicate\",\"tabs.splitRight\":\"Split right\",\"tabs.splitDown\":\"Split down\",\"tabs.moveToPane\":\"Move to pane\",\"tabs.detach\":\"Detach into a new window\",\"tabs.moveToWindow\":\"Move to window\",\"tabs.newWindow\":\"New window\",\"tabs.saveTerm\":\"Save as link (.term)…\",\"tabs.addToDesk\":\"Add to desk\",\"tabs.copyAddress\":\"Copy address\",\"tabs.closeOthers\":\"Close other tabs\",\"tabs.closeRight\":\"Close tabs to the right\",\"grid.gutter\":\"Drag to resize the panes; double click: same size\",\"grid.broadcast\":\"Send input to all panes\",\"grid.broadcastOn\":\"Input to all panes\",\"grid.broadcastOff\":\"What you type goes to the tab shown in every pane. Click to turn it off.\",\"menu.title\":\"Terminal menu\",\"menu.openTerm\":\"Open link (.term)…\",\"menu.openTermTitle\":\"Open a terminal link\",\"drag.newWindow\":\"Drop to open {name} in a new window\",\"drag.pane\":\"Move to this pane\",\"drag.split.left\":\"New pane on the left\",\"drag.split.right\":\"New pane on the right\",\"drag.split.up\":\"New pane above\",\"drag.split.down\":\"New pane below\",\"file.invalid\":\"This is not a terminal link (.term) or it is damaged\",\"file.missing\":\"The link does not exist any more\",\"file.cannot\":\"This tab cannot become a link\",\"file.noFolder\":\"The folder {path} does not exist\",\"file.serverFolder\":\"The folder of the server must be a full path, such as /var/www\",\"file.exists\":\"There is already a file named {name} in that folder\",\"file.noPassword\":\"Type the password (or the key) to keep in the file\",\"file.onDesk\":\"{name} is on the desk\",\"file.saved\":\"Link saved: {path}\",\"file.saveTitle\":\"Save link\",\"file.name\":\"File name\",\"file.folder\":\"Folder\",\"file.change\":\"Change…\",\"file.pickFolder\":\"Where to save the link\",\"file.cwdLocal\":\"Start in the folder (optional)\",\"file.cwdRemote\":\"Folder of the server to start in (optional)\",\"file.command\":\"Command to run at the start (optional)\",\"file.commandRemote\":\"Command at start (optional)\",\"file.commandRemoteHint\":\"Runs instead of the shell of the server\",\"file.openAs\":\"When opened\",\"file.openDefault\":\"As in the Options ({how})\",\"file.keepPassword\":\"Keep the password in the file\",\"file.passwordSaved\":\"The password saved for this host goes in the file.\",\"file.passwordHint\":\"The password is encrypted: it works only for you, on this lilOS, for this server and user. For anyone else it is asked as usual.\",\"file.save\":\"Save\",\"file.command.title\":\"This link runs a command\",\"file.command.text\":\"«{name}» runs this command when it opens:\\n\\n{command}\\n\\nRun it only if you trust who made the link. Continue?\",\"options.open\":\"Options…\",\"options.title\":\"Terminal options\",\"options.tab.general\":\"General\",\"options.tab.generalDescription\":\"How Terminal opens links\",\"options.files\":\"Terminal links (.term)\",\"options.openTerm\":\"Open the links\",\"options.openTermDescription\":\"Where a .term file opens with a double click, when the file does not say it itself\",\"options.openTerm.window\":\"In a new window\",\"options.openTerm.tab\":\"In a tab of the open window\"}}"),
+	it: /* @__PURE__ */ JSON.parse("{\"strings\":{\"@name\":\"Terminale\",\"@description\":\"Una shell simile a bash sui file di lilOS, in schede e riquadri affiancati, e sessioni remote: SSH, Telnet, rlogin e SUPDUP, con host salvati, collegamenti .term e sessioni che restano aperte anche a finestra chiusa.\",\"@entrypoints.main.params.cwd.label\":\"Cartella\",\"@entrypoints.main.params.cwd.description\":\"La cartella in cui aprire il terminale\",\"@automation.terminal.run.label\":\"Esegui un comando\",\"@automation.terminal.run.params.command.label\":\"Comando\",\"@automation.terminal.run.params.folder.label\":\"Cartella\",\"@automation.terminal.run.params.folder.description\":\"La cartella di lavoro in cui gira il comando\",\"@entrypoints.main.params.file.label\":\"Collegamento\",\"@entrypoints.main.params.file.description\":\"Un collegamento al terminale (.term) da aprire\",\"ui.title\":\"Terminale\",\"ui.commandLine\":\"Riga di comando\",\"ui.welcome\":\"Terminale di lilOS · «help» elenca i comandi\",\"automation.tooLong\":\"Comando troppo lungo da registrare\",\"automation.noCommand\":\"Nessun comando da eseguire\",\"automation.busy\":\"Il terminale sta eseguendo un altro comando\",\"automation.noFolder\":\"La cartella non c’è più\",\"automation.status\":\"Il comando è finito con lo stato {status}\",\"shell.defaultUser\":\"utente\",\"shell.readonly\":\"{name}: variabile in sola lettura\",\"shell.cannotUnset\":\"{name}: impossibile eliminare: variabile in sola lettura\",\"shell.badSubscript\":\"{index}: indice dell’array non valido\",\"shell.unknownConstruct\":\"costrutto sconosciuto: {type}\",\"shell.badRegex\":\"espressione regolare non valida\",\"shell.unaryExpected\":\"{op}: operatore unario atteso\",\"shell.integerExpected\":\"{value}: è attesa un’espressione intera\",\"shell.binaryExpected\":\"{op}: operatore binario atteso\",\"shell.commandNotFound\":\"{name}: comando non trovato\",\"shell.tooDeep\":\"{name}: troppi livelli di ricorsione\",\"shell.badFd\":\"{fd}: descrittore di file errato\",\"shell.fdExpected\":\"{target}: è richiesto un descrittore di file\",\"shell.ambiguousRedirect\":\"{target}: redirezione ambigua\",\"shell.isAppLink\":\"{path}: è un collegamento a un’app\",\"err.noSuchFile\":\"{path}: file o cartella inesistente\",\"err.isADirectory\":\"{path}: è una cartella\",\"err.notAFile\":\"{path}: non è un file\",\"err.missingParen\":\"manca «)»\",\"err.badIdentifier\":\"«{name}»: identificatore non valido\",\"err.numericArgument\":\"{value}: è richiesto un argomento numerico\",\"err.tooManyArguments\":\"troppi argomenti\",\"err.notADirectory\":\"{path}: non è una cartella\",\"err.notFound\":\"{name}: non trovato\",\"err.missingOperand\":\"manca l’operando\",\"err.unknownSubcommand\":\"sottocomando sconosciuto: «{sub}»\",\"parse.unexpectedEnd\":\"errore di sintassi: fine del testo inattesa\",\"parse.unexpectedEndOfFile\":\"errore di sintassi: fine del file inattesa\",\"parse.nearEnd\":\"fine del testo\",\"parse.nearNewline\":\"a capo\",\"parse.nearToken\":\"«{token}»\",\"parse.near\":\"errore di sintassi vicino a {near}\",\"parse.nearExpected\":\"errore di sintassi vicino a {near}: atteso «{expected}»\",\"parse.badFunctionName\":\"nome di funzione non valido\",\"parse.parenAfterName\":\"atteso «)» dopo il nome della funzione\",\"parse.aliasLoop\":\"alias espansi troppe volte\",\"parse.missingTarget\":\"errore di sintassi vicino a {near}: manca la destinazione di «{op}»\",\"parse.forBadName\":\"for: nome di variabile non valido\",\"parse.caseNoWord\":\"case: manca la parola\",\"parse.condNear\":\"errore di sintassi in [[ vicino a {near}\",\"parse.condNoOperand\":\"errore di sintassi in [[: manca un operando\",\"parse.condNoRegex\":\"errore di sintassi in [[: manca l’espressione regolare\",\"parse.badSubstitution\":\"sostituzione errata\",\"parse.badSubstitutionBrace\":\"sostituzione errata: manca «}»\",\"parse.backquotes\":\"errore di sintassi tra gli apici inversi\",\"jobs.done\":\"Fatto\",\"jobs.interrupted\":\"Interrotto\",\"jobs.exit\":\"Uscita {code}\",\"jobs.running\":\"In esecuzione\",\"help.usageLine\":\"Uso: {usage}\",\"help.usageShort\":\"uso: {usage}\",\"help.noHelp\":\"nessun aiuto per «{name}»\",\"help.intro\":\"Terminale di lilOS: una shell come bash sui file di lilOS.\\n«help comando» o «comando --help» spiega un comando; «help if», «help for», «help case»… la sintassi.\",\"help.syntaxList\":\"Sintassi: {list}\",\"help.sh.summary\":\"Come bash.\",\"help.sh.usage\":\"sh [-c comandi | script] [argomenti…]\",\"help.bash.text\":\"«bash script.sh a b» esegue lo script con $1=a, $2=b; «bash -c 'echo $1' nome x» esegue il testo; «cat script.sh | bash» legge lo script dall’input.\",\"help.bash.summary\":\"Esegue uno script o dei comandi in una nuova shell.\",\"help.bash.usage\":\"bash [-c comandi | script] [argomenti…]\",\"help.sleep.summary\":\"Aspetta: 5 (secondi), 0.5, 2m, 1h.\",\"help.sleep.usage\":\"sleep durata…\",\"help.kill.summary\":\"Interrompe dei comandi in background.\",\"help.kill.usage\":\"kill [-segnale] %job | pid…\",\"help.fg.summary\":\"Porta in primo piano un comando in background: lo si aspetta e Ctrl C lo interrompe.\",\"help.wait.summary\":\"Aspetta che finiscano i comandi in background (tutti, o quelli indicati).\",\"help.jobs.summary\":\"Elenca i comandi avviati in background con &.\",\"help.clear.summary\":\"Pulisce lo schermo (anche Ctrl L).\",\"help.help.summary\":\"Elenca i comandi, o spiega quello indicato.\",\"help.help.usage\":\"help [comando]\",\"help.history.summary\":\"Mostra i comandi dati (gli ultimi n); -c cancella la cronologia.\",\"help.which.summary\":\"Dice dove si trova un comando.\",\"help.which.usage\":\"which nome…\",\"help.command.summary\":\"Avvia un comando ignorando le funzioni con lo stesso nome; con -v dice cosa avvierebbe.\",\"help.command.usage\":\"command [-v] nome [argomenti…]\",\"help.type.summary\":\"Dice cos’è un nome: alias, parola chiave, funzione, comando.\",\"help.type.usage\":\"type [-t] nome…\",\"help.unalias.summary\":\"Elimina degli alias (tutti con -a).\",\"help.unalias.usage\":\"unalias [-a] nome…\",\"help.alias.text\":\"Esempio: alias ll='ls -l'. Gli alias valgono dalla riga successiva a quella che li definisce.\",\"help.alias.summary\":\"Definisce o mostra gli alias (nomi brevi per comandi).\",\"help.alias.usage\":\"alias [nome[=valore]…]\",\"help.eval.summary\":\"Esegue gli argomenti, uniti da spazi, come un comando.\",\"help.eval.usage\":\"eval [argomenti…]\",\"help.dot.summary\":\"Come source.\",\"help.dot.usage\":\". file [argomenti…]\",\"help.source.summary\":\"Esegue i comandi di un file in questa shell (variabili, funzioni e alias restano).\",\"help.source.usage\":\"source file [argomenti…]\",\"help.read.text\":\"-r  le barre rovesciate restano come sono\\n-p  mostra un prompt\\n-a  mette le parole in un array\\n-d  legge fino a questo carattere invece che fino all’a capo\\n-s  non mostra ciò che si scrive (per le password)\\nStato 1 alla fine dell’input.\",\"help.read.summary\":\"Legge una riga e la divide nelle variabili indicate ($REPLY senza nomi).\",\"help.read.usage\":\"read [-rs] [-p prompt] [-a array] [-d delim] [nome…]\",\"help.continue.summary\":\"Passa al giro successivo del ciclo (o dell’n-esimo ciclo esterno).\",\"help.break.summary\":\"Esce dal ciclo (o da n cicli).\",\"help.return.summary\":\"Esce dalla funzione (o dallo script letto con source).\",\"help.return.usage\":\"return [stato]\",\"help.exit.summary\":\"Chiude il terminale (o esce dallo script) con uno stato.\",\"help.exit.usage\":\"exit [stato]\",\"help.let.summary\":\"Calcola espressioni aritmetiche (stato 1 se l’ultima vale 0).\",\"help.let.usage\":\"let espressione…\",\"help.bracket.summary\":\"Come test, con una «]» finale.\",\"help.bracket.usage\":\"[ espressione ]\",\"help.test.text\":\"File: -e esiste, -f è un file, -d è una cartella, -s non è vuoto\\nTesto: -z vuoto, -n non vuoto, a = b, a != b\\nNumeri: -eq -ne -lt -le -gt -ge\\nInsieme: ! negazione, -a e, -o o, ( … )\",\"help.test.summary\":\"Valuta un’espressione: stato 0 se vera, 1 se falsa.\",\"help.test.usage\":\"test espressione\",\"help.colon.summary\":\"Non fa niente (stato 0); gli argomenti vengono comunque espansi.\",\"help.colon.usage\":\": [argomenti…]\",\"help.false.summary\":\"Non fa niente, senza successo (stato 1).\",\"help.true.summary\":\"Non fa niente, con successo (stato 0).\",\"help.shift.summary\":\"Sposta i parametri posizionali: $2 diventa $1…\",\"help.set.text\":\"-e  esce al primo comando che fallisce\\n-u  errore se si usa una variabile non impostata\\n-x  mostra i comandi prima di eseguirli\\n-f  niente espansione di * e ?\\n-o pipefail  una pipe fallisce se fallisce uno dei suoi comandi\\n+e, +u… le disattivano. Senza argomenti mostra tutte le variabili.\",\"help.set.summary\":\"Imposta le opzioni della shell e i parametri posizionali ($1, $2…).\",\"help.set.usage\":\"set [-euxf] [-o opzione] [--] [argomenti…]\",\"help.printenv.summary\":\"Mostra le variabili esportate (o il valore di quelle indicate).\",\"help.printenv.usage\":\"printenv [nome…]\",\"help.env.summary\":\"Mostra le variabili esportate, o avvia un comando con variabili in più.\",\"help.env.usage\":\"env [nome=valore…] [comando [argomenti…]]\",\"help.unset.summary\":\"Elimina variabili (o funzioni con -f).\",\"help.unset.usage\":\"unset [-fv] nome…\",\"help.typeset.summary\":\"Come declare.\",\"help.typeset.usage\":\"typeset [-aprxifF] [nome[=valore]…]\",\"help.declare.text\":\"-a array, -x esportata, -r sola lettura, -i intero (il valore si calcola), -p mostra, -f mostra le funzioni, -g globale dentro una funzione.\",\"help.declare.summary\":\"Dichiara variabili e ne mostra gli attributi.\",\"help.declare.usage\":\"declare [-aprxifF] [nome[=valore]…]\",\"help.local.summary\":\"Variabili visibili solo dentro la funzione.\",\"help.local.usage\":\"local [-arx] nome[=valore]…\",\"help.readonly.summary\":\"Rende le variabili di sola lettura.\",\"help.readonly.usage\":\"readonly [nome[=valore]…]\",\"help.export.text\":\"Senza argomenti elenca le variabili esportate. -n toglie l’esportazione.\",\"help.export.summary\":\"Rende le variabili visibili ai comandi e agli script avviati.\",\"help.export.usage\":\"export [-n] [nome[=valore]…]\",\"help.printf.text\":\"Il formato si riapplica finché restano argomenti. -v salva il risultato in una variabile.\",\"help.printf.summary\":\"Scrive gli argomenti secondo un formato (%s, %d, %5.2f, %x, %b, %q…).\",\"help.printf.usage\":\"printf [-v var] formato [argomenti…]\",\"help.echo.text\":\"-n  senza a capo finale\\n-e  interpreta \\\\n, \\\\t, \\\\\\\\, \\\\e… \\n-E  non le interpreta (predefinito)\",\"help.echo.summary\":\"Scrive gli argomenti, separati da uno spazio.\",\"help.echo.usage\":\"echo [-neE] [testo…]\",\"help.pwd.summary\":\"Mostra la cartella di lavoro.\",\"help.cd.text\":\"Senza argomenti va nella home ($HOME). «cd -» torna alla cartella precedente ($OLDPWD).\",\"help.cd.summary\":\"Cambia la cartella di lavoro.\",\"help.cd.usage\":\"cd [cartella]\",\"help.realpath.summary\":\"Il percorso completo.\",\"help.realpath.usage\":\"realpath [-m] percorso…\",\"help.dirname.summary\":\"Il percorso senza l’ultima parte.\",\"help.dirname.usage\":\"dirname percorso…\",\"help.basename.summary\":\"L’ultima parte di un percorso (senza il suffisso).\",\"help.basename.usage\":\"basename percorso [suffisso]\",\"help.tree.summary\":\"Mostra le cartelle ad albero.\",\"help.tree.usage\":\"tree [-adf] [-L livelli] [cartella…]\",\"help.find.text\":\"Test: -name modello, -iname, -path, -type f|d|l, -empty, -size [+-]n[ckMG], -mtime [+-]giorni, -mmin, -newer file\\nAzioni: -print, -print0, -delete (nel cestino), -exec comando {} \\\\; oppure +\\nOpzioni: -maxdepth n, -mindepth n. Insieme: ! (negazione), -o (o), ( … )\\nEsempio: find . -name \\\"*.txt\\\" -size +1k\",\"help.find.summary\":\"Cerca file e cartelle.\",\"help.find.usage\":\"find [percorso…] [espressione]\",\"help.stat.text\":\"-c  formato: %n nome, %s dimensione, %F tipo, %y data di modifica, %Y in secondi, %w %W creazione, %i id\",\"help.stat.summary\":\"Mostra i dettagli di file e cartelle.\",\"help.stat.usage\":\"stat [-c formato] percorso…\",\"help.rmdir.summary\":\"Rimuove cartelle vuote (nel cestino).\",\"help.rmdir.usage\":\"rmdir [-p] cartella…\",\"help.rm.text\":\"-r  anche le cartelle, con il loro contenuto\\n-d  le cartelle vuote\\n-f  nessun errore per ciò che non esiste\\n--purge  elimina definitivamente, senza cestino\\nCiò che va nel cestino si rimette a posto con «trash restore».\",\"help.rm.summary\":\"Sposta file e cartelle nel cestino (con --purge li elimina per sempre).\",\"help.rm.usage\":\"rm [-rfvd] [--purge] percorso…\",\"help.mv.text\":\"Se la destinazione è una cartella, ci sposta dentro; altrimenti rinomina. Un file sovrascritto va nel cestino.\\n-n  non sovrascrive\\n-v  dice cosa sposta\",\"help.mv.summary\":\"Sposta o rinomina file e cartelle.\",\"help.mv.usage\":\"mv [-nv] origine… destinazione\",\"help.cp.text\":\"-r  copia anche le cartelle, con il loro contenuto\\n-n  non sovrascrive i file che esistono\\n-v  dice cosa copia\",\"help.cp.summary\":\"Copia file e cartelle.\",\"help.cp.usage\":\"cp [-rnv] origine… destinazione\",\"help.touch.summary\":\"Crea dei file vuoti, o aggiorna la data di modifica di quelli che esistono.\",\"help.mkdir.text\":\"-p  crea anche le cartelle intermedie; nessun errore se esiste già\",\"help.mkdir.summary\":\"Crea delle cartelle.\",\"help.mkdir.usage\":\"mkdir [-pv] cartella…\",\"help.cat.text\":\"-n  numera le righe\\n-b  numera solo quelle non vuote\\n-s  una sola riga vuota di fila\\n-E  $ alla fine di ogni riga\",\"help.cat.summary\":\"Mostra il contenuto dei file (o dell’input), uno dopo l’altro.\",\"help.ls.text\":\"-l  dettagli (tipo, dimensione, data, tag)\\n-a  anche i nomi che iniziano con «.»\\n-h  dimensioni leggibili (1,2K)\\n-t  per data, -S per dimensione, -r al contrario\\n-1  uno per riga\\n-d  la cartella stessa, non il contenuto\\n-R  anche le sottocartelle\\n-F  / dopo le cartelle, @ dopo i collegamenti, * dopo gli script\",\"help.ls.summary\":\"Elenca il contenuto delle cartelle.\",\"help.ls.usage\":\"ls [-laAh1trSdRF] [percorso…]\",\"help.xargs.text\":\"-n N  al massimo N argomenti per volta\\n-I {}  un comando per riga, con {} sostituito dalla riga\\n-0  parole separate dal carattere nullo (find -print0)\\n-d C  parole separate da C\\n-t  mostra i comandi prima di avviarli\\n-r  non avvia niente se l’input è vuoto\\nEsempio: find . -name \\\"*.tmp\\\" | xargs rm\",\"help.xargs.summary\":\"Avvia un comando con le parole dell’input come argomenti.\",\"help.xargs.usage\":\"xargs [-n N] [-I {}] [-0] [-t] [comando [argomenti…]]\",\"help.yes.summary\":\"Ripete una riga all’infinito (y se non indicata): utile in una pipe.\",\"help.yes.usage\":\"yes [testo]\",\"help.seq.text\":\"-s S  separatore (a capo se non indicato)\\n-w  stessa larghezza, con zeri davanti\",\"help.seq.summary\":\"Scrive una sequenza di numeri.\",\"help.seq.usage\":\"seq [primo [passo]] ultimo\",\"help.nl.summary\":\"Numera le righe (non vuote, o tutte con -b a).\",\"help.rev.summary\":\"Scrive ogni riga al contrario.\",\"help.tr.text\":\"tr a-z A-Z  in maiuscolo\\ntr -d '\\\\r'  elimina i ritorni a capo di Windows\\ntr -s ' '  un solo spazio di fila\\nClassi: [:upper:] [:lower:] [:digit:] [:alpha:] [:alnum:] [:space:] [:punct:]\",\"help.tr.summary\":\"Sostituisce o elimina caratteri.\",\"help.tr.usage\":\"tr [-dsc] insieme1 [insieme2]\",\"help.cut.text\":\"-f 1,3  i campi 1 e 3 (separati da tab o da -d)\\n-d ,  il separatore\\n-c 1-5  i caratteri da 1 a 5\\n-s  solo le righe con il separatore\",\"help.cut.summary\":\"Estrae colonne da ogni riga.\",\"help.cut.usage\":\"cut -f campi [-d separatore] | -c caratteri [file…]\",\"help.tee.text\":\"-a  aggiunge in fondo invece di sovrascrivere\",\"help.tee.summary\":\"Copia l’input sia sull’output sia nei file.\",\"help.uniq.text\":\"-c  con il numero di ripetizioni\\n-d  solo le righe ripetute\\n-u  solo quelle uniche\\n-i  senza distinguere maiuscole e minuscole\",\"help.uniq.summary\":\"Toglie le righe ripetute una dopo l’altra (di solito dopo sort).\",\"help.sort.text\":\"-r  al contrario\\n-n  per numero\\n-h  per dimensione leggibile (2K, 1M)\\n-u  senza doppioni\\n-f  senza distinguere maiuscole e minuscole\\n-k N[,M]  per il campo N (fino a M)\\n-t C  campi separati da C\\n-V  numeri dentro il testo (file2 prima di file10)\\n-o file  scrive nel file\",\"help.sort.summary\":\"Ordina le righe.\",\"help.sort.usage\":\"sort [-rnufhV] [-k campo] [-t separatore] [file…]\",\"help.grep.text\":\"-i  senza distinguere maiuscole e minuscole\\n-v  le righe che NON corrispondono\\n-n  con il numero di riga\\n-c  conta le righe\\n-l  solo i nomi dei file\\n-r  cerca nelle cartelle\\n-w  parole intere, -x righe intere\\n-E  espressioni regolari estese (| + ? () senza barra)\\n-F  testo semplice, non espressione regolare\\n-o  solo la parte che corrisponde\\n-q  nessun risultato, solo lo stato\\n-A N, -B N, -C N  righe di contesto dopo, prima, intorno\\nStato: 0 trovato, 1 non trovato, 2 errore.\",\"help.grep.summary\":\"Cerca le righe che contengono un modello (espressione regolare).\",\"help.grep.usage\":\"grep [-ivnclrwxEFoqH] [-e modello] modello [file…]\",\"help.wc.text\":\"-l righe, -w parole, -c byte, -m caratteri, -L la riga più lunga\",\"help.wc.summary\":\"Conta righe, parole e byte.\",\"help.tail.text\":\"-n N  le ultime N righe (-n +N: dalla riga N in poi)\\n-c N  gli ultimi N caratteri\",\"help.tail.summary\":\"Le ultime righe (10 se non indicato).\",\"help.tail.usage\":\"tail [-n righe] [-c byte] [file…]\",\"help.head.text\":\"-n N  le prime N righe (-n -N: tutte tranne le ultime N)\\n-c N  i primi N caratteri\\n-5 è come -n 5\",\"help.head.summary\":\"Le prime righe (10 se non indicato).\",\"help.head.usage\":\"head [-n righe] [-c byte] [file…]\",\"help.sed.text\":\"s/vecchio/nuovo/g  sostituisce (g: tutte le volte, i: senza maiuscole, p: stampa)\\n3d, /re/d, 2,5d  elimina righe     -n …p  stampa solo quelle scelte\\ny/abc/xyz/  traslittera     a testo, i testo, c testo  aggiunge, inserisce, cambia\\n=  numero di riga   q  esce   h H g G x  spazio di riserva   b t :etichetta  salti\\nIndirizzi: n, $, /re/, a,b, a,+n, ! per negare, { … } per raggruppare.\\n-n  non stampa le righe da sola    -E  espressioni regolari estese    -i  modifica i file\\nEsempi: sed 's/rosso/blu/g' note.txt    sed -n '1,5p' file    sed -i '/^#/d' conf.txt\",\"help.sed.summary\":\"Modifica il testo riga per riga (sostituzioni, cancellazioni…).\",\"help.diff.text\":\"-u  formato unificato (con 3 righe di contesto; -U N per N)\\n-q  dice solo se sono diversi\\n-i  senza distinguere maiuscole e minuscole\\n-w  ignorando gli spazi, -b ignorando quanti sono\\n-B  ignorando le righe vuote\\n-s  dice anche quando sono identici\\n«-» è l’input. Stato: 0 uguali, 1 diversi, 2 errore.\",\"help.diff.summary\":\"Mostra le differenze tra due file.\",\"help.uname.summary\":\"Il nome del sistema operativo.\",\"help.hostname.summary\":\"Il nome del sistema.\",\"help.whoami.summary\":\"Il nome dell’utente.\",\"help.date.text\":\"Formato: %Y anno, %m mese, %d giorno, %H:%M:%S ora, %A giorno della settimana, %B mese, %s secondi dal 1970, %F = %Y-%m-%d, %T = %H:%M:%S\\n-d @1700000000, -d 2026-01-01, -d ieri\\nEsempio: date +%F\",\"help.date.summary\":\"Data e ora.\",\"help.date.usage\":\"date [-u] [-d data] [+formato]\",\"help.apps.summary\":\"Elenca le app installate (id, nome, versione).\",\"help.tag.text\":\"tag                elenca i tag\\ntag ls Lavoro      gli elementi con il tag\\ntag show file      i tag di un elemento\\ntag add Lavoro f   mette il tag (lo crea se non c’è)\\ntag rm Lavoro f    lo toglie\\ntag new nome blu   crea un tag\\ntag delete nome    elimina un tag\",\"help.tag.summary\":\"I tag di lilOS: elenca, assegna, toglie.\",\"help.tag.usage\":\"tag [ls [tag…] | show percorso… | add tag percorso… | rm tag percorso… | new nome [colore] | delete tag…]\",\"help.trash.text\":\"trash              elenca ciò che è nel cestino\\ntrash put file     sposta nel cestino (come rm -r)\\ntrash restore nome rimette a posto\\ntrash rm nome      elimina definitivamente\\ntrash empty        svuota il cestino\",\"help.trash.summary\":\"Il cestino: elenca, rimette a posto, svuota.\",\"help.trash.usage\":\"trash [list | put percorso… | restore nome… | rm nome… | empty]\",\"help.open.text\":\"open note.txt   apre con l’app predefinita\\nopen .   apre la cartella nel File Manager\\nopen -a editor note.txt   con un’app precisa\\nopen -a photo   avvia un’app\",\"help.open.summary\":\"Apre file e cartelle con la loro app (o con quella indicata).\",\"help.open.usage\":\"open [-a app] percorso…\",\"arith.tooDeep\":\"espressione: troppi livelli di ricorsione\",\"arith.syntax\":\"{expr}: errore di sintassi nell’espressione (simbolo errato «{token}»)\",\"arith.end\":\"fine\",\"arith.missingBracket\":\"{expr}: manca «]»\",\"arith.operandExpected\":\"{expr}: errore di sintassi nell’espressione (operando atteso)\",\"arith.badBase\":\"{value}: base non valida\",\"arith.tooGreatForBase\":\"{value}: valore troppo grande per la base\",\"arith.invalid\":\"espressione non valida\",\"arith.divisionByZero\":\"divisione per zero\",\"arith.negativeExponent\":\"esponente negativo\",\"arith.unknownOperator\":\"operatore sconosciuto {op}\",\"expand.braceTooLarge\":\"espansione delle graffe troppo grande\",\"expand.badSubstitution\":\"{name}: sostituzione errata\",\"expand.unbound\":\"{name}: variabile non impostata\",\"expand.cannotAssign\":\"{name}: impossibile assegnare in questo modo\",\"expand.nullOrNotSet\":\"parametro nullo o non impostato\",\"expand.negativeSubstring\":\"{count}: espressione di sottostringa < 0\",\"opt.invalid\":\"opzione non valida -- «{option}»\",\"opt.longNeedsArgument\":\"l’opzione «--{name}» richiede un argomento\",\"opt.needsArgument\":\"l’opzione richiede un argomento -- «{option}»\",\"opt.badNumber\":\"numero non valido: «{value}»\",\"regex.unmatchedBracket\":\"«[» senza «]» nell’espressione regolare\",\"regex.invalid\":\"espressione regolare non valida: {pattern}\",\"appCmd.summary\":\"Comando dell’app {app}.\",\"appCmd.usage\":\"{name} [argomenti…]\",\"printf.badNumber\":\"{value}: è richiesto un numero\",\"test.argumentExpected\":\"manca un argomento\",\"test.unexpectedArgument\":\"{arg}: argomento inatteso\",\"test.missingBracket\":\"manca «]»\",\"cd.oldpwdNotSet\":\"OLDPWD non impostata\",\"local.onlyInFunction\":\"si può usare solo in una funzione\",\"set.badOptionName\":\"{name}: nome di opzione non valido\",\"set.badOption\":\"{option}: opzione non valida\",\"let.noExpression\":\"manca l’espressione\",\"return.onlyInFunction\":\"si può usare solo in una funzione o in uno script letto con source\",\"loop.onlyInLoop\":\"ha senso solo in un ciclo for, while o until\",\"loop.badCount\":\"{n}: numero di cicli non valido\",\"alias.badName\":\"«{name}»: nome di alias non valido\",\"which.builtIn\":\"{name}: comando integrato nel Terminale\",\"wait.notAJob\":\"{spec}: non è un job di questa shell\",\"fg.noSuchJob\":\"{job}: job inesistente\",\"fg.current\":\"attuale\",\"kill.noSuchJob\":\"{spec}: job o processo inesistente\",\"sleep.missing\":\"manca la durata\",\"sleep.badDuration\":\"durata non valida: «{value}»\",\"source.noFile\":\"manca il nome del file\",\"bash.noCommand\":\"-c: manca il testo dei comandi\",\"bash.already\":\"Sei già in bash: per uno script scrivi «bash file.sh» o «source file.sh».\",\"type.alias\":\"{name} è un alias di «{value}»\",\"type.keyword\":\"{name} è una parola chiave della shell\",\"type.function\":\"{name} è una funzione\",\"type.builtin\":\"{name} è un comando interno della shell\",\"type.appCommand\":\"{name} è un comando dell’app {app}\",\"type.command\":\"{name} è un comando del Terminale\",\"type.file\":\"{name} è {path}\",\"syntax.topic.variables\":\"variabili\",\"syntax.topic.redirections\":\"redirezioni\",\"syntax.if\":\"if comandi; then comandi; [elif comandi; then comandi;] [else comandi;] fi\\nEsegue il ramo del primo «if»/«elif» i cui comandi riescono (stato 0).\\n  if [ -f note.txt ]; then echo c’è; else echo manca; fi\",\"syntax.for\":\"for nome in parole…; do comandi; done\\nfor (( inizio; condizione; passo )); do comandi; done\\n  for f in *.txt; do wc -l \\\"$f\\\"; done\\n  for ((i = 1; i <= 3; i++)); do echo $i; done\",\"syntax.while\":\"while comandi; do comandi; done   (until: finché i comandi NON riescono)\\n  n=0; while [ $n -lt 3 ]; do echo $n; n=$((n + 1)); done\\n  ls | while read -r nome; do echo \\\"- $nome\\\"; done\",\"syntax.until\":\"until comandi; do comandi; done: ripete finché i comandi non riescono.\",\"syntax.case\":\"case parola in modello|modello) comandi;; … esac\\nI modelli usano * ? [ ]. «;&» prosegue nel ramo dopo, «;;&» prova anche i modelli successivi.\\n  case \\\"$f\\\" in *.txt) echo testo;; *.png|*.jpg) echo immagine;; *) echo altro;; esac\",\"syntax.function\":\"nome() { comandi; }   oppure   function nome { comandi; }\\nGli argomenti sono $1, $2…, $@; «local» crea variabili della funzione, «return n» esce.\\n  saluta() { echo \\\"Ciao, $1\\\"; }; saluta Eugenio\",\"syntax.cond\":\"[[ espressione ]]: test senza divisione in parole né espansione di *.\\n  [[ $nome == *.txt ]]      confronto con un modello\\n  [[ $s =~ ^[0-9]+$ ]]      espressione regolare (gruppi in BASH_REMATCH)\\n  [[ -d dir && ! -e file ]] -e -f -d -s -z -n, && || ! ( )\",\"syntax.arith\":\"(( espressione )): aritmetica intera; stato 0 se il risultato non è 0.\\n  (( n++ )); (( n > 3 )) && echo grande; echo $(( 2 ** 10 ))\",\"syntax.variables\":\"nome=valore (senza spazi), $nome o ${nome}. Array: a=(x y z), ${a[0]}, ${a[@]}, ${#a[@]}.\\n${v:-predefinito} ${v:=predefinito} ${v:+alt} ${#v} ${v#prefisso} ${v%suffisso} ${v/da/a} ${v//da/a} ${v:inizio:lunghezza} ${v^^} ${v,,}\\nSpeciali: $? stato dell’ultimo comando, $$ la shell, $! l’ultimo comando in background, $# $@ $* gli argomenti.\",\"syntax.redirections\":\"> file (sovrascrive), >> file (aggiunge), < file (legge), 2> errori, 2>&1, &> file, <<EOF … EOF, <<< testo, | pipe.\\n/dev/null scarta tutto.\",\"files.cannotAccess\":\"impossibile accedere a «{path}»: file o cartella inesistente\",\"files.cannotCreate\":\"impossibile creare «{path}»: file o cartella inesistente\",\"files.overwriteFolder\":\"impossibile sovrascrivere la cartella «{name}» con un file\",\"files.missingDestination\":\"manca la destinazione dopo «{path}»\",\"files.targetNotFolder\":\"la destinazione «{path}» non è una cartella\",\"files.cannotStat\":\"impossibile fare stat di «{path}»: file o cartella inesistente\",\"files.cannotRemove\":\"impossibile rimuovere «{path}»: {reason}\",\"files.quotedNoSuchFile\":\"«{path}»: file o cartella inesistente\",\"mkdir.notAFolder\":\"impossibile creare la cartella «{path}»: «{name}» esiste e non è una cartella\",\"mkdir.exists\":\"impossibile creare la cartella «{path}»: il file esiste\",\"mkdir.noParent\":\"impossibile creare la cartella «{path}»: file o cartella inesistente\",\"mkdir.created\":\"creata la cartella «{path}»\",\"cp.overwriteFile\":\"impossibile sovrascrivere «{name}», che non è una cartella, con una cartella\",\"cp.verbose\":\"«{from}» -> «{to}»\",\"cp.omitting\":\"-r non specificato; si omette la cartella «{path}»\",\"cp.intoItself\":\"impossibile copiare la cartella «{path}» dentro se stessa\",\"mv.system\":\"impossibile spostare «{path}»: è una cartella di sistema\",\"mv.intoItself\":\"impossibile spostare «{path}» in una sua sottocartella\",\"mv.notEmpty\":\"impossibile spostare «{path}» su «{name}»: la cartella non è vuota\",\"mv.verbose\":\"rinominato «{from}» -> «{to}»\",\"reason.noSuchFile\":\"file o cartella inesistente\",\"reason.isADirectory\":\"è una cartella\",\"reason.notADirectory\":\"non è una cartella\",\"reason.notEmpty\":\"la cartella non è vuota\",\"reason.system\":\"è una cartella di sistema\",\"reason.containsSystem\":\"contiene cartelle di sistema\",\"rm.home\":\"è pericoloso agire su «{path}»: è la home\",\"rm.purged\":\"eliminato definitivamente «{path}»\",\"rm.trashed\":\"spostato nel cestino «{path}»\",\"rmdir.removed\":\"rimossa la cartella «{path}»\",\"stat.folder\":\"cartella\",\"stat.appLink\":\"collegamento all’app {app}\",\"stat.file\":\"file\",\"stat.emptyFile\":\"file vuoto\",\"stat.type\":\"Tipo: {type}\",\"stat.path\":\"Percorso: {path}\",\"stat.items\":\"Elementi: {n} ({total} in tutto)\",\"stat.size\":\"Dimensione: {size} byte ({human})\",\"stat.created\":\"Creato: {date}\",\"stat.modified\":\"Modificato: {date}\",\"stat.tags\":\"Tag: {tags}\",\"stat.system\":\"Cartella di sistema\",\"find.missingArgument\":\"manca l’argomento di «{name}»\",\"find.badType\":\"tipo sconosciuto per -type: «{type}» (f, d o l)\",\"find.badSize\":\"dimensione non valida: «{value}»\",\"find.badValue\":\"valore non valido per {option}: «{value}»\",\"find.cannotFind\":\"impossibile trovare «{path}»\",\"find.execEnd\":\"manca la fine di «-exec» («;» o «+»)\",\"find.execCommand\":\"manca il comando di «-exec»\",\"find.unknownPredicate\":\"predicato sconosciuto: «{name}»\",\"find.unexpected\":\"argomento inatteso: «{arg}»\",\"tree.folders\":{\"one\":\"{n} cartella\",\"other\":\"{n} cartelle\"},\"tree.files\":{\"one\":\"{n} file\",\"other\":\"{n} file\"},\"ls.date\":\"{day} {month}\",\"wc.total\":\"totale\",\"grep.noPattern\":\"manca il modello da cercare\\nUso: grep [opzioni] modello [file…]\",\"sort.badKey\":\"chiave non valida: «{key}»\",\"sort.disorder\":\"-:{n}: disordine: {line}\",\"cut.badList\":\"elenco non valido: «{spec}»\",\"cut.noList\":\"indicare un elenco di campi (-f) o di caratteri (-c)\",\"cut.badDelimiter\":\"il delimitatore deve essere un solo carattere\",\"tr.reverseRange\":\"intervallo al contrario: «{range}»\",\"tr.missingSet2\":\"manca il secondo insieme dopo «{set}»\",\"seq.badArgument\":\"argomento non valido: «{value}»\",\"seq.zeroStep\":\"il passo non può essere 0\",\"xargs.unmatchedDouble\":\"virgolette doppie non chiuse\",\"xargs.unmatchedSingle\":\"virgolette singole non chiuse\",\"xargs.badCount\":\"il numero di argomenti deve essere almeno 1\",\"sed.at\":\"-e espressione #1, carattere {pos}: {message}\",\"sed.unterminated\":\"comando «s» non terminato\",\"sed.badAddress\":\"indirizzo non valido\",\"sed.missingAddress\":\"manca il secondo indirizzo\",\"sed.missingCommand\":\"manca il comando\",\"sed.unexpectedBrace\":\"«}» inatteso\",\"sed.badDelimiter\":\"delimitatore non valido per «s»\",\"sed.yLengths\":\"le stringhe di «y» hanno lunghezze diverse\",\"sed.noLabel\":\"«:» senza etichetta\",\"sed.unknownCommand\":\"comando sconosciuto: «{cmd}»\",\"sed.unmatchedBrace\":\"manca «}»\",\"sed.noSuchLabel\":\"etichetta inesistente per un salto: «{label}»\",\"sed.noPreviousRegex\":\"nessuna espressione regolare precedente\",\"sed.cannotRead\":\"impossibile leggere {path}: file o cartella inesistente\",\"sed.noScript\":\"manca lo script\\nUso: sed [-n] [-E] [-i] script [file…]\",\"sed.noFiles\":\"nessun file da modificare con -i\",\"diff.missingOperand\":\"manca un operando dopo «{arg}»\",\"diff.extraOperand\":\"operando in più: «{arg}»\",\"diff.identical\":\"I file {a} e {b} sono identici\",\"diff.differ\":\"I file {a} e {b} sono diversi\",\"diff.tooBig\":\"i file sono troppo diversi e troppo grandi da confrontare\",\"open.noApp\":\"app non trovata: «{app}» (vedi «apps»)\",\"trash.notInTrash\":\"«{name}» non è nel cestino\",\"trash.empty\":\"Il cestino è vuoto.\",\"trash.deletedFolder\":\"(cartella eliminata)\",\"trash.items\":{\"one\":\"{n} elemento\",\"other\":\"{n} elementi\"},\"trash.missingPut\":\"manca cosa mettere nel cestino\",\"trash.cannotTrash\":\"{path}: non si può cestinare (cartella di sistema)\",\"trash.missingRestore\":\"manca il nome di ciò che va rimesso a posto\",\"trash.restored\":\"rimesso in {path}\",\"trash.missingName\":\"manca il nome\",\"trash.purged\":{\"one\":\"eliminato definitivamente {n} elemento\",\"other\":\"eliminati definitivamente {n} elementi\"},\"trash.emptied\":{\"one\":\"Cestino svuotato ({n} elemento).\",\"other\":\"Cestino svuotato ({n} elementi).\"},\"trash.alreadyEmpty\":\"Il cestino era già vuoto.\",\"tag.noSuchTag\":\"tag inesistente: «{name}» (vedi «tag ls»)\",\"tag.none\":\"Nessun tag. Creane uno con «tag new nome».\",\"tag.hidden\":\"nascosto\",\"tag.noTags\":\"nessun tag\",\"tag.usageAddRm\":\"tag {sub} nome file…\",\"tag.created\":\"creato il tag «{name}»\",\"tag.system\":\"{path}: gli elementi di sistema non hanno tag\",\"tag.usageNew\":\"tag new nome [colore]\",\"tag.createdShown\":\"creato il tag {tag}\",\"tag.usageDelete\":\"tag delete nome…\",\"date.formatC\":\"%a %e %b %Y, %H:%M:%S\",\"date.formatX\":\"%d/%m/%Y\",\"date.format\":\"%a %e %b %Y, %H:%M:%S %Z\",\"date.invalid\":\"data non valida: «{date}»\",\"@actions.terminal.sshHere.label\":\"Apri terminale SSH qui\",\"help.ssh.summary\":\"apre una sessione SSH in una scheda nuova\",\"help.ssh.usage\":\"ssh [-p porta] [-l utente] [utente@]host [comando] | ssh <host salvato>\",\"help.telnet.summary\":\"apre una sessione Telnet in una scheda nuova\",\"help.telnet.usage\":\"telnet [-l utente] host [porta] | telnet <host salvato>\",\"help.rlogin.summary\":\"apre una sessione rlogin in una scheda nuova\",\"help.rlogin.usage\":\"rlogin [-l utente] host | rlogin <host salvato>\",\"help.supdup.summary\":\"apre una sessione SUPDUP in una scheda nuova\",\"help.supdup.usage\":\"supdup host [porta] | supdup <host salvato>\",\"help.sessions.summary\":\"le sessioni remote ancora aperte; con un numero, ne mostra una in una scheda\",\"help.sessions.usage\":\"sessions [n]\",\"remote.cmd.unavailable\":\"le sessioni remote non sono disponibili (lilOS non ha i loro moduli)\",\"remote.cmd.noModule\":\"{name}: lilOS non ha il suo modulo (un amministratore installa {module} dall’AppStore, scheda Kernel)\",\"remote.cmd.opened\":\"Aperta in una scheda nuova: {name}\",\"remote.cmd.noUser\":\"ssh: serve un utente: utente@host oppure -l utente\",\"remote.cmd.noSession\":\"nessuna sessione aperta «{name}» (vedi «sessions»)\",\"remote.cmd.shown\":\"Mostrata in una scheda: {name}\",\"remote.cmd.shownNow\":\"mostrata in una finestra\",\"remote.cmd.closesIn\":{\"one\":\"si chiude tra {n} minuto\",\"other\":\"si chiude tra {n} minuti\"},\"remote.cmd.none\":\"Nessuna sessione remota aperta.\",\"remote.cmd.resumeHint\":\"«sessions <n>» ne mostra una in una scheda\",\"remote.tabs\":\"Schede\",\"remote.screen\":\"Terminale remoto\",\"remote.newShell\":\"Nuova shell\",\"remote.activity\":\"Nuovo output\",\"remote.closeTab\":\"Chiudi scheda\",\"remote.closeSession\":\"Chiudi (termina la sessione)\",\"remote.closeNamed\":\"Chiudi {name}\",\"remote.notRemote\":\"non è in una connessione di rete\",\"remote.notSftp\":\"il terminale SSH si apre solo sulle connessioni SFTP\",\"remote.cannotReconnect\":\"questa sessione non si riapre da qui: aprila di nuovo dal File Manager\",\"remote.unavailable\":\"Le sessioni remote non rispondono: {error}\",\"remote.noProtocols\":\"lilOS non ha moduli per le sessioni remote. Un amministratore può installare ssh, term-telnet, term-rlogin o term-supdup dall’AppStore (scheda Kernel).\",\"remote.side.label\":\"Host e sessioni remote\",\"remote.side.toggle\":\"Mostra o nascondi gli host\",\"remote.side.hosts\":\"Host\",\"remote.side.connect\":\"Connetti\",\"remote.side.open\":\"C’è una sessione aperta su questo host\",\"remote.side.none\":\"Nessun host salvato. «ssh utente@server» apre una sessione; + salva un host.\",\"remote.side.running\":\"Ancora attive\",\"remote.side.elsewhere\":\"in un’altra finestra\",\"remote.side.closesIn\":{\"one\":\"si chiude tra {n} minuto\",\"other\":\"si chiude tra {n} minuti\"},\"remote.side.resume\":\"Riprendi\",\"remote.taken\":\"La sessione è stata aperta in un’altra finestra\",\"remote.takeBack\":\"Mostrala qui\",\"remote.lostLink\":\"Il collegamento con lilOS si è interrotto\",\"remote.attachAgain\":\"Ricollega\",\"remote.secure\":\"Cifrata\",\"remote.insecure\":\"Non cifrata\",\"remote.insecureHint\":\"Quello che scrivi, password comprese, passa in chiaro sulla rete\",\"remote.cipher\":\"Cifratura: {cipher}\",\"remote.state.new\":\"In attesa\",\"remote.state.connecting\":\"Connessione…\",\"remote.state.on\":\"Connessa\",\"remote.state.closed\":\"Chiusa\",\"remote.find\":\"Cerca (Ctrl+Maiusc+F)\",\"remote.record\":\"Registra la sessione in un file\",\"remote.recordStop\":\"Ferma la registrazione\",\"remote.keys\":\"Tasti\",\"remote.keys.send\":\"Manda al server:\",\"remote.keys.copy\":\"Copia\",\"remote.keys.paste\":\"Incolla: Ctrl+Maiusc+V\",\"remote.keys.clear\":\"Cancella lo storico\",\"remote.keys.disconnect\":\"Disconnetti\",\"remote.signal.break\":\"Invia Break\",\"remote.signal.interrupt\":\"Interrompi il processo\",\"remote.signal.ayt\":\"Ci sei? (AYT)\",\"remote.reconnect\":\"Riconnetti\",\"remote.closed\":\"Connessione chiusa\",\"remote.closedWhy\":\"Connessione chiusa: {reason}\",\"remote.record.title\":\"Registra la sessione\",\"remote.record.file\":\"File\",\"remote.record.hint\":\"Un file nella tua home. Viene scritto mentre lavori; si ferma a 8 MB.\",\"remote.record.colors\":\"Anche con i codici di colore (per rivederla com’era)\",\"remote.record.start\":\"Registra\",\"remote.record.badPath\":\"La cartella non esiste: scrivi un percorso come ~/Documenti/sessione.txt\",\"remote.record.exists\":\"«{name}» esiste già: scegli un altro nome\",\"remote.record.full\":\"Registrazione fermata: «{path}» ha raggiunto la dimensione massima\",\"remote.record.failed\":\"La registrazione non si salva: {error}\",\"remote.record.saved\":\"Sessione registrata in «{path}»\",\"remote.host.newTitle\":\"Nuovo host\",\"remote.host.editTitle\":\"Modifica l’host\",\"remote.host.name\":\"Nome\",\"remote.host.folder\":\"Cartella\",\"remote.host.folderNone\":\"Nessuna\",\"remote.host.protocol\":\"Protocollo\",\"remote.host.noProtocols\":\"Nessun protocollo disponibile.\",\"remote.host.insecureTitle\":\"Connessione non cifrata\",\"remote.host.insecureText\":\"Quello che scrivi, password comprese, passa in chiaro sulla rete. Usala solo su reti di cui ti fidi o con apparati che non hanno SSH.\",\"remote.host.remember\":\"Ricorda password e passphrase\",\"remote.host.keyUnreadable\":\"Il file della chiave non si legge: {error}\",\"remote.host.advanced\":\"Avanzate\",\"remote.host.term\":\"Tipo di terminale\",\"remote.host.encoding\":\"Codifica\",\"remote.host.backspace\":\"Backspace manda\",\"remote.host.backspaceDel\":\"DEL (^?)\",\"remote.host.backspaceBs\":\"BS (^H)\",\"remote.host.delete\":\"Elimina\",\"remote.host.save\":\"Salva\",\"remote.host.saveConnect\":\"Salva e connetti\",\"@entrypoints.filePreview.label\":\"Anteprime dei collegamenti .term\",\"@entrypoints.shell.label\":\"Shell per la Pianificazione\",\"@commands.terminal.newShell.label\":\"Nuova shell\",\"@commands.terminal.splitRight.label\":\"Dividi a destra\",\"@commands.terminal.splitDown.label\":\"Dividi in basso\",\"@commands.terminal.detach.label\":\"Stacca la scheda in una nuova finestra\",\"@commands.terminal.broadcast.label\":\"Invia l’input a tutti i riquadri\",\"@commands.terminal.focusLeft.label\":\"Riquadro a sinistra\",\"@commands.terminal.focusRight.label\":\"Riquadro a destra\",\"@commands.terminal.focusUp.label\":\"Riquadro sopra\",\"@commands.terminal.focusDown.label\":\"Riquadro sotto\",\"@commands.terminal.previousTab.label\":\"Scheda precedente del riquadro\",\"@commands.terminal.nextTab.label\":\"Scheda successiva del riquadro\",\"@commands.terminal.moveLeft.label\":\"Sposta la scheda a sinistra\",\"@commands.terminal.moveRight.label\":\"Sposta la scheda a destra\",\"@commands.terminal.moveUp.label\":\"Sposta la scheda in alto\",\"@commands.terminal.moveDown.label\":\"Sposta la scheda in basso\",\"@dependencies.ssh.reason\":\"Sessioni remote via SSH, e comandi del Terminale sugli host SSH salvati\",\"@dependencies.term-telnet.reason\":\"Sessioni remote via Telnet\",\"@dependencies.term-rlogin.reason\":\"Sessioni remote via rlogin\",\"@dependencies.term-supdup.reason\":\"Sessioni remote via SUPDUP\",\"@dependencies.services-isolate.reason\":\"Comandi del Terminale pianificati nel kernel, con il tempo massimo dell’operazione e Annulla\",\"tabs.count\":{\"one\":\"{n} scheda\",\"other\":\"{n} schede\"},\"tabs.pane\":\"Riquadro {n} — {name}\",\"tabs.rename\":\"Rinomina…\",\"tabs.renameLabel\":\"Nome della scheda\",\"tabs.renameHint\":\"Vuoto: il nome solito (la cartella, o il server).\",\"tabs.renameOk\":\"Rinomina\",\"tabs.duplicate\":\"Duplica\",\"tabs.splitRight\":\"Dividi a destra\",\"tabs.splitDown\":\"Dividi in basso\",\"tabs.moveToPane\":\"Sposta nel riquadro\",\"tabs.detach\":\"Stacca in una nuova finestra\",\"tabs.moveToWindow\":\"Sposta nella finestra\",\"tabs.newWindow\":\"Nuova finestra\",\"tabs.saveTerm\":\"Salva come collegamento (.term)…\",\"tabs.addToDesk\":\"Aggiungi alla scrivania\",\"tabs.copyAddress\":\"Copia indirizzo\",\"tabs.closeOthers\":\"Chiudi le altre schede\",\"tabs.closeRight\":\"Chiudi le schede a destra\",\"grid.gutter\":\"Trascina per cambiare la misura dei riquadri; doppio clic: uguali\",\"grid.broadcast\":\"Invia l’input a tutti i riquadri\",\"grid.broadcastOn\":\"Input a tutti i riquadri\",\"grid.broadcastOff\":\"Quello che scrivi va alla scheda mostrata in ogni riquadro. Clic per spegnerlo.\",\"menu.title\":\"Menu di Terminale\",\"menu.openTerm\":\"Apri un collegamento (.term)…\",\"menu.openTermTitle\":\"Apri un collegamento al terminale\",\"drag.newWindow\":\"Rilascia per aprire {name} in una finestra nuova\",\"drag.pane\":\"Sposta in questo riquadro\",\"drag.split.left\":\"Nuovo riquadro a sinistra\",\"drag.split.right\":\"Nuovo riquadro a destra\",\"drag.split.up\":\"Nuovo riquadro sopra\",\"drag.split.down\":\"Nuovo riquadro sotto\",\"file.invalid\":\"Non è un collegamento al terminale (.term) o è rovinato\",\"file.missing\":\"Il collegamento non esiste più\",\"file.cannot\":\"Questa scheda non può diventare un collegamento\",\"file.noFolder\":\"La cartella {path} non esiste\",\"file.serverFolder\":\"La cartella del server va scritta per intero, per esempio /var/www\",\"file.exists\":\"C’è già un file {name} in quella cartella\",\"file.noPassword\":\"Scrivi la password (o la chiave) da salvare nel file\",\"file.onDesk\":\"{name} è sulla scrivania\",\"file.saved\":\"Collegamento salvato: {path}\",\"file.saveTitle\":\"Salva collegamento\",\"file.name\":\"Nome del file\",\"file.folder\":\"Cartella\",\"file.change\":\"Cambia…\",\"file.pickFolder\":\"Dove salvare il collegamento\",\"file.cwdLocal\":\"Parti dalla cartella (facoltativo)\",\"file.cwdRemote\":\"Cartella del server in cui entrare (facoltativo)\",\"file.command\":\"Comando da eseguire all’avvio (facoltativo)\",\"file.commandRemote\":\"Comando all’avvio (facoltativo)\",\"file.commandRemoteHint\":\"Parte al posto della shell del server\",\"file.openAs\":\"All’apertura\",\"file.openDefault\":\"Come nelle Opzioni ({how})\",\"file.keepPassword\":\"Salva la password nel file\",\"file.passwordSaved\":\"Nel file va la password salvata per questo host.\",\"file.passwordHint\":\"La password è cifrata: vale solo per te, su questo lilOS, per questo server e utente. A chiunque altro viene chiesta come al solito.\",\"file.save\":\"Salva\",\"file.command.title\":\"Questo collegamento esegue un comando\",\"file.command.text\":\"«{name}» all’apertura esegue questo comando:\\n\\n{command}\\n\\nEseguilo solo se ti fidi di chi ha fatto il collegamento. Continuare?\",\"options.open\":\"Opzioni…\",\"options.title\":\"Opzioni di Terminale\",\"options.tab.general\":\"Generale\",\"options.tab.generalDescription\":\"Come Terminale apre i collegamenti\",\"options.files\":\"Collegamenti al terminale (.term)\",\"options.openTerm\":\"Apri i collegamenti\",\"options.openTermDescription\":\"Dove si apre un file .term con il doppio clic, quando il file non lo dice da sé\",\"options.openTerm.window\":\"In una finestra nuova\",\"options.openTerm.tab\":\"In una scheda della finestra aperta\"}}")
 }), { t: j } = A, ae = [
 	"&>>",
 	"<<<",
@@ -1553,22 +1553,22 @@ function Ie(e, t, n) {
 	}
 	throw new k(A.t("arith.unknownOperator", { op: e }));
 }
-// src/terminal/shell/pattern.js
-var Le = {
+// src/shared/text.js
+var Le = (e) => String(e).replace(/[.*+?^${}()|[\]\\/]/g, "\\$&"), Re = {
 	alpha: "a-zA-Z",
 	digit: "0-9",
 	alnum: "a-zA-Z0-9",
 	upper: "A-Z",
 	lower: "a-z",
-	space: "\\s",
-	blank: " \\t",
-	punct: "!-\\/:-@\\[-`{-~",
+	space: "s",
+	blank: " 	",
+	punct: "!-/:-@[-`{-~",
 	xdigit: "0-9A-Fa-f",
-	word: "\\w",
-	cntrl: "\\x00-\\x1f\\x7f",
-	print: "\\x20-\\x7e",
-	graph: "\\x21-\\x7e"
-}, Re = /* @__PURE__ */ new Map(), ze = (e) => String(e).replace(/[\\*?[\]]/g, "\\$&"), Be = (e) => e.replace(/[.*+?^${}()|[\]\\/-]/g, "\\$&");
+	word: "w",
+	cntrl: "\0-",
+	print: " -~",
+	graph: "!-~"
+}, ze = /* @__PURE__ */ new Map(), Be = (e) => String(e).replace(/[\\*?[\]]/g, "\\$&");
 function Ve(e) {
 	for (let t = 0; t < e.length; t++) {
 		let n = e[t];
@@ -1591,7 +1591,7 @@ function Ue(e) {
 	let t = "";
 	for (let n = 0; n < e.length; n++) {
 		let r = e[n];
-		if (r === "\\") n + 1 < e.length ? t += Be(e[++n]) : t += "\\\\";
+		if (r === "\\") n + 1 < e.length ? t += Le(e[++n]) : t += "\\\\";
 		else if (r === "*") t += "[\\s\\S]*";
 		else if (r === "?") t += "[\\s\\S]";
 		else if (r === "[" && He(e, n) > 0) {
@@ -1600,17 +1600,17 @@ function Ue(e) {
 				let t = e[i];
 				if (t === "[" && e[i + 1] === ":") {
 					let t = e.indexOf(":]", i + 2), n = e.slice(i + 2, t);
-					a += Le[n] ?? "", i = t + 1;
+					a += Re[n] ?? "", i = t + 1;
 				} else t === "\\" ? a += "\\" + (e[++i] ?? "\\") : t === "-" && i > n + 1 && i < r - 1 && a && a !== "^" ? a += "-" : a += /[\]\\^-]/.test(t) ? "\\" + t : t;
 			}
 			t += `[${a}]`, n = r;
-		} else t += Be(r);
+		} else t += Le(r);
 	}
 	return t;
 }
 function R(e, t, { ignoreCase: n = !1 } = {}) {
-	let r = (n ? "i" : "s") + e, i = Re.get(r);
-	return i || (i = RegExp(`^(?:${Ue(e)})$`, n ? "i" : ""), Re.size > 500 && Re.clear(), Re.set(r, i)), i.test(t);
+	let r = (n ? "i" : "s") + e, i = ze.get(r);
+	return i || (i = RegExp(`^(?:${Ue(e)})$`, n ? "i" : ""), ze.size > 500 && ze.clear(), ze.set(r, i)), i.test(t);
 }
 var We = (e) => String(e).replace(/\\([\s\S])/g, "$1");
 // src/terminal/shell/paths.js
@@ -1691,7 +1691,7 @@ async function H(e, t) {
 async function $e(e, t) {
 	return nt(await U(e, t.parts, !1)).map((e) => e.quoted ? e.text.replace(/[.*+?^${}()|[\]\\/]/g, "\\$&") : e.text).join("");
 }
-var et = (e) => e.getVar("IFS") ?? " 	\n", tt = (e) => e.map((e) => e.quoted ? ze(e.text) : e.text).join("");
+var et = (e) => e.getVar("IFS") ?? " 	\n", tt = (e) => e.map((e) => e.quoted ? Be(e.text) : e.text).join("");
 function nt(e) {
 	return e.map((e) => e.brk ? {
 		text: " ",
@@ -4970,21 +4970,7 @@ var On = [
 		},
 		run: Dn
 	}
-], kn = {
-	alpha: "a-zA-Z",
-	digit: "0-9",
-	alnum: "a-zA-Z0-9",
-	upper: "A-Z",
-	lower: "a-z",
-	space: "\\s",
-	blank: " \\t",
-	punct: "!-\\/:-@\\[-`{-~",
-	xdigit: "0-9A-Fa-f",
-	word: "\\w",
-	cntrl: "\\x00-\\x1f\\x7f",
-	print: "\\x20-\\x7e",
-	graph: "\\x21-\\x7e"
-}, An = /* @__PURE__ */ new Set([
+], kn = /* @__PURE__ */ new Set([
 	"(",
 	")",
 	"{",
@@ -4993,7 +4979,7 @@ var On = [
 	"+",
 	"?"
 ]);
-function jn(e, t) {
+function An(e, t) {
 	let n = "";
 	for (let r = 0; r < e.length; r++) {
 		let i = e[r];
@@ -5003,7 +4989,7 @@ function jn(e, t) {
 				if (e[t] === "[" && e[t + 1] === ":") {
 					let n = e.indexOf(":]", t + 2);
 					if (n > 0) {
-						i += kn[e.slice(t + 2, n)] ?? "", t = n + 1;
+						i += Re[e.slice(t + 2, n)] ?? "", t = n + 1;
 						continue;
 					}
 				}
@@ -5013,13 +4999,13 @@ function jn(e, t) {
 			n += i + "]", r = t;
 		} else if (i === "\\" && r + 1 < e.length) {
 			let i = e[++r];
-			i === "<" || i === ">" ? n += "\\b" : !t && An.has(i) ? n += i : n += "\\" + i;
-		} else !t && An.has(i) ? n += "\\" + i : i === "*" && (r === 0 || !t && e.slice(0, r).endsWith("\\(")) ? n += "\\*" : n += i;
+			i === "<" || i === ">" ? n += "\\b" : !t && kn.has(i) ? n += i : n += "\\" + i;
+		} else !t && kn.has(i) ? n += "\\" + i : i === "*" && (r === 0 || !t && e.slice(0, r).endsWith("\\(")) ? n += "\\*" : n += i;
 	}
 	return n;
 }
-function Mn(e, { extended: t = !1, fixed: n = !1, ignoreCase: r = !1, word: i = !1, line: a = !1, global: o = !1 } = {}) {
-	let s = n ? e.replace(/[.*+?^${}()|[\]\\/]/g, "\\$&") : jn(e, t);
+function jn(e, { extended: t = !1, fixed: n = !1, ignoreCase: r = !1, word: i = !1, line: a = !1, global: o = !1 } = {}) {
+	let s = n ? Le(e) : An(e, t);
 	i && (s = `(?<![\\w])(?:${s})(?![\\w])`), a && (s = `^(?:${s})$`);
 	try {
 		return new RegExp(s, (r ? "i" : "") + (o ? "g" : "") + "u");
@@ -5032,7 +5018,7 @@ function Mn(e, { extended: t = !1, fixed: n = !1, ignoreCase: r = !1, word: i = 
 	}
 }
 // src/terminal/commands/text.js
-var Nn = (e) => e.stdout === e.shell.host.stdout, Pn = (e) => new TextEncoder().encode(e).length;
+var Mn = (e) => e.stdout === e.shell.host.stdout, Nn = (e) => new TextEncoder().encode(e).length;
 function Z(e) {
 	let t = e.split("\n"), n = e.endsWith("\n");
 	return (n || e === "") && t.pop(), {
@@ -5040,7 +5026,7 @@ function Z(e) {
 		ended: n
 	};
 }
-async function Fn(e) {
+async function Pn(e) {
 	let { opts: t, args: n } = q(e, {
 		flags: "qv",
 		values: "nc",
@@ -5070,7 +5056,7 @@ async function Fn(e) {
 	}
 	return +!!e.failed;
 }
-async function In(e) {
+async function Fn(e) {
 	let { opts: t, args: n } = q(e, {
 		flags: "qvf",
 		values: "nc",
@@ -5092,7 +5078,7 @@ async function In(e) {
 	}
 	return +!!e.failed;
 }
-async function Ln(e) {
+async function In(e) {
 	let { opts: t, args: n } = q(e, {
 		flags: "lwcmL",
 		long: {
@@ -5110,7 +5096,7 @@ async function Ln(e) {
 		name: t === "-" && !n.length ? "" : t,
 		l: (r.match(/\n/g) ?? []).length,
 		w: (r.match(/\S+/g) ?? []).length,
-		c: Pn(r),
+		c: Nn(r),
 		m: [...r].length,
 		L: Math.max(0, ...r.split("\n").map((e) => e.length))
 	});
@@ -5134,7 +5120,7 @@ async function Ln(e) {
 	for (let t of i) await e.out(a.map((e) => String(t[e]).padStart(o)).join(" ") + (t.name ? ` ${t.name}` : "") + "\n");
 	return +!!e.failed;
 }
-async function Rn(e) {
+async function Ln(e) {
 	let { opts: t, args: n } = q(e, {
 		flags: "ivnclLrRwxEFoqsHhGPz",
 		values: "mABC",
@@ -5182,10 +5168,10 @@ async function Rn(e) {
 		ignoreCase: t.i,
 		word: t.w,
 		line: t.x
-	}, o = i.map((e) => Mn(e, a)), s = i.map((e) => Mn(e, {
+	}, o = i.map((e) => jn(e, a)), s = i.map((e) => jn(e, {
 		...a,
 		global: !0
-	})), c = Nn(e), l = t.r || t.R, u = [], d = (e, t) => {
+	})), c = Mn(e), l = t.r || t.R, u = [], d = (e, t) => {
 		if (e.type === "file") u.push(t);
 		else if (e.type === "folder") for (let n of [...v.children(e.id)].sort((e, t) => B(e.name, t.name))) d(n, t.endsWith("/") ? t + n.name : `${t}/${n.name}`);
 	};
@@ -5239,22 +5225,22 @@ async function Rn(e) {
 	}
 	return e.failed && !t.q ? 2 : +!g;
 }
-function zn(e, t, n) {
+function Rn(e, t, n) {
 	if (!t) return e;
 	let r = n == null ? e.trim().split(/\s+/) : e.split(n), i = t.end ?? r.length;
 	return r.slice(t.start - 1, i).join(n ?? " ");
 }
-var Bn = {
+var zn = {
 	K: 1e3,
 	M: 1e6,
 	G: 1e9,
 	T: 0xe8d4a51000,
 	k: 1e3
-}, Vn = (e) => {
+}, Bn = (e) => {
 	let t = /^\s*([+-]?\d*[.,]?\d+)/.exec(e);
 	return t ? Number(t[1].replace(",", ".")) : 0;
 };
-async function Hn(e) {
+async function Vn(e) {
 	let { opts: t, args: n } = q(e, {
 		flags: "rnufhbVsc",
 		values: "kto",
@@ -5280,15 +5266,15 @@ async function Hn(e) {
 		}, /n/.test(t.k) && (t.n = !0), /r/.test(t.k) && (t.r = !0);
 	}
 	let a = (e) => {
-		let n = zn(e, i, t.t);
+		let n = Rn(e, i, t.t);
 		return t.b && (n = n.trim()), t.f && (n = n.toLowerCase()), n;
 	}, o = (e, n) => {
 		let r = a(e), i = a(n);
-		if (t.n) return Vn(r) - Vn(i) || B(e, n);
+		if (t.n) return Bn(r) - Bn(i) || B(e, n);
 		if (t.h) {
 			let t = (e) => {
 				let t = /^\s*([+-]?\d*\.?\d+)([KMGTk]?)/.exec(e);
-				return t ? Number(t[1]) * (Bn[t[2]] ?? 1) : 0;
+				return t ? Number(t[1]) * (zn[t[2]] ?? 1) : 0;
 			};
 			return t(r) - t(i) || B(e, n);
 		}
@@ -5309,7 +5295,7 @@ async function Hn(e) {
 	} else await e.out(s);
 	return e.failed ? 2 : 0;
 }
-async function Un(e) {
+async function Hn(e) {
 	let { opts: t, args: n } = q(e, {
 		flags: "cdui",
 		values: "fs",
@@ -5335,7 +5321,7 @@ async function Un(e) {
 	}
 	return i ? await v.write(e.shell.fileFor(i).id, s) : await e.out(s), +!!e.failed;
 }
-async function Wn(e) {
+async function Un(e) {
 	let { opts: t, args: n } = q(e, {
 		flags: "ai",
 		long: { append: "a" }
@@ -5349,7 +5335,7 @@ async function Wn(e) {
 		await v.write(e.id, n + i);
 	}
 }
-function Gn(e) {
+function Wn(e) {
 	let t = String(e).split(",").map((t) => {
 		let n = /^(\d*)(-?)(\d*)$/.exec(t);
 		if (!n || !n[1] && !n[3]) throw new k(j("cut.badList", { spec: e }), 2);
@@ -5358,7 +5344,7 @@ function Gn(e) {
 	});
 	return (e) => t.some(([t, n]) => e >= t && e <= n);
 }
-async function Kn(e) {
+async function Gn(e) {
 	let { opts: t, args: n } = q(e, {
 		flags: "s",
 		values: "dfcb",
@@ -5380,10 +5366,10 @@ async function Kn(e) {
 			t.s || (a += e + "\n");
 			continue;
 		}
-		let n = Gn(t.f);
+		let n = Wn(t.f);
 		a += e.split(r).filter((e, t) => n(t + 1)).join(i) + "\n";
 	} else {
-		let n = Gn(t.c ?? t.b);
+		let n = Wn(t.c ?? t.b);
 		a += [...e].filter((e, t) => n(t + 1)).join("") + "\n";
 	}
 	return await e.out(a), +!!e.failed;
@@ -5397,7 +5383,7 @@ var Q = {
 	punct: "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"
 };
 Q.alpha = Q.upper + Q.lower, Q.alnum = Q.alpha + Q.digit, Q.xdigit = "0123456789ABCDEFabcdef";
-function qn(e) {
+function Kn(e) {
 	let t = [], n = [];
 	for (let t = 0; t < e.length; t++) {
 		if (e[t] === "[" && e[t + 1] === ":") {
@@ -5441,7 +5427,7 @@ function qn(e) {
 	} else t.push(n[e].c);
 	return t;
 }
-async function Jn(e) {
+async function qn(e) {
 	let { opts: t, args: n } = q(e, {
 		flags: "dscC",
 		long: {
@@ -5451,7 +5437,7 @@ async function Jn(e) {
 		}
 	});
 	if (!n.length) throw new k(j("err.missingOperand"), 2);
-	let r = qn(n[0]), i = n[1] == null ? null : qn(n[1]);
+	let r = Kn(n[0]), i = n[1] == null ? null : Kn(n[1]);
 	if (!t.d && !t.s && !i) throw new k(j("tr.missingSet2", { set: n[0] }), 2);
 	let a = t.c || t.C, o = a ? (e) => !r.includes(e) : (e) => r.includes(e), s = await e.stdin.readAll(), c = "", l = /* @__PURE__ */ new Map();
 	i && !t.d && !a && r.forEach((e, t) => l.set(e, i[Math.min(t, i.length - 1)]));
@@ -5463,7 +5449,7 @@ async function Jn(e) {
 	}
 	await e.out(c);
 }
-async function Yn(e) {
+async function Jn(e) {
 	let t = "";
 	for await (let { text: n } of e.inputs(e.args)) {
 		let { lines: e } = Z(n);
@@ -5471,12 +5457,12 @@ async function Yn(e) {
 	}
 	return await e.out(t), +!!e.failed;
 }
-async function Xn(e) {
+async function Yn(e) {
 	let { opts: t, args: n } = q(e, { values: "bwsv" }), r = t.b === "a", i = t.w == null ? 6 : J(t.w), a = t.s ?? "	", o = t.v == null ? 1 : J(t.v), s = "";
 	for await (let { text: t } of e.inputs(n)) for (let e of Z(t).lines) s += r || e.trim() ? `${String(o++).padStart(i)}${a}${e}\n` : `${" ".repeat(i)}${a}${e}\n`.replace(/^\s+\t\n$/, "\n");
 	await e.out(s);
 }
-async function Zn(e) {
+async function Xn(e) {
 	let { opts: t, args: n } = q(e, {
 		flags: "w",
 		values: "sf",
@@ -5515,11 +5501,11 @@ async function Zn(e) {
 	}
 	await e.out(u + (d ? "\n" : ""));
 }
-async function Qn(e) {
+async function Zn(e) {
 	let t = (e.args.length ? e.args.join(" ") : "y") + "\n", n = t.repeat(Math.max(1, Math.floor(4096 / t.length)));
 	for (;;) await e.out(n), await e.tick();
 }
-function $n(e) {
+function Qn(e) {
 	let t = [], n = "", r = !1, i = null;
 	for (let a = 0; a < e.length; a++) {
 		let o = e[a];
@@ -5528,7 +5514,7 @@ function $n(e) {
 	if (i) throw new k(j(i === "\"" ? "xargs.unmatchedDouble" : "xargs.unmatchedSingle"));
 	return r && t.push(n), t;
 }
-async function er(e) {
+async function $n(e) {
 	let { opts: t, args: n } = q(e, {
 		flags: "0rtpx",
 		values: "nIdLP",
@@ -5543,14 +5529,14 @@ async function er(e) {
 		},
 		stopAtArg: !0
 	}), r = n.length ? n : ["echo"], i = await e.stdin.readAll(), a;
-	a = t[0] ? i.split("\0").filter((e, t, n) => e !== "" || t < n.length - 1) : t.d == null ? t.I != null || t.L != null ? i.split("\n").map((e) => e.trim()).filter(Boolean) : $n(i) : i.split(t.d.replace(/\\n/, "\n").replace(/\\t/, "	")).filter((e, t, n) => e !== "" || t < n.length - 1), t.d != null && a.at(-1)?.endsWith("\n") && (a[a.length - 1] = a.at(-1).slice(0, -1));
+	a = t[0] ? i.split("\0").filter((e, t, n) => e !== "" || t < n.length - 1) : t.d == null ? t.I != null || t.L != null ? i.split("\n").map((e) => e.trim()).filter(Boolean) : Qn(i) : i.split(t.d.replace(/\\n/, "\n").replace(/\\t/, "	")).filter((e, t, n) => e !== "" || t < n.length - 1), t.d != null && a.at(-1)?.endsWith("\n") && (a[a.length - 1] = a.at(-1).slice(0, -1));
 	let o = [];
 	if (t.I != null) for (let e of a) o.push(r.map((n) => n.replaceAll(t.I, e)));
 	else {
 		let e = t.n == null ? t.L == null ? Infinity : J(t.L) : J(t.n);
 		if (e < 1) throw new k(j("xargs.badCount"), 2);
 		for (let n = 0; n < a.length; n += e === Infinity ? a.length : e) {
-			let i = t.L == null ? a.slice(n, n + (e === Infinity ? a.length : e)) : a.slice(n, n + e).flatMap($n);
+			let i = t.L == null ? a.slice(n, n + (e === Infinity ? a.length : e)) : a.slice(n, n + e).flatMap(Qn);
 			o.push([...r, ...i]);
 		}
 		!a.length && !t.r && o.push([...r]);
@@ -5568,7 +5554,7 @@ async function er(e) {
 	}
 	return s;
 }
-var tr = [
+var er = [
 	{
 		name: "head",
 		get usage() {
@@ -5577,7 +5563,7 @@ var tr = [
 		get summary() {
 			return j("help.head.summary");
 		},
-		run: Fn,
+		run: Pn,
 		get help() {
 			return j("help.head.text");
 		}
@@ -5590,7 +5576,7 @@ var tr = [
 		get summary() {
 			return j("help.tail.summary");
 		},
-		run: In,
+		run: Fn,
 		get help() {
 			return j("help.tail.text");
 		}
@@ -5601,7 +5587,7 @@ var tr = [
 		get summary() {
 			return j("help.wc.summary");
 		},
-		run: Ln,
+		run: In,
 		get help() {
 			return j("help.wc.text");
 		}
@@ -5614,7 +5600,7 @@ var tr = [
 		get summary() {
 			return j("help.grep.summary");
 		},
-		run: Rn,
+		run: Ln,
 		get help() {
 			return j("help.grep.text");
 		}
@@ -5627,7 +5613,7 @@ var tr = [
 		get summary() {
 			return j("help.sort.summary");
 		},
-		run: Hn,
+		run: Vn,
 		get help() {
 			return j("help.sort.text");
 		}
@@ -5638,7 +5624,7 @@ var tr = [
 		get summary() {
 			return j("help.uniq.summary");
 		},
-		run: Un,
+		run: Hn,
 		get help() {
 			return j("help.uniq.text");
 		}
@@ -5649,7 +5635,7 @@ var tr = [
 		get summary() {
 			return j("help.tee.summary");
 		},
-		run: Wn,
+		run: Un,
 		get help() {
 			return j("help.tee.text");
 		}
@@ -5662,7 +5648,7 @@ var tr = [
 		get summary() {
 			return j("help.cut.summary");
 		},
-		run: Kn,
+		run: Gn,
 		get help() {
 			return j("help.cut.text");
 		}
@@ -5675,7 +5661,7 @@ var tr = [
 		get summary() {
 			return j("help.tr.summary");
 		},
-		run: Jn,
+		run: qn,
 		get help() {
 			return j("help.tr.text");
 		}
@@ -5686,7 +5672,7 @@ var tr = [
 		get summary() {
 			return j("help.rev.summary");
 		},
-		run: Yn
+		run: Jn
 	},
 	{
 		name: "nl",
@@ -5694,7 +5680,7 @@ var tr = [
 		get summary() {
 			return j("help.nl.summary");
 		},
-		run: Xn
+		run: Yn
 	},
 	{
 		name: "seq",
@@ -5704,7 +5690,7 @@ var tr = [
 		get summary() {
 			return j("help.seq.summary");
 		},
-		run: Zn,
+		run: Xn,
 		get help() {
 			return j("help.seq.text");
 		}
@@ -5717,7 +5703,7 @@ var tr = [
 		get summary() {
 			return j("help.yes.summary");
 		},
-		run: Qn
+		run: Zn
 	},
 	{
 		name: "xargs",
@@ -5727,14 +5713,14 @@ var tr = [
 		get summary() {
 			return j("help.xargs.summary");
 		},
-		run: er,
+		run: $n,
 		get help() {
 			return j("help.xargs.text");
 		}
 	}
 ];
 // src/terminal/commands/sed.js
-function nr(e, t) {
+function tr(e, t) {
 	let n = [], r = [], i = 0, a = () => e[i], o = () => {
 		for (; i < e.length && /[ \t]/.test(e[i]);) i++;
 	}, s = (e) => {
@@ -5877,11 +5863,11 @@ function nr(e, t) {
 	let p = new Map(n.map((e, t) => [e, t]).filter(([e]) => e.type === ":").map(([e, t]) => [e.label, t]));
 	for (let e of n) {
 		if ((e.type === "b" || e.type === "t" || e.type === "T") && e.label && !p.has(e.label)) throw new k(j("sed.noSuchLabel", { label: e.label }));
-		for (let n of [e.a1, e.a2]) n?.re != null && (n.compiled = n.re === "" ? null : Mn(n.re, {
+		for (let n of [e.a1, e.a2]) n?.re != null && (n.compiled = n.re === "" ? null : jn(n.re, {
 			extended: t,
 			ignoreCase: n.ignoreCase
 		}));
-		e.type === "s" && (e.compiled = e.re === "" ? null : Mn(e.re, {
+		e.type === "s" && (e.compiled = e.re === "" ? null : jn(e.re, {
 			extended: t,
 			ignoreCase: e.ignoreCase,
 			global: !0
@@ -5892,7 +5878,7 @@ function nr(e, t) {
 		labels: p
 	};
 }
-function rr(e, t) {
+function nr(e, t) {
 	let n = "";
 	for (let r = 0; r < e.length; r++) {
 		let i = e[r];
@@ -5904,7 +5890,7 @@ function rr(e, t) {
 	}
 	return n;
 }
-async function ir(e, t, n, { quiet: r, write: i }) {
+async function rr(e, t, n, { quiet: r, write: i }) {
 	let { cmds: a, labels: o } = t, s = "", c = null, l = 0, u = 0, d = !1;
 	for (let e of a) e.active = !1;
 	let f = () => l >= n.length, p = (e, t, n) => {
@@ -5936,7 +5922,7 @@ async function ir(e, t, n, { quiet: r, write: i }) {
 							c = n;
 							let r = 0, i = !1, a = t.replace(new RegExp(n.source, n.flags.includes("g") ? n.flags : n.flags + "g"), (...e) => {
 								let t = typeof e.at(-1) == "object" && e.at(-1) !== null, n = e.slice(0, t ? -3 : -2);
-								return r++, r < x.nth || i && !x.global ? n[0] : (i = !0, rr(x.rep, n));
+								return r++, r < x.nth || i && !x.global ? n[0] : (i = !0, nr(x.rep, n));
 							});
 							i && (t = a, g = !0, x.print && await e.out(t + "\n"));
 							break;
@@ -6039,7 +6025,7 @@ async function ir(e, t, n, { quiet: r, write: i }) {
 	}
 	return u;
 }
-async function ar(e) {
+async function ir(e) {
 	let { opts: t, args: n } = q(e, {
 		flags: "nEris",
 		values: "I",
@@ -6063,7 +6049,7 @@ async function ar(e) {
 		if (!r.length) throw new k(j("sed.noScript"), 1);
 		i.push(r.shift());
 	}
-	let a = nr(i.join("\n"), t.E || t.r), o = /* @__PURE__ */ new Map(), s = (e, t) => o.set(e, (o.get(e) ?? "") + t), c = 0;
+	let a = tr(i.join("\n"), t.E || t.r), o = /* @__PURE__ */ new Map(), s = (e, t) => o.set(e, (o.get(e) ?? "") + t), c = 0;
 	if (t.i || t.I != null) {
 		if (!r.length) throw new k(j("sed.noFiles"));
 		for (let n of r) {
@@ -6072,8 +6058,8 @@ async function ar(e) {
 				await e.error(j("sed.cannotRead", { path: n })), c = 2;
 				continue;
 			}
-			let { lines: i, ended: o } = or(await v.read(r.id)), l = "";
-			c = await ir({
+			let { lines: i, ended: o } = ar(await v.read(r.id)), l = "";
+			c = await rr({
 				...e,
 				out: (e) => {
 					l += e;
@@ -6088,11 +6074,11 @@ async function ar(e) {
 	} else {
 		let n = r.length ? r : ["-"], i = [], o = !0;
 		for await (let { text: t } of e.inputs(n)) {
-			let e = or(t);
+			let e = ar(t);
 			i.push(...e.lines), o = e.ended;
 		}
 		let l = "";
-		c = await ir({
+		c = await rr({
 			...e,
 			out: (e) => {
 				l += e;
@@ -6107,38 +6093,38 @@ async function ar(e) {
 	for (let [t, n] of o) await v.write(e.shell.fileFor(t).id, n);
 	return c;
 }
-function or(e) {
+function ar(e) {
 	let t = e.split("\n"), n = e.endsWith("\n") || e === "";
 	return n && t.pop(), {
 		lines: t,
 		ended: n
 	};
 }
-var sr = [{
+var or = [{
 	name: "sed",
 	usage: "sed [-nEi] [-e script] [script] [file…]",
 	get summary() {
 		return j("help.sed.summary");
 	},
-	run: ar,
+	run: ir,
 	get help() {
 		return j("help.sed.text");
 	}
 }];
 // src/terminal/commands/diff.js
-function cr(e, t, n = (e, t) => e === t) {
+function sr(e, t, n = (e, t) => e === t) {
 	let r = 0, i = 0;
 	for (; r < e.length && r < t.length && n(e[r], t[r]);) r++;
 	for (; i < e.length - r && i < t.length - r && n(e[e.length - 1 - i], t[t.length - 1 - i]);) i++;
-	let a = ur(e.slice(r, e.length - i), t.slice(r, t.length - i), n);
+	let a = lr(e.slice(r, e.length - i), t.slice(r, t.length - i), n);
 	for (let e of a) e.a += r, e.b += r;
 	return a;
 }
-var lr = 4e7;
-function ur(e, t, n) {
+var cr = 4e7;
+function lr(e, t, n) {
 	let r = e.length, i = t.length, a = r + i, o = new Int32Array(2 * a + 2), s = [], c = !1;
 	for (let l = 0; l <= a && !c; l++) {
-		if ((l + 1) * o.length > lr) throw new k(j("diff.tooBig"), 2);
+		if ((l + 1) * o.length > cr) throw new k(j("diff.tooBig"), 2);
 		s.push(o.slice());
 		for (let s = -l; s <= l; s += 2) {
 			let u = s === -l || s !== l && o[a + s - 1] < o[a + s + 1] ? o[a + s + 1] : o[a + s - 1] + 1, d = u - s;
@@ -6181,19 +6167,19 @@ function ur(e, t, n) {
 	}
 	return f;
 }
-var dr = (e, t) => t <= 1 ? String(e + +!!t) : `${e + 1},${e + t}`, fr = (e, t) => t === 1 ? String(e + 1) : `${t ? e + 1 : e},${t}`;
-function pr(e, t, n) {
+var ur = (e, t) => t <= 1 ? String(e + +!!t) : `${e + 1},${e + t}`, dr = (e, t) => t === 1 ? String(e + 1) : `${t ? e + 1 : e},${t}`;
+function fr(e, t, n) {
 	let r = "";
 	for (let i of n) {
 		let n = i.del && i.ins ? "c" : i.del ? "d" : "a";
-		r += `${n === "a" ? String(i.a) : dr(i.a, i.del)}${n}${n === "d" ? String(i.b) : dr(i.b, i.ins)}\n`;
+		r += `${n === "a" ? String(i.a) : ur(i.a, i.del)}${n}${n === "d" ? String(i.b) : ur(i.b, i.ins)}\n`;
 		for (let t = 0; t < i.del; t++) r += `< ${e[i.a + t]}\n`;
 		n === "c" && (r += "---\n");
 		for (let e = 0; e < i.ins; e++) r += `> ${t[i.b + e]}\n`;
 	}
 	return r;
 }
-function mr(e, t, n, r) {
+function pr(e, t, n, r) {
 	let i = "", a = [];
 	for (let e of n) {
 		let t = a.at(-1);
@@ -6201,7 +6187,7 @@ function mr(e, t, n, r) {
 	}
 	for (let n of a) {
 		let a = n[0], o = n.at(-1), s = Math.max(0, a.a - r), c = Math.max(0, a.b - r), l = Math.min(e.length, o.a + o.del + r), u = Math.min(t.length, o.b + o.ins + r);
-		i += `@@ -${fr(s, l - s)} +${fr(c, u - c)} @@\n`;
+		i += `@@ -${dr(s, l - s)} +${dr(c, u - c)} @@\n`;
 		let d = s;
 		for (let r of n) {
 			for (; d < r.a; d++) i += ` ${e[d]}\n`;
@@ -6213,11 +6199,11 @@ function mr(e, t, n, r) {
 	}
 	return i;
 }
-var hr = (e) => {
+var mr = (e) => {
 	let t = new Date(e), n = (e) => String(e).padStart(2, "0");
 	return `${t.getFullYear()}-${n(t.getMonth() + 1)}-${n(t.getDate())} ${n(t.getHours())}:${n(t.getMinutes())}:${n(t.getSeconds())}`;
 };
-async function gr(e) {
+async function hr(e) {
 	let { opts: t, args: n } = q(e, {
 		flags: "uqiwbBsN",
 		values: "U",
@@ -6247,7 +6233,7 @@ async function gr(e) {
 	}, [i, a] = [await r(n[0]), await r(n[1])], o = (e) => {
 		let t = e.split("\n");
 		return (e.endsWith("\n") || e === "") && t.pop(), t;
-	}, s = o(i.text), c = o(a.text), l = (e) => (t.i && (e = e.toLowerCase()), t.w ? e = e.replace(/\s+/g, "") : t.b && (e = e.replace(/\s+/g, " ").trimEnd()), e), u = cr(s, c, (e, t) => l(e) === l(t));
+	}, s = o(i.text), c = o(a.text), l = (e) => (t.i && (e = e.toLowerCase()), t.w ? e = e.replace(/\s+/g, "") : t.b && (e = e.replace(/\s+/g, " ").trimEnd()), e), u = sr(s, c, (e, t) => l(e) === l(t));
 	if (t.B && (u = u.filter((e) => !(s.slice(e.a, e.a + e.del).every((e) => !e.trim()) && c.slice(e.b, e.b + e.ins).every((e) => !e.trim())))), !u.length) return t.s && await e.out(`${j("diff.identical", {
 		a: n[0],
 		b: n[1]
@@ -6258,31 +6244,31 @@ async function gr(e) {
 	})}\n`), 1;
 	if (t.u || t.U != null) {
 		let r = t.U == null ? 3 : J(t.U);
-		await e.out(`--- ${n[0]}\t${hr(i.time)}\n+++ ${n[1]}\t${hr(a.time)}\n` + mr(s, c, u, r));
-	} else await e.out(pr(s, c, u));
+		await e.out(`--- ${n[0]}\t${mr(i.time)}\n+++ ${n[1]}\t${mr(a.time)}\n` + pr(s, c, u, r));
+	} else await e.out(fr(s, c, u));
 	return 1;
 }
-var _r = [{
+var gr = [{
 	name: "diff",
 	usage: "diff [-uqiwB] file1 file2",
 	get summary() {
 		return j("help.diff.summary");
 	},
-	run: gr,
+	run: hr,
 	get help() {
 		return j("help.diff.text");
 	}
-}], vr = (e) => e.stdout === e.shell.host.stdout, yr = (e) => {
+}], _r = (e) => e.stdout === e.shell.host.stdout, vr = (e) => {
 	let t = String(e).toLowerCase();
 	return At().find((e) => e.id.toLowerCase() === t) ?? At().find((e) => e.name.toLowerCase() === t) ?? null;
 };
-async function br(e) {
+async function yr(e) {
 	let { opts: t, args: n } = q(e, {
 		values: "a",
 		long: { app: "a" }
 	});
 	if (t.a != null) {
-		let r = yr(t.a);
+		let r = vr(t.a);
 		if (!r) throw new k(j("open.noApp", { app: t.a }));
 		if (!n.length) return jt(r.id), 0;
 		for (let t of n) {
@@ -6300,13 +6286,13 @@ async function br(e) {
 	}
 	return r;
 }
-var xr = (e) => A.date(e, {
+var br = (e) => A.date(e, {
 	day: "2-digit",
 	month: "short",
 	hour: "2-digit",
 	minute: "2-digit"
 });
-function Sr(e, t) {
+function xr(e, t) {
 	let n = v.trashed();
 	return t.map((e) => {
 		let t = n.find((t) => t.id === e) ?? n.find((t) => t.name === e) ?? n.find((t) => t.name.toLowerCase() === e.toLowerCase());
@@ -6314,7 +6300,7 @@ function Sr(e, t) {
 		return t;
 	});
 }
-async function Cr(e) {
+async function Sr(e) {
 	let [t = "list", ...n] = e.args;
 	switch (t) {
 		case "list":
@@ -6323,7 +6309,7 @@ async function Cr(e) {
 			if (!t.length) return await e.out(`${j("trash.empty")}\n`), 0;
 			for (let n of t) {
 				let t = v.exists(n.trashed.from) ? v.path(n.trashed.from) : j("trash.deletedFolder"), r = n.type === "folder" ? j("trash.items", { n: n.inside }) : $t(n.bytes);
-				await e.out(`${xr(n.trashed.at)}  ${r.padStart(10)}  ${n.name}${n.type === "folder" ? "/" : ""}  ← ${t}\n`);
+				await e.out(`${br(n.trashed.at)}  ${r.padStart(10)}  ${n.name}${n.type === "folder" ? "/" : ""}  ← ${t}\n`);
 			}
 			return 0;
 		}
@@ -6338,11 +6324,11 @@ async function Cr(e) {
 		}
 		case "restore":
 			if (!n.length) throw new k(j("trash.missingRestore"), 2);
-			for (let { id: t, parent: r } of v.untrash(Sr(e, n).map((e) => e.id))) await e.out(`${j("trash.restored", { path: v.path(t) })}${v.root, ""}\n`);
+			for (let { id: t, parent: r } of v.untrash(xr(e, n).map((e) => e.id))) await e.out(`${j("trash.restored", { path: v.path(t) })}${v.root, ""}\n`);
 			return 0;
 		case "rm": {
 			if (!n.length) throw new k(j("trash.missingName"), 2);
-			let t = v.purge(Sr(e, n).map((e) => e.id));
+			let t = v.purge(xr(e, n).map((e) => e.id));
 			return await e.out(`${j("trash.purged", { n: t })}\n`), 0;
 		}
 		case "empty": {
@@ -6352,20 +6338,20 @@ async function Cr(e) {
 	}
 	throw new k(`${j("err.unknownSubcommand", { sub: t })}\n${j("help.usageLine", { usage: e.cmd.usage })}`, 2);
 }
-function wr(e, t = !1) {
+function Cr(e, t = !1) {
 	let n = x.byName(e) ?? x.get(e);
 	if (n) return n;
 	if (t) return x.create({ name: e });
 	throw new k(j("tag.noSuchTag", { name: e }));
 }
-async function Tr(e) {
-	let [t = "ls", ...n] = e.args, r = (t) => vr(e) ? `\x1b[38;2;${parseInt(t.slice(1, 3), 16)};${parseInt(t.slice(3, 5), 16)};${parseInt(t.slice(5, 7), 16)}m●\x1b[0m ` : "";
+async function wr(e) {
+	let [t = "ls", ...n] = e.args, r = (t) => _r(e) ? `\x1b[38;2;${parseInt(t.slice(1, 3), 16)};${parseInt(t.slice(3, 5), 16)};${parseInt(t.slice(5, 7), 16)}m●\x1b[0m ` : "";
 	switch (t) {
 		case "ls":
 		case "list": {
 			if (n.length) {
 				for (let t of n) {
-					let n = wr(t);
+					let n = Cr(t);
 					for (let t of v.tagged(n.id).sort((e, t) => B(v.path(e.id), v.path(t.id)))) await e.out(v.path(t.id) + (t.type === "folder" ? "/" : "") + "\n");
 				}
 				return 0;
@@ -6392,7 +6378,7 @@ async function Tr(e) {
 		case "rm": {
 			let [r, ...i] = n;
 			if (!r || !i.length) throw new k(j("help.usageShort", { usage: j("tag.usageAddRm", { sub: t }) }), 2);
-			let a = t === "add" && !x.byName(r), o = wr(r, t === "add");
+			let a = t === "add" && !x.byName(r), o = Cr(r, t === "add");
 			a && await e.out(`${j("tag.created", { name: o.name })}\n`);
 			let s = 0;
 			for (let n of i) {
@@ -6421,20 +6407,20 @@ async function Tr(e) {
 		}
 		case "delete":
 			if (!n.length) throw new k(j("help.usageShort", { usage: j("tag.usageDelete") }), 2);
-			for (let e of n) x.remove(wr(e).id);
+			for (let e of n) x.remove(Cr(e).id);
 			return 0;
 	}
 	throw new k(`${j("err.unknownSubcommand", { sub: t })}\n${j("help.usageLine", { usage: e.cmd.usage })}`, 2);
 }
-async function Er(e) {
+async function Tr(e) {
 	let t = [...At()].sort((e, t) => B(e.name, t.name)), n = Math.max(...t.map((e) => e.id.length));
 	for (let r of t) {
 		let t = r.package?.manifest?.version ?? "";
 		await e.out(`${r.id.padEnd(n)}  ${r.name}${t ? `  ${t}` : ""}\n`);
 	}
 }
-var Dr = (e, t) => A.date(new Date(2024, 0, 7 + e, 12), { weekday: t }), Or = (e, t) => A.date(new Date(2024, e, 15, 12), { month: t });
-function kr(e, t, n = !1) {
+var Er = (e, t) => A.date(new Date(2024, 0, 7 + e, 12), { weekday: t }), Dr = (e, t) => A.date(new Date(2024, e, 15, 12), { month: t });
+function Or(e, t, n = !1) {
 	let r = (e) => n ? t[`getUTC${e}`]() : t[`get${e}`](), i = (e, t = 2) => String(e).padStart(t, "0"), a = n ? Date.UTC(r("FullYear"), 0, 1) : new Date(r("FullYear"), 0, 1).getTime(), o = n ? 0 : -t.getTimezoneOffset(), s = {
 		Y: () => r("FullYear"),
 		y: () => i(r("FullYear") % 100),
@@ -6447,11 +6433,11 @@ function kr(e, t, n = !1) {
 		S: () => i(r("Seconds")),
 		N: () => i(r("Milliseconds"), 3) + "000000",
 		p: () => r("Hours") < 12 ? "AM" : "PM",
-		A: () => Dr(r("Day"), "long"),
-		a: () => Dr(r("Day"), "short"),
-		B: () => Or(r("Month"), "long"),
-		b: () => Or(r("Month"), "short"),
-		h: () => Or(r("Month"), "short"),
+		A: () => Er(r("Day"), "long"),
+		a: () => Er(r("Day"), "short"),
+		B: () => Dr(r("Month"), "long"),
+		b: () => Dr(r("Month"), "short"),
+		h: () => Dr(r("Month"), "short"),
 		j: () => i(Math.floor((t - a) / 864e5) + 1, 3),
 		u: () => r("Day") || 7,
 		w: () => r("Day"),
@@ -6462,8 +6448,8 @@ function kr(e, t, n = !1) {
 		T: () => `${s.H()}:${s.M()}:${s.S()}`,
 		D: () => `${s.m()}/${s.d()}/${s.y()}`,
 		R: () => `${s.H()}:${s.M()}`,
-		c: () => kr(j("date.formatC"), t, n),
-		x: () => kr(j("date.formatX"), t, n),
+		c: () => Or(j("date.formatC"), t, n),
+		x: () => Or(j("date.formatX"), t, n),
 		X: () => s.T(),
 		n: () => "\n",
 		t: () => "	",
@@ -6471,7 +6457,7 @@ function kr(e, t, n = !1) {
 	};
 	return e.replace(/%([a-zA-Z%])/g, (e, t) => s[t] ? String(s[t]()) : e);
 }
-async function Ar(e) {
+async function kr(e) {
 	let { opts: t, args: n } = q(e, {
 		flags: "uR",
 		values: "dI",
@@ -6487,12 +6473,12 @@ async function Ar(e) {
 		if (r = /^@\d+$/.test(e) ? /* @__PURE__ */ new Date(Number(e.slice(1)) * 1e3) : e === "now" ? /* @__PURE__ */ new Date() : e === "yesterday" || e === "ieri" ? /* @__PURE__ */ new Date(Date.now() - 864e5) : e === "tomorrow" || e === "domani" ? new Date(Date.now() + 864e5) : new Date(e), Number.isNaN(r.getTime())) throw new k(j("date.invalid", { date: t.d }));
 	}
 	let i = n.find((e) => e.startsWith("+"));
-	if (i) return e.out(kr(i.slice(1), r, t.u) + "\n");
-	if (t.I != null) return e.out(kr(t.I === "seconds" ? "%Y-%m-%dT%H:%M:%S%z" : "%F", r, t.u) + "\n");
+	if (i) return e.out(Or(i.slice(1), r, t.u) + "\n");
+	if (t.I != null) return e.out(Or(t.I === "seconds" ? "%Y-%m-%dT%H:%M:%S%z" : "%F", r, t.u) + "\n");
 	if (t.R) return e.out(r.toUTCString() + "\n");
-	await e.out(kr(j("date.format"), r, t.u) + "\n");
+	await e.out(Or(j("date.format"), r, t.u) + "\n");
 }
-var jr = [
+var Ar = [
 	{
 		name: "open",
 		get usage() {
@@ -6501,7 +6487,7 @@ var jr = [
 		get summary() {
 			return j("help.open.summary");
 		},
-		run: br,
+		run: yr,
 		get help() {
 			return j("help.open.text");
 		}
@@ -6514,7 +6500,7 @@ var jr = [
 		get summary() {
 			return j("help.trash.summary");
 		},
-		run: Cr,
+		run: Sr,
 		get help() {
 			return j("help.trash.text");
 		}
@@ -6527,7 +6513,7 @@ var jr = [
 		get summary() {
 			return j("help.tag.summary");
 		},
-		run: Tr,
+		run: wr,
 		get help() {
 			return j("help.tag.text");
 		}
@@ -6538,7 +6524,7 @@ var jr = [
 		get summary() {
 			return j("help.apps.summary");
 		},
-		run: Er
+		run: Tr
 	},
 	{
 		name: "date",
@@ -6548,7 +6534,7 @@ var jr = [
 		get summary() {
 			return j("help.date.summary");
 		},
-		run: Ar,
+		run: kr,
 		get help() {
 			return j("help.date.text");
 		}
@@ -6577,14 +6563,14 @@ var jr = [
 		},
 		run: (e) => e.out(e.args.includes("-a") ? `lilOS lilos ${e.shell.getVar("BASH_VERSION")} ${navigator.platform || ""}\n`.replace(/ \n$/, "\n") : "lilOS\n")
 	}
-], Mr = (e) => e.shell.host.remote ?? null;
+], jr = (e) => e.shell.host.remote ?? null;
+async function Mr(e) {
+	throw jr(e), new k(j("remote.cmd.unavailable"));
+}
 async function Nr(e) {
-	throw Mr(e), new k(j("remote.cmd.unavailable"));
+	throw jr(e), new k(j("remote.cmd.unavailable"));
 }
-async function Pr(e) {
-	throw Mr(e), new k(j("remote.cmd.unavailable"));
-}
-var Fr = [
+var Pr = [
 	{
 		name: "ssh",
 		get usage() {
@@ -6593,7 +6579,7 @@ var Fr = [
 		get summary() {
 			return j("help.ssh.summary");
 		},
-		run: Nr
+		run: Mr
 	},
 	{
 		name: "telnet",
@@ -6603,7 +6589,7 @@ var Fr = [
 		get summary() {
 			return j("help.telnet.summary");
 		},
-		run: Nr
+		run: Mr
 	},
 	{
 		name: "rlogin",
@@ -6613,7 +6599,7 @@ var Fr = [
 		get summary() {
 			return j("help.rlogin.summary");
 		},
-		run: Nr
+		run: Mr
 	},
 	{
 		name: "supdup",
@@ -6623,7 +6609,7 @@ var Fr = [
 		get summary() {
 			return j("help.supdup.summary");
 		},
-		run: Nr
+		run: Mr
 	},
 	{
 		name: "sessions",
@@ -6633,34 +6619,34 @@ var Fr = [
 		get summary() {
 			return j("help.sessions.summary");
 		},
-		run: Pr
+		run: Nr
 	}
-], Ir = /^[a-z][\w.-]{0,39}$/, $ = /* @__PURE__ */ new Map();
+], Fr = /^[a-z][\w.-]{0,39}$/, $ = /* @__PURE__ */ new Map();
 for (let e of Ut) $.set(e.name, Object.assign(e, { builtin: !0 }));
 for (let e of [
 	...On,
-	...tr,
-	...sr,
-	..._r,
-	...jr,
-	...Fr
+	...er,
+	...or,
+	...gr,
+	...Ar,
+	...Pr
 ]) $.set(e.name, e);
-function Lr() {
+function Ir() {
 	let e = /* @__PURE__ */ new Map();
 	for (let t of At()) {
 		let n = t.package?.manifest?.contributes?.shell;
-		if (Array.isArray(n)) for (let r of n.slice(0, 50)) r && Ir.test(r.name ?? "") && typeof r.entry == "string" && !$.has(r.name) && !e.has(r.name) && e.set(r.name, {
+		if (Array.isArray(n)) for (let r of n.slice(0, 50)) r && Fr.test(r.name ?? "") && typeof r.entry == "string" && !$.has(r.name) && !e.has(r.name) && e.set(r.name, {
 			name: r.name,
 			app: t.name,
 			summary: typeof r.summary == "string" ? r.summary.slice(0, 120) : j("appCmd.summary", { app: t.name }),
 			usage: typeof r.usage == "string" ? r.usage.slice(0, 200) : j("appCmd.usage", { name: r.name }),
 			ownHelp: r.help === !0,
-			run: (e) => Rr(e, t.id, r.entry)
+			run: (e) => Lr(e, t.id, r.entry)
 		});
 	}
 	return e;
 }
-async function Rr(e, t, n) {
+async function Lr(e, t, n) {
 	let r = e.shell, i = e.stdin === r.host.stdin ? null : await e.stdin.readAll(), a;
 	try {
 		a = await Nt(t, n, {
@@ -6675,11 +6661,11 @@ async function Rr(e, t, n) {
 	}
 	return a == null ? 0 : typeof a == "string" ? (await e.out(a), 0) : (typeof a.stdout == "string" && await e.out(a.stdout), typeof a.stderr == "string" && await e.err(a.stderr), Number.isInteger(a.code) ? (a.code % 256 + 256) % 256 : 0);
 }
-var zr = {
-	get: (e) => $.get(e) ?? Lr().get(e) ?? null,
-	has: (e) => $.has(e) || Lr().has(e),
-	names: () => [...$.keys(), ...Lr().keys()],
-	values: () => [...$.values(), ...Lr().values()]
+var Rr = {
+	get: (e) => $.get(e) ?? Ir().get(e) ?? null,
+	has: (e) => $.has(e) || Ir().has(e),
+	names: () => [...$.keys(), ...Ir().keys()],
+	values: () => [...$.values(), ...Ir().values()]
 };
 globalThis.performance ??= { now: () => Date.now() }, globalThis.queueMicrotask ??= (e) => {
 	Promise.resolve().then(e);
@@ -6693,7 +6679,7 @@ globalThis.performance ??= { now: () => Date.now() }, globalThis.queueMicrotask 
 		return new Uint8Array(t);
 	}
 });
-async function Br(e, { lines: t = "", cwd: n = null } = {}, r) {
+async function zr(e, { lines: t = "", cwd: n = null } = {}, r) {
 	if (r?.cancelled) return {
 		ok: !1,
 		code: 130,
@@ -6724,7 +6710,7 @@ async function Br(e, { lines: t = "", cwd: n = null } = {}, r) {
 		}
 	}, l = new Tt({
 		host: c,
-		commands: zr
+		commands: Rr
 	});
 	typeof n == "string" && i.get(n)?.type === "folder" && (l.cwd = n);
 	let u = 0, d = r?.onCancel?.(() => l.token.abort());
@@ -6746,7 +6732,7 @@ async function Br(e, { lines: t = "", cwd: n = null } = {}, r) {
 		log: a
 	};
 }
-function Vr({ lilos: e }) {
+function Br({ lilos: e }) {
 	let t = Promise.resolve();
 	e.handle((n, r, i) => {
 		if (r !== "scheduler" || !n?.schedule) return {
@@ -6754,8 +6740,8 @@ function Vr({ lilos: e }) {
 			code: 2,
 			error: "Il servizio shell esegue solo i comandi della Pianificazione"
 		};
-		let a = t.then(() => Br(e, n.schedule.params ?? {}, i));
+		let a = t.then(() => zr(e, n.schedule.params ?? {}, i));
 		return t = a.catch(() => {}), a;
 	});
 }
-export { Vr as shell };
+export { Br as shell };

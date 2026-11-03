@@ -1,6 +1,6 @@
 {
   "id": "zip",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "kind": "local",
   "name": "Zip",
   "description": "Compress files and folders into .zip archives and extract them, from the menu of files and folders (Compress → Zip or Unzip).",
@@ -14,6 +14,7 @@
     "name": "lilOS"
   },
   "sdk": "2",
+  "lilos": ">=1.22.0",
   "entrypoints": {
     "main": {
       "kind": "window"
@@ -106,7 +107,7 @@
   "entry": "dist/index.js",
   "locales": "locales.json",
   "files": {
-    "dist/index.js": "sha256-uI7eOoI2RrhZcfa6ufbFSrs7Ibkpc8a9Lmegi22rAAg=",
+    "dist/index.js": "sha256-+mF4ka9+3hnogU3Ev1nS5x6NQOJRwI34o6dciwHdlRs=",
     "locales.json": "sha256-Hwyj6zldjOIhA9Qm5PQfxuKFFNS3RS6s3ax6Qm5dHzk="
   }
 }

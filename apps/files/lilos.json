@@ -1,6 +1,6 @@
 {
   "id": "files",
-  "version": "1.16.0",
+  "version": "1.17.0",
   "kind": "local",
   "name": "File Manager",
   "description": "Browse, search and organize files and folders: tags, links, desktop links, trash, info and preview.",
@@ -15,6 +15,7 @@
   },
   "sdk": "2",
   "system": true,
+  "lilos": ">=1.22.0",
   "required": true,
   "entrypoints": {
     "main": {
@@ -45,9 +46,9 @@
   },
   "dependencies": [
     {
-      "module": "netfs-sftp",
+      "module": "ssh",
       "optional": true,
-      "reason": "SFTP connections in Network"
+      "reason": "SFTP connections in Network (and SSH sessions in Terminal)"
     },
     {
       "module": "netfs-ftp",
@@ -75,14 +76,9 @@
       "reason": "OneDrive in Network"
     },
     {
-      "module": "netfs-gdrive",
+      "module": "netfs-google",
       "optional": true,
-      "reason": "Google Drive in Network"
-    },
-    {
-      "module": "netfs-gphotos",
-      "optional": true,
-      "reason": "Google Photos in Network"
+      "reason": "Google Drive and Google Photos in Network"
     },
     {
       "module": "netfs-s3",
@@ -243,12 +239,12 @@
   },
   "entry": "dist/index.js",
   "styles": [
-    "dist/index-DCrpzGcy.css"
+    "dist/index-CM3ZOa5Z.css"
   ],
   "locales": "locales.json",
   "files": {
-    "dist/index-DCrpzGcy.css": "sha256-sVXS8jqu8+QBfzSAQMDhK/LkFP78iB+rm5I6TAsQBmo=",
-    "dist/index.js": "sha256-lnaZoNyByhd5JGN+B0Slwkq/tTUC9z2L7/lwCauOfO8=",
-    "locales.json": "sha256-2qvdLDRg7E6B3wBou2VIAkUzX+dfztdptkWO6kMzTM0="
+    "dist/index-CM3ZOa5Z.css": "sha256-uvM5ZpT1WTQ3C4MM/wCxKiXDjmJUrbUALsEUl5lMB8Y=",
+    "dist/index.js": "sha256-ATlOwzoLCCLhAR6I323Af3Yy9DyMpqqVxROYSt4MGD8=",
+    "locales.json": "sha256-xQdWspuKfyoVSX3+ZzBAdsjVvuLW4cb3pc/ScWWxja0="
   }
 }

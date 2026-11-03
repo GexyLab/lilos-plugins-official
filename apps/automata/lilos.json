@@ -1,6 +1,6 @@
 {
   "id": "automata",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "kind": "local",
   "name": "Automata",
   "description": "Record what you do in lilOS and do it again with a click: each step can ask for confirmation, or for its values, before it runs.",
@@ -15,7 +15,7 @@
   },
   "sdk": "2",
   "system": true,
-  "lilos": ">=1.17.0",
+  "lilos": ">=1.22.0",
   "entrypoints": {
     "main": {
       "kind": "window",
@@ -38,6 +38,10 @@
     "cli": {
       "kind": "background",
       "label": "Terminal command"
+    },
+    "triggers": {
+      "kind": "background",
+      "label": "Starts at a time moved to Scheduler"
     }
   },
   "permissions": [
@@ -63,12 +67,12 @@
   },
   "entry": "dist/index.js",
   "styles": [
-    "dist/index-Crufyhex.css"
+    "dist/index-DVVecDOh.css"
   ],
   "locales": "locales.json",
   "files": {
-    "dist/index-Crufyhex.css": "sha256-r1xlxYeH/ls7VcjDbonMM8eq1eVzb4IouJnXUW1jeMk=",
-    "dist/index.js": "sha256-C+vdnPbjbubMr8xlTSnAEDloAvEPn3JOsMhc7XaUecc=",
-    "locales.json": "sha256-Us8Qhtx5JapE4bs8JpD4XdY7vkI1CLm7biOtryFkQS4="
+    "dist/index-DVVecDOh.css": "sha256-ZL7czhUJngxFZ+iwvUBvEzcCpg2zWLm+9zv5g6mt74c=",
+    "dist/index.js": "sha256-jd4qMkirFpgNL1sOugnlb6gAWkZWmgKk7A0FQpd+EwQ=",
+    "locales.json": "sha256-gqB2mih/pUqjDIyldcSW6pCtaY5x30RaWHbC9W/JpCM="
   }
 }
