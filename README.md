@@ -23,38 +23,15 @@ Le altre app e i loro moduli, con i sorgenti aperti a tutti, stanno nel reposito
 
 Ogni cartella di pacchetto (`apps/<id>/`, `modules/<nome>/`) ha un `README.md`: l'AppStore lo mostra nei dettagli del pacchetto (Markdown, niente HTML, immagini non caricate; oltre 64 KB se ne vede l'inizio e un link salva il file completo nella cartella Download di lilOS). In `app.json` il campo `category` (`system`, `productivity`, `media`, `development` o `other`, predefinita) decide in quale scheda dell'AppStore compare l'app; `module.json` può avere `icon: { glyph, color }`.
 
-Le app di sistema girano dentro lilOS, senza sandbox. Il kernel le accetta solo da questo repository. Si installano dalla versione più alta tra i tag `vX.Y.Z`.
+Le app di sistema girano dentro lilOS, senza sandbox. Il kernel le accetta solo da questo repository. Si installano dalla versione più alta tra i tag `vX.Y.Z`. Ogni tag ha le sue note di rilascio in `changelog/<tag>.md`.
 
 ## Struttura
 
-- `src/<app>/`: sorgenti di ogni app, con `app.json`, il modello del manifesto.
-- `apps/<app>/`: il pacchetto pronto, con `lilos.json`, `dist/` e il `README.md` (che si scrive qui, a mano).
-  - Si genera con `npm run build` e si committa: il kernel installa i file così come sono, senza compilare niente.
-  - `lilos.json` contiene l'hash di ogni file, controllato dal kernel all'installazione.
-- `modules/<nome>/`: un modulo del kernel così com'è (`module.json`, `index.js`, eventuale `package.json` con `package-lock.json`).
-- `modules/_shared/`: codice in comune tra i moduli (non è un modulo: il catalogo non lo elenca). Vedi «Codice in comune dei moduli».
-- `src/shared/`: componenti usati da più app (vedi sotto), inclusi nel build di ogni app che li importa.
+Qui ci sono solo i pacchetti pronti da installare, costruiti, uniti e minificati: il kernel li installa così come sono, senza compilare niente. I sorgenti stanno nel repository di [lilOS](https://github.com/GexyLab/lilos), nella cartella `plugins/`; la loro storia fino al tag `v1.51.0` resta anche qui.
 
-Le app importano `@lilos/sdk` e `@lilos/system` senza includerli nel build: a runtime usano quelli di lilOS, serviti come `/host/sdk.js` e `/host/system.js`. `@lilos/system` è l'API che lilOS dà alle app di sistema (vedi `src/systemApi.js` nel repository di lilOS).
+- `apps/<app>/`: `lilos.json` (il manifesto, con l'hash di ogni file, controllato dal kernel all'installazione), `dist/`, `locales.json` e `README.md`.
+- `modules/<nome>/`: un modulo del kernel, con il suo codice unito e minificato in `index.js`; le dipendenze npm (`package.json`, `package-lock.json`) le installa il kernel.
+- `system/lilos/`: lilOS stesso (pagina, kernel e SDK), che l'AppStore aggiorna.
+- `changelog/<tag>.md`: cosa porta ogni versione.
 
-### Componenti condivisi
-
-`src/shared/` contiene quello che più app farebbero ognuna a modo suo: `fieldsForm.js` (moduli disegnati dalla descrizione dei campi: connessioni, host, impostazioni dei moduli), `paramsForm.js` (i `params` di un entry point), `trustPrompt.js` (conferma della chiave o del certificato di un server), `FindBar.js`, `TabBar.js`, `inlineRename.js`, `preview.js` (l'entry point `filePreview`), `text.js`, e in `sandbox/` quello delle app isolate (Zip, FileCrypt, Calcolatrice), che non importa l'SDK. Ogni app li importa con un percorso relativo (`../shared/FindBar.js`) e Vite li mette nel suo bundle, CSS compreso: le regole `.sh-*` vanno cambiate solo in modi che vadano bene anche alle copie più vecchie, perché le app si aggiornano una per volta.
-
-I testi dei componenti stanno in `src/shared/locales.json` (inglese e italiano, chiavi `shared.<parte>.<nome>`), mai scritti nel codice. Il componente riceve il `t` dell'app; il build aggiunge al `locales.json` di ogni app le parti (`find`, `tabs`…) che usano i componenti condivisi che importa (`scripts/shared-locales.mjs`), e si ferma se un'app ha una lingua che `src/shared/locales.json` non ha o una chiave sua che comincia per `shared.`. `npm run check:locales` controlla anche le stringhe condivise.
-
-## Pubblicare una nuova versione
-
-1. Aumenta `version` in `src/<app>/app.json` (o in `modules/<nome>/module.json`).
-2. `npm install`, poi `npm run build` (oppure `npm run build -- editor` per una sola app).
-3. Committa sorgenti e `apps/`, poi crea il tag: `git tag v1.1.0 && git push --follow-tags`.
-
-Le grammatiche di Tree-sitter dell'Editor si aggiornano con `npm run vendor:tree-sitter`.
-
-### Codice in comune dei moduli
-
-Un modulo si installa da solo (solo la sua cartella, come `modules/<nome>_<versione>`), quindi non può importare da un altro. Il codice che più moduli usano (errori di rete, connessioni TCP e TLS attraverso `ctx.lookup` del kernel, HTTP con i certificati da confermare, XML, richieste alle API dei servizi cloud, flussi a pezzi…) sta in `modules/_shared/`, e ogni modulo ne ha una copia in `lib/shared/`: quella dei file che il suo codice importa da lì (con quello che importano a loro volta). Si modifica sempre `modules/_shared/`, poi `npm run sync:modules` aggiorna le copie (e toglie quelle non più importate) e si aumenta la versione dei moduli che cambiano. `npm run check:modules`, e `npm run build`, si fermano se una copia manca, è diversa o non serve più.
-
-### Riconoscimenti
-
-Ogni libreria, font o strumento di altri autori compare nel Pannello di controllo, in Informazioni → Riconoscimenti, letto da `src/settings/credits.json`. Quando aggiungi, aggiorni o togli una dipendenza (di un'app o di un modulo), installa (`npm ci` qui e in ogni modulo con un `package-lock.json`) e rigenera l'elenco con `npm run credits`, poi ricostruisci il Pannello di controllo (`npm run build -- settings`). Il codice copiato nel repository (una cartella con la sua `LICENSE`) va in `VENDORED` e i font web in `FONTS`, in `scripts/credits.mjs`. `npm run build` e `npm run check:credits` si fermano se l'elenco non corrisponde ai `package-lock.json`, al codice copiato o ai font.
+Non si modifica a mano: si pubblica dal repository di lilOS con `npm run publish:repo` (vedi `plugins/README.md` là).
