@@ -1305,6 +1305,15 @@ var yt = {
 		},
 		{
 			kind: "library",
+			name: "bzip2",
+			version: "1.0.8",
+			license: "bzip2-1.0.6",
+			copyright: "Copyright (C) 1996-2019 Julian R Seward",
+			url: "https://sourceware.org/bzip2/",
+			usedBy: ["compress-archive"]
+		},
+		{
+			kind: "library",
 			name: "ccount",
 			version: "2.0.1",
 			license: "MIT",
@@ -1376,12 +1385,12 @@ var yt = {
 		},
 		{
 			kind: "library",
-			name: "fflate",
-			version: "0.8.2",
+			name: "emscripten",
+			version: "6.0.12",
 			license: "MIT",
-			copyright: "Copyright (c) 2023 Arjun Barrett",
-			url: "https://101arrowz.github.io/fflate",
-			usedBy: ["zip"]
+			copyright: "Copyright (c) 2010-2014 Emscripten authors",
+			url: "https://emscripten.org",
+			usedBy: ["compress-archive"]
 		},
 		{
 			kind: "library",
@@ -1431,6 +1440,24 @@ var yt = {
 			url: "https://github.com/microsoft/node-jsonc-parser",
 			usedBy: ["editor"],
 			via: ["vscode-json-languageservice"]
+		},
+		{
+			kind: "library",
+			name: "libarchive",
+			version: "3.8.10",
+			license: "BSD-2-Clause",
+			copyright: "Copyright Tim Kientzle and the libarchive contributors",
+			url: "https://www.libarchive.org",
+			usedBy: ["compress-archive"]
+		},
+		{
+			kind: "library",
+			name: "mbedtls",
+			version: "3.6.7",
+			license: "Apache-2.0",
+			copyright: "Copyright The Mbed TLS Contributors",
+			url: "https://www.trustedfirmware.org/projects/mbed-tls/",
+			usedBy: ["compress-archive"]
 		},
 		{
 			kind: "library",
@@ -1491,6 +1518,15 @@ var yt = {
 			url: "https://github.com/micromark/micromark/tree/main/packages/micromark-util-types",
 			usedBy: ["editor"],
 			via: ["@shikijs/core"]
+		},
+		{
+			kind: "library",
+			name: "musl",
+			version: "1.2.6",
+			license: "MIT",
+			copyright: "Copyright © 2005-2020 Rich Felker, et al.",
+			url: "https://musl.libc.org",
+			usedBy: ["compress-archive"]
 		},
 		{
 			kind: "library",
@@ -1980,6 +2016,24 @@ var yt = {
 		},
 		{
 			kind: "library",
+			name: "xz",
+			version: "5.8.4",
+			license: "0BSD",
+			copyright: "Lasse Collin, Igor Pavlov and the XZ Utils contributors",
+			url: "https://tukaani.org/xz/",
+			usedBy: ["compress-archive"]
+		},
+		{
+			kind: "library",
+			name: "zlib",
+			version: "1.3.2",
+			license: "Zlib",
+			copyright: "Copyright (C) 1995-2026 Jean-loup Gailly and Mark Adler",
+			url: "https://zlib.net",
+			usedBy: ["compress-archive"]
+		},
+		{
+			kind: "library",
 			name: "zwitch",
 			version: "2.0.4",
 			license: "MIT",
@@ -2029,9 +2083,9 @@ var yt = {
 			en: "Terminal",
 			it: "Terminale"
 		},
-		zip: {
-			en: "Zip",
-			it: "Zip"
+		"compress-archive": {
+			en: "Compress Archive",
+			it: "Compress Archive"
 		}
 	}
 };
