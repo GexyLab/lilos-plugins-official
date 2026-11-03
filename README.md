@@ -2,7 +2,7 @@
 
 Il repository ufficiale di [lilOS](https://github.com/GexyLab/lilos): le app di sistema e i moduli del kernel. Il kernel di lilOS installa da qui le app che gli mancano e l'AppStore lo mostra sempre.
 
-Le altre app e i loro moduli, con i sorgenti aperti a tutti, stanno nel repository [lilos-plugins-community](https://github.com/GexyLab/lilos-plugins-community) (per esempio ArduinoIDE4LilOS e il modulo `arduino`): un amministratore lo aggiunge da AppStore → Opzioni → Aggiungi un repository.
+Le altre app e i loro moduli, con i sorgenti aperti a tutti, stanno nel repository [lilos-plugins-community](https://github.com/GexyLab/lilos-plugins-community) (per esempio ArduinoIDE4LilOS con il modulo `arduino`, e Compress Archive): un amministratore lo aggiunge da AppStore → Opzioni → Aggiungi un repository.
 
 ## Cosa c'è
 
@@ -14,7 +14,6 @@ Le altre app e i loro moduli, con i sorgenti aperti a tutti, stanno nel reposito
 | `apps/appstore` | **AppStore**: app e moduli dei repository | Necessaria |
 | `apps/photo` | **Photo**: guarda le immagini e le ritocca (disegno, testo, ritaglio, ridimensionamento, conversione in PNG, JPEG e WebP) | Si installa dall'AppStore; vuole lilOS con i file binari (`fs.readBlob`) |
 | `apps/terminal` | **Terminale**: una shell come bash sui file di lilOS (pipe, redirezioni, variabili, cicli, funzioni, script; `ls`, `grep`, `sed`, `find`, `diff`…). Le altre app possono aggiungere comandi con `contributes.shell` | Si installa dall'AppStore; `rm` sposta nel cestino |
-| `apps/compress-archive` | **Compress Archive** (prima Zip): crea ed estrae zip (anche con password), 7z, tar, tar.gz, tar.bz2, tar.xz, iso, gz, bz2 e xz, ed estrae i rar, dal menu di file e cartelle (**Comprimi → Zip / tar.gz / Comprimi come… / Estrai**); aprendo un archivio ne mostra il contenuto | Si installa dall'AppStore; vuole lilOS 1.22.0 |
 | `modules/users-basic` | Modulo del kernel: utenti e accesso, in `users.json` | |
 | `modules/fs-postgres` | Modulo del kernel: file system su PostgreSQL | |
 | `modules/services-isolate` | Modulo del kernel: fa girare i servizi delle app, isolati (isolated-vm) | |
