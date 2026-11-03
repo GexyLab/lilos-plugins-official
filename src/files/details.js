@@ -92,9 +92,12 @@ function nodeInfo(n, text) {
   // Lines, words and characters of a file: from its content, when it arrives
   if (readable(n) && (n.size ?? 0) <= STATS_BYTES) {
     const lines = h('dd', {}, '…'), words = h('dd', {}, '…'), chars = h('dd', {}, '…');
-    view.append(section(t('info.text'), h('dl', { class: 'fm-facts' },
-      h('dt', {}, t('info.lines')), lines, h('dt', {}, t('info.words')), words, h('dt', {}, t('info.chars')), chars)));
+    const stats = section(t('info.text'), h('dl', { class: 'fm-facts' },
+      h('dt', {}, t('info.lines')), lines, h('dt', {}, t('info.words')), words, h('dt', {}, t('info.chars')), chars));
+    view.append(stats);
     text(n).then(content => {
+      // Not text (a zip, an image…): no lines nor words to count
+      if (content.slice(0, 8000).includes('\0')) return stats.remove();
       lines.textContent = num(content ? content.split('\n').length : 0);
       words.textContent = num(content.trim() ? content.trim().split(/\s+/).length : 0);
       chars.textContent = num([...content].length);

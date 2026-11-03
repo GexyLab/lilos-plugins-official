@@ -5,6 +5,7 @@
  *   session  the user the service runs for
  *   tags     the user's tag definitions, to read (creating and changing tags needs lilOS's page)
  *   locale   the Terminal's strings, in the user's language (lilos.locale)
+ *   term     null: remote sessions need the Terminal open in lilOS (commands/remote.js checks it)
  */
 import { kernelFs } from './kfs.js';
 
@@ -22,6 +23,8 @@ const forward = get => new Proxy({}, {
 });
 
 export const fs = forward(() => fsImpl);
+
+export const term = null;
 
 export const session = {
   get user() { return api?.app?.user ?? null; },

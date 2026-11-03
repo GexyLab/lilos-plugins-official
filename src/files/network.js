@@ -341,7 +341,7 @@ function signInRow(protocol, f, values, signin, changed) {
     }
     const button = h('button', { class: 'ctl-btn primary fm-signin', type: 'button', onclick: go }, icon('user'), text(f.button) || t('net.signin.button'));
     buttons = [button];
-    row.replaceChildren(label, h('div', { class: 'sh-field-pick' }, button, cancel), f.hint ? h('small', { class: 'sh-field-hint' }, text(f.hint)) : null, paste.el, status);
+    row.replaceChildren(...[label, h('div', { class: 'sh-field-pick' }, button, cancel), f.hint ? h('small', { class: 'sh-field-hint' }, text(f.hint)) : null, paste.el, status].filter(Boolean));
   };
   draw();
   return row;
@@ -408,6 +408,12 @@ export function connectDialog(browser, m = null, { initial = null, onConnected =
   let named = !!m;   // the user wrote a name: the server's does not replace it
 
   const hint = () => { nameHint.textContent = name.value.trim() ? t('net.name.hint', { path: `~/Rete/${name.value.trim()}` }) : ''; };
+  // Until the user names it, the folder in Rete is called after the server, or the provider for an account to sign in to
+  const defaultName = () => {
+    if (named) return;
+    name.value = fields.values().host ?? (signsIn(protocol) ? text(protocol.label) : '');
+    hint();
+  };
   const say = (msg, bad = false) => { status.textContent = msg; status.classList.toggle('bad', bad); };
   const draw = () => {
     trust = null;
@@ -420,18 +426,17 @@ export function connectDialog(browser, m = null, { initial = null, onConnected =
         h('div', {}, h('button', { class: 'ctl-btn', type: 'button', onclick: () => launch('settings', { tab: protocol.id }) }, icon('gear'), t('net.notReady.settings')))));
       return;
     }
-    // An account to sign in to: the folder in Rete is called after the provider, unless the user names it
-    if (!named && signsIn(protocol)) { name.value = text(protocol.label); hint(); }
     rememberText.textContent = t(signsIn(protocol) ? 'net.remember.signin' : 'net.remember');
     fields = protocolFields(browser, protocol, {
       initial: m?.values ?? (protocol.id === initial?.protocol ? initial.values : {}),
       editing: !!m,
       onShares: protocol.canListShares ? listShares : null,
       onChange: () => {
-        if (!named) { name.value = fields.values().host ?? (signsIn(protocol) ? text(protocol.label) : ''); hint(); }
+        defaultName();
         trust = null;   // another server: confirmed again
       },
     });
+    defaultName();
     holder.replaceChildren(fields.el);
   };
   /** What the kernel gets: the configuration, and the secrets apart (files of the fields read now). */

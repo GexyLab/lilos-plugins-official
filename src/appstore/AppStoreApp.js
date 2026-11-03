@@ -317,13 +317,17 @@ export default function AppStore() {
     return answer === 'yes';
   }
 
+  /** The installed modules a module takes the place of (module.json `replaces`): they go when it comes in. */
+  const takesPlaceOf = item => (item.kind === 'module' ? (item.module.replaces ?? []).filter(n => state.modules.some(m => m.name === n)) : []);
+  const replacing = (name, replaces) => (replaces.length ? [t('confirm.replaces', { name, names: replaces.join(', ') })] : []);
+
   /** Asks before installing: what the package may do and, when it is not official, the warning. null when the user said no. */
-  async function confirmInstall({ title, name, permissions = [], official, kernelModule = false }) {
+  async function confirmInstall({ title, name, permissions = [], official, kernelModule = false, replaces = [] }) {
     const asked = needsGrant(permissions);
     const what = kernelModule ? null : asked.length ? h('ul', {}, ...asked.map(p => h('li', {}, describePermission(p)))) : h('p', {}, t('permissions.none'));
     const ok = await ask({
       title,
-      text: [kernelModule ? t('confirm.kernelModule', { name }) : t('confirm.mayDo', { name })],
+      text: [kernelModule ? t('confirm.kernelModule', { name }) : t('confirm.mayDo', { name }), ...replacing(name, replaces)],
       content: what || !official ? h('div', { class: 'as-ask' }, what, official ? null : h('p', { class: 'as-warning' }, t('confirm.unverified'))) : null,
       confirm: { label: official ? t('action.install') : t('action.installAnyway'), primary: official, danger: !official },
     });
@@ -352,7 +356,7 @@ export default function AppStore() {
    * it, what may come with it (optional: the admin ticks it), what cannot be had (then it cannot go
    * in). Resolves with packages.install's answers ({ root, steps }), or null.
    */
-  async function confirmPlan({ title, name, plan, official, kernelModule = false, permissions = [], rootDeps = null }) {
+  async function confirmPlan({ title, name, plan, official, kernelModule = false, permissions = [], rootDeps = null, replaces = [] }) {
     const asked = needsGrant(permissions);
     const required = plan.steps.filter(s => !s.optional);
     const choices = plan.steps.filter(s => s.choice);
@@ -403,7 +407,7 @@ export default function AppStore() {
     const unverified = !official || required.some(s => !s.verified);
     const ok = await ask({
       title, width: 520,
-      text: [kernelModule ? t('confirm.kernelModule', { name }) : t('confirm.mayDo', { name })],
+      text: [kernelModule ? t('confirm.kernelModule', { name }) : t('confirm.mayDo', { name }), ...replacing(name, replaces)],
       content: h('div', { class: 'as-ask' },
         !kernelModule && asked.length ? h('ul', {}, ...asked.map(p => h('li', {}, describePermission(p)))) : null,
         !kernelModule && !asked.length ? h('p', {}, t('permissions.none')) : null,
@@ -474,14 +478,14 @@ export default function AppStore() {
     if (plan.steps.length || plan.problems.length) {
       const answer = await confirmPlan({
         title: t('confirm.installTitle', { name: item.name }), name: item.name, plan, official: repo.official, kernelModule: isModule,
-        permissions: item.manifest?.permissions, rootDeps: item.shown?.dependencies,
+        permissions: item.manifest?.permissions, rootDeps: item.shown?.dependencies, replaces: takesPlaceOf(item),
       });
       return answer && { target, answer };
     }
     if (trusted && repo.official) return { source, answer: { grant: needsGrant(item.manifest?.permissions), allowUnsigned: false } };
     const answer = await confirmInstall({
       title: t('confirm.installTitle', { name: item.name }), name: item.name, official: repo.official,
-      ...(isModule ? { kernelModule: true } : { permissions: item.manifest.permissions }),
+      ...(isModule ? { kernelModule: true, replaces: takesPlaceOf(item) } : { permissions: item.manifest.permissions }),
     });
     return answer && { source, answer };
   }

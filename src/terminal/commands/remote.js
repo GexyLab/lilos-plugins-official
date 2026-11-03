@@ -16,7 +16,7 @@ async function connect(ctx) {
   if (!remote || !sdk.term?.available) throw new ShellError(t('remote.cmd.unavailable'));
   if (!ctx.args.length) throw new ShellError(t('help.usageShort', { usage: ctx.cmd.usage }), 2);
   const { hosts, protocols } = await remote.data();
-  if (!protocols.some(p => p.id === protocol(ctx.name))) throw new ShellError(t('remote.cmd.noModule', { name: ctx.name, module: `term-${protocol(ctx.name)}` }));
+  if (!protocols.some(p => p.id === protocol(ctx.name))) throw new ShellError(t('remote.cmd.noModule', { name: ctx.name, module: protocol(ctx.name) === 'ssh' ? 'ssh' : `term-${protocol(ctx.name)}` }));
   // One word that is the name of a saved host of that protocol
   if (ctx.args.length === 1) {
     const key = ctx.args[0].toLowerCase();
