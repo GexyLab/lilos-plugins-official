@@ -8,7 +8,9 @@
  * home loaded again, in `cwd` (a folder's id; the home without it), and answers
  * { ok, code, text, log }: the exit status and what the commands wrote (stdout and stderr, the
  * last 64 KB). ~/.bashrc is not read, as cron does. The commands that open apps or files say they
- * need lilOS's page.
+ * need lilOS's page. When the scheduler gives up («Annulla», the operation's time limit: the
+ * handler's third argument, services-isolate 1.2.0) the shell gets Ctrl+C: the command stops with
+ * 130 and what it wrote so far is the answer.
  */
 import { connect } from './sdk.js';
 import { Shell } from '../shell/Shell.js';
@@ -39,7 +41,8 @@ if (typeof globalThis.TextEncoder !== 'function') {
   };
 }
 
-async function run(lilos, { lines = '', cwd = null } = {}) {
+async function run(lilos, { lines = '', cwd = null } = {}, request) {
+  if (request?.cancelled) return { ok: false, code: 130, log: '' };
   let fs;
   try {
     fs = await connect(lilos);
@@ -57,14 +60,17 @@ async function run(lilos, { lines = '', cwd = null } = {}) {
   const shell = new Shell({ host, commands });
   if (typeof cwd === 'string' && fs.get(cwd)?.type === 'folder') shell.cwd = cwd;
   let code = 0;
+  const off = request?.onCancel?.(() => shell.token.abort());
   try {
     await shell.run(String(lines), host);
-    code = shell.status;
+    code = shell.token.aborted ? 130 : shell.status;
   } catch (err) {
     if (err instanceof ExitSignal) code = err.code ?? 0;
     else if (err instanceof Interrupt) code = 130;
     else if (err instanceof ParseError || err instanceof Incomplete) { write(`bash: ${err.message}\n`); code = 2; }
     else { write(`bash: ${err?.message ?? err}\n`); code = 1; }
+  } finally {
+    off?.();
   }
   try {
     await fs.flush();
@@ -78,10 +84,10 @@ async function run(lilos, { lines = '', cwd = null } = {}) {
 export function shell({ lilos }) {
   // One run at a time: two operations at once would share the same tree
   let queue = Promise.resolve();
-  lilos.handle((data, from) => {
+  lilos.handle((data, from, request) => {
     // Only the scheduler (the kernel refuses `schedule` from pages and apps, see AppServices.call)
     if (from !== 'scheduler' || !data?.schedule) return { ok: false, code: 2, error: 'Il servizio shell esegue solo i comandi della Pianificazione' };
-    const next = queue.then(() => run(lilos, data.schedule.params ?? {}));
+    const next = queue.then(() => run(lilos, data.schedule.params ?? {}, request));
     queue = next.catch(() => {});
     return next;
   });
