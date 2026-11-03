@@ -1,1 +1,0 @@
-export{n as checkSystem}from"./systemPackage-D_sB4CVv.js";

@@ -1,5 +1,11 @@
 # Changelog di lilOS
 
+## 1.24.0 — 2026-11-03
+
+- Nuova funzionalità — impostazioni di installazione: un file lilos-install.json dice dove installare lilOS, quale versione (quella dell'installer o la più recente), quali moduli, repository, app e utenti, e le impostazioni iniziali di ogni utente.
+- Nuova funzionalità — immagini del sistema: tools/image.js fa un'immagine di un lilOS installato e configurato (app, utenti, file); con "image" nel file di installazione si installa quella al posto della release ufficiale.
+- Sicurezza: le password del file di installazione vengono cancellate al primo avvio; le sessioni non entrano mai in un'immagine.
+
 ## 1.23.0 — 2026-11-03
 
 - **Nuova funzionalità — il programma lilOS.** lilOS gira anche nella sua finestra, senza browser, su Windows, macOS e Linux: si scarica da https://github.com/GexyLab/lilos/releases. Il programma può installare lilOS sul computer (kernel e PostgreSQL compresi), collegarsi a un server lilOS o al lilOS già installato. Da qui la pagina sa quando gira nel programma: numero di notifiche sull'icona, notifiche del sistema, link lilos://, scelta dei dispositivi (porte seriali, USB) fatta da lilOS
