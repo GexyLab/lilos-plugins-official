@@ -34,3 +34,9 @@ Qui ci sono solo i pacchetti pronti da installare, costruiti, uniti e minificati
 - `changelog/<tag>.md`: cosa porta ogni versione.
 
 Non si modifica a mano: si pubblica dal repository di lilOS con `npm run publish:repo` (vedi `plugins/README.md` là).
+
+## Licenza
+
+I pacchetti di questo repository sono coperti dalla [licenza d'uso di lilOS](LICENSE.md), © 2026 Eugenio Liguori. Tutti, aziende comprese, possono installarli e usarli gratis; non si possono ridistribuire, modificare, offrire come servizio a terzi né usare per farne altri prodotti. I componenti di terzi che contengono restano con le loro licenze (in lilOS: Pannello di controllo → Informazioni → Riconoscimenti).
+
+*License: the packages are covered by the [lilOS License Agreement](LICENSE.md): free use for everyone, companies included; no redistribution, changes, hosting for others or derivative products.*
