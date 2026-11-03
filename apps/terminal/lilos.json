@@ -1,6 +1,6 @@
 {
   "id": "terminal",
-  "version": "1.8.0",
+  "version": "1.9.0",
   "kind": "local",
   "name": "Terminal",
   "description": "A bash-like shell over the files of lilOS, in tabs and panes side by side, and remote sessions: SSH, Telnet, rlogin and SUPDUP, with saved hosts, .term links and sessions that keep running when the window is closed.",
@@ -233,8 +233,8 @@
   "locales": "locales.json",
   "files": {
     "dist/index-WkOK-2xM.css": "sha256-9Xt/zvJnW4n+fp9gaJ9fGJy1r4Pn7EWdiyFV67ZyFzE=",
-    "dist/index.js": "sha256-EJ34rfsmdKeG6LlU3sBTxzzVOeo04ROmP6Pmr8/tQDU=",
-    "dist/shell.js": "sha256-aYagrkwqmlAqkgkBMTd7K3yRkiiXBtirB8qoem+7epA=",
-    "locales.json": "sha256-z44THjvM/NXR+3rYVD6VkWDi/L3Nrisi1Bj7pflySBI="
+    "dist/index.js": "sha256-MwrF1VbfN7YiBSBClLKWp81mPDN+BwXmfloZbnlvX5w=",
+    "dist/shell.js": "sha256-kBTfgVLcdpw7hjVZNf4Eyr1dszPdfub4ox1fp7hazH0=",
+    "locales.json": "sha256-u+c2mkIrduMFJ4WslL42ctJ6G2vpH8nOcE1UlqTjn0U="
   }
 }

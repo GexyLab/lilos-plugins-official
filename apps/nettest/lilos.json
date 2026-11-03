@@ -1,0 +1,77 @@
+{
+  "id": "nettest",
+  "version": "1.0.0",
+  "kind": "local",
+  "name": "NetTest",
+  "description": "Requests to APIs and network services, made by the lilOS kernel: HTTP/REST and GraphQL with environments, secret variables, authentication, scripts and checks; WebSocket, SSE, gRPC, MQTT, TCP, TLS and UDP sessions; collections run in order or by the Scheduler.",
+  "category": "development",
+  "icon": {
+    "glyph": "globe",
+    "color": "#c2410c"
+  },
+  "publisher": {
+    "id": "lilos",
+    "name": "lilOS"
+  },
+  "sdk": "2",
+  "lilos": ">=1.25.0",
+  "system": true,
+  "entrypoints": {
+    "main": {
+      "kind": "window",
+      "params": {
+        "file": {
+          "type": "file",
+          "label": "Collection",
+          "description": "A NetTest collection (.nettest) to open"
+        }
+      }
+    },
+    "filePreview": {
+      "kind": "background",
+      "label": "Previews of .nettest collections"
+    }
+  },
+  "dependencies": [
+    {
+      "module": "services-isolate",
+      "version": ">=1.2.0",
+      "optional": true,
+      "reason": "JavaScript scripts before and after the requests, in an isolated sandbox"
+    },
+    {
+      "module": "call-grpc",
+      "optional": true,
+      "reason": "gRPC calls and streams"
+    },
+    {
+      "module": "call-mqtt",
+      "optional": true,
+      "reason": "MQTT sessions"
+    }
+  ],
+  "permissions": [
+    "fs.write:~",
+    "calls"
+  ],
+  "contributes": {
+    "window": {
+      "width": 1180,
+      "height": 720
+    },
+    "fileTypes": [
+      "nettest"
+    ]
+  },
+  "entry": "dist/index.js",
+  "styles": [
+    "dist/index-Dq1_h46v.css"
+  ],
+  "locales": "locales.json",
+  "files": {
+    "dist/formats-BbYv1NMK.js": "sha256-iz5bKzUCp1bofeFVgmGb6fn1mP2uDRXha7PyLDkZhXc=",
+    "dist/index-Dq1_h46v.css": "sha256-yh3lUOUOnDKxRLXlUWbiaZAOE9/ypU0QPvSPbwnRUZ0=",
+    "dist/index.js": "sha256-SpmXmeLUoU1R4SwqZNvZ0XgOohwuIwAXQAhgSp5kn1g=",
+    "locales.json": "sha256-+700W4PkSt1+4vbNXCe3wdAjgFc7Jj8p8f4GuFge1i8="
+  }
+}

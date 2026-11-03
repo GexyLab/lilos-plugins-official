@@ -1,7 +1,7 @@
 import * as e from "/host/sdk.js";
 import { Emitter as t, SettingsWindow as n, TAG_COLORS as r, Window as i, actionButton as a, fs as o, h as s, icon as c, messageBox as l, resizeHandle as u, selectField as d, session as f, storage as p, tags as m, trackDrag as h, uid as g } from "/host/sdk.js";
 import { DESK_NAME as _, callEntrypoint as v, handleCommand as y, installedApps as b, launch as x, openFile as ee, pickFile as te } from "/host/system.js";
-// node_modules/@xterm/xterm/lib/xterm.mjs
+// ../../../../../../../../../Desktop/lilos/plugins/node_modules/@xterm/xterm/lib/xterm.mjs
 var ne = Object.defineProperty, re = Object.getOwnPropertyDescriptor, ie = (e, t) => {
 	for (var n in t) ne(e, n, {
 		get: t[n],
@@ -358,15 +358,15 @@ var _e = class {
 function De(e) {
 	return e[Te] || [];
 }
-function Oe(e) {
+function T(e) {
 	if (Ee.has(e)) return Ee.get(e);
 	let t = function(e, n, r) {
 		if (arguments.length !== 3) throw Error("@IServiceName-decorator can only be used to decorate a parameter");
-		ke(t, e, r);
+		Oe(t, e, r);
 	};
 	return t._id = e, Ee.set(e, t), t;
 }
-function ke(e, t, n) {
+function Oe(e, t, n) {
 	t[we] === t ? t[Te].push({
 		id: e,
 		index: n
@@ -375,7 +375,7 @@ function ke(e, t, n) {
 		index: n
 	}], t[we] = t);
 }
-var Ae = Oe("BufferService"), je = Oe("CoreMouseService"), Me = Oe("CoreService"), Ne = Oe("CharsetService"), Pe = Oe("InstantiationService"), Fe = Oe("LogService"), Ie = Oe("OptionsService"), Le = Oe("OscLinkService"), Re = Oe("UnicodeService"), ze = Oe("DecorationService"), Be = class {
+var ke = T("BufferService"), Ae = T("CoreMouseService"), je = T("CoreService"), Me = T("CharsetService"), Ne = T("InstantiationService"), Pe = T("LogService"), Fe = T("OptionsService"), Ie = T("OscLinkService"), Le = T("UnicodeService"), Re = T("DecorationService"), ze = class {
 	constructor(e, t, n) {
 		this._bufferService = e, this._optionsService = t, this._oscLinkService = n;
 	}
@@ -416,7 +416,7 @@ var Ae = Oe("BufferService"), je = Oe("CoreMouseService"), Me = Oe("CoreService"
 					s || r.push({
 						text: n,
 						range: a,
-						activate: (e, t) => i ? i.activate(e, t, a) : Ve(e, t),
+						activate: (e, t) => i ? i.activate(e, t, a) : Be(e, t),
 						hover: (e, t) => i?.hover?.(e, t, a),
 						leave: (e, t) => i?.leave?.(e, t, a)
 					});
@@ -427,12 +427,12 @@ var Ae = Oe("BufferService"), je = Oe("CoreMouseService"), Me = Oe("CoreService"
 		t(r);
 	}
 };
-Be = S([
-	C(0, Ae),
-	C(1, Ie),
-	C(2, Le)
-], Be);
-function Ve(e, t) {
+ze = S([
+	C(0, ke),
+	C(1, Fe),
+	C(2, Ie)
+], ze);
+function Be(e, t) {
 	if (confirm(`Do you want to navigate to ${t}?
 
 WARNING: This link could potentially be dangerous`)) {
@@ -445,11 +445,11 @@ WARNING: This link could potentially be dangerous`)) {
 		} else console.warn("Opening link blocked as opener could not be cleared");
 	}
 }
-var He = Oe("CharSizeService"), Ue = Oe("CoreBrowserService"), We = Oe("MouseService"), Ge = Oe("RenderService"), Ke = Oe("SelectionService"), qe = Oe("CharacterJoinerService"), Je = Oe("ThemeService"), Ye = Oe("LinkProviderService"), Xe = new class {
+var Ve = T("CharSizeService"), He = T("CoreBrowserService"), Ue = T("MouseService"), We = T("RenderService"), Ge = T("SelectionService"), Ke = T("CharacterJoinerService"), qe = T("ThemeService"), Je = T("LinkProviderService"), Ye = new class {
 	constructor() {
 		this.listeners = [], this.unexpectedErrorHandler = function(e) {
 			setTimeout(() => {
-				throw e.stack ? nt.isErrorNoTelemetry(e) ? new nt(e.message + "\n\n" + e.stack) : /* @__PURE__ */ Error(e.message + "\n\n" + e.stack) : e;
+				throw e.stack ? tt.isErrorNoTelemetry(e) ? new tt(e.message + "\n\n" + e.stack) : /* @__PURE__ */ Error(e.message + "\n\n" + e.stack) : e;
 			}, 0);
 		};
 	}
@@ -479,22 +479,22 @@ var He = Oe("CharSizeService"), Ue = Oe("CoreBrowserService"), We = Oe("MouseSer
 		this.unexpectedErrorHandler(e);
 	}
 }();
-function Ze(e) {
-	$e(e) || Xe.onUnexpectedError(e);
+function Xe(e) {
+	Qe(e) || Ye.onUnexpectedError(e);
 }
-var Qe = "Canceled";
-function $e(e) {
-	return e instanceof et || e instanceof Error && e.name === Qe && e.message === Qe;
+var Ze = "Canceled";
+function Qe(e) {
+	return e instanceof $e || e instanceof Error && e.name === Ze && e.message === Ze;
 }
-var et = class extends Error {
+var $e = class extends Error {
 	constructor() {
-		super(Qe), this.name = this.message;
+		super(Ze), this.name = this.message;
 	}
 };
-function tt(e) {
+function et(e) {
 	return Error(e ? `Illegal argument: ${e}` : "Illegal argument");
 }
-var nt = class e extends Error {
+var tt = class e extends Error {
 	constructor(e) {
 		super(e), this.name = "CodeExpectedError";
 	}
@@ -506,15 +506,15 @@ var nt = class e extends Error {
 	static isErrorNoTelemetry(e) {
 		return e.name === "CodeExpectedError";
 	}
-}, rt = class e extends Error {
+}, nt = class e extends Error {
 	constructor(t) {
 		super(t || "An unexpected bug occurred."), Object.setPrototypeOf(this, e.prototype);
 	}
 };
-function it(e, t = 0) {
+function rt(e, t = 0) {
 	return e[e.length - (1 + t)];
 }
-var at;
+var it;
 ((e) => {
 	function t(e) {
 		return e < 0;
@@ -532,8 +532,8 @@ var at;
 		return e === 0;
 	}
 	e.isNeitherLessOrGreaterThan = i, e.greaterThan = 1, e.lessThan = -1, e.neitherLessOrGreaterThan = 0;
-})(at ||= {});
-var ot = class e {
+})(it ||= {});
+var at = class e {
 	constructor(e) {
 		this.iterate = e;
 	}
@@ -564,11 +564,11 @@ var ot = class e {
 	}
 	findLastMaxBy(e) {
 		let t, n = !0;
-		return this.iterate((r) => ((n || at.isGreaterThan(e(r, t))) && (n = !1, t = r), !0)), t;
+		return this.iterate((r) => ((n || it.isGreaterThan(e(r, t))) && (n = !1, t = r), !0)), t;
 	}
 };
-ot.empty = new ot((e) => {});
-function st(e, t) {
+at.empty = new at((e) => {});
+function ot(e, t) {
 	let n = this, r = !1, i;
 	return function() {
 		if (r) return i;
@@ -581,7 +581,7 @@ function st(e, t) {
 		return i;
 	};
 }
-var ct;
+var st;
 ((e) => {
 	function t(e) {
 		return e && typeof e == "object" && typeof e[Symbol.iterator] == "function";
@@ -674,22 +674,22 @@ var ct;
 		return Promise.resolve(t);
 	}
 	e.asyncToArray = y;
-})(ct ||= {});
-var lt = null;
+})(st ||= {});
+var ct = null;
+function lt(e) {
+	return ct?.trackDisposable(e), e;
+}
 function ut(e) {
-	return lt?.trackDisposable(e), e;
+	ct?.markAsDisposed(e);
 }
-function dt(e) {
-	lt?.markAsDisposed(e);
+function dt(e, t) {
+	ct?.setParent(e, t);
 }
-function ft(e, t) {
-	lt?.setParent(e, t);
+function ft(e) {
+	return ct?.markAsSingleton(e), e;
 }
 function pt(e) {
-	return lt?.markAsSingleton(e), e;
-}
-function mt(e) {
-	if (ct.is(e)) {
+	if (st.is(e)) {
 		let t = [];
 		for (let n of e) if (n) try {
 			n.dispose();
@@ -702,28 +702,28 @@ function mt(e) {
 	}
 	if (e) return e.dispose(), e;
 }
-function ht(...e) {
-	return T(() => mt(e));
+function mt(...e) {
+	return E(() => pt(e));
 }
-function T(e) {
-	let t = ut({ dispose: st(() => {
-		dt(t), e();
+function E(e) {
+	let t = lt({ dispose: ot(() => {
+		ut(t), e();
 	}) });
 	return t;
 }
-var gt = class e {
+var ht = class e {
 	constructor() {
-		this._toDispose = /* @__PURE__ */ new Set(), this._isDisposed = !1, ut(this);
+		this._toDispose = /* @__PURE__ */ new Set(), this._isDisposed = !1, lt(this);
 	}
 	dispose() {
-		this._isDisposed || (dt(this), this._isDisposed = !0, this.clear());
+		this._isDisposed || (ut(this), this._isDisposed = !0, this.clear());
 	}
 	get isDisposed() {
 		return this._isDisposed;
 	}
 	clear() {
 		if (this._toDispose.size !== 0) try {
-			mt(this._toDispose);
+			pt(this._toDispose);
 		} finally {
 			this._toDispose.clear();
 		}
@@ -731,7 +731,7 @@ var gt = class e {
 	add(t) {
 		if (!t) return t;
 		if (t === this) throw Error("Cannot register a disposable on itself!");
-		return ft(t, this), this._isDisposed ? e.DISABLE_DISPOSED_WARNING || console.warn((/* @__PURE__ */ Error("Trying to add a disposable to a DisposableStore that has already been disposed of. The added object will be leaked!")).stack) : this._toDispose.add(t), t;
+		return dt(t, this), this._isDisposed ? e.DISABLE_DISPOSED_WARNING || console.warn((/* @__PURE__ */ Error("Trying to add a disposable to a DisposableStore that has already been disposed of. The added object will be leaked!")).stack) : this._toDispose.add(t), t;
 	}
 	delete(e) {
 		if (e) {
@@ -740,66 +740,66 @@ var gt = class e {
 		}
 	}
 	deleteAndLeak(e) {
-		e && this._toDispose.has(e) && (this._toDispose.delete(e), ft(e, null));
+		e && this._toDispose.has(e) && (this._toDispose.delete(e), dt(e, null));
 	}
 };
-gt.DISABLE_DISPOSED_WARNING = !1;
-var _t = gt, E = class {
+ht.DISABLE_DISPOSED_WARNING = !1;
+var gt = ht, D = class {
 	constructor() {
-		this._store = new _t(), ut(this), ft(this._store, this);
+		this._store = new gt(), lt(this), dt(this._store, this);
 	}
 	dispose() {
-		dt(this), this._store.dispose();
+		ut(this), this._store.dispose();
 	}
 	_register(e) {
 		if (e === this) throw Error("Cannot register a disposable on itself!");
 		return this._store.add(e);
 	}
 };
-E.None = Object.freeze({ dispose() {} });
-var vt = class {
+D.None = Object.freeze({ dispose() {} });
+var _t = class {
 	constructor() {
-		this._isDisposed = !1, ut(this);
+		this._isDisposed = !1, lt(this);
 	}
 	get value() {
 		return this._isDisposed ? void 0 : this._value;
 	}
 	set value(e) {
-		this._isDisposed || e === this._value || (this._value?.dispose(), e && ft(e, this), this._value = e);
+		this._isDisposed || e === this._value || (this._value?.dispose(), e && dt(e, this), this._value = e);
 	}
 	clear() {
 		this.value = void 0;
 	}
 	dispose() {
-		this._isDisposed = !0, dt(this), this._value?.dispose(), this._value = void 0;
+		this._isDisposed = !0, ut(this), this._value?.dispose(), this._value = void 0;
 	}
 	clearAndLeak() {
 		let e = this._value;
-		return this._value = void 0, e && ft(e, null), e;
+		return this._value = void 0, e && dt(e, null), e;
 	}
-}, yt = typeof window == "object" ? window : globalThis, bt = class e {
+}, vt = typeof window == "object" ? window : globalThis, yt = class e {
 	constructor(t) {
 		this.element = t, this.next = e.Undefined, this.prev = e.Undefined;
 	}
 };
-bt.Undefined = new bt(void 0);
-var D = bt, xt = class {
+yt.Undefined = new yt(void 0);
+var O = yt, bt = class {
 	constructor() {
-		this._first = D.Undefined, this._last = D.Undefined, this._size = 0;
+		this._first = O.Undefined, this._last = O.Undefined, this._size = 0;
 	}
 	get size() {
 		return this._size;
 	}
 	isEmpty() {
-		return this._first === D.Undefined;
+		return this._first === O.Undefined;
 	}
 	clear() {
 		let e = this._first;
-		for (; e !== D.Undefined;) {
+		for (; e !== O.Undefined;) {
 			let t = e.next;
-			e.prev = D.Undefined, e.next = D.Undefined, e = t;
+			e.prev = O.Undefined, e.next = O.Undefined, e = t;
 		}
-		this._first = D.Undefined, this._last = D.Undefined, this._size = 0;
+		this._first = O.Undefined, this._last = O.Undefined, this._size = 0;
 	}
 	unshift(e) {
 		return this._insert(e, !1);
@@ -808,8 +808,8 @@ var D = bt, xt = class {
 		return this._insert(e, !0);
 	}
 	_insert(e, t) {
-		let n = new D(e);
-		if (this._first === D.Undefined) this._first = n, this._last = n;
+		let n = new O(e);
+		if (this._first === O.Undefined) this._first = n, this._last = n;
 		else if (t) {
 			let e = this._last;
 			this._last = n, n.prev = e, e.next = n;
@@ -824,34 +824,34 @@ var D = bt, xt = class {
 		};
 	}
 	shift() {
-		if (this._first !== D.Undefined) {
+		if (this._first !== O.Undefined) {
 			let e = this._first.element;
 			return this._remove(this._first), e;
 		}
 	}
 	pop() {
-		if (this._last !== D.Undefined) {
+		if (this._last !== O.Undefined) {
 			let e = this._last.element;
 			return this._remove(this._last), e;
 		}
 	}
 	_remove(e) {
-		if (e.prev !== D.Undefined && e.next !== D.Undefined) {
+		if (e.prev !== O.Undefined && e.next !== O.Undefined) {
 			let t = e.prev;
 			t.next = e.next, e.next.prev = t;
-		} else e.prev === D.Undefined && e.next === D.Undefined ? (this._first = D.Undefined, this._last = D.Undefined) : e.next === D.Undefined ? (this._last = this._last.prev, this._last.next = D.Undefined) : e.prev === D.Undefined && (this._first = this._first.next, this._first.prev = D.Undefined);
+		} else e.prev === O.Undefined && e.next === O.Undefined ? (this._first = O.Undefined, this._last = O.Undefined) : e.next === O.Undefined ? (this._last = this._last.prev, this._last.next = O.Undefined) : e.prev === O.Undefined && (this._first = this._first.next, this._first.prev = O.Undefined);
 		--this._size;
 	}
 	*[Symbol.iterator]() {
 		let e = this._first;
-		for (; e !== D.Undefined;) yield e.element, e = e.next;
+		for (; e !== O.Undefined;) yield e.element, e = e.next;
 	}
-}, St = globalThis.performance && typeof globalThis.performance.now == "function", Ct = class e {
+}, xt = globalThis.performance && typeof globalThis.performance.now == "function", St = class e {
 	static create(t) {
 		return new e(t);
 	}
 	constructor(e) {
-		this._now = St && e === !1 ? Date.now : globalThis.performance.now.bind(globalThis.performance), this._startTime = this._now(), this._stopTime = -1;
+		this._now = xt && e === !1 ? Date.now : globalThis.performance.now.bind(globalThis.performance), this._startTime = this._now(), this._stopTime = -1;
 	}
 	stop() {
 		this._stopTime = this._now();
@@ -862,9 +862,9 @@ var D = bt, xt = class {
 	elapsed() {
 		return this._stopTime === -1 ? this._now() - this._startTime : this._stopTime - this._startTime;
 	}
-}, wt;
+}, Ct;
 ((e) => {
-	e.None = () => E.None;
+	e.None = () => D.None;
 	function t(e, t) {
 		return d(e, () => {}, 0, void 0, !0, void 0, t);
 	}
@@ -897,7 +897,7 @@ var D = bt, xt = class {
 	}
 	e.signal = o;
 	function s(...e) {
-		return (t, n = null, r) => u(ht(...e.map((e) => e((e) => t.call(n, e)))), r);
+		return (t, n = null, r) => u(mt(...e.map((e) => e((e) => t.call(n, e)))), r);
 	}
 	e.any = s;
 	function c(e, t, n, i) {
@@ -906,7 +906,7 @@ var D = bt, xt = class {
 	}
 	e.reduce = c;
 	function l(e, t) {
-		let n, r = new O({
+		let n, r = new k({
 			onWillAddFirstListener() {
 				n = e(r.fire, r);
 			},
@@ -920,7 +920,7 @@ var D = bt, xt = class {
 		return t instanceof Array ? t.push(e) : t && t.add(e), e;
 	}
 	function d(e, t, n = 100, r = !1, i = !1, a, o) {
-		let s, c, l, u = 0, d, f = new O({
+		let s, c, l, u = 0, d, f = new k({
 			leakWarningThreshold: a,
 			onWillAddFirstListener() {
 				s = e((e) => {
@@ -963,7 +963,7 @@ var D = bt, xt = class {
 		r && r.add(a);
 		let o = () => {
 			i?.forEach((e) => s.fire(e)), i = null;
-		}, s = new O({
+		}, s = new k({
 			onWillAddFirstListener() {
 				a || (a = e((e) => s.fire(e)), r && r.add(a));
 			},
@@ -1018,7 +1018,7 @@ var D = bt, xt = class {
 		}
 	}
 	function y(e, t, n = (e) => e) {
-		let r = (...e) => i.fire(n(...e)), i = new O({
+		let r = (...e) => i.fire(n(...e)), i = new k({
 			onWillAddFirstListener: () => e.on(t, r),
 			onDidRemoveLastListener: () => e.removeListener(t, r)
 		});
@@ -1026,7 +1026,7 @@ var D = bt, xt = class {
 	}
 	e.fromNodeEventEmitter = y;
 	function b(e, t, n = (e) => e) {
-		let r = (...e) => i.fire(n(...e)), i = new O({
+		let r = (...e) => i.fire(n(...e)), i = new k({
 			onWillAddFirstListener: () => e.addEventListener(t, r),
 			onDidRemoveLastListener: () => e.removeEventListener(t, r)
 		});
@@ -1038,7 +1038,7 @@ var D = bt, xt = class {
 	}
 	e.toPromise = x;
 	function ee(e) {
-		let t = new O();
+		let t = new k();
 		return e.then((e) => {
 			t.fire(e);
 		}, () => {
@@ -1067,7 +1067,7 @@ var D = bt, xt = class {
 					e.removeObserver(this);
 				}
 			};
-			this.emitter = new O(n), t && t.add(this.emitter);
+			this.emitter = new k(n), t && t.add(this.emitter);
 		}
 		beginUpdate(e) {
 			this._counter++;
@@ -1102,17 +1102,17 @@ var D = bt, xt = class {
 			let s = { dispose() {
 				e.removeObserver(o);
 			} };
-			return r instanceof _t ? r.add(s) : Array.isArray(r) && r.push(s), s;
+			return r instanceof gt ? r.add(s) : Array.isArray(r) && r.push(s), s;
 		};
 	}
 	e.fromObservableLight = S;
-})(wt ||= {});
-var Tt = class e {
+})(Ct ||= {});
+var wt = class e {
 	constructor(t) {
 		this.listenerCount = 0, this.invocationCount = 0, this.elapsedOverall = 0, this.durations = [], this.name = `${t}_${e._idPool++}`, e.all.add(this);
 	}
 	start(e) {
-		this._stopWatch = new Ct(), this.listenerCount = e;
+		this._stopWatch = new St(), this.listenerCount = e;
 	}
 	stop() {
 		if (this._stopWatch) {
@@ -1121,8 +1121,8 @@ var Tt = class e {
 		}
 	}
 };
-Tt.all = /* @__PURE__ */ new Set(), Tt._idPool = 0;
-var Et = Tt, Dt = -1, Ot = class e {
+wt.all = /* @__PURE__ */ new Set(), wt._idPool = 0;
+var Tt = wt, Et = -1, Dt = class e {
 	constructor(t, n, r = (e._idPool++).toString(16).padStart(3, "0")) {
 		this._errorHandler = t, this.threshold = n, this.name = r, this._warnCountdown = 0;
 	}
@@ -1138,7 +1138,7 @@ var Et = Tt, Dt = -1, Ot = class e {
 			this._warnCountdown = n * .5;
 			let [e, r] = this.getMostFrequentStack(), i = `[${this.name}] potential listener LEAK detected, having ${t} listeners already. MOST frequent listener (${r}):`;
 			console.warn(i), console.warn(e);
-			let a = new jt(i, e);
+			let a = new At(i, e);
 			this._errorHandler(a);
 		}
 		return () => {
@@ -1153,8 +1153,8 @@ var Et = Tt, Dt = -1, Ot = class e {
 		return e;
 	}
 };
-Ot._idPool = 1;
-var kt = Ot, At = class e {
+Dt._idPool = 1;
+var Ot = Dt, kt = class e {
 	constructor(e) {
 		this.value = e;
 	}
@@ -1164,21 +1164,21 @@ var kt = Ot, At = class e {
 	print() {
 		console.warn(this.value.split("\n").slice(2).join("\n"));
 	}
-}, jt = class extends Error {
+}, At = class extends Error {
 	constructor(e, t) {
 		super(e), this.name = "ListenerLeakError", this.stack = t;
 	}
-}, Mt = class extends Error {
+}, jt = class extends Error {
 	constructor(e, t) {
 		super(e), this.name = "ListenerRefusalError", this.stack = t;
 	}
-}, Nt = 0, Pt = class {
+}, Mt = 0, Nt = class {
 	constructor(e) {
-		this.value = e, this.id = Nt++;
+		this.value = e, this.id = Mt++;
 	}
-}, Ft = 2, O = class {
+}, Pt = 2, k = class {
 	constructor(e) {
-		this._size = 0, this._options = e, this._leakageMon = Dt > 0 || this._options?.leakWarningThreshold ? new kt(e?.onListenerError ?? Ze, this._options?.leakWarningThreshold ?? Dt) : void 0, this._perfMon = this._options?._profName ? new Et(this._options._profName) : void 0, this._deliveryQueue = this._options?.deliveryQueue;
+		this._size = 0, this._options = e, this._leakageMon = Et > 0 || this._options?.leakWarningThreshold ? new Ot(e?.onListenerError ?? Xe, this._options?.leakWarningThreshold ?? Et) : void 0, this._perfMon = this._options?._profName ? new Tt(this._options._profName) : void 0, this._deliveryQueue = this._options?.deliveryQueue;
 	}
 	dispose() {
 		this._disposed || (this._disposed = !0, this._deliveryQueue?.current === this && this._deliveryQueue.reset(), this._listeners && (this._listeners = void 0, this._size = 0), this._options?.onDidRemoveLastListener?.(), this._leakageMon?.dispose());
@@ -1188,17 +1188,17 @@ var kt = Ot, At = class e {
 			if (this._leakageMon && this._size > this._leakageMon.threshold ** 2) {
 				let e = `[${this._leakageMon.name}] REFUSES to accept new listeners because it exceeded its threshold by far (${this._size} vs ${this._leakageMon.threshold})`;
 				console.warn(e);
-				let t = this._leakageMon.getMostFrequentStack() ?? ["UNKNOWN stack", -1], n = new Mt(`${e}. HINT: Stack shows most frequent listener (${t[1]}-times)`, t[0]);
-				return (this._options?.onListenerError || Ze)(n), E.None;
+				let t = this._leakageMon.getMostFrequentStack() ?? ["UNKNOWN stack", -1], n = new jt(`${e}. HINT: Stack shows most frequent listener (${t[1]}-times)`, t[0]);
+				return (this._options?.onListenerError || Xe)(n), D.None;
 			}
-			if (this._disposed) return E.None;
+			if (this._disposed) return D.None;
 			t && (e = e.bind(t));
-			let r = new Pt(e), i;
-			this._leakageMon && this._size >= Math.ceil(this._leakageMon.threshold * .2) && (r.stack = At.create(), i = this._leakageMon.check(r.stack, this._size + 1)), this._listeners ? this._listeners instanceof Pt ? (this._deliveryQueue ??= new It(), this._listeners = [this._listeners, r]) : this._listeners.push(r) : (this._options?.onWillAddFirstListener?.(this), this._listeners = r, this._options?.onDidAddFirstListener?.(this)), this._size++;
-			let a = T(() => {
+			let r = new Nt(e), i;
+			this._leakageMon && this._size >= Math.ceil(this._leakageMon.threshold * .2) && (r.stack = kt.create(), i = this._leakageMon.check(r.stack, this._size + 1)), this._listeners ? this._listeners instanceof Nt ? (this._deliveryQueue ??= new Ft(), this._listeners = [this._listeners, r]) : this._listeners.push(r) : (this._options?.onWillAddFirstListener?.(this), this._listeners = r, this._options?.onDidAddFirstListener?.(this)), this._size++;
+			let a = E(() => {
 				i?.(), this._removeListener(r);
 			});
-			return n instanceof _t ? n.add(a) : Array.isArray(n) && n.push(a), a;
+			return n instanceof gt ? n.add(a) : Array.isArray(n) && n.push(a), a;
 		}, this._event;
 	}
 	_removeListener(e) {
@@ -1211,7 +1211,7 @@ var kt = Ot, At = class e {
 		if (n === -1) throw console.log("disposed?", this._disposed), console.log("size?", this._size), console.log("arr?", JSON.stringify(this._listeners)), /* @__PURE__ */ Error("Attempted to dispose unknown listener");
 		this._size--, t[n] = void 0;
 		let r = this._deliveryQueue.current === this;
-		if (this._size * Ft <= t.length) {
+		if (this._size * Pt <= t.length) {
 			let e = 0;
 			for (let n = 0; n < t.length; n++) t[n] ? t[e++] = t[n] : r && (this._deliveryQueue.end--, e < this._deliveryQueue.i && this._deliveryQueue.i--);
 			t.length = e;
@@ -1219,7 +1219,7 @@ var kt = Ot, At = class e {
 	}
 	_deliver(e, t) {
 		if (!e) return;
-		let n = this._options?.onListenerError || Ze;
+		let n = this._options?.onListenerError || Xe;
 		if (!n) e.value(t);
 		else try {
 			e.value(t);
@@ -1234,7 +1234,7 @@ var kt = Ot, At = class e {
 	}
 	fire(e) {
 		if (this._deliveryQueue?.current && (this._deliverQueue(this._deliveryQueue), this._perfMon?.stop()), this._perfMon?.start(this._size), this._listeners) {
-			if (this._listeners instanceof Pt) this._deliver(this._listeners, e);
+			if (this._listeners instanceof Nt) this._deliver(this._listeners, e);
 			else {
 				let t = this._deliveryQueue;
 				t.enqueue(this, e, this._listeners.length), this._deliverQueue(t);
@@ -1245,7 +1245,7 @@ var kt = Ot, At = class e {
 	hasListeners() {
 		return this._size > 0;
 	}
-}, It = class {
+}, Ft = class {
 	constructor() {
 		this.i = -1, this.end = 0;
 	}
@@ -1255,9 +1255,9 @@ var kt = Ot, At = class e {
 	reset() {
 		this.i = this.end, this.current = void 0, this.value = void 0;
 	}
-}, Lt = class {
+}, It = class {
 	constructor() {
-		this.mapWindowIdToZoomLevel = /* @__PURE__ */ new Map(), this._onDidChangeZoomLevel = new O(), this.onDidChangeZoomLevel = this._onDidChangeZoomLevel.event, this.mapWindowIdToZoomFactor = /* @__PURE__ */ new Map(), this._onDidChangeFullscreen = new O(), this.onDidChangeFullscreen = this._onDidChangeFullscreen.event, this.mapWindowIdToFullScreen = /* @__PURE__ */ new Map();
+		this.mapWindowIdToZoomLevel = /* @__PURE__ */ new Map(), this._onDidChangeZoomLevel = new k(), this.onDidChangeZoomLevel = this._onDidChangeZoomLevel.event, this.mapWindowIdToZoomFactor = /* @__PURE__ */ new Map(), this._onDidChangeFullscreen = new k(), this.onDidChangeFullscreen = this._onDidChangeFullscreen.event, this.mapWindowIdToFullScreen = /* @__PURE__ */ new Map();
 	}
 	getZoomLevel(e) {
 		return this.mapWindowIdToZoomLevel.get(this.getWindowId(e)) ?? 0;
@@ -1285,62 +1285,62 @@ var kt = Ot, At = class e {
 		return e.vscodeWindowId;
 	}
 };
-Lt.INSTANCE = new Lt();
-var Rt = Lt;
-function zt(e, t, n) {
+It.INSTANCE = new It();
+var Lt = It;
+function Rt(e, t, n) {
 	typeof t == "string" && (t = e.matchMedia(t)), t.addEventListener("change", n);
 }
-Rt.INSTANCE.onDidChangeZoomLevel;
-function Bt(e) {
-	return Rt.INSTANCE.getZoomFactor(e);
+Lt.INSTANCE.onDidChangeZoomLevel;
+function zt(e) {
+	return Lt.INSTANCE.getZoomFactor(e);
 }
-Rt.INSTANCE.onDidChangeFullscreen;
-var Vt = typeof navigator == "object" ? navigator.userAgent : "", Ht = Vt.indexOf("Firefox") >= 0, Ut = Vt.indexOf("AppleWebKit") >= 0, Wt = Vt.indexOf("Chrome") >= 0, Gt = !Wt && Vt.indexOf("Safari") >= 0;
-Vt.indexOf("Electron/"), Vt.indexOf("Android");
-var Kt = !1;
-if (typeof yt.matchMedia == "function") {
-	let e = yt.matchMedia("(display-mode: standalone) or (display-mode: window-controls-overlay)"), t = yt.matchMedia("(display-mode: fullscreen)");
-	Kt = e.matches, zt(yt, e, ({ matches: e }) => {
-		Kt && t.matches || (Kt = e);
+Lt.INSTANCE.onDidChangeFullscreen;
+var Bt = typeof navigator == "object" ? navigator.userAgent : "", Vt = Bt.indexOf("Firefox") >= 0, Ht = Bt.indexOf("AppleWebKit") >= 0, Ut = Bt.indexOf("Chrome") >= 0, Wt = !Ut && Bt.indexOf("Safari") >= 0;
+Bt.indexOf("Electron/"), Bt.indexOf("Android");
+var Gt = !1;
+if (typeof vt.matchMedia == "function") {
+	let e = vt.matchMedia("(display-mode: standalone) or (display-mode: window-controls-overlay)"), t = vt.matchMedia("(display-mode: fullscreen)");
+	Gt = e.matches, Rt(vt, e, ({ matches: e }) => {
+		Gt && t.matches || (Gt = e);
 	});
 }
-function qt() {
-	return Kt;
+function Kt() {
+	return Gt;
 }
-var Jt = "en", Yt = !1, Xt = !1, Zt = !1, Qt = !1, $t = !1, en = Jt, tn, nn = globalThis, rn;
-typeof nn.vscode < "u" && typeof nn.vscode.process < "u" ? rn = nn.vscode.process : typeof process < "u" && typeof process?.versions?.node == "string" && (rn = process);
-var an = typeof rn?.versions?.electron == "string" && rn?.type === "renderer";
-if (typeof rn == "object") {
-	Yt = rn.platform === "win32", Xt = rn.platform === "darwin", Zt = rn.platform === "linux", Zt && rn.env.SNAP && rn.env.SNAP_REVISION, rn.env.CI || rn.env.BUILD_ARTIFACTSTAGINGDIRECTORY, en = Jt;
-	let e = rn.env.VSCODE_NLS_CONFIG;
+var qt = "en", Jt = !1, Yt = !1, Xt = !1, Zt = !1, Qt = !1, $t = qt, en, tn = globalThis, nn;
+typeof tn.vscode < "u" && typeof tn.vscode.process < "u" ? nn = tn.vscode.process : typeof process < "u" && typeof process?.versions?.node == "string" && (nn = process);
+var rn = typeof nn?.versions?.electron == "string" && nn?.type === "renderer";
+if (typeof nn == "object") {
+	Jt = nn.platform === "win32", Yt = nn.platform === "darwin", Xt = nn.platform === "linux", Xt && nn.env.SNAP && nn.env.SNAP_REVISION, nn.env.CI || nn.env.BUILD_ARTIFACTSTAGINGDIRECTORY, $t = qt;
+	let e = nn.env.VSCODE_NLS_CONFIG;
 	if (e) try {
 		let t = JSON.parse(e);
-		t.userLocale, t.osLocale, en = t.resolvedLanguage || Jt, t.languagePack?.translationsConfigFile;
+		t.userLocale, t.osLocale, $t = t.resolvedLanguage || qt, t.languagePack?.translationsConfigFile;
 	} catch {}
-	Qt = !0;
-} else typeof navigator == "object" && !an ? (tn = navigator.userAgent, Yt = tn.indexOf("Windows") >= 0, Xt = tn.indexOf("Macintosh") >= 0, (tn.indexOf("Macintosh") >= 0 || tn.indexOf("iPad") >= 0 || tn.indexOf("iPhone") >= 0) && navigator.maxTouchPoints && navigator.maxTouchPoints, Zt = tn.indexOf("Linux") >= 0, tn?.indexOf("Mobi"), $t = !0, en = globalThis._VSCODE_NLS_LANGUAGE || Jt, navigator.language.toLowerCase()) : console.error("Unable to resolve platform.");
-var on = Yt, sn = Xt, cn = Zt, ln = Qt;
-$t && typeof nn.importScripts == "function" && nn.origin;
-var un = tn, dn = en, fn;
+	Zt = !0;
+} else typeof navigator == "object" && !rn ? (en = navigator.userAgent, Jt = en.indexOf("Windows") >= 0, Yt = en.indexOf("Macintosh") >= 0, (en.indexOf("Macintosh") >= 0 || en.indexOf("iPad") >= 0 || en.indexOf("iPhone") >= 0) && navigator.maxTouchPoints && navigator.maxTouchPoints, Xt = en.indexOf("Linux") >= 0, en?.indexOf("Mobi"), Qt = !0, $t = globalThis._VSCODE_NLS_LANGUAGE || qt, navigator.language.toLowerCase()) : console.error("Unable to resolve platform.");
+var an = Jt, on = Yt, sn = Xt, cn = Zt;
+Qt && typeof tn.importScripts == "function" && tn.origin;
+var ln = en, un = $t, dn;
 ((e) => {
 	function t() {
-		return dn;
+		return un;
 	}
 	e.value = t;
 	function n() {
-		return dn.length === 2 ? dn === "en" : dn.length >= 3 && dn[0] === "e" && dn[1] === "n" && dn[2] === "-";
+		return un.length === 2 ? un === "en" : un.length >= 3 && un[0] === "e" && un[1] === "n" && un[2] === "-";
 	}
 	e.isDefaultVariant = n;
 	function r() {
-		return dn === "en";
+		return un === "en";
 	}
 	e.isDefault = r;
-})(fn ||= {});
-var pn = typeof nn.postMessage == "function" && !nn.importScripts;
+})(dn ||= {});
+var fn = typeof tn.postMessage == "function" && !tn.importScripts;
 (() => {
-	if (pn) {
+	if (fn) {
 		let e = [];
-		nn.addEventListener("message", (t) => {
+		tn.addEventListener("message", (t) => {
 			if (t.data && t.data.vscodeScheduleAsyncWork) for (let n = 0, r = e.length; n < r; n++) {
 				let r = e[n];
 				if (r.id === t.data.vscodeScheduleAsyncWork) {
@@ -1355,16 +1355,16 @@ var pn = typeof nn.postMessage == "function" && !nn.importScripts;
 			e.push({
 				id: r,
 				callback: n
-			}), nn.postMessage({ vscodeScheduleAsyncWork: r }, "*");
+			}), tn.postMessage({ vscodeScheduleAsyncWork: r }, "*");
 		};
 	}
 	return (e) => setTimeout(e);
 })();
-var mn = !!(un && un.indexOf("Chrome") >= 0);
-un && un.indexOf("Firefox"), !mn && un && un.indexOf("Safari"), un && un.indexOf("Edg/"), un && un.indexOf("Android");
-var hn = typeof navigator == "object" ? navigator : {};
-ln || document.queryCommandSupported && document.queryCommandSupported("copy") || hn && hn.clipboard && hn.clipboard.writeText, ln || hn && hn.clipboard && hn.clipboard.readText, ln || qt() || hn.keyboard, "ontouchstart" in yt || hn.maxTouchPoints, yt.PointerEvent && ("ontouchstart" in yt || navigator.maxTouchPoints);
-var gn = class {
+var pn = !!(ln && ln.indexOf("Chrome") >= 0);
+ln && ln.indexOf("Firefox"), !pn && ln && ln.indexOf("Safari"), ln && ln.indexOf("Edg/"), ln && ln.indexOf("Android");
+var mn = typeof navigator == "object" ? navigator : {};
+cn || document.queryCommandSupported && document.queryCommandSupported("copy") || mn && mn.clipboard && mn.clipboard.writeText, cn || mn && mn.clipboard && mn.clipboard.readText, cn || Kt() || mn.keyboard, "ontouchstart" in vt || mn.maxTouchPoints, vt.PointerEvent && ("ontouchstart" in vt || navigator.maxTouchPoints);
+var hn = class {
 	constructor() {
 		this._keyCodeToStr = [], this._strToKeyCode = Object.create(null);
 	}
@@ -1377,26 +1377,26 @@ var gn = class {
 	strToKeyCode(e) {
 		return this._strToKeyCode[e.toLowerCase()] || 0;
 	}
-}, _n = new gn(), vn = new gn(), yn = new gn(), bn = Array(230), xn;
+}, gn = new hn(), _n = new hn(), vn = new hn(), yn = Array(230), bn;
 ((e) => {
 	function t(e) {
-		return _n.keyCodeToStr(e);
+		return gn.keyCodeToStr(e);
 	}
 	e.toString = t;
 	function n(e) {
-		return _n.strToKeyCode(e);
+		return gn.strToKeyCode(e);
 	}
 	e.fromString = n;
 	function r(e) {
-		return vn.keyCodeToStr(e);
+		return _n.keyCodeToStr(e);
 	}
 	e.toUserSettingsUS = r;
 	function i(e) {
-		return yn.keyCodeToStr(e);
+		return vn.keyCodeToStr(e);
 	}
 	e.toUserSettingsGeneral = i;
 	function a(e) {
-		return vn.strToKeyCode(e) || yn.strToKeyCode(e);
+		return _n.strToKeyCode(e) || vn.strToKeyCode(e);
 	}
 	e.fromUserSettings = a;
 	function o(e) {
@@ -1407,11 +1407,11 @@ var gn = class {
 			case 15: return "Left";
 			case 17: return "Right";
 		}
-		return _n.keyCodeToStr(e);
+		return gn.keyCodeToStr(e);
 	}
 	e.toElectronAccelerator = o;
-})(xn ||= {});
-var Sn = class e {
+})(bn ||= {});
+var xn = class e {
 	constructor(e, t, n, r, i) {
 		this.ctrlKey = e, this.shiftKey = t, this.altKey = n, this.metaKey = r, this.keyCode = i;
 	}
@@ -1425,14 +1425,14 @@ var Sn = class e {
 		return this.keyCode === 0 || this.keyCode === 5 || this.keyCode === 57 || this.keyCode === 6 || this.keyCode === 4;
 	}
 	toKeybinding() {
-		return new Cn([this]);
+		return new Sn([this]);
 	}
 	isDuplicateModifierCase() {
 		return this.ctrlKey && this.keyCode === 5 || this.shiftKey && this.keyCode === 4 || this.altKey && this.keyCode === 6 || this.metaKey && this.keyCode === 57;
 	}
-}, Cn = class {
+}, Sn = class {
 	constructor(e) {
-		if (e.length === 0) throw tt("chords");
+		if (e.length === 0) throw et("chords");
 		this.chords = e;
 	}
 	getHashCode() {
@@ -1446,32 +1446,32 @@ var Sn = class e {
 		return !0;
 	}
 };
-function wn(e) {
+function Cn(e) {
 	if (e.charCode) {
 		let t = String.fromCharCode(e.charCode).toUpperCase();
-		return xn.fromString(t);
+		return bn.fromString(t);
 	}
 	let t = e.keyCode;
 	if (t === 3) return 7;
-	if (Ht) switch (t) {
+	if (Vt) switch (t) {
 		case 59: return 85;
 		case 60:
-			if (cn) return 97;
+			if (sn) return 97;
 			break;
 		case 61: return 86;
 		case 107: return 109;
 		case 109: return 111;
 		case 173: return 88;
-		case 224: if (sn) return 57;
+		case 224: if (on) return 57;
 	}
-	else if (Ut && (sn && t === 93 || !sn && t === 92)) return 57;
-	return bn[t] || 0;
+	else if (Ht && (on && t === 93 || !on && t === 92)) return 57;
+	return yn[t] || 0;
 }
-var Tn = sn ? 256 : 2048, En = 512, Dn = 1024, On = sn ? 2048 : 256, kn = class {
+var wn = on ? 256 : 2048, Tn = 512, En = 1024, Dn = on ? 2048 : 256, On = class {
 	constructor(e) {
 		this._standardKeyboardEventBrand = !0;
 		let t = e;
-		this.browserEvent = t, this.target = t.target, this.ctrlKey = t.ctrlKey, this.shiftKey = t.shiftKey, this.altKey = t.altKey, this.metaKey = t.metaKey, this.altGraphKey = t.getModifierState?.("AltGraph"), this.keyCode = wn(t), this.code = t.code, this.ctrlKey = this.ctrlKey || this.keyCode === 5, this.altKey = this.altKey || this.keyCode === 6, this.shiftKey = this.shiftKey || this.keyCode === 4, this.metaKey = this.metaKey || this.keyCode === 57, this._asKeybinding = this._computeKeybinding(), this._asKeyCodeChord = this._computeKeyCodeChord();
+		this.browserEvent = t, this.target = t.target, this.ctrlKey = t.ctrlKey, this.shiftKey = t.shiftKey, this.altKey = t.altKey, this.metaKey = t.metaKey, this.altGraphKey = t.getModifierState?.("AltGraph"), this.keyCode = Cn(t), this.code = t.code, this.ctrlKey = this.ctrlKey || this.keyCode === 5, this.altKey = this.altKey || this.keyCode === 6, this.shiftKey = this.shiftKey || this.keyCode === 4, this.metaKey = this.metaKey || this.keyCode === 57, this._asKeybinding = this._computeKeybinding(), this._asKeyCodeChord = this._computeKeyCodeChord();
 	}
 	preventDefault() {
 		this.browserEvent && this.browserEvent.preventDefault && this.browserEvent.preventDefault();
@@ -1489,14 +1489,14 @@ var Tn = sn ? 256 : 2048, En = 512, Dn = 1024, On = sn ? 2048 : 256, kn = class 
 		let e = 0;
 		this.keyCode !== 5 && this.keyCode !== 4 && this.keyCode !== 6 && this.keyCode !== 57 && (e = this.keyCode);
 		let t = 0;
-		return this.ctrlKey && (t |= Tn), this.altKey && (t |= En), this.shiftKey && (t |= Dn), this.metaKey && (t |= On), t |= e, t;
+		return this.ctrlKey && (t |= wn), this.altKey && (t |= Tn), this.shiftKey && (t |= En), this.metaKey && (t |= Dn), t |= e, t;
 	}
 	_computeKeyCodeChord() {
 		let e = 0;
-		return this.keyCode !== 5 && this.keyCode !== 4 && this.keyCode !== 6 && this.keyCode !== 57 && (e = this.keyCode), new Sn(this.ctrlKey, this.shiftKey, this.altKey, this.metaKey, e);
+		return this.keyCode !== 5 && this.keyCode !== 4 && this.keyCode !== 6 && this.keyCode !== 57 && (e = this.keyCode), new xn(this.ctrlKey, this.shiftKey, this.altKey, this.metaKey, e);
 	}
-}, An = /* @__PURE__ */ new WeakMap();
-function jn(e) {
+}, kn = /* @__PURE__ */ new WeakMap();
+function An(e) {
 	if (!e.parent || e.parent === e) return null;
 	try {
 		let t = e.location, n = e.parent.location;
@@ -1506,14 +1506,14 @@ function jn(e) {
 	}
 	return e.parent;
 }
-var Mn = class {
+var jn = class {
 	static getSameOriginWindowChain(e) {
-		let t = An.get(e);
+		let t = kn.get(e);
 		if (!t) {
-			t = [], An.set(e, t);
+			t = [], kn.set(e, t);
 			let n = e, r;
 			do
-				r = jn(n), r ? t.push({
+				r = An(n), r ? t.push({
 					window: new WeakRef(n),
 					iframeElement: n.frameElement || null
 				}) : t.push({
@@ -1541,10 +1541,10 @@ var Mn = class {
 			left: r
 		};
 	}
-}, Nn = class {
+}, Mn = class {
 	constructor(e, t) {
 		this.timestamp = Date.now(), this.browserEvent = t, this.leftButton = t.button === 0, this.middleButton = t.button === 1, this.rightButton = t.button === 2, this.buttons = t.buttons, this.target = t.target, this.detail = t.detail || 1, t.type === "dblclick" && (this.detail = 2), this.ctrlKey = t.ctrlKey, this.shiftKey = t.shiftKey, this.altKey = t.altKey, this.metaKey = t.metaKey, typeof t.pageX == "number" ? (this.posx = t.pageX, this.posy = t.pageY) : (this.posx = t.clientX + this.target.ownerDocument.body.scrollLeft + this.target.ownerDocument.documentElement.scrollLeft, this.posy = t.clientY + this.target.ownerDocument.body.scrollTop + this.target.ownerDocument.documentElement.scrollTop);
-		let n = Mn.getPositionOfChildWindowRelativeToAncestorWindow(e, t.view);
+		let n = jn.getPositionOfChildWindowRelativeToAncestorWindow(e, t.view);
 		this.posx -= n.left, this.posy -= n.top;
 	}
 	preventDefault() {
@@ -1553,11 +1553,11 @@ var Mn = class {
 	stopPropagation() {
 		this.browserEvent.stopPropagation();
 	}
-}, Pn = class {
+}, Nn = class {
 	constructor(e, t = 0, n = 0) {
 		this.browserEvent = e || null, this.target = e ? e.target || e.targetNode || e.srcElement : null, this.deltaY = n, this.deltaX = t;
 		let r = !1;
-		if (Wt) {
+		if (Ut) {
 			let e = navigator.userAgent.match(/Chrome\/(\d+)/);
 			r = (e ? parseInt(e[1]) : 123) <= 122;
 		}
@@ -1567,13 +1567,13 @@ var Mn = class {
 			else if (typeof n.VERTICAL_AXIS < "u" && n.axis === n.VERTICAL_AXIS) this.deltaY = -n.detail / 3;
 			else if (e.type === "wheel") {
 				let t = e;
-				this.deltaY = t.deltaMode === t.DOM_DELTA_LINE ? Ht && !sn ? -e.deltaY / 3 : -e.deltaY : -e.deltaY / 40;
+				this.deltaY = t.deltaMode === t.DOM_DELTA_LINE ? Vt && !on ? -e.deltaY / 3 : -e.deltaY : -e.deltaY / 40;
 			}
-			if (typeof t.wheelDeltaX < "u") this.deltaX = Gt && on ? -(t.wheelDeltaX / 120) : r ? t.wheelDeltaX / (120 * i) : t.wheelDeltaX / 120;
+			if (typeof t.wheelDeltaX < "u") this.deltaX = Wt && an ? -(t.wheelDeltaX / 120) : r ? t.wheelDeltaX / (120 * i) : t.wheelDeltaX / 120;
 			else if (typeof n.HORIZONTAL_AXIS < "u" && n.axis === n.HORIZONTAL_AXIS) this.deltaX = -e.detail / 3;
 			else if (e.type === "wheel") {
 				let t = e;
-				this.deltaX = t.deltaMode === t.DOM_DELTA_LINE ? Ht && !sn ? -e.deltaX / 3 : -e.deltaX : -e.deltaX / 40;
+				this.deltaX = t.deltaMode === t.DOM_DELTA_LINE ? Vt && !on ? -e.deltaX / 3 : -e.deltaX : -e.deltaX / 40;
 			}
 			this.deltaY === 0 && this.deltaX === 0 && e.wheelDelta && (this.deltaY = r ? e.wheelDelta / (120 * i) : e.wheelDelta / 120);
 		}
@@ -1584,25 +1584,25 @@ var Mn = class {
 	stopPropagation() {
 		this.browserEvent?.stopPropagation();
 	}
-}, Fn = Object.freeze(function(e, t) {
+}, Pn = Object.freeze(function(e, t) {
 	let n = setTimeout(e.bind(t), 0);
 	return { dispose() {
 		clearTimeout(n);
 	} };
-}), In;
+}), Fn;
 ((e) => {
 	function t(t) {
-		return t === e.None || t === e.Cancelled || t instanceof Ln ? !0 : !t || typeof t != "object" ? !1 : typeof t.isCancellationRequested == "boolean" && typeof t.onCancellationRequested == "function";
+		return t === e.None || t === e.Cancelled || t instanceof In ? !0 : !t || typeof t != "object" ? !1 : typeof t.isCancellationRequested == "boolean" && typeof t.onCancellationRequested == "function";
 	}
 	e.isCancellationToken = t, e.None = Object.freeze({
 		isCancellationRequested: !1,
-		onCancellationRequested: wt.None
+		onCancellationRequested: Ct.None
 	}), e.Cancelled = Object.freeze({
 		isCancellationRequested: !0,
-		onCancellationRequested: Fn
+		onCancellationRequested: Pn
 	});
-})(In ||= {});
-var Ln = class {
+})(Fn ||= {});
+var In = class {
 	constructor() {
 		this._isCancelled = !1, this._emitter = null;
 	}
@@ -1613,12 +1613,12 @@ var Ln = class {
 		return this._isCancelled;
 	}
 	get onCancellationRequested() {
-		return this._isCancelled ? Fn : (this._emitter ||= new O(), this._emitter.event);
+		return this._isCancelled ? Pn : (this._emitter ||= new k(), this._emitter.event);
 	}
 	dispose() {
 		this._emitter &&= (this._emitter.dispose(), null);
 	}
-}, Rn = class {
+}, Ln = class {
 	constructor(e, t) {
 		this._isDisposed = !1, this._token = -1, typeof e == "function" && typeof t == "number" && this.setIfNotSet(e, t);
 	}
@@ -1629,18 +1629,18 @@ var Ln = class {
 		this._token !== -1 && (clearTimeout(this._token), this._token = -1);
 	}
 	cancelAndSet(e, t) {
-		if (this._isDisposed) throw new rt("Calling 'cancelAndSet' on a disposed TimeoutTimer");
+		if (this._isDisposed) throw new nt("Calling 'cancelAndSet' on a disposed TimeoutTimer");
 		this.cancel(), this._token = setTimeout(() => {
 			this._token = -1, e();
 		}, t);
 	}
 	setIfNotSet(e, t) {
-		if (this._isDisposed) throw new rt("Calling 'setIfNotSet' on a disposed TimeoutTimer");
+		if (this._isDisposed) throw new nt("Calling 'setIfNotSet' on a disposed TimeoutTimer");
 		this._token === -1 && (this._token = setTimeout(() => {
 			this._token = -1, e();
 		}, t));
 	}
-}, zn = class {
+}, Rn = class {
 	constructor() {
 		this.disposable = void 0, this.isDisposed = !1;
 	}
@@ -1648,12 +1648,12 @@ var Ln = class {
 		this.disposable?.dispose(), this.disposable = void 0;
 	}
 	cancelAndSet(e, t, n = globalThis) {
-		if (this.isDisposed) throw new rt("Calling 'cancelAndSet' on a disposed IntervalTimer");
+		if (this.isDisposed) throw new nt("Calling 'cancelAndSet' on a disposed IntervalTimer");
 		this.cancel();
 		let r = n.setInterval(() => {
 			e();
 		}, t);
-		this.disposable = T(() => {
+		this.disposable = E(() => {
 			n.clearInterval(r), this.disposable = void 0;
 		});
 	}
@@ -1664,7 +1664,7 @@ var Ln = class {
 (function() {
 	typeof globalThis.requestIdleCallback != "function" || globalThis.cancelIdleCallback;
 })();
-var Bn;
+var zn;
 ((e) => {
 	async function t(e) {
 		let t, n = await Promise.all(e.map((e) => e.then((e) => e, (e) => {
@@ -1684,8 +1684,8 @@ var Bn;
 		});
 	}
 	e.withAsyncBody = n;
-})(Bn ||= {});
-var Vn = class e {
+})(zn ||= {});
+var Bn = class e {
 	static fromArray(t) {
 		return new e((e) => {
 			e.emitMany(t);
@@ -1709,7 +1709,7 @@ var Vn = class e {
 		});
 	}
 	constructor(e, t) {
-		this._state = 0, this._results = [], this._error = null, this._onReturn = t, this._onStateChanged = new O(), queueMicrotask(async () => {
+		this._state = 0, this._results = [], this._error = null, this._onReturn = t, this._onStateChanged = new k(), queueMicrotask(async () => {
 			let t = {
 				emitOne: (e) => this.emitOne(e),
 				emitMany: (e) => this.emitMany(e),
@@ -1738,7 +1738,7 @@ var Vn = class e {
 						done: !0,
 						value: void 0
 					};
-					await wt.toPromise(this._onStateChanged.event);
+					await Ct.toPromise(this._onStateChanged.event);
 				} while (1);
 			},
 			return: async () => (this._onReturn?.(), {
@@ -1790,44 +1790,44 @@ var Vn = class e {
 		this._state === 0 && (this._state = 2, this._error = e, this._onStateChanged.fire());
 	}
 };
-Vn.EMPTY = Vn.fromArray([]);
-function Hn(e) {
-	return Un(e, 0);
+Bn.EMPTY = Bn.fromArray([]);
+function Vn(e) {
+	return Hn(e, 0);
 }
-function Un(e, t) {
+function Hn(e, t) {
 	switch (typeof e) {
-		case "object": return e === null ? Wn(349, t) : Array.isArray(e) ? qn(e, t) : Jn(e, t);
-		case "string": return Kn(e, t);
-		case "boolean": return Gn(e, t);
-		case "number": return Wn(e, t);
-		case "undefined": return Wn(937, t);
-		default: return Wn(617, t);
+		case "object": return e === null ? Un(349, t) : Array.isArray(e) ? Kn(e, t) : qn(e, t);
+		case "string": return Gn(e, t);
+		case "boolean": return Wn(e, t);
+		case "number": return Un(e, t);
+		case "undefined": return Un(937, t);
+		default: return Un(617, t);
 	}
 }
-function Wn(e, t) {
+function Un(e, t) {
 	return (t << 5) - t + e | 0;
 }
-function Gn(e, t) {
-	return Wn(e ? 433 : 863, t);
+function Wn(e, t) {
+	return Un(e ? 433 : 863, t);
 }
-function Kn(e, t) {
-	t = Wn(149417, t);
-	for (let n = 0, r = e.length; n < r; n++) t = Wn(e.charCodeAt(n), t);
+function Gn(e, t) {
+	t = Un(149417, t);
+	for (let n = 0, r = e.length; n < r; n++) t = Un(e.charCodeAt(n), t);
 	return t;
 }
+function Kn(e, t) {
+	return t = Un(104579, t), e.reduce((e, t) => Hn(t, e), t);
+}
 function qn(e, t) {
-	return t = Wn(104579, t), e.reduce((e, t) => Un(t, e), t);
+	return t = Un(181387, t), Object.keys(e).sort().reduce((t, n) => (t = Gn(n, t), Hn(e[n], t)), t);
 }
-function Jn(e, t) {
-	return t = Wn(181387, t), Object.keys(e).sort().reduce((t, n) => (t = Kn(n, t), Un(e[n], t)), t);
-}
-var { registerWindow: Yn, getWindow: Xn, getDocument: Zn, getWindows: Qn, getWindowsCount: $n, getWindowId: er, getWindowById: tr, hasWindow: nr, onDidRegisterWindow: rr, onWillUnregisterWindow: ir, onDidUnregisterWindow: ar } = function() {
+var { registerWindow: Jn, getWindow: Yn, getDocument: Xn, getWindows: Zn, getWindowsCount: Qn, getWindowId: $n, getWindowById: er, hasWindow: tr, onDidRegisterWindow: nr, onWillUnregisterWindow: rr, onDidUnregisterWindow: ir } = function() {
 	let e = /* @__PURE__ */ new Map(), t = {
-		window: yt,
-		disposables: new _t()
+		window: vt,
+		disposables: new gt()
 	};
-	e.set(yt.vscodeWindowId, t);
-	let n = new O(), r = new O(), i = new O();
+	e.set(vt.vscodeWindowId, t);
+	let n = new k(), r = new k(), i = new k();
 	function a(n, r) {
 		return (typeof n == "number" ? e.get(n) : void 0) ?? (r ? t : void 0);
 	}
@@ -1836,14 +1836,14 @@ var { registerWindow: Yn, getWindow: Xn, getDocument: Zn, getWindows: Qn, getWin
 		onWillUnregisterWindow: i.event,
 		onDidUnregisterWindow: r.event,
 		registerWindow(t) {
-			if (e.has(t.vscodeWindowId)) return E.None;
-			let a = new _t(), o = {
+			if (e.has(t.vscodeWindowId)) return D.None;
+			let a = new gt(), o = {
 				window: t,
-				disposables: a.add(new _t())
+				disposables: a.add(new gt())
 			};
-			return e.set(t.vscodeWindowId, o), a.add(T(() => {
+			return e.set(t.vscodeWindowId, o), a.add(E(() => {
 				e.delete(t.vscodeWindowId), r.fire(t);
-			})), a.add(k(t, hr.BEFORE_UNLOAD, () => {
+			})), a.add(A(t, mr.BEFORE_UNLOAD, () => {
 				i.fire(t);
 			})), n.fire(o), a;
 		},
@@ -1864,13 +1864,13 @@ var { registerWindow: Yn, getWindow: Xn, getDocument: Zn, getWindows: Qn, getWin
 			let t = e;
 			if (t?.ownerDocument?.defaultView) return t.ownerDocument.defaultView.window;
 			let n = e;
-			return n?.view ? n.view.window : yt;
+			return n?.view ? n.view.window : vt;
 		},
 		getDocument(e) {
-			return Xn(e).document;
+			return Yn(e).document;
 		}
 	};
-}(), or = class {
+}(), ar = class {
 	constructor(e, t, n, r) {
 		this._node = e, this._type = t, this._handler = n, this._options = r || !1, this._node.addEventListener(this._type, this._handler, this._options);
 	}
@@ -1878,30 +1878,30 @@ var { registerWindow: Yn, getWindow: Xn, getDocument: Zn, getWindows: Qn, getWin
 		this._handler &&= (this._node.removeEventListener(this._type, this._handler, this._options), this._node = null, null);
 	}
 };
-function k(e, t, n, r) {
-	return new or(e, t, n, r);
+function A(e, t, n, r) {
+	return new ar(e, t, n, r);
 }
-function sr(e, t) {
+function or(e, t) {
 	return function(n) {
-		return t(new Nn(e, n));
+		return t(new Mn(e, n));
 	};
 }
-function cr(e) {
+function sr(e) {
 	return function(t) {
-		return e(new kn(t));
+		return e(new On(t));
 	};
 }
-var lr = function(e, t, n, r) {
+var cr = function(e, t, n, r) {
 	let i = n;
-	return t === "click" || t === "mousedown" || t === "contextmenu" ? i = sr(Xn(e), n) : (t === "keydown" || t === "keypress" || t === "keyup") && (i = cr(n)), k(e, t, i, r);
-}, ur, dr = class extends zn {
+	return t === "click" || t === "mousedown" || t === "contextmenu" ? i = or(Yn(e), n) : (t === "keydown" || t === "keypress" || t === "keyup") && (i = sr(n)), A(e, t, i, r);
+}, lr, ur = class extends Rn {
 	constructor(e) {
-		super(), this.defaultTarget = e && Xn(e);
+		super(), this.defaultTarget = e && Yn(e);
 	}
 	cancelAndSet(e, t, n) {
 		return super.cancelAndSet(e, t, n ?? this.defaultTarget);
 	}
-}, fr = class {
+}, dr = class {
 	constructor(e, t = 0) {
 		this._runner = e, this.priority = t, this._canceled = !1;
 	}
@@ -1912,7 +1912,7 @@ var lr = function(e, t, n, r) {
 		if (!this._canceled) try {
 			this._runner();
 		} catch (e) {
-			Ze(e);
+			Xe(e);
 		}
 	}
 	static sort(e, t) {
@@ -1923,15 +1923,15 @@ var lr = function(e, t, n, r) {
 	let e = /* @__PURE__ */ new Map(), t = /* @__PURE__ */ new Map(), n = /* @__PURE__ */ new Map(), r = /* @__PURE__ */ new Map(), i = (i) => {
 		n.set(i, !1);
 		let a = e.get(i) ?? [];
-		for (t.set(i, a), e.set(i, []), r.set(i, !0); a.length > 0;) a.sort(fr.sort), a.shift().execute();
+		for (t.set(i, a), e.set(i, []), r.set(i, !0); a.length > 0;) a.sort(dr.sort), a.shift().execute();
 		r.set(i, !1);
 	};
-	ur = (t, r, a = 0) => {
-		let o = er(t), s = new fr(r, a), c = e.get(o);
+	lr = (t, r, a = 0) => {
+		let o = $n(t), s = new dr(r, a), c = e.get(o);
 		return c || (c = [], e.set(o, c)), c.push(s), n.get(o) || (n.set(o, !0), t.requestAnimationFrame(() => i(o))), s;
 	};
 })();
-var pr = class e {
+var fr = class e {
 	constructor(e, t) {
 		this.width = e, this.height = t;
 	}
@@ -1948,9 +1948,9 @@ var pr = class e {
 		return e === t ? !0 : !e || !t ? !1 : e.width === t.width && e.height === t.height;
 	}
 };
-pr.None = new pr(0, 0);
-function mr(e) {
-	let t = e.getBoundingClientRect(), n = Xn(e);
+fr.None = new fr(0, 0);
+function pr(e) {
+	let t = e.getBoundingClientRect(), n = Yn(e);
 	return {
 		left: t.left + n.scrollX,
 		top: t.top + n.scrollY,
@@ -1965,24 +1965,24 @@ new class {
 	observe(e, t, n) {
 		let r = this.mutationObservers.get(e);
 		r || (r = /* @__PURE__ */ new Map(), this.mutationObservers.set(e, r));
-		let i = Hn(n), a = r.get(i);
+		let i = Vn(n), a = r.get(i);
 		if (a) a.users += 1;
 		else {
-			let o = new O(), s = new MutationObserver((e) => o.fire(e));
+			let o = new k(), s = new MutationObserver((e) => o.fire(e));
 			s.observe(e, n);
 			let c = a = {
 				users: 1,
 				observer: s,
 				onDidMutate: o.event
 			};
-			t.add(T(() => {
+			t.add(E(() => {
 				--c.users, c.users === 0 && (o.dispose(), s.disconnect(), r?.delete(i), r?.size === 0 && this.mutationObservers.delete(e));
 			})), r.set(i, a);
 		}
 		return a.onDidMutate;
 	}
 }();
-var hr = {
+var mr = {
 	CLICK: "click",
 	AUXCLICK: "auxclick",
 	DBLCLICK: "dblclick",
@@ -2032,55 +2032,55 @@ var hr = {
 	DRAG_OVER: "dragover",
 	DROP: "drop",
 	DRAG_END: "dragend",
-	ANIMATION_START: Ut ? "webkitAnimationStart" : "animationstart",
-	ANIMATION_END: Ut ? "webkitAnimationEnd" : "animationend",
-	ANIMATION_ITERATION: Ut ? "webkitAnimationIteration" : "animationiteration"
-}, gr = class {
+	ANIMATION_START: Ht ? "webkitAnimationStart" : "animationstart",
+	ANIMATION_END: Ht ? "webkitAnimationEnd" : "animationend",
+	ANIMATION_ITERATION: Ht ? "webkitAnimationIteration" : "animationiteration"
+}, hr = class {
 	constructor(e) {
 		this.domNode = e, this._maxWidth = "", this._width = "", this._height = "", this._top = "", this._left = "", this._bottom = "", this._right = "", this._paddingTop = "", this._paddingLeft = "", this._paddingBottom = "", this._paddingRight = "", this._fontFamily = "", this._fontWeight = "", this._fontSize = "", this._fontStyle = "", this._fontFeatureSettings = "", this._fontVariationSettings = "", this._textDecoration = "", this._lineHeight = "", this._letterSpacing = "", this._className = "", this._display = "", this._position = "", this._visibility = "", this._color = "", this._backgroundColor = "", this._layerHint = !1, this._contain = "none", this._boxShadow = "";
 	}
 	setMaxWidth(e) {
-		let t = _r(e);
+		let t = gr(e);
 		this._maxWidth !== t && (this._maxWidth = t, this.domNode.style.maxWidth = this._maxWidth);
 	}
 	setWidth(e) {
-		let t = _r(e);
+		let t = gr(e);
 		this._width !== t && (this._width = t, this.domNode.style.width = this._width);
 	}
 	setHeight(e) {
-		let t = _r(e);
+		let t = gr(e);
 		this._height !== t && (this._height = t, this.domNode.style.height = this._height);
 	}
 	setTop(e) {
-		let t = _r(e);
+		let t = gr(e);
 		this._top !== t && (this._top = t, this.domNode.style.top = this._top);
 	}
 	setLeft(e) {
-		let t = _r(e);
+		let t = gr(e);
 		this._left !== t && (this._left = t, this.domNode.style.left = this._left);
 	}
 	setBottom(e) {
-		let t = _r(e);
+		let t = gr(e);
 		this._bottom !== t && (this._bottom = t, this.domNode.style.bottom = this._bottom);
 	}
 	setRight(e) {
-		let t = _r(e);
+		let t = gr(e);
 		this._right !== t && (this._right = t, this.domNode.style.right = this._right);
 	}
 	setPaddingTop(e) {
-		let t = _r(e);
+		let t = gr(e);
 		this._paddingTop !== t && (this._paddingTop = t, this.domNode.style.paddingTop = this._paddingTop);
 	}
 	setPaddingLeft(e) {
-		let t = _r(e);
+		let t = gr(e);
 		this._paddingLeft !== t && (this._paddingLeft = t, this.domNode.style.paddingLeft = this._paddingLeft);
 	}
 	setPaddingBottom(e) {
-		let t = _r(e);
+		let t = gr(e);
 		this._paddingBottom !== t && (this._paddingBottom = t, this.domNode.style.paddingBottom = this._paddingBottom);
 	}
 	setPaddingRight(e) {
-		let t = _r(e);
+		let t = gr(e);
 		this._paddingRight !== t && (this._paddingRight = t, this.domNode.style.paddingRight = this._paddingRight);
 	}
 	setFontFamily(e) {
@@ -2090,7 +2090,7 @@ var hr = {
 		this._fontWeight !== e && (this._fontWeight = e, this.domNode.style.fontWeight = this._fontWeight);
 	}
 	setFontSize(e) {
-		let t = _r(e);
+		let t = gr(e);
 		this._fontSize !== t && (this._fontSize = t, this.domNode.style.fontSize = this._fontSize);
 	}
 	setFontStyle(e) {
@@ -2106,11 +2106,11 @@ var hr = {
 		this._textDecoration !== e && (this._textDecoration = e, this.domNode.style.textDecoration = this._textDecoration);
 	}
 	setLineHeight(e) {
-		let t = _r(e);
+		let t = gr(e);
 		this._lineHeight !== t && (this._lineHeight = t, this.domNode.style.lineHeight = this._lineHeight);
 	}
 	setLetterSpacing(e) {
-		let t = _r(e);
+		let t = gr(e);
 		this._letterSpacing !== t && (this._letterSpacing = t, this.domNode.style.letterSpacing = this._letterSpacing);
 	}
 	setClassName(e) {
@@ -2156,15 +2156,15 @@ var hr = {
 		this.domNode.removeChild(e.domNode);
 	}
 };
-function _r(e) {
+function gr(e) {
 	return typeof e == "number" ? `${e}px` : e;
 }
-function vr(e) {
-	return new gr(e);
+function _r(e) {
+	return new hr(e);
 }
-var yr = class {
+var vr = class {
 	constructor() {
-		this._hooks = new _t(), this._pointerMoveCallback = null, this._onStopCallback = null;
+		this._hooks = new gt(), this._pointerMoveCallback = null, this._onStopCallback = null;
 	}
 	dispose() {
 		this.stopMonitoring(!1), this._hooks.dispose();
@@ -2182,20 +2182,20 @@ var yr = class {
 		this.isMonitoring() && this.stopMonitoring(!1), this._pointerMoveCallback = r, this._onStopCallback = i;
 		let a = e;
 		try {
-			e.setPointerCapture(t), this._hooks.add(T(() => {
+			e.setPointerCapture(t), this._hooks.add(E(() => {
 				try {
 					e.releasePointerCapture(t);
 				} catch {}
 			}));
 		} catch {
-			a = Xn(e);
+			a = Yn(e);
 		}
-		this._hooks.add(k(a, hr.POINTER_MOVE, (e) => {
+		this._hooks.add(A(a, mr.POINTER_MOVE, (e) => {
 			e.buttons === n ? (e.preventDefault(), this._pointerMoveCallback(e)) : this.stopMonitoring(!0);
-		})), this._hooks.add(k(a, hr.POINTER_UP, (e) => this.stopMonitoring(!0)));
+		})), this._hooks.add(A(a, mr.POINTER_UP, (e) => this.stopMonitoring(!0)));
 	}
 };
-function br(e, t, n) {
+function yr(e, t, n) {
 	let r = null, i = null;
 	if (typeof n.value == "function" ? (r = "value", i = n.value, i.length !== 0 && console.warn("Memoize should only be used in functions with zero parameters")) : typeof n.get == "function" && (r = "get", i = n.get), !i) throw Error("not supported");
 	let a = `$memoize$${t}`;
@@ -2208,25 +2208,25 @@ function br(e, t, n) {
 		}), this[a];
 	};
 }
-var xr;
-((e) => (e.Tap = "-xterm-gesturetap", e.Change = "-xterm-gesturechange", e.Start = "-xterm-gesturestart", e.End = "-xterm-gesturesend", e.Contextmenu = "-xterm-gesturecontextmenu"))(xr ||= {});
-var Sr = class e extends E {
+var br;
+((e) => (e.Tap = "-xterm-gesturetap", e.Change = "-xterm-gesturechange", e.Start = "-xterm-gesturestart", e.End = "-xterm-gesturesend", e.Contextmenu = "-xterm-gesturecontextmenu"))(br ||= {});
+var xr = class e extends D {
 	constructor() {
-		super(), this.dispatched = !1, this.targets = new xt(), this.ignoreTargets = new xt(), this.activeTouches = {}, this.handle = null, this._lastSetTapCountTime = 0, this._register(wt.runAndSubscribe(rr, ({ window: e, disposables: t }) => {
-			t.add(k(e.document, "touchstart", (e) => this.onTouchStart(e), { passive: !1 })), t.add(k(e.document, "touchend", (t) => this.onTouchEnd(e, t))), t.add(k(e.document, "touchmove", (e) => this.onTouchMove(e), { passive: !1 }));
+		super(), this.dispatched = !1, this.targets = new bt(), this.ignoreTargets = new bt(), this.activeTouches = {}, this.handle = null, this._lastSetTapCountTime = 0, this._register(Ct.runAndSubscribe(nr, ({ window: e, disposables: t }) => {
+			t.add(A(e.document, "touchstart", (e) => this.onTouchStart(e), { passive: !1 })), t.add(A(e.document, "touchend", (t) => this.onTouchEnd(e, t))), t.add(A(e.document, "touchmove", (e) => this.onTouchMove(e), { passive: !1 }));
 		}, {
-			window: yt,
+			window: vt,
 			disposables: this._store
 		}));
 	}
 	static addTarget(t) {
-		return e.isTouchDevice() ? (e.INSTANCE ||= pt(new e()), T(e.INSTANCE.targets.push(t))) : E.None;
+		return e.isTouchDevice() ? (e.INSTANCE ||= ft(new e()), E(e.INSTANCE.targets.push(t))) : D.None;
 	}
 	static ignoreTarget(t) {
-		return e.isTouchDevice() ? (e.INSTANCE ||= pt(new e()), T(e.INSTANCE.ignoreTargets.push(t))) : E.None;
+		return e.isTouchDevice() ? (e.INSTANCE ||= ft(new e()), E(e.INSTANCE.ignoreTargets.push(t))) : D.None;
 	}
 	static isTouchDevice() {
-		return "ontouchstart" in yt || navigator.maxTouchPoints > 0;
+		return "ontouchstart" in vt || navigator.maxTouchPoints > 0;
 	}
 	dispose() {
 		this.handle &&= (this.handle.dispose(), null), super.dispose();
@@ -2246,7 +2246,7 @@ var Sr = class e extends E {
 				rollingPageX: [r.pageX],
 				rollingPageY: [r.pageY]
 			};
-			let i = this.newGestureEvent(xr.Start, r.target);
+			let i = this.newGestureEvent(br.Start, r.target);
 			i.pageX = r.pageX, i.pageY = r.pageY, this.dispatchEvent(i);
 		}
 		this.dispatched &&= (e.preventDefault(), e.stopPropagation(), !1);
@@ -2260,17 +2260,17 @@ var Sr = class e extends E {
 				continue;
 			}
 			let s = this.activeTouches[o.identifier], c = Date.now() - s.initialTimeStamp;
-			if (c < e.HOLD_DELAY && Math.abs(s.initialPageX - it(s.rollingPageX)) < 30 && Math.abs(s.initialPageY - it(s.rollingPageY)) < 30) {
-				let e = this.newGestureEvent(xr.Tap, s.initialTarget);
-				e.pageX = it(s.rollingPageX), e.pageY = it(s.rollingPageY), this.dispatchEvent(e);
-			} else if (c >= e.HOLD_DELAY && Math.abs(s.initialPageX - it(s.rollingPageX)) < 30 && Math.abs(s.initialPageY - it(s.rollingPageY)) < 30) {
-				let e = this.newGestureEvent(xr.Contextmenu, s.initialTarget);
-				e.pageX = it(s.rollingPageX), e.pageY = it(s.rollingPageY), this.dispatchEvent(e);
+			if (c < e.HOLD_DELAY && Math.abs(s.initialPageX - rt(s.rollingPageX)) < 30 && Math.abs(s.initialPageY - rt(s.rollingPageY)) < 30) {
+				let e = this.newGestureEvent(br.Tap, s.initialTarget);
+				e.pageX = rt(s.rollingPageX), e.pageY = rt(s.rollingPageY), this.dispatchEvent(e);
+			} else if (c >= e.HOLD_DELAY && Math.abs(s.initialPageX - rt(s.rollingPageX)) < 30 && Math.abs(s.initialPageY - rt(s.rollingPageY)) < 30) {
+				let e = this.newGestureEvent(br.Contextmenu, s.initialTarget);
+				e.pageX = rt(s.rollingPageX), e.pageY = rt(s.rollingPageY), this.dispatchEvent(e);
 			} else if (i === 1) {
-				let e = it(s.rollingPageX), n = it(s.rollingPageY), i = it(s.rollingTimestamps) - s.rollingTimestamps[0], a = e - s.rollingPageX[0], o = n - s.rollingPageY[0], c = [...this.targets].filter((e) => s.initialTarget instanceof Node && e.contains(s.initialTarget));
+				let e = rt(s.rollingPageX), n = rt(s.rollingPageY), i = rt(s.rollingTimestamps) - s.rollingTimestamps[0], a = e - s.rollingPageX[0], o = n - s.rollingPageY[0], c = [...this.targets].filter((e) => s.initialTarget instanceof Node && e.contains(s.initialTarget));
 				this.inertia(t, c, r, Math.abs(a) / i, a > 0 ? 1 : -1, e, Math.abs(o) / i, o > 0 ? 1 : -1, n);
 			}
-			this.dispatchEvent(this.newGestureEvent(xr.End, s.initialTarget)), delete this.activeTouches[o.identifier];
+			this.dispatchEvent(this.newGestureEvent(br.End, s.initialTarget)), delete this.activeTouches[o.identifier];
 		}
 		this.dispatched &&= (n.preventDefault(), n.stopPropagation(), !1);
 	}
@@ -2279,10 +2279,10 @@ var Sr = class e extends E {
 		return n.initEvent(e, !1, !0), n.initialTarget = t, n.tapCount = 0, n;
 	}
 	dispatchEvent(t) {
-		if (t.type === xr.Tap) {
+		if (t.type === br.Tap) {
 			let n = (/* @__PURE__ */ new Date()).getTime(), r = 0;
 			r = n - this._lastSetTapCountTime > e.CLEAR_TAP_COUNT_TIME ? 1 : 2, this._lastSetTapCountTime = n, t.tapCount = r;
-		} else (t.type === xr.Change || t.type === xr.Contextmenu) && (this._lastSetTapCountTime = 0);
+		} else (t.type === br.Change || t.type === br.Contextmenu) && (this._lastSetTapCountTime = 0);
 		if (t.initialTarget instanceof Node) {
 			for (let e of this.ignoreTargets) if (e.contains(t.initialTarget)) return;
 			let e = [];
@@ -2296,10 +2296,10 @@ var Sr = class e extends E {
 		}
 	}
 	inertia(t, n, r, i, a, o, s, c, l) {
-		this.handle = ur(t, () => {
+		this.handle = lr(t, () => {
 			let u = Date.now(), d = u - r, f = 0, p = 0, m = !0;
 			i += e.SCROLL_FRICTION * d, s += e.SCROLL_FRICTION * d, i > 0 && (m = !1, f = a * i * d), s > 0 && (m = !1, p = c * s * d);
-			let h = this.newGestureEvent(xr.Change);
+			let h = this.newGestureEvent(br.Change);
 			h.translationX = f, h.translationY = p, n.forEach((e) => e.dispatchEvent(h)), m || this.inertia(t, n, u, i, a, o + f, s, c, l + p);
 		});
 	}
@@ -2311,59 +2311,59 @@ var Sr = class e extends E {
 				console.warn("end of an UNKNOWN touch", r);
 				continue;
 			}
-			let i = this.activeTouches[r.identifier], a = this.newGestureEvent(xr.Change, i.initialTarget);
-			a.translationX = r.pageX - it(i.rollingPageX), a.translationY = r.pageY - it(i.rollingPageY), a.pageX = r.pageX, a.pageY = r.pageY, this.dispatchEvent(a), i.rollingPageX.length > 3 && (i.rollingPageX.shift(), i.rollingPageY.shift(), i.rollingTimestamps.shift()), i.rollingPageX.push(r.pageX), i.rollingPageY.push(r.pageY), i.rollingTimestamps.push(t);
+			let i = this.activeTouches[r.identifier], a = this.newGestureEvent(br.Change, i.initialTarget);
+			a.translationX = r.pageX - rt(i.rollingPageX), a.translationY = r.pageY - rt(i.rollingPageY), a.pageX = r.pageX, a.pageY = r.pageY, this.dispatchEvent(a), i.rollingPageX.length > 3 && (i.rollingPageX.shift(), i.rollingPageY.shift(), i.rollingTimestamps.shift()), i.rollingPageX.push(r.pageX), i.rollingPageY.push(r.pageY), i.rollingTimestamps.push(t);
 		}
 		this.dispatched &&= (e.preventDefault(), e.stopPropagation(), !1);
 	}
 };
-Sr.SCROLL_FRICTION = -.005, Sr.HOLD_DELAY = 700, Sr.CLEAR_TAP_COUNT_TIME = 400, S([br], Sr, "isTouchDevice", 1);
-var Cr = Sr, wr = class extends E {
+xr.SCROLL_FRICTION = -.005, xr.HOLD_DELAY = 700, xr.CLEAR_TAP_COUNT_TIME = 400, S([yr], xr, "isTouchDevice", 1);
+var Sr = xr, Cr = class extends D {
 	onclick(e, t) {
-		this._register(k(e, hr.CLICK, (n) => t(new Nn(Xn(e), n))));
+		this._register(A(e, mr.CLICK, (n) => t(new Mn(Yn(e), n))));
 	}
 	onmousedown(e, t) {
-		this._register(k(e, hr.MOUSE_DOWN, (n) => t(new Nn(Xn(e), n))));
+		this._register(A(e, mr.MOUSE_DOWN, (n) => t(new Mn(Yn(e), n))));
 	}
 	onmouseover(e, t) {
-		this._register(k(e, hr.MOUSE_OVER, (n) => t(new Nn(Xn(e), n))));
+		this._register(A(e, mr.MOUSE_OVER, (n) => t(new Mn(Yn(e), n))));
 	}
 	onmouseleave(e, t) {
-		this._register(k(e, hr.MOUSE_LEAVE, (n) => t(new Nn(Xn(e), n))));
+		this._register(A(e, mr.MOUSE_LEAVE, (n) => t(new Mn(Yn(e), n))));
 	}
 	onkeydown(e, t) {
-		this._register(k(e, hr.KEY_DOWN, (e) => t(new kn(e))));
+		this._register(A(e, mr.KEY_DOWN, (e) => t(new On(e))));
 	}
 	onkeyup(e, t) {
-		this._register(k(e, hr.KEY_UP, (e) => t(new kn(e))));
+		this._register(A(e, mr.KEY_UP, (e) => t(new On(e))));
 	}
 	oninput(e, t) {
-		this._register(k(e, hr.INPUT, t));
+		this._register(A(e, mr.INPUT, t));
 	}
 	onblur(e, t) {
-		this._register(k(e, hr.BLUR, t));
+		this._register(A(e, mr.BLUR, t));
 	}
 	onfocus(e, t) {
-		this._register(k(e, hr.FOCUS, t));
+		this._register(A(e, mr.FOCUS, t));
 	}
 	onchange(e, t) {
-		this._register(k(e, hr.CHANGE, t));
+		this._register(A(e, mr.CHANGE, t));
 	}
 	ignoreGesture(e) {
-		return Cr.ignoreTarget(e);
+		return Sr.ignoreTarget(e);
 	}
-}, Tr = 11, Er = class extends wr {
+}, wr = 11, Tr = class extends Cr {
 	constructor(e) {
-		super(), this._onActivate = e.onActivate, this.bgDomNode = document.createElement("div"), this.bgDomNode.className = "arrow-background", this.bgDomNode.style.position = "absolute", this.bgDomNode.style.width = e.bgWidth + "px", this.bgDomNode.style.height = e.bgHeight + "px", typeof e.top < "u" && (this.bgDomNode.style.top = "0px"), typeof e.left < "u" && (this.bgDomNode.style.left = "0px"), typeof e.bottom < "u" && (this.bgDomNode.style.bottom = "0px"), typeof e.right < "u" && (this.bgDomNode.style.right = "0px"), this.domNode = document.createElement("div"), this.domNode.className = e.className, this.domNode.style.position = "absolute", this.domNode.style.width = Tr + "px", this.domNode.style.height = Tr + "px", typeof e.top < "u" && (this.domNode.style.top = e.top + "px"), typeof e.left < "u" && (this.domNode.style.left = e.left + "px"), typeof e.bottom < "u" && (this.domNode.style.bottom = e.bottom + "px"), typeof e.right < "u" && (this.domNode.style.right = e.right + "px"), this._pointerMoveMonitor = this._register(new yr()), this._register(lr(this.bgDomNode, hr.POINTER_DOWN, (e) => this._arrowPointerDown(e))), this._register(lr(this.domNode, hr.POINTER_DOWN, (e) => this._arrowPointerDown(e))), this._pointerdownRepeatTimer = this._register(new dr()), this._pointerdownScheduleRepeatTimer = this._register(new Rn());
+		super(), this._onActivate = e.onActivate, this.bgDomNode = document.createElement("div"), this.bgDomNode.className = "arrow-background", this.bgDomNode.style.position = "absolute", this.bgDomNode.style.width = e.bgWidth + "px", this.bgDomNode.style.height = e.bgHeight + "px", typeof e.top < "u" && (this.bgDomNode.style.top = "0px"), typeof e.left < "u" && (this.bgDomNode.style.left = "0px"), typeof e.bottom < "u" && (this.bgDomNode.style.bottom = "0px"), typeof e.right < "u" && (this.bgDomNode.style.right = "0px"), this.domNode = document.createElement("div"), this.domNode.className = e.className, this.domNode.style.position = "absolute", this.domNode.style.width = wr + "px", this.domNode.style.height = wr + "px", typeof e.top < "u" && (this.domNode.style.top = e.top + "px"), typeof e.left < "u" && (this.domNode.style.left = e.left + "px"), typeof e.bottom < "u" && (this.domNode.style.bottom = e.bottom + "px"), typeof e.right < "u" && (this.domNode.style.right = e.right + "px"), this._pointerMoveMonitor = this._register(new vr()), this._register(cr(this.bgDomNode, mr.POINTER_DOWN, (e) => this._arrowPointerDown(e))), this._register(cr(this.domNode, mr.POINTER_DOWN, (e) => this._arrowPointerDown(e))), this._pointerdownRepeatTimer = this._register(new ur()), this._pointerdownScheduleRepeatTimer = this._register(new Ln());
 	}
 	_arrowPointerDown(e) {
 		e.target && e.target instanceof Element && (this._onActivate(), this._pointerdownRepeatTimer.cancel(), this._pointerdownScheduleRepeatTimer.cancelAndSet(() => {
-			this._pointerdownRepeatTimer.cancelAndSet(() => this._onActivate(), 1e3 / 24, Xn(e));
+			this._pointerdownRepeatTimer.cancelAndSet(() => this._onActivate(), 1e3 / 24, Yn(e));
 		}, 200), this._pointerMoveMonitor.startMonitoring(e.target, e.pointerId, e.buttons, (e) => {}, () => {
 			this._pointerdownRepeatTimer.cancel(), this._pointerdownScheduleRepeatTimer.cancel();
 		}), e.preventDefault());
 	}
-}, Dr = class e {
+}, Er = class e {
 	constructor(e, t, n, r, i, a, o) {
 		this._forceIntegerValues = e, this._scrollStateBrand = void 0, this._forceIntegerValues && (t |= 0, n |= 0, r |= 0, i |= 0, a |= 0, o |= 0), this.rawScrollLeft = r, this.rawScrollTop = o, t < 0 && (t = 0), r + t > n && (r = n - t), r < 0 && (r = 0), i < 0 && (i = 0), o + i > a && (o = a - i), o < 0 && (o = 0), this.width = t, this.scrollWidth = n, this.scrollLeft = r, this.height = i, this.scrollHeight = a, this.scrollTop = o;
 	}
@@ -2400,9 +2400,9 @@ var Cr = Sr, wr = class extends E {
 			scrollTopChanged: s
 		};
 	}
-}, Or = class extends E {
+}, Dr = class extends D {
 	constructor(e) {
-		super(), this._scrollableBrand = void 0, this._onScroll = this._register(new O()), this.onScroll = this._onScroll.event, this._smoothScrollDuration = e.smoothScrollDuration, this._scheduleAtNextAnimationFrame = e.scheduleAtNextAnimationFrame, this._state = new Dr(e.forceIntegerValues, 0, 0, 0, 0, 0, 0), this._smoothScrolling = null;
+		super(), this._scrollableBrand = void 0, this._onScroll = this._register(new k()), this.onScroll = this._onScroll.event, this._smoothScrollDuration = e.smoothScrollDuration, this._scheduleAtNextAnimationFrame = e.scheduleAtNextAnimationFrame, this._state = new Er(e.forceIntegerValues, 0, 0, 0, 0, 0, 0), this._smoothScrolling = null;
 	}
 	dispose() {
 		this._smoothScrolling &&= (this._smoothScrolling.dispose(), null), super.dispose();
@@ -2440,10 +2440,10 @@ var Cr = Sr, wr = class extends E {
 			let n = this._state.withScrollPosition(e);
 			if (this._smoothScrolling.to.scrollLeft === n.scrollLeft && this._smoothScrolling.to.scrollTop === n.scrollTop) return;
 			let r;
-			r = t ? new Mr(this._smoothScrolling.from, n, this._smoothScrolling.startTime, this._smoothScrolling.duration) : this._smoothScrolling.combine(this._state, n, this._smoothScrollDuration), this._smoothScrolling.dispose(), this._smoothScrolling = r;
+			r = t ? new jr(this._smoothScrolling.from, n, this._smoothScrolling.startTime, this._smoothScrolling.duration) : this._smoothScrolling.combine(this._state, n, this._smoothScrollDuration), this._smoothScrolling.dispose(), this._smoothScrolling = r;
 		} else {
 			let t = this._state.withScrollPosition(e);
-			this._smoothScrolling = Mr.start(this._state, t, this._smoothScrollDuration);
+			this._smoothScrolling = jr.start(this._state, t, this._smoothScrollDuration);
 		}
 		this._smoothScrolling.animationFrameDisposable = this._scheduleAtNextAnimationFrame(() => {
 			this._smoothScrolling && (this._smoothScrolling.animationFrameDisposable = null, this._performSmoothScrolling());
@@ -2469,23 +2469,23 @@ var Cr = Sr, wr = class extends E {
 		let n = this._state;
 		n.equals(e) || (this._state = e, this._onScroll.fire(this._state.createScrollEvent(n, t)));
 	}
-}, kr = class {
+}, Or = class {
 	constructor(e, t, n) {
 		this.scrollLeft = e, this.scrollTop = t, this.isDone = n;
 	}
 };
-function Ar(e, t) {
+function kr(e, t) {
 	let n = t - e;
 	return function(t) {
-		return e + n * Pr(t);
+		return e + n * Nr(t);
 	};
 }
-function jr(e, t, n) {
+function Ar(e, t, n) {
 	return function(r) {
 		return r < n ? e(r / n) : t((r - n) / (1 - n));
 	};
 }
-var Mr = class e {
+var jr = class e {
 	constructor(e, t, n, r) {
 		this.from = e, this.to = t, this.duration = r, this.startTime = n, this.animationFrameDisposable = null, this._initAnimations();
 	}
@@ -2495,9 +2495,9 @@ var Mr = class e {
 	_initAnimation(e, t, n) {
 		if (Math.abs(e - t) > 2.5 * n) {
 			let r, i;
-			return e < t ? (r = e + .75 * n, i = t - .75 * n) : (r = e - .75 * n, i = t + .75 * n), jr(Ar(e, r), Ar(i, t), .33);
+			return e < t ? (r = e + .75 * n, i = t - .75 * n) : (r = e - .75 * n, i = t + .75 * n), Ar(kr(e, r), kr(i, t), .33);
 		}
-		return Ar(e, t);
+		return kr(e, t);
 	}
 	dispose() {
 		this.animationFrameDisposable !== null && (this.animationFrameDisposable.dispose(), this.animationFrameDisposable = null);
@@ -2510,7 +2510,7 @@ var Mr = class e {
 	}
 	_tick(e) {
 		let t = (e - this.startTime) / this.duration;
-		return t < 1 ? new kr(this.scrollLeft(t), this.scrollTop(t), !1) : new kr(this.to.scrollLeft, this.to.scrollTop, !0);
+		return t < 1 ? new Or(this.scrollLeft(t), this.scrollTop(t), !1) : new Or(this.to.scrollLeft, this.to.scrollTop, !0);
 	}
 	combine(t, n, r) {
 		return e.start(t, n, r);
@@ -2521,15 +2521,15 @@ var Mr = class e {
 		return new e(t, n, i, r);
 	}
 };
-function Nr(e) {
+function Mr(e) {
 	return e ** 3;
 }
-function Pr(e) {
-	return 1 - Nr(1 - e);
+function Nr(e) {
+	return 1 - Mr(1 - e);
 }
-var Fr = class extends E {
+var Pr = class extends D {
 	constructor(e, t, n) {
-		super(), this._visibility = e, this._visibleClassName = t, this._invisibleClassName = n, this._domNode = null, this._isVisible = !1, this._isNeeded = !1, this._rawShouldBeVisible = !1, this._shouldBeVisible = !1, this._revealTimer = this._register(new Rn());
+		super(), this._visibility = e, this._visibleClassName = t, this._invisibleClassName = n, this._domNode = null, this._isVisible = !1, this._isNeeded = !1, this._rawShouldBeVisible = !1, this._shouldBeVisible = !1, this._revealTimer = this._register(new Ln());
 	}
 	setVisibility(e) {
 		this._visibility !== e && (this._visibility = e, this._updateShouldBeVisible());
@@ -2561,16 +2561,16 @@ var Fr = class extends E {
 	_hide(e) {
 		this._revealTimer.cancel(), this._isVisible && (this._isVisible = !1, this._domNode?.setClassName(this._invisibleClassName + (e ? " fade" : "")));
 	}
-}, Ir = 140, Lr = class extends wr {
+}, Fr = 140, Ir = class extends Cr {
 	constructor(e) {
-		super(), this._lazyRender = e.lazyRender, this._host = e.host, this._scrollable = e.scrollable, this._scrollByPage = e.scrollByPage, this._scrollbarState = e.scrollbarState, this._visibilityController = this._register(new Fr(e.visibility, "visible scrollbar " + e.extraScrollbarClassName, "invisible scrollbar " + e.extraScrollbarClassName)), this._visibilityController.setIsNeeded(this._scrollbarState.isNeeded()), this._pointerMoveMonitor = this._register(new yr()), this._shouldRender = !0, this.domNode = vr(document.createElement("div")), this.domNode.setAttribute("role", "presentation"), this.domNode.setAttribute("aria-hidden", "true"), this._visibilityController.setDomNode(this.domNode), this.domNode.setPosition("absolute"), this._register(k(this.domNode.domNode, hr.POINTER_DOWN, (e) => this._domNodePointerDown(e)));
+		super(), this._lazyRender = e.lazyRender, this._host = e.host, this._scrollable = e.scrollable, this._scrollByPage = e.scrollByPage, this._scrollbarState = e.scrollbarState, this._visibilityController = this._register(new Pr(e.visibility, "visible scrollbar " + e.extraScrollbarClassName, "invisible scrollbar " + e.extraScrollbarClassName)), this._visibilityController.setIsNeeded(this._scrollbarState.isNeeded()), this._pointerMoveMonitor = this._register(new vr()), this._shouldRender = !0, this.domNode = _r(document.createElement("div")), this.domNode.setAttribute("role", "presentation"), this.domNode.setAttribute("aria-hidden", "true"), this._visibilityController.setDomNode(this.domNode), this.domNode.setPosition("absolute"), this._register(A(this.domNode.domNode, mr.POINTER_DOWN, (e) => this._domNodePointerDown(e)));
 	}
 	_createArrow(e) {
-		let t = this._register(new Er(e));
+		let t = this._register(new Tr(e));
 		this.domNode.domNode.appendChild(t.bgDomNode), this.domNode.domNode.appendChild(t.domNode);
 	}
 	_createSlider(e, t, n, r) {
-		this.slider = vr(document.createElement("div")), this.slider.setClassName("slider"), this.slider.setPosition("absolute"), this.slider.setTop(e), this.slider.setLeft(t), typeof n == "number" && this.slider.setWidth(n), typeof r == "number" && this.slider.setHeight(r), this.slider.setLayerHinting(!0), this.slider.setContain("strict"), this.domNode.domNode.appendChild(this.slider.domNode), this._register(k(this.slider.domNode, hr.POINTER_DOWN, (e) => {
+		this.slider = _r(document.createElement("div")), this.slider.setClassName("slider"), this.slider.setPosition("absolute"), this.slider.setTop(e), this.slider.setLeft(t), typeof n == "number" && this.slider.setWidth(n), typeof r == "number" && this.slider.setHeight(r), this.slider.setLayerHinting(!0), this.slider.setContain("strict"), this.domNode.domNode.appendChild(this.slider.domNode), this._register(A(this.slider.domNode, mr.POINTER_DOWN, (e) => {
 			e.button === 0 && (e.preventDefault(), this._sliderPointerDown(e));
 		})), this.onclick(this.slider.domNode, (e) => {
 			e.leftButton && e.stopPropagation();
@@ -2605,7 +2605,7 @@ var Fr = class extends E {
 		let t, n;
 		if (e.target === this.domNode.domNode && typeof e.offsetX == "number" && typeof e.offsetY == "number") t = e.offsetX, n = e.offsetY;
 		else {
-			let r = mr(this.domNode.domNode);
+			let r = pr(this.domNode.domNode);
 			t = e.pageX - r.left, n = e.pageY - r.top;
 		}
 		let r = this._pointerDownRelativePosition(t, n);
@@ -2616,7 +2616,7 @@ var Fr = class extends E {
 		let t = this._sliderPointerPosition(e), n = this._sliderOrthogonalPointerPosition(e), r = this._scrollbarState.clone();
 		this.slider.toggleClassName("active", !0), this._pointerMoveMonitor.startMonitoring(e.target, e.pointerId, e.buttons, (e) => {
 			let i = this._sliderOrthogonalPointerPosition(e), a = Math.abs(i - n);
-			if (on && a > Ir) {
+			if (an && a > Fr) {
 				this._setDesiredScrollPositionNow(r.getScrollPosition());
 				return;
 			}
@@ -2636,7 +2636,7 @@ var Fr = class extends E {
 	isNeeded() {
 		return this._scrollbarState.isNeeded();
 	}
-}, Rr = class e {
+}, Lr = class e {
 	constructor(e, t, n, r, i, a) {
 		this._scrollbarSize = Math.round(t), this._oppositeScrollbarSize = Math.round(n), this._arrowSize = Math.round(e), this._visibleSize = r, this._scrollSize = i, this._scrollPosition = a, this._computedAvailableSize = 0, this._computedIsNeeded = !1, this._computedSliderSize = 0, this._computedSliderRatio = 0, this._computedSliderPosition = 0, this._refreshComputedValues();
 	}
@@ -2719,13 +2719,13 @@ var Fr = class extends E {
 		let t = this._computedSliderPosition + e;
 		return Math.round(t / this._computedSliderRatio);
 	}
-}, zr = class extends Lr {
+}, Rr = class extends Ir {
 	constructor(e, t, n) {
 		let r = e.getScrollDimensions(), i = e.getCurrentScrollPosition();
 		if (super({
 			lazyRender: t.lazyRender,
 			host: n,
-			scrollbarState: new Rr(t.horizontalHasArrows ? t.arrowSize : 0, t.horizontal === 2 ? 0 : t.horizontalScrollbarSize, t.vertical === 2 ? 0 : t.verticalScrollbarSize, r.width, r.scrollWidth, i.scrollLeft),
+			scrollbarState: new Lr(t.horizontalHasArrows ? t.arrowSize : 0, t.horizontal === 2 ? 0 : t.horizontalScrollbarSize, t.vertical === 2 ? 0 : t.verticalScrollbarSize, r.width, r.scrollWidth, i.scrollLeft),
 			visibility: t.horizontal,
 			extraScrollbarClassName: "horizontal",
 			scrollable: e,
@@ -2760,13 +2760,13 @@ var Fr = class extends E {
 	updateOptions(e) {
 		this.updateScrollbarSize(e.horizontal === 2 ? 0 : e.horizontalScrollbarSize), this._scrollbarState.setOppositeScrollbarSize(e.vertical === 2 ? 0 : e.verticalScrollbarSize), this._visibilityController.setVisibility(e.horizontal), this._scrollByPage = e.scrollByPage;
 	}
-}, Br = class extends Lr {
+}, zr = class extends Ir {
 	constructor(e, t, n) {
 		let r = e.getScrollDimensions(), i = e.getCurrentScrollPosition();
 		if (super({
 			lazyRender: t.lazyRender,
 			host: n,
-			scrollbarState: new Rr(t.verticalHasArrows ? t.arrowSize : 0, t.vertical === 2 ? 0 : t.verticalScrollbarSize, 0, r.height, r.scrollHeight, i.scrollTop),
+			scrollbarState: new Lr(t.verticalHasArrows ? t.arrowSize : 0, t.vertical === 2 ? 0 : t.verticalScrollbarSize, 0, r.height, r.scrollHeight, i.scrollTop),
 			visibility: t.vertical,
 			extraScrollbarClassName: "vertical",
 			scrollable: e,
@@ -2801,11 +2801,11 @@ var Fr = class extends E {
 	updateOptions(e) {
 		this.updateScrollbarSize(e.vertical === 2 ? 0 : e.verticalScrollbarSize), this._scrollbarState.setOppositeScrollbarSize(0), this._visibilityController.setVisibility(e.vertical), this._scrollByPage = e.scrollByPage;
 	}
-}, Vr = 500, Hr = 50, Ur = !0, Wr = class {
+}, Br = 500, Vr = 50, Hr = !0, Ur = class {
 	constructor(e, t, n) {
 		this.timestamp = e, this.deltaX = t, this.deltaY = n, this.score = 0;
 	}
-}, Gr = class {
+}, Wr = class {
 	constructor() {
 		this._capacity = 5, this._memory = [], this._front = -1, this._rear = -1;
 	}
@@ -2820,13 +2820,13 @@ var Fr = class extends E {
 		return t <= .5;
 	}
 	acceptStandardWheelEvent(e) {
-		if (Wt) {
-			let t = Bt(Xn(e.browserEvent));
+		if (Ut) {
+			let t = zt(Yn(e.browserEvent));
 			this.accept(Date.now(), e.deltaX * t, e.deltaY * t);
 		} else this.accept(Date.now(), e.deltaX, e.deltaY);
 	}
 	accept(e, t, n) {
-		let r = null, i = new Wr(e, t, n);
+		let r = null, i = new Ur(e, t, n);
 		this._front === -1 && this._rear === -1 ? (this._memory[0] = i, this._front = 0, this._rear = 0) : (r = this._memory[this._rear], this._rear = (this._rear + 1) % this._capacity, this._rear === this._front && (this._front = (this._front + 1) % this._capacity), this._memory[this._rear] = i), i.score = this._computeScore(i, r);
 	}
 	_computeScore(e, t) {
@@ -2842,10 +2842,10 @@ var Fr = class extends E {
 		return Math.abs(Math.round(e) - e) < .01;
 	}
 };
-Gr.INSTANCE = new Gr();
-var Kr = Gr, qr = class extends wr {
+Wr.INSTANCE = new Wr();
+var Gr = Wr, Kr = class extends Cr {
 	constructor(e, t, n) {
-		super(), this._onScroll = this._register(new O()), this.onScroll = this._onScroll.event, this._onWillScroll = this._register(new O()), this.onWillScroll = this._onWillScroll.event, this._options = Yr(t), this._scrollable = n, this._register(this._scrollable.onScroll((e) => {
+		super(), this._onScroll = this._register(new k()), this.onScroll = this._onScroll.event, this._onWillScroll = this._register(new k()), this.onWillScroll = this._onWillScroll.event, this._options = Jr(t), this._scrollable = n, this._register(this._scrollable.onScroll((e) => {
 			this._onWillScroll.fire(e), this._onDidScroll(e), this._onScroll.fire(e);
 		}));
 		let r = {
@@ -2853,13 +2853,13 @@ var Kr = Gr, qr = class extends wr {
 			onDragStart: () => this._onDragStart(),
 			onDragEnd: () => this._onDragEnd()
 		};
-		this._verticalScrollbar = this._register(new Br(this._scrollable, this._options, r)), this._horizontalScrollbar = this._register(new zr(this._scrollable, this._options, r)), this._domNode = document.createElement("div"), this._domNode.className = "xterm-scrollable-element " + this._options.className, this._domNode.setAttribute("role", "presentation"), this._domNode.style.position = "relative", this._domNode.appendChild(e), this._domNode.appendChild(this._horizontalScrollbar.domNode.domNode), this._domNode.appendChild(this._verticalScrollbar.domNode.domNode), this._options.useShadows ? (this._leftShadowDomNode = vr(document.createElement("div")), this._leftShadowDomNode.setClassName("shadow"), this._domNode.appendChild(this._leftShadowDomNode.domNode), this._topShadowDomNode = vr(document.createElement("div")), this._topShadowDomNode.setClassName("shadow"), this._domNode.appendChild(this._topShadowDomNode.domNode), this._topLeftShadowDomNode = vr(document.createElement("div")), this._topLeftShadowDomNode.setClassName("shadow"), this._domNode.appendChild(this._topLeftShadowDomNode.domNode)) : (this._leftShadowDomNode = null, this._topShadowDomNode = null, this._topLeftShadowDomNode = null), this._listenOnDomNode = this._options.listenOnDomNode || this._domNode, this._mouseWheelToDispose = [], this._setListeningToMouseWheel(this._options.handleMouseWheel), this.onmouseover(this._listenOnDomNode, (e) => this._onMouseOver(e)), this.onmouseleave(this._listenOnDomNode, (e) => this._onMouseLeave(e)), this._hideTimeout = this._register(new Rn()), this._isDragging = !1, this._mouseIsOver = !1, this._shouldRender = !0, this._revealOnScroll = !0;
+		this._verticalScrollbar = this._register(new zr(this._scrollable, this._options, r)), this._horizontalScrollbar = this._register(new Rr(this._scrollable, this._options, r)), this._domNode = document.createElement("div"), this._domNode.className = "xterm-scrollable-element " + this._options.className, this._domNode.setAttribute("role", "presentation"), this._domNode.style.position = "relative", this._domNode.appendChild(e), this._domNode.appendChild(this._horizontalScrollbar.domNode.domNode), this._domNode.appendChild(this._verticalScrollbar.domNode.domNode), this._options.useShadows ? (this._leftShadowDomNode = _r(document.createElement("div")), this._leftShadowDomNode.setClassName("shadow"), this._domNode.appendChild(this._leftShadowDomNode.domNode), this._topShadowDomNode = _r(document.createElement("div")), this._topShadowDomNode.setClassName("shadow"), this._domNode.appendChild(this._topShadowDomNode.domNode), this._topLeftShadowDomNode = _r(document.createElement("div")), this._topLeftShadowDomNode.setClassName("shadow"), this._domNode.appendChild(this._topLeftShadowDomNode.domNode)) : (this._leftShadowDomNode = null, this._topShadowDomNode = null, this._topLeftShadowDomNode = null), this._listenOnDomNode = this._options.listenOnDomNode || this._domNode, this._mouseWheelToDispose = [], this._setListeningToMouseWheel(this._options.handleMouseWheel), this.onmouseover(this._listenOnDomNode, (e) => this._onMouseOver(e)), this.onmouseleave(this._listenOnDomNode, (e) => this._onMouseLeave(e)), this._hideTimeout = this._register(new Ln()), this._isDragging = !1, this._mouseIsOver = !1, this._shouldRender = !0, this._revealOnScroll = !0;
 	}
 	get options() {
 		return this._options;
 	}
 	dispose() {
-		this._mouseWheelToDispose = mt(this._mouseWheelToDispose), super.dispose();
+		this._mouseWheelToDispose = pt(this._mouseWheelToDispose), super.dispose();
 	}
 	getDomNode() {
 		return this._domNode;
@@ -2880,7 +2880,7 @@ var Kr = Gr, qr = class extends wr {
 		this._scrollable.setScrollDimensions(e, !1);
 	}
 	updateClassName(e) {
-		this._options.className = e, sn && (this._options.className += " mac"), this._domNode.className = "xterm-scrollable-element " + this._options.className;
+		this._options.className = e, on && (this._options.className += " mac"), this._domNode.className = "xterm-scrollable-element " + this._options.className;
 	}
 	updateOptions(e) {
 		typeof e.handleMouseWheel < "u" && (this._options.handleMouseWheel = e.handleMouseWheel, this._setListeningToMouseWheel(this._options.handleMouseWheel)), typeof e.mouseWheelScrollSensitivity < "u" && (this._options.mouseWheelScrollSensitivity = e.mouseWheelScrollSensitivity), typeof e.fastScrollSensitivity < "u" && (this._options.fastScrollSensitivity = e.fastScrollSensitivity), typeof e.scrollPredominantAxis < "u" && (this._options.scrollPredominantAxis = e.scrollPredominantAxis), typeof e.horizontal < "u" && (this._options.horizontal = e.horizontal), typeof e.vertical < "u" && (this._options.vertical = e.vertical), typeof e.horizontalScrollbarSize < "u" && (this._options.horizontalScrollbarSize = e.horizontalScrollbarSize), typeof e.verticalScrollbarSize < "u" && (this._options.verticalScrollbarSize = e.verticalScrollbarSize), typeof e.scrollByPage < "u" && (this._options.scrollByPage = e.scrollByPage), this._horizontalScrollbar.updateOptions(this._options), this._verticalScrollbar.updateOptions(this._options), this._options.lazyRender || this._render();
@@ -2889,33 +2889,33 @@ var Kr = Gr, qr = class extends wr {
 		this._revealOnScroll = e;
 	}
 	delegateScrollFromMouseWheelEvent(e) {
-		this._onMouseWheel(new Pn(e));
+		this._onMouseWheel(new Nn(e));
 	}
 	_setListeningToMouseWheel(e) {
-		this._mouseWheelToDispose.length > 0 !== e && (this._mouseWheelToDispose = mt(this._mouseWheelToDispose), e) && this._mouseWheelToDispose.push(k(this._listenOnDomNode, hr.MOUSE_WHEEL, (e) => {
-			this._onMouseWheel(new Pn(e));
+		this._mouseWheelToDispose.length > 0 !== e && (this._mouseWheelToDispose = pt(this._mouseWheelToDispose), e) && this._mouseWheelToDispose.push(A(this._listenOnDomNode, mr.MOUSE_WHEEL, (e) => {
+			this._onMouseWheel(new Nn(e));
 		}, { passive: !1 }));
 	}
 	_onMouseWheel(e) {
 		if (e.browserEvent?.defaultPrevented) return;
-		let t = Kr.INSTANCE;
-		Ur && t.acceptStandardWheelEvent(e);
+		let t = Gr.INSTANCE;
+		Hr && t.acceptStandardWheelEvent(e);
 		let n = !1;
 		if (e.deltaY || e.deltaX) {
 			let r = e.deltaY * this._options.mouseWheelScrollSensitivity, i = e.deltaX * this._options.mouseWheelScrollSensitivity;
 			this._options.scrollPredominantAxis && (this._options.scrollYToX && i + r === 0 ? i = r = 0 : Math.abs(r) >= Math.abs(i) ? i = 0 : r = 0), this._options.flipAxes && ([r, i] = [i, r]);
-			let a = !sn && e.browserEvent && e.browserEvent.shiftKey;
+			let a = !on && e.browserEvent && e.browserEvent.shiftKey;
 			(this._options.scrollYToX || a) && !i && (i = r, r = 0), e.browserEvent && e.browserEvent.altKey && (i *= this._options.fastScrollSensitivity, r *= this._options.fastScrollSensitivity);
 			let o = this._scrollable.getFutureScrollPosition(), s = {};
 			if (r) {
-				let e = Hr * r, t = o.scrollTop - (e < 0 ? Math.floor(e) : Math.ceil(e));
+				let e = Vr * r, t = o.scrollTop - (e < 0 ? Math.floor(e) : Math.ceil(e));
 				this._verticalScrollbar.writeScrollPosition(s, t);
 			}
 			if (i) {
-				let e = Hr * i, t = o.scrollLeft - (e < 0 ? Math.floor(e) : Math.ceil(e));
+				let e = Vr * i, t = o.scrollLeft - (e < 0 ? Math.floor(e) : Math.ceil(e));
 				this._horizontalScrollbar.writeScrollPosition(s, t);
 			}
-			s = this._scrollable.validateScrollPosition(s), (o.scrollLeft !== s.scrollLeft || o.scrollTop !== s.scrollTop) && (Ur && this._options.mouseWheelSmoothScroll && t.isPhysicalMouseWheel() ? this._scrollable.setScrollPositionSmooth(s) : this._scrollable.setScrollPositionNow(s), n = !0);
+			s = this._scrollable.validateScrollPosition(s), (o.scrollLeft !== s.scrollLeft || o.scrollTop !== s.scrollTop) && (Hr && this._options.mouseWheelSmoothScroll && t.isPhysicalMouseWheel() ? this._scrollable.setScrollPositionSmooth(s) : this._scrollable.setScrollPositionNow(s), n = !0);
 		}
 		let r = n;
 		!r && this._options.alwaysConsumeMouseWheel && (r = !0), !r && this._options.consumeMouseWheelIfScrollbarIsNeeded && (this._verticalScrollbar.isNeeded() || this._horizontalScrollbar.isNeeded()) && (r = !0), r && (e.preventDefault(), e.stopPropagation());
@@ -2952,9 +2952,9 @@ var Kr = Gr, qr = class extends wr {
 		!this._mouseIsOver && !this._isDragging && (this._verticalScrollbar.beginHide(), this._horizontalScrollbar.beginHide());
 	}
 	_scheduleHide() {
-		!this._mouseIsOver && !this._isDragging && this._hideTimeout.cancelAndSet(() => this._hide(), Vr);
+		!this._mouseIsOver && !this._isDragging && this._hideTimeout.cancelAndSet(() => this._hide(), Br);
 	}
-}, Jr = class extends qr {
+}, qr = class extends Kr {
 	constructor(e, t, n) {
 		super(e, t, n);
 	}
@@ -2965,7 +2965,7 @@ var Kr = Gr, qr = class extends wr {
 		return this._scrollable.getCurrentScrollPosition();
 	}
 };
-function Yr(e) {
+function Jr(e) {
 	let t = {
 		lazyRender: typeof e.lazyRender < "u" && e.lazyRender,
 		className: typeof e.className < "u" ? e.className : "",
@@ -2991,19 +2991,19 @@ function Yr(e) {
 		verticalSliderSize: typeof e.verticalSliderSize < "u" ? e.verticalSliderSize : 0,
 		scrollByPage: typeof e.scrollByPage < "u" && e.scrollByPage
 	};
-	return t.horizontalSliderSize = typeof e.horizontalSliderSize < "u" ? e.horizontalSliderSize : t.horizontalScrollbarSize, t.verticalSliderSize = typeof e.verticalSliderSize < "u" ? e.verticalSliderSize : t.verticalScrollbarSize, sn && (t.className += " mac"), t;
+	return t.horizontalSliderSize = typeof e.horizontalSliderSize < "u" ? e.horizontalSliderSize : t.horizontalScrollbarSize, t.verticalSliderSize = typeof e.verticalSliderSize < "u" ? e.verticalSliderSize : t.verticalScrollbarSize, on && (t.className += " mac"), t;
 }
-var Xr = class extends E {
+var Yr = class extends D {
 	constructor(e, t, n, r, i, a, o, s) {
-		super(), this._bufferService = n, this._optionsService = o, this._renderService = s, this._onRequestScrollLines = this._register(new O()), this.onRequestScrollLines = this._onRequestScrollLines.event, this._isSyncing = !1, this._isHandlingScroll = !1, this._suppressOnScrollHandler = !1;
-		let c = this._register(new Or({
+		super(), this._bufferService = n, this._optionsService = o, this._renderService = s, this._onRequestScrollLines = this._register(new k()), this.onRequestScrollLines = this._onRequestScrollLines.event, this._isSyncing = !1, this._isHandlingScroll = !1, this._suppressOnScrollHandler = !1;
+		let c = this._register(new Dr({
 			forceIntegerValues: !1,
 			smoothScrollDuration: this._optionsService.rawOptions.smoothScrollDuration,
-			scheduleAtNextAnimationFrame: (e) => ur(r.window, e)
+			scheduleAtNextAnimationFrame: (e) => lr(r.window, e)
 		}));
 		this._register(this._optionsService.onSpecificOptionChange("smoothScrollDuration", () => {
 			c.setSmoothScrollDuration(this._optionsService.rawOptions.smoothScrollDuration);
-		})), this._scrollableElement = this._register(new Jr(t, {
+		})), this._scrollableElement = this._register(new qr(t, {
 			vertical: 1,
 			horizontal: 2,
 			useShadows: !1,
@@ -3018,9 +3018,9 @@ var Xr = class extends E {
 		})), this._scrollableElement.setScrollDimensions({
 			height: 0,
 			scrollHeight: 0
-		}), this._register(wt.runAndSubscribe(a.onChangeColors, () => {
+		}), this._register(Ct.runAndSubscribe(a.onChangeColors, () => {
 			this._scrollableElement.getDomNode().style.backgroundColor = a.colors.background.css;
-		})), e.appendChild(this._scrollableElement.getDomNode()), this._register(T(() => this._scrollableElement.getDomNode().remove())), this._styleElement = r.mainDocument.createElement("style"), t.appendChild(this._styleElement), this._register(T(() => this._styleElement.remove())), this._register(wt.runAndSubscribe(a.onChangeColors, () => {
+		})), e.appendChild(this._scrollableElement.getDomNode()), this._register(E(() => this._scrollableElement.getDomNode().remove())), this._styleElement = r.mainDocument.createElement("style"), t.appendChild(this._styleElement), this._register(E(() => this._styleElement.remove())), this._register(Ct.runAndSubscribe(a.onChangeColors, () => {
 			this._styleElement.textContent = [
 				".xterm .xterm-scrollable-element > .scrollbar > .slider {",
 				`  background: ${a.colors.scrollbarSliderBackground.css};`,
@@ -3074,21 +3074,21 @@ var Xr = class extends E {
 		n !== 0 && (this._latestYDisp = t, this._onRequestScrollLines.fire(n)), this._isHandlingScroll = !1;
 	}
 };
-Xr = S([
-	C(2, Ae),
-	C(3, Ue),
-	C(4, je),
-	C(5, Je),
-	C(6, Ie),
-	C(7, Ge)
-], Xr);
-var Zr = class extends E {
+Yr = S([
+	C(2, ke),
+	C(3, He),
+	C(4, Ae),
+	C(5, qe),
+	C(6, Fe),
+	C(7, We)
+], Yr);
+var Xr = class extends D {
 	constructor(e, t, n, r, i) {
 		super(), this._screenElement = e, this._bufferService = t, this._coreBrowserService = n, this._decorationService = r, this._renderService = i, this._decorationElements = /* @__PURE__ */ new Map(), this._altBufferIsActive = !1, this._dimensionsChanged = !1, this._container = document.createElement("div"), this._container.classList.add("xterm-decoration-container"), this._screenElement.appendChild(this._container), this._register(this._renderService.onRenderedViewportChange(() => this._doRefreshDecorations())), this._register(this._renderService.onDimensionsChange(() => {
 			this._dimensionsChanged = !0, this._queueRefresh();
 		})), this._register(this._coreBrowserService.onDprChange(() => this._queueRefresh())), this._register(this._bufferService.buffers.onBufferActivate(() => {
 			this._altBufferIsActive = this._bufferService.buffer === this._bufferService.buffers.alt;
-		})), this._register(this._decorationService.onDecorationRegistered(() => this._queueRefresh())), this._register(this._decorationService.onDecorationRemoved((e) => this._removeDecoration(e))), this._register(T(() => {
+		})), this._register(this._decorationService.onDecorationRegistered(() => this._queueRefresh())), this._register(this._decorationService.onDecorationRemoved((e) => this._removeDecoration(e))), this._register(E(() => {
 			this._container.remove(), this._decorationElements.clear();
 		}));
 	}
@@ -3129,13 +3129,13 @@ var Zr = class extends E {
 		this._decorationElements.get(e)?.remove(), this._decorationElements.delete(e), e.dispose();
 	}
 };
-Zr = S([
-	C(1, Ae),
-	C(2, Ue),
-	C(3, ze),
-	C(4, Ge)
-], Zr);
-var Qr = class {
+Xr = S([
+	C(1, ke),
+	C(2, He),
+	C(3, Re),
+	C(4, We)
+], Xr);
+var Zr = class {
 	constructor() {
 		this._zones = [], this._zonePool = [], this._zonePoolIndex = 0, this._linePadding = {
 			full: 0,
@@ -3183,6 +3183,11 @@ var Qr = class {
 	_addLineToZone(e, t) {
 		e.startBufferLine = Math.min(e.startBufferLine, t), e.endBufferLine = Math.max(e.endBufferLine, t);
 	}
+}, Qr = {
+	full: 0,
+	left: 0,
+	center: 0,
+	right: 0
 }, $r = {
 	full: 0,
 	left: 0,
@@ -3193,14 +3198,9 @@ var Qr = class {
 	left: 0,
 	center: 0,
 	right: 0
-}, ti = {
-	full: 0,
-	left: 0,
-	center: 0,
-	right: 0
-}, ni = class extends E {
+}, ti = class extends D {
 	constructor(e, t, n, r, i, a, o, s) {
-		super(), this._viewportElement = e, this._screenElement = t, this._bufferService = n, this._decorationService = r, this._renderService = i, this._optionsService = a, this._themeService = o, this._coreBrowserService = s, this._colorZoneStore = new Qr(), this._shouldUpdateDimensions = !0, this._shouldUpdateAnchor = !0, this._lastKnownBufferLength = 0, this._canvas = this._coreBrowserService.mainDocument.createElement("canvas"), this._canvas.classList.add("xterm-decoration-overview-ruler"), this._refreshCanvasDimensions(), this._viewportElement.parentElement?.insertBefore(this._canvas, this._viewportElement), this._register(T(() => this._canvas?.remove()));
+		super(), this._viewportElement = e, this._screenElement = t, this._bufferService = n, this._decorationService = r, this._renderService = i, this._optionsService = a, this._themeService = o, this._coreBrowserService = s, this._colorZoneStore = new Zr(), this._shouldUpdateDimensions = !0, this._shouldUpdateAnchor = !0, this._lastKnownBufferLength = 0, this._canvas = this._coreBrowserService.mainDocument.createElement("canvas"), this._canvas.classList.add("xterm-decoration-overview-ruler"), this._refreshCanvasDimensions(), this._viewportElement.parentElement?.insertBefore(this._canvas, this._viewportElement), this._register(E(() => this._canvas?.remove()));
 		let c = this._canvas.getContext("2d");
 		if (c) this._ctx = c;
 		else throw Error("Ctx cannot be null");
@@ -3217,19 +3217,19 @@ var Qr = class {
 	}
 	_refreshDrawConstants() {
 		let e = Math.floor((this._canvas.width - 1) / 3), t = Math.ceil((this._canvas.width - 1) / 3);
-		ei.full = this._canvas.width, ei.left = e, ei.center = t, ei.right = e, this._refreshDrawHeightConstants(), ti.full = 1, ti.left = 1, ti.center = 1 + ei.left, ti.right = 1 + ei.left + ei.center;
+		$r.full = this._canvas.width, $r.left = e, $r.center = t, $r.right = e, this._refreshDrawHeightConstants(), ei.full = 1, ei.left = 1, ei.center = 1 + $r.left, ei.right = 1 + $r.left + $r.center;
 	}
 	_refreshDrawHeightConstants() {
-		$r.full = Math.round(2 * this._coreBrowserService.dpr);
+		Qr.full = Math.round(2 * this._coreBrowserService.dpr);
 		let e = this._canvas.height / this._bufferService.buffer.lines.length, t = Math.round(Math.max(Math.min(e, 12), 6) * this._coreBrowserService.dpr);
-		$r.left = t, $r.center = t, $r.right = t;
+		Qr.left = t, Qr.center = t, Qr.right = t;
 	}
 	_refreshColorZonePadding() {
 		this._colorZoneStore.setPadding({
-			full: Math.floor(this._bufferService.buffers.active.lines.length / (this._canvas.height - 1) * $r.full),
-			left: Math.floor(this._bufferService.buffers.active.lines.length / (this._canvas.height - 1) * $r.left),
-			center: Math.floor(this._bufferService.buffers.active.lines.length / (this._canvas.height - 1) * $r.center),
-			right: Math.floor(this._bufferService.buffers.active.lines.length / (this._canvas.height - 1) * $r.right)
+			full: Math.floor(this._bufferService.buffers.active.lines.length / (this._canvas.height - 1) * Qr.full),
+			left: Math.floor(this._bufferService.buffers.active.lines.length / (this._canvas.height - 1) * Qr.left),
+			center: Math.floor(this._bufferService.buffers.active.lines.length / (this._canvas.height - 1) * Qr.center),
+			right: Math.floor(this._bufferService.buffers.active.lines.length / (this._canvas.height - 1) * Qr.right)
 		}), this._lastKnownBufferLength = this._bufferService.buffers.normal.lines.length;
 	}
 	_refreshCanvasDimensions() {
@@ -3248,7 +3248,7 @@ var Qr = class {
 		this._ctx.fillStyle = this._themeService.colors.overviewRulerBorder.css, this._ctx.fillRect(0, 0, 1, this._canvas.height), this._optionsService.rawOptions.overviewRuler.showTopBorder && this._ctx.fillRect(1, 0, this._canvas.width - 1, 1), this._optionsService.rawOptions.overviewRuler.showBottomBorder && this._ctx.fillRect(1, this._canvas.height - 1, this._canvas.width - 1, this._canvas.height);
 	}
 	_renderColorZone(e) {
-		this._ctx.fillStyle = e.color, this._ctx.fillRect(ti[e.position || "full"], Math.round((this._canvas.height - 1) * (e.startBufferLine / this._bufferService.buffers.active.lines.length) - $r[e.position || "full"] / 2), ei[e.position || "full"], Math.round((this._canvas.height - 1) * ((e.endBufferLine - e.startBufferLine) / this._bufferService.buffers.active.lines.length) + $r[e.position || "full"]));
+		this._ctx.fillStyle = e.color, this._ctx.fillRect(ei[e.position || "full"], Math.round((this._canvas.height - 1) * (e.startBufferLine / this._bufferService.buffers.active.lines.length) - Qr[e.position || "full"] / 2), $r[e.position || "full"], Math.round((this._canvas.height - 1) * ((e.endBufferLine - e.startBufferLine) / this._bufferService.buffers.active.lines.length) + Qr[e.position || "full"]));
 	}
 	_queueRefresh(e, t) {
 		this._shouldUpdateDimensions = e || this._shouldUpdateDimensions, this._shouldUpdateAnchor = t || this._shouldUpdateAnchor, this._animationFrame === void 0 && (this._animationFrame = this._coreBrowserService.window.requestAnimationFrame(() => {
@@ -3256,21 +3256,21 @@ var Qr = class {
 		}));
 	}
 };
-ni = S([
-	C(2, Ae),
-	C(3, ze),
-	C(4, Ge),
-	C(5, Ie),
-	C(6, Je),
-	C(7, Ue)
-], ni);
-var A;
-((e) => (e.NUL = "\0", e.SOH = "", e.STX = "", e.ETX = "", e.EOT = "", e.ENQ = "", e.ACK = "", e.BEL = "\x07", e.BS = "\b", e.HT = "	", e.LF = "\n", e.VT = "\v", e.FF = "\f", e.CR = "\r", e.SO = "", e.SI = "", e.DLE = "", e.DC1 = "", e.DC2 = "", e.DC3 = "", e.DC4 = "", e.NAK = "", e.SYN = "", e.ETB = "", e.CAN = "", e.EM = "", e.SUB = "", e.ESC = "\x1B", e.FS = "", e.GS = "", e.RS = "", e.US = "", e.SP = " ", e.DEL = ""))(A ||= {});
+ti = S([
+	C(2, ke),
+	C(3, Re),
+	C(4, We),
+	C(5, Fe),
+	C(6, qe),
+	C(7, He)
+], ti);
+var j;
+((e) => (e.NUL = "\0", e.SOH = "", e.STX = "", e.ETX = "", e.EOT = "", e.ENQ = "", e.ACK = "", e.BEL = "\x07", e.BS = "\b", e.HT = "	", e.LF = "\n", e.VT = "\v", e.FF = "\f", e.CR = "\r", e.SO = "", e.SI = "", e.DLE = "", e.DC1 = "", e.DC2 = "", e.DC3 = "", e.DC4 = "", e.NAK = "", e.SYN = "", e.ETB = "", e.CAN = "", e.EM = "", e.SUB = "", e.ESC = "\x1B", e.FS = "", e.GS = "", e.RS = "", e.US = "", e.SP = " ", e.DEL = ""))(j ||= {});
+var ni;
+((e) => (e.PAD = "", e.HOP = "", e.BPH = "", e.NBH = "", e.IND = "", e.NEL = "", e.SSA = "", e.ESA = "", e.HTS = "", e.HTJ = "", e.VTS = "", e.PLD = "", e.PLU = "", e.RI = "", e.SS2 = "", e.SS3 = "", e.DCS = "", e.PU1 = "", e.PU2 = "", e.STS = "", e.CCH = "", e.MW = "", e.SPA = "", e.EPA = "", e.SOS = "", e.SGCI = "", e.SCI = "", e.CSI = "", e.ST = "", e.OSC = "", e.PM = "", e.APC = ""))(ni ||= {});
 var ri;
-((e) => (e.PAD = "", e.HOP = "", e.BPH = "", e.NBH = "", e.IND = "", e.NEL = "", e.SSA = "", e.ESA = "", e.HTS = "", e.HTJ = "", e.VTS = "", e.PLD = "", e.PLU = "", e.RI = "", e.SS2 = "", e.SS3 = "", e.DCS = "", e.PU1 = "", e.PU2 = "", e.STS = "", e.CCH = "", e.MW = "", e.SPA = "", e.EPA = "", e.SOS = "", e.SGCI = "", e.SCI = "", e.CSI = "", e.ST = "", e.OSC = "", e.PM = "", e.APC = ""))(ri ||= {});
-var ii;
-((e) => e.ST = `${A.ESC}\\`)(ii ||= {});
-var ai = class {
+((e) => e.ST = `${j.ESC}\\`)(ri ||= {});
+var ii = class {
 	constructor(e, t, n, r, i, a) {
 		this._textarea = e, this._compositionView = t, this._bufferService = n, this._optionsService = r, this._coreService = i, this._renderService = a, this._isComposing = !1, this._isSendingComposition = !1, this._compositionPosition = {
 			start: 0,
@@ -3322,7 +3322,7 @@ var ai = class {
 		setTimeout(() => {
 			if (!this._isComposing) {
 				let t = this._textarea.value, n = t.replace(e, "");
-				this._dataAlreadySent = n, t.length > e.length ? this._coreService.triggerDataEvent(n, !0) : t.length < e.length ? this._coreService.triggerDataEvent(`${A.DEL}`, !0) : t.length === e.length && t !== e && this._coreService.triggerDataEvent(t, !0);
+				this._dataAlreadySent = n, t.length > e.length ? this._coreService.triggerDataEvent(n, !0) : t.length < e.length ? this._coreService.triggerDataEvent(`${j.DEL}`, !0) : t.length === e.length && t !== e && this._coreService.triggerDataEvent(t, !0);
 			}
 		}, 0);
 	}
@@ -3338,13 +3338,13 @@ var ai = class {
 		}
 	}
 };
-ai = S([
-	C(2, Ae),
-	C(3, Ie),
-	C(4, Me),
-	C(5, Ge)
-], ai);
-var oi = 0, j = 0, si = 0, M = 0, ci = {
+ii = S([
+	C(2, ke),
+	C(3, Fe),
+	C(4, je),
+	C(5, We)
+], ii);
+var ai = 0, oi = 0, si = 0, M = 0, ci = {
 	css: "#00000000",
 	rgba: 0
 }, N;
@@ -3373,9 +3373,9 @@ var P;
 			rgba: t.rgba
 		};
 		let n = t.rgba >> 24 & 255, r = t.rgba >> 16 & 255, i = t.rgba >> 8 & 255, a = e.rgba >> 24 & 255, o = e.rgba >> 16 & 255, s = e.rgba >> 8 & 255;
-		return oi = a + Math.round((n - a) * M), j = o + Math.round((r - o) * M), si = s + Math.round((i - s) * M), {
-			css: N.toCss(oi, j, si),
-			rgba: N.toRgba(oi, j, si)
+		return ai = a + Math.round((n - a) * M), oi = o + Math.round((r - o) * M), si = s + Math.round((i - s) * M), {
+			css: N.toCss(ai, oi, si),
+			rgba: N.toRgba(ai, oi, si)
 		};
 	}
 	e.blend = t;
@@ -3390,16 +3390,16 @@ var P;
 	e.ensureContrastRatio = r;
 	function i(e) {
 		let t = (e.rgba | 255) >>> 0;
-		return [oi, j, si] = ui.toChannels(t), {
-			css: N.toCss(oi, j, si),
+		return [ai, oi, si] = ui.toChannels(t), {
+			css: N.toCss(ai, oi, si),
 			rgba: t
 		};
 	}
 	e.opaque = i;
 	function a(e, t) {
-		return M = Math.round(t * 255), [oi, j, si] = ui.toChannels(e.rgba), {
-			css: N.toCss(oi, j, si, M),
-			rgba: N.toRgba(oi, j, si, M)
+		return M = Math.round(t * 255), [ai, oi, si] = ui.toChannels(e.rgba), {
+			css: N.toCss(ai, oi, si, M),
+			rgba: N.toRgba(ai, oi, si, M)
 		};
 	}
 	e.opacity = a;
@@ -3427,8 +3427,8 @@ var F;
 	} catch {}
 	function r(e) {
 		if (e.match(/#[\da-f]{3,8}/i)) switch (e.length) {
-			case 4: return oi = parseInt(e.slice(1, 2).repeat(2), 16), j = parseInt(e.slice(2, 3).repeat(2), 16), si = parseInt(e.slice(3, 4).repeat(2), 16), N.toColor(oi, j, si);
-			case 5: return oi = parseInt(e.slice(1, 2).repeat(2), 16), j = parseInt(e.slice(2, 3).repeat(2), 16), si = parseInt(e.slice(3, 4).repeat(2), 16), M = parseInt(e.slice(4, 5).repeat(2), 16), N.toColor(oi, j, si, M);
+			case 4: return ai = parseInt(e.slice(1, 2).repeat(2), 16), oi = parseInt(e.slice(2, 3).repeat(2), 16), si = parseInt(e.slice(3, 4).repeat(2), 16), N.toColor(ai, oi, si);
+			case 5: return ai = parseInt(e.slice(1, 2).repeat(2), 16), oi = parseInt(e.slice(2, 3).repeat(2), 16), si = parseInt(e.slice(3, 4).repeat(2), 16), M = parseInt(e.slice(4, 5).repeat(2), 16), N.toColor(ai, oi, si, M);
 			case 7: return {
 				css: e,
 				rgba: (parseInt(e.slice(1), 16) << 8 | 255) >>> 0
@@ -3439,10 +3439,10 @@ var F;
 			};
 		}
 		let r = e.match(/rgba?\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*(,\s*(0|1|\d?\.(\d+))\s*)?\)/);
-		if (r) return oi = parseInt(r[1]), j = parseInt(r[2]), si = parseInt(r[3]), M = Math.round((r[5] === void 0 ? 1 : parseFloat(r[5])) * 255), N.toColor(oi, j, si, M);
-		if (!t || !n || (t.fillStyle = n, t.fillStyle = e, typeof t.fillStyle != "string") || (t.fillRect(0, 0, 1, 1), [oi, j, si, M] = t.getImageData(0, 0, 1, 1).data, M !== 255)) throw Error("css.toColor: Unsupported css format");
+		if (r) return ai = parseInt(r[1]), oi = parseInt(r[2]), si = parseInt(r[3]), M = Math.round((r[5] === void 0 ? 1 : parseFloat(r[5])) * 255), N.toColor(ai, oi, si, M);
+		if (!t || !n || (t.fillStyle = n, t.fillStyle = e, typeof t.fillStyle != "string") || (t.fillRect(0, 0, 1, 1), [ai, oi, si, M] = t.getImageData(0, 0, 1, 1).data, M !== 255)) throw Error("css.toColor: Unsupported css format");
 		return {
-			rgba: N.toRgba(oi, j, si, M),
+			rgba: N.toRgba(ai, oi, si, M),
 			css: e
 		};
 	}
@@ -3465,7 +3465,7 @@ var ui;
 	function t(e, t) {
 		if (M = (t & 255) / 255, M === 1) return t;
 		let n = t >> 24 & 255, r = t >> 16 & 255, i = t >> 8 & 255, a = e >> 24 & 255, o = e >> 16 & 255, s = e >> 8 & 255;
-		return oi = a + Math.round((n - a) * M), j = o + Math.round((r - o) * M), si = s + Math.round((i - s) * M), N.toRgba(oi, j, si);
+		return ai = a + Math.round((n - a) * M), oi = o + Math.round((r - o) * M), si = s + Math.round((i - s) * M), N.toRgba(ai, oi, si);
 	}
 	e.blend = t;
 	function n(e, t, n) {
@@ -3629,7 +3629,7 @@ var pi = class extends xe {
 		return n ? e[e.length - 1][1] = t[1] : e.push(t), e;
 	}
 };
-mi = S([C(0, Ae)], mi);
+mi = S([C(0, ke)], mi);
 function hi(e) {
 	return 57508 <= e && e <= 57558;
 }
@@ -3775,12 +3775,12 @@ var bi = class {
 	}
 };
 bi = S([
-	C(1, qe),
-	C(2, Ie),
-	C(3, Ue),
-	C(4, Me),
-	C(5, ze),
-	C(6, Je)
+	C(1, Ke),
+	C(2, Fe),
+	C(3, He),
+	C(4, je),
+	C(5, Re),
+	C(6, qe)
 ], bi);
 function xi(e, t, n) {
 	for (; e.length < n;) e = t + e;
@@ -3854,9 +3854,9 @@ var Si = class {
 function wi() {
 	return new Ci();
 }
-var Ti = "xterm-dom-renderer-owner-", Ei = "xterm-rows", Di = "xterm-fg-", Oi = "xterm-bg-", ki = "xterm-focus", Ai = "xterm-selection", ji = 1, Mi = class extends E {
+var Ti = "xterm-dom-renderer-owner-", Ei = "xterm-rows", Di = "xterm-fg-", Oi = "xterm-bg-", ki = "xterm-focus", Ai = "xterm-selection", ji = 1, Mi = class extends D {
 	constructor(e, t, n, r, i, a, o, s, c, l, u, d, f, p) {
-		super(), this._terminal = e, this._document = t, this._element = n, this._screenElement = r, this._viewportElement = i, this._helperContainer = a, this._linkifier2 = o, this._charSizeService = c, this._optionsService = l, this._bufferService = u, this._coreService = d, this._coreBrowserService = f, this._themeService = p, this._terminalClass = ji++, this._rowElements = [], this._selectionRenderModel = wi(), this.onRequestRedraw = this._register(new O()).event, this._rowContainer = this._document.createElement("div"), this._rowContainer.classList.add(Ei), this._rowContainer.style.lineHeight = "normal", this._rowContainer.setAttribute("aria-hidden", "true"), this._refreshRowElements(this._bufferService.cols, this._bufferService.rows), this._selectionContainer = this._document.createElement("div"), this._selectionContainer.classList.add(Ai), this._selectionContainer.setAttribute("aria-hidden", "true"), this.dimensions = vi(), this._updateDimensions(), this._register(this._optionsService.onOptionChange(() => this._handleOptionsChanged())), this._register(this._themeService.onChangeColors((e) => this._injectCss(e))), this._injectCss(this._themeService.colors), this._rowFactory = s.createInstance(bi, document), this._element.classList.add(Ti + this._terminalClass), this._screenElement.appendChild(this._rowContainer), this._screenElement.appendChild(this._selectionContainer), this._register(this._linkifier2.onShowLinkUnderline((e) => this._handleLinkHover(e))), this._register(this._linkifier2.onHideLinkUnderline((e) => this._handleLinkLeave(e))), this._register(T(() => {
+		super(), this._terminal = e, this._document = t, this._element = n, this._screenElement = r, this._viewportElement = i, this._helperContainer = a, this._linkifier2 = o, this._charSizeService = c, this._optionsService = l, this._bufferService = u, this._coreService = d, this._coreBrowserService = f, this._themeService = p, this._terminalClass = ji++, this._rowElements = [], this._selectionRenderModel = wi(), this.onRequestRedraw = this._register(new k()).event, this._rowContainer = this._document.createElement("div"), this._rowContainer.classList.add(Ei), this._rowContainer.style.lineHeight = "normal", this._rowContainer.setAttribute("aria-hidden", "true"), this._refreshRowElements(this._bufferService.cols, this._bufferService.rows), this._selectionContainer = this._document.createElement("div"), this._selectionContainer.classList.add(Ai), this._selectionContainer.setAttribute("aria-hidden", "true"), this.dimensions = vi(), this._updateDimensions(), this._register(this._optionsService.onOptionChange(() => this._handleOptionsChanged())), this._register(this._themeService.onChangeColors((e) => this._injectCss(e))), this._injectCss(this._themeService.colors), this._rowFactory = s.createInstance(bi, document), this._element.classList.add(Ti + this._terminalClass), this._screenElement.appendChild(this._rowContainer), this._screenElement.appendChild(this._selectionContainer), this._register(this._linkifier2.onShowLinkUnderline((e) => this._handleLinkHover(e))), this._register(this._linkifier2.onHideLinkUnderline((e) => this._handleLinkLeave(e))), this._register(E(() => {
 			this._element.classList.remove(Ti + this._terminalClass), this._rowContainer.remove(), this._selectionContainer.remove(), this._widthCache.dispose(), this._themeStyleElement.remove(), this._dimensionsStyleElement.remove();
 		})), this._widthCache = new Si(this._document, this._helperContainer), this._widthCache.setFont(this._optionsService.rawOptions.fontFamily, this._optionsService.rawOptions.fontSize, this._optionsService.rawOptions.fontWeight, this._optionsService.rawOptions.fontWeightBold), this._setDefaultSpacing();
 	}
@@ -3961,17 +3961,17 @@ var Ti = "xterm-dom-renderer-owner-", Ei = "xterm-rows", Di = "xterm-fg-", Oi = 
 	}
 };
 Mi = S([
-	C(7, Pe),
-	C(8, He),
-	C(9, Ie),
-	C(10, Ae),
-	C(11, Me),
-	C(12, Ue),
-	C(13, Je)
+	C(7, Ne),
+	C(8, Ve),
+	C(9, Fe),
+	C(10, ke),
+	C(11, je),
+	C(12, He),
+	C(13, qe)
 ], Mi);
-var Ni = class extends E {
+var Ni = class extends D {
 	constructor(e, t, n) {
-		super(), this._optionsService = n, this.width = 0, this.height = 0, this._onCharSizeChange = this._register(new O()), this.onCharSizeChange = this._onCharSizeChange.event;
+		super(), this._optionsService = n, this.width = 0, this.height = 0, this._onCharSizeChange = this._register(new k()), this.onCharSizeChange = this._onCharSizeChange.event;
 		try {
 			this._measureStrategy = this._register(new Ii(this._optionsService));
 		} catch {
@@ -3987,8 +3987,8 @@ var Ni = class extends E {
 		(e.width !== this.width || e.height !== this.height) && (this.width = e.width, this.height = e.height, this._onCharSizeChange.fire());
 	}
 };
-Ni = S([C(2, Ie)], Ni);
-var Pi = class extends E {
+Ni = S([C(2, Fe)], Ni);
+var Pi = class extends D {
 	constructor() {
 		super(...arguments), this._result = {
 			width: 0,
@@ -4016,9 +4016,9 @@ var Pi = class extends E {
 		let e = this._ctx.measureText("W");
 		return this._validateAndSet(e.width, e.fontBoundingBoxAscent + e.fontBoundingBoxDescent), this._result;
 	}
-}, Li = class extends E {
+}, Li = class extends D {
 	constructor(e, t, n) {
-		super(), this._textarea = e, this._window = t, this.mainDocument = n, this._isFocused = !1, this._cachedIsFocused = void 0, this._screenDprMonitor = this._register(new Ri(this._window)), this._onDprChange = this._register(new O()), this.onDprChange = this._onDprChange.event, this._onWindowChange = this._register(new O()), this.onWindowChange = this._onWindowChange.event, this._register(this.onWindowChange((e) => this._screenDprMonitor.setWindow(e))), this._register(wt.forward(this._screenDprMonitor.onDprChange, this._onDprChange)), this._register(k(this._textarea, "focus", () => this._isFocused = !0)), this._register(k(this._textarea, "blur", () => this._isFocused = !1));
+		super(), this._textarea = e, this._window = t, this.mainDocument = n, this._isFocused = !1, this._cachedIsFocused = void 0, this._screenDprMonitor = this._register(new Ri(this._window)), this._onDprChange = this._register(new k()), this.onDprChange = this._onDprChange.event, this._onWindowChange = this._register(new k()), this.onWindowChange = this._onWindowChange.event, this._register(this.onWindowChange((e) => this._screenDprMonitor.setWindow(e))), this._register(Ct.forward(this._screenDprMonitor.onDprChange, this._onDprChange)), this._register(A(this._textarea, "focus", () => this._isFocused = !0)), this._register(A(this._textarea, "blur", () => this._isFocused = !1));
 	}
 	get window() {
 		return this._window;
@@ -4032,15 +4032,15 @@ var Pi = class extends E {
 	get isFocused() {
 		return this._cachedIsFocused === void 0 && (this._cachedIsFocused = this._isFocused && this._textarea.ownerDocument.hasFocus(), queueMicrotask(() => this._cachedIsFocused = void 0)), this._cachedIsFocused;
 	}
-}, Ri = class extends E {
+}, Ri = class extends D {
 	constructor(e) {
-		super(), this._parentWindow = e, this._windowResizeListener = this._register(new vt()), this._onDprChange = this._register(new O()), this.onDprChange = this._onDprChange.event, this._outerListener = () => this._setDprAndFireIfDiffers(), this._currentDevicePixelRatio = this._parentWindow.devicePixelRatio, this._updateDpr(), this._setWindowResizeListener(), this._register(T(() => this.clearListener()));
+		super(), this._parentWindow = e, this._windowResizeListener = this._register(new _t()), this._onDprChange = this._register(new k()), this.onDprChange = this._onDprChange.event, this._outerListener = () => this._setDprAndFireIfDiffers(), this._currentDevicePixelRatio = this._parentWindow.devicePixelRatio, this._updateDpr(), this._setWindowResizeListener(), this._register(E(() => this.clearListener()));
 	}
 	setWindow(e) {
 		this._parentWindow = e, this._setWindowResizeListener(), this._setDprAndFireIfDiffers();
 	}
 	_setWindowResizeListener() {
-		this._windowResizeListener.value = k(this._parentWindow, "resize", () => this._setDprAndFireIfDiffers());
+		this._windowResizeListener.value = A(this._parentWindow, "resize", () => this._setDprAndFireIfDiffers());
 	}
 	_setDprAndFireIfDiffers() {
 		this._parentWindow.devicePixelRatio !== this._currentDevicePixelRatio && this._onDprChange.fire(this._parentWindow.devicePixelRatio), this._updateDpr();
@@ -4051,9 +4051,9 @@ var Pi = class extends E {
 	clearListener() {
 		!this._resolutionMediaMatchList || !this._outerListener || (this._resolutionMediaMatchList.removeListener(this._outerListener), this._resolutionMediaMatchList = void 0, this._outerListener = void 0);
 	}
-}, zi = class extends E {
+}, zi = class extends D {
 	constructor() {
-		super(), this.linkProviders = [], this._register(T(() => this.linkProviders.length = 0));
+		super(), this.linkProviders = [], this._register(E(() => this.linkProviders.length = 0));
 	}
 	registerLinkProvider(e) {
 		return this.linkProviders.push(e), { dispose: () => {
@@ -4088,7 +4088,7 @@ var Hi = class {
 		};
 	}
 };
-Hi = S([C(0, Ge), C(1, He)], Hi);
+Hi = S([C(0, We), C(1, Ve)], Hi);
 var Ui = class {
 	constructor(e, t) {
 		this._renderCallback = e, this._coreBrowserService = t, this._refreshCallbacks = [];
@@ -4201,13 +4201,13 @@ var Qi = [
 	flush() {
 		this._queue.flush();
 	}
-}, la = class extends E {
+}, la = class extends D {
 	constructor(e, t, n, r, i, a, o, s, c) {
-		super(), this._rowCount = e, this._optionsService = n, this._charSizeService = r, this._coreService = i, this._coreBrowserService = s, this._renderer = this._register(new vt()), this._pausedResizeTask = new ca(), this._observerDisposable = this._register(new vt()), this._isPaused = !1, this._needsFullRefresh = !1, this._isNextRenderRedrawOnly = !0, this._needsSelectionRefresh = !1, this._canvasWidth = 0, this._canvasHeight = 0, this._selectionState = {
+		super(), this._rowCount = e, this._optionsService = n, this._charSizeService = r, this._coreService = i, this._coreBrowserService = s, this._renderer = this._register(new _t()), this._pausedResizeTask = new ca(), this._observerDisposable = this._register(new _t()), this._isPaused = !1, this._needsFullRefresh = !1, this._isNextRenderRedrawOnly = !0, this._needsSelectionRefresh = !1, this._canvasWidth = 0, this._canvasHeight = 0, this._selectionState = {
 			start: void 0,
 			end: void 0,
 			columnSelectMode: !1
-		}, this._onDimensionsChange = this._register(new O()), this.onDimensionsChange = this._onDimensionsChange.event, this._onRenderedViewportChange = this._register(new O()), this.onRenderedViewportChange = this._onRenderedViewportChange.event, this._onRender = this._register(new O()), this.onRender = this._onRender.event, this._onRefreshRequest = this._register(new O()), this.onRefreshRequest = this._onRefreshRequest.event, this._renderDebouncer = new Ui((e, t) => this._renderRows(e, t), this._coreBrowserService), this._register(this._renderDebouncer), this._syncOutputHandler = new ua(this._coreBrowserService, this._coreService, () => this._fullRefresh()), this._register(T(() => this._syncOutputHandler.dispose())), this._register(this._coreBrowserService.onDprChange(() => this.handleDevicePixelRatioChange())), this._register(o.onResize(() => this._fullRefresh())), this._register(o.buffers.onBufferActivate(() => this._renderer.value?.clear())), this._register(this._optionsService.onOptionChange(() => this._handleOptionsChanged())), this._register(this._charSizeService.onCharSizeChange(() => this.handleCharSizeChanged())), this._register(a.onDecorationRegistered(() => this._fullRefresh())), this._register(a.onDecorationRemoved(() => this._fullRefresh())), this._register(this._optionsService.onMultipleOptionChange([
+		}, this._onDimensionsChange = this._register(new k()), this.onDimensionsChange = this._onDimensionsChange.event, this._onRenderedViewportChange = this._register(new k()), this.onRenderedViewportChange = this._onRenderedViewportChange.event, this._onRender = this._register(new k()), this.onRender = this._onRender.event, this._onRefreshRequest = this._register(new k()), this.onRefreshRequest = this._onRefreshRequest.event, this._renderDebouncer = new Ui((e, t) => this._renderRows(e, t), this._coreBrowserService), this._register(this._renderDebouncer), this._syncOutputHandler = new ua(this._coreBrowserService, this._coreService, () => this._fullRefresh()), this._register(E(() => this._syncOutputHandler.dispose())), this._register(this._coreBrowserService.onDprChange(() => this.handleDevicePixelRatioChange())), this._register(o.onResize(() => this._fullRefresh())), this._register(o.buffers.onBufferActivate(() => this._renderer.value?.clear())), this._register(this._optionsService.onOptionChange(() => this._handleOptionsChanged())), this._register(this._charSizeService.onCharSizeChange(() => this.handleCharSizeChanged())), this._register(a.onDecorationRegistered(() => this._fullRefresh())), this._register(a.onDecorationRemoved(() => this._fullRefresh())), this._register(this._optionsService.onMultipleOptionChange([
 			"customGlyphs",
 			"drawBoldTextInBrightColors",
 			"letterSpacing",
@@ -4228,7 +4228,7 @@ var Qi = [
 	_registerIntersectionObserver(e, t) {
 		if ("IntersectionObserver" in e) {
 			let n = new e.IntersectionObserver((e) => this._handleIntersectionChange(e[e.length - 1]), { threshold: 0 });
-			n.observe(t), this._observerDisposable.value = T(() => n.disconnect());
+			n.observe(t), this._observerDisposable.value = E(() => n.disconnect());
 		}
 	}
 	_handleIntersectionChange(e) {
@@ -4311,13 +4311,13 @@ var Qi = [
 	}
 };
 la = S([
-	C(2, Ie),
-	C(3, He),
-	C(4, Me),
-	C(5, ze),
-	C(6, Ae),
-	C(7, Ue),
-	C(8, Je)
+	C(2, Fe),
+	C(3, Ve),
+	C(4, je),
+	C(5, Re),
+	C(6, ke),
+	C(7, He),
+	C(8, qe)
 ], la);
 var ua = class {
 	constructor(e, t, n) {
@@ -4395,7 +4395,7 @@ function xa(e, t, n, r, i, a) {
 }
 function Sa(e, t) {
 	let n = t ? "O" : "[";
-	return A.ESC + n + e;
+	return j.ESC + n + e;
 }
 function Ca(e, t) {
 	e = Math.floor(e);
@@ -4439,11 +4439,11 @@ function Ta(e, t) {
 	if (e.start.y > e.end.y) throw Error(`Buffer range end (${e.end.x}, ${e.end.y}) cannot be before start (${e.start.x}, ${e.start.y})`);
 	return t * (e.end.y - e.start.y) + (e.end.x - e.start.x + 1);
 }
-var Ea = 50, Da = 15, Oa = 50, ka = 500, Aa = /* @__PURE__ */ RegExp("\xA0", "g"), ja = class extends E {
+var Ea = 50, Da = 15, Oa = 50, ka = 500, Aa = /* @__PURE__ */ RegExp("\xA0", "g"), ja = class extends D {
 	constructor(e, t, n, r, i, a, o, s, c) {
-		super(), this._element = e, this._screenElement = t, this._linkifier = n, this._bufferService = r, this._coreService = i, this._mouseService = a, this._optionsService = o, this._renderService = s, this._coreBrowserService = c, this._dragScrollAmount = 0, this._enabled = !0, this._workCell = new Ce(), this._mouseDownTimeStamp = 0, this._oldHasSelection = !1, this._oldSelectionStart = void 0, this._oldSelectionEnd = void 0, this._onLinuxMouseSelection = this._register(new O()), this.onLinuxMouseSelection = this._onLinuxMouseSelection.event, this._onRedrawRequest = this._register(new O()), this.onRequestRedraw = this._onRedrawRequest.event, this._onSelectionChange = this._register(new O()), this.onSelectionChange = this._onSelectionChange.event, this._onRequestScrollLines = this._register(new O()), this.onRequestScrollLines = this._onRequestScrollLines.event, this._mouseMoveListener = (e) => this._handleMouseMove(e), this._mouseUpListener = (e) => this._handleMouseUp(e), this._coreService.onUserInput(() => {
+		super(), this._element = e, this._screenElement = t, this._linkifier = n, this._bufferService = r, this._coreService = i, this._mouseService = a, this._optionsService = o, this._renderService = s, this._coreBrowserService = c, this._dragScrollAmount = 0, this._enabled = !0, this._workCell = new Ce(), this._mouseDownTimeStamp = 0, this._oldHasSelection = !1, this._oldSelectionStart = void 0, this._oldSelectionEnd = void 0, this._onLinuxMouseSelection = this._register(new k()), this.onLinuxMouseSelection = this._onLinuxMouseSelection.event, this._onRedrawRequest = this._register(new k()), this.onRequestRedraw = this._onRedrawRequest.event, this._onSelectionChange = this._register(new k()), this.onSelectionChange = this._onSelectionChange.event, this._onRequestScrollLines = this._register(new k()), this.onRequestScrollLines = this._onRequestScrollLines.event, this._mouseMoveListener = (e) => this._handleMouseMove(e), this._mouseUpListener = (e) => this._handleMouseUp(e), this._coreService.onUserInput(() => {
 			this.hasSelection && this.clearSelection();
-		}), this._trimListener = this._bufferService.buffer.lines.onTrim((e) => this._handleTrim(e)), this._register(this._bufferService.buffers.onBufferActivate((e) => this._handleBufferActivate(e))), this.enable(), this._model = new wa(this._bufferService), this._activeSelectionMode = 0, this._register(T(() => {
+		}), this._trimListener = this._bufferService.buffer.lines.onTrim((e) => this._handleTrim(e)), this._register(this._bufferService.buffers.onBufferActivate((e) => this._handleBufferActivate(e))), this.enable(), this._model = new wa(this._bufferService), this._activeSelectionMode = 0, this._register(E(() => {
 			this._removeMouseDownListeners();
 		})), this._register(this._bufferService.onResize((e) => {
 			e.rowsChanged && this.clearSelection();
@@ -4721,12 +4721,12 @@ var Ea = 50, Da = 15, Oa = 50, ka = 500, Aa = /* @__PURE__ */ RegExp("\xA0", "g"
 	}
 };
 ja = S([
-	C(3, Ae),
-	C(4, Me),
-	C(5, We),
-	C(6, Ie),
-	C(7, Ge),
-	C(8, Ue)
+	C(3, ke),
+	C(4, je),
+	C(5, Ue),
+	C(6, Fe),
+	C(7, We),
+	C(8, He)
 ], ja);
 var Ma = class {
 	constructor() {
@@ -4804,9 +4804,9 @@ var Ma = class {
 })()), Pa = F.toColor("#ffffff"), Fa = F.toColor("#000000"), Ia = F.toColor("#ffffff"), La = Fa, Ra = {
 	css: "rgba(255, 255, 255, 0.3)",
 	rgba: 4294967117
-}, za = Pa, Ba = class extends E {
+}, za = Pa, Ba = class extends D {
 	constructor(e) {
-		super(), this._optionsService = e, this._contrastCache = new Na(), this._halfContrastCache = new Na(), this._onChangeColors = this._register(new O()), this.onChangeColors = this._onChangeColors.event, this._colors = {
+		super(), this._optionsService = e, this._contrastCache = new Na(), this._halfContrastCache = new Na(), this._onChangeColors = this._register(new k()), this.onChangeColors = this._onChangeColors.event, this._colors = {
 			foreground: Pa,
 			background: Fa,
 			cursor: Ia,
@@ -4866,7 +4866,7 @@ var Ma = class {
 		};
 	}
 };
-Ba = S([C(0, Ie)], Ba);
+Ba = S([C(0, Fe)], Ba);
 function L(e, t) {
 	if (e !== void 0) try {
 		return F.toColor(e);
@@ -4893,7 +4893,7 @@ var Va = class {
 	}
 }, Ha = class {
 	constructor() {
-		this._services = new Va(), this._services.set(Pe, this);
+		this._services = new Va(), this._services.set(Ne, this);
 	}
 	setService(e, t) {
 		this._services.set(e, t);
@@ -4919,7 +4919,7 @@ var Va = class {
 	warn: 3,
 	error: 4,
 	off: 5
-}, Wa = "xterm.js: ", Ga = class extends E {
+}, Wa = "xterm.js: ", Ga = class extends D {
 	constructor(e) {
 		super(), this._optionsService = e, this._logLevel = 5, this._updateLogLevel(), this._register(this._optionsService.onSpecificOptionChange("logLevel", () => this._updateLogLevel())), Ka = this;
 	}
@@ -4951,10 +4951,10 @@ var Va = class {
 		this._logLevel <= 4 && this._log(this._optionsService.options.logger?.error.bind(this._optionsService.options.logger) ?? console.error, e, t);
 	}
 };
-Ga = S([C(0, Ie)], Ga);
-var Ka, qa = class extends E {
+Ga = S([C(0, Fe)], Ga);
+var Ka, qa = class extends D {
 	constructor(e) {
-		super(), this._maxLength = e, this.onDeleteEmitter = this._register(new O()), this.onDelete = this.onDeleteEmitter.event, this.onInsertEmitter = this._register(new O()), this.onInsert = this.onInsertEmitter.event, this.onTrimEmitter = this._register(new O()), this.onTrim = this.onTrimEmitter.event, this._array = Array(this._maxLength), this._startIndex = 0, this._length = 0;
+		super(), this._maxLength = e, this.onDeleteEmitter = this._register(new k()), this.onDelete = this.onDeleteEmitter.event, this.onInsertEmitter = this._register(new k()), this.onInsert = this.onInsertEmitter.event, this.onTrimEmitter = this._register(new k()), this.onTrim = this.onTrimEmitter.event, this._array = Array(this._maxLength), this._startIndex = 0, this._length = 0;
 	}
 	get maxLength() {
 		return this._maxLength;
@@ -5267,13 +5267,13 @@ function to(e, t, n) {
 }
 var no = class e {
 	constructor(t) {
-		this.line = t, this.isDisposed = !1, this._disposables = [], this._id = e._nextId++, this._onDispose = this.register(new O()), this.onDispose = this._onDispose.event;
+		this.line = t, this.isDisposed = !1, this._disposables = [], this._id = e._nextId++, this._onDispose = this.register(new k()), this.onDispose = this._onDispose.event;
 	}
 	get id() {
 		return this._id;
 	}
 	dispose() {
-		this.isDisposed || (this.isDisposed = !0, this.line = -1, this._onDispose.fire(), mt(this._disposables), this._disposables.length = 0);
+		this.isDisposed || (this.isDisposed = !0, this.line = -1, this._onDispose.fire(), pt(this._disposables), this._disposables.length = 0);
 	}
 	register(e) {
 		return this._disposables.push(e), e;
@@ -5607,9 +5607,9 @@ var ao = 4294967295, oo = class {
 	_removeMarker(e) {
 		this._isClearing || this.markers.splice(this.markers.indexOf(e), 1);
 	}
-}, so = class extends E {
+}, so = class extends D {
 	constructor(e, t) {
-		super(), this._optionsService = e, this._bufferService = t, this._onBufferActivate = this._register(new O()), this.onBufferActivate = this._onBufferActivate.event, this.reset(), this._register(this._optionsService.onSpecificOptionChange("scrollback", () => this.resize(this._bufferService.cols, this._bufferService.rows))), this._register(this._optionsService.onSpecificOptionChange("tabStopWidth", () => this.setupTabStops()));
+		super(), this._optionsService = e, this._bufferService = t, this._onBufferActivate = this._register(new k()), this.onBufferActivate = this._onBufferActivate.event, this.reset(), this._register(this._optionsService.onSpecificOptionChange("scrollback", () => this.resize(this._bufferService.cols, this._bufferService.rows))), this._register(this._optionsService.onSpecificOptionChange("tabStopWidth", () => this.setupTabStops()));
 	}
 	reset() {
 		this._normal = new oo(!0, this._optionsService, this._bufferService), this._normal.fillViewportRows(), this._alt = new oo(!1, this._optionsService, this._bufferService), this._activeBuffer = this._normal, this._onBufferActivate.fire({
@@ -5644,9 +5644,9 @@ var ao = 4294967295, oo = class {
 	setupTabStops(e) {
 		this._normal.setupTabStops(e), this._alt.setupTabStops(e);
 	}
-}, co = 2, lo = 1, uo = class extends E {
+}, co = 2, lo = 1, uo = class extends D {
 	constructor(e) {
-		super(), this.isUserScrolling = !1, this._onResize = this._register(new O()), this.onResize = this._onResize.event, this._onScroll = this._register(new O()), this.onScroll = this._onScroll.event, this.cols = Math.max(e.rawOptions.cols || 0, co), this.rows = Math.max(e.rawOptions.rows || 0, lo), this.buffers = this._register(new so(e, this)), this._register(this.buffers.onBufferActivate((e) => {
+		super(), this.isUserScrolling = !1, this._onResize = this._register(new k()), this.onResize = this._onResize.event, this._onScroll = this._register(new k()), this.onScroll = this._onScroll.event, this.cols = Math.max(e.rawOptions.cols || 0, co), this.rows = Math.max(e.rawOptions.rows || 0, lo), this.buffers = this._register(new so(e, this)), this._register(this.buffers.onBufferActivate((e) => {
 			this._onScroll.fire(e.activeBuffer.ydisp);
 		}));
 	}
@@ -5688,7 +5688,7 @@ var ao = 4294967295, oo = class {
 		n.ydisp = Math.max(Math.min(n.ydisp + e, n.ybase), 0), r !== n.ydisp && (t || this._onScroll.fire(n.ydisp));
 	}
 };
-uo = S([C(0, Ie)], uo);
+uo = S([C(0, Fe)], uo);
 var fo = {
 	cols: 80,
 	rows: 24,
@@ -5749,9 +5749,9 @@ var fo = {
 	"700",
 	"800",
 	"900"
-], mo = class extends E {
+], mo = class extends D {
 	constructor(e) {
-		super(), this._onOptionChange = this._register(new O()), this.onOptionChange = this._onOptionChange.event;
+		super(), this._onOptionChange = this._register(new k()), this.onOptionChange = this._onOptionChange.event;
 		let t = { ...fo };
 		for (let n in e) if (n in t) try {
 			let r = e[n];
@@ -5759,7 +5759,7 @@ var fo = {
 		} catch (e) {
 			console.error(e);
 		}
-		this.rawOptions = t, this.options = { ...t }, this._setupOptions(), this._register(T(() => {
+		this.rawOptions = t, this.options = { ...t }, this._setupOptions(), this._register(E(() => {
 			this.rawOptions.linkHandler = null, this.rawOptions.documentOverride = null;
 		}));
 	}
@@ -5846,9 +5846,9 @@ var _o = Object.freeze({ insertMode: !1 }), vo = Object.freeze({
 	sendFocus: !1,
 	synchronizedOutput: !1,
 	wraparound: !0
-}), yo = class extends E {
+}), yo = class extends D {
 	constructor(e, t, n) {
-		super(), this._bufferService = e, this._logService = t, this._optionsService = n, this.isCursorInitialized = !1, this.isCursorHidden = !1, this._onData = this._register(new O()), this.onData = this._onData.event, this._onUserInput = this._register(new O()), this.onUserInput = this._onUserInput.event, this._onBinary = this._register(new O()), this.onBinary = this._onBinary.event, this._onRequestScrollToBottom = this._register(new O()), this.onRequestScrollToBottom = this._onRequestScrollToBottom.event, this.modes = go(_o), this.decPrivateModes = go(vo);
+		super(), this._bufferService = e, this._logService = t, this._optionsService = n, this.isCursorInitialized = !1, this.isCursorHidden = !1, this._onData = this._register(new k()), this.onData = this._onData.event, this._onUserInput = this._register(new k()), this.onUserInput = this._onUserInput.event, this._onBinary = this._register(new k()), this.onBinary = this._onBinary.event, this._onRequestScrollToBottom = this._register(new k()), this.onRequestScrollToBottom = this._onRequestScrollToBottom.event, this.modes = go(_o), this.decPrivateModes = go(vo);
 	}
 	reset() {
 		this.modes = go(_o), this.decPrivateModes = go(vo);
@@ -5863,9 +5863,9 @@ var _o = Object.freeze({ insertMode: !1 }), vo = Object.freeze({
 	}
 };
 yo = S([
-	C(0, Ae),
-	C(1, Fe),
-	C(2, Ie)
+	C(0, ke),
+	C(1, Pe),
+	C(2, Fe)
 ], yo);
 var bo = {
 	NONE: {
@@ -5910,9 +5910,9 @@ var So = String.fromCharCode, Co = {
 		let t = e.action === 0 && e.button !== 4 ? "m" : "M";
 		return `\x1B[<${xo(e, !0)};${e.x};${e.y}${t}`;
 	}
-}, wo = class extends E {
+}, wo = class extends D {
 	constructor(e, t, n) {
-		super(), this._bufferService = e, this._coreService = t, this._optionsService = n, this._protocols = {}, this._encodings = {}, this._activeProtocol = "", this._activeEncoding = "", this._lastEvent = null, this._wheelPartialScroll = 0, this._onProtocolChange = this._register(new O()), this.onProtocolChange = this._onProtocolChange.event;
+		super(), this._bufferService = e, this._coreService = t, this._optionsService = n, this._protocols = {}, this._encodings = {}, this._activeProtocol = "", this._activeEncoding = "", this._lastEvent = null, this._wheelPartialScroll = 0, this._onProtocolChange = this._register(new k()), this.onProtocolChange = this._onProtocolChange.event;
 		for (let e of Object.keys(bo)) this.addProtocol(e, bo[e]);
 		for (let e of Object.keys(Co)) this.addEncoding(e, Co[e]);
 		this.reset();
@@ -5973,9 +5973,9 @@ var So = String.fromCharCode, Co = {
 	}
 };
 wo = S([
-	C(0, Ae),
-	C(1, Me),
-	C(2, Ie)
+	C(0, ke),
+	C(1, je),
+	C(2, Fe)
 ], wo);
 var To = [
 	[768, 879],
@@ -6150,7 +6150,7 @@ var Oo = class {
 	}
 }, ko = class e {
 	constructor() {
-		this._providers = Object.create(null), this._active = "", this._onChange = new O(), this.onChange = this._onChange.event;
+		this._providers = Object.create(null), this._active = "", this._onChange = new k(), this.onChange = this._onChange.event;
 		let e = new Oo();
 		this.register(e), this._active = e.version, this._activeProvider = e;
 	}
@@ -6512,7 +6512,7 @@ var Vo = class {
 		24,
 		26
 	], 13, 14, 0), e.add(Uo, 0, 2, 0), e.add(Uo, 8, 5, 8), e.add(Uo, 6, 0, 6), e.add(Uo, 11, 0, 11), e.add(Uo, 13, 13, 13), e;
-}(), Go = class extends E {
+}(), Go = class extends D {
 	constructor(e = Wo) {
 		super(), this._transitions = e, this._parseStack = {
 			state: 0,
@@ -6520,7 +6520,7 @@ var Vo = class {
 			handlerPos: 0,
 			transition: 0,
 			chunkPos: 0
-		}, this.initialState = 0, this.currentState = this.initialState, this._params = new Po(), this._params.addParam(0), this._collect = 0, this.precedingJoinState = 0, this._printHandlerFb = (e, t, n) => {}, this._executeHandlerFb = (e) => {}, this._csiHandlerFb = (e, t) => {}, this._escHandlerFb = (e) => {}, this._errorHandlerFb = (e) => e, this._printHandler = this._printHandlerFb, this._executeHandlers = Object.create(null), this._csiHandlers = Object.create(null), this._escHandlers = Object.create(null), this._register(T(() => {
+		}, this.initialState = 0, this.currentState = this.initialState, this._params = new Po(), this._params.addParam(0), this._collect = 0, this.precedingJoinState = 0, this._printHandlerFb = (e, t, n) => {}, this._executeHandlerFb = (e) => {}, this._csiHandlerFb = (e, t) => {}, this._escHandlerFb = (e) => {}, this._errorHandlerFb = (e) => e, this._printHandler = this._printHandlerFb, this._executeHandlers = Object.create(null), this._csiHandlers = Object.create(null), this._escHandlers = Object.create(null), this._register(E(() => {
 			this._csiHandlers = Object.create(null), this._executeHandlers = Object.create(null), this._escHandlers = Object.create(null);
 		})), this._oscParser = this._register(new Io()), this._dcsParser = this._register(new zo()), this._errorHandler = this._errorHandlerFb, this.registerEscHandler({ final: "\\" }, () => !0);
 	}
@@ -6817,9 +6817,9 @@ function es(e, t) {
 	}
 	return !1;
 }
-var ts = 5e3, ns = 0, rs = class extends E {
+var ts = 5e3, ns = 0, rs = class extends D {
 	constructor(e, t, n, r, i, a, o, s, c = new Go()) {
-		super(), this._bufferService = e, this._charsetService = t, this._coreService = n, this._logService = r, this._optionsService = i, this._oscLinkService = a, this._coreMouseService = o, this._unicodeService = s, this._parser = c, this._parseBuffer = /* @__PURE__ */ new Uint32Array(4096), this._stringDecoder = new _e(), this._utf8Decoder = new ve(), this._windowTitle = "", this._iconName = "", this._windowTitleStack = [], this._iconNameStack = [], this._curAttrData = z.clone(), this._eraseAttrDataInternal = z.clone(), this._onRequestBell = this._register(new O()), this.onRequestBell = this._onRequestBell.event, this._onRequestRefreshRows = this._register(new O()), this.onRequestRefreshRows = this._onRequestRefreshRows.event, this._onRequestReset = this._register(new O()), this.onRequestReset = this._onRequestReset.event, this._onRequestSendFocus = this._register(new O()), this.onRequestSendFocus = this._onRequestSendFocus.event, this._onRequestSyncScrollBar = this._register(new O()), this.onRequestSyncScrollBar = this._onRequestSyncScrollBar.event, this._onRequestWindowsOptionsReport = this._register(new O()), this.onRequestWindowsOptionsReport = this._onRequestWindowsOptionsReport.event, this._onA11yChar = this._register(new O()), this.onA11yChar = this._onA11yChar.event, this._onA11yTab = this._register(new O()), this.onA11yTab = this._onA11yTab.event, this._onCursorMove = this._register(new O()), this.onCursorMove = this._onCursorMove.event, this._onLineFeed = this._register(new O()), this.onLineFeed = this._onLineFeed.event, this._onScroll = this._register(new O()), this.onScroll = this._onScroll.event, this._onTitleChange = this._register(new O()), this.onTitleChange = this._onTitleChange.event, this._onColor = this._register(new O()), this.onColor = this._onColor.event, this._parseStack = {
+		super(), this._bufferService = e, this._charsetService = t, this._coreService = n, this._logService = r, this._optionsService = i, this._oscLinkService = a, this._coreMouseService = o, this._unicodeService = s, this._parser = c, this._parseBuffer = /* @__PURE__ */ new Uint32Array(4096), this._stringDecoder = new _e(), this._utf8Decoder = new ve(), this._windowTitle = "", this._iconName = "", this._windowTitleStack = [], this._iconNameStack = [], this._curAttrData = z.clone(), this._eraseAttrDataInternal = z.clone(), this._onRequestBell = this._register(new k()), this.onRequestBell = this._onRequestBell.event, this._onRequestRefreshRows = this._register(new k()), this.onRequestRefreshRows = this._onRequestRefreshRows.event, this._onRequestReset = this._register(new k()), this.onRequestReset = this._onRequestReset.event, this._onRequestSendFocus = this._register(new k()), this.onRequestSendFocus = this._onRequestSendFocus.event, this._onRequestSyncScrollBar = this._register(new k()), this.onRequestSyncScrollBar = this._onRequestSyncScrollBar.event, this._onRequestWindowsOptionsReport = this._register(new k()), this.onRequestWindowsOptionsReport = this._onRequestWindowsOptionsReport.event, this._onA11yChar = this._register(new k()), this.onA11yChar = this._onA11yChar.event, this._onA11yTab = this._register(new k()), this.onA11yTab = this._onA11yTab.event, this._onCursorMove = this._register(new k()), this.onCursorMove = this._onCursorMove.event, this._onLineFeed = this._register(new k()), this.onLineFeed = this._onLineFeed.event, this._onScroll = this._register(new k()), this.onScroll = this._onScroll.event, this._onTitleChange = this._register(new k()), this.onTitleChange = this._onTitleChange.event, this._onColor = this._register(new k()), this.onColor = this._onColor.event, this._parseStack = {
 			paused: !1,
 			cursorStartX: 0,
 			cursorStartY: 0,
@@ -6896,7 +6896,7 @@ var ts = 5e3, ns = 0, rs = class extends E {
 			prefix: "?",
 			intermediates: "$",
 			final: "p"
-		}, (e) => this.requestMode(e, !1)), this._parser.setExecuteHandler(A.BEL, () => this.bell()), this._parser.setExecuteHandler(A.LF, () => this.lineFeed()), this._parser.setExecuteHandler(A.VT, () => this.lineFeed()), this._parser.setExecuteHandler(A.FF, () => this.lineFeed()), this._parser.setExecuteHandler(A.CR, () => this.carriageReturn()), this._parser.setExecuteHandler(A.BS, () => this.backspace()), this._parser.setExecuteHandler(A.HT, () => this.tab()), this._parser.setExecuteHandler(A.SO, () => this.shiftOut()), this._parser.setExecuteHandler(A.SI, () => this.shiftIn()), this._parser.setExecuteHandler(ri.IND, () => this.index()), this._parser.setExecuteHandler(ri.NEL, () => this.nextLine()), this._parser.setExecuteHandler(ri.HTS, () => this.tabSet()), this._parser.registerOscHandler(0, new Lo((e) => (this.setTitle(e), this.setIconName(e), !0))), this._parser.registerOscHandler(1, new Lo((e) => this.setIconName(e))), this._parser.registerOscHandler(2, new Lo((e) => this.setTitle(e))), this._parser.registerOscHandler(4, new Lo((e) => this.setOrReportIndexedColor(e))), this._parser.registerOscHandler(8, new Lo((e) => this.setHyperlink(e))), this._parser.registerOscHandler(10, new Lo((e) => this.setOrReportFgColor(e))), this._parser.registerOscHandler(11, new Lo((e) => this.setOrReportBgColor(e))), this._parser.registerOscHandler(12, new Lo((e) => this.setOrReportCursorColor(e))), this._parser.registerOscHandler(104, new Lo((e) => this.restoreIndexedColor(e))), this._parser.registerOscHandler(110, new Lo((e) => this.restoreFgColor(e))), this._parser.registerOscHandler(111, new Lo((e) => this.restoreBgColor(e))), this._parser.registerOscHandler(112, new Lo((e) => this.restoreCursorColor(e))), this._parser.registerEscHandler({ final: "7" }, () => this.saveCursor()), this._parser.registerEscHandler({ final: "8" }, () => this.restoreCursor()), this._parser.registerEscHandler({ final: "D" }, () => this.index()), this._parser.registerEscHandler({ final: "E" }, () => this.nextLine()), this._parser.registerEscHandler({ final: "H" }, () => this.tabSet()), this._parser.registerEscHandler({ final: "M" }, () => this.reverseIndex()), this._parser.registerEscHandler({ final: "=" }, () => this.keypadApplicationMode()), this._parser.registerEscHandler({ final: ">" }, () => this.keypadNumericMode()), this._parser.registerEscHandler({ final: "c" }, () => this.fullReset()), this._parser.registerEscHandler({ final: "n" }, () => this.setgLevel(2)), this._parser.registerEscHandler({ final: "o" }, () => this.setgLevel(3)), this._parser.registerEscHandler({ final: "|" }, () => this.setgLevel(3)), this._parser.registerEscHandler({ final: "}" }, () => this.setgLevel(2)), this._parser.registerEscHandler({ final: "~" }, () => this.setgLevel(1)), this._parser.registerEscHandler({
+		}, (e) => this.requestMode(e, !1)), this._parser.setExecuteHandler(j.BEL, () => this.bell()), this._parser.setExecuteHandler(j.LF, () => this.lineFeed()), this._parser.setExecuteHandler(j.VT, () => this.lineFeed()), this._parser.setExecuteHandler(j.FF, () => this.lineFeed()), this._parser.setExecuteHandler(j.CR, () => this.carriageReturn()), this._parser.setExecuteHandler(j.BS, () => this.backspace()), this._parser.setExecuteHandler(j.HT, () => this.tab()), this._parser.setExecuteHandler(j.SO, () => this.shiftOut()), this._parser.setExecuteHandler(j.SI, () => this.shiftIn()), this._parser.setExecuteHandler(ni.IND, () => this.index()), this._parser.setExecuteHandler(ni.NEL, () => this.nextLine()), this._parser.setExecuteHandler(ni.HTS, () => this.tabSet()), this._parser.registerOscHandler(0, new Lo((e) => (this.setTitle(e), this.setIconName(e), !0))), this._parser.registerOscHandler(1, new Lo((e) => this.setIconName(e))), this._parser.registerOscHandler(2, new Lo((e) => this.setTitle(e))), this._parser.registerOscHandler(4, new Lo((e) => this.setOrReportIndexedColor(e))), this._parser.registerOscHandler(8, new Lo((e) => this.setHyperlink(e))), this._parser.registerOscHandler(10, new Lo((e) => this.setOrReportFgColor(e))), this._parser.registerOscHandler(11, new Lo((e) => this.setOrReportBgColor(e))), this._parser.registerOscHandler(12, new Lo((e) => this.setOrReportCursorColor(e))), this._parser.registerOscHandler(104, new Lo((e) => this.restoreIndexedColor(e))), this._parser.registerOscHandler(110, new Lo((e) => this.restoreFgColor(e))), this._parser.registerOscHandler(111, new Lo((e) => this.restoreBgColor(e))), this._parser.registerOscHandler(112, new Lo((e) => this.restoreCursorColor(e))), this._parser.registerEscHandler({ final: "7" }, () => this.saveCursor()), this._parser.registerEscHandler({ final: "8" }, () => this.restoreCursor()), this._parser.registerEscHandler({ final: "D" }, () => this.index()), this._parser.registerEscHandler({ final: "E" }, () => this.nextLine()), this._parser.registerEscHandler({ final: "H" }, () => this.tabSet()), this._parser.registerEscHandler({ final: "M" }, () => this.reverseIndex()), this._parser.registerEscHandler({ final: "=" }, () => this.keypadApplicationMode()), this._parser.registerEscHandler({ final: ">" }, () => this.keypadNumericMode()), this._parser.registerEscHandler({ final: "c" }, () => this.fullReset()), this._parser.registerEscHandler({ final: "n" }, () => this.setgLevel(2)), this._parser.registerEscHandler({ final: "o" }, () => this.setgLevel(3)), this._parser.registerEscHandler({ final: "|" }, () => this.setgLevel(3)), this._parser.registerEscHandler({ final: "}" }, () => this.setgLevel(2)), this._parser.registerEscHandler({ final: "~" }, () => this.setgLevel(1)), this._parser.registerEscHandler({
 			intermediates: "%",
 			final: "@"
 		}, () => this.selectDefaultCharset()), this._parser.registerEscHandler({
@@ -7244,10 +7244,10 @@ var ts = 5e3, ns = 0, rs = class extends E {
 		return this.print(o, 0, c), !0;
 	}
 	sendDeviceAttributesPrimary(e) {
-		return e.params[0] > 0 || (this._is("xterm") || this._is("rxvt-unicode") || this._is("screen") ? this._coreService.triggerDataEvent(A.ESC + "[?1;2c") : this._is("linux") && this._coreService.triggerDataEvent(A.ESC + "[?6c")), !0;
+		return e.params[0] > 0 || (this._is("xterm") || this._is("rxvt-unicode") || this._is("screen") ? this._coreService.triggerDataEvent(j.ESC + "[?1;2c") : this._is("linux") && this._coreService.triggerDataEvent(j.ESC + "[?6c")), !0;
 	}
 	sendDeviceAttributesSecondary(e) {
-		return e.params[0] > 0 || (this._is("xterm") ? this._coreService.triggerDataEvent(A.ESC + "[>0;276;0c") : this._is("rxvt-unicode") ? this._coreService.triggerDataEvent(A.ESC + "[>85;95;0c") : this._is("linux") ? this._coreService.triggerDataEvent(e.params[0] + "c") : this._is("screen") && this._coreService.triggerDataEvent(A.ESC + "[>83;40003;0c")), !0;
+		return e.params[0] > 0 || (this._is("xterm") ? this._coreService.triggerDataEvent(j.ESC + "[>0;276;0c") : this._is("rxvt-unicode") ? this._coreService.triggerDataEvent(j.ESC + "[>85;95;0c") : this._is("linux") ? this._coreService.triggerDataEvent(e.params[0] + "c") : this._is("screen") && this._coreService.triggerDataEvent(j.ESC + "[>83;40003;0c")), !0;
 	}
 	_is(e) {
 		return (this._optionsService.rawOptions.termName + "").indexOf(e) === 0;
@@ -7406,7 +7406,7 @@ var ts = 5e3, ns = 0, rs = class extends E {
 	requestMode(e, t) {
 		let n;
 		((e) => (e[e.NOT_RECOGNIZED = 0] = "NOT_RECOGNIZED", e[e.SET = 1] = "SET", e[e.RESET = 2] = "RESET", e[e.PERMANENTLY_SET = 3] = "PERMANENTLY_SET", e[e.PERMANENTLY_RESET = 4] = "PERMANENTLY_RESET"))(n ||= {});
-		let r = this._coreService.decPrivateModes, { activeProtocol: i, activeEncoding: a } = this._coreMouseService, o = this._coreService, { buffers: s, cols: c } = this._bufferService, { active: l, alt: u } = s, d = this._optionsService.rawOptions, f = (e, n) => (o.triggerDataEvent(`${A.ESC}[${t ? "" : "?"}${e};${n}$y`), !0), p = (e) => e ? 1 : 2, m = e.params[0];
+		let r = this._coreService.decPrivateModes, { activeProtocol: i, activeEncoding: a } = this._coreMouseService, o = this._coreService, { buffers: s, cols: c } = this._bufferService, { active: l, alt: u } = s, d = this._optionsService.rawOptions, f = (e, n) => (o.triggerDataEvent(`${j.ESC}[${t ? "" : "?"}${e};${n}$y`), !0), p = (e) => e ? 1 : 2, m = e.params[0];
 		return t ? m === 2 ? f(m, 4) : m === 4 ? f(m, p(o.modes.insertMode)) : m === 12 ? f(m, 3) : m === 20 ? f(m, p(d.convertEol)) : f(m, 0) : m === 1 ? f(m, p(r.applicationCursorKeys)) : m === 3 ? f(m, d.windowOptions.setWinLines ? c === 80 ? 2 : +(c === 132) : 0) : m === 6 ? f(m, p(r.origin)) : m === 7 ? f(m, p(r.wraparound)) : m === 8 ? f(m, 3) : m === 9 ? f(m, p(i === "X10")) : m === 12 ? f(m, p(d.cursorBlink)) : m === 25 ? f(m, p(!o.isCursorHidden)) : m === 45 ? f(m, p(r.reverseWraparound)) : m === 66 ? f(m, p(r.applicationKeypad)) : m === 67 ? f(m, 4) : m === 1e3 ? f(m, p(i === "VT200")) : m === 1002 ? f(m, p(i === "DRAG")) : m === 1003 ? f(m, p(i === "ANY")) : m === 1004 ? f(m, p(r.sendFocus)) : m === 1005 ? f(m, 4) : m === 1006 ? f(m, p(a === "SGR")) : m === 1015 ? f(m, 4) : m === 1016 ? f(m, p(a === "SGR_PIXELS")) : m === 1048 ? f(m, 1) : m === 47 || m === 1047 || m === 1049 ? f(m, p(l === u)) : m === 2004 ? f(m, p(r.bracketedPasteMode)) : m === 2026 ? f(m, p(r.synchronizedOutput)) : f(m, 0);
 	}
 	_updateAttrColor(e, t, n, r, i) {
@@ -7463,18 +7463,18 @@ var ts = 5e3, ns = 0, rs = class extends E {
 	deviceStatus(e) {
 		switch (e.params[0]) {
 			case 5:
-				this._coreService.triggerDataEvent(`${A.ESC}[0n`);
+				this._coreService.triggerDataEvent(`${j.ESC}[0n`);
 				break;
 			case 6:
 				let e = this._activeBuffer.y + 1, t = this._activeBuffer.x + 1;
-				this._coreService.triggerDataEvent(`${A.ESC}[${e};${t}R`);
+				this._coreService.triggerDataEvent(`${j.ESC}[${e};${t}R`);
 		}
 		return !0;
 	}
 	deviceStatusPrivate(e) {
 		if (e.params[0] === 6) {
 			let e = this._activeBuffer.y + 1, t = this._activeBuffer.x + 1;
-			this._coreService.triggerDataEvent(`${A.ESC}[?${e};${t}R`);
+			this._coreService.triggerDataEvent(`${j.ESC}[?${e};${t}R`);
 		}
 		return !0;
 	}
@@ -7517,7 +7517,7 @@ var ts = 5e3, ns = 0, rs = class extends E {
 				this._onRequestWindowsOptionsReport.fire(1);
 				break;
 			case 18:
-				this._bufferService && this._coreService.triggerDataEvent(`${A.ESC}[8;${this._bufferService.rows};${this._bufferService.cols}t`);
+				this._bufferService && this._coreService.triggerDataEvent(`${j.ESC}[8;${this._bufferService.rows};${this._bufferService.cols}t`);
 				break;
 			case 22:
 				(t === 0 || t === 2) && (this._windowTitleStack.push(this._windowTitle), this._windowTitleStack.length > $o && this._windowTitleStack.shift()), (t === 0 || t === 1) && (this._iconNameStack.push(this._iconName), this._iconNameStack.length > $o && this._iconNameStack.shift());
@@ -7684,7 +7684,7 @@ var ts = 5e3, ns = 0, rs = class extends E {
 		return this._dirtyRowTracker.markAllDirty(), this._setCursor(0, 0), !0;
 	}
 	requestStatusString(e, t) {
-		let n = (e) => (this._coreService.triggerDataEvent(`${A.ESC}${e}${A.ESC}\\`), !0), r = this._bufferService.buffer, i = this._optionsService.rawOptions;
+		let n = (e) => (this._coreService.triggerDataEvent(`${j.ESC}${e}${j.ESC}\\`), !0), r = this._bufferService.buffer, i = this._optionsService.rawOptions;
 		return n(e === "\"q" ? `P1$r${+!!this._curAttrData.isProtected()}"q` : e === "\"p" ? "P1$r61;1\"p" : e === "r" ? `P1$r${r.scrollTop + 1};${r.scrollBottom + 1}r` : e === "m" ? "P1$r0m" : e === " q" ? `P1$r${{
 			block: 2,
 			underline: 4,
@@ -7711,13 +7711,13 @@ var ts = 5e3, ns = 0, rs = class extends E {
 		this.markRangeDirty(0, this._bufferService.rows - 1);
 	}
 };
-is = S([C(0, Ae)], is);
+is = S([C(0, ke)], is);
 function as(e) {
 	return 0 <= e && e < 256;
 }
-var os = 5e7, ss = 12, cs = 50, ls = class extends E {
+var os = 5e7, ss = 12, cs = 50, ls = class extends D {
 	constructor(e) {
-		super(), this._action = e, this._writeBuffer = [], this._callbacks = [], this._pendingData = 0, this._bufferOffset = 0, this._isSyncWriting = !1, this._syncCalls = 0, this._didUserInput = !1, this._onWriteParsed = this._register(new O()), this.onWriteParsed = this._onWriteParsed.event;
+		super(), this._action = e, this._writeBuffer = [], this._callbacks = [], this._pendingData = 0, this._bufferOffset = 0, this._isSyncWriting = !1, this._syncCalls = 0, this._didUserInput = !1, this._onWriteParsed = this._register(new k()), this.onWriteParsed = this._onWriteParsed.event;
 	}
 	handleUserInput() {
 		this._didUserInput = !0;
@@ -7805,15 +7805,15 @@ var os = 5e7, ss = 12, cs = 50, ls = class extends E {
 		n !== -1 && (e.lines.splice(n, 1), e.lines.length === 0 && (e.data.id !== void 0 && this._entriesWithId.delete(e.key), this._dataByLinkId.delete(e.id)));
 	}
 };
-us = S([C(0, Ae)], us);
-var ds = !1, fs = class extends E {
+us = S([C(0, ke)], us);
+var ds = !1, fs = class extends D {
 	constructor(e) {
-		super(), this._windowsWrappingHeuristics = this._register(new vt()), this._onBinary = this._register(new O()), this.onBinary = this._onBinary.event, this._onData = this._register(new O()), this.onData = this._onData.event, this._onLineFeed = this._register(new O()), this.onLineFeed = this._onLineFeed.event, this._onResize = this._register(new O()), this.onResize = this._onResize.event, this._onWriteParsed = this._register(new O()), this.onWriteParsed = this._onWriteParsed.event, this._onScroll = this._register(new O()), this._instantiationService = new Ha(), this.optionsService = this._register(new mo(e)), this._instantiationService.setService(Ie, this.optionsService), this._bufferService = this._register(this._instantiationService.createInstance(uo)), this._instantiationService.setService(Ae, this._bufferService), this._logService = this._register(this._instantiationService.createInstance(Ga)), this._instantiationService.setService(Fe, this._logService), this.coreService = this._register(this._instantiationService.createInstance(yo)), this._instantiationService.setService(Me, this.coreService), this.coreMouseService = this._register(this._instantiationService.createInstance(wo)), this._instantiationService.setService(je, this.coreMouseService), this.unicodeService = this._register(this._instantiationService.createInstance(ko)), this._instantiationService.setService(Re, this.unicodeService), this._charsetService = this._instantiationService.createInstance(Ao), this._instantiationService.setService(Ne, this._charsetService), this._oscLinkService = this._instantiationService.createInstance(us), this._instantiationService.setService(Le, this._oscLinkService), this._inputHandler = this._register(new rs(this._bufferService, this._charsetService, this.coreService, this._logService, this.optionsService, this._oscLinkService, this.coreMouseService, this.unicodeService)), this._register(wt.forward(this._inputHandler.onLineFeed, this._onLineFeed)), this._register(this._inputHandler), this._register(wt.forward(this._bufferService.onResize, this._onResize)), this._register(wt.forward(this.coreService.onData, this._onData)), this._register(wt.forward(this.coreService.onBinary, this._onBinary)), this._register(this.coreService.onRequestScrollToBottom(() => this.scrollToBottom(!0))), this._register(this.coreService.onUserInput(() => this._writeBuffer.handleUserInput())), this._register(this.optionsService.onMultipleOptionChange(["windowsMode", "windowsPty"], () => this._handleWindowsPtyOptionChange())), this._register(this._bufferService.onScroll(() => {
+		super(), this._windowsWrappingHeuristics = this._register(new _t()), this._onBinary = this._register(new k()), this.onBinary = this._onBinary.event, this._onData = this._register(new k()), this.onData = this._onData.event, this._onLineFeed = this._register(new k()), this.onLineFeed = this._onLineFeed.event, this._onResize = this._register(new k()), this.onResize = this._onResize.event, this._onWriteParsed = this._register(new k()), this.onWriteParsed = this._onWriteParsed.event, this._onScroll = this._register(new k()), this._instantiationService = new Ha(), this.optionsService = this._register(new mo(e)), this._instantiationService.setService(Fe, this.optionsService), this._bufferService = this._register(this._instantiationService.createInstance(uo)), this._instantiationService.setService(ke, this._bufferService), this._logService = this._register(this._instantiationService.createInstance(Ga)), this._instantiationService.setService(Pe, this._logService), this.coreService = this._register(this._instantiationService.createInstance(yo)), this._instantiationService.setService(je, this.coreService), this.coreMouseService = this._register(this._instantiationService.createInstance(wo)), this._instantiationService.setService(Ae, this.coreMouseService), this.unicodeService = this._register(this._instantiationService.createInstance(ko)), this._instantiationService.setService(Le, this.unicodeService), this._charsetService = this._instantiationService.createInstance(Ao), this._instantiationService.setService(Me, this._charsetService), this._oscLinkService = this._instantiationService.createInstance(us), this._instantiationService.setService(Ie, this._oscLinkService), this._inputHandler = this._register(new rs(this._bufferService, this._charsetService, this.coreService, this._logService, this.optionsService, this._oscLinkService, this.coreMouseService, this.unicodeService)), this._register(Ct.forward(this._inputHandler.onLineFeed, this._onLineFeed)), this._register(this._inputHandler), this._register(Ct.forward(this._bufferService.onResize, this._onResize)), this._register(Ct.forward(this.coreService.onData, this._onData)), this._register(Ct.forward(this.coreService.onBinary, this._onBinary)), this._register(this.coreService.onRequestScrollToBottom(() => this.scrollToBottom(!0))), this._register(this.coreService.onUserInput(() => this._writeBuffer.handleUserInput())), this._register(this.optionsService.onMultipleOptionChange(["windowsMode", "windowsPty"], () => this._handleWindowsPtyOptionChange())), this._register(this._bufferService.onScroll(() => {
 			this._onScroll.fire({ position: this._bufferService.buffer.ydisp }), this._inputHandler.markRangeDirty(this._bufferService.buffer.scrollTop, this._bufferService.buffer.scrollBottom);
-		})), this._writeBuffer = this._register(new ls((e, t) => this._inputHandler.parse(e, t))), this._register(wt.forward(this._writeBuffer.onWriteParsed, this._onWriteParsed));
+		})), this._writeBuffer = this._register(new ls((e, t) => this._inputHandler.parse(e, t))), this._register(Ct.forward(this._writeBuffer.onWriteParsed, this._onWriteParsed));
 	}
 	get onScroll() {
-		return this._onScrollApi || (this._onScrollApi = this._register(new O()), this._onScroll.event((e) => {
+		return this._onScrollApi || (this._onScrollApi = this._register(new k()), this._onScroll.event((e) => {
 			this._onScrollApi?.fire(e.position);
 		})), this._onScrollApi.event;
 	}
@@ -7888,7 +7888,7 @@ var ds = !1, fs = class extends E {
 	_enableWindowsWrappingHeuristics() {
 		if (!this._windowsWrappingHeuristics.value) {
 			let e = [];
-			e.push(this.onLineFeed(jo.bind(null, this._bufferService))), e.push(this.registerCsiHandler({ final: "H" }, () => (jo(this._bufferService), !1))), this._windowsWrappingHeuristics.value = T(() => {
+			e.push(this.onLineFeed(jo.bind(null, this._bufferService))), e.push(this.registerCsiHandler({ final: "H" }, () => (jo(this._bufferService), !1))), this._windowsWrappingHeuristics.value = E(() => {
 				for (let t of e) t.dispose();
 			});
 		}
@@ -7924,107 +7924,107 @@ function ms(e, t, n, r) {
 	}, a = +!!e.shiftKey | (e.altKey ? 2 : 0) | (e.ctrlKey ? 4 : 0) | (e.metaKey ? 8 : 0);
 	switch (e.keyCode) {
 		case 0:
-			e.key === "UIKeyInputUpArrow" ? i.key = t ? A.ESC + "OA" : A.ESC + "[A" : e.key === "UIKeyInputLeftArrow" ? i.key = t ? A.ESC + "OD" : A.ESC + "[D" : e.key === "UIKeyInputRightArrow" ? i.key = t ? A.ESC + "OC" : A.ESC + "[C" : e.key === "UIKeyInputDownArrow" && (i.key = t ? A.ESC + "OB" : A.ESC + "[B");
+			e.key === "UIKeyInputUpArrow" ? i.key = t ? j.ESC + "OA" : j.ESC + "[A" : e.key === "UIKeyInputLeftArrow" ? i.key = t ? j.ESC + "OD" : j.ESC + "[D" : e.key === "UIKeyInputRightArrow" ? i.key = t ? j.ESC + "OC" : j.ESC + "[C" : e.key === "UIKeyInputDownArrow" && (i.key = t ? j.ESC + "OB" : j.ESC + "[B");
 			break;
 		case 8:
-			i.key = e.ctrlKey ? "\b" : A.DEL, e.altKey && (i.key = A.ESC + i.key);
+			i.key = e.ctrlKey ? "\b" : j.DEL, e.altKey && (i.key = j.ESC + i.key);
 			break;
 		case 9:
 			if (e.shiftKey) {
-				i.key = A.ESC + "[Z";
+				i.key = j.ESC + "[Z";
 				break;
 			}
-			i.key = A.HT, i.cancel = !0;
+			i.key = j.HT, i.cancel = !0;
 			break;
 		case 13:
-			i.key = e.altKey ? A.ESC + A.CR : A.CR, i.cancel = !0;
+			i.key = e.altKey ? j.ESC + j.CR : j.CR, i.cancel = !0;
 			break;
 		case 27:
-			i.key = A.ESC, e.altKey && (i.key = A.ESC + A.ESC), i.cancel = !0;
+			i.key = j.ESC, e.altKey && (i.key = j.ESC + j.ESC), i.cancel = !0;
 			break;
 		case 37:
 			if (e.metaKey) break;
-			i.key = a ? A.ESC + "[1;" + (a + 1) + "D" : t ? A.ESC + "OD" : A.ESC + "[D";
+			i.key = a ? j.ESC + "[1;" + (a + 1) + "D" : t ? j.ESC + "OD" : j.ESC + "[D";
 			break;
 		case 39:
 			if (e.metaKey) break;
-			i.key = a ? A.ESC + "[1;" + (a + 1) + "C" : t ? A.ESC + "OC" : A.ESC + "[C";
+			i.key = a ? j.ESC + "[1;" + (a + 1) + "C" : t ? j.ESC + "OC" : j.ESC + "[C";
 			break;
 		case 38:
 			if (e.metaKey) break;
-			i.key = a ? A.ESC + "[1;" + (a + 1) + "A" : t ? A.ESC + "OA" : A.ESC + "[A";
+			i.key = a ? j.ESC + "[1;" + (a + 1) + "A" : t ? j.ESC + "OA" : j.ESC + "[A";
 			break;
 		case 40:
 			if (e.metaKey) break;
-			i.key = a ? A.ESC + "[1;" + (a + 1) + "B" : t ? A.ESC + "OB" : A.ESC + "[B";
+			i.key = a ? j.ESC + "[1;" + (a + 1) + "B" : t ? j.ESC + "OB" : j.ESC + "[B";
 			break;
 		case 45:
-			!e.shiftKey && !e.ctrlKey && (i.key = A.ESC + "[2~");
+			!e.shiftKey && !e.ctrlKey && (i.key = j.ESC + "[2~");
 			break;
 		case 46:
-			i.key = a ? A.ESC + "[3;" + (a + 1) + "~" : A.ESC + "[3~";
+			i.key = a ? j.ESC + "[3;" + (a + 1) + "~" : j.ESC + "[3~";
 			break;
 		case 36:
-			i.key = a ? A.ESC + "[1;" + (a + 1) + "H" : t ? A.ESC + "OH" : A.ESC + "[H";
+			i.key = a ? j.ESC + "[1;" + (a + 1) + "H" : t ? j.ESC + "OH" : j.ESC + "[H";
 			break;
 		case 35:
-			i.key = a ? A.ESC + "[1;" + (a + 1) + "F" : t ? A.ESC + "OF" : A.ESC + "[F";
+			i.key = a ? j.ESC + "[1;" + (a + 1) + "F" : t ? j.ESC + "OF" : j.ESC + "[F";
 			break;
 		case 33:
-			e.shiftKey ? i.type = 2 : i.key = e.ctrlKey ? A.ESC + "[5;" + (a + 1) + "~" : A.ESC + "[5~";
+			e.shiftKey ? i.type = 2 : i.key = e.ctrlKey ? j.ESC + "[5;" + (a + 1) + "~" : j.ESC + "[5~";
 			break;
 		case 34:
-			e.shiftKey ? i.type = 3 : i.key = e.ctrlKey ? A.ESC + "[6;" + (a + 1) + "~" : A.ESC + "[6~";
+			e.shiftKey ? i.type = 3 : i.key = e.ctrlKey ? j.ESC + "[6;" + (a + 1) + "~" : j.ESC + "[6~";
 			break;
 		case 112:
-			i.key = a ? A.ESC + "[1;" + (a + 1) + "P" : A.ESC + "OP";
+			i.key = a ? j.ESC + "[1;" + (a + 1) + "P" : j.ESC + "OP";
 			break;
 		case 113:
-			i.key = a ? A.ESC + "[1;" + (a + 1) + "Q" : A.ESC + "OQ";
+			i.key = a ? j.ESC + "[1;" + (a + 1) + "Q" : j.ESC + "OQ";
 			break;
 		case 114:
-			i.key = a ? A.ESC + "[1;" + (a + 1) + "R" : A.ESC + "OR";
+			i.key = a ? j.ESC + "[1;" + (a + 1) + "R" : j.ESC + "OR";
 			break;
 		case 115:
-			i.key = a ? A.ESC + "[1;" + (a + 1) + "S" : A.ESC + "OS";
+			i.key = a ? j.ESC + "[1;" + (a + 1) + "S" : j.ESC + "OS";
 			break;
 		case 116:
-			i.key = a ? A.ESC + "[15;" + (a + 1) + "~" : A.ESC + "[15~";
+			i.key = a ? j.ESC + "[15;" + (a + 1) + "~" : j.ESC + "[15~";
 			break;
 		case 117:
-			i.key = a ? A.ESC + "[17;" + (a + 1) + "~" : A.ESC + "[17~";
+			i.key = a ? j.ESC + "[17;" + (a + 1) + "~" : j.ESC + "[17~";
 			break;
 		case 118:
-			i.key = a ? A.ESC + "[18;" + (a + 1) + "~" : A.ESC + "[18~";
+			i.key = a ? j.ESC + "[18;" + (a + 1) + "~" : j.ESC + "[18~";
 			break;
 		case 119:
-			i.key = a ? A.ESC + "[19;" + (a + 1) + "~" : A.ESC + "[19~";
+			i.key = a ? j.ESC + "[19;" + (a + 1) + "~" : j.ESC + "[19~";
 			break;
 		case 120:
-			i.key = a ? A.ESC + "[20;" + (a + 1) + "~" : A.ESC + "[20~";
+			i.key = a ? j.ESC + "[20;" + (a + 1) + "~" : j.ESC + "[20~";
 			break;
 		case 121:
-			i.key = a ? A.ESC + "[21;" + (a + 1) + "~" : A.ESC + "[21~";
+			i.key = a ? j.ESC + "[21;" + (a + 1) + "~" : j.ESC + "[21~";
 			break;
 		case 122:
-			i.key = a ? A.ESC + "[23;" + (a + 1) + "~" : A.ESC + "[23~";
+			i.key = a ? j.ESC + "[23;" + (a + 1) + "~" : j.ESC + "[23~";
 			break;
 		case 123:
-			i.key = a ? A.ESC + "[24;" + (a + 1) + "~" : A.ESC + "[24~";
+			i.key = a ? j.ESC + "[24;" + (a + 1) + "~" : j.ESC + "[24~";
 			break;
-		default: if (e.ctrlKey && !e.shiftKey && !e.altKey && !e.metaKey) e.keyCode >= 65 && e.keyCode <= 90 ? i.key = String.fromCharCode(e.keyCode - 64) : e.keyCode === 32 ? i.key = A.NUL : e.keyCode >= 51 && e.keyCode <= 55 ? i.key = String.fromCharCode(e.keyCode - 51 + 27) : e.keyCode === 56 ? i.key = A.DEL : e.keyCode === 219 ? i.key = A.ESC : e.keyCode === 220 ? i.key = A.FS : e.keyCode === 221 && (i.key = A.GS);
+		default: if (e.ctrlKey && !e.shiftKey && !e.altKey && !e.metaKey) e.keyCode >= 65 && e.keyCode <= 90 ? i.key = String.fromCharCode(e.keyCode - 64) : e.keyCode === 32 ? i.key = j.NUL : e.keyCode >= 51 && e.keyCode <= 55 ? i.key = String.fromCharCode(e.keyCode - 51 + 27) : e.keyCode === 56 ? i.key = j.DEL : e.keyCode === 219 ? i.key = j.ESC : e.keyCode === 220 ? i.key = j.FS : e.keyCode === 221 && (i.key = j.GS);
 		else if ((!n || r) && e.altKey && !e.metaKey) {
 			let t = ps[e.keyCode]?.[+!!e.shiftKey];
-			if (t) i.key = A.ESC + t;
+			if (t) i.key = j.ESC + t;
 			else if (e.keyCode >= 65 && e.keyCode <= 90) {
 				let t = e.ctrlKey ? e.keyCode - 64 : e.keyCode + 32, n = String.fromCharCode(t);
-				e.shiftKey && (n = n.toUpperCase()), i.key = A.ESC + n;
-			} else if (e.keyCode === 32) i.key = A.ESC + (e.ctrlKey ? A.NUL : " ");
+				e.shiftKey && (n = n.toUpperCase()), i.key = j.ESC + n;
+			} else if (e.keyCode === 32) i.key = j.ESC + (e.ctrlKey ? j.NUL : " ");
 			else if (e.key === "Dead" && e.code.startsWith("Key")) {
 				let t = e.code.slice(3, 4);
-				e.shiftKey || (t = t.toLowerCase()), i.key = A.ESC + t, i.cancel = !0;
+				e.shiftKey || (t = t.toLowerCase()), i.key = j.ESC + t, i.cancel = !0;
 			}
-		} else n && !e.altKey && !e.ctrlKey && !e.shiftKey && e.metaKey ? e.keyCode === 65 && (i.type = 1) : e.key && !e.ctrlKey && !e.altKey && !e.metaKey && e.keyCode >= 48 && e.key.length === 1 ? i.key = e.key : e.key && e.ctrlKey && (e.key === "_" && (i.key = A.US), e.key === "@" && (i.key = A.NUL));
+		} else n && !e.altKey && !e.ctrlKey && !e.shiftKey && e.metaKey ? e.keyCode === 65 && (i.type = 1) : e.key && !e.ctrlKey && !e.altKey && !e.metaKey && e.keyCode >= 48 && e.key.length === 1 ? i.key = e.key : e.key && e.ctrlKey && (e.key === "_" && (i.key = j.US), e.key === "@" && (i.key = j.NUL));
 	}
 	return i;
 }
@@ -8090,9 +8090,9 @@ var H = 0, hs = class {
 		}
 		return t;
 	}
-}, gs = 0, _s = 0, vs = class extends E {
+}, gs = 0, _s = 0, vs = class extends D {
 	constructor() {
-		super(), this._decorations = new hs((e) => e?.marker.line), this._onDecorationRegistered = this._register(new O()), this.onDecorationRegistered = this._onDecorationRegistered.event, this._onDecorationRemoved = this._register(new O()), this.onDecorationRemoved = this._onDecorationRemoved.event, this._register(T(() => this.reset()));
+		super(), this._decorations = new hs((e) => e?.marker.line), this._onDecorationRegistered = this._register(new k()), this.onDecorationRegistered = this._onDecorationRegistered.event, this._onDecorationRemoved = this._register(new k()), this.onDecorationRemoved = this._onDecorationRemoved.event, this._register(E(() => this.reset()));
 	}
 	get decorations() {
 		return this._decorations.values();
@@ -8121,9 +8121,9 @@ var H = 0, hs = class {
 			gs = t.options.x ?? 0, _s = gs + (t.options.width ?? 1), e >= gs && e < _s && (!n || (t.options.layer ?? "bottom") === n) && r(t);
 		});
 	}
-}, ys = class extends _t {
+}, ys = class extends gt {
 	constructor(e) {
-		super(), this.options = e, this.onRenderEmitter = this.add(new O()), this.onRender = this.onRenderEmitter.event, this._onDispose = this.add(new O()), this.onDispose = this._onDispose.event, this._cachedBg = null, this._cachedFg = null, this.marker = e.marker, this.options.overviewRulerOptions && !this.options.overviewRulerOptions.position && (this.options.overviewRulerOptions.position = "full");
+		super(), this.options = e, this.onRenderEmitter = this.add(new k()), this.onRender = this.onRenderEmitter.event, this._onDispose = this.add(new k()), this.onDispose = this._onDispose.event, this._cachedBg = null, this._cachedFg = null, this.marker = e.marker, this.options.overviewRulerOptions && !this.options.overviewRulerOptions.position && (this.options.overviewRulerOptions.position = "full");
 	}
 	get backgroundColorRGB() {
 		return this._cachedBg === null && (this._cachedBg = this.options.backgroundColor ? F.toColor(this.options.backgroundColor) : void 0), this._cachedBg;
@@ -8157,14 +8157,14 @@ var H = 0, hs = class {
 		let e = Math.max(this._rowStart, 0), t = Math.min(this._rowEnd, this._rowCount - 1);
 		this._rowStart = void 0, this._rowEnd = void 0, this._renderCallback(e, t);
 	}
-}, Ss = 20, Cs = class extends E {
+}, Ss = 20, Cs = class extends D {
 	constructor(e, t, n, r) {
 		super(), this._terminal = e, this._coreBrowserService = n, this._renderService = r, this._rowColumns = /* @__PURE__ */ new WeakMap(), this._liveRegionLineCount = 0, this._charsToConsume = [], this._charsToAnnounce = "";
 		let i = this._coreBrowserService.mainDocument;
 		this._accessibilityContainer = i.createElement("div"), this._accessibilityContainer.classList.add("xterm-accessibility"), this._rowContainer = i.createElement("div"), this._rowContainer.setAttribute("role", "list"), this._rowContainer.classList.add("xterm-accessibility-tree"), this._rowElements = [];
 		for (let e = 0; e < this._terminal.rows; e++) this._rowElements[e] = this._createAccessibilityTreeNode(), this._rowContainer.appendChild(this._rowElements[e]);
 		if (this._topBoundaryFocusListener = (e) => this._handleBoundaryFocus(e, 0), this._bottomBoundaryFocusListener = (e) => this._handleBoundaryFocus(e, 1), this._rowElements[0].addEventListener("focus", this._topBoundaryFocusListener), this._rowElements[this._rowElements.length - 1].addEventListener("focus", this._bottomBoundaryFocusListener), this._accessibilityContainer.appendChild(this._rowContainer), this._liveRegion = i.createElement("div"), this._liveRegion.classList.add("live-region"), this._liveRegion.setAttribute("aria-live", "assertive"), this._accessibilityContainer.appendChild(this._liveRegion), this._liveRegionDebouncer = this._register(new xs(this._renderRows.bind(this))), !this._terminal.element) throw Error("Cannot enable accessibility before Terminal.open");
-		this._terminal.element.insertAdjacentElement("afterbegin", this._accessibilityContainer), this._register(this._terminal.onResize((e) => this._handleResize(e.rows))), this._register(this._terminal.onRender((e) => this._refreshRows(e.start, e.end))), this._register(this._terminal.onScroll(() => this._refreshRows())), this._register(this._terminal.onA11yChar((e) => this._handleChar(e))), this._register(this._terminal.onLineFeed(() => this._handleChar("\n"))), this._register(this._terminal.onA11yTab((e) => this._handleTab(e))), this._register(this._terminal.onKey((e) => this._handleKey(e.key))), this._register(this._terminal.onBlur(() => this._clearLiveRegion())), this._register(this._renderService.onDimensionsChange(() => this._refreshRowsDimensions())), this._register(k(i, "selectionchange", () => this._handleSelectionChange())), this._register(this._coreBrowserService.onDprChange(() => this._refreshRowsDimensions())), this._refreshRowsDimensions(), this._refreshRows(), this._register(T(() => {
+		this._terminal.element.insertAdjacentElement("afterbegin", this._accessibilityContainer), this._register(this._terminal.onResize((e) => this._handleResize(e.rows))), this._register(this._terminal.onRender((e) => this._refreshRows(e.start, e.end))), this._register(this._terminal.onScroll(() => this._refreshRows())), this._register(this._terminal.onA11yChar((e) => this._handleChar(e))), this._register(this._terminal.onLineFeed(() => this._handleChar("\n"))), this._register(this._terminal.onA11yTab((e) => this._handleTab(e))), this._register(this._terminal.onKey((e) => this._handleKey(e.key))), this._register(this._terminal.onBlur(() => this._clearLiveRegion())), this._register(this._renderService.onDimensionsChange(() => this._refreshRowsDimensions())), this._register(A(i, "selectionchange", () => this._handleSelectionChange())), this._register(this._coreBrowserService.onDprChange(() => this._refreshRowsDimensions())), this._refreshRowsDimensions(), this._refreshRows(), this._register(E(() => {
 			this._accessibilityContainer.remove(), this._rowElements.length = 0;
 		}));
 	}
@@ -8282,19 +8282,19 @@ var H = 0, hs = class {
 	}
 };
 Cs = S([
-	C(1, Pe),
-	C(2, Ue),
-	C(3, Ge)
+	C(1, Ne),
+	C(2, He),
+	C(3, We)
 ], Cs);
-var ws = class extends E {
+var ws = class extends D {
 	constructor(e, t, n, r, i) {
-		super(), this._element = e, this._mouseService = t, this._renderService = n, this._bufferService = r, this._linkProviderService = i, this._linkCacheDisposables = [], this._isMouseOut = !0, this._wasResized = !1, this._activeLine = -1, this._onShowLinkUnderline = this._register(new O()), this.onShowLinkUnderline = this._onShowLinkUnderline.event, this._onHideLinkUnderline = this._register(new O()), this.onHideLinkUnderline = this._onHideLinkUnderline.event, this._register(T(() => {
-			mt(this._linkCacheDisposables), this._linkCacheDisposables.length = 0, this._lastMouseEvent = void 0, this._activeProviderReplies?.clear();
+		super(), this._element = e, this._mouseService = t, this._renderService = n, this._bufferService = r, this._linkProviderService = i, this._linkCacheDisposables = [], this._isMouseOut = !0, this._wasResized = !1, this._activeLine = -1, this._onShowLinkUnderline = this._register(new k()), this.onShowLinkUnderline = this._onShowLinkUnderline.event, this._onHideLinkUnderline = this._register(new k()), this.onHideLinkUnderline = this._onHideLinkUnderline.event, this._register(E(() => {
+			pt(this._linkCacheDisposables), this._linkCacheDisposables.length = 0, this._lastMouseEvent = void 0, this._activeProviderReplies?.clear();
 		})), this._register(this._bufferService.onResize(() => {
 			this._clearCurrentLink(), this._wasResized = !0;
-		})), this._register(k(this._element, "mouseleave", () => {
+		})), this._register(A(this._element, "mouseleave", () => {
 			this._isMouseOut = !0, this._clearCurrentLink();
-		})), this._register(k(this._element, "mousemove", this._handleMouseMove.bind(this))), this._register(k(this._element, "mousedown", this._handleMouseDown.bind(this))), this._register(k(this._element, "mouseup", this._handleMouseUp.bind(this)));
+		})), this._register(A(this._element, "mousemove", this._handleMouseMove.bind(this))), this._register(A(this._element, "mousedown", this._handleMouseDown.bind(this))), this._register(A(this._element, "mouseup", this._handleMouseUp.bind(this)));
 	}
 	get currentLink() {
 		return this._currentLink;
@@ -8370,7 +8370,7 @@ var ws = class extends E {
 		t && this._mouseDownLink && Ts(this._mouseDownLink.link, this._currentLink.link) && this._linkAtPosition(this._currentLink.link, t) && this._currentLink.link.activate(e, this._currentLink.link.text);
 	}
 	_clearCurrentLink(e, t) {
-		!this._currentLink || !this._lastMouseEvent || (!e || !t || this._currentLink.link.range.start.y >= e && this._currentLink.link.range.end.y <= t) && (this._linkLeave(this._element, this._currentLink.link, this._lastMouseEvent), this._currentLink = void 0, mt(this._linkCacheDisposables), this._linkCacheDisposables.length = 0);
+		!this._currentLink || !this._lastMouseEvent || (!e || !t || this._currentLink.link.range.start.y >= e && this._currentLink.link.range.end.y <= t) && (this._linkLeave(this._element, this._currentLink.link, this._lastMouseEvent), this._currentLink = void 0, pt(this._linkCacheDisposables), this._linkCacheDisposables.length = 0);
 	}
 	_handleNewLink(e) {
 		if (!this._lastMouseEvent) return;
@@ -8436,17 +8436,17 @@ var ws = class extends E {
 	}
 };
 ws = S([
-	C(1, We),
-	C(2, Ge),
-	C(3, Ae),
-	C(4, Ye)
+	C(1, Ue),
+	C(2, We),
+	C(3, ke),
+	C(4, Je)
 ], ws);
 function Ts(e, t) {
 	return e.text === t.text && e.range.start.x === t.range.start.x && e.range.start.y === t.range.start.y && e.range.end.x === t.range.end.x && e.range.end.y === t.range.end.y;
 }
 var Es = class extends fs {
 	constructor(e = {}) {
-		super(e), this._linkifier = this._register(new vt()), this.browser = Wi, this._keyDownHandled = !1, this._keyDownSeen = !1, this._keyPressHandled = !1, this._unprocessedDeadKey = !1, this._accessibilityManager = this._register(new vt()), this._onCursorMove = this._register(new O()), this.onCursorMove = this._onCursorMove.event, this._onKey = this._register(new O()), this.onKey = this._onKey.event, this._onRender = this._register(new O()), this.onRender = this._onRender.event, this._onSelectionChange = this._register(new O()), this.onSelectionChange = this._onSelectionChange.event, this._onTitleChange = this._register(new O()), this.onTitleChange = this._onTitleChange.event, this._onBell = this._register(new O()), this.onBell = this._onBell.event, this._onFocus = this._register(new O()), this._onBlur = this._register(new O()), this._onA11yCharEmitter = this._register(new O()), this._onA11yTabEmitter = this._register(new O()), this._onWillOpen = this._register(new O()), this._setup(), this._decorationService = this._instantiationService.createInstance(vs), this._instantiationService.setService(ze, this._decorationService), this._linkProviderService = this._instantiationService.createInstance(zi), this._instantiationService.setService(Ye, this._linkProviderService), this._linkProviderService.registerLinkProvider(this._instantiationService.createInstance(Be)), this._register(this._inputHandler.onRequestBell(() => this._onBell.fire())), this._register(this._inputHandler.onRequestRefreshRows((e) => this.refresh(e?.start ?? 0, e?.end ?? this.rows - 1))), this._register(this._inputHandler.onRequestSendFocus(() => this._reportFocus())), this._register(this._inputHandler.onRequestReset(() => this.reset())), this._register(this._inputHandler.onRequestWindowsOptionsReport((e) => this._reportWindowsOptions(e))), this._register(this._inputHandler.onColor((e) => this._handleColorEvent(e))), this._register(wt.forward(this._inputHandler.onCursorMove, this._onCursorMove)), this._register(wt.forward(this._inputHandler.onTitleChange, this._onTitleChange)), this._register(wt.forward(this._inputHandler.onA11yChar, this._onA11yCharEmitter)), this._register(wt.forward(this._inputHandler.onA11yTab, this._onA11yTabEmitter)), this._register(this._bufferService.onResize((e) => this._afterResize(e.cols, e.rows))), this._register(T(() => {
+		super(e), this._linkifier = this._register(new _t()), this.browser = Wi, this._keyDownHandled = !1, this._keyDownSeen = !1, this._keyPressHandled = !1, this._unprocessedDeadKey = !1, this._accessibilityManager = this._register(new _t()), this._onCursorMove = this._register(new k()), this.onCursorMove = this._onCursorMove.event, this._onKey = this._register(new k()), this.onKey = this._onKey.event, this._onRender = this._register(new k()), this.onRender = this._onRender.event, this._onSelectionChange = this._register(new k()), this.onSelectionChange = this._onSelectionChange.event, this._onTitleChange = this._register(new k()), this.onTitleChange = this._onTitleChange.event, this._onBell = this._register(new k()), this.onBell = this._onBell.event, this._onFocus = this._register(new k()), this._onBlur = this._register(new k()), this._onA11yCharEmitter = this._register(new k()), this._onA11yTabEmitter = this._register(new k()), this._onWillOpen = this._register(new k()), this._setup(), this._decorationService = this._instantiationService.createInstance(vs), this._instantiationService.setService(Re, this._decorationService), this._linkProviderService = this._instantiationService.createInstance(zi), this._instantiationService.setService(Je, this._linkProviderService), this._linkProviderService.registerLinkProvider(this._instantiationService.createInstance(ze)), this._register(this._inputHandler.onRequestBell(() => this._onBell.fire())), this._register(this._inputHandler.onRequestRefreshRows((e) => this.refresh(e?.start ?? 0, e?.end ?? this.rows - 1))), this._register(this._inputHandler.onRequestSendFocus(() => this._reportFocus())), this._register(this._inputHandler.onRequestReset(() => this.reset())), this._register(this._inputHandler.onRequestWindowsOptionsReport((e) => this._reportWindowsOptions(e))), this._register(this._inputHandler.onColor((e) => this._handleColorEvent(e))), this._register(Ct.forward(this._inputHandler.onCursorMove, this._onCursorMove)), this._register(Ct.forward(this._inputHandler.onTitleChange, this._onTitleChange)), this._register(Ct.forward(this._inputHandler.onA11yChar, this._onA11yCharEmitter)), this._register(Ct.forward(this._inputHandler.onA11yTab, this._onA11yTabEmitter)), this._register(this._bufferService.onResize((e) => this._afterResize(e.cols, e.rows))), this._register(E(() => {
 			this._customKeyEventHandler = void 0, this.element?.parentNode?.removeChild(this.element);
 		}));
 	}
@@ -8486,7 +8486,7 @@ var Es = class extends fs {
 			switch (t.type) {
 				case 0:
 					let r = P.toColorRGB(e === "ansi" ? this._themeService.colors.ansi[t.index] : this._themeService.colors[e]);
-					this.coreService.triggerDataEvent(`${A.ESC}]${n};${Xo(r)}${ii.ST}`);
+					this.coreService.triggerDataEvent(`${j.ESC}]${n};${Xo(r)}${ri.ST}`);
 					break;
 				case 1:
 					if (e === "ansi") this._themeService.modifyColors((e) => e.ansi[t.index] = N.toColor(...t.color));
@@ -8512,13 +8512,13 @@ var Es = class extends fs {
 		e ? !this._accessibilityManager.value && this._renderService && (this._accessibilityManager.value = this._instantiationService.createInstance(Cs, this)) : this._accessibilityManager.clear();
 	}
 	_handleTextAreaFocus(e) {
-		this.coreService.decPrivateModes.sendFocus && this.coreService.triggerDataEvent(A.ESC + "[I"), this.element.classList.add("focus"), this._showCursor(), this._onFocus.fire();
+		this.coreService.decPrivateModes.sendFocus && this.coreService.triggerDataEvent(j.ESC + "[I"), this.element.classList.add("focus"), this._showCursor(), this._onFocus.fire();
 	}
 	blur() {
 		return this.textarea?.blur();
 	}
 	_handleTextAreaBlur() {
-		this.textarea.value = "", this.refresh(this.buffer.y, this.buffer.y), this.coreService.decPrivateModes.sendFocus && this.coreService.triggerDataEvent(A.ESC + "[O"), this.element.classList.remove("focus"), this._onBlur.fire();
+		this.textarea.value = "", this.refresh(this.buffer.y, this.buffer.y), this.coreService.decPrivateModes.sendFocus && this.coreService.triggerDataEvent(j.ESC + "[O"), this.element.classList.remove("focus"), this._onBlur.fire();
 	}
 	_syncTextArea() {
 		if (!this.textarea || !this.buffer.isCursorInViewport || this._compositionHelper.isComposing || !this._renderService) return;
@@ -8528,20 +8528,20 @@ var Es = class extends fs {
 		this.textarea.style.left = s + "px", this.textarea.style.top = o + "px", this.textarea.style.width = a + "px", this.textarea.style.height = r + "px", this.textarea.style.lineHeight = r + "px", this.textarea.style.zIndex = "-5";
 	}
 	_initGlobal() {
-		this._bindKeys(), this._register(k(this.element, "copy", (e) => {
+		this._bindKeys(), this._register(A(this.element, "copy", (e) => {
 			this.hasSelection() && ue(e, this._selectionService);
 		}));
 		let e = (e) => de(e, this.textarea, this.coreService, this.optionsService);
-		this._register(k(this.textarea, "paste", e)), this._register(k(this.element, "paste", e)), Ji ? this._register(k(this.element, "mousedown", (e) => {
+		this._register(A(this.textarea, "paste", e)), this._register(A(this.element, "paste", e)), Ji ? this._register(A(this.element, "mousedown", (e) => {
 			e.button === 2 && me(e, this.textarea, this.screenElement, this._selectionService, this.options.rightClickSelectsWord);
-		})) : this._register(k(this.element, "contextmenu", (e) => {
+		})) : this._register(A(this.element, "contextmenu", (e) => {
 			me(e, this.textarea, this.screenElement, this._selectionService, this.options.rightClickSelectsWord);
-		})), na && this._register(k(this.element, "auxclick", (e) => {
+		})), na && this._register(A(this.element, "auxclick", (e) => {
 			e.button === 1 && pe(e, this.textarea, this.screenElement);
 		}));
 	}
 	_bindKeys() {
-		this._register(k(this.textarea, "keyup", (e) => this._keyUp(e), !0)), this._register(k(this.textarea, "keydown", (e) => this._keyDown(e), !0)), this._register(k(this.textarea, "keypress", (e) => this._keyPress(e), !0)), this._register(k(this.textarea, "compositionstart", () => this._compositionHelper.compositionstart())), this._register(k(this.textarea, "compositionupdate", (e) => this._compositionHelper.compositionupdate(e))), this._register(k(this.textarea, "compositionend", () => this._compositionHelper.compositionend())), this._register(k(this.textarea, "input", (e) => this._inputEvent(e), !0)), this._register(this.onRender(() => this._compositionHelper.updateCompositionElements()));
+		this._register(A(this.textarea, "keyup", (e) => this._keyUp(e), !0)), this._register(A(this.textarea, "keydown", (e) => this._keyDown(e), !0)), this._register(A(this.textarea, "keypress", (e) => this._keyPress(e), !0)), this._register(A(this.textarea, "compositionstart", () => this._compositionHelper.compositionstart())), this._register(A(this.textarea, "compositionupdate", (e) => this._compositionHelper.compositionupdate(e))), this._register(A(this.textarea, "compositionend", () => this._compositionHelper.compositionend())), this._register(A(this.textarea, "input", (e) => this._inputEvent(e), !0)), this._register(this.onRender(() => this._compositionHelper.updateCompositionElements()));
 	}
 	open(e) {
 		if (!e) throw Error("Terminal requires a parent element.");
@@ -8551,9 +8551,9 @@ var Es = class extends fs {
 		}
 		this._document = e.ownerDocument, this.options.documentOverride && this.options.documentOverride instanceof Document && (this._document = this.optionsService.rawOptions.documentOverride), this.element = this._document.createElement("div"), this.element.dir = "ltr", this.element.classList.add("terminal"), this.element.classList.add("xterm"), e.appendChild(this.element);
 		let t = this._document.createDocumentFragment();
-		this._viewportElement = this._document.createElement("div"), this._viewportElement.classList.add("xterm-viewport"), t.appendChild(this._viewportElement), this.screenElement = this._document.createElement("div"), this.screenElement.classList.add("xterm-screen"), this._register(k(this.screenElement, "mousemove", (e) => this.updateCursorStyle(e))), this._helperContainer = this._document.createElement("div"), this._helperContainer.classList.add("xterm-helpers"), this.screenElement.appendChild(this._helperContainer), t.appendChild(this.screenElement);
+		this._viewportElement = this._document.createElement("div"), this._viewportElement.classList.add("xterm-viewport"), t.appendChild(this._viewportElement), this.screenElement = this._document.createElement("div"), this.screenElement.classList.add("xterm-screen"), this._register(A(this.screenElement, "mousemove", (e) => this.updateCursorStyle(e))), this._helperContainer = this._document.createElement("div"), this._helperContainer.classList.add("xterm-helpers"), this.screenElement.appendChild(this._helperContainer), t.appendChild(this.screenElement);
 		let n = this.textarea = this._document.createElement("textarea");
-		this.textarea.classList.add("xterm-helper-textarea"), this.textarea.setAttribute("aria-label", oe.get()), ra || this.textarea.setAttribute("aria-multiline", "false"), this.textarea.setAttribute("autocorrect", "off"), this.textarea.setAttribute("autocapitalize", "off"), this.textarea.setAttribute("spellcheck", "false"), this.textarea.tabIndex = 0, this._register(this.optionsService.onSpecificOptionChange("disableStdin", () => n.readOnly = this.optionsService.rawOptions.disableStdin)), this.textarea.readOnly = this.optionsService.rawOptions.disableStdin, this._coreBrowserService = this._register(this._instantiationService.createInstance(Li, this.textarea, e.ownerDocument.defaultView ?? window, this._document ?? typeof window < "u" ? window.document : null)), this._instantiationService.setService(Ue, this._coreBrowserService), this._register(k(this.textarea, "focus", (e) => this._handleTextAreaFocus(e))), this._register(k(this.textarea, "blur", () => this._handleTextAreaBlur())), this._helperContainer.appendChild(this.textarea), this._charSizeService = this._instantiationService.createInstance(Ni, this._document, this._helperContainer), this._instantiationService.setService(He, this._charSizeService), this._themeService = this._instantiationService.createInstance(Ba), this._instantiationService.setService(Je, this._themeService), this._characterJoinerService = this._instantiationService.createInstance(mi), this._instantiationService.setService(qe, this._characterJoinerService), this._renderService = this._register(this._instantiationService.createInstance(la, this.rows, this.screenElement)), this._instantiationService.setService(Ge, this._renderService), this._register(this._renderService.onRenderedViewportChange((e) => this._onRender.fire(e))), this.onResize((e) => this._renderService.resize(e.cols, e.rows)), this._compositionView = this._document.createElement("div"), this._compositionView.classList.add("composition-view"), this._compositionHelper = this._instantiationService.createInstance(ai, this.textarea, this._compositionView), this._helperContainer.appendChild(this._compositionView), this._mouseService = this._instantiationService.createInstance(Hi), this._instantiationService.setService(We, this._mouseService);
+		this.textarea.classList.add("xterm-helper-textarea"), this.textarea.setAttribute("aria-label", oe.get()), ra || this.textarea.setAttribute("aria-multiline", "false"), this.textarea.setAttribute("autocorrect", "off"), this.textarea.setAttribute("autocapitalize", "off"), this.textarea.setAttribute("spellcheck", "false"), this.textarea.tabIndex = 0, this._register(this.optionsService.onSpecificOptionChange("disableStdin", () => n.readOnly = this.optionsService.rawOptions.disableStdin)), this.textarea.readOnly = this.optionsService.rawOptions.disableStdin, this._coreBrowserService = this._register(this._instantiationService.createInstance(Li, this.textarea, e.ownerDocument.defaultView ?? window, this._document ?? typeof window < "u" ? window.document : null)), this._instantiationService.setService(He, this._coreBrowserService), this._register(A(this.textarea, "focus", (e) => this._handleTextAreaFocus(e))), this._register(A(this.textarea, "blur", () => this._handleTextAreaBlur())), this._helperContainer.appendChild(this.textarea), this._charSizeService = this._instantiationService.createInstance(Ni, this._document, this._helperContainer), this._instantiationService.setService(Ve, this._charSizeService), this._themeService = this._instantiationService.createInstance(Ba), this._instantiationService.setService(qe, this._themeService), this._characterJoinerService = this._instantiationService.createInstance(mi), this._instantiationService.setService(Ke, this._characterJoinerService), this._renderService = this._register(this._instantiationService.createInstance(la, this.rows, this.screenElement)), this._instantiationService.setService(We, this._renderService), this._register(this._renderService.onRenderedViewportChange((e) => this._onRender.fire(e))), this.onResize((e) => this._renderService.resize(e.cols, e.rows)), this._compositionView = this._document.createElement("div"), this._compositionView.classList.add("composition-view"), this._compositionHelper = this._instantiationService.createInstance(ii, this.textarea, this._compositionView), this._helperContainer.appendChild(this._compositionView), this._mouseService = this._instantiationService.createInstance(Hi), this._instantiationService.setService(Ue, this._mouseService);
 		let r = this._linkifier.value = this._register(this._instantiationService.createInstance(ws, this.screenElement));
 		this.element.appendChild(t);
 		try {
@@ -8561,14 +8561,14 @@ var Es = class extends fs {
 		} catch {}
 		this._renderService.hasRenderer() || this._renderService.setRenderer(this._createRenderer()), this._register(this.onCursorMove(() => {
 			this._renderService.handleCursorMove(), this._syncTextArea();
-		})), this._register(this.onResize(() => this._renderService.handleResize(this.cols, this.rows))), this._register(this.onBlur(() => this._renderService.handleBlur())), this._register(this.onFocus(() => this._renderService.handleFocus())), this._viewport = this._register(this._instantiationService.createInstance(Xr, this.element, this.screenElement)), this._register(this._viewport.onRequestScrollLines((e) => {
+		})), this._register(this.onResize(() => this._renderService.handleResize(this.cols, this.rows))), this._register(this.onBlur(() => this._renderService.handleBlur())), this._register(this.onFocus(() => this._renderService.handleFocus())), this._viewport = this._register(this._instantiationService.createInstance(Yr, this.element, this.screenElement)), this._register(this._viewport.onRequestScrollLines((e) => {
 			super.scrollLines(e, !1), this.refresh(0, this.rows - 1);
-		})), this._selectionService = this._register(this._instantiationService.createInstance(ja, this.element, this.screenElement, r)), this._instantiationService.setService(Ke, this._selectionService), this._register(this._selectionService.onRequestScrollLines((e) => this.scrollLines(e.amount, e.suppressScrollEvent))), this._register(this._selectionService.onSelectionChange(() => this._onSelectionChange.fire())), this._register(this._selectionService.onRequestRedraw((e) => this._renderService.handleSelectionChanged(e.start, e.end, e.columnSelectMode))), this._register(this._selectionService.onLinuxMouseSelection((e) => {
+		})), this._selectionService = this._register(this._instantiationService.createInstance(ja, this.element, this.screenElement, r)), this._instantiationService.setService(Ge, this._selectionService), this._register(this._selectionService.onRequestScrollLines((e) => this.scrollLines(e.amount, e.suppressScrollEvent))), this._register(this._selectionService.onSelectionChange(() => this._onSelectionChange.fire())), this._register(this._selectionService.onRequestRedraw((e) => this._renderService.handleSelectionChanged(e.start, e.end, e.columnSelectMode))), this._register(this._selectionService.onLinuxMouseSelection((e) => {
 			this.textarea.value = e, this.textarea.focus(), this.textarea.select();
-		})), this._register(wt.any(this._onScroll.event, this._inputHandler.onScroll)(() => {
+		})), this._register(Ct.any(this._onScroll.event, this._inputHandler.onScroll)(() => {
 			this._selectionService.refresh(), this._viewport?.queueSync();
-		})), this._register(this._instantiationService.createInstance(Zr, this.screenElement)), this._register(k(this.element, "mousedown", (e) => this._selectionService.handleMouseDown(e))), this.coreMouseService.areMouseEventsActive ? (this._selectionService.disable(), this.element.classList.add("enable-mouse-events")) : this._selectionService.enable(), this.options.screenReaderMode && (this._accessibilityManager.value = this._instantiationService.createInstance(Cs, this)), this._register(this.optionsService.onSpecificOptionChange("screenReaderMode", (e) => this._handleScreenReaderModeOptionChange(e))), this.options.overviewRuler.width && (this._overviewRulerRenderer = this._register(this._instantiationService.createInstance(ni, this._viewportElement, this.screenElement))), this.optionsService.onSpecificOptionChange("overviewRuler", (e) => {
-			!this._overviewRulerRenderer && e && this._viewportElement && this.screenElement && (this._overviewRulerRenderer = this._register(this._instantiationService.createInstance(ni, this._viewportElement, this.screenElement)));
+		})), this._register(this._instantiationService.createInstance(Xr, this.screenElement)), this._register(A(this.element, "mousedown", (e) => this._selectionService.handleMouseDown(e))), this.coreMouseService.areMouseEventsActive ? (this._selectionService.disable(), this.element.classList.add("enable-mouse-events")) : this._selectionService.enable(), this.options.screenReaderMode && (this._accessibilityManager.value = this._instantiationService.createInstance(Cs, this)), this._register(this.optionsService.onSpecificOptionChange("screenReaderMode", (e) => this._handleScreenReaderModeOptionChange(e))), this.options.overviewRuler.width && (this._overviewRulerRenderer = this._register(this._instantiationService.createInstance(ti, this._viewportElement, this.screenElement))), this.optionsService.onSpecificOptionChange("overviewRuler", (e) => {
+			!this._overviewRulerRenderer && e && this._viewportElement && this.screenElement && (this._overviewRulerRenderer = this._register(this._instantiationService.createInstance(ti, this._viewportElement, this.screenElement)));
 		}), this._charSizeService.measure(), this.refresh(0, this.rows - 1), this._initGlobal(), this.bindMouse();
 	}
 	_createRenderer() {
@@ -8627,15 +8627,15 @@ var Es = class extends fs {
 		};
 		this._register(this.coreMouseService.onProtocolChange((e) => {
 			e ? (this.optionsService.rawOptions.logLevel === "debug" && this._logService.debug("Binding to mouse events:", this.coreMouseService.explainEvents(e)), this.element.classList.add("enable-mouse-events"), this._selectionService.disable()) : (this._logService.debug("Unbinding from mouse events."), this.element.classList.remove("enable-mouse-events"), this._selectionService.enable()), e & 8 ? r.mousemove ||= (t.addEventListener("mousemove", i.mousemove), i.mousemove) : (t.removeEventListener("mousemove", r.mousemove), r.mousemove = null), e & 16 ? r.wheel ||= (t.addEventListener("wheel", i.wheel, { passive: !1 }), i.wheel) : (t.removeEventListener("wheel", r.wheel), r.wheel = null), e & 2 ? r.mouseup ||= i.mouseup : (this._document.removeEventListener("mouseup", r.mouseup), r.mouseup = null), e & 4 ? r.mousedrag ||= i.mousedrag : (this._document.removeEventListener("mousemove", r.mousedrag), r.mousedrag = null);
-		})), this.coreMouseService.activeProtocol = this.coreMouseService.activeProtocol, this._register(k(t, "mousedown", (e) => {
+		})), this.coreMouseService.activeProtocol = this.coreMouseService.activeProtocol, this._register(A(t, "mousedown", (e) => {
 			if (e.preventDefault(), this.focus(), this.coreMouseService.areMouseEventsActive && !this._selectionService.shouldForceSelection(e)) return n(e), r.mouseup && this._document.addEventListener("mouseup", r.mouseup), r.mousedrag && this._document.addEventListener("mousemove", r.mousedrag), this.cancel(e);
-		})), this._register(k(t, "wheel", (t) => {
+		})), this._register(A(t, "wheel", (t) => {
 			if (!r.wheel) {
 				if (this._customWheelEventHandler && this._customWheelEventHandler(t) === !1) return !1;
 				if (!this.buffer.hasScrollback) {
 					if (t.deltaY === 0) return !1;
 					if (e.coreMouseService.consumeWheelEvent(t, e._renderService?.dimensions?.device?.cell?.height, e._coreBrowserService?.dpr) === 0) return this.cancel(t, !0);
-					let n = A.ESC + (this.coreService.decPrivateModes.applicationCursorKeys ? "O" : "[") + (t.deltaY < 0 ? "A" : "B");
+					let n = j.ESC + (this.coreService.decPrivateModes.applicationCursorKeys ? "O" : "[") + (t.deltaY < 0 ? "A" : "B");
 					return this.coreService.triggerDataEvent(n, !0), this.cancel(t, !0);
 				}
 			}
@@ -8738,7 +8738,7 @@ var Es = class extends fs {
 		}
 		if (n.type === 1 && this.selectAll(), this._isThirdLevelShift(this.browser, e) || (n.cancel && this.cancel(e, !0), !n.key) || e.key && !e.ctrlKey && !e.altKey && !e.metaKey && e.key.length === 1 && e.key.charCodeAt(0) >= 65 && e.key.charCodeAt(0) <= 90) return !0;
 		if (this._unprocessedDeadKey) return this._unprocessedDeadKey = !1, !0;
-		if ((n.key === A.ETX || n.key === A.CR) && (this.textarea.value = ""), this._onKey.fire({
+		if ((n.key === j.ETX || n.key === j.CR) && (this.textarea.value = ""), this._onKey.fire({
 			key: n.key,
 			domEvent: e
 		}), this._showCursor(), this.coreService.triggerDataEvent(n.key, !0), !this.optionsService.rawOptions.screenReaderMode || e.altKey || e.ctrlKey) return this.cancel(e, !0);
@@ -8794,17 +8794,17 @@ var Es = class extends fs {
 		this._renderService?.clearTextureAtlas();
 	}
 	_reportFocus() {
-		this.element?.classList.contains("focus") ? this.coreService.triggerDataEvent(A.ESC + "[I") : this.coreService.triggerDataEvent(A.ESC + "[O");
+		this.element?.classList.contains("focus") ? this.coreService.triggerDataEvent(j.ESC + "[I") : this.coreService.triggerDataEvent(j.ESC + "[O");
 	}
 	_reportWindowsOptions(e) {
 		if (this._renderService) switch (e) {
 			case 0:
 				let e = this._renderService.dimensions.css.canvas.width.toFixed(0), t = this._renderService.dimensions.css.canvas.height.toFixed(0);
-				this.coreService.triggerDataEvent(`${A.ESC}[4;${t};${e}t`);
+				this.coreService.triggerDataEvent(`${j.ESC}[4;${t};${e}t`);
 				break;
 			case 1:
 				let n = this._renderService.dimensions.css.cell.width.toFixed(0), r = this._renderService.dimensions.css.cell.height.toFixed(0);
-				this.coreService.triggerDataEvent(`${A.ESC}[6;${r};${n}t`);
+				this.coreService.triggerDataEvent(`${j.ESC}[6;${r};${n}t`);
 		}
 	}
 	cancel(e, t) {
@@ -8884,9 +8884,9 @@ var Os = class {
 	getNullCell() {
 		return new Ce();
 	}
-}, js = class extends E {
+}, js = class extends D {
 	constructor(e) {
-		super(), this._core = e, this._onBufferChange = this._register(new O()), this.onBufferChange = this._onBufferChange.event, this._normal = new As(this._core.buffers.normal, "normal"), this._alternate = new As(this._core.buffers.alt, "alternate"), this._core.buffers.onBufferActivate(() => this._onBufferChange.fire(this.active));
+		super(), this._core = e, this._onBufferChange = this._register(new k()), this.onBufferChange = this._onBufferChange.event, this._normal = new As(this._core.buffers.normal, "normal"), this._alternate = new As(this._core.buffers.alt, "alternate"), this._core.buffers.onBufferActivate(() => this._onBufferChange.fire(this.active));
 	}
 	get active() {
 		if (this._core.buffers.active === this._core.buffers.normal) return this.normal;
@@ -8943,7 +8943,7 @@ var Os = class {
 	set activeVersion(e) {
 		this._core.unicodeService.activeVersion = e;
 	}
-}, Ps = ["cols", "rows"], Fs = 0, Is = class extends E {
+}, Ps = ["cols", "rows"], Fs = 0, Is = class extends D {
 	constructor(e) {
 		super(), this._core = this._register(new Es(e)), this._addonManager = this._register(new Os()), this._publicOptions = { ...this._core.options };
 		let t = (e) => this._core.options[e], n = (e, t) => {
@@ -12277,8 +12277,8 @@ function su(t, n) {
 }
 // src/terminal/i18n.js
 var G = su("terminal", {
-	en: /* @__PURE__ */ JSON.parse("{\"strings\":{\"@name\":\"Terminal\",\"@description\":\"A bash-like shell over the files of lilOS, in tabs and panes side by side, and remote sessions: SSH, Telnet, rlogin and SUPDUP, with saved hosts, .term links and sessions that keep running when the window is closed.\",\"@entrypoints.main.params.cwd.label\":\"Folder\",\"@entrypoints.main.params.cwd.description\":\"The folder to open the terminal in\",\"@automation.terminal.run.label\":\"Run a command\",\"@automation.terminal.run.params.command.label\":\"Command\",\"@automation.terminal.run.params.folder.label\":\"Folder\",\"@automation.terminal.run.params.folder.description\":\"The working folder the command runs in\",\"@entrypoints.main.params.file.label\":\"Link\",\"@entrypoints.main.params.file.description\":\"A terminal link (.term) to open\",\"ui.title\":\"Terminal\",\"ui.commandLine\":\"Command line\",\"ui.welcome\":\"lilOS Terminal · \\\"help\\\" lists the commands\",\"automation.tooLong\":\"Command too long to record\",\"automation.noCommand\":\"No command to run\",\"automation.busy\":\"The terminal is busy with another command\",\"automation.noFolder\":\"The folder is not there any more\",\"automation.status\":\"The command ended with status {status}\",\"shell.defaultUser\":\"user\",\"shell.readonly\":\"{name}: readonly variable\",\"shell.cannotUnset\":\"{name}: cannot unset: readonly variable\",\"shell.badSubscript\":\"{index}: bad array subscript\",\"shell.unknownConstruct\":\"unknown construct: {type}\",\"shell.badRegex\":\"invalid regular expression\",\"shell.unaryExpected\":\"{op}: unary operator expected\",\"shell.integerExpected\":\"{value}: integer expression expected\",\"shell.binaryExpected\":\"{op}: binary operator expected\",\"shell.commandNotFound\":\"{name}: command not found\",\"shell.tooDeep\":\"{name}: maximum function nesting level exceeded\",\"shell.badFd\":\"{fd}: Bad file descriptor\",\"shell.fdExpected\":\"{target}: file descriptor expected\",\"shell.ambiguousRedirect\":\"{target}: ambiguous redirect\",\"shell.isAppLink\":\"{path}: is a link to an app\",\"err.noSuchFile\":\"{path}: No such file or directory\",\"err.isADirectory\":\"{path}: Is a directory\",\"err.notAFile\":\"{path}: Not a regular file\",\"err.missingParen\":\"`)' expected\",\"err.badIdentifier\":\"`{name}': not a valid identifier\",\"err.numericArgument\":\"{value}: numeric argument required\",\"err.tooManyArguments\":\"too many arguments\",\"err.notADirectory\":\"{path}: Not a directory\",\"err.notFound\":\"{name}: not found\",\"err.missingOperand\":\"missing operand\",\"err.unknownSubcommand\":\"unknown subcommand: '{sub}'\",\"parse.unexpectedEnd\":\"syntax error: unexpected end of input\",\"parse.unexpectedEndOfFile\":\"syntax error: unexpected end of file\",\"parse.nearEnd\":\"end of input\",\"parse.nearNewline\":\"`newline'\",\"parse.nearToken\":\"`{token}'\",\"parse.near\":\"syntax error near unexpected token {near}\",\"parse.nearExpected\":\"syntax error near unexpected token {near}: expected `{expected}'\",\"parse.badFunctionName\":\"invalid function name\",\"parse.parenAfterName\":\"expected `)' after the function name\",\"parse.aliasLoop\":\"aliases expanded too many times\",\"parse.missingTarget\":\"syntax error near unexpected token {near}: missing target of `{op}'\",\"parse.forBadName\":\"for: invalid variable name\",\"parse.caseNoWord\":\"case: missing word\",\"parse.condNear\":\"syntax error in conditional expression near {near}\",\"parse.condNoOperand\":\"syntax error in conditional expression: missing operand\",\"parse.condNoRegex\":\"syntax error in conditional expression: missing regular expression\",\"parse.badSubstitution\":\"bad substitution\",\"parse.badSubstitutionBrace\":\"bad substitution: missing `}'\",\"parse.backquotes\":\"syntax error in backquoted command substitution\",\"jobs.done\":\"Done\",\"jobs.interrupted\":\"Interrupt\",\"jobs.exit\":\"Exit {code}\",\"jobs.running\":\"Running\",\"help.usageLine\":\"Usage: {usage}\",\"help.usageShort\":\"usage: {usage}\",\"help.noHelp\":\"no help topics match `{name}'\",\"help.intro\":\"lilOS Terminal: a bash-like shell over the files of lilOS.\\n\\\"help command\\\" or \\\"command --help\\\" explains a command; \\\"help if\\\", \\\"help for\\\", \\\"help case\\\"… the syntax.\",\"help.syntaxList\":\"Syntax: {list}\",\"help.sh.summary\":\"Like bash.\",\"help.sh.usage\":\"sh [-c commands | script] [arguments…]\",\"help.bash.text\":\"\\\"bash script.sh a b\\\" runs the script with $1=a, $2=b; \\\"bash -c 'echo $1' name x\\\" runs the text; \\\"cat script.sh | bash\\\" reads the script from the input.\",\"help.bash.summary\":\"Runs a script or commands in a new shell.\",\"help.bash.usage\":\"bash [-c commands | script] [arguments…]\",\"help.sleep.summary\":\"Waits: 5 (seconds), 0.5, 2m, 1h.\",\"help.sleep.usage\":\"sleep duration…\",\"help.kill.summary\":\"Interrupts commands in the background.\",\"help.kill.usage\":\"kill [-signal] %job | pid…\",\"help.fg.summary\":\"Brings a command in the background to the foreground: it is waited for and Ctrl C interrupts it.\",\"help.wait.summary\":\"Waits for the commands in the background to finish (all of them, or the ones named).\",\"help.jobs.summary\":\"Lists the commands started in the background with &.\",\"help.clear.summary\":\"Clears the screen (Ctrl L too).\",\"help.help.summary\":\"Lists the commands, or explains the one named.\",\"help.help.usage\":\"help [command]\",\"help.history.summary\":\"Shows the commands given (the last n); -c clears the history.\",\"help.which.summary\":\"Tells where a command is.\",\"help.which.usage\":\"which name…\",\"help.command.summary\":\"Starts a command ignoring the functions with the same name; with -v tells what it would start.\",\"help.command.usage\":\"command [-v] name [arguments…]\",\"help.type.summary\":\"Tells what a name is: alias, keyword, function, command.\",\"help.type.usage\":\"type [-t] name…\",\"help.unalias.summary\":\"Removes aliases (all of them with -a).\",\"help.unalias.usage\":\"unalias [-a] name…\",\"help.alias.text\":\"Example: alias ll='ls -l'. Aliases work from the line after the one that defines them.\",\"help.alias.summary\":\"Defines or shows aliases (short names for commands).\",\"help.alias.usage\":\"alias [name[=value]…]\",\"help.eval.summary\":\"Runs the arguments, joined by spaces, as a command.\",\"help.eval.usage\":\"eval [arguments…]\",\"help.dot.summary\":\"Like source.\",\"help.dot.usage\":\". file [arguments…]\",\"help.source.summary\":\"Runs the commands of a file in this shell (variables, functions and aliases stay).\",\"help.source.usage\":\"source file [arguments…]\",\"help.read.text\":\"-r  backslashes stay as they are\\n-p  shows a prompt\\n-a  puts the words in an array\\n-d  reads up to this character instead of up to the newline\\n-s  does not show what is typed (for passwords)\\nStatus 1 at the end of the input.\",\"help.read.summary\":\"Reads a line and splits it into the variables named ($REPLY without names).\",\"help.read.usage\":\"read [-rs] [-p prompt] [-a array] [-d delim] [name…]\",\"help.continue.summary\":\"Goes on to the next round of the loop (or of the n-th enclosing loop).\",\"help.break.summary\":\"Exits the loop (or n loops).\",\"help.return.summary\":\"Exits the function (or the script read with source).\",\"help.return.usage\":\"return [status]\",\"help.exit.summary\":\"Closes the terminal (or exits the script) with a status.\",\"help.exit.usage\":\"exit [status]\",\"help.let.summary\":\"Computes arithmetic expressions (status 1 if the last one is 0).\",\"help.let.usage\":\"let expression…\",\"help.bracket.summary\":\"Like test, with a final \\\"]\\\".\",\"help.bracket.usage\":\"[ expression ]\",\"help.test.text\":\"Files: -e exists, -f is a file, -d is a directory, -s is not empty\\nText: -z empty, -n not empty, a = b, a != b\\nNumbers: -eq -ne -lt -le -gt -ge\\nCombined: ! not, -a and, -o or, ( … )\",\"help.test.summary\":\"Evaluates an expression: status 0 if true, 1 if false.\",\"help.test.usage\":\"test expression\",\"help.colon.summary\":\"Does nothing (status 0); the arguments are expanded anyway.\",\"help.colon.usage\":\": [arguments…]\",\"help.false.summary\":\"Does nothing, unsuccessfully (status 1).\",\"help.true.summary\":\"Does nothing, successfully (status 0).\",\"help.shift.summary\":\"Shifts the positional parameters: $2 becomes $1…\",\"help.set.text\":\"-e  exits at the first command that fails\\n-u  error when an unset variable is used\\n-x  shows the commands before running them\\n-f  no expansion of * and ?\\n-o pipefail  a pipeline fails if one of its commands fails\\n+e, +u… turn them off. Without arguments it shows every variable.\",\"help.set.summary\":\"Sets the options of the shell and the positional parameters ($1, $2…).\",\"help.set.usage\":\"set [-euxf] [-o option] [--] [arguments…]\",\"help.printenv.summary\":\"Shows the exported variables (or the value of the ones named).\",\"help.printenv.usage\":\"printenv [name…]\",\"help.env.summary\":\"Shows the exported variables, or starts a command with more variables.\",\"help.env.usage\":\"env [name=value…] [command [arguments…]]\",\"help.unset.summary\":\"Removes variables (or functions with -f).\",\"help.unset.usage\":\"unset [-fv] name…\",\"help.typeset.summary\":\"Like declare.\",\"help.typeset.usage\":\"typeset [-aprxifF] [name[=value]…]\",\"help.declare.text\":\"-a array, -x exported, -r read-only, -i integer (the value is computed), -p shows, -f shows the functions, -g global inside a function.\",\"help.declare.summary\":\"Declares variables and shows their attributes.\",\"help.declare.usage\":\"declare [-aprxifF] [name[=value]…]\",\"help.local.summary\":\"Variables visible only inside the function.\",\"help.local.usage\":\"local [-arx] name[=value]…\",\"help.readonly.summary\":\"Makes variables read-only.\",\"help.readonly.usage\":\"readonly [name[=value]…]\",\"help.export.text\":\"Without arguments it lists the exported variables. -n removes the export.\",\"help.export.summary\":\"Makes variables visible to the commands and scripts it starts.\",\"help.export.usage\":\"export [-n] [name[=value]…]\",\"help.printf.text\":\"The format is applied again while arguments are left. -v saves the result in a variable.\",\"help.printf.summary\":\"Writes the arguments according to a format (%s, %d, %5.2f, %x, %b, %q…).\",\"help.printf.usage\":\"printf [-v var] format [arguments…]\",\"help.echo.text\":\"-n  no final newline\\n-e  interprets \\\\n, \\\\t, \\\\\\\\, \\\\e… \\n-E  does not interpret them (default)\",\"help.echo.summary\":\"Writes the arguments, separated by a space.\",\"help.echo.usage\":\"echo [-neE] [text…]\",\"help.pwd.summary\":\"Shows the working directory.\",\"help.cd.text\":\"Without arguments it goes to the home ($HOME). \\\"cd -\\\" goes back to the previous directory ($OLDPWD).\",\"help.cd.summary\":\"Changes the working directory.\",\"help.cd.usage\":\"cd [dir]\",\"help.realpath.summary\":\"The full path.\",\"help.realpath.usage\":\"realpath [-m] path…\",\"help.dirname.summary\":\"The path without its last part.\",\"help.dirname.usage\":\"dirname path…\",\"help.basename.summary\":\"The last part of a path (without the suffix).\",\"help.basename.usage\":\"basename path [suffix]\",\"help.tree.summary\":\"Shows directories as a tree.\",\"help.tree.usage\":\"tree [-adf] [-L levels] [dir…]\",\"help.find.text\":\"Tests: -name pattern, -iname, -path, -type f|d|l, -empty, -size [+-]n[ckMG], -mtime [+-]days, -mmin, -newer file\\nActions: -print, -print0, -delete (to the trash), -exec command {} \\\\; or +\\nOptions: -maxdepth n, -mindepth n. Combined: ! (not), -o (or), ( … )\\nExample: find . -name \\\"*.txt\\\" -size +1k\",\"help.find.summary\":\"Searches for files and directories.\",\"help.find.usage\":\"find [path…] [expression]\",\"help.stat.text\":\"-c  format: %n name, %s size, %F type, %y modification date, %Y in seconds, %w %W creation, %i id\",\"help.stat.summary\":\"Shows the details of files and directories.\",\"help.stat.usage\":\"stat [-c format] path…\",\"help.rmdir.summary\":\"Removes empty directories (to the trash).\",\"help.rmdir.usage\":\"rmdir [-p] dir…\",\"help.rm.text\":\"-r  directories too, with their contents\\n-d  empty directories\\n-f  no error for what does not exist\\n--purge  deletes permanently, without the trash\\nWhat goes to the trash can be put back with \\\"trash restore\\\".\",\"help.rm.summary\":\"Moves files and directories to the trash (with --purge deletes them forever).\",\"help.rm.usage\":\"rm [-rfvd] [--purge] path…\",\"help.mv.text\":\"If the destination is a directory, it moves into it; otherwise it renames. An overwritten file goes to the trash.\\n-n  does not overwrite\\n-v  tells what it moves\",\"help.mv.summary\":\"Moves or renames files and directories.\",\"help.mv.usage\":\"mv [-nv] source… dest\",\"help.cp.text\":\"-r  copies directories too, with their contents\\n-n  does not overwrite existing files\\n-v  tells what it copies\",\"help.cp.summary\":\"Copies files and directories.\",\"help.cp.usage\":\"cp [-rnv] source… dest\",\"help.touch.summary\":\"Creates empty files, or updates the modification date of the ones that exist.\",\"help.mkdir.text\":\"-p  creates the intermediate directories too; no error if it already exists\",\"help.mkdir.summary\":\"Creates directories.\",\"help.mkdir.usage\":\"mkdir [-pv] dir…\",\"help.cat.text\":\"-n  numbers the lines\\n-b  numbers only the non-empty ones\\n-s  only one empty line in a row\\n-E  $ at the end of every line\",\"help.cat.summary\":\"Shows the contents of files (or of the input), one after the other.\",\"help.ls.text\":\"-l  details (type, size, date, tags)\\n-a  also the names starting with \\\".\\\"\\n-h  human-readable sizes (1.2K)\\n-t  by date, -S by size, -r reversed\\n-1  one per line\\n-d  the directory itself, not its contents\\n-R  subdirectories too\\n-F  / after directories, @ after links, * after scripts\",\"help.ls.summary\":\"Lists the contents of directories.\",\"help.ls.usage\":\"ls [-laAh1trSdRF] [path…]\",\"help.xargs.text\":\"-n N  at most N arguments at a time\\n-I {}  one command per line, with {} replaced by the line\\n-0  words separated by the null character (find -print0)\\n-d C  words separated by C\\n-t  shows the commands before starting them\\n-r  starts nothing if the input is empty\\nExample: find . -name \\\"*.tmp\\\" | xargs rm\",\"help.xargs.summary\":\"Starts a command with the words of the input as arguments.\",\"help.xargs.usage\":\"xargs [-n N] [-I {}] [-0] [-t] [command [arguments…]]\",\"help.yes.summary\":\"Repeats a line forever (y if not given): useful in a pipeline.\",\"help.yes.usage\":\"yes [text]\",\"help.seq.text\":\"-s S  separator (newline if not given)\\n-w  same width, padded with zeros\",\"help.seq.summary\":\"Writes a sequence of numbers.\",\"help.seq.usage\":\"seq [first [step]] last\",\"help.nl.summary\":\"Numbers the lines (non-empty ones, or all with -b a).\",\"help.rev.summary\":\"Writes every line reversed.\",\"help.tr.text\":\"tr a-z A-Z  to uppercase\\ntr -d '\\\\r'  removes Windows carriage returns\\ntr -s ' '  only one space in a row\\nClasses: [:upper:] [:lower:] [:digit:] [:alpha:] [:alnum:] [:space:] [:punct:]\",\"help.tr.summary\":\"Replaces or deletes characters.\",\"help.tr.usage\":\"tr [-dsc] set1 [set2]\",\"help.cut.text\":\"-f 1,3  fields 1 and 3 (separated by tab or by -d)\\n-d ,  the separator\\n-c 1-5  characters 1 to 5\\n-s  only the lines with the separator\",\"help.cut.summary\":\"Extracts columns from every line.\",\"help.cut.usage\":\"cut -f fields [-d separator] | -c characters [file…]\",\"help.tee.text\":\"-a  appends instead of overwriting\",\"help.tee.summary\":\"Copies the input both to the output and to files.\",\"help.uniq.text\":\"-c  with the number of repetitions\\n-d  only the repeated lines\\n-u  only the unique ones\\n-i  ignoring case\",\"help.uniq.summary\":\"Removes lines repeated one after the other (usually after sort).\",\"help.sort.text\":\"-r  reversed\\n-n  by number\\n-h  by human-readable size (2K, 1M)\\n-u  without duplicates\\n-f  ignoring case\\n-k N[,M]  by field N (up to M)\\n-t C  fields separated by C\\n-V  numbers inside the text (file2 before file10)\\n-o file  writes to the file\",\"help.sort.summary\":\"Sorts lines.\",\"help.sort.usage\":\"sort [-rnufhV] [-k field] [-t separator] [file…]\",\"help.grep.text\":\"-i  ignoring case\\n-v  the lines that do NOT match\\n-n  with the line number\\n-c  counts the lines\\n-l  only the names of the files\\n-r  searches in directories\\n-w  whole words, -x whole lines\\n-E  extended regular expressions (| + ? () without backslash)\\n-F  plain text, not a regular expression\\n-o  only the part that matches\\n-q  no output, only the status\\n-A N, -B N, -C N  lines of context after, before, around\\nStatus: 0 found, 1 not found, 2 error.\",\"help.grep.summary\":\"Searches for the lines that contain a pattern (regular expression).\",\"help.grep.usage\":\"grep [-ivnclrwxEFoqH] [-e pattern] pattern [file…]\",\"help.wc.text\":\"-l lines, -w words, -c bytes, -m characters, -L the longest line\",\"help.wc.summary\":\"Counts lines, words and bytes.\",\"help.tail.text\":\"-n N  the last N lines (-n +N: from line N on)\\n-c N  the last N characters\",\"help.tail.summary\":\"The last lines (10 if not given).\",\"help.tail.usage\":\"tail [-n lines] [-c bytes] [file…]\",\"help.head.text\":\"-n N  the first N lines (-n -N: all but the last N)\\n-c N  the first N characters\\n-5 is like -n 5\",\"help.head.summary\":\"The first lines (10 if not given).\",\"help.head.usage\":\"head [-n lines] [-c bytes] [file…]\",\"help.sed.text\":\"s/old/new/g  replaces (g: every time, i: ignoring case, p: prints)\\n3d, /re/d, 2,5d  deletes lines     -n …p  prints only the chosen ones\\ny/abc/xyz/  transliterates     a text, i text, c text  appends, inserts, changes\\n=  line number   q  quits   h H g G x  hold space   b t :label  jumps\\nAddresses: n, $, /re/, a,b, a,+n, ! to negate, { … } to group.\\n-n  does not print lines by itself    -E  extended regular expressions    -i  edits the files\\nExamples: sed 's/red/blue/g' notes.txt    sed -n '1,5p' file    sed -i '/^#/d' conf.txt\",\"help.sed.summary\":\"Edits text line by line (substitutions, deletions…).\",\"help.diff.text\":\"-u  unified format (with 3 lines of context; -U N for N)\\n-q  only tells whether they differ\\n-i  ignoring case\\n-w  ignoring spaces, -b ignoring how many there are\\n-B  ignoring empty lines\\n-s  tells also when they are identical\\n\\\"-\\\" is the input. Status: 0 same, 1 different, 2 error.\",\"help.diff.summary\":\"Shows the differences between two files.\",\"help.uname.summary\":\"The name of the operating system.\",\"help.hostname.summary\":\"The name of the system.\",\"help.whoami.summary\":\"The name of the user.\",\"help.date.text\":\"Format: %Y year, %m month, %d day, %H:%M:%S time, %A day of the week, %B month, %s seconds since 1970, %F = %Y-%m-%d, %T = %H:%M:%S\\n-d @1700000000, -d 2026-01-01, -d yesterday\\nExample: date +%F\",\"help.date.summary\":\"Date and time.\",\"help.date.usage\":\"date [-u] [-d date] [+format]\",\"help.apps.summary\":\"Lists the installed apps (id, name, version).\",\"help.tag.text\":\"tag                lists the tags\\ntag ls Work        the items with the tag\\ntag show file      the tags of an item\\ntag add Work f     puts the tag (creates it if missing)\\ntag rm Work f      removes it\\ntag new name color creates a tag\\ntag delete name    deletes a tag\",\"help.tag.summary\":\"The tags of lilOS: lists, assigns, removes.\",\"help.tag.usage\":\"tag [ls [tag…] | show path… | add tag path… | rm tag path… | new name [color] | delete tag…]\",\"help.trash.text\":\"trash              lists what is in the trash\\ntrash put file     moves to the trash (like rm -r)\\ntrash restore name puts back\\ntrash rm name      deletes permanently\\ntrash empty        empties the trash\",\"help.trash.summary\":\"The trash: lists, puts back, empties.\",\"help.trash.usage\":\"trash [list | put path… | restore name… | rm name… | empty]\",\"help.open.text\":\"open notes.txt   opens with the default app\\nopen .   opens the directory in the File Manager\\nopen -a editor notes.txt   with a given app\\nopen -a photo   starts an app\",\"help.open.summary\":\"Opens files and directories with their app (or with the one given).\",\"help.open.usage\":\"open [-a app] path…\",\"arith.tooDeep\":\"expression recursion level exceeded\",\"arith.syntax\":\"{expr}: syntax error in expression (error token is \\\"{token}\\\")\",\"arith.end\":\"end\",\"arith.missingBracket\":\"{expr}: missing `]'\",\"arith.operandExpected\":\"{expr}: syntax error: operand expected\",\"arith.badBase\":\"{value}: invalid arithmetic base\",\"arith.tooGreatForBase\":\"{value}: value too great for base\",\"arith.invalid\":\"invalid expression\",\"arith.divisionByZero\":\"division by 0\",\"arith.negativeExponent\":\"exponent less than 0\",\"arith.unknownOperator\":\"unknown operator {op}\",\"expand.braceTooLarge\":\"brace expansion too large\",\"expand.badSubstitution\":\"{name}: bad substitution\",\"expand.unbound\":\"{name}: unbound variable\",\"expand.cannotAssign\":\"{name}: cannot assign in this way\",\"expand.nullOrNotSet\":\"parameter null or not set\",\"expand.negativeSubstring\":\"{count}: substring expression < 0\",\"opt.invalid\":\"invalid option -- '{option}'\",\"opt.longNeedsArgument\":\"option '--{name}' requires an argument\",\"opt.needsArgument\":\"option requires an argument -- '{option}'\",\"opt.badNumber\":\"invalid number: '{value}'\",\"regex.unmatchedBracket\":\"Unmatched [ in regular expression\",\"regex.invalid\":\"invalid regular expression: {pattern}\",\"appCmd.summary\":\"A command of the {app} app.\",\"appCmd.usage\":\"{name} [arguments…]\",\"printf.badNumber\":\"{value}: invalid number\",\"test.argumentExpected\":\"argument expected\",\"test.unexpectedArgument\":\"{arg}: unexpected argument\",\"test.missingBracket\":\"missing `]'\",\"cd.oldpwdNotSet\":\"OLDPWD not set\",\"local.onlyInFunction\":\"can only be used in a function\",\"set.badOptionName\":\"{name}: invalid option name\",\"set.badOption\":\"{option}: invalid option\",\"let.noExpression\":\"expression expected\",\"return.onlyInFunction\":\"can only `return' from a function or sourced script\",\"loop.onlyInLoop\":\"only meaningful in a `for', `while', or `until' loop\",\"loop.badCount\":\"{n}: loop count out of range\",\"alias.badName\":\"`{name}': invalid alias name\",\"which.builtIn\":\"{name}: built into the Terminal\",\"wait.notAJob\":\"{spec}: not a job of this shell\",\"fg.noSuchJob\":\"{job}: no such job\",\"fg.current\":\"current\",\"kill.noSuchJob\":\"{spec}: no such job or process\",\"sleep.missing\":\"missing operand\",\"sleep.badDuration\":\"invalid time interval '{value}'\",\"source.noFile\":\"filename argument required\",\"bash.noCommand\":\"-c: option requires an argument\",\"bash.already\":\"You are already in bash: for a script type \\\"bash file.sh\\\" or \\\"source file.sh\\\".\",\"type.alias\":\"{name} is aliased to `{value}'\",\"type.keyword\":\"{name} is a shell keyword\",\"type.function\":\"{name} is a function\",\"type.builtin\":\"{name} is a shell builtin\",\"type.appCommand\":\"{name} is a command of the {app} app\",\"type.command\":\"{name} is a Terminal command\",\"type.file\":\"{name} is {path}\",\"syntax.topic.variables\":\"variables\",\"syntax.topic.redirections\":\"redirections\",\"syntax.if\":\"if commands; then commands; [elif commands; then commands;] [else commands;] fi\\nRuns the branch of the first \\\"if\\\"/\\\"elif\\\" whose commands succeed (status 0).\\n  if [ -f notes.txt ]; then echo found; else echo missing; fi\",\"syntax.for\":\"for name in words…; do commands; done\\nfor (( init; condition; step )); do commands; done\\n  for f in *.txt; do wc -l \\\"$f\\\"; done\\n  for ((i = 1; i <= 3; i++)); do echo $i; done\",\"syntax.while\":\"while commands; do commands; done   (until: as long as the commands do NOT succeed)\\n  n=0; while [ $n -lt 3 ]; do echo $n; n=$((n + 1)); done\\n  ls | while read -r name; do echo \\\"- $name\\\"; done\",\"syntax.until\":\"until commands; do commands; done: repeats as long as the commands do not succeed.\",\"syntax.case\":\"case word in pattern|pattern) commands;; … esac\\nPatterns use * ? [ ]. \\\";&\\\" goes on into the next branch, \\\";;&\\\" tries the following patterns too.\\n  case \\\"$f\\\" in *.txt) echo text;; *.png|*.jpg) echo image;; *) echo other;; esac\",\"syntax.function\":\"name() { commands; }   or   function name { commands; }\\nThe arguments are $1, $2…, $@; \\\"local\\\" creates variables of the function, \\\"return n\\\" exits.\\n  greet() { echo \\\"Hello, $1\\\"; }; greet Eugenio\",\"syntax.cond\":\"[[ expression ]]: test without word splitting or expansion of *.\\n  [[ $name == *.txt ]]      comparison with a pattern\\n  [[ $s =~ ^[0-9]+$ ]]      regular expression (groups in BASH_REMATCH)\\n  [[ -d dir && ! -e file ]] -e -f -d -s -z -n, && || ! ( )\",\"syntax.arith\":\"(( expression )): integer arithmetic; status 0 if the result is not 0.\\n  (( n++ )); (( n > 3 )) && echo big; echo $(( 2 ** 10 ))\",\"syntax.variables\":\"name=value (no spaces), $name or ${name}. Arrays: a=(x y z), ${a[0]}, ${a[@]}, ${#a[@]}.\\n${v:-default} ${v:=default} ${v:+alt} ${#v} ${v#prefix} ${v%suffix} ${v/from/to} ${v//from/to} ${v:start:length} ${v^^} ${v,,}\\nSpecial: $? status of the last command, $$ the shell, $! the last command in the background, $# $@ $* the arguments.\",\"syntax.redirections\":\"> file (overwrites), >> file (appends), < file (reads), 2> errors, 2>&1, &> file, <<EOF … EOF, <<< text, | pipe.\\n/dev/null discards everything.\",\"files.cannotAccess\":\"cannot access '{path}': No such file or directory\",\"files.cannotCreate\":\"cannot create '{path}': No such file or directory\",\"files.overwriteFolder\":\"cannot overwrite directory '{name}' with non-directory\",\"files.missingDestination\":\"missing destination file operand after '{path}'\",\"files.targetNotFolder\":\"target '{path}' is not a directory\",\"files.cannotStat\":\"cannot stat '{path}': No such file or directory\",\"files.cannotRemove\":\"cannot remove '{path}': {reason}\",\"files.quotedNoSuchFile\":\"'{path}': No such file or directory\",\"mkdir.notAFolder\":\"cannot create directory '{path}': '{name}' exists and is not a directory\",\"mkdir.exists\":\"cannot create directory '{path}': File exists\",\"mkdir.noParent\":\"cannot create directory '{path}': No such file or directory\",\"mkdir.created\":\"created directory '{path}'\",\"cp.overwriteFile\":\"cannot overwrite non-directory '{name}' with directory\",\"cp.verbose\":\"'{from}' -> '{to}'\",\"cp.omitting\":\"-r not specified; omitting directory '{path}'\",\"cp.intoItself\":\"cannot copy a directory, '{path}', into itself\",\"mv.system\":\"cannot move '{path}': it is a system folder\",\"mv.intoItself\":\"cannot move '{path}' to a subdirectory of itself\",\"mv.notEmpty\":\"cannot move '{path}' to '{name}': Directory not empty\",\"mv.verbose\":\"renamed '{from}' -> '{to}'\",\"reason.noSuchFile\":\"No such file or directory\",\"reason.isADirectory\":\"Is a directory\",\"reason.notADirectory\":\"Not a directory\",\"reason.notEmpty\":\"Directory not empty\",\"reason.system\":\"it is a system folder\",\"reason.containsSystem\":\"it contains system folders\",\"rm.home\":\"it is dangerous to operate on '{path}': it is the home\",\"rm.purged\":\"permanently deleted '{path}'\",\"rm.trashed\":\"moved to the trash '{path}'\",\"rmdir.removed\":\"removed directory '{path}'\",\"stat.folder\":\"directory\",\"stat.appLink\":\"link to the app {app}\",\"stat.file\":\"regular file\",\"stat.emptyFile\":\"regular empty file\",\"stat.type\":\"Type: {type}\",\"stat.path\":\"Path: {path}\",\"stat.items\":\"Items: {n} ({total} in all)\",\"stat.size\":\"Size: {size} bytes ({human})\",\"stat.created\":\"Created: {date}\",\"stat.modified\":\"Modified: {date}\",\"stat.tags\":\"Tags: {tags}\",\"stat.system\":\"System folder\",\"find.missingArgument\":\"missing argument to `{name}'\",\"find.badType\":\"unknown argument to -type: {type} (f, d or l)\",\"find.badSize\":\"invalid -size argument '{value}'\",\"find.badValue\":\"invalid argument '{value}' to {option}\",\"find.cannotFind\":\"cannot find '{path}'\",\"find.execEnd\":\"missing end of `-exec' (`;' or `+')\",\"find.execCommand\":\"missing command of `-exec'\",\"find.unknownPredicate\":\"unknown predicate `{name}'\",\"find.unexpected\":\"unexpected argument: '{arg}'\",\"tree.folders\":{\"one\":\"{n} directory\",\"other\":\"{n} directories\"},\"tree.files\":{\"one\":\"{n} file\",\"other\":\"{n} files\"},\"ls.date\":\"{month} {day}\",\"wc.total\":\"total\",\"grep.noPattern\":\"missing pattern\\nUsage: grep [options] pattern [file…]\",\"sort.badKey\":\"invalid key: '{key}'\",\"sort.disorder\":\"-:{n}: disorder: {line}\",\"cut.badList\":\"invalid list: '{spec}'\",\"cut.noList\":\"you must specify a list of fields (-f) or characters (-c)\",\"cut.badDelimiter\":\"the delimiter must be a single character\",\"tr.reverseRange\":\"range-endpoints of '{range}' are in reverse collating sequence order\",\"tr.missingSet2\":\"missing operand after '{set}'\",\"seq.badArgument\":\"invalid floating point argument: '{value}'\",\"seq.zeroStep\":\"invalid Zero increment value: '0'\",\"xargs.unmatchedDouble\":\"unmatched double quote\",\"xargs.unmatchedSingle\":\"unmatched single quote\",\"xargs.badCount\":\"value for -n option should be >= 1\",\"sed.at\":\"-e expression #1, char {pos}: {message}\",\"sed.unterminated\":\"unterminated `s' command\",\"sed.badAddress\":\"invalid address\",\"sed.missingAddress\":\"missing second address\",\"sed.missingCommand\":\"missing command\",\"sed.unexpectedBrace\":\"unexpected `}'\",\"sed.badDelimiter\":\"invalid delimiter for `s'\",\"sed.yLengths\":\"strings for `y' command are different lengths\",\"sed.noLabel\":\"\\\":\\\" lacks a label\",\"sed.unknownCommand\":\"unknown command: `{cmd}'\",\"sed.unmatchedBrace\":\"unmatched `{'\",\"sed.noSuchLabel\":\"can't find label for jump to `{label}'\",\"sed.noPreviousRegex\":\"no previous regular expression\",\"sed.cannotRead\":\"can't read {path}: No such file or directory\",\"sed.noScript\":\"missing script\\nUsage: sed [-n] [-E] [-i] script [file…]\",\"sed.noFiles\":\"no input files to edit with -i\",\"diff.missingOperand\":\"missing operand after '{arg}'\",\"diff.extraOperand\":\"extra operand '{arg}'\",\"diff.identical\":\"Files {a} and {b} are identical\",\"diff.differ\":\"Files {a} and {b} differ\",\"diff.tooBig\":\"the files are too different and too large to compare\",\"open.noApp\":\"app not found: '{app}' (see \\\"apps\\\")\",\"trash.notInTrash\":\"'{name}' is not in the trash\",\"trash.empty\":\"The trash is empty.\",\"trash.deletedFolder\":\"(deleted folder)\",\"trash.items\":{\"one\":\"{n} item\",\"other\":\"{n} items\"},\"trash.missingPut\":\"missing what to move to the trash\",\"trash.cannotTrash\":\"{path}: cannot be moved to the trash (system folder)\",\"trash.missingRestore\":\"missing the name of what to put back\",\"trash.restored\":\"restored to {path}\",\"trash.missingName\":\"missing name\",\"trash.purged\":{\"one\":\"permanently deleted {n} item\",\"other\":\"permanently deleted {n} items\"},\"trash.emptied\":{\"one\":\"Trash emptied ({n} item).\",\"other\":\"Trash emptied ({n} items).\"},\"trash.alreadyEmpty\":\"The trash was already empty.\",\"tag.noSuchTag\":\"no such tag: '{name}' (see \\\"tag ls\\\")\",\"tag.none\":\"No tags. Create one with \\\"tag new name\\\".\",\"tag.hidden\":\"hidden\",\"tag.noTags\":\"no tags\",\"tag.usageAddRm\":\"tag {sub} name file…\",\"tag.created\":\"created tag '{name}'\",\"tag.system\":\"{path}: system items have no tags\",\"tag.usageNew\":\"tag new name [color]\",\"tag.createdShown\":\"created tag {tag}\",\"tag.usageDelete\":\"tag delete name…\",\"date.formatC\":\"%a %b %e %H:%M:%S %Y\",\"date.formatX\":\"%m/%d/%y\",\"date.format\":\"%a %b %e %H:%M:%S %Z %Y\",\"date.invalid\":\"invalid date '{date}'\",\"@actions.terminal.sshHere.label\":\"Open SSH terminal here\",\"help.ssh.summary\":\"open an SSH session in a new tab\",\"help.ssh.usage\":\"ssh [-p port] [-l user] [user@]host [command] | ssh <saved host>\",\"help.telnet.summary\":\"open a Telnet session in a new tab\",\"help.telnet.usage\":\"telnet [-l user] host [port] | telnet <saved host>\",\"help.rlogin.summary\":\"open an rlogin session in a new tab\",\"help.rlogin.usage\":\"rlogin [-l user] host | rlogin <saved host>\",\"help.supdup.summary\":\"open a SUPDUP session in a new tab\",\"help.supdup.usage\":\"supdup host [port] | supdup <saved host>\",\"help.sessions.summary\":\"the remote sessions still running; with a number, shows one in a tab\",\"help.sessions.usage\":\"sessions [n]\",\"remote.cmd.unavailable\":\"remote sessions are not available (lilOS has no module for them)\",\"remote.cmd.noModule\":\"{name}: lilOS has no module for it (an administrator installs {module} from the AppStore, Kernel tab)\",\"remote.cmd.opened\":\"Opened in a new tab: {name}\",\"remote.cmd.noUser\":\"ssh: a user is needed: user@host or -l user\",\"remote.cmd.noSession\":\"no running session «{name}» (see «sessions»)\",\"remote.cmd.shown\":\"Shown in a tab: {name}\",\"remote.cmd.shownNow\":\"shown in a window\",\"remote.cmd.closesIn\":{\"one\":\"closes in {n} minute\",\"other\":\"closes in {n} minutes\"},\"remote.cmd.none\":\"No remote session is running.\",\"remote.cmd.resumeHint\":\"«sessions <n>» shows one in a tab\",\"remote.tabs\":\"Tabs\",\"remote.screen\":\"Remote terminal\",\"remote.newShell\":\"New shell\",\"remote.activity\":\"New output\",\"remote.closeTab\":\"Close tab\",\"remote.closeSession\":\"Close (ends the session)\",\"remote.closeNamed\":\"Close {name}\",\"remote.notRemote\":\"it is not in a network connection\",\"remote.notSftp\":\"the SSH terminal opens only on SFTP connections\",\"remote.cannotReconnect\":\"this session cannot be opened again from here: open it again from the File Manager\",\"remote.unavailable\":\"The remote sessions cannot be reached: {error}\",\"remote.noProtocols\":\"lilOS has no module for remote sessions. An administrator can install ssh, term-telnet, term-rlogin or term-supdup from the AppStore (Kernel tab).\",\"remote.side.label\":\"Hosts and remote sessions\",\"remote.side.toggle\":\"Show or hide the hosts\",\"remote.side.hosts\":\"Hosts\",\"remote.side.connect\":\"Connect\",\"remote.side.open\":\"A session is open on this host\",\"remote.side.none\":\"No saved hosts. «ssh user@server» opens a session; + saves a host.\",\"remote.side.running\":\"Still running\",\"remote.side.elsewhere\":\"in another window\",\"remote.side.closesIn\":{\"one\":\"closes in {n} minute\",\"other\":\"closes in {n} minutes\"},\"remote.side.resume\":\"Resume\",\"remote.taken\":\"The session was opened in another window\",\"remote.takeBack\":\"Show it here\",\"remote.lostLink\":\"The link with lilOS dropped\",\"remote.attachAgain\":\"Attach again\",\"remote.secure\":\"Encrypted\",\"remote.insecure\":\"Not encrypted\",\"remote.insecureHint\":\"What you type, passwords included, goes over the network in clear\",\"remote.cipher\":\"Cipher: {cipher}\",\"remote.state.new\":\"Waiting\",\"remote.state.connecting\":\"Connecting…\",\"remote.state.on\":\"Connected\",\"remote.state.closed\":\"Closed\",\"remote.find\":\"Find (Ctrl+Shift+F)\",\"remote.record\":\"Record the session in a file\",\"remote.recordStop\":\"Stop recording\",\"remote.keys\":\"Keys\",\"remote.keys.send\":\"Send to the server:\",\"remote.keys.copy\":\"Copy\",\"remote.keys.paste\":\"Paste: Ctrl+Shift+V\",\"remote.keys.clear\":\"Clear the history\",\"remote.keys.disconnect\":\"Disconnect\",\"remote.signal.break\":\"Send Break\",\"remote.signal.interrupt\":\"Interrupt process\",\"remote.signal.ayt\":\"Are you there?\",\"remote.reconnect\":\"Reconnect\",\"remote.closed\":\"Connection closed\",\"remote.closedWhy\":\"Connection closed: {reason}\",\"remote.record.title\":\"Record the session\",\"remote.record.file\":\"File\",\"remote.record.hint\":\"A file in your home. It is written while you work; it stops at 8 MB.\",\"remote.record.colors\":\"Keep the color codes (to see it again as it was)\",\"remote.record.start\":\"Record\",\"remote.record.badPath\":\"The folder does not exist: write a path such as ~/Documenti/session.txt\",\"remote.record.exists\":\"«{name}» exists already: choose another name\",\"remote.record.full\":\"Recording stopped: «{path}» reached its size limit\",\"remote.record.failed\":\"The recording could not be saved: {error}\",\"remote.record.saved\":\"Session recorded in «{path}»\",\"remote.host.newTitle\":\"New host\",\"remote.host.editTitle\":\"Change the host\",\"remote.host.name\":\"Name\",\"remote.host.folder\":\"Folder\",\"remote.host.folderNone\":\"None\",\"remote.host.protocol\":\"Protocol\",\"remote.host.noProtocols\":\"No protocol available.\",\"remote.host.insecureTitle\":\"Connection not encrypted\",\"remote.host.insecureText\":\"What you type, passwords included, goes over the network in clear. Use it only on networks you trust or with devices that have no SSH.\",\"remote.host.remember\":\"Remember passwords and passphrases\",\"remote.host.keyUnreadable\":\"The key file cannot be read: {error}\",\"remote.host.advanced\":\"Advanced\",\"remote.host.term\":\"Terminal type\",\"remote.host.encoding\":\"Encoding\",\"remote.host.backspace\":\"Backspace sends\",\"remote.host.backspaceDel\":\"DEL (^?)\",\"remote.host.backspaceBs\":\"BS (^H)\",\"remote.host.delete\":\"Delete\",\"remote.host.save\":\"Save\",\"remote.host.saveConnect\":\"Save and connect\",\"@entrypoints.filePreview.label\":\"Previews of .term links\",\"@entrypoints.shell.label\":\"Shell for the Scheduler\",\"@commands.terminal.newShell.label\":\"New shell\",\"@commands.terminal.splitRight.label\":\"Split right\",\"@commands.terminal.splitDown.label\":\"Split down\",\"@commands.terminal.detach.label\":\"Detach tab into a new window\",\"@commands.terminal.broadcast.label\":\"Send input to all panes\",\"@commands.terminal.focusLeft.label\":\"Pane on the left\",\"@commands.terminal.focusRight.label\":\"Pane on the right\",\"@commands.terminal.focusUp.label\":\"Pane above\",\"@commands.terminal.focusDown.label\":\"Pane below\",\"@commands.terminal.previousTab.label\":\"Previous tab of the pane\",\"@commands.terminal.nextTab.label\":\"Next tab of the pane\",\"@commands.terminal.moveLeft.label\":\"Move tab to the left\",\"@commands.terminal.moveRight.label\":\"Move tab to the right\",\"@commands.terminal.moveUp.label\":\"Move tab up\",\"@commands.terminal.moveDown.label\":\"Move tab down\",\"@dependencies.ssh.reason\":\"Remote sessions over SSH, and Terminal commands on saved SSH hosts\",\"@dependencies.term-telnet.reason\":\"Remote sessions over Telnet\",\"@dependencies.term-rlogin.reason\":\"Remote sessions over rlogin\",\"@dependencies.term-supdup.reason\":\"Remote sessions over SUPDUP\",\"@dependencies.services-isolate.reason\":\"Scheduled Terminal commands in the kernel, with the operation's time limit and Cancel\",\"tabs.count\":{\"one\":\"{n} tab\",\"other\":\"{n} tabs\"},\"tabs.pane\":\"Pane {n} — {name}\",\"tabs.rename\":\"Rename…\",\"tabs.renameLabel\":\"Tab name\",\"tabs.renameHint\":\"Empty: the usual name (the folder, or the server).\",\"tabs.renameOk\":\"Rename\",\"tabs.duplicate\":\"Duplicate\",\"tabs.splitRight\":\"Split right\",\"tabs.splitDown\":\"Split down\",\"tabs.moveToPane\":\"Move to pane\",\"tabs.detach\":\"Detach into a new window\",\"tabs.moveToWindow\":\"Move to window\",\"tabs.newWindow\":\"New window\",\"tabs.saveTerm\":\"Save as link (.term)…\",\"tabs.addToDesk\":\"Add to desk\",\"tabs.copyAddress\":\"Copy address\",\"tabs.closeOthers\":\"Close other tabs\",\"tabs.closeRight\":\"Close tabs to the right\",\"grid.gutter\":\"Drag to resize the panes; double click: same size\",\"grid.broadcast\":\"Send input to all panes\",\"grid.broadcastOn\":\"Input to all panes\",\"grid.broadcastOff\":\"What you type goes to the tab shown in every pane. Click to turn it off.\",\"menu.title\":\"Terminal menu\",\"menu.openTerm\":\"Open link (.term)…\",\"menu.openTermTitle\":\"Open a terminal link\",\"drag.newWindow\":\"Drop to open {name} in a new window\",\"drag.pane\":\"Move to this pane\",\"drag.split.left\":\"New pane on the left\",\"drag.split.right\":\"New pane on the right\",\"drag.split.up\":\"New pane above\",\"drag.split.down\":\"New pane below\",\"file.invalid\":\"This is not a terminal link (.term) or it is damaged\",\"file.missing\":\"The link does not exist any more\",\"file.cannot\":\"This tab cannot become a link\",\"file.noFolder\":\"The folder {path} does not exist\",\"file.serverFolder\":\"The folder of the server must be a full path, such as /var/www\",\"file.exists\":\"There is already a file named {name} in that folder\",\"file.noPassword\":\"Type the password (or the key) to keep in the file\",\"file.onDesk\":\"{name} is on the desk\",\"file.saved\":\"Link saved: {path}\",\"file.saveTitle\":\"Save link\",\"file.name\":\"File name\",\"file.folder\":\"Folder\",\"file.change\":\"Change…\",\"file.pickFolder\":\"Where to save the link\",\"file.cwdLocal\":\"Start in the folder (optional)\",\"file.cwdRemote\":\"Folder of the server to start in (optional)\",\"file.command\":\"Command to run at the start (optional)\",\"file.commandRemote\":\"Command at start (optional)\",\"file.commandRemoteHint\":\"Runs instead of the shell of the server\",\"file.openAs\":\"When opened\",\"file.openDefault\":\"As in the Options ({how})\",\"file.keepPassword\":\"Keep the password in the file\",\"file.passwordSaved\":\"The password saved for this host goes in the file.\",\"file.passwordHint\":\"The password is encrypted: it works only for you, on this lilOS, for this server and user. For anyone else it is asked as usual.\",\"file.save\":\"Save\",\"file.command.title\":\"This link runs a command\",\"file.command.text\":\"«{name}» runs this command when it opens:\\n\\n{command}\\n\\nRun it only if you trust who made the link. Continue?\",\"options.open\":\"Options…\",\"options.title\":\"Terminal options\",\"options.tab.general\":\"General\",\"options.tab.generalDescription\":\"How Terminal opens links\",\"options.files\":\"Terminal links (.term)\",\"options.openTerm\":\"Open the links\",\"options.openTermDescription\":\"Where a .term file opens with a double click, when the file does not say it itself\",\"options.openTerm.window\":\"In a new window\",\"options.openTerm.tab\":\"In a tab of the open window\"}}"),
-	it: /* @__PURE__ */ JSON.parse("{\"strings\":{\"@name\":\"Terminale\",\"@description\":\"Una shell simile a bash sui file di lilOS, in schede e riquadri affiancati, e sessioni remote: SSH, Telnet, rlogin e SUPDUP, con host salvati, collegamenti .term e sessioni che restano aperte anche a finestra chiusa.\",\"@entrypoints.main.params.cwd.label\":\"Cartella\",\"@entrypoints.main.params.cwd.description\":\"La cartella in cui aprire il terminale\",\"@automation.terminal.run.label\":\"Esegui un comando\",\"@automation.terminal.run.params.command.label\":\"Comando\",\"@automation.terminal.run.params.folder.label\":\"Cartella\",\"@automation.terminal.run.params.folder.description\":\"La cartella di lavoro in cui gira il comando\",\"@entrypoints.main.params.file.label\":\"Collegamento\",\"@entrypoints.main.params.file.description\":\"Un collegamento al terminale (.term) da aprire\",\"ui.title\":\"Terminale\",\"ui.commandLine\":\"Riga di comando\",\"ui.welcome\":\"Terminale di lilOS · «help» elenca i comandi\",\"automation.tooLong\":\"Comando troppo lungo da registrare\",\"automation.noCommand\":\"Nessun comando da eseguire\",\"automation.busy\":\"Il terminale sta eseguendo un altro comando\",\"automation.noFolder\":\"La cartella non c’è più\",\"automation.status\":\"Il comando è finito con lo stato {status}\",\"shell.defaultUser\":\"utente\",\"shell.readonly\":\"{name}: variabile in sola lettura\",\"shell.cannotUnset\":\"{name}: impossibile eliminare: variabile in sola lettura\",\"shell.badSubscript\":\"{index}: indice dell’array non valido\",\"shell.unknownConstruct\":\"costrutto sconosciuto: {type}\",\"shell.badRegex\":\"espressione regolare non valida\",\"shell.unaryExpected\":\"{op}: operatore unario atteso\",\"shell.integerExpected\":\"{value}: è attesa un’espressione intera\",\"shell.binaryExpected\":\"{op}: operatore binario atteso\",\"shell.commandNotFound\":\"{name}: comando non trovato\",\"shell.tooDeep\":\"{name}: troppi livelli di ricorsione\",\"shell.badFd\":\"{fd}: descrittore di file errato\",\"shell.fdExpected\":\"{target}: è richiesto un descrittore di file\",\"shell.ambiguousRedirect\":\"{target}: redirezione ambigua\",\"shell.isAppLink\":\"{path}: è un collegamento a un’app\",\"err.noSuchFile\":\"{path}: file o cartella inesistente\",\"err.isADirectory\":\"{path}: è una cartella\",\"err.notAFile\":\"{path}: non è un file\",\"err.missingParen\":\"manca «)»\",\"err.badIdentifier\":\"«{name}»: identificatore non valido\",\"err.numericArgument\":\"{value}: è richiesto un argomento numerico\",\"err.tooManyArguments\":\"troppi argomenti\",\"err.notADirectory\":\"{path}: non è una cartella\",\"err.notFound\":\"{name}: non trovato\",\"err.missingOperand\":\"manca l’operando\",\"err.unknownSubcommand\":\"sottocomando sconosciuto: «{sub}»\",\"parse.unexpectedEnd\":\"errore di sintassi: fine del testo inattesa\",\"parse.unexpectedEndOfFile\":\"errore di sintassi: fine del file inattesa\",\"parse.nearEnd\":\"fine del testo\",\"parse.nearNewline\":\"a capo\",\"parse.nearToken\":\"«{token}»\",\"parse.near\":\"errore di sintassi vicino a {near}\",\"parse.nearExpected\":\"errore di sintassi vicino a {near}: atteso «{expected}»\",\"parse.badFunctionName\":\"nome di funzione non valido\",\"parse.parenAfterName\":\"atteso «)» dopo il nome della funzione\",\"parse.aliasLoop\":\"alias espansi troppe volte\",\"parse.missingTarget\":\"errore di sintassi vicino a {near}: manca la destinazione di «{op}»\",\"parse.forBadName\":\"for: nome di variabile non valido\",\"parse.caseNoWord\":\"case: manca la parola\",\"parse.condNear\":\"errore di sintassi in [[ vicino a {near}\",\"parse.condNoOperand\":\"errore di sintassi in [[: manca un operando\",\"parse.condNoRegex\":\"errore di sintassi in [[: manca l’espressione regolare\",\"parse.badSubstitution\":\"sostituzione errata\",\"parse.badSubstitutionBrace\":\"sostituzione errata: manca «}»\",\"parse.backquotes\":\"errore di sintassi tra gli apici inversi\",\"jobs.done\":\"Fatto\",\"jobs.interrupted\":\"Interrotto\",\"jobs.exit\":\"Uscita {code}\",\"jobs.running\":\"In esecuzione\",\"help.usageLine\":\"Uso: {usage}\",\"help.usageShort\":\"uso: {usage}\",\"help.noHelp\":\"nessun aiuto per «{name}»\",\"help.intro\":\"Terminale di lilOS: una shell come bash sui file di lilOS.\\n«help comando» o «comando --help» spiega un comando; «help if», «help for», «help case»… la sintassi.\",\"help.syntaxList\":\"Sintassi: {list}\",\"help.sh.summary\":\"Come bash.\",\"help.sh.usage\":\"sh [-c comandi | script] [argomenti…]\",\"help.bash.text\":\"«bash script.sh a b» esegue lo script con $1=a, $2=b; «bash -c 'echo $1' nome x» esegue il testo; «cat script.sh | bash» legge lo script dall’input.\",\"help.bash.summary\":\"Esegue uno script o dei comandi in una nuova shell.\",\"help.bash.usage\":\"bash [-c comandi | script] [argomenti…]\",\"help.sleep.summary\":\"Aspetta: 5 (secondi), 0.5, 2m, 1h.\",\"help.sleep.usage\":\"sleep durata…\",\"help.kill.summary\":\"Interrompe dei comandi in background.\",\"help.kill.usage\":\"kill [-segnale] %job | pid…\",\"help.fg.summary\":\"Porta in primo piano un comando in background: lo si aspetta e Ctrl C lo interrompe.\",\"help.wait.summary\":\"Aspetta che finiscano i comandi in background (tutti, o quelli indicati).\",\"help.jobs.summary\":\"Elenca i comandi avviati in background con &.\",\"help.clear.summary\":\"Pulisce lo schermo (anche Ctrl L).\",\"help.help.summary\":\"Elenca i comandi, o spiega quello indicato.\",\"help.help.usage\":\"help [comando]\",\"help.history.summary\":\"Mostra i comandi dati (gli ultimi n); -c cancella la cronologia.\",\"help.which.summary\":\"Dice dove si trova un comando.\",\"help.which.usage\":\"which nome…\",\"help.command.summary\":\"Avvia un comando ignorando le funzioni con lo stesso nome; con -v dice cosa avvierebbe.\",\"help.command.usage\":\"command [-v] nome [argomenti…]\",\"help.type.summary\":\"Dice cos’è un nome: alias, parola chiave, funzione, comando.\",\"help.type.usage\":\"type [-t] nome…\",\"help.unalias.summary\":\"Elimina degli alias (tutti con -a).\",\"help.unalias.usage\":\"unalias [-a] nome…\",\"help.alias.text\":\"Esempio: alias ll='ls -l'. Gli alias valgono dalla riga successiva a quella che li definisce.\",\"help.alias.summary\":\"Definisce o mostra gli alias (nomi brevi per comandi).\",\"help.alias.usage\":\"alias [nome[=valore]…]\",\"help.eval.summary\":\"Esegue gli argomenti, uniti da spazi, come un comando.\",\"help.eval.usage\":\"eval [argomenti…]\",\"help.dot.summary\":\"Come source.\",\"help.dot.usage\":\". file [argomenti…]\",\"help.source.summary\":\"Esegue i comandi di un file in questa shell (variabili, funzioni e alias restano).\",\"help.source.usage\":\"source file [argomenti…]\",\"help.read.text\":\"-r  le barre rovesciate restano come sono\\n-p  mostra un prompt\\n-a  mette le parole in un array\\n-d  legge fino a questo carattere invece che fino all’a capo\\n-s  non mostra ciò che si scrive (per le password)\\nStato 1 alla fine dell’input.\",\"help.read.summary\":\"Legge una riga e la divide nelle variabili indicate ($REPLY senza nomi).\",\"help.read.usage\":\"read [-rs] [-p prompt] [-a array] [-d delim] [nome…]\",\"help.continue.summary\":\"Passa al giro successivo del ciclo (o dell’n-esimo ciclo esterno).\",\"help.break.summary\":\"Esce dal ciclo (o da n cicli).\",\"help.return.summary\":\"Esce dalla funzione (o dallo script letto con source).\",\"help.return.usage\":\"return [stato]\",\"help.exit.summary\":\"Chiude il terminale (o esce dallo script) con uno stato.\",\"help.exit.usage\":\"exit [stato]\",\"help.let.summary\":\"Calcola espressioni aritmetiche (stato 1 se l’ultima vale 0).\",\"help.let.usage\":\"let espressione…\",\"help.bracket.summary\":\"Come test, con una «]» finale.\",\"help.bracket.usage\":\"[ espressione ]\",\"help.test.text\":\"File: -e esiste, -f è un file, -d è una cartella, -s non è vuoto\\nTesto: -z vuoto, -n non vuoto, a = b, a != b\\nNumeri: -eq -ne -lt -le -gt -ge\\nInsieme: ! negazione, -a e, -o o, ( … )\",\"help.test.summary\":\"Valuta un’espressione: stato 0 se vera, 1 se falsa.\",\"help.test.usage\":\"test espressione\",\"help.colon.summary\":\"Non fa niente (stato 0); gli argomenti vengono comunque espansi.\",\"help.colon.usage\":\": [argomenti…]\",\"help.false.summary\":\"Non fa niente, senza successo (stato 1).\",\"help.true.summary\":\"Non fa niente, con successo (stato 0).\",\"help.shift.summary\":\"Sposta i parametri posizionali: $2 diventa $1…\",\"help.set.text\":\"-e  esce al primo comando che fallisce\\n-u  errore se si usa una variabile non impostata\\n-x  mostra i comandi prima di eseguirli\\n-f  niente espansione di * e ?\\n-o pipefail  una pipe fallisce se fallisce uno dei suoi comandi\\n+e, +u… le disattivano. Senza argomenti mostra tutte le variabili.\",\"help.set.summary\":\"Imposta le opzioni della shell e i parametri posizionali ($1, $2…).\",\"help.set.usage\":\"set [-euxf] [-o opzione] [--] [argomenti…]\",\"help.printenv.summary\":\"Mostra le variabili esportate (o il valore di quelle indicate).\",\"help.printenv.usage\":\"printenv [nome…]\",\"help.env.summary\":\"Mostra le variabili esportate, o avvia un comando con variabili in più.\",\"help.env.usage\":\"env [nome=valore…] [comando [argomenti…]]\",\"help.unset.summary\":\"Elimina variabili (o funzioni con -f).\",\"help.unset.usage\":\"unset [-fv] nome…\",\"help.typeset.summary\":\"Come declare.\",\"help.typeset.usage\":\"typeset [-aprxifF] [nome[=valore]…]\",\"help.declare.text\":\"-a array, -x esportata, -r sola lettura, -i intero (il valore si calcola), -p mostra, -f mostra le funzioni, -g globale dentro una funzione.\",\"help.declare.summary\":\"Dichiara variabili e ne mostra gli attributi.\",\"help.declare.usage\":\"declare [-aprxifF] [nome[=valore]…]\",\"help.local.summary\":\"Variabili visibili solo dentro la funzione.\",\"help.local.usage\":\"local [-arx] nome[=valore]…\",\"help.readonly.summary\":\"Rende le variabili di sola lettura.\",\"help.readonly.usage\":\"readonly [nome[=valore]…]\",\"help.export.text\":\"Senza argomenti elenca le variabili esportate. -n toglie l’esportazione.\",\"help.export.summary\":\"Rende le variabili visibili ai comandi e agli script avviati.\",\"help.export.usage\":\"export [-n] [nome[=valore]…]\",\"help.printf.text\":\"Il formato si riapplica finché restano argomenti. -v salva il risultato in una variabile.\",\"help.printf.summary\":\"Scrive gli argomenti secondo un formato (%s, %d, %5.2f, %x, %b, %q…).\",\"help.printf.usage\":\"printf [-v var] formato [argomenti…]\",\"help.echo.text\":\"-n  senza a capo finale\\n-e  interpreta \\\\n, \\\\t, \\\\\\\\, \\\\e… \\n-E  non le interpreta (predefinito)\",\"help.echo.summary\":\"Scrive gli argomenti, separati da uno spazio.\",\"help.echo.usage\":\"echo [-neE] [testo…]\",\"help.pwd.summary\":\"Mostra la cartella di lavoro.\",\"help.cd.text\":\"Senza argomenti va nella home ($HOME). «cd -» torna alla cartella precedente ($OLDPWD).\",\"help.cd.summary\":\"Cambia la cartella di lavoro.\",\"help.cd.usage\":\"cd [cartella]\",\"help.realpath.summary\":\"Il percorso completo.\",\"help.realpath.usage\":\"realpath [-m] percorso…\",\"help.dirname.summary\":\"Il percorso senza l’ultima parte.\",\"help.dirname.usage\":\"dirname percorso…\",\"help.basename.summary\":\"L’ultima parte di un percorso (senza il suffisso).\",\"help.basename.usage\":\"basename percorso [suffisso]\",\"help.tree.summary\":\"Mostra le cartelle ad albero.\",\"help.tree.usage\":\"tree [-adf] [-L livelli] [cartella…]\",\"help.find.text\":\"Test: -name modello, -iname, -path, -type f|d|l, -empty, -size [+-]n[ckMG], -mtime [+-]giorni, -mmin, -newer file\\nAzioni: -print, -print0, -delete (nel cestino), -exec comando {} \\\\; oppure +\\nOpzioni: -maxdepth n, -mindepth n. Insieme: ! (negazione), -o (o), ( … )\\nEsempio: find . -name \\\"*.txt\\\" -size +1k\",\"help.find.summary\":\"Cerca file e cartelle.\",\"help.find.usage\":\"find [percorso…] [espressione]\",\"help.stat.text\":\"-c  formato: %n nome, %s dimensione, %F tipo, %y data di modifica, %Y in secondi, %w %W creazione, %i id\",\"help.stat.summary\":\"Mostra i dettagli di file e cartelle.\",\"help.stat.usage\":\"stat [-c formato] percorso…\",\"help.rmdir.summary\":\"Rimuove cartelle vuote (nel cestino).\",\"help.rmdir.usage\":\"rmdir [-p] cartella…\",\"help.rm.text\":\"-r  anche le cartelle, con il loro contenuto\\n-d  le cartelle vuote\\n-f  nessun errore per ciò che non esiste\\n--purge  elimina definitivamente, senza cestino\\nCiò che va nel cestino si rimette a posto con «trash restore».\",\"help.rm.summary\":\"Sposta file e cartelle nel cestino (con --purge li elimina per sempre).\",\"help.rm.usage\":\"rm [-rfvd] [--purge] percorso…\",\"help.mv.text\":\"Se la destinazione è una cartella, ci sposta dentro; altrimenti rinomina. Un file sovrascritto va nel cestino.\\n-n  non sovrascrive\\n-v  dice cosa sposta\",\"help.mv.summary\":\"Sposta o rinomina file e cartelle.\",\"help.mv.usage\":\"mv [-nv] origine… destinazione\",\"help.cp.text\":\"-r  copia anche le cartelle, con il loro contenuto\\n-n  non sovrascrive i file che esistono\\n-v  dice cosa copia\",\"help.cp.summary\":\"Copia file e cartelle.\",\"help.cp.usage\":\"cp [-rnv] origine… destinazione\",\"help.touch.summary\":\"Crea dei file vuoti, o aggiorna la data di modifica di quelli che esistono.\",\"help.mkdir.text\":\"-p  crea anche le cartelle intermedie; nessun errore se esiste già\",\"help.mkdir.summary\":\"Crea delle cartelle.\",\"help.mkdir.usage\":\"mkdir [-pv] cartella…\",\"help.cat.text\":\"-n  numera le righe\\n-b  numera solo quelle non vuote\\n-s  una sola riga vuota di fila\\n-E  $ alla fine di ogni riga\",\"help.cat.summary\":\"Mostra il contenuto dei file (o dell’input), uno dopo l’altro.\",\"help.ls.text\":\"-l  dettagli (tipo, dimensione, data, tag)\\n-a  anche i nomi che iniziano con «.»\\n-h  dimensioni leggibili (1,2K)\\n-t  per data, -S per dimensione, -r al contrario\\n-1  uno per riga\\n-d  la cartella stessa, non il contenuto\\n-R  anche le sottocartelle\\n-F  / dopo le cartelle, @ dopo i collegamenti, * dopo gli script\",\"help.ls.summary\":\"Elenca il contenuto delle cartelle.\",\"help.ls.usage\":\"ls [-laAh1trSdRF] [percorso…]\",\"help.xargs.text\":\"-n N  al massimo N argomenti per volta\\n-I {}  un comando per riga, con {} sostituito dalla riga\\n-0  parole separate dal carattere nullo (find -print0)\\n-d C  parole separate da C\\n-t  mostra i comandi prima di avviarli\\n-r  non avvia niente se l’input è vuoto\\nEsempio: find . -name \\\"*.tmp\\\" | xargs rm\",\"help.xargs.summary\":\"Avvia un comando con le parole dell’input come argomenti.\",\"help.xargs.usage\":\"xargs [-n N] [-I {}] [-0] [-t] [comando [argomenti…]]\",\"help.yes.summary\":\"Ripete una riga all’infinito (y se non indicata): utile in una pipe.\",\"help.yes.usage\":\"yes [testo]\",\"help.seq.text\":\"-s S  separatore (a capo se non indicato)\\n-w  stessa larghezza, con zeri davanti\",\"help.seq.summary\":\"Scrive una sequenza di numeri.\",\"help.seq.usage\":\"seq [primo [passo]] ultimo\",\"help.nl.summary\":\"Numera le righe (non vuote, o tutte con -b a).\",\"help.rev.summary\":\"Scrive ogni riga al contrario.\",\"help.tr.text\":\"tr a-z A-Z  in maiuscolo\\ntr -d '\\\\r'  elimina i ritorni a capo di Windows\\ntr -s ' '  un solo spazio di fila\\nClassi: [:upper:] [:lower:] [:digit:] [:alpha:] [:alnum:] [:space:] [:punct:]\",\"help.tr.summary\":\"Sostituisce o elimina caratteri.\",\"help.tr.usage\":\"tr [-dsc] insieme1 [insieme2]\",\"help.cut.text\":\"-f 1,3  i campi 1 e 3 (separati da tab o da -d)\\n-d ,  il separatore\\n-c 1-5  i caratteri da 1 a 5\\n-s  solo le righe con il separatore\",\"help.cut.summary\":\"Estrae colonne da ogni riga.\",\"help.cut.usage\":\"cut -f campi [-d separatore] | -c caratteri [file…]\",\"help.tee.text\":\"-a  aggiunge in fondo invece di sovrascrivere\",\"help.tee.summary\":\"Copia l’input sia sull’output sia nei file.\",\"help.uniq.text\":\"-c  con il numero di ripetizioni\\n-d  solo le righe ripetute\\n-u  solo quelle uniche\\n-i  senza distinguere maiuscole e minuscole\",\"help.uniq.summary\":\"Toglie le righe ripetute una dopo l’altra (di solito dopo sort).\",\"help.sort.text\":\"-r  al contrario\\n-n  per numero\\n-h  per dimensione leggibile (2K, 1M)\\n-u  senza doppioni\\n-f  senza distinguere maiuscole e minuscole\\n-k N[,M]  per il campo N (fino a M)\\n-t C  campi separati da C\\n-V  numeri dentro il testo (file2 prima di file10)\\n-o file  scrive nel file\",\"help.sort.summary\":\"Ordina le righe.\",\"help.sort.usage\":\"sort [-rnufhV] [-k campo] [-t separatore] [file…]\",\"help.grep.text\":\"-i  senza distinguere maiuscole e minuscole\\n-v  le righe che NON corrispondono\\n-n  con il numero di riga\\n-c  conta le righe\\n-l  solo i nomi dei file\\n-r  cerca nelle cartelle\\n-w  parole intere, -x righe intere\\n-E  espressioni regolari estese (| + ? () senza barra)\\n-F  testo semplice, non espressione regolare\\n-o  solo la parte che corrisponde\\n-q  nessun risultato, solo lo stato\\n-A N, -B N, -C N  righe di contesto dopo, prima, intorno\\nStato: 0 trovato, 1 non trovato, 2 errore.\",\"help.grep.summary\":\"Cerca le righe che contengono un modello (espressione regolare).\",\"help.grep.usage\":\"grep [-ivnclrwxEFoqH] [-e modello] modello [file…]\",\"help.wc.text\":\"-l righe, -w parole, -c byte, -m caratteri, -L la riga più lunga\",\"help.wc.summary\":\"Conta righe, parole e byte.\",\"help.tail.text\":\"-n N  le ultime N righe (-n +N: dalla riga N in poi)\\n-c N  gli ultimi N caratteri\",\"help.tail.summary\":\"Le ultime righe (10 se non indicato).\",\"help.tail.usage\":\"tail [-n righe] [-c byte] [file…]\",\"help.head.text\":\"-n N  le prime N righe (-n -N: tutte tranne le ultime N)\\n-c N  i primi N caratteri\\n-5 è come -n 5\",\"help.head.summary\":\"Le prime righe (10 se non indicato).\",\"help.head.usage\":\"head [-n righe] [-c byte] [file…]\",\"help.sed.text\":\"s/vecchio/nuovo/g  sostituisce (g: tutte le volte, i: senza maiuscole, p: stampa)\\n3d, /re/d, 2,5d  elimina righe     -n …p  stampa solo quelle scelte\\ny/abc/xyz/  traslittera     a testo, i testo, c testo  aggiunge, inserisce, cambia\\n=  numero di riga   q  esce   h H g G x  spazio di riserva   b t :etichetta  salti\\nIndirizzi: n, $, /re/, a,b, a,+n, ! per negare, { … } per raggruppare.\\n-n  non stampa le righe da sola    -E  espressioni regolari estese    -i  modifica i file\\nEsempi: sed 's/rosso/blu/g' note.txt    sed -n '1,5p' file    sed -i '/^#/d' conf.txt\",\"help.sed.summary\":\"Modifica il testo riga per riga (sostituzioni, cancellazioni…).\",\"help.diff.text\":\"-u  formato unificato (con 3 righe di contesto; -U N per N)\\n-q  dice solo se sono diversi\\n-i  senza distinguere maiuscole e minuscole\\n-w  ignorando gli spazi, -b ignorando quanti sono\\n-B  ignorando le righe vuote\\n-s  dice anche quando sono identici\\n«-» è l’input. Stato: 0 uguali, 1 diversi, 2 errore.\",\"help.diff.summary\":\"Mostra le differenze tra due file.\",\"help.uname.summary\":\"Il nome del sistema operativo.\",\"help.hostname.summary\":\"Il nome del sistema.\",\"help.whoami.summary\":\"Il nome dell’utente.\",\"help.date.text\":\"Formato: %Y anno, %m mese, %d giorno, %H:%M:%S ora, %A giorno della settimana, %B mese, %s secondi dal 1970, %F = %Y-%m-%d, %T = %H:%M:%S\\n-d @1700000000, -d 2026-01-01, -d ieri\\nEsempio: date +%F\",\"help.date.summary\":\"Data e ora.\",\"help.date.usage\":\"date [-u] [-d data] [+formato]\",\"help.apps.summary\":\"Elenca le app installate (id, nome, versione).\",\"help.tag.text\":\"tag                elenca i tag\\ntag ls Lavoro      gli elementi con il tag\\ntag show file      i tag di un elemento\\ntag add Lavoro f   mette il tag (lo crea se non c’è)\\ntag rm Lavoro f    lo toglie\\ntag new nome blu   crea un tag\\ntag delete nome    elimina un tag\",\"help.tag.summary\":\"I tag di lilOS: elenca, assegna, toglie.\",\"help.tag.usage\":\"tag [ls [tag…] | show percorso… | add tag percorso… | rm tag percorso… | new nome [colore] | delete tag…]\",\"help.trash.text\":\"trash              elenca ciò che è nel cestino\\ntrash put file     sposta nel cestino (come rm -r)\\ntrash restore nome rimette a posto\\ntrash rm nome      elimina definitivamente\\ntrash empty        svuota il cestino\",\"help.trash.summary\":\"Il cestino: elenca, rimette a posto, svuota.\",\"help.trash.usage\":\"trash [list | put percorso… | restore nome… | rm nome… | empty]\",\"help.open.text\":\"open note.txt   apre con l’app predefinita\\nopen .   apre la cartella nel File Manager\\nopen -a editor note.txt   con un’app precisa\\nopen -a photo   avvia un’app\",\"help.open.summary\":\"Apre file e cartelle con la loro app (o con quella indicata).\",\"help.open.usage\":\"open [-a app] percorso…\",\"arith.tooDeep\":\"espressione: troppi livelli di ricorsione\",\"arith.syntax\":\"{expr}: errore di sintassi nell’espressione (simbolo errato «{token}»)\",\"arith.end\":\"fine\",\"arith.missingBracket\":\"{expr}: manca «]»\",\"arith.operandExpected\":\"{expr}: errore di sintassi nell’espressione (operando atteso)\",\"arith.badBase\":\"{value}: base non valida\",\"arith.tooGreatForBase\":\"{value}: valore troppo grande per la base\",\"arith.invalid\":\"espressione non valida\",\"arith.divisionByZero\":\"divisione per zero\",\"arith.negativeExponent\":\"esponente negativo\",\"arith.unknownOperator\":\"operatore sconosciuto {op}\",\"expand.braceTooLarge\":\"espansione delle graffe troppo grande\",\"expand.badSubstitution\":\"{name}: sostituzione errata\",\"expand.unbound\":\"{name}: variabile non impostata\",\"expand.cannotAssign\":\"{name}: impossibile assegnare in questo modo\",\"expand.nullOrNotSet\":\"parametro nullo o non impostato\",\"expand.negativeSubstring\":\"{count}: espressione di sottostringa < 0\",\"opt.invalid\":\"opzione non valida -- «{option}»\",\"opt.longNeedsArgument\":\"l’opzione «--{name}» richiede un argomento\",\"opt.needsArgument\":\"l’opzione richiede un argomento -- «{option}»\",\"opt.badNumber\":\"numero non valido: «{value}»\",\"regex.unmatchedBracket\":\"«[» senza «]» nell’espressione regolare\",\"regex.invalid\":\"espressione regolare non valida: {pattern}\",\"appCmd.summary\":\"Comando dell’app {app}.\",\"appCmd.usage\":\"{name} [argomenti…]\",\"printf.badNumber\":\"{value}: è richiesto un numero\",\"test.argumentExpected\":\"manca un argomento\",\"test.unexpectedArgument\":\"{arg}: argomento inatteso\",\"test.missingBracket\":\"manca «]»\",\"cd.oldpwdNotSet\":\"OLDPWD non impostata\",\"local.onlyInFunction\":\"si può usare solo in una funzione\",\"set.badOptionName\":\"{name}: nome di opzione non valido\",\"set.badOption\":\"{option}: opzione non valida\",\"let.noExpression\":\"manca l’espressione\",\"return.onlyInFunction\":\"si può usare solo in una funzione o in uno script letto con source\",\"loop.onlyInLoop\":\"ha senso solo in un ciclo for, while o until\",\"loop.badCount\":\"{n}: numero di cicli non valido\",\"alias.badName\":\"«{name}»: nome di alias non valido\",\"which.builtIn\":\"{name}: comando integrato nel Terminale\",\"wait.notAJob\":\"{spec}: non è un job di questa shell\",\"fg.noSuchJob\":\"{job}: job inesistente\",\"fg.current\":\"attuale\",\"kill.noSuchJob\":\"{spec}: job o processo inesistente\",\"sleep.missing\":\"manca la durata\",\"sleep.badDuration\":\"durata non valida: «{value}»\",\"source.noFile\":\"manca il nome del file\",\"bash.noCommand\":\"-c: manca il testo dei comandi\",\"bash.already\":\"Sei già in bash: per uno script scrivi «bash file.sh» o «source file.sh».\",\"type.alias\":\"{name} è un alias di «{value}»\",\"type.keyword\":\"{name} è una parola chiave della shell\",\"type.function\":\"{name} è una funzione\",\"type.builtin\":\"{name} è un comando interno della shell\",\"type.appCommand\":\"{name} è un comando dell’app {app}\",\"type.command\":\"{name} è un comando del Terminale\",\"type.file\":\"{name} è {path}\",\"syntax.topic.variables\":\"variabili\",\"syntax.topic.redirections\":\"redirezioni\",\"syntax.if\":\"if comandi; then comandi; [elif comandi; then comandi;] [else comandi;] fi\\nEsegue il ramo del primo «if»/«elif» i cui comandi riescono (stato 0).\\n  if [ -f note.txt ]; then echo c’è; else echo manca; fi\",\"syntax.for\":\"for nome in parole…; do comandi; done\\nfor (( inizio; condizione; passo )); do comandi; done\\n  for f in *.txt; do wc -l \\\"$f\\\"; done\\n  for ((i = 1; i <= 3; i++)); do echo $i; done\",\"syntax.while\":\"while comandi; do comandi; done   (until: finché i comandi NON riescono)\\n  n=0; while [ $n -lt 3 ]; do echo $n; n=$((n + 1)); done\\n  ls | while read -r nome; do echo \\\"- $nome\\\"; done\",\"syntax.until\":\"until comandi; do comandi; done: ripete finché i comandi non riescono.\",\"syntax.case\":\"case parola in modello|modello) comandi;; … esac\\nI modelli usano * ? [ ]. «;&» prosegue nel ramo dopo, «;;&» prova anche i modelli successivi.\\n  case \\\"$f\\\" in *.txt) echo testo;; *.png|*.jpg) echo immagine;; *) echo altro;; esac\",\"syntax.function\":\"nome() { comandi; }   oppure   function nome { comandi; }\\nGli argomenti sono $1, $2…, $@; «local» crea variabili della funzione, «return n» esce.\\n  saluta() { echo \\\"Ciao, $1\\\"; }; saluta Eugenio\",\"syntax.cond\":\"[[ espressione ]]: test senza divisione in parole né espansione di *.\\n  [[ $nome == *.txt ]]      confronto con un modello\\n  [[ $s =~ ^[0-9]+$ ]]      espressione regolare (gruppi in BASH_REMATCH)\\n  [[ -d dir && ! -e file ]] -e -f -d -s -z -n, && || ! ( )\",\"syntax.arith\":\"(( espressione )): aritmetica intera; stato 0 se il risultato non è 0.\\n  (( n++ )); (( n > 3 )) && echo grande; echo $(( 2 ** 10 ))\",\"syntax.variables\":\"nome=valore (senza spazi), $nome o ${nome}. Array: a=(x y z), ${a[0]}, ${a[@]}, ${#a[@]}.\\n${v:-predefinito} ${v:=predefinito} ${v:+alt} ${#v} ${v#prefisso} ${v%suffisso} ${v/da/a} ${v//da/a} ${v:inizio:lunghezza} ${v^^} ${v,,}\\nSpeciali: $? stato dell’ultimo comando, $$ la shell, $! l’ultimo comando in background, $# $@ $* gli argomenti.\",\"syntax.redirections\":\"> file (sovrascrive), >> file (aggiunge), < file (legge), 2> errori, 2>&1, &> file, <<EOF … EOF, <<< testo, | pipe.\\n/dev/null scarta tutto.\",\"files.cannotAccess\":\"impossibile accedere a «{path}»: file o cartella inesistente\",\"files.cannotCreate\":\"impossibile creare «{path}»: file o cartella inesistente\",\"files.overwriteFolder\":\"impossibile sovrascrivere la cartella «{name}» con un file\",\"files.missingDestination\":\"manca la destinazione dopo «{path}»\",\"files.targetNotFolder\":\"la destinazione «{path}» non è una cartella\",\"files.cannotStat\":\"impossibile fare stat di «{path}»: file o cartella inesistente\",\"files.cannotRemove\":\"impossibile rimuovere «{path}»: {reason}\",\"files.quotedNoSuchFile\":\"«{path}»: file o cartella inesistente\",\"mkdir.notAFolder\":\"impossibile creare la cartella «{path}»: «{name}» esiste e non è una cartella\",\"mkdir.exists\":\"impossibile creare la cartella «{path}»: il file esiste\",\"mkdir.noParent\":\"impossibile creare la cartella «{path}»: file o cartella inesistente\",\"mkdir.created\":\"creata la cartella «{path}»\",\"cp.overwriteFile\":\"impossibile sovrascrivere «{name}», che non è una cartella, con una cartella\",\"cp.verbose\":\"«{from}» -> «{to}»\",\"cp.omitting\":\"-r non specificato; si omette la cartella «{path}»\",\"cp.intoItself\":\"impossibile copiare la cartella «{path}» dentro se stessa\",\"mv.system\":\"impossibile spostare «{path}»: è una cartella di sistema\",\"mv.intoItself\":\"impossibile spostare «{path}» in una sua sottocartella\",\"mv.notEmpty\":\"impossibile spostare «{path}» su «{name}»: la cartella non è vuota\",\"mv.verbose\":\"rinominato «{from}» -> «{to}»\",\"reason.noSuchFile\":\"file o cartella inesistente\",\"reason.isADirectory\":\"è una cartella\",\"reason.notADirectory\":\"non è una cartella\",\"reason.notEmpty\":\"la cartella non è vuota\",\"reason.system\":\"è una cartella di sistema\",\"reason.containsSystem\":\"contiene cartelle di sistema\",\"rm.home\":\"è pericoloso agire su «{path}»: è la home\",\"rm.purged\":\"eliminato definitivamente «{path}»\",\"rm.trashed\":\"spostato nel cestino «{path}»\",\"rmdir.removed\":\"rimossa la cartella «{path}»\",\"stat.folder\":\"cartella\",\"stat.appLink\":\"collegamento all’app {app}\",\"stat.file\":\"file\",\"stat.emptyFile\":\"file vuoto\",\"stat.type\":\"Tipo: {type}\",\"stat.path\":\"Percorso: {path}\",\"stat.items\":\"Elementi: {n} ({total} in tutto)\",\"stat.size\":\"Dimensione: {size} byte ({human})\",\"stat.created\":\"Creato: {date}\",\"stat.modified\":\"Modificato: {date}\",\"stat.tags\":\"Tag: {tags}\",\"stat.system\":\"Cartella di sistema\",\"find.missingArgument\":\"manca l’argomento di «{name}»\",\"find.badType\":\"tipo sconosciuto per -type: «{type}» (f, d o l)\",\"find.badSize\":\"dimensione non valida: «{value}»\",\"find.badValue\":\"valore non valido per {option}: «{value}»\",\"find.cannotFind\":\"impossibile trovare «{path}»\",\"find.execEnd\":\"manca la fine di «-exec» («;» o «+»)\",\"find.execCommand\":\"manca il comando di «-exec»\",\"find.unknownPredicate\":\"predicato sconosciuto: «{name}»\",\"find.unexpected\":\"argomento inatteso: «{arg}»\",\"tree.folders\":{\"one\":\"{n} cartella\",\"other\":\"{n} cartelle\"},\"tree.files\":{\"one\":\"{n} file\",\"other\":\"{n} file\"},\"ls.date\":\"{day} {month}\",\"wc.total\":\"totale\",\"grep.noPattern\":\"manca il modello da cercare\\nUso: grep [opzioni] modello [file…]\",\"sort.badKey\":\"chiave non valida: «{key}»\",\"sort.disorder\":\"-:{n}: disordine: {line}\",\"cut.badList\":\"elenco non valido: «{spec}»\",\"cut.noList\":\"indicare un elenco di campi (-f) o di caratteri (-c)\",\"cut.badDelimiter\":\"il delimitatore deve essere un solo carattere\",\"tr.reverseRange\":\"intervallo al contrario: «{range}»\",\"tr.missingSet2\":\"manca il secondo insieme dopo «{set}»\",\"seq.badArgument\":\"argomento non valido: «{value}»\",\"seq.zeroStep\":\"il passo non può essere 0\",\"xargs.unmatchedDouble\":\"virgolette doppie non chiuse\",\"xargs.unmatchedSingle\":\"virgolette singole non chiuse\",\"xargs.badCount\":\"il numero di argomenti deve essere almeno 1\",\"sed.at\":\"-e espressione #1, carattere {pos}: {message}\",\"sed.unterminated\":\"comando «s» non terminato\",\"sed.badAddress\":\"indirizzo non valido\",\"sed.missingAddress\":\"manca il secondo indirizzo\",\"sed.missingCommand\":\"manca il comando\",\"sed.unexpectedBrace\":\"«}» inatteso\",\"sed.badDelimiter\":\"delimitatore non valido per «s»\",\"sed.yLengths\":\"le stringhe di «y» hanno lunghezze diverse\",\"sed.noLabel\":\"«:» senza etichetta\",\"sed.unknownCommand\":\"comando sconosciuto: «{cmd}»\",\"sed.unmatchedBrace\":\"manca «}»\",\"sed.noSuchLabel\":\"etichetta inesistente per un salto: «{label}»\",\"sed.noPreviousRegex\":\"nessuna espressione regolare precedente\",\"sed.cannotRead\":\"impossibile leggere {path}: file o cartella inesistente\",\"sed.noScript\":\"manca lo script\\nUso: sed [-n] [-E] [-i] script [file…]\",\"sed.noFiles\":\"nessun file da modificare con -i\",\"diff.missingOperand\":\"manca un operando dopo «{arg}»\",\"diff.extraOperand\":\"operando in più: «{arg}»\",\"diff.identical\":\"I file {a} e {b} sono identici\",\"diff.differ\":\"I file {a} e {b} sono diversi\",\"diff.tooBig\":\"i file sono troppo diversi e troppo grandi da confrontare\",\"open.noApp\":\"app non trovata: «{app}» (vedi «apps»)\",\"trash.notInTrash\":\"«{name}» non è nel cestino\",\"trash.empty\":\"Il cestino è vuoto.\",\"trash.deletedFolder\":\"(cartella eliminata)\",\"trash.items\":{\"one\":\"{n} elemento\",\"other\":\"{n} elementi\"},\"trash.missingPut\":\"manca cosa mettere nel cestino\",\"trash.cannotTrash\":\"{path}: non si può cestinare (cartella di sistema)\",\"trash.missingRestore\":\"manca il nome di ciò che va rimesso a posto\",\"trash.restored\":\"rimesso in {path}\",\"trash.missingName\":\"manca il nome\",\"trash.purged\":{\"one\":\"eliminato definitivamente {n} elemento\",\"other\":\"eliminati definitivamente {n} elementi\"},\"trash.emptied\":{\"one\":\"Cestino svuotato ({n} elemento).\",\"other\":\"Cestino svuotato ({n} elementi).\"},\"trash.alreadyEmpty\":\"Il cestino era già vuoto.\",\"tag.noSuchTag\":\"tag inesistente: «{name}» (vedi «tag ls»)\",\"tag.none\":\"Nessun tag. Creane uno con «tag new nome».\",\"tag.hidden\":\"nascosto\",\"tag.noTags\":\"nessun tag\",\"tag.usageAddRm\":\"tag {sub} nome file…\",\"tag.created\":\"creato il tag «{name}»\",\"tag.system\":\"{path}: gli elementi di sistema non hanno tag\",\"tag.usageNew\":\"tag new nome [colore]\",\"tag.createdShown\":\"creato il tag {tag}\",\"tag.usageDelete\":\"tag delete nome…\",\"date.formatC\":\"%a %e %b %Y, %H:%M:%S\",\"date.formatX\":\"%d/%m/%Y\",\"date.format\":\"%a %e %b %Y, %H:%M:%S %Z\",\"date.invalid\":\"data non valida: «{date}»\",\"@actions.terminal.sshHere.label\":\"Apri terminale SSH qui\",\"help.ssh.summary\":\"apre una sessione SSH in una scheda nuova\",\"help.ssh.usage\":\"ssh [-p porta] [-l utente] [utente@]host [comando] | ssh <host salvato>\",\"help.telnet.summary\":\"apre una sessione Telnet in una scheda nuova\",\"help.telnet.usage\":\"telnet [-l utente] host [porta] | telnet <host salvato>\",\"help.rlogin.summary\":\"apre una sessione rlogin in una scheda nuova\",\"help.rlogin.usage\":\"rlogin [-l utente] host | rlogin <host salvato>\",\"help.supdup.summary\":\"apre una sessione SUPDUP in una scheda nuova\",\"help.supdup.usage\":\"supdup host [porta] | supdup <host salvato>\",\"help.sessions.summary\":\"le sessioni remote ancora aperte; con un numero, ne mostra una in una scheda\",\"help.sessions.usage\":\"sessions [n]\",\"remote.cmd.unavailable\":\"le sessioni remote non sono disponibili (lilOS non ha i loro moduli)\",\"remote.cmd.noModule\":\"{name}: lilOS non ha il suo modulo (un amministratore installa {module} dall’AppStore, scheda Kernel)\",\"remote.cmd.opened\":\"Aperta in una scheda nuova: {name}\",\"remote.cmd.noUser\":\"ssh: serve un utente: utente@host oppure -l utente\",\"remote.cmd.noSession\":\"nessuna sessione aperta «{name}» (vedi «sessions»)\",\"remote.cmd.shown\":\"Mostrata in una scheda: {name}\",\"remote.cmd.shownNow\":\"mostrata in una finestra\",\"remote.cmd.closesIn\":{\"one\":\"si chiude tra {n} minuto\",\"other\":\"si chiude tra {n} minuti\"},\"remote.cmd.none\":\"Nessuna sessione remota aperta.\",\"remote.cmd.resumeHint\":\"«sessions <n>» ne mostra una in una scheda\",\"remote.tabs\":\"Schede\",\"remote.screen\":\"Terminale remoto\",\"remote.newShell\":\"Nuova shell\",\"remote.activity\":\"Nuovo output\",\"remote.closeTab\":\"Chiudi scheda\",\"remote.closeSession\":\"Chiudi (termina la sessione)\",\"remote.closeNamed\":\"Chiudi {name}\",\"remote.notRemote\":\"non è in una connessione di rete\",\"remote.notSftp\":\"il terminale SSH si apre solo sulle connessioni SFTP\",\"remote.cannotReconnect\":\"questa sessione non si riapre da qui: aprila di nuovo dal File Manager\",\"remote.unavailable\":\"Le sessioni remote non rispondono: {error}\",\"remote.noProtocols\":\"lilOS non ha moduli per le sessioni remote. Un amministratore può installare ssh, term-telnet, term-rlogin o term-supdup dall’AppStore (scheda Kernel).\",\"remote.side.label\":\"Host e sessioni remote\",\"remote.side.toggle\":\"Mostra o nascondi gli host\",\"remote.side.hosts\":\"Host\",\"remote.side.connect\":\"Connetti\",\"remote.side.open\":\"C’è una sessione aperta su questo host\",\"remote.side.none\":\"Nessun host salvato. «ssh utente@server» apre una sessione; + salva un host.\",\"remote.side.running\":\"Ancora attive\",\"remote.side.elsewhere\":\"in un’altra finestra\",\"remote.side.closesIn\":{\"one\":\"si chiude tra {n} minuto\",\"other\":\"si chiude tra {n} minuti\"},\"remote.side.resume\":\"Riprendi\",\"remote.taken\":\"La sessione è stata aperta in un’altra finestra\",\"remote.takeBack\":\"Mostrala qui\",\"remote.lostLink\":\"Il collegamento con lilOS si è interrotto\",\"remote.attachAgain\":\"Ricollega\",\"remote.secure\":\"Cifrata\",\"remote.insecure\":\"Non cifrata\",\"remote.insecureHint\":\"Quello che scrivi, password comprese, passa in chiaro sulla rete\",\"remote.cipher\":\"Cifratura: {cipher}\",\"remote.state.new\":\"In attesa\",\"remote.state.connecting\":\"Connessione…\",\"remote.state.on\":\"Connessa\",\"remote.state.closed\":\"Chiusa\",\"remote.find\":\"Cerca (Ctrl+Maiusc+F)\",\"remote.record\":\"Registra la sessione in un file\",\"remote.recordStop\":\"Ferma la registrazione\",\"remote.keys\":\"Tasti\",\"remote.keys.send\":\"Manda al server:\",\"remote.keys.copy\":\"Copia\",\"remote.keys.paste\":\"Incolla: Ctrl+Maiusc+V\",\"remote.keys.clear\":\"Cancella lo storico\",\"remote.keys.disconnect\":\"Disconnetti\",\"remote.signal.break\":\"Invia Break\",\"remote.signal.interrupt\":\"Interrompi il processo\",\"remote.signal.ayt\":\"Ci sei? (AYT)\",\"remote.reconnect\":\"Riconnetti\",\"remote.closed\":\"Connessione chiusa\",\"remote.closedWhy\":\"Connessione chiusa: {reason}\",\"remote.record.title\":\"Registra la sessione\",\"remote.record.file\":\"File\",\"remote.record.hint\":\"Un file nella tua home. Viene scritto mentre lavori; si ferma a 8 MB.\",\"remote.record.colors\":\"Anche con i codici di colore (per rivederla com’era)\",\"remote.record.start\":\"Registra\",\"remote.record.badPath\":\"La cartella non esiste: scrivi un percorso come ~/Documenti/sessione.txt\",\"remote.record.exists\":\"«{name}» esiste già: scegli un altro nome\",\"remote.record.full\":\"Registrazione fermata: «{path}» ha raggiunto la dimensione massima\",\"remote.record.failed\":\"La registrazione non si salva: {error}\",\"remote.record.saved\":\"Sessione registrata in «{path}»\",\"remote.host.newTitle\":\"Nuovo host\",\"remote.host.editTitle\":\"Modifica l’host\",\"remote.host.name\":\"Nome\",\"remote.host.folder\":\"Cartella\",\"remote.host.folderNone\":\"Nessuna\",\"remote.host.protocol\":\"Protocollo\",\"remote.host.noProtocols\":\"Nessun protocollo disponibile.\",\"remote.host.insecureTitle\":\"Connessione non cifrata\",\"remote.host.insecureText\":\"Quello che scrivi, password comprese, passa in chiaro sulla rete. Usala solo su reti di cui ti fidi o con apparati che non hanno SSH.\",\"remote.host.remember\":\"Ricorda password e passphrase\",\"remote.host.keyUnreadable\":\"Il file della chiave non si legge: {error}\",\"remote.host.advanced\":\"Avanzate\",\"remote.host.term\":\"Tipo di terminale\",\"remote.host.encoding\":\"Codifica\",\"remote.host.backspace\":\"Backspace manda\",\"remote.host.backspaceDel\":\"DEL (^?)\",\"remote.host.backspaceBs\":\"BS (^H)\",\"remote.host.delete\":\"Elimina\",\"remote.host.save\":\"Salva\",\"remote.host.saveConnect\":\"Salva e connetti\",\"@entrypoints.filePreview.label\":\"Anteprime dei collegamenti .term\",\"@entrypoints.shell.label\":\"Shell per la Pianificazione\",\"@commands.terminal.newShell.label\":\"Nuova shell\",\"@commands.terminal.splitRight.label\":\"Dividi a destra\",\"@commands.terminal.splitDown.label\":\"Dividi in basso\",\"@commands.terminal.detach.label\":\"Stacca la scheda in una nuova finestra\",\"@commands.terminal.broadcast.label\":\"Invia l’input a tutti i riquadri\",\"@commands.terminal.focusLeft.label\":\"Riquadro a sinistra\",\"@commands.terminal.focusRight.label\":\"Riquadro a destra\",\"@commands.terminal.focusUp.label\":\"Riquadro sopra\",\"@commands.terminal.focusDown.label\":\"Riquadro sotto\",\"@commands.terminal.previousTab.label\":\"Scheda precedente del riquadro\",\"@commands.terminal.nextTab.label\":\"Scheda successiva del riquadro\",\"@commands.terminal.moveLeft.label\":\"Sposta la scheda a sinistra\",\"@commands.terminal.moveRight.label\":\"Sposta la scheda a destra\",\"@commands.terminal.moveUp.label\":\"Sposta la scheda in alto\",\"@commands.terminal.moveDown.label\":\"Sposta la scheda in basso\",\"@dependencies.ssh.reason\":\"Sessioni remote via SSH, e comandi del Terminale sugli host SSH salvati\",\"@dependencies.term-telnet.reason\":\"Sessioni remote via Telnet\",\"@dependencies.term-rlogin.reason\":\"Sessioni remote via rlogin\",\"@dependencies.term-supdup.reason\":\"Sessioni remote via SUPDUP\",\"@dependencies.services-isolate.reason\":\"Comandi del Terminale pianificati nel kernel, con il tempo massimo dell’operazione e Annulla\",\"tabs.count\":{\"one\":\"{n} scheda\",\"other\":\"{n} schede\"},\"tabs.pane\":\"Riquadro {n} — {name}\",\"tabs.rename\":\"Rinomina…\",\"tabs.renameLabel\":\"Nome della scheda\",\"tabs.renameHint\":\"Vuoto: il nome solito (la cartella, o il server).\",\"tabs.renameOk\":\"Rinomina\",\"tabs.duplicate\":\"Duplica\",\"tabs.splitRight\":\"Dividi a destra\",\"tabs.splitDown\":\"Dividi in basso\",\"tabs.moveToPane\":\"Sposta nel riquadro\",\"tabs.detach\":\"Stacca in una nuova finestra\",\"tabs.moveToWindow\":\"Sposta nella finestra\",\"tabs.newWindow\":\"Nuova finestra\",\"tabs.saveTerm\":\"Salva come collegamento (.term)…\",\"tabs.addToDesk\":\"Aggiungi alla scrivania\",\"tabs.copyAddress\":\"Copia indirizzo\",\"tabs.closeOthers\":\"Chiudi le altre schede\",\"tabs.closeRight\":\"Chiudi le schede a destra\",\"grid.gutter\":\"Trascina per cambiare la misura dei riquadri; doppio clic: uguali\",\"grid.broadcast\":\"Invia l’input a tutti i riquadri\",\"grid.broadcastOn\":\"Input a tutti i riquadri\",\"grid.broadcastOff\":\"Quello che scrivi va alla scheda mostrata in ogni riquadro. Clic per spegnerlo.\",\"menu.title\":\"Menu di Terminale\",\"menu.openTerm\":\"Apri un collegamento (.term)…\",\"menu.openTermTitle\":\"Apri un collegamento al terminale\",\"drag.newWindow\":\"Rilascia per aprire {name} in una finestra nuova\",\"drag.pane\":\"Sposta in questo riquadro\",\"drag.split.left\":\"Nuovo riquadro a sinistra\",\"drag.split.right\":\"Nuovo riquadro a destra\",\"drag.split.up\":\"Nuovo riquadro sopra\",\"drag.split.down\":\"Nuovo riquadro sotto\",\"file.invalid\":\"Non è un collegamento al terminale (.term) o è rovinato\",\"file.missing\":\"Il collegamento non esiste più\",\"file.cannot\":\"Questa scheda non può diventare un collegamento\",\"file.noFolder\":\"La cartella {path} non esiste\",\"file.serverFolder\":\"La cartella del server va scritta per intero, per esempio /var/www\",\"file.exists\":\"C’è già un file {name} in quella cartella\",\"file.noPassword\":\"Scrivi la password (o la chiave) da salvare nel file\",\"file.onDesk\":\"{name} è sulla scrivania\",\"file.saved\":\"Collegamento salvato: {path}\",\"file.saveTitle\":\"Salva collegamento\",\"file.name\":\"Nome del file\",\"file.folder\":\"Cartella\",\"file.change\":\"Cambia…\",\"file.pickFolder\":\"Dove salvare il collegamento\",\"file.cwdLocal\":\"Parti dalla cartella (facoltativo)\",\"file.cwdRemote\":\"Cartella del server in cui entrare (facoltativo)\",\"file.command\":\"Comando da eseguire all’avvio (facoltativo)\",\"file.commandRemote\":\"Comando all’avvio (facoltativo)\",\"file.commandRemoteHint\":\"Parte al posto della shell del server\",\"file.openAs\":\"All’apertura\",\"file.openDefault\":\"Come nelle Opzioni ({how})\",\"file.keepPassword\":\"Salva la password nel file\",\"file.passwordSaved\":\"Nel file va la password salvata per questo host.\",\"file.passwordHint\":\"La password è cifrata: vale solo per te, su questo lilOS, per questo server e utente. A chiunque altro viene chiesta come al solito.\",\"file.save\":\"Salva\",\"file.command.title\":\"Questo collegamento esegue un comando\",\"file.command.text\":\"«{name}» all’apertura esegue questo comando:\\n\\n{command}\\n\\nEseguilo solo se ti fidi di chi ha fatto il collegamento. Continuare?\",\"options.open\":\"Opzioni…\",\"options.title\":\"Opzioni di Terminale\",\"options.tab.general\":\"Generale\",\"options.tab.generalDescription\":\"Come Terminale apre i collegamenti\",\"options.files\":\"Collegamenti al terminale (.term)\",\"options.openTerm\":\"Apri i collegamenti\",\"options.openTermDescription\":\"Dove si apre un file .term con il doppio clic, quando il file non lo dice da sé\",\"options.openTerm.window\":\"In una finestra nuova\",\"options.openTerm.tab\":\"In una scheda della finestra aperta\"}}")
+	en: /* @__PURE__ */ JSON.parse("{\"strings\":{\"@name\":\"Terminal\",\"@description\":\"A bash-like shell over the files of lilOS, in tabs and panes side by side, and remote sessions: SSH, Telnet, rlogin and SUPDUP, with saved hosts, .term links and sessions that keep running when the window is closed.\",\"@entrypoints.main.params.cwd.label\":\"Folder\",\"@entrypoints.main.params.cwd.description\":\"The folder to open the terminal in\",\"@automation.terminal.run.label\":\"Run a command\",\"@automation.terminal.run.params.command.label\":\"Command\",\"@automation.terminal.run.params.folder.label\":\"Folder\",\"@automation.terminal.run.params.folder.description\":\"The working folder the command runs in\",\"@entrypoints.main.params.file.label\":\"Link\",\"@entrypoints.main.params.file.description\":\"A terminal link (.term) to open\",\"ui.title\":\"Terminal\",\"ui.commandLine\":\"Command line\",\"ui.welcome\":\"lilOS Terminal · \\\"help\\\" lists the commands\",\"automation.tooLong\":\"Command too long to record\",\"automation.noCommand\":\"No command to run\",\"automation.busy\":\"The terminal is busy with another command\",\"automation.noFolder\":\"The folder is not there any more\",\"automation.status\":\"The command ended with status {status}\",\"shell.defaultUser\":\"user\",\"shell.readonly\":\"{name}: readonly variable\",\"shell.cannotUnset\":\"{name}: cannot unset: readonly variable\",\"shell.badSubscript\":\"{index}: bad array subscript\",\"shell.unknownConstruct\":\"unknown construct: {type}\",\"shell.badRegex\":\"invalid regular expression\",\"shell.unaryExpected\":\"{op}: unary operator expected\",\"shell.integerExpected\":\"{value}: integer expression expected\",\"shell.binaryExpected\":\"{op}: binary operator expected\",\"shell.commandNotFound\":\"{name}: command not found\",\"shell.tooDeep\":\"{name}: maximum function nesting level exceeded\",\"shell.badFd\":\"{fd}: Bad file descriptor\",\"shell.fdExpected\":\"{target}: file descriptor expected\",\"shell.ambiguousRedirect\":\"{target}: ambiguous redirect\",\"shell.isAppLink\":\"{path}: is a link to an app\",\"err.noSuchFile\":\"{path}: No such file or directory\",\"err.isADirectory\":\"{path}: Is a directory\",\"err.notAFile\":\"{path}: Not a regular file\",\"err.missingParen\":\"`)' expected\",\"err.badIdentifier\":\"`{name}': not a valid identifier\",\"err.numericArgument\":\"{value}: numeric argument required\",\"err.tooManyArguments\":\"too many arguments\",\"err.notADirectory\":\"{path}: Not a directory\",\"err.notFound\":\"{name}: not found\",\"err.missingOperand\":\"missing operand\",\"err.unknownSubcommand\":\"unknown subcommand: '{sub}'\",\"parse.unexpectedEnd\":\"syntax error: unexpected end of input\",\"parse.unexpectedEndOfFile\":\"syntax error: unexpected end of file\",\"parse.nearEnd\":\"end of input\",\"parse.nearNewline\":\"`newline'\",\"parse.nearToken\":\"`{token}'\",\"parse.near\":\"syntax error near unexpected token {near}\",\"parse.nearExpected\":\"syntax error near unexpected token {near}: expected `{expected}'\",\"parse.badFunctionName\":\"invalid function name\",\"parse.parenAfterName\":\"expected `)' after the function name\",\"parse.aliasLoop\":\"aliases expanded too many times\",\"parse.missingTarget\":\"syntax error near unexpected token {near}: missing target of `{op}'\",\"parse.forBadName\":\"for: invalid variable name\",\"parse.caseNoWord\":\"case: missing word\",\"parse.condNear\":\"syntax error in conditional expression near {near}\",\"parse.condNoOperand\":\"syntax error in conditional expression: missing operand\",\"parse.condNoRegex\":\"syntax error in conditional expression: missing regular expression\",\"parse.badSubstitution\":\"bad substitution\",\"parse.badSubstitutionBrace\":\"bad substitution: missing `}'\",\"parse.backquotes\":\"syntax error in backquoted command substitution\",\"jobs.done\":\"Done\",\"jobs.interrupted\":\"Interrupt\",\"jobs.exit\":\"Exit {code}\",\"jobs.running\":\"Running\",\"help.usageLine\":\"Usage: {usage}\",\"help.usageShort\":\"usage: {usage}\",\"help.noHelp\":\"no help topics match `{name}'\",\"help.intro\":\"lilOS Terminal: a bash-like shell over the files of lilOS.\\n\\\"help command\\\" or \\\"command --help\\\" explains a command; \\\"help if\\\", \\\"help for\\\", \\\"help case\\\"… the syntax.\",\"help.syntaxList\":\"Syntax: {list}\",\"help.sh.summary\":\"Like bash.\",\"help.sh.usage\":\"sh [-c commands | script] [arguments…]\",\"help.bash.text\":\"\\\"bash script.sh a b\\\" runs the script with $1=a, $2=b; \\\"bash -c 'echo $1' name x\\\" runs the text; \\\"cat script.sh | bash\\\" reads the script from the input.\",\"help.bash.summary\":\"Runs a script or commands in a new shell.\",\"help.bash.usage\":\"bash [-c commands | script] [arguments…]\",\"help.sleep.summary\":\"Waits: 5 (seconds), 0.5, 2m, 1h.\",\"help.sleep.usage\":\"sleep duration…\",\"help.kill.summary\":\"Interrupts commands in the background.\",\"help.kill.usage\":\"kill [-signal] %job | pid…\",\"help.fg.summary\":\"Brings a command in the background to the foreground: it is waited for and Ctrl C interrupts it.\",\"help.wait.summary\":\"Waits for the commands in the background to finish (all of them, or the ones named).\",\"help.jobs.summary\":\"Lists the commands started in the background with &.\",\"help.clear.summary\":\"Clears the screen (Ctrl L too).\",\"help.help.summary\":\"Lists the commands, or explains the one named.\",\"help.help.usage\":\"help [command]\",\"help.history.summary\":\"Shows the commands given (the last n); -c clears the history.\",\"help.which.summary\":\"Tells where a command is.\",\"help.which.usage\":\"which name…\",\"help.command.summary\":\"Starts a command ignoring the functions with the same name; with -v tells what it would start.\",\"help.command.usage\":\"command [-v] name [arguments…]\",\"help.type.summary\":\"Tells what a name is: alias, keyword, function, command.\",\"help.type.usage\":\"type [-t] name…\",\"help.unalias.summary\":\"Removes aliases (all of them with -a).\",\"help.unalias.usage\":\"unalias [-a] name…\",\"help.alias.text\":\"Example: alias ll='ls -l'. Aliases work from the line after the one that defines them.\",\"help.alias.summary\":\"Defines or shows aliases (short names for commands).\",\"help.alias.usage\":\"alias [name[=value]…]\",\"help.eval.summary\":\"Runs the arguments, joined by spaces, as a command.\",\"help.eval.usage\":\"eval [arguments…]\",\"help.dot.summary\":\"Like source.\",\"help.dot.usage\":\". file [arguments…]\",\"help.source.summary\":\"Runs the commands of a file in this shell (variables, functions and aliases stay).\",\"help.source.usage\":\"source file [arguments…]\",\"help.read.text\":\"-r  backslashes stay as they are\\n-p  shows a prompt\\n-a  puts the words in an array\\n-d  reads up to this character instead of up to the newline\\n-s  does not show what is typed (for passwords)\\nStatus 1 at the end of the input.\",\"help.read.summary\":\"Reads a line and splits it into the variables named ($REPLY without names).\",\"help.read.usage\":\"read [-rs] [-p prompt] [-a array] [-d delim] [name…]\",\"help.continue.summary\":\"Goes on to the next round of the loop (or of the n-th enclosing loop).\",\"help.break.summary\":\"Exits the loop (or n loops).\",\"help.return.summary\":\"Exits the function (or the script read with source).\",\"help.return.usage\":\"return [status]\",\"help.exit.summary\":\"Closes the terminal (or exits the script) with a status.\",\"help.exit.usage\":\"exit [status]\",\"help.let.summary\":\"Computes arithmetic expressions (status 1 if the last one is 0).\",\"help.let.usage\":\"let expression…\",\"help.bracket.summary\":\"Like test, with a final \\\"]\\\".\",\"help.bracket.usage\":\"[ expression ]\",\"help.test.text\":\"Files: -e exists, -f is a file, -d is a directory, -s is not empty\\nText: -z empty, -n not empty, a = b, a != b\\nNumbers: -eq -ne -lt -le -gt -ge\\nCombined: ! not, -a and, -o or, ( … )\",\"help.test.summary\":\"Evaluates an expression: status 0 if true, 1 if false.\",\"help.test.usage\":\"test expression\",\"help.colon.summary\":\"Does nothing (status 0); the arguments are expanded anyway.\",\"help.colon.usage\":\": [arguments…]\",\"help.false.summary\":\"Does nothing, unsuccessfully (status 1).\",\"help.true.summary\":\"Does nothing, successfully (status 0).\",\"help.shift.summary\":\"Shifts the positional parameters: $2 becomes $1…\",\"help.set.text\":\"-e  exits at the first command that fails\\n-u  error when an unset variable is used\\n-x  shows the commands before running them\\n-f  no expansion of * and ?\\n-o pipefail  a pipeline fails if one of its commands fails\\n+e, +u… turn them off. Without arguments it shows every variable.\",\"help.set.summary\":\"Sets the options of the shell and the positional parameters ($1, $2…).\",\"help.set.usage\":\"set [-euxf] [-o option] [--] [arguments…]\",\"help.printenv.summary\":\"Shows the exported variables (or the value of the ones named).\",\"help.printenv.usage\":\"printenv [name…]\",\"help.env.summary\":\"Shows the exported variables, or starts a command with more variables.\",\"help.env.usage\":\"env [name=value…] [command [arguments…]]\",\"help.unset.summary\":\"Removes variables (or functions with -f).\",\"help.unset.usage\":\"unset [-fv] name…\",\"help.typeset.summary\":\"Like declare.\",\"help.typeset.usage\":\"typeset [-aprxifF] [name[=value]…]\",\"help.declare.text\":\"-a array, -x exported, -r read-only, -i integer (the value is computed), -p shows, -f shows the functions, -g global inside a function.\",\"help.declare.summary\":\"Declares variables and shows their attributes.\",\"help.declare.usage\":\"declare [-aprxifF] [name[=value]…]\",\"help.local.summary\":\"Variables visible only inside the function.\",\"help.local.usage\":\"local [-arx] name[=value]…\",\"help.readonly.summary\":\"Makes variables read-only.\",\"help.readonly.usage\":\"readonly [name[=value]…]\",\"help.export.text\":\"Without arguments it lists the exported variables. -n removes the export.\",\"help.export.summary\":\"Makes variables visible to the commands and scripts it starts.\",\"help.export.usage\":\"export [-n] [name[=value]…]\",\"help.printf.text\":\"The format is applied again while arguments are left. -v saves the result in a variable.\",\"help.printf.summary\":\"Writes the arguments according to a format (%s, %d, %5.2f, %x, %b, %q…).\",\"help.printf.usage\":\"printf [-v var] format [arguments…]\",\"help.echo.text\":\"-n  no final newline\\n-e  interprets \\\\n, \\\\t, \\\\\\\\, \\\\e… \\n-E  does not interpret them (default)\",\"help.echo.summary\":\"Writes the arguments, separated by a space.\",\"help.echo.usage\":\"echo [-neE] [text…]\",\"help.pwd.summary\":\"Shows the working directory.\",\"help.cd.text\":\"Without arguments it goes to the home ($HOME). \\\"cd -\\\" goes back to the previous directory ($OLDPWD).\",\"help.cd.summary\":\"Changes the working directory.\",\"help.cd.usage\":\"cd [dir]\",\"help.realpath.summary\":\"The full path.\",\"help.realpath.usage\":\"realpath [-m] path…\",\"help.dirname.summary\":\"The path without its last part.\",\"help.dirname.usage\":\"dirname path…\",\"help.basename.summary\":\"The last part of a path (without the suffix).\",\"help.basename.usage\":\"basename path [suffix]\",\"help.tree.summary\":\"Shows directories as a tree.\",\"help.tree.usage\":\"tree [-adf] [-L levels] [dir…]\",\"help.find.text\":\"Tests: -name pattern, -iname, -path, -type f|d|l, -empty, -size [+-]n[ckMG], -mtime [+-]days, -mmin, -newer file\\nActions: -print, -print0, -delete (to the trash), -exec command {} \\\\; or +\\nOptions: -maxdepth n, -mindepth n. Combined: ! (not), -o (or), ( … )\\nExample: find . -name \\\"*.txt\\\" -size +1k\",\"help.find.summary\":\"Searches for files and directories.\",\"help.find.usage\":\"find [path…] [expression]\",\"help.stat.text\":\"-c  format: %n name, %s size, %F type, %y modification date, %Y in seconds, %w %W creation, %i id\",\"help.stat.summary\":\"Shows the details of files and directories.\",\"help.stat.usage\":\"stat [-c format] path…\",\"help.rmdir.summary\":\"Removes empty directories (to the trash).\",\"help.rmdir.usage\":\"rmdir [-p] dir…\",\"help.rm.text\":\"-r  directories too, with their contents\\n-d  empty directories\\n-f  no error for what does not exist\\n--purge  deletes permanently, without the trash\\nWhat goes to the trash can be put back with \\\"trash restore\\\".\",\"help.rm.summary\":\"Moves files and directories to the trash (with --purge deletes them forever).\",\"help.rm.usage\":\"rm [-rfvd] [--purge] path…\",\"help.mv.text\":\"If the destination is a directory, it moves into it; otherwise it renames. An overwritten file goes to the trash.\\n-n  does not overwrite\\n-v  tells what it moves\",\"help.mv.summary\":\"Moves or renames files and directories.\",\"help.mv.usage\":\"mv [-nv] source… dest\",\"help.cp.text\":\"-r  copies directories too, with their contents\\n-n  does not overwrite existing files\\n-v  tells what it copies\",\"help.cp.summary\":\"Copies files and directories.\",\"help.cp.usage\":\"cp [-rnv] source… dest\",\"help.touch.summary\":\"Creates empty files, or updates the modification date of the ones that exist.\",\"help.mkdir.text\":\"-p  creates the intermediate directories too; no error if it already exists\",\"help.mkdir.summary\":\"Creates directories.\",\"help.mkdir.usage\":\"mkdir [-pv] dir…\",\"help.cat.text\":\"-n  numbers the lines\\n-b  numbers only the non-empty ones\\n-s  only one empty line in a row\\n-E  $ at the end of every line\",\"help.cat.summary\":\"Shows the contents of files (or of the input), one after the other.\",\"help.ls.text\":\"-l  details (type, size, date, tags)\\n-a  also the names starting with \\\".\\\"\\n-h  human-readable sizes (1.2K)\\n-t  by date, -S by size, -r reversed\\n-1  one per line\\n-d  the directory itself, not its contents\\n-R  subdirectories too\\n-F  / after directories, @ after links, * after scripts\",\"help.ls.summary\":\"Lists the contents of directories.\",\"help.ls.usage\":\"ls [-laAh1trSdRF] [path…]\",\"help.xargs.text\":\"-n N  at most N arguments at a time\\n-I {}  one command per line, with {} replaced by the line\\n-0  words separated by the null character (find -print0)\\n-d C  words separated by C\\n-t  shows the commands before starting them\\n-r  starts nothing if the input is empty\\nExample: find . -name \\\"*.tmp\\\" | xargs rm\",\"help.xargs.summary\":\"Starts a command with the words of the input as arguments.\",\"help.xargs.usage\":\"xargs [-n N] [-I {}] [-0] [-t] [command [arguments…]]\",\"help.yes.summary\":\"Repeats a line forever (y if not given): useful in a pipeline.\",\"help.yes.usage\":\"yes [text]\",\"help.seq.text\":\"-s S  separator (newline if not given)\\n-w  same width, padded with zeros\",\"help.seq.summary\":\"Writes a sequence of numbers.\",\"help.seq.usage\":\"seq [first [step]] last\",\"help.nl.summary\":\"Numbers the lines (non-empty ones, or all with -b a).\",\"help.rev.summary\":\"Writes every line reversed.\",\"help.tr.text\":\"tr a-z A-Z  to uppercase\\ntr -d '\\\\r'  removes Windows carriage returns\\ntr -s ' '  only one space in a row\\nClasses: [:upper:] [:lower:] [:digit:] [:alpha:] [:alnum:] [:space:] [:punct:]\",\"help.tr.summary\":\"Replaces or deletes characters.\",\"help.tr.usage\":\"tr [-dsc] set1 [set2]\",\"help.cut.text\":\"-f 1,3  fields 1 and 3 (separated by tab or by -d)\\n-d ,  the separator\\n-c 1-5  characters 1 to 5\\n-s  only the lines with the separator\",\"help.cut.summary\":\"Extracts columns from every line.\",\"help.cut.usage\":\"cut -f fields [-d separator] | -c characters [file…]\",\"help.tee.text\":\"-a  appends instead of overwriting\",\"help.tee.summary\":\"Copies the input both to the output and to files.\",\"help.uniq.text\":\"-c  with the number of repetitions\\n-d  only the repeated lines\\n-u  only the unique ones\\n-i  ignoring case\",\"help.uniq.summary\":\"Removes lines repeated one after the other (usually after sort).\",\"help.sort.text\":\"-r  reversed\\n-n  by number\\n-h  by human-readable size (2K, 1M)\\n-u  without duplicates\\n-f  ignoring case\\n-k N[,M]  by field N (up to M)\\n-t C  fields separated by C\\n-V  numbers inside the text (file2 before file10)\\n-o file  writes to the file\",\"help.sort.summary\":\"Sorts lines.\",\"help.sort.usage\":\"sort [-rnufhV] [-k field] [-t separator] [file…]\",\"help.grep.text\":\"-i  ignoring case\\n-v  the lines that do NOT match\\n-n  with the line number\\n-c  counts the lines\\n-l  only the names of the files\\n-r  searches in directories\\n-w  whole words, -x whole lines\\n-E  extended regular expressions (| + ? () without backslash)\\n-F  plain text, not a regular expression\\n-o  only the part that matches\\n-q  no output, only the status\\n-A N, -B N, -C N  lines of context after, before, around\\nStatus: 0 found, 1 not found, 2 error.\",\"help.grep.summary\":\"Searches for the lines that contain a pattern (regular expression).\",\"help.grep.usage\":\"grep [-ivnclrwxEFoqH] [-e pattern] pattern [file…]\",\"help.wc.text\":\"-l lines, -w words, -c bytes, -m characters, -L the longest line\",\"help.wc.summary\":\"Counts lines, words and bytes.\",\"help.tail.text\":\"-n N  the last N lines (-n +N: from line N on)\\n-c N  the last N characters\",\"help.tail.summary\":\"The last lines (10 if not given).\",\"help.tail.usage\":\"tail [-n lines] [-c bytes] [file…]\",\"help.head.text\":\"-n N  the first N lines (-n -N: all but the last N)\\n-c N  the first N characters\\n-5 is like -n 5\",\"help.head.summary\":\"The first lines (10 if not given).\",\"help.head.usage\":\"head [-n lines] [-c bytes] [file…]\",\"help.sed.text\":\"s/old/new/g  replaces (g: every time, i: ignoring case, p: prints)\\n3d, /re/d, 2,5d  deletes lines     -n …p  prints only the chosen ones\\ny/abc/xyz/  transliterates     a text, i text, c text  appends, inserts, changes\\n=  line number   q  quits   h H g G x  hold space   b t :label  jumps\\nAddresses: n, $, /re/, a,b, a,+n, ! to negate, { … } to group.\\n-n  does not print lines by itself    -E  extended regular expressions    -i  edits the files\\nExamples: sed 's/red/blue/g' notes.txt    sed -n '1,5p' file    sed -i '/^#/d' conf.txt\",\"help.sed.summary\":\"Edits text line by line (substitutions, deletions…).\",\"help.diff.text\":\"-u  unified format (with 3 lines of context; -U N for N)\\n-q  only tells whether they differ\\n-i  ignoring case\\n-w  ignoring spaces, -b ignoring how many there are\\n-B  ignoring empty lines\\n-s  tells also when they are identical\\n\\\"-\\\" is the input. Status: 0 same, 1 different, 2 error.\",\"help.diff.summary\":\"Shows the differences between two files.\",\"help.uname.summary\":\"The name of the operating system.\",\"help.hostname.summary\":\"The name of the system.\",\"help.whoami.summary\":\"The name of the user.\",\"help.date.text\":\"Format: %Y year, %m month, %d day, %H:%M:%S time, %A day of the week, %B month, %s seconds since 1970, %F = %Y-%m-%d, %T = %H:%M:%S\\n-d @1700000000, -d 2026-01-01, -d yesterday\\nExample: date +%F\",\"help.date.summary\":\"Date and time.\",\"help.date.usage\":\"date [-u] [-d date] [+format]\",\"help.apps.summary\":\"Lists the installed apps (id, name, version).\",\"help.tag.text\":\"tag                lists the tags\\ntag ls Work        the items with the tag\\ntag show file      the tags of an item\\ntag add Work f     puts the tag (creates it if missing)\\ntag rm Work f      removes it\\ntag new name color creates a tag\\ntag delete name    deletes a tag\",\"help.tag.summary\":\"The tags of lilOS: lists, assigns, removes.\",\"help.tag.usage\":\"tag [ls [tag…] | show path… | add tag path… | rm tag path… | new name [color] | delete tag…]\",\"help.trash.text\":\"trash              lists what is in the trash\\ntrash put file     moves to the trash (like rm -r)\\ntrash restore name puts back\\ntrash rm name      deletes permanently\\ntrash empty        empties the trash\",\"help.trash.summary\":\"The trash: lists, puts back, empties.\",\"help.trash.usage\":\"trash [list | put path… | restore name… | rm name… | empty]\",\"help.open.text\":\"open notes.txt   opens with the default app\\nopen .   opens the directory in the File Manager\\nopen -a editor notes.txt   with a given app\\nopen -a photo   starts an app\",\"help.open.summary\":\"Opens files and directories with their app (or with the one given).\",\"help.open.usage\":\"open [-a app] path…\",\"arith.tooDeep\":\"expression recursion level exceeded\",\"arith.syntax\":\"{expr}: syntax error in expression (error token is \\\"{token}\\\")\",\"arith.end\":\"end\",\"arith.missingBracket\":\"{expr}: missing `]'\",\"arith.operandExpected\":\"{expr}: syntax error: operand expected\",\"arith.badBase\":\"{value}: invalid arithmetic base\",\"arith.tooGreatForBase\":\"{value}: value too great for base\",\"arith.invalid\":\"invalid expression\",\"arith.divisionByZero\":\"division by 0\",\"arith.negativeExponent\":\"exponent less than 0\",\"arith.unknownOperator\":\"unknown operator {op}\",\"expand.braceTooLarge\":\"brace expansion too large\",\"expand.badSubstitution\":\"{name}: bad substitution\",\"expand.unbound\":\"{name}: unbound variable\",\"expand.cannotAssign\":\"{name}: cannot assign in this way\",\"expand.nullOrNotSet\":\"parameter null or not set\",\"expand.negativeSubstring\":\"{count}: substring expression < 0\",\"opt.invalid\":\"invalid option -- '{option}'\",\"opt.longNeedsArgument\":\"option '--{name}' requires an argument\",\"opt.needsArgument\":\"option requires an argument -- '{option}'\",\"opt.badNumber\":\"invalid number: '{value}'\",\"regex.unmatchedBracket\":\"Unmatched [ in regular expression\",\"regex.invalid\":\"invalid regular expression: {pattern}\",\"appCmd.summary\":\"A command of the {app} app.\",\"appCmd.usage\":\"{name} [arguments…]\",\"printf.badNumber\":\"{value}: invalid number\",\"test.argumentExpected\":\"argument expected\",\"test.unexpectedArgument\":\"{arg}: unexpected argument\",\"test.missingBracket\":\"missing `]'\",\"cd.oldpwdNotSet\":\"OLDPWD not set\",\"local.onlyInFunction\":\"can only be used in a function\",\"set.badOptionName\":\"{name}: invalid option name\",\"set.badOption\":\"{option}: invalid option\",\"let.noExpression\":\"expression expected\",\"return.onlyInFunction\":\"can only `return' from a function or sourced script\",\"loop.onlyInLoop\":\"only meaningful in a `for', `while', or `until' loop\",\"loop.badCount\":\"{n}: loop count out of range\",\"alias.badName\":\"`{name}': invalid alias name\",\"which.builtIn\":\"{name}: built into the Terminal\",\"wait.notAJob\":\"{spec}: not a job of this shell\",\"fg.noSuchJob\":\"{job}: no such job\",\"fg.current\":\"current\",\"kill.noSuchJob\":\"{spec}: no such job or process\",\"sleep.missing\":\"missing operand\",\"sleep.badDuration\":\"invalid time interval '{value}'\",\"source.noFile\":\"filename argument required\",\"bash.noCommand\":\"-c: option requires an argument\",\"bash.already\":\"You are already in bash: for a script type \\\"bash file.sh\\\" or \\\"source file.sh\\\".\",\"type.alias\":\"{name} is aliased to `{value}'\",\"type.keyword\":\"{name} is a shell keyword\",\"type.function\":\"{name} is a function\",\"type.builtin\":\"{name} is a shell builtin\",\"type.appCommand\":\"{name} is a command of the {app} app\",\"type.command\":\"{name} is a Terminal command\",\"type.file\":\"{name} is {path}\",\"syntax.topic.variables\":\"variables\",\"syntax.topic.redirections\":\"redirections\",\"syntax.if\":\"if commands; then commands; [elif commands; then commands;] [else commands;] fi\\nRuns the branch of the first \\\"if\\\"/\\\"elif\\\" whose commands succeed (status 0).\\n  if [ -f notes.txt ]; then echo found; else echo missing; fi\",\"syntax.for\":\"for name in words…; do commands; done\\nfor (( init; condition; step )); do commands; done\\n  for f in *.txt; do wc -l \\\"$f\\\"; done\\n  for ((i = 1; i <= 3; i++)); do echo $i; done\",\"syntax.while\":\"while commands; do commands; done   (until: as long as the commands do NOT succeed)\\n  n=0; while [ $n -lt 3 ]; do echo $n; n=$((n + 1)); done\\n  ls | while read -r name; do echo \\\"- $name\\\"; done\",\"syntax.until\":\"until commands; do commands; done: repeats as long as the commands do not succeed.\",\"syntax.case\":\"case word in pattern|pattern) commands;; … esac\\nPatterns use * ? [ ]. \\\";&\\\" goes on into the next branch, \\\";;&\\\" tries the following patterns too.\\n  case \\\"$f\\\" in *.txt) echo text;; *.png|*.jpg) echo image;; *) echo other;; esac\",\"syntax.function\":\"name() { commands; }   or   function name { commands; }\\nThe arguments are $1, $2…, $@; \\\"local\\\" creates variables of the function, \\\"return n\\\" exits.\\n  greet() { echo \\\"Hello, $1\\\"; }; greet Eugenio\",\"syntax.cond\":\"[[ expression ]]: test without word splitting or expansion of *.\\n  [[ $name == *.txt ]]      comparison with a pattern\\n  [[ $s =~ ^[0-9]+$ ]]      regular expression (groups in BASH_REMATCH)\\n  [[ -d dir && ! -e file ]] -e -f -d -s -z -n, && || ! ( )\",\"syntax.arith\":\"(( expression )): integer arithmetic; status 0 if the result is not 0.\\n  (( n++ )); (( n > 3 )) && echo big; echo $(( 2 ** 10 ))\",\"syntax.variables\":\"name=value (no spaces), $name or ${name}. Arrays: a=(x y z), ${a[0]}, ${a[@]}, ${#a[@]}.\\n${v:-default} ${v:=default} ${v:+alt} ${#v} ${v#prefix} ${v%suffix} ${v/from/to} ${v//from/to} ${v:start:length} ${v^^} ${v,,}\\nSpecial: $? status of the last command, $$ the shell, $! the last command in the background, $# $@ $* the arguments.\",\"syntax.redirections\":\"> file (overwrites), >> file (appends), < file (reads), 2> errors, 2>&1, &> file, <<EOF … EOF, <<< text, | pipe.\\n/dev/null discards everything.\",\"files.cannotAccess\":\"cannot access '{path}': No such file or directory\",\"files.cannotCreate\":\"cannot create '{path}': No such file or directory\",\"files.overwriteFolder\":\"cannot overwrite directory '{name}' with non-directory\",\"files.missingDestination\":\"missing destination file operand after '{path}'\",\"files.targetNotFolder\":\"target '{path}' is not a directory\",\"files.cannotStat\":\"cannot stat '{path}': No such file or directory\",\"files.cannotRemove\":\"cannot remove '{path}': {reason}\",\"files.quotedNoSuchFile\":\"'{path}': No such file or directory\",\"mkdir.notAFolder\":\"cannot create directory '{path}': '{name}' exists and is not a directory\",\"mkdir.exists\":\"cannot create directory '{path}': File exists\",\"mkdir.noParent\":\"cannot create directory '{path}': No such file or directory\",\"mkdir.created\":\"created directory '{path}'\",\"cp.overwriteFile\":\"cannot overwrite non-directory '{name}' with directory\",\"cp.verbose\":\"'{from}' -> '{to}'\",\"cp.omitting\":\"-r not specified; omitting directory '{path}'\",\"cp.intoItself\":\"cannot copy a directory, '{path}', into itself\",\"mv.system\":\"cannot move '{path}': it is a system folder\",\"mv.intoItself\":\"cannot move '{path}' to a subdirectory of itself\",\"mv.notEmpty\":\"cannot move '{path}' to '{name}': Directory not empty\",\"mv.verbose\":\"renamed '{from}' -> '{to}'\",\"reason.noSuchFile\":\"No such file or directory\",\"reason.isADirectory\":\"Is a directory\",\"reason.notADirectory\":\"Not a directory\",\"reason.notEmpty\":\"Directory not empty\",\"reason.system\":\"it is a system folder\",\"reason.containsSystem\":\"it contains system folders\",\"rm.home\":\"it is dangerous to operate on '{path}': it is the home\",\"rm.purged\":\"permanently deleted '{path}'\",\"rm.trashed\":\"moved to the trash '{path}'\",\"rmdir.removed\":\"removed directory '{path}'\",\"stat.folder\":\"directory\",\"stat.appLink\":\"link to the app {app}\",\"stat.file\":\"regular file\",\"stat.emptyFile\":\"regular empty file\",\"stat.type\":\"Type: {type}\",\"stat.path\":\"Path: {path}\",\"stat.items\":\"Items: {n} ({total} in all)\",\"stat.size\":\"Size: {size} bytes ({human})\",\"stat.created\":\"Created: {date}\",\"stat.modified\":\"Modified: {date}\",\"stat.tags\":\"Tags: {tags}\",\"stat.system\":\"System folder\",\"find.missingArgument\":\"missing argument to `{name}'\",\"find.badType\":\"unknown argument to -type: {type} (f, d or l)\",\"find.badSize\":\"invalid -size argument '{value}'\",\"find.badValue\":\"invalid argument '{value}' to {option}\",\"find.cannotFind\":\"cannot find '{path}'\",\"find.execEnd\":\"missing end of `-exec' (`;' or `+')\",\"find.execCommand\":\"missing command of `-exec'\",\"find.unknownPredicate\":\"unknown predicate `{name}'\",\"find.unexpected\":\"unexpected argument: '{arg}'\",\"tree.folders\":{\"one\":\"{n} directory\",\"other\":\"{n} directories\"},\"tree.files\":{\"one\":\"{n} file\",\"other\":\"{n} files\"},\"ls.date\":\"{month} {day}\",\"wc.total\":\"total\",\"grep.noPattern\":\"missing pattern\\nUsage: grep [options] pattern [file…]\",\"sort.badKey\":\"invalid key: '{key}'\",\"sort.disorder\":\"-:{n}: disorder: {line}\",\"cut.badList\":\"invalid list: '{spec}'\",\"cut.noList\":\"you must specify a list of fields (-f) or characters (-c)\",\"cut.badDelimiter\":\"the delimiter must be a single character\",\"tr.reverseRange\":\"range-endpoints of '{range}' are in reverse collating sequence order\",\"tr.missingSet2\":\"missing operand after '{set}'\",\"seq.badArgument\":\"invalid floating point argument: '{value}'\",\"seq.zeroStep\":\"invalid Zero increment value: '0'\",\"xargs.unmatchedDouble\":\"unmatched double quote\",\"xargs.unmatchedSingle\":\"unmatched single quote\",\"xargs.badCount\":\"value for -n option should be >= 1\",\"sed.at\":\"-e expression #1, char {pos}: {message}\",\"sed.unterminated\":\"unterminated `s' command\",\"sed.badAddress\":\"invalid address\",\"sed.missingAddress\":\"missing second address\",\"sed.missingCommand\":\"missing command\",\"sed.unexpectedBrace\":\"unexpected `}'\",\"sed.badDelimiter\":\"invalid delimiter for `s'\",\"sed.yLengths\":\"strings for `y' command are different lengths\",\"sed.noLabel\":\"\\\":\\\" lacks a label\",\"sed.unknownCommand\":\"unknown command: `{cmd}'\",\"sed.unmatchedBrace\":\"unmatched `{'\",\"sed.noSuchLabel\":\"can't find label for jump to `{label}'\",\"sed.noPreviousRegex\":\"no previous regular expression\",\"sed.cannotRead\":\"can't read {path}: No such file or directory\",\"sed.noScript\":\"missing script\\nUsage: sed [-n] [-E] [-i] script [file…]\",\"sed.noFiles\":\"no input files to edit with -i\",\"diff.missingOperand\":\"missing operand after '{arg}'\",\"diff.extraOperand\":\"extra operand '{arg}'\",\"diff.identical\":\"Files {a} and {b} are identical\",\"diff.differ\":\"Files {a} and {b} differ\",\"diff.tooBig\":\"the files are too different and too large to compare\",\"open.noApp\":\"app not found: '{app}' (see \\\"apps\\\")\",\"trash.notInTrash\":\"'{name}' is not in the trash\",\"trash.empty\":\"The trash is empty.\",\"trash.deletedFolder\":\"(deleted folder)\",\"trash.items\":{\"one\":\"{n} item\",\"other\":\"{n} items\"},\"trash.missingPut\":\"missing what to move to the trash\",\"trash.cannotTrash\":\"{path}: cannot be moved to the trash (system folder)\",\"trash.missingRestore\":\"missing the name of what to put back\",\"trash.restored\":\"restored to {path}\",\"trash.missingName\":\"missing name\",\"trash.purged\":{\"one\":\"permanently deleted {n} item\",\"other\":\"permanently deleted {n} items\"},\"trash.emptied\":{\"one\":\"Trash emptied ({n} item).\",\"other\":\"Trash emptied ({n} items).\"},\"trash.alreadyEmpty\":\"The trash was already empty.\",\"tag.noSuchTag\":\"no such tag: '{name}' (see \\\"tag ls\\\")\",\"tag.none\":\"No tags. Create one with \\\"tag new name\\\".\",\"tag.hidden\":\"hidden\",\"tag.noTags\":\"no tags\",\"tag.usageAddRm\":\"tag {sub} name file…\",\"tag.created\":\"created tag '{name}'\",\"tag.system\":\"{path}: system items have no tags\",\"tag.usageNew\":\"tag new name [color]\",\"tag.createdShown\":\"created tag {tag}\",\"tag.usageDelete\":\"tag delete name…\",\"date.formatC\":\"%a %b %e %H:%M:%S %Y\",\"date.formatX\":\"%m/%d/%y\",\"date.format\":\"%a %b %e %H:%M:%S %Z %Y\",\"date.invalid\":\"invalid date '{date}'\",\"@actions.terminal.sshHere.label\":\"Open SSH terminal here\",\"help.ssh.summary\":\"open an SSH session in a new tab\",\"help.ssh.usage\":\"ssh [-p port] [-l user] [user@]host [command] | ssh <saved host>\",\"help.telnet.summary\":\"open a Telnet session in a new tab\",\"help.telnet.usage\":\"telnet [-l user] host [port] | telnet <saved host>\",\"help.rlogin.summary\":\"open an rlogin session in a new tab\",\"help.rlogin.usage\":\"rlogin [-l user] host | rlogin <saved host>\",\"help.supdup.summary\":\"open a SUPDUP session in a new tab\",\"help.supdup.usage\":\"supdup host [port] | supdup <saved host>\",\"help.sessions.summary\":\"the remote sessions still running; with a number, shows one in a tab\",\"help.sessions.usage\":\"sessions [n]\",\"remote.cmd.unavailable\":\"remote sessions are not available (lilOS has no module for them)\",\"remote.cmd.noModule\":\"{name}: lilOS has no module for it (an administrator installs {module} from the AppStore, Kernel tab)\",\"remote.cmd.opened\":\"Opened in a new tab: {name}\",\"remote.cmd.noUser\":\"ssh: a user is needed: user@host or -l user\",\"remote.cmd.noSession\":\"no running session «{name}» (see «sessions»)\",\"remote.cmd.shown\":\"Shown in a tab: {name}\",\"remote.cmd.shownNow\":\"shown in a window\",\"remote.cmd.closesIn\":{\"one\":\"closes in {n} minute\",\"other\":\"closes in {n} minutes\"},\"remote.cmd.none\":\"No remote session is running.\",\"remote.cmd.resumeHint\":\"«sessions <n>» shows one in a tab\",\"remote.tabs\":\"Tabs\",\"remote.screen\":\"Remote terminal\",\"remote.newShell\":\"New shell\",\"remote.activity\":\"New output\",\"remote.closeTab\":\"Close tab\",\"remote.closeSession\":\"Close (ends the session)\",\"remote.closeNamed\":\"Close {name}\",\"remote.notRemote\":\"it is not in a network connection\",\"remote.notSftp\":\"the SSH terminal opens only on SFTP connections\",\"remote.cannotReconnect\":\"this session cannot be opened again from here: open it again from the File Manager\",\"remote.unavailable\":\"The remote sessions cannot be reached: {error}\",\"remote.noProtocols\":\"lilOS has no module for remote sessions. An administrator can install ssh, term-telnet, term-rlogin or term-supdup from the AppStore (Kernel tab).\",\"remote.side.label\":\"Hosts and remote sessions\",\"remote.side.toggle\":\"Show or hide the hosts\",\"remote.side.hosts\":\"Hosts\",\"remote.side.connect\":\"Connect\",\"remote.side.open\":\"A session is open on this host\",\"remote.side.none\":\"No saved hosts. «ssh user@server» opens a session; + saves a host.\",\"remote.side.running\":\"Still running\",\"remote.side.elsewhere\":\"in another window\",\"remote.side.closesIn\":{\"one\":\"closes in {n} minute\",\"other\":\"closes in {n} minutes\"},\"remote.side.resume\":\"Resume\",\"remote.taken\":\"The session was opened in another window\",\"remote.takeBack\":\"Show it here\",\"remote.lostLink\":\"The link with lilOS dropped\",\"remote.attachAgain\":\"Attach again\",\"remote.secure\":\"Encrypted\",\"remote.insecure\":\"Not encrypted\",\"remote.insecureHint\":\"What you type, passwords included, goes over the network in clear\",\"remote.cipher\":\"Cipher: {cipher}\",\"remote.state.new\":\"Waiting\",\"remote.state.connecting\":\"Connecting…\",\"remote.state.on\":\"Connected\",\"remote.state.closed\":\"Closed\",\"remote.find\":\"Find (Ctrl+Shift+F)\",\"remote.record\":\"Record the session in a file\",\"remote.recordStop\":\"Stop recording\",\"remote.keys\":\"Keys\",\"remote.keys.send\":\"Send to the server:\",\"remote.keys.copy\":\"Copy\",\"remote.keys.paste\":\"Paste: Ctrl+Shift+V\",\"remote.keys.clear\":\"Clear the history\",\"remote.keys.disconnect\":\"Disconnect\",\"remote.signal.break\":\"Send Break\",\"remote.signal.interrupt\":\"Interrupt process\",\"remote.signal.ayt\":\"Are you there?\",\"remote.reconnect\":\"Reconnect\",\"remote.closed\":\"Connection closed\",\"remote.closedWhy\":\"Connection closed: {reason}\",\"remote.record.title\":\"Record the session\",\"remote.record.file\":\"File\",\"remote.record.hint\":\"A file in your home. It is written while you work; it stops at 8 MB.\",\"remote.record.colors\":\"Keep the color codes (to see it again as it was)\",\"remote.record.start\":\"Record\",\"remote.record.badPath\":\"The folder does not exist: write a path such as ~/Documenti/session.txt\",\"remote.record.exists\":\"«{name}» exists already: choose another name\",\"remote.record.full\":\"Recording stopped: «{path}» reached its size limit\",\"remote.record.failed\":\"The recording could not be saved: {error}\",\"remote.record.saved\":\"Session recorded in «{path}»\",\"remote.host.newTitle\":\"New host\",\"remote.host.editTitle\":\"Change the host\",\"remote.host.name\":\"Name\",\"remote.host.folder\":\"Folder\",\"remote.host.folderNone\":\"None\",\"remote.host.protocol\":\"Protocol\",\"remote.host.noProtocols\":\"No protocol available.\",\"remote.host.insecureTitle\":\"Connection not encrypted\",\"remote.host.insecureText\":\"What you type, passwords included, goes over the network in clear. Use it only on networks you trust or with devices that have no SSH.\",\"remote.host.remember\":\"Remember passwords and passphrases\",\"remote.host.keyUnreadable\":\"The key file cannot be read: {error}\",\"remote.host.advanced\":\"Advanced\",\"remote.host.term\":\"Terminal type\",\"remote.host.encoding\":\"Encoding\",\"remote.host.backspace\":\"Backspace sends\",\"remote.host.backspaceDel\":\"DEL (^?)\",\"remote.host.backspaceBs\":\"BS (^H)\",\"remote.host.delete\":\"Delete\",\"remote.host.save\":\"Save\",\"remote.host.saveConnect\":\"Save and connect\",\"@entrypoints.filePreview.label\":\"Previews of .term links\",\"@entrypoints.shell.label\":\"Shell for the Scheduler\",\"@commands.terminal.newShell.label\":\"New shell\",\"@commands.terminal.splitRight.label\":\"Split right\",\"@commands.terminal.splitDown.label\":\"Split down\",\"@commands.terminal.detach.label\":\"Detach tab into a new window\",\"@commands.terminal.broadcast.label\":\"Send input to all panes\",\"@commands.terminal.focusLeft.label\":\"Pane on the left\",\"@commands.terminal.focusRight.label\":\"Pane on the right\",\"@commands.terminal.focusUp.label\":\"Pane above\",\"@commands.terminal.focusDown.label\":\"Pane below\",\"@commands.terminal.previousTab.label\":\"Previous tab of the pane\",\"@commands.terminal.nextTab.label\":\"Next tab of the pane\",\"@commands.terminal.moveLeft.label\":\"Move tab to the left\",\"@commands.terminal.moveRight.label\":\"Move tab to the right\",\"@commands.terminal.moveUp.label\":\"Move tab up\",\"@commands.terminal.moveDown.label\":\"Move tab down\",\"@dependencies.ssh.reason\":\"Remote sessions over SSH, and Terminal commands on saved SSH hosts\",\"@dependencies.term-telnet.reason\":\"Remote sessions over Telnet\",\"@dependencies.term-rlogin.reason\":\"Remote sessions over rlogin\",\"@dependencies.term-supdup.reason\":\"Remote sessions over SUPDUP\",\"@dependencies.services-isolate.reason\":\"Scheduled Terminal commands in the kernel, with the operation's time limit and Cancel\",\"tabs.count\":{\"one\":\"{n} tab\",\"other\":\"{n} tabs\"},\"tabs.pane\":\"Pane {n} — {name}\",\"tabs.rename\":\"Rename…\",\"tabs.renameLabel\":\"Tab name\",\"tabs.renameHint\":\"Empty: the usual name (the folder, or the server).\",\"tabs.renameOk\":\"Rename\",\"tabs.duplicate\":\"Duplicate\",\"tabs.splitRight\":\"Split right\",\"tabs.splitDown\":\"Split down\",\"tabs.moveToPane\":\"Move to pane\",\"tabs.detach\":\"Detach into a new window\",\"tabs.moveToWindow\":\"Move to window\",\"tabs.newWindow\":\"New window\",\"tabs.saveTerm\":\"Save as link (.term)…\",\"tabs.addToDesk\":\"Add to desk\",\"tabs.copyAddress\":\"Copy address\",\"tabs.closeOthers\":\"Close other tabs\",\"tabs.closeRight\":\"Close tabs to the right\",\"grid.gutter\":\"Drag to resize the panes; double click: same size\",\"grid.broadcast\":\"Send input to all panes\",\"grid.broadcastOn\":\"Input to all panes\",\"grid.broadcastOff\":\"What you type goes to the tab shown in every pane. Click to turn it off.\",\"menu.title\":\"Terminal menu\",\"menu.openTerm\":\"Open link (.term)…\",\"menu.openTermTitle\":\"Open a terminal link\",\"drag.newWindow\":\"Drop to open {name} in a new window\",\"drag.pane\":\"Move to this pane\",\"drag.split.left\":\"New pane on the left\",\"drag.split.right\":\"New pane on the right\",\"drag.split.up\":\"New pane above\",\"drag.split.down\":\"New pane below\",\"file.invalid\":\"This is not a terminal link (.term) or it is damaged\",\"file.missing\":\"The link does not exist any more\",\"file.cannot\":\"This tab cannot become a link\",\"file.noFolder\":\"The folder {path} does not exist\",\"file.serverFolder\":\"The folder of the server must be a full path, such as /var/www\",\"file.exists\":\"There is already a file named {name} in that folder\",\"file.noPassword\":\"Type the password (or the key) to keep in the file\",\"file.onDesk\":\"{name} is on the desk\",\"file.saved\":\"Link saved: {path}\",\"file.saveTitle\":\"Save link\",\"file.name\":\"File name\",\"file.folder\":\"Folder\",\"file.change\":\"Change…\",\"file.pickFolder\":\"Where to save the link\",\"file.cwdLocal\":\"Start in the folder (optional)\",\"file.cwdRemote\":\"Folder of the server to start in (optional)\",\"file.command\":\"Command to run at the start (optional)\",\"file.commandRemote\":\"Command at start (optional)\",\"file.commandRemoteHint\":\"Runs instead of the shell of the server\",\"file.openAs\":\"When opened\",\"file.openDefault\":\"As in the Options ({how})\",\"file.keepPassword\":\"Keep the password in the file\",\"file.passwordSaved\":\"The password saved for this host goes in the file.\",\"file.passwordHint\":\"The password is encrypted: it works only for you, on this lilOS, for this server and user. For anyone else it is asked as usual.\",\"file.save\":\"Save\",\"file.command.title\":\"This link runs a command\",\"file.command.text\":\"«{name}» runs this command when it opens:\\n\\n{command}\\n\\nRun it only if you trust who made the link. Continue?\",\"options.open\":\"Options…\",\"options.title\":\"Terminal options\",\"options.tab.general\":\"General\",\"options.tab.generalDescription\":\"How Terminal opens links\",\"options.files\":\"Terminal links (.term)\",\"options.openTerm\":\"Open the links\",\"options.openTermDescription\":\"Where a .term file opens with a double click, when the file does not say it itself\",\"options.openTerm.window\":\"In a new window\",\"options.openTerm.tab\":\"In a tab of the open window\",\"help.nettest.usage\":\"nettest run FILE [-e ENV] [-f FOLDER] [-n N] [-d DATA] [--bail] [-v] | nettest send FILE REQUEST [-e ENV] [-v] | nettest list FILE\",\"help.nettest.summary\":\"runs the requests of a NetTest collection (.nettest) through the kernel; exit status 1 when one fails\",\"nettest.unavailable\":\"NetTest requests need lilOS’s kernel (1.25.0 or newer)\",\"nettest.notCollection\":\"not a NetTest collection\",\"nettest.noFile\":\"{path}: no such file\",\"nettest.noEnv\":\"no environment «{name}» (there are: {list})\",\"nettest.noRequest\":\"no request «{name}» (nettest list FILE shows them)\",\"nettest.noFolder\":\"no folder «{name}»\",\"nettest.badData\":\"the data file is not a CSV with a header row nor a JSON array\",\"nettest.check\":\"check\",\"nettest.test\":\"test\",\"nettest.summary\":\"{passed} passed, {failed} failed, {skipped} skipped in {time}\"}}"),
+	it: /* @__PURE__ */ JSON.parse("{\"strings\":{\"@name\":\"Terminale\",\"@description\":\"Una shell simile a bash sui file di lilOS, in schede e riquadri affiancati, e sessioni remote: SSH, Telnet, rlogin e SUPDUP, con host salvati, collegamenti .term e sessioni che restano aperte anche a finestra chiusa.\",\"@entrypoints.main.params.cwd.label\":\"Cartella\",\"@entrypoints.main.params.cwd.description\":\"La cartella in cui aprire il terminale\",\"@automation.terminal.run.label\":\"Esegui un comando\",\"@automation.terminal.run.params.command.label\":\"Comando\",\"@automation.terminal.run.params.folder.label\":\"Cartella\",\"@automation.terminal.run.params.folder.description\":\"La cartella di lavoro in cui gira il comando\",\"@entrypoints.main.params.file.label\":\"Collegamento\",\"@entrypoints.main.params.file.description\":\"Un collegamento al terminale (.term) da aprire\",\"ui.title\":\"Terminale\",\"ui.commandLine\":\"Riga di comando\",\"ui.welcome\":\"Terminale di lilOS · «help» elenca i comandi\",\"automation.tooLong\":\"Comando troppo lungo da registrare\",\"automation.noCommand\":\"Nessun comando da eseguire\",\"automation.busy\":\"Il terminale sta eseguendo un altro comando\",\"automation.noFolder\":\"La cartella non c’è più\",\"automation.status\":\"Il comando è finito con lo stato {status}\",\"shell.defaultUser\":\"utente\",\"shell.readonly\":\"{name}: variabile in sola lettura\",\"shell.cannotUnset\":\"{name}: impossibile eliminare: variabile in sola lettura\",\"shell.badSubscript\":\"{index}: indice dell’array non valido\",\"shell.unknownConstruct\":\"costrutto sconosciuto: {type}\",\"shell.badRegex\":\"espressione regolare non valida\",\"shell.unaryExpected\":\"{op}: operatore unario atteso\",\"shell.integerExpected\":\"{value}: è attesa un’espressione intera\",\"shell.binaryExpected\":\"{op}: operatore binario atteso\",\"shell.commandNotFound\":\"{name}: comando non trovato\",\"shell.tooDeep\":\"{name}: troppi livelli di ricorsione\",\"shell.badFd\":\"{fd}: descrittore di file errato\",\"shell.fdExpected\":\"{target}: è richiesto un descrittore di file\",\"shell.ambiguousRedirect\":\"{target}: redirezione ambigua\",\"shell.isAppLink\":\"{path}: è un collegamento a un’app\",\"err.noSuchFile\":\"{path}: file o cartella inesistente\",\"err.isADirectory\":\"{path}: è una cartella\",\"err.notAFile\":\"{path}: non è un file\",\"err.missingParen\":\"manca «)»\",\"err.badIdentifier\":\"«{name}»: identificatore non valido\",\"err.numericArgument\":\"{value}: è richiesto un argomento numerico\",\"err.tooManyArguments\":\"troppi argomenti\",\"err.notADirectory\":\"{path}: non è una cartella\",\"err.notFound\":\"{name}: non trovato\",\"err.missingOperand\":\"manca l’operando\",\"err.unknownSubcommand\":\"sottocomando sconosciuto: «{sub}»\",\"parse.unexpectedEnd\":\"errore di sintassi: fine del testo inattesa\",\"parse.unexpectedEndOfFile\":\"errore di sintassi: fine del file inattesa\",\"parse.nearEnd\":\"fine del testo\",\"parse.nearNewline\":\"a capo\",\"parse.nearToken\":\"«{token}»\",\"parse.near\":\"errore di sintassi vicino a {near}\",\"parse.nearExpected\":\"errore di sintassi vicino a {near}: atteso «{expected}»\",\"parse.badFunctionName\":\"nome di funzione non valido\",\"parse.parenAfterName\":\"atteso «)» dopo il nome della funzione\",\"parse.aliasLoop\":\"alias espansi troppe volte\",\"parse.missingTarget\":\"errore di sintassi vicino a {near}: manca la destinazione di «{op}»\",\"parse.forBadName\":\"for: nome di variabile non valido\",\"parse.caseNoWord\":\"case: manca la parola\",\"parse.condNear\":\"errore di sintassi in [[ vicino a {near}\",\"parse.condNoOperand\":\"errore di sintassi in [[: manca un operando\",\"parse.condNoRegex\":\"errore di sintassi in [[: manca l’espressione regolare\",\"parse.badSubstitution\":\"sostituzione errata\",\"parse.badSubstitutionBrace\":\"sostituzione errata: manca «}»\",\"parse.backquotes\":\"errore di sintassi tra gli apici inversi\",\"jobs.done\":\"Fatto\",\"jobs.interrupted\":\"Interrotto\",\"jobs.exit\":\"Uscita {code}\",\"jobs.running\":\"In esecuzione\",\"help.usageLine\":\"Uso: {usage}\",\"help.usageShort\":\"uso: {usage}\",\"help.noHelp\":\"nessun aiuto per «{name}»\",\"help.intro\":\"Terminale di lilOS: una shell come bash sui file di lilOS.\\n«help comando» o «comando --help» spiega un comando; «help if», «help for», «help case»… la sintassi.\",\"help.syntaxList\":\"Sintassi: {list}\",\"help.sh.summary\":\"Come bash.\",\"help.sh.usage\":\"sh [-c comandi | script] [argomenti…]\",\"help.bash.text\":\"«bash script.sh a b» esegue lo script con $1=a, $2=b; «bash -c 'echo $1' nome x» esegue il testo; «cat script.sh | bash» legge lo script dall’input.\",\"help.bash.summary\":\"Esegue uno script o dei comandi in una nuova shell.\",\"help.bash.usage\":\"bash [-c comandi | script] [argomenti…]\",\"help.sleep.summary\":\"Aspetta: 5 (secondi), 0.5, 2m, 1h.\",\"help.sleep.usage\":\"sleep durata…\",\"help.kill.summary\":\"Interrompe dei comandi in background.\",\"help.kill.usage\":\"kill [-segnale] %job | pid…\",\"help.fg.summary\":\"Porta in primo piano un comando in background: lo si aspetta e Ctrl C lo interrompe.\",\"help.wait.summary\":\"Aspetta che finiscano i comandi in background (tutti, o quelli indicati).\",\"help.jobs.summary\":\"Elenca i comandi avviati in background con &.\",\"help.clear.summary\":\"Pulisce lo schermo (anche Ctrl L).\",\"help.help.summary\":\"Elenca i comandi, o spiega quello indicato.\",\"help.help.usage\":\"help [comando]\",\"help.history.summary\":\"Mostra i comandi dati (gli ultimi n); -c cancella la cronologia.\",\"help.which.summary\":\"Dice dove si trova un comando.\",\"help.which.usage\":\"which nome…\",\"help.command.summary\":\"Avvia un comando ignorando le funzioni con lo stesso nome; con -v dice cosa avvierebbe.\",\"help.command.usage\":\"command [-v] nome [argomenti…]\",\"help.type.summary\":\"Dice cos’è un nome: alias, parola chiave, funzione, comando.\",\"help.type.usage\":\"type [-t] nome…\",\"help.unalias.summary\":\"Elimina degli alias (tutti con -a).\",\"help.unalias.usage\":\"unalias [-a] nome…\",\"help.alias.text\":\"Esempio: alias ll='ls -l'. Gli alias valgono dalla riga successiva a quella che li definisce.\",\"help.alias.summary\":\"Definisce o mostra gli alias (nomi brevi per comandi).\",\"help.alias.usage\":\"alias [nome[=valore]…]\",\"help.eval.summary\":\"Esegue gli argomenti, uniti da spazi, come un comando.\",\"help.eval.usage\":\"eval [argomenti…]\",\"help.dot.summary\":\"Come source.\",\"help.dot.usage\":\". file [argomenti…]\",\"help.source.summary\":\"Esegue i comandi di un file in questa shell (variabili, funzioni e alias restano).\",\"help.source.usage\":\"source file [argomenti…]\",\"help.read.text\":\"-r  le barre rovesciate restano come sono\\n-p  mostra un prompt\\n-a  mette le parole in un array\\n-d  legge fino a questo carattere invece che fino all’a capo\\n-s  non mostra ciò che si scrive (per le password)\\nStato 1 alla fine dell’input.\",\"help.read.summary\":\"Legge una riga e la divide nelle variabili indicate ($REPLY senza nomi).\",\"help.read.usage\":\"read [-rs] [-p prompt] [-a array] [-d delim] [nome…]\",\"help.continue.summary\":\"Passa al giro successivo del ciclo (o dell’n-esimo ciclo esterno).\",\"help.break.summary\":\"Esce dal ciclo (o da n cicli).\",\"help.return.summary\":\"Esce dalla funzione (o dallo script letto con source).\",\"help.return.usage\":\"return [stato]\",\"help.exit.summary\":\"Chiude il terminale (o esce dallo script) con uno stato.\",\"help.exit.usage\":\"exit [stato]\",\"help.let.summary\":\"Calcola espressioni aritmetiche (stato 1 se l’ultima vale 0).\",\"help.let.usage\":\"let espressione…\",\"help.bracket.summary\":\"Come test, con una «]» finale.\",\"help.bracket.usage\":\"[ espressione ]\",\"help.test.text\":\"File: -e esiste, -f è un file, -d è una cartella, -s non è vuoto\\nTesto: -z vuoto, -n non vuoto, a = b, a != b\\nNumeri: -eq -ne -lt -le -gt -ge\\nInsieme: ! negazione, -a e, -o o, ( … )\",\"help.test.summary\":\"Valuta un’espressione: stato 0 se vera, 1 se falsa.\",\"help.test.usage\":\"test espressione\",\"help.colon.summary\":\"Non fa niente (stato 0); gli argomenti vengono comunque espansi.\",\"help.colon.usage\":\": [argomenti…]\",\"help.false.summary\":\"Non fa niente, senza successo (stato 1).\",\"help.true.summary\":\"Non fa niente, con successo (stato 0).\",\"help.shift.summary\":\"Sposta i parametri posizionali: $2 diventa $1…\",\"help.set.text\":\"-e  esce al primo comando che fallisce\\n-u  errore se si usa una variabile non impostata\\n-x  mostra i comandi prima di eseguirli\\n-f  niente espansione di * e ?\\n-o pipefail  una pipe fallisce se fallisce uno dei suoi comandi\\n+e, +u… le disattivano. Senza argomenti mostra tutte le variabili.\",\"help.set.summary\":\"Imposta le opzioni della shell e i parametri posizionali ($1, $2…).\",\"help.set.usage\":\"set [-euxf] [-o opzione] [--] [argomenti…]\",\"help.printenv.summary\":\"Mostra le variabili esportate (o il valore di quelle indicate).\",\"help.printenv.usage\":\"printenv [nome…]\",\"help.env.summary\":\"Mostra le variabili esportate, o avvia un comando con variabili in più.\",\"help.env.usage\":\"env [nome=valore…] [comando [argomenti…]]\",\"help.unset.summary\":\"Elimina variabili (o funzioni con -f).\",\"help.unset.usage\":\"unset [-fv] nome…\",\"help.typeset.summary\":\"Come declare.\",\"help.typeset.usage\":\"typeset [-aprxifF] [nome[=valore]…]\",\"help.declare.text\":\"-a array, -x esportata, -r sola lettura, -i intero (il valore si calcola), -p mostra, -f mostra le funzioni, -g globale dentro una funzione.\",\"help.declare.summary\":\"Dichiara variabili e ne mostra gli attributi.\",\"help.declare.usage\":\"declare [-aprxifF] [nome[=valore]…]\",\"help.local.summary\":\"Variabili visibili solo dentro la funzione.\",\"help.local.usage\":\"local [-arx] nome[=valore]…\",\"help.readonly.summary\":\"Rende le variabili di sola lettura.\",\"help.readonly.usage\":\"readonly [nome[=valore]…]\",\"help.export.text\":\"Senza argomenti elenca le variabili esportate. -n toglie l’esportazione.\",\"help.export.summary\":\"Rende le variabili visibili ai comandi e agli script avviati.\",\"help.export.usage\":\"export [-n] [nome[=valore]…]\",\"help.printf.text\":\"Il formato si riapplica finché restano argomenti. -v salva il risultato in una variabile.\",\"help.printf.summary\":\"Scrive gli argomenti secondo un formato (%s, %d, %5.2f, %x, %b, %q…).\",\"help.printf.usage\":\"printf [-v var] formato [argomenti…]\",\"help.echo.text\":\"-n  senza a capo finale\\n-e  interpreta \\\\n, \\\\t, \\\\\\\\, \\\\e… \\n-E  non le interpreta (predefinito)\",\"help.echo.summary\":\"Scrive gli argomenti, separati da uno spazio.\",\"help.echo.usage\":\"echo [-neE] [testo…]\",\"help.pwd.summary\":\"Mostra la cartella di lavoro.\",\"help.cd.text\":\"Senza argomenti va nella home ($HOME). «cd -» torna alla cartella precedente ($OLDPWD).\",\"help.cd.summary\":\"Cambia la cartella di lavoro.\",\"help.cd.usage\":\"cd [cartella]\",\"help.realpath.summary\":\"Il percorso completo.\",\"help.realpath.usage\":\"realpath [-m] percorso…\",\"help.dirname.summary\":\"Il percorso senza l’ultima parte.\",\"help.dirname.usage\":\"dirname percorso…\",\"help.basename.summary\":\"L’ultima parte di un percorso (senza il suffisso).\",\"help.basename.usage\":\"basename percorso [suffisso]\",\"help.tree.summary\":\"Mostra le cartelle ad albero.\",\"help.tree.usage\":\"tree [-adf] [-L livelli] [cartella…]\",\"help.find.text\":\"Test: -name modello, -iname, -path, -type f|d|l, -empty, -size [+-]n[ckMG], -mtime [+-]giorni, -mmin, -newer file\\nAzioni: -print, -print0, -delete (nel cestino), -exec comando {} \\\\; oppure +\\nOpzioni: -maxdepth n, -mindepth n. Insieme: ! (negazione), -o (o), ( … )\\nEsempio: find . -name \\\"*.txt\\\" -size +1k\",\"help.find.summary\":\"Cerca file e cartelle.\",\"help.find.usage\":\"find [percorso…] [espressione]\",\"help.stat.text\":\"-c  formato: %n nome, %s dimensione, %F tipo, %y data di modifica, %Y in secondi, %w %W creazione, %i id\",\"help.stat.summary\":\"Mostra i dettagli di file e cartelle.\",\"help.stat.usage\":\"stat [-c formato] percorso…\",\"help.rmdir.summary\":\"Rimuove cartelle vuote (nel cestino).\",\"help.rmdir.usage\":\"rmdir [-p] cartella…\",\"help.rm.text\":\"-r  anche le cartelle, con il loro contenuto\\n-d  le cartelle vuote\\n-f  nessun errore per ciò che non esiste\\n--purge  elimina definitivamente, senza cestino\\nCiò che va nel cestino si rimette a posto con «trash restore».\",\"help.rm.summary\":\"Sposta file e cartelle nel cestino (con --purge li elimina per sempre).\",\"help.rm.usage\":\"rm [-rfvd] [--purge] percorso…\",\"help.mv.text\":\"Se la destinazione è una cartella, ci sposta dentro; altrimenti rinomina. Un file sovrascritto va nel cestino.\\n-n  non sovrascrive\\n-v  dice cosa sposta\",\"help.mv.summary\":\"Sposta o rinomina file e cartelle.\",\"help.mv.usage\":\"mv [-nv] origine… destinazione\",\"help.cp.text\":\"-r  copia anche le cartelle, con il loro contenuto\\n-n  non sovrascrive i file che esistono\\n-v  dice cosa copia\",\"help.cp.summary\":\"Copia file e cartelle.\",\"help.cp.usage\":\"cp [-rnv] origine… destinazione\",\"help.touch.summary\":\"Crea dei file vuoti, o aggiorna la data di modifica di quelli che esistono.\",\"help.mkdir.text\":\"-p  crea anche le cartelle intermedie; nessun errore se esiste già\",\"help.mkdir.summary\":\"Crea delle cartelle.\",\"help.mkdir.usage\":\"mkdir [-pv] cartella…\",\"help.cat.text\":\"-n  numera le righe\\n-b  numera solo quelle non vuote\\n-s  una sola riga vuota di fila\\n-E  $ alla fine di ogni riga\",\"help.cat.summary\":\"Mostra il contenuto dei file (o dell’input), uno dopo l’altro.\",\"help.ls.text\":\"-l  dettagli (tipo, dimensione, data, tag)\\n-a  anche i nomi che iniziano con «.»\\n-h  dimensioni leggibili (1,2K)\\n-t  per data, -S per dimensione, -r al contrario\\n-1  uno per riga\\n-d  la cartella stessa, non il contenuto\\n-R  anche le sottocartelle\\n-F  / dopo le cartelle, @ dopo i collegamenti, * dopo gli script\",\"help.ls.summary\":\"Elenca il contenuto delle cartelle.\",\"help.ls.usage\":\"ls [-laAh1trSdRF] [percorso…]\",\"help.xargs.text\":\"-n N  al massimo N argomenti per volta\\n-I {}  un comando per riga, con {} sostituito dalla riga\\n-0  parole separate dal carattere nullo (find -print0)\\n-d C  parole separate da C\\n-t  mostra i comandi prima di avviarli\\n-r  non avvia niente se l’input è vuoto\\nEsempio: find . -name \\\"*.tmp\\\" | xargs rm\",\"help.xargs.summary\":\"Avvia un comando con le parole dell’input come argomenti.\",\"help.xargs.usage\":\"xargs [-n N] [-I {}] [-0] [-t] [comando [argomenti…]]\",\"help.yes.summary\":\"Ripete una riga all’infinito (y se non indicata): utile in una pipe.\",\"help.yes.usage\":\"yes [testo]\",\"help.seq.text\":\"-s S  separatore (a capo se non indicato)\\n-w  stessa larghezza, con zeri davanti\",\"help.seq.summary\":\"Scrive una sequenza di numeri.\",\"help.seq.usage\":\"seq [primo [passo]] ultimo\",\"help.nl.summary\":\"Numera le righe (non vuote, o tutte con -b a).\",\"help.rev.summary\":\"Scrive ogni riga al contrario.\",\"help.tr.text\":\"tr a-z A-Z  in maiuscolo\\ntr -d '\\\\r'  elimina i ritorni a capo di Windows\\ntr -s ' '  un solo spazio di fila\\nClassi: [:upper:] [:lower:] [:digit:] [:alpha:] [:alnum:] [:space:] [:punct:]\",\"help.tr.summary\":\"Sostituisce o elimina caratteri.\",\"help.tr.usage\":\"tr [-dsc] insieme1 [insieme2]\",\"help.cut.text\":\"-f 1,3  i campi 1 e 3 (separati da tab o da -d)\\n-d ,  il separatore\\n-c 1-5  i caratteri da 1 a 5\\n-s  solo le righe con il separatore\",\"help.cut.summary\":\"Estrae colonne da ogni riga.\",\"help.cut.usage\":\"cut -f campi [-d separatore] | -c caratteri [file…]\",\"help.tee.text\":\"-a  aggiunge in fondo invece di sovrascrivere\",\"help.tee.summary\":\"Copia l’input sia sull’output sia nei file.\",\"help.uniq.text\":\"-c  con il numero di ripetizioni\\n-d  solo le righe ripetute\\n-u  solo quelle uniche\\n-i  senza distinguere maiuscole e minuscole\",\"help.uniq.summary\":\"Toglie le righe ripetute una dopo l’altra (di solito dopo sort).\",\"help.sort.text\":\"-r  al contrario\\n-n  per numero\\n-h  per dimensione leggibile (2K, 1M)\\n-u  senza doppioni\\n-f  senza distinguere maiuscole e minuscole\\n-k N[,M]  per il campo N (fino a M)\\n-t C  campi separati da C\\n-V  numeri dentro il testo (file2 prima di file10)\\n-o file  scrive nel file\",\"help.sort.summary\":\"Ordina le righe.\",\"help.sort.usage\":\"sort [-rnufhV] [-k campo] [-t separatore] [file…]\",\"help.grep.text\":\"-i  senza distinguere maiuscole e minuscole\\n-v  le righe che NON corrispondono\\n-n  con il numero di riga\\n-c  conta le righe\\n-l  solo i nomi dei file\\n-r  cerca nelle cartelle\\n-w  parole intere, -x righe intere\\n-E  espressioni regolari estese (| + ? () senza barra)\\n-F  testo semplice, non espressione regolare\\n-o  solo la parte che corrisponde\\n-q  nessun risultato, solo lo stato\\n-A N, -B N, -C N  righe di contesto dopo, prima, intorno\\nStato: 0 trovato, 1 non trovato, 2 errore.\",\"help.grep.summary\":\"Cerca le righe che contengono un modello (espressione regolare).\",\"help.grep.usage\":\"grep [-ivnclrwxEFoqH] [-e modello] modello [file…]\",\"help.wc.text\":\"-l righe, -w parole, -c byte, -m caratteri, -L la riga più lunga\",\"help.wc.summary\":\"Conta righe, parole e byte.\",\"help.tail.text\":\"-n N  le ultime N righe (-n +N: dalla riga N in poi)\\n-c N  gli ultimi N caratteri\",\"help.tail.summary\":\"Le ultime righe (10 se non indicato).\",\"help.tail.usage\":\"tail [-n righe] [-c byte] [file…]\",\"help.head.text\":\"-n N  le prime N righe (-n -N: tutte tranne le ultime N)\\n-c N  i primi N caratteri\\n-5 è come -n 5\",\"help.head.summary\":\"Le prime righe (10 se non indicato).\",\"help.head.usage\":\"head [-n righe] [-c byte] [file…]\",\"help.sed.text\":\"s/vecchio/nuovo/g  sostituisce (g: tutte le volte, i: senza maiuscole, p: stampa)\\n3d, /re/d, 2,5d  elimina righe     -n …p  stampa solo quelle scelte\\ny/abc/xyz/  traslittera     a testo, i testo, c testo  aggiunge, inserisce, cambia\\n=  numero di riga   q  esce   h H g G x  spazio di riserva   b t :etichetta  salti\\nIndirizzi: n, $, /re/, a,b, a,+n, ! per negare, { … } per raggruppare.\\n-n  non stampa le righe da sola    -E  espressioni regolari estese    -i  modifica i file\\nEsempi: sed 's/rosso/blu/g' note.txt    sed -n '1,5p' file    sed -i '/^#/d' conf.txt\",\"help.sed.summary\":\"Modifica il testo riga per riga (sostituzioni, cancellazioni…).\",\"help.diff.text\":\"-u  formato unificato (con 3 righe di contesto; -U N per N)\\n-q  dice solo se sono diversi\\n-i  senza distinguere maiuscole e minuscole\\n-w  ignorando gli spazi, -b ignorando quanti sono\\n-B  ignorando le righe vuote\\n-s  dice anche quando sono identici\\n«-» è l’input. Stato: 0 uguali, 1 diversi, 2 errore.\",\"help.diff.summary\":\"Mostra le differenze tra due file.\",\"help.uname.summary\":\"Il nome del sistema operativo.\",\"help.hostname.summary\":\"Il nome del sistema.\",\"help.whoami.summary\":\"Il nome dell’utente.\",\"help.date.text\":\"Formato: %Y anno, %m mese, %d giorno, %H:%M:%S ora, %A giorno della settimana, %B mese, %s secondi dal 1970, %F = %Y-%m-%d, %T = %H:%M:%S\\n-d @1700000000, -d 2026-01-01, -d ieri\\nEsempio: date +%F\",\"help.date.summary\":\"Data e ora.\",\"help.date.usage\":\"date [-u] [-d data] [+formato]\",\"help.apps.summary\":\"Elenca le app installate (id, nome, versione).\",\"help.tag.text\":\"tag                elenca i tag\\ntag ls Lavoro      gli elementi con il tag\\ntag show file      i tag di un elemento\\ntag add Lavoro f   mette il tag (lo crea se non c’è)\\ntag rm Lavoro f    lo toglie\\ntag new nome blu   crea un tag\\ntag delete nome    elimina un tag\",\"help.tag.summary\":\"I tag di lilOS: elenca, assegna, toglie.\",\"help.tag.usage\":\"tag [ls [tag…] | show percorso… | add tag percorso… | rm tag percorso… | new nome [colore] | delete tag…]\",\"help.trash.text\":\"trash              elenca ciò che è nel cestino\\ntrash put file     sposta nel cestino (come rm -r)\\ntrash restore nome rimette a posto\\ntrash rm nome      elimina definitivamente\\ntrash empty        svuota il cestino\",\"help.trash.summary\":\"Il cestino: elenca, rimette a posto, svuota.\",\"help.trash.usage\":\"trash [list | put percorso… | restore nome… | rm nome… | empty]\",\"help.open.text\":\"open note.txt   apre con l’app predefinita\\nopen .   apre la cartella nel File Manager\\nopen -a editor note.txt   con un’app precisa\\nopen -a photo   avvia un’app\",\"help.open.summary\":\"Apre file e cartelle con la loro app (o con quella indicata).\",\"help.open.usage\":\"open [-a app] percorso…\",\"arith.tooDeep\":\"espressione: troppi livelli di ricorsione\",\"arith.syntax\":\"{expr}: errore di sintassi nell’espressione (simbolo errato «{token}»)\",\"arith.end\":\"fine\",\"arith.missingBracket\":\"{expr}: manca «]»\",\"arith.operandExpected\":\"{expr}: errore di sintassi nell’espressione (operando atteso)\",\"arith.badBase\":\"{value}: base non valida\",\"arith.tooGreatForBase\":\"{value}: valore troppo grande per la base\",\"arith.invalid\":\"espressione non valida\",\"arith.divisionByZero\":\"divisione per zero\",\"arith.negativeExponent\":\"esponente negativo\",\"arith.unknownOperator\":\"operatore sconosciuto {op}\",\"expand.braceTooLarge\":\"espansione delle graffe troppo grande\",\"expand.badSubstitution\":\"{name}: sostituzione errata\",\"expand.unbound\":\"{name}: variabile non impostata\",\"expand.cannotAssign\":\"{name}: impossibile assegnare in questo modo\",\"expand.nullOrNotSet\":\"parametro nullo o non impostato\",\"expand.negativeSubstring\":\"{count}: espressione di sottostringa < 0\",\"opt.invalid\":\"opzione non valida -- «{option}»\",\"opt.longNeedsArgument\":\"l’opzione «--{name}» richiede un argomento\",\"opt.needsArgument\":\"l’opzione richiede un argomento -- «{option}»\",\"opt.badNumber\":\"numero non valido: «{value}»\",\"regex.unmatchedBracket\":\"«[» senza «]» nell’espressione regolare\",\"regex.invalid\":\"espressione regolare non valida: {pattern}\",\"appCmd.summary\":\"Comando dell’app {app}.\",\"appCmd.usage\":\"{name} [argomenti…]\",\"printf.badNumber\":\"{value}: è richiesto un numero\",\"test.argumentExpected\":\"manca un argomento\",\"test.unexpectedArgument\":\"{arg}: argomento inatteso\",\"test.missingBracket\":\"manca «]»\",\"cd.oldpwdNotSet\":\"OLDPWD non impostata\",\"local.onlyInFunction\":\"si può usare solo in una funzione\",\"set.badOptionName\":\"{name}: nome di opzione non valido\",\"set.badOption\":\"{option}: opzione non valida\",\"let.noExpression\":\"manca l’espressione\",\"return.onlyInFunction\":\"si può usare solo in una funzione o in uno script letto con source\",\"loop.onlyInLoop\":\"ha senso solo in un ciclo for, while o until\",\"loop.badCount\":\"{n}: numero di cicli non valido\",\"alias.badName\":\"«{name}»: nome di alias non valido\",\"which.builtIn\":\"{name}: comando integrato nel Terminale\",\"wait.notAJob\":\"{spec}: non è un job di questa shell\",\"fg.noSuchJob\":\"{job}: job inesistente\",\"fg.current\":\"attuale\",\"kill.noSuchJob\":\"{spec}: job o processo inesistente\",\"sleep.missing\":\"manca la durata\",\"sleep.badDuration\":\"durata non valida: «{value}»\",\"source.noFile\":\"manca il nome del file\",\"bash.noCommand\":\"-c: manca il testo dei comandi\",\"bash.already\":\"Sei già in bash: per uno script scrivi «bash file.sh» o «source file.sh».\",\"type.alias\":\"{name} è un alias di «{value}»\",\"type.keyword\":\"{name} è una parola chiave della shell\",\"type.function\":\"{name} è una funzione\",\"type.builtin\":\"{name} è un comando interno della shell\",\"type.appCommand\":\"{name} è un comando dell’app {app}\",\"type.command\":\"{name} è un comando del Terminale\",\"type.file\":\"{name} è {path}\",\"syntax.topic.variables\":\"variabili\",\"syntax.topic.redirections\":\"redirezioni\",\"syntax.if\":\"if comandi; then comandi; [elif comandi; then comandi;] [else comandi;] fi\\nEsegue il ramo del primo «if»/«elif» i cui comandi riescono (stato 0).\\n  if [ -f note.txt ]; then echo c’è; else echo manca; fi\",\"syntax.for\":\"for nome in parole…; do comandi; done\\nfor (( inizio; condizione; passo )); do comandi; done\\n  for f in *.txt; do wc -l \\\"$f\\\"; done\\n  for ((i = 1; i <= 3; i++)); do echo $i; done\",\"syntax.while\":\"while comandi; do comandi; done   (until: finché i comandi NON riescono)\\n  n=0; while [ $n -lt 3 ]; do echo $n; n=$((n + 1)); done\\n  ls | while read -r nome; do echo \\\"- $nome\\\"; done\",\"syntax.until\":\"until comandi; do comandi; done: ripete finché i comandi non riescono.\",\"syntax.case\":\"case parola in modello|modello) comandi;; … esac\\nI modelli usano * ? [ ]. «;&» prosegue nel ramo dopo, «;;&» prova anche i modelli successivi.\\n  case \\\"$f\\\" in *.txt) echo testo;; *.png|*.jpg) echo immagine;; *) echo altro;; esac\",\"syntax.function\":\"nome() { comandi; }   oppure   function nome { comandi; }\\nGli argomenti sono $1, $2…, $@; «local» crea variabili della funzione, «return n» esce.\\n  saluta() { echo \\\"Ciao, $1\\\"; }; saluta Eugenio\",\"syntax.cond\":\"[[ espressione ]]: test senza divisione in parole né espansione di *.\\n  [[ $nome == *.txt ]]      confronto con un modello\\n  [[ $s =~ ^[0-9]+$ ]]      espressione regolare (gruppi in BASH_REMATCH)\\n  [[ -d dir && ! -e file ]] -e -f -d -s -z -n, && || ! ( )\",\"syntax.arith\":\"(( espressione )): aritmetica intera; stato 0 se il risultato non è 0.\\n  (( n++ )); (( n > 3 )) && echo grande; echo $(( 2 ** 10 ))\",\"syntax.variables\":\"nome=valore (senza spazi), $nome o ${nome}. Array: a=(x y z), ${a[0]}, ${a[@]}, ${#a[@]}.\\n${v:-predefinito} ${v:=predefinito} ${v:+alt} ${#v} ${v#prefisso} ${v%suffisso} ${v/da/a} ${v//da/a} ${v:inizio:lunghezza} ${v^^} ${v,,}\\nSpeciali: $? stato dell’ultimo comando, $$ la shell, $! l’ultimo comando in background, $# $@ $* gli argomenti.\",\"syntax.redirections\":\"> file (sovrascrive), >> file (aggiunge), < file (legge), 2> errori, 2>&1, &> file, <<EOF … EOF, <<< testo, | pipe.\\n/dev/null scarta tutto.\",\"files.cannotAccess\":\"impossibile accedere a «{path}»: file o cartella inesistente\",\"files.cannotCreate\":\"impossibile creare «{path}»: file o cartella inesistente\",\"files.overwriteFolder\":\"impossibile sovrascrivere la cartella «{name}» con un file\",\"files.missingDestination\":\"manca la destinazione dopo «{path}»\",\"files.targetNotFolder\":\"la destinazione «{path}» non è una cartella\",\"files.cannotStat\":\"impossibile fare stat di «{path}»: file o cartella inesistente\",\"files.cannotRemove\":\"impossibile rimuovere «{path}»: {reason}\",\"files.quotedNoSuchFile\":\"«{path}»: file o cartella inesistente\",\"mkdir.notAFolder\":\"impossibile creare la cartella «{path}»: «{name}» esiste e non è una cartella\",\"mkdir.exists\":\"impossibile creare la cartella «{path}»: il file esiste\",\"mkdir.noParent\":\"impossibile creare la cartella «{path}»: file o cartella inesistente\",\"mkdir.created\":\"creata la cartella «{path}»\",\"cp.overwriteFile\":\"impossibile sovrascrivere «{name}», che non è una cartella, con una cartella\",\"cp.verbose\":\"«{from}» -> «{to}»\",\"cp.omitting\":\"-r non specificato; si omette la cartella «{path}»\",\"cp.intoItself\":\"impossibile copiare la cartella «{path}» dentro se stessa\",\"mv.system\":\"impossibile spostare «{path}»: è una cartella di sistema\",\"mv.intoItself\":\"impossibile spostare «{path}» in una sua sottocartella\",\"mv.notEmpty\":\"impossibile spostare «{path}» su «{name}»: la cartella non è vuota\",\"mv.verbose\":\"rinominato «{from}» -> «{to}»\",\"reason.noSuchFile\":\"file o cartella inesistente\",\"reason.isADirectory\":\"è una cartella\",\"reason.notADirectory\":\"non è una cartella\",\"reason.notEmpty\":\"la cartella non è vuota\",\"reason.system\":\"è una cartella di sistema\",\"reason.containsSystem\":\"contiene cartelle di sistema\",\"rm.home\":\"è pericoloso agire su «{path}»: è la home\",\"rm.purged\":\"eliminato definitivamente «{path}»\",\"rm.trashed\":\"spostato nel cestino «{path}»\",\"rmdir.removed\":\"rimossa la cartella «{path}»\",\"stat.folder\":\"cartella\",\"stat.appLink\":\"collegamento all’app {app}\",\"stat.file\":\"file\",\"stat.emptyFile\":\"file vuoto\",\"stat.type\":\"Tipo: {type}\",\"stat.path\":\"Percorso: {path}\",\"stat.items\":\"Elementi: {n} ({total} in tutto)\",\"stat.size\":\"Dimensione: {size} byte ({human})\",\"stat.created\":\"Creato: {date}\",\"stat.modified\":\"Modificato: {date}\",\"stat.tags\":\"Tag: {tags}\",\"stat.system\":\"Cartella di sistema\",\"find.missingArgument\":\"manca l’argomento di «{name}»\",\"find.badType\":\"tipo sconosciuto per -type: «{type}» (f, d o l)\",\"find.badSize\":\"dimensione non valida: «{value}»\",\"find.badValue\":\"valore non valido per {option}: «{value}»\",\"find.cannotFind\":\"impossibile trovare «{path}»\",\"find.execEnd\":\"manca la fine di «-exec» («;» o «+»)\",\"find.execCommand\":\"manca il comando di «-exec»\",\"find.unknownPredicate\":\"predicato sconosciuto: «{name}»\",\"find.unexpected\":\"argomento inatteso: «{arg}»\",\"tree.folders\":{\"one\":\"{n} cartella\",\"other\":\"{n} cartelle\"},\"tree.files\":{\"one\":\"{n} file\",\"other\":\"{n} file\"},\"ls.date\":\"{day} {month}\",\"wc.total\":\"totale\",\"grep.noPattern\":\"manca il modello da cercare\\nUso: grep [opzioni] modello [file…]\",\"sort.badKey\":\"chiave non valida: «{key}»\",\"sort.disorder\":\"-:{n}: disordine: {line}\",\"cut.badList\":\"elenco non valido: «{spec}»\",\"cut.noList\":\"indicare un elenco di campi (-f) o di caratteri (-c)\",\"cut.badDelimiter\":\"il delimitatore deve essere un solo carattere\",\"tr.reverseRange\":\"intervallo al contrario: «{range}»\",\"tr.missingSet2\":\"manca il secondo insieme dopo «{set}»\",\"seq.badArgument\":\"argomento non valido: «{value}»\",\"seq.zeroStep\":\"il passo non può essere 0\",\"xargs.unmatchedDouble\":\"virgolette doppie non chiuse\",\"xargs.unmatchedSingle\":\"virgolette singole non chiuse\",\"xargs.badCount\":\"il numero di argomenti deve essere almeno 1\",\"sed.at\":\"-e espressione #1, carattere {pos}: {message}\",\"sed.unterminated\":\"comando «s» non terminato\",\"sed.badAddress\":\"indirizzo non valido\",\"sed.missingAddress\":\"manca il secondo indirizzo\",\"sed.missingCommand\":\"manca il comando\",\"sed.unexpectedBrace\":\"«}» inatteso\",\"sed.badDelimiter\":\"delimitatore non valido per «s»\",\"sed.yLengths\":\"le stringhe di «y» hanno lunghezze diverse\",\"sed.noLabel\":\"«:» senza etichetta\",\"sed.unknownCommand\":\"comando sconosciuto: «{cmd}»\",\"sed.unmatchedBrace\":\"manca «}»\",\"sed.noSuchLabel\":\"etichetta inesistente per un salto: «{label}»\",\"sed.noPreviousRegex\":\"nessuna espressione regolare precedente\",\"sed.cannotRead\":\"impossibile leggere {path}: file o cartella inesistente\",\"sed.noScript\":\"manca lo script\\nUso: sed [-n] [-E] [-i] script [file…]\",\"sed.noFiles\":\"nessun file da modificare con -i\",\"diff.missingOperand\":\"manca un operando dopo «{arg}»\",\"diff.extraOperand\":\"operando in più: «{arg}»\",\"diff.identical\":\"I file {a} e {b} sono identici\",\"diff.differ\":\"I file {a} e {b} sono diversi\",\"diff.tooBig\":\"i file sono troppo diversi e troppo grandi da confrontare\",\"open.noApp\":\"app non trovata: «{app}» (vedi «apps»)\",\"trash.notInTrash\":\"«{name}» non è nel cestino\",\"trash.empty\":\"Il cestino è vuoto.\",\"trash.deletedFolder\":\"(cartella eliminata)\",\"trash.items\":{\"one\":\"{n} elemento\",\"other\":\"{n} elementi\"},\"trash.missingPut\":\"manca cosa mettere nel cestino\",\"trash.cannotTrash\":\"{path}: non si può cestinare (cartella di sistema)\",\"trash.missingRestore\":\"manca il nome di ciò che va rimesso a posto\",\"trash.restored\":\"rimesso in {path}\",\"trash.missingName\":\"manca il nome\",\"trash.purged\":{\"one\":\"eliminato definitivamente {n} elemento\",\"other\":\"eliminati definitivamente {n} elementi\"},\"trash.emptied\":{\"one\":\"Cestino svuotato ({n} elemento).\",\"other\":\"Cestino svuotato ({n} elementi).\"},\"trash.alreadyEmpty\":\"Il cestino era già vuoto.\",\"tag.noSuchTag\":\"tag inesistente: «{name}» (vedi «tag ls»)\",\"tag.none\":\"Nessun tag. Creane uno con «tag new nome».\",\"tag.hidden\":\"nascosto\",\"tag.noTags\":\"nessun tag\",\"tag.usageAddRm\":\"tag {sub} nome file…\",\"tag.created\":\"creato il tag «{name}»\",\"tag.system\":\"{path}: gli elementi di sistema non hanno tag\",\"tag.usageNew\":\"tag new nome [colore]\",\"tag.createdShown\":\"creato il tag {tag}\",\"tag.usageDelete\":\"tag delete nome…\",\"date.formatC\":\"%a %e %b %Y, %H:%M:%S\",\"date.formatX\":\"%d/%m/%Y\",\"date.format\":\"%a %e %b %Y, %H:%M:%S %Z\",\"date.invalid\":\"data non valida: «{date}»\",\"@actions.terminal.sshHere.label\":\"Apri terminale SSH qui\",\"help.ssh.summary\":\"apre una sessione SSH in una scheda nuova\",\"help.ssh.usage\":\"ssh [-p porta] [-l utente] [utente@]host [comando] | ssh <host salvato>\",\"help.telnet.summary\":\"apre una sessione Telnet in una scheda nuova\",\"help.telnet.usage\":\"telnet [-l utente] host [porta] | telnet <host salvato>\",\"help.rlogin.summary\":\"apre una sessione rlogin in una scheda nuova\",\"help.rlogin.usage\":\"rlogin [-l utente] host | rlogin <host salvato>\",\"help.supdup.summary\":\"apre una sessione SUPDUP in una scheda nuova\",\"help.supdup.usage\":\"supdup host [porta] | supdup <host salvato>\",\"help.sessions.summary\":\"le sessioni remote ancora aperte; con un numero, ne mostra una in una scheda\",\"help.sessions.usage\":\"sessions [n]\",\"remote.cmd.unavailable\":\"le sessioni remote non sono disponibili (lilOS non ha i loro moduli)\",\"remote.cmd.noModule\":\"{name}: lilOS non ha il suo modulo (un amministratore installa {module} dall’AppStore, scheda Kernel)\",\"remote.cmd.opened\":\"Aperta in una scheda nuova: {name}\",\"remote.cmd.noUser\":\"ssh: serve un utente: utente@host oppure -l utente\",\"remote.cmd.noSession\":\"nessuna sessione aperta «{name}» (vedi «sessions»)\",\"remote.cmd.shown\":\"Mostrata in una scheda: {name}\",\"remote.cmd.shownNow\":\"mostrata in una finestra\",\"remote.cmd.closesIn\":{\"one\":\"si chiude tra {n} minuto\",\"other\":\"si chiude tra {n} minuti\"},\"remote.cmd.none\":\"Nessuna sessione remota aperta.\",\"remote.cmd.resumeHint\":\"«sessions <n>» ne mostra una in una scheda\",\"remote.tabs\":\"Schede\",\"remote.screen\":\"Terminale remoto\",\"remote.newShell\":\"Nuova shell\",\"remote.activity\":\"Nuovo output\",\"remote.closeTab\":\"Chiudi scheda\",\"remote.closeSession\":\"Chiudi (termina la sessione)\",\"remote.closeNamed\":\"Chiudi {name}\",\"remote.notRemote\":\"non è in una connessione di rete\",\"remote.notSftp\":\"il terminale SSH si apre solo sulle connessioni SFTP\",\"remote.cannotReconnect\":\"questa sessione non si riapre da qui: aprila di nuovo dal File Manager\",\"remote.unavailable\":\"Le sessioni remote non rispondono: {error}\",\"remote.noProtocols\":\"lilOS non ha moduli per le sessioni remote. Un amministratore può installare ssh, term-telnet, term-rlogin o term-supdup dall’AppStore (scheda Kernel).\",\"remote.side.label\":\"Host e sessioni remote\",\"remote.side.toggle\":\"Mostra o nascondi gli host\",\"remote.side.hosts\":\"Host\",\"remote.side.connect\":\"Connetti\",\"remote.side.open\":\"C’è una sessione aperta su questo host\",\"remote.side.none\":\"Nessun host salvato. «ssh utente@server» apre una sessione; + salva un host.\",\"remote.side.running\":\"Ancora attive\",\"remote.side.elsewhere\":\"in un’altra finestra\",\"remote.side.closesIn\":{\"one\":\"si chiude tra {n} minuto\",\"other\":\"si chiude tra {n} minuti\"},\"remote.side.resume\":\"Riprendi\",\"remote.taken\":\"La sessione è stata aperta in un’altra finestra\",\"remote.takeBack\":\"Mostrala qui\",\"remote.lostLink\":\"Il collegamento con lilOS si è interrotto\",\"remote.attachAgain\":\"Ricollega\",\"remote.secure\":\"Cifrata\",\"remote.insecure\":\"Non cifrata\",\"remote.insecureHint\":\"Quello che scrivi, password comprese, passa in chiaro sulla rete\",\"remote.cipher\":\"Cifratura: {cipher}\",\"remote.state.new\":\"In attesa\",\"remote.state.connecting\":\"Connessione…\",\"remote.state.on\":\"Connessa\",\"remote.state.closed\":\"Chiusa\",\"remote.find\":\"Cerca (Ctrl+Maiusc+F)\",\"remote.record\":\"Registra la sessione in un file\",\"remote.recordStop\":\"Ferma la registrazione\",\"remote.keys\":\"Tasti\",\"remote.keys.send\":\"Manda al server:\",\"remote.keys.copy\":\"Copia\",\"remote.keys.paste\":\"Incolla: Ctrl+Maiusc+V\",\"remote.keys.clear\":\"Cancella lo storico\",\"remote.keys.disconnect\":\"Disconnetti\",\"remote.signal.break\":\"Invia Break\",\"remote.signal.interrupt\":\"Interrompi il processo\",\"remote.signal.ayt\":\"Ci sei? (AYT)\",\"remote.reconnect\":\"Riconnetti\",\"remote.closed\":\"Connessione chiusa\",\"remote.closedWhy\":\"Connessione chiusa: {reason}\",\"remote.record.title\":\"Registra la sessione\",\"remote.record.file\":\"File\",\"remote.record.hint\":\"Un file nella tua home. Viene scritto mentre lavori; si ferma a 8 MB.\",\"remote.record.colors\":\"Anche con i codici di colore (per rivederla com’era)\",\"remote.record.start\":\"Registra\",\"remote.record.badPath\":\"La cartella non esiste: scrivi un percorso come ~/Documenti/sessione.txt\",\"remote.record.exists\":\"«{name}» esiste già: scegli un altro nome\",\"remote.record.full\":\"Registrazione fermata: «{path}» ha raggiunto la dimensione massima\",\"remote.record.failed\":\"La registrazione non si salva: {error}\",\"remote.record.saved\":\"Sessione registrata in «{path}»\",\"remote.host.newTitle\":\"Nuovo host\",\"remote.host.editTitle\":\"Modifica l’host\",\"remote.host.name\":\"Nome\",\"remote.host.folder\":\"Cartella\",\"remote.host.folderNone\":\"Nessuna\",\"remote.host.protocol\":\"Protocollo\",\"remote.host.noProtocols\":\"Nessun protocollo disponibile.\",\"remote.host.insecureTitle\":\"Connessione non cifrata\",\"remote.host.insecureText\":\"Quello che scrivi, password comprese, passa in chiaro sulla rete. Usala solo su reti di cui ti fidi o con apparati che non hanno SSH.\",\"remote.host.remember\":\"Ricorda password e passphrase\",\"remote.host.keyUnreadable\":\"Il file della chiave non si legge: {error}\",\"remote.host.advanced\":\"Avanzate\",\"remote.host.term\":\"Tipo di terminale\",\"remote.host.encoding\":\"Codifica\",\"remote.host.backspace\":\"Backspace manda\",\"remote.host.backspaceDel\":\"DEL (^?)\",\"remote.host.backspaceBs\":\"BS (^H)\",\"remote.host.delete\":\"Elimina\",\"remote.host.save\":\"Salva\",\"remote.host.saveConnect\":\"Salva e connetti\",\"@entrypoints.filePreview.label\":\"Anteprime dei collegamenti .term\",\"@entrypoints.shell.label\":\"Shell per la Pianificazione\",\"@commands.terminal.newShell.label\":\"Nuova shell\",\"@commands.terminal.splitRight.label\":\"Dividi a destra\",\"@commands.terminal.splitDown.label\":\"Dividi in basso\",\"@commands.terminal.detach.label\":\"Stacca la scheda in una nuova finestra\",\"@commands.terminal.broadcast.label\":\"Invia l’input a tutti i riquadri\",\"@commands.terminal.focusLeft.label\":\"Riquadro a sinistra\",\"@commands.terminal.focusRight.label\":\"Riquadro a destra\",\"@commands.terminal.focusUp.label\":\"Riquadro sopra\",\"@commands.terminal.focusDown.label\":\"Riquadro sotto\",\"@commands.terminal.previousTab.label\":\"Scheda precedente del riquadro\",\"@commands.terminal.nextTab.label\":\"Scheda successiva del riquadro\",\"@commands.terminal.moveLeft.label\":\"Sposta la scheda a sinistra\",\"@commands.terminal.moveRight.label\":\"Sposta la scheda a destra\",\"@commands.terminal.moveUp.label\":\"Sposta la scheda in alto\",\"@commands.terminal.moveDown.label\":\"Sposta la scheda in basso\",\"@dependencies.ssh.reason\":\"Sessioni remote via SSH, e comandi del Terminale sugli host SSH salvati\",\"@dependencies.term-telnet.reason\":\"Sessioni remote via Telnet\",\"@dependencies.term-rlogin.reason\":\"Sessioni remote via rlogin\",\"@dependencies.term-supdup.reason\":\"Sessioni remote via SUPDUP\",\"@dependencies.services-isolate.reason\":\"Comandi del Terminale pianificati nel kernel, con il tempo massimo dell’operazione e Annulla\",\"tabs.count\":{\"one\":\"{n} scheda\",\"other\":\"{n} schede\"},\"tabs.pane\":\"Riquadro {n} — {name}\",\"tabs.rename\":\"Rinomina…\",\"tabs.renameLabel\":\"Nome della scheda\",\"tabs.renameHint\":\"Vuoto: il nome solito (la cartella, o il server).\",\"tabs.renameOk\":\"Rinomina\",\"tabs.duplicate\":\"Duplica\",\"tabs.splitRight\":\"Dividi a destra\",\"tabs.splitDown\":\"Dividi in basso\",\"tabs.moveToPane\":\"Sposta nel riquadro\",\"tabs.detach\":\"Stacca in una nuova finestra\",\"tabs.moveToWindow\":\"Sposta nella finestra\",\"tabs.newWindow\":\"Nuova finestra\",\"tabs.saveTerm\":\"Salva come collegamento (.term)…\",\"tabs.addToDesk\":\"Aggiungi alla scrivania\",\"tabs.copyAddress\":\"Copia indirizzo\",\"tabs.closeOthers\":\"Chiudi le altre schede\",\"tabs.closeRight\":\"Chiudi le schede a destra\",\"grid.gutter\":\"Trascina per cambiare la misura dei riquadri; doppio clic: uguali\",\"grid.broadcast\":\"Invia l’input a tutti i riquadri\",\"grid.broadcastOn\":\"Input a tutti i riquadri\",\"grid.broadcastOff\":\"Quello che scrivi va alla scheda mostrata in ogni riquadro. Clic per spegnerlo.\",\"menu.title\":\"Menu di Terminale\",\"menu.openTerm\":\"Apri un collegamento (.term)…\",\"menu.openTermTitle\":\"Apri un collegamento al terminale\",\"drag.newWindow\":\"Rilascia per aprire {name} in una finestra nuova\",\"drag.pane\":\"Sposta in questo riquadro\",\"drag.split.left\":\"Nuovo riquadro a sinistra\",\"drag.split.right\":\"Nuovo riquadro a destra\",\"drag.split.up\":\"Nuovo riquadro sopra\",\"drag.split.down\":\"Nuovo riquadro sotto\",\"file.invalid\":\"Non è un collegamento al terminale (.term) o è rovinato\",\"file.missing\":\"Il collegamento non esiste più\",\"file.cannot\":\"Questa scheda non può diventare un collegamento\",\"file.noFolder\":\"La cartella {path} non esiste\",\"file.serverFolder\":\"La cartella del server va scritta per intero, per esempio /var/www\",\"file.exists\":\"C’è già un file {name} in quella cartella\",\"file.noPassword\":\"Scrivi la password (o la chiave) da salvare nel file\",\"file.onDesk\":\"{name} è sulla scrivania\",\"file.saved\":\"Collegamento salvato: {path}\",\"file.saveTitle\":\"Salva collegamento\",\"file.name\":\"Nome del file\",\"file.folder\":\"Cartella\",\"file.change\":\"Cambia…\",\"file.pickFolder\":\"Dove salvare il collegamento\",\"file.cwdLocal\":\"Parti dalla cartella (facoltativo)\",\"file.cwdRemote\":\"Cartella del server in cui entrare (facoltativo)\",\"file.command\":\"Comando da eseguire all’avvio (facoltativo)\",\"file.commandRemote\":\"Comando all’avvio (facoltativo)\",\"file.commandRemoteHint\":\"Parte al posto della shell del server\",\"file.openAs\":\"All’apertura\",\"file.openDefault\":\"Come nelle Opzioni ({how})\",\"file.keepPassword\":\"Salva la password nel file\",\"file.passwordSaved\":\"Nel file va la password salvata per questo host.\",\"file.passwordHint\":\"La password è cifrata: vale solo per te, su questo lilOS, per questo server e utente. A chiunque altro viene chiesta come al solito.\",\"file.save\":\"Salva\",\"file.command.title\":\"Questo collegamento esegue un comando\",\"file.command.text\":\"«{name}» all’apertura esegue questo comando:\\n\\n{command}\\n\\nEseguilo solo se ti fidi di chi ha fatto il collegamento. Continuare?\",\"options.open\":\"Opzioni…\",\"options.title\":\"Opzioni di Terminale\",\"options.tab.general\":\"Generale\",\"options.tab.generalDescription\":\"Come Terminale apre i collegamenti\",\"options.files\":\"Collegamenti al terminale (.term)\",\"options.openTerm\":\"Apri i collegamenti\",\"options.openTermDescription\":\"Dove si apre un file .term con il doppio clic, quando il file non lo dice da sé\",\"options.openTerm.window\":\"In una finestra nuova\",\"options.openTerm.tab\":\"In una scheda della finestra aperta\",\"help.nettest.usage\":\"nettest run FILE [-e AMBIENTE] [-f CARTELLA] [-n N] [-d DATI] [--bail] [-v] | nettest send FILE RICHIESTA [-e AMBIENTE] [-v] | nettest list FILE\",\"help.nettest.summary\":\"esegue le richieste di una collezione di NetTest (.nettest) con il kernel; stato di uscita 1 se una fallisce\",\"nettest.unavailable\":\"Le richieste di NetTest hanno bisogno del kernel di lilOS (1.25.0 o più recente)\",\"nettest.notCollection\":\"non è una collezione di NetTest\",\"nettest.noFile\":\"{path}: file inesistente\",\"nettest.noEnv\":\"nessun ambiente «{name}» (ci sono: {list})\",\"nettest.noRequest\":\"nessuna richiesta «{name}» (nettest list FILE le mostra)\",\"nettest.noFolder\":\"nessuna cartella «{name}»\",\"nettest.badData\":\"il file di dati non è un CSV con la riga di intestazione né un array JSON\",\"nettest.check\":\"verifica\",\"nettest.test\":\"test\",\"nettest.summary\":\"{passed} riuscite, {failed} fallite, {skipped} saltate in {time}\"}}")
 }), { t: K } = G, { h: q, icon: cu, fs: lu, uid: uu } = e, du = (e, t, { beside: n = null, hint: r = null } = {}) => (t.id ||= `tm-c-${uu()}`, q("div", { class: "sh-field" }, q("label", { for: t.id }, e), n ? q("div", { class: "sh-field-pick" }, t, n) : t, r && q("small", { class: "sh-field-hint" }, r)));
 async function fu(t, n = null, r = null) {
 	let i = (t) => e.term.text(t), { protocols: a, encodings: o, hosts: s } = t.data, c = n?.protocol ?? r?.protocol ?? a[0]?.id, l = {
@@ -20545,32 +20545,198 @@ var Ih = [
 		},
 		run: Fh
 	}
-], Lh = /^[a-z][\w.-]{0,39}$/, Rh = /* @__PURE__ */ new Map();
-for (let e of Ip) Rh.set(e.name, Object.assign(e, { builtin: !0 }));
+], Lh = (e) => {
+	let t;
+	try {
+		t = JSON.parse(e);
+	} catch {
+		t = null;
+	}
+	if (t?.format !== "nettest" || !Array.isArray(t.items)) throw new X(K("nettest.notCollection"));
+	return t;
+};
+async function Rh(t, n) {
+	let r = If(t.cwd, n);
+	if (!r || r.type !== "file") throw new X(K("nettest.noFile", { path: n }));
+	return Lh(await e.fs.read(r.id));
+}
+var zh = (e) => Array.isArray(e?.variables) ? e.variables.filter((e) => e && e.enabled !== !1 && e.key) : [];
+function Bh(e, t) {
+	if (!t) return {
+		values: {},
+		secrets: {}
+	};
+	let n = (e.environments ?? []).find((e) => e.id === t || String(e.name).toLowerCase() === String(t).toLowerCase());
+	if (!n) throw new X(K("nettest.noEnv", {
+		name: t,
+		list: (e.environments ?? []).map((e) => e.name).join(", ") || "—"
+	}));
+	let r = zh(n);
+	return {
+		values: Object.fromEntries(r.filter((e) => !e.secret).map((e) => [e.key, String(e.value ?? "")])),
+		secrets: Object.fromEntries(r.filter((e) => e.secret && e.sealed).map((e) => [e.key, e.sealed]))
+	};
+}
+var Vh = (e) => Object.fromEntries((e ?? []).filter((e) => e && e.enabled !== !1 && e.key && !e.secret).map((e) => [e.key, String(e.value ?? "")]));
+function Hh(e) {
+	let t = [], n = (e, r, i) => {
+		for (let a of e ?? []) a.type === "folder" ? n(a.items, [...r, a.name], [...i, {
+			auth: a.auth ?? { type: "inherit" },
+			scripts: a.scripts ?? {}
+		}]) : t.push({
+			item: a,
+			path: r.join("/"),
+			chain: i
+		});
+	};
+	return n(e.items, [], [{
+		auth: e.auth ?? { type: "none" },
+		scripts: e.scripts ?? {}
+	}]), t;
+}
+var Uh = (e) => `\x1b[2m${e}\x1b[0m`, Wh = (e) => e < 1e3 ? `${e} ms` : `${(e / 1e3).toFixed(2)} s`;
+async function Gh(t) {
+	if (!e.calls?.available) throw new X(K("nettest.unavailable"));
+	let { opts: n, args: r } = Q(t, {
+		flags: "bv",
+		values: "efnd",
+		long: {
+			env: "e",
+			folder: "f",
+			iterations: "n",
+			data: "d",
+			bail: "b",
+			verbose: "v"
+		}
+	}), [i, a, o] = r;
+	if (!i || !a) throw new X(K("help.usageShort", { usage: t.cmd.usage }), 2);
+	let s = await Rh(t, a);
+	if (i === "list") {
+		for (let { item: e, path: n } of Hh(s)) await t.out(`${(e.protocol === "http" ? e.method : String(e.protocol).toUpperCase()).padEnd(7)} ${n ? Uh(`${n}/`) : ""}${e.name}\n`);
+		return 0;
+	}
+	let c = Bh(s, n.e);
+	if (i === "send") {
+		if (!o) throw new X(K("help.usageShort", { usage: t.cmd.usage }), 2);
+		let r = Hh(s).find((e) => e.item.name.toLowerCase() === o.toLowerCase() || e.item.id === o);
+		if (!r) throw new X(K("nettest.noRequest", { name: o }));
+		let { result: i } = await e.calls.send({
+			request: r.item,
+			chain: r.chain,
+			environment: c,
+			collection: { values: Vh(s.variables) },
+			globals: { values: {} }
+		});
+		if (i.error) throw new X(i.error.message);
+		let a = i.response;
+		if (n.v) {
+			await t.err(`${a.status} ${a.statusText ?? ""} · ${Wh(a.timings?.total ?? i.ms)}\n`);
+			for (let [e, n] of a.headers) await t.err(`${e}: ${n}\n`);
+			await t.err("\n");
+		}
+		return await t.out(new TextDecoder().decode(Uint8Array.from(atob(a.body ?? ""), (e) => e.charCodeAt(0)))), +(a.status >= 400 || !i.ok);
+	}
+	if (i !== "run") throw new X(K("help.usageShort", { usage: t.cmd.usage }), 2);
+	let l = null;
+	if (n.f) {
+		let e = null, t = (r) => {
+			for (let i of r ?? []) i.type === "folder" && (i.name.toLowerCase() === n.f.toLowerCase() ? e = i : t(i.items));
+		};
+		if (t(s.items), !e) throw new X(K("nettest.noFolder", { name: n.f }));
+		l = [e.id];
+	}
+	let u = null;
+	if (n.d) {
+		let r = If(t.cwd, n.d);
+		if (!r || r.type !== "file") throw new X(K("nettest.noFile", { path: n.d }));
+		let i = await e.fs.read(r.id);
+		try {
+			u = /\.json$/i.test(r.name) ? JSON.parse(i) : Kh(i);
+		} catch {
+			throw new X(K("nettest.badData"));
+		}
+	}
+	let { id: d } = await e.calls.run({
+		collection: s,
+		only: l,
+		environment: c,
+		globals: { values: {} },
+		data: u,
+		iterations: n.n ? $(n.n) : 1,
+		stopOnError: !!n.b
+	});
+	t.signal?.addEventListener?.("abort", () => e.calls.cancelRun(d).catch(() => {}), { once: !0 });
+	let f;
+	for (let r = 0;;) {
+		let i = await e.calls.progress(d, {
+			after: r,
+			wait: !0
+		});
+		for (let e of i.results) {
+			let r = e.skipped ? Uh("·") : e.ok ? "\x1B[32m✓\x1B[0m" : "\x1B[31m✗\x1B[0m", i = e.response ? String(e.response.status) : e.error ? "!" : "";
+			await t.out(`${r} ${e.name || e.id} ${Uh(`${i} · ${Wh(e.ms)}${e.iteration ? ` · #${e.iteration + 1}` : ""}`)}\n`), e.error && await t.out(`    ${e.error.message}\n`);
+			for (let n of e.checks.filter((e) => !e.ok)) await t.out(`    ${K("nettest.check")}: ${n.label || n.id || ""} (${n.actual})\n`);
+			for (let n of e.tests.filter((e) => e.ok === !1)) await t.out(`    ${K("nettest.test")} «${n.name}»: ${n.error ?? ""}\n`);
+			if (n.v) for (let n of e.logs) await t.out(Uh(`    ${n.text}\n`));
+		}
+		if (r = i.next, i.done) {
+			f = i.summary;
+			break;
+		}
+	}
+	return await t.out(`\n${K("nettest.summary", {
+		passed: f.passed,
+		failed: f.failed,
+		skipped: f.skipped,
+		time: Wh(f.ms)
+	})}\n`), f.failed || f.cancelled ? 1 : 0;
+}
+function Kh(e) {
+	let t = String(e).replace(/^﻿/, ""), n = t.slice(0, t.search(/\r?\n|$/)), r = n.includes(";") && !n.includes(",") ? ";" : ",", i = [], a = [], o = "", s = !1;
+	for (let e = 0; e < t.length; e++) {
+		let n = t[e];
+		s ? n === "\"" && t[e + 1] === "\"" ? (o += "\"", e++) : n === "\"" ? s = !1 : o += n : n === "\"" && !o ? s = !0 : n === r ? (a.push(o), o = "") : n === "\n" || n === "\r" ? (n === "\r" && t[e + 1] === "\n" && e++, a.push(o), o = "", a.some((e) => e) && i.push(a), a = []) : o += n;
+	}
+	a.push(o), a.some((e) => e) && i.push(a);
+	let [c, ...l] = i;
+	return (l ?? []).map((e) => Object.fromEntries((c ?? []).map((t, n) => [t.trim(), e[n] ?? ""])));
+}
+var qh = [{
+	name: "nettest",
+	get usage() {
+		return K("help.nettest.usage");
+	},
+	get summary() {
+		return K("help.nettest.summary");
+	},
+	run: Gh
+}], Jh = /^[a-z][\w.-]{0,39}$/, Yh = /* @__PURE__ */ new Map();
+for (let e of Ip) Yh.set(e.name, Object.assign(e, { builtin: !0 }));
 for (let e of [
 	...Sm,
 	...Xm,
 	...nh,
 	...fh,
 	...Eh,
-	...Ih
-]) Rh.set(e.name, e);
-function zh() {
+	...Ih,
+	...qh
+]) Yh.set(e.name, e);
+function Xh() {
 	let e = /* @__PURE__ */ new Map();
 	for (let t of b()) {
 		let n = t.package?.manifest?.contributes?.shell;
-		if (Array.isArray(n)) for (let r of n.slice(0, 50)) r && Lh.test(r.name ?? "") && typeof r.entry == "string" && !Rh.has(r.name) && !e.has(r.name) && e.set(r.name, {
+		if (Array.isArray(n)) for (let r of n.slice(0, 50)) r && Jh.test(r.name ?? "") && typeof r.entry == "string" && !Yh.has(r.name) && !e.has(r.name) && e.set(r.name, {
 			name: r.name,
 			app: t.name,
 			summary: typeof r.summary == "string" ? r.summary.slice(0, 120) : K("appCmd.summary", { app: t.name }),
 			usage: typeof r.usage == "string" ? r.usage.slice(0, 200) : K("appCmd.usage", { name: r.name }),
 			ownHelp: r.help === !0,
-			run: (e) => Bh(e, t.id, r.entry)
+			run: (e) => Zh(e, t.id, r.entry)
 		});
 	}
 	return e;
 }
-async function Bh(e, t, n) {
+async function Zh(e, t, n) {
 	let r = e.shell, i = e.stdin === r.host.stdin ? null : await e.stdin.readAll(), a;
 	try {
 		a = await v(t, n, {
@@ -20585,12 +20751,12 @@ async function Bh(e, t, n) {
 	}
 	return a == null ? 0 : typeof a == "string" ? (await e.out(a), 0) : (typeof a.stdout == "string" && await e.out(a.stdout), typeof a.stderr == "string" && await e.err(a.stderr), Number.isInteger(a.code) ? (a.code % 256 + 256) % 256 : 0);
 }
-var Vh = {
-	get: (e) => Rh.get(e) ?? zh().get(e) ?? null,
-	has: (e) => Rh.has(e) || zh().has(e),
-	names: () => [...Rh.keys(), ...zh().keys()],
-	values: () => [...Rh.values(), ...zh().values()]
-}, Hh = /\x1b\[([0-9;?]*)([A-Za-z])|\x1b\][^\x07\x1b]*(?:\x07|\x1b\\)|\x1b[()][0-9A-Za-z]|\x1b./g, Uh = [
+var Qh = {
+	get: (e) => Yh.get(e) ?? Xh().get(e) ?? null,
+	has: (e) => Yh.has(e) || Xh().has(e),
+	names: () => [...Yh.keys(), ...Xh().keys()],
+	values: () => [...Yh.values(), ...Xh().values()]
+}, $h = /\x1b\[([0-9;?]*)([A-Za-z])|\x1b\][^\x07\x1b]*(?:\x07|\x1b\\)|\x1b[()][0-9A-Za-z]|\x1b./g, eg = [
 	0,
 	95,
 	135,
@@ -20598,21 +20764,21 @@ var Vh = {
 	215,
 	255
 ];
-function Wh(e) {
+function tg(e) {
 	if (e < 16) return { cls: e };
 	if (e >= 232) {
 		let t = 8 + (e - 232) * 10;
 		return { css: `rgb(${t},${t},${t})` };
 	}
 	let t = e - 16;
-	return { css: `rgb(${Uh[Math.floor(t / 36)]},${Uh[Math.floor(t / 6) % 6]},${Uh[t % 6]})` };
+	return { css: `rgb(${eg[Math.floor(t / 36)]},${eg[Math.floor(t / 6) % 6]},${eg[t % 6]})` };
 }
-var Gh = class {
+var ng = class {
 	style = {};
 	write(e, t, n = null, r = () => {}) {
 		let i = 0;
-		Hh.lastIndex = 0;
-		for (let a; a = Hh.exec(e);) this.#e(e.slice(i, a.index), t, n), i = Hh.lastIndex, a[2] === "m" ? this.#t(a[1]) : a[2] === "J" && (a[1] === "2" || a[1] === "3") && r();
+		$h.lastIndex = 0;
+		for (let a; a = $h.exec(e);) this.#e(e.slice(i, a.index), t, n), i = $h.lastIndex, a[2] === "m" ? this.#t(a[1]) : a[2] === "J" && (a[1] === "2" || a[1] === "3") && r();
 		this.#e(e.slice(i), t, n);
 	}
 	#e(e, t, n) {
@@ -20655,7 +20821,7 @@ var Gh = class {
 			else if (r === 49) delete n.bg;
 			else if (r === 38 || r === 48) {
 				let i = r === 38 ? "fg" : "bg";
-				if (t[e + 1] === 5) n[i] = Wh(t[e + 2] ?? 0), e += 2;
+				if (t[e + 1] === 5) n[i] = tg(t[e + 2] ?? 0), e += 2;
 				else if (t[e + 1] === 2) {
 					let [r, a, o] = t.slice(e + 2, e + 5).map((e) => Math.max(0, Math.min(255, e || 0)));
 					n[i] = { css: `rgb(${r},${a},${o})` }, e += 4;
@@ -20667,8 +20833,8 @@ var Gh = class {
 	reset() {
 		this.style = {};
 	}
-}, Kh = /[\s'"\\$`|&;<>()*?[\]{}!#]/g, qh = (e) => e.replace(Kh, "\\$&");
-function Jh(e, t, n) {
+}, rg = /[\s'"\\$`|&;<>()*?[\]{}!#]/g, ig = (e) => e.replace(rg, "\\$&");
+function ag(e, t, n) {
 	let r = t.slice(0, n), i = n;
 	for (; i > 0 && !(/[\s|&;<>()]/.test(r[i - 1]) && r[i - 2] !== "\\");) i--;
 	let a = r.slice(i).replace(/\\(.)/g, "$1").replace(/^['"]/, ""), s = r.slice(0, i).trimEnd(), c = !s || /(^|[|&;(]|\$\(|\b(then|do|else|elif|if|while|until|sudo|xargs|time|command|which|type|help))$/.test(s), l = /\$\{?([A-Za-z_]\w*)?$/.exec(a);
@@ -20689,7 +20855,7 @@ function Jh(e, t, n) {
 			...e.functions.keys(),
 			...e.aliases.keys()
 		])].filter((e) => e.startsWith(a)).sort(Bf).map((e) => ({
-			value: qh(e),
+			value: ig(e),
 			label: e
 		}));
 		if (t.length || !a) return {
@@ -20707,7 +20873,7 @@ function Jh(e, t, n) {
 		items: []
 	};
 	let h = f.toLowerCase(), g = o.children(m.id).filter((e) => e.name.toLowerCase().startsWith(h) && (f.startsWith(".") || !e.name.startsWith("."))).sort((e, t) => Bf(e.name, t.name)).map((e) => ({
-		value: qh(d) + qh(e.name) + (e.type === "folder" ? "/" : ""),
+		value: ig(d) + ig(e.name) + (e.type === "folder" ? "/" : ""),
 		label: e.name + (e.type === "folder" ? "/" : ""),
 		folder: e.type === "folder"
 	}));
@@ -20717,7 +20883,7 @@ function Jh(e, t, n) {
 		items: g
 	};
 }
-function Yh(e) {
+function og(e) {
 	if (!e.length) return "";
 	let t = e[0];
 	for (let n of e.slice(1)) {
@@ -20727,18 +20893,18 @@ function Yh(e) {
 	}
 	return t;
 }
-var Xh = 2048, Zh = 1024, Qh = (e, t = Zh) => Number.isFinite(e) ? Math.min(Xh, Math.max(16, Math.round(e))) : t;
-function $h(e, t, { size: n = Zh } = {}) {
-	e.handle(async (e) => typeof e?.file == "string" ? t(e.file, Qh(e.size, n)) : null);
+var sg = 2048, cg = 1024, lg = (e, t = cg) => Number.isFinite(e) ? Math.min(sg, Math.max(16, Math.round(e))) : t;
+function ug(e, t, { size: n = cg } = {}) {
+	e.handle(async (e) => typeof e?.file == "string" ? t(e.file, lg(e.size, n)) : null);
 }
-async function eg(e, t = .85) {
+async function dg(e, t = .85) {
 	let n = e;
 	typeof n?.toBlob != "function" && (n = document.createElement("canvas"), n.width = Math.max(1, e.width), n.height = Math.max(1, e.height), n.getContext("2d").drawImage(e, 0, 0));
 	let r = (e) => new Promise((r) => n.toBlob(r, e, t)), i = await r("image/webp");
 	return i?.type === "image/webp" ? i : r("image/png");
 }
 // src/terminal/preview.js
-var tg = "#2b3038", ng = {
+var fg = "#2b3038", pg = {
 	ssh: [
 		"SSH",
 		"#dff3ec",
@@ -20760,8 +20926,8 @@ var tg = "#2b3038", ng = {
 		"#a2283a"
 	]
 };
-function rg({ lilos: e }) {
-	$h(e, async (t, n) => {
+function mg({ lilos: e }) {
+	ug(e, async (t, n) => {
 		let r;
 		try {
 			r = rd(await e.files.read(t));
@@ -20769,17 +20935,17 @@ function rg({ lilos: e }) {
 			return null;
 		}
 		return {
-			image: await eg(ig(r, n), .9),
+			image: await dg(hg(r, n), .9),
 			note: ld(r)
 		};
 	}, { size: 512 });
 }
-function ig(e, t) {
+function hg(e, t) {
 	let n = document.createElement("canvas");
 	n.width = n.height = t;
 	let r = n.getContext("2d"), i = t / 100;
-	r.fillStyle = e.protocol === "local" ? "#3b4049" : tg, r.fillRect(14 * i, 10 * i, 72 * i, 72 * i), r.strokeStyle = "#ffffff", r.lineWidth = 6 * i, r.lineCap = "round", r.lineJoin = "round", r.beginPath(), r.moveTo(32 * i, 34 * i), r.lineTo(44 * i, 46 * i), r.lineTo(32 * i, 58 * i), r.moveTo(50 * i, 58 * i), r.lineTo(66 * i, 58 * i), r.stroke();
-	let a = ng[e.protocol] ?? (e.protocol === "local" ? null : [
+	r.fillStyle = e.protocol === "local" ? "#3b4049" : fg, r.fillRect(14 * i, 10 * i, 72 * i, 72 * i), r.strokeStyle = "#ffffff", r.lineWidth = 6 * i, r.lineCap = "round", r.lineJoin = "round", r.beginPath(), r.moveTo(32 * i, 34 * i), r.lineTo(44 * i, 46 * i), r.lineTo(32 * i, 58 * i), r.moveTo(50 * i, 58 * i), r.lineTo(66 * i, 58 * i), r.stroke();
+	let a = pg[e.protocol] ?? (e.protocol === "local" ? null : [
 		e.protocol.toUpperCase().slice(0, 8),
 		"#e9ecf1",
 		"#59606c"
@@ -20793,11 +20959,11 @@ function ig(e, t) {
 	return n;
 }
 // src/terminal/TerminalApp.js
-var ag = "terminal.history", og = 4e5, sg = ".bashrc", cg = 4e3, lg = () => e.automation ?? null, ug = (e) => o.tildePath(e) ?? "~";
-function dg({ args: e, openWindow: t } = {}) {
-	return fg(e, t);
+var gg = "terminal.history", _g = 4e5, vg = ".bashrc", yg = 4e3, bg = () => e.automation ?? null, xg = (e) => o.tildePath(e) ?? "~";
+function Sg({ args: e, openWindow: t } = {}) {
+	return Cg(e, t);
 }
-function fg(e, t) {
+function Cg(e, t) {
 	let n = e?.size, r = new i({
 		title: K("ui.title"),
 		icon: "terminal",
@@ -20807,24 +20973,24 @@ function fg(e, t) {
 		minHeight: 200
 	}), a = new Md(r, e, {
 		openWindow: t,
-		makeShell: (e, t) => new gg(e, t),
+		makeShell: (e, t) => new Dg(e, t),
 		makeWindow: (e, n) => {
-			let r = fg(e, t);
+			let r = Cg(e, t);
 			return t(r, null, {
 				main: !0,
 				at: n
 			}), r.terminal;
 		}
 	});
-	return r.terminal = a, r.getState = () => a.state(), r.on("launch", (e) => a.launched(e)), lg()?.handle("terminal.run", (e) => {
+	return r.terminal = a, r.getState = () => a.state(), r.on("launch", (e) => a.launched(e)), bg()?.handle("terminal.run", (e) => {
 		let t = a.current && !a.current.remote ? a.current : a.firstLocal();
-		return t || a.add(t = new gg(a, {})), a.select(t), t.replay(e);
+		return t || a.add(t = new Dg(a, {})), a.select(t), t.replay(e);
 	}, {
 		window: r,
 		file: () => null
 	}), r;
 }
-var pg = {
+var wg = {
 	enter: "\r",
 	complete: "	",
 	interrupt: "",
@@ -20844,8 +21010,8 @@ var pg = {
 	up: "\x1B[A",
 	down: "\x1B[B",
 	escape: "\x1B"
-}, mg = [
-	...Object.entries(pg).map(([e, t]) => [t, e]),
+}, Tg = [
+	...Object.entries(wg).map(([e, t]) => [t, e]),
 	["\n", "enter"],
 	["", "home"],
 	["", "end"],
@@ -20858,7 +21024,7 @@ var pg = {
 	["\x1BOB", "down"],
 	["\x1BOC", "right"],
 	["\x1BOD", "left"]
-].sort((e, t) => t[0].length - e[0].length), hg = class extends lp {
+].sort((e, t) => t[0].length - e[0].length), Eg = class extends lp {
 	silent = !1;
 	constructor(e) {
 		super(), this.term = e;
@@ -20866,7 +21032,7 @@ var pg = {
 	pull() {
 		return this.term.readInput(this);
 	}
-}, gg = class {
+}, Dg = class {
 	remote = !1;
 	text = "";
 	cursor = 0;
@@ -20883,7 +21049,7 @@ var pg = {
 	#o = null;
 	#s = new AbortController();
 	constructor(e, t) {
-		this.owner = e, this.#c = t?.quiet === !0, this.ansi = new Gh();
+		this.owner = e, this.#c = t?.quiet === !0, this.ansi = new ng();
 		let { signal: n } = this.#s;
 		this.edit = s("span", { class: "tm-edit" }), this.output = s("div", {
 			class: "tm-out",
@@ -20904,10 +21070,10 @@ var pg = {
 			String(getSelection()).length || this.focus();
 		}, { signal: n }), this.resizes = new ResizeObserver(() => {
 			this.#a = 0;
-		}), this.resizes.observe(this.screen), this.history = _g();
+		}), this.resizes.observe(this.screen), this.history = Og();
 		let r = new hp((e) => this.write(e));
 		this.host = {
-			stdin: new hg(this),
+			stdin: new Eg(this),
 			stdout: r,
 			stderr: r,
 			clear: () => this.clear(),
@@ -20915,7 +21081,7 @@ var pg = {
 			history: {
 				list: () => [...this.history],
 				clear: () => {
-					this.history = [], vg([]);
+					this.history = [], kg([]);
 				}
 			}
 		}, Object.defineProperty(this.host, "remote", {
@@ -20923,15 +21089,15 @@ var pg = {
 			enumerable: !0
 		}), this.shell = new xp({
 			host: this.host,
-			commands: Vh
+			commands: Qh
 		}), t?.cwd && o.get(t.cwd)?.type === "folder" && (this.shell.cwd = t.cwd), this.shell.setVar("PS1", "\\[\\e[1;32m\\]\\u@\\h\\[\\e[0m\\]:\\[\\e[1;34m\\]\\w\\[\\e[0m\\]\\$ "), typeof t?.run == "string" && t.run.trim() && this.queue.push(t.run), this.#A(), this.ready = this.#l();
 	}
 	#c = !1;
 	get name() {
-		return ug(this.shell.cwd);
+		return xg(this.shell.cwd);
 	}
 	get subtitle() {
-		return ug(this.shell.cwd);
+		return xg(this.shell.cwd);
 	}
 	get closed() {
 		return !1;
@@ -20959,7 +21125,7 @@ var pg = {
 			n &&= (this.#h(n), "");
 		};
 		for (let e = 0; e < t.length;) {
-			let i = mg.find(([n]) => t.startsWith(n, e));
+			let i = Tg.find(([n]) => t.startsWith(n, e));
 			if (i && !(i[0] === "\x1B" && e + 1 < t.length)) {
 				r(), this.#b(i[1]), e += i[0].length;
 				continue;
@@ -20975,7 +21141,7 @@ var pg = {
 		this.reader?.reject(new Ld());
 	}
 	async #l() {
-		this.#c || this.write(`\x1b[2m${K("ui.welcome")}\x1b[0m\n`), this.shell.resolve(`~/${sg}`)?.type === "file" ? await this.#D(`source ~/${sg}`, { record: !1 }) : (this.prompt(), this.#T()), requestAnimationFrame(() => {
+		this.#c || this.write(`\x1b[2m${K("ui.welcome")}\x1b[0m\n`), this.shell.resolve(`~/${vg}`)?.type === "file" ? await this.#D(`source ~/${vg}`, { record: !1 }) : (this.prompt(), this.#T()), requestAnimationFrame(() => {
 			this.el.hidden || this.focus();
 		});
 	}
@@ -20994,7 +21160,7 @@ var pg = {
 	}
 	#u() {
 		let e = this.output.textContent.length;
-		for (; e > og && this.output.firstChild !== this.edit;) e -= this.output.firstChild.textContent.length, this.output.firstChild.remove();
+		for (; e > _g && this.output.firstChild !== this.edit;) e -= this.output.firstChild.textContent.length, this.output.firstChild.remove();
 	}
 	#d() {
 		return this.screen.scrollHeight - this.screen.scrollTop - this.screen.clientHeight < 40;
@@ -21019,7 +21185,7 @@ var pg = {
 			u: n,
 			h: this.shell.getVar("HOSTNAME") ?? "lilos",
 			H: this.shell.getVar("HOSTNAME") ?? "lilos",
-			w: ug(this.shell.cwd),
+			w: xg(this.shell.cwd),
 			W: this.shell.cwd === o.root ? "~" : o.get(this.shell.cwd)?.name ?? "~",
 			$: "$",
 			n: "\n",
@@ -21080,7 +21246,7 @@ var pg = {
 		let t = e.ctrlKey && !e.altKey && !e.metaKey, n = e.ctrlKey && e.key.length === 1 ? e.key.toLowerCase() : e.key;
 		if (n !== "Tab" && (this.#i = 0), e.isComposing) return;
 		let r = this.#y(n, t);
-		r && (r === "interrupt" && String(getSelection()).length || (e.preventDefault(), e.stopPropagation(), pg[r] && this.owner.typed?.(this, pg[r]), this.#b(r)));
+		r && (r === "interrupt" && String(getSelection()).length || (e.preventDefault(), e.stopPropagation(), wg[r] && this.owner.typed?.(this, wg[r]), this.#b(r)));
 	}
 	#y(e, t) {
 		if (e === "Enter") return "enter";
@@ -21163,7 +21329,7 @@ var pg = {
 	}
 	#S() {
 		if (this.reader) return;
-		let { start: e, end: t, items: n } = Jh(this.shell, this.text, this.cursor);
+		let { start: e, end: t, items: n } = ag(this.shell, this.text, this.cursor);
 		if (this.#i++, !n.length) return;
 		let r = (n) => this.setLine(this.text.slice(0, e) + n + this.text.slice(t), e + n.length);
 		if (n.length === 1) {
@@ -21171,7 +21337,7 @@ var pg = {
 			r(e.value + (e.folder || /[}/]$/.test(e.value) ? "" : " "));
 			return;
 		}
-		let i = Yh(n.map((e) => e.value)), a = this.text.slice(e, t);
+		let i = og(n.map((e) => e.value)), a = this.text.slice(e, t);
 		if (i.length > a.length) {
 			r(i), this.#i = 1;
 			return;
@@ -21207,7 +21373,7 @@ var pg = {
 			error: ""
 		};
 		let r = this.shell.cwd;
-		this.running = !0, this.renderLine(), this.#o = new Bd(), this.shell.token = this.#o, this.host.stdin = new hg(this);
+		this.running = !0, this.renderLine(), this.#o = new Bd(), this.shell.token = this.#o, this.host.stdin = new Eg(this);
 		let i = "", a = n ? {
 			...this.host,
 			stderr: new hp((e) => {
@@ -21216,7 +21382,7 @@ var pg = {
 		} : this.host, o = !1;
 		try {
 			let t = () => this.shell.run(e, a);
-			await (lg()?.quiet(t) ?? t());
+			await (bg()?.quiet(t) ?? t());
 		} catch (e) {
 			if (e instanceof Y && !n) o = !0;
 			else if (e instanceof Y) a.stderr.write(`bash: ${e.message || K("parse.unexpectedEndOfFile")}\n`), this.shell.status = 2;
@@ -21228,7 +21394,7 @@ var pg = {
 			else e instanceof Ld ? this.shell.status = 130 : (a.stderr.write(`bash: ${e?.message ?? e}\n`), this.shell.status = 1);
 		}
 		let s = this.shell.status;
-		return this.pending = o ? e : "", t && !o && this.#O(e), t && !o && s === 0 && lg()?.recording && !/^\s*automata(\s|$)/.test(e) && (await new Promise((e) => setTimeout(e)), e.length > cg ? lg()?.missed("terminal", K("automation.tooLong")) : lg()?.record("terminal.run", { params: {
+		return this.pending = o ? e : "", t && !o && this.#O(e), t && !o && s === 0 && bg()?.recording && !/^\s*automata(\s|$)/.test(e) && (await new Promise((e) => setTimeout(e)), e.length > yg ? bg()?.missed("terminal", K("automation.tooLong")) : bg()?.record("terminal.run", { params: {
 			command: e,
 			folder: r
 		} })), this.running = !1, this.reader = null, this.#A(), this.flush(), /\n$/.test(this.edit.previousSibling?.textContent ?? "\n") || this.write("\n"), this.prompt(), this.#T(), {
@@ -21245,7 +21411,7 @@ var pg = {
 			cursor: this.cursor
 		};
 		if (this.setLine(""), t && t !== this.shell.cwd) {
-			let e = ug(t);
+			let e = xg(t);
 			this.write(`cd ${e.startsWith("~/") ? `~/${Tp(e.slice(2))}` : Tp(e)}\n`), this.shell.cwd = t, this.#A(), this.prompt();
 		}
 		this.#f(e);
@@ -21260,7 +21426,7 @@ var pg = {
 	}
 	#O(e) {
 		let t = e.trim();
-		t && !e.startsWith(" ") && this.history.at(-1) !== t && (this.history = [..._g().filter((e) => e !== t), t].slice(-1e3), vg(this.history));
+		t && !e.startsWith(" ") && this.history.at(-1) !== t && (this.history = [...Og().filter((e) => e !== t), t].slice(-1e3), kg(this.history));
 	}
 	readInput(e) {
 		if (this.queue.length) {
@@ -21287,7 +21453,7 @@ var pg = {
 		this.reader = null, this.renderLine(), t?.resolve(e);
 	}
 	changeDir(e) {
-		this.shell.cwd = e, this.#A(), this.running || (this.write(`\ncd ${ug(e)}\n`), this.prompt());
+		this.shell.cwd = e, this.#A(), this.running || (this.write(`\ncd ${xg(e)}\n`), this.prompt());
 	}
 	#A() {
 		this.owner.tabChanged(this);
@@ -21296,9 +21462,9 @@ var pg = {
 		this.running = !0, this.renderLine(), this.owner.closeTab(this);
 	}
 };
-function _g() {
-	let e = p.get(ag, []);
+function Og() {
+	let e = p.get(gg, []);
 	return Array.isArray(e) ? e.filter((e) => typeof e == "string").slice(-1e3) : [];
 }
-var vg = (e) => p.set(ag, e);
-export { dg as default, rg as filePreview };
+var kg = (e) => p.set(gg, e);
+export { Sg as default, mg as filePreview };

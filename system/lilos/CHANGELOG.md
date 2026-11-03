@@ -1,5 +1,16 @@
 # Changelog di lilOS
 
+## 1.27.0 — 2026-11-03
+
+Comprende anche la 1.25.0 e la 1.26.0.
+
+- **Nuova funzionalità — la licenza di lilOS si accetta al primo avvio.** Dopo l'accesso un amministratore legge la licenza d'uso, letta dal repository ufficiale, e la accetta una volta per tutta l'installazione. Finché non l'ha fatto, gli altri utenti non entrano. Se il testo cambia si accetta di nuovo. Senza rete si usa la copia inclusa (EULA.md). Con "acceptLicense": true in lilos-install.json la accetta chi prepara l'installazione. **Dopo l'aggiornamento entra subito come amministratore.**
+- **Nuova funzionalità — NetTest.** Una nuova app, dall'AppStore, per provare API e servizi di rete (HTTP, GraphQL, WebSocket, SSE, TCP, TLS, UDP, gRPC, MQTT). Le richieste le fa il kernel.
+- **Sicurezza — i valori segreti di NetTest non lasciano il kernel.** Sono sigillati: pagina, script, cronologia e risposte li mostrano come ••••. Credenziali e corpo non seguono un reindirizzamento verso un altro server.
+- **Nuova funzionalità — l'eccezione per la rete decisa dall'amministratore.** In Pannello di controllo → Rete l'amministratore può aprire al kernel questo computer, la rete locale o solo alcuni indirizzi.
+- **Nuova funzionalità — Arresta.** Nella pagina utente, solo per gli amministratori: spegne lilOS per tutti, dopo una conferma.
+- **Miglioramento — per gli sviluppatori.** SDK 0.17.0: calls, net.rules() e net.setRules(), kernelModules.shutdown(), host.quit().
+
 ## 1.24.0 — 2026-11-03
 
 - Nuova funzionalità — impostazioni di installazione: un file lilos-install.json dice dove installare lilOS, quale versione (quella dell'installer o la più recente), quali moduli, repository, app e utenti, e le impostazioni iniziali di ogni utente.

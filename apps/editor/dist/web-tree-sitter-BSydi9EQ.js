@@ -1,5 +1,5 @@
 import { r as __toESM } from "./rolldown-runtime-QGRDbDUS.js";
-// node_modules/web-tree-sitter/web-tree-sitter.js
+// ../../../../../../../../../Desktop/lilos/plugins/node_modules/web-tree-sitter/web-tree-sitter.js
 var __defProp = Object.defineProperty, __name = (e, t) => __defProp(e, "name", {
 	value: t,
 	configurable: !0

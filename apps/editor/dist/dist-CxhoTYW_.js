@@ -1,4 +1,4 @@
-// node_modules/@shikijs/engine-javascript/dist/string-TLTPtCPs.mjs
+// ../../../../../../../../../Desktop/lilos/plugins/node_modules/@shikijs/engine-javascript/dist/string-TLTPtCPs.mjs
 var e = 4294967295;
 function t(e) {
 	return !e.sticky && !e.rawOptions?.strategy;
@@ -77,7 +77,7 @@ function a(e) {
 		id: ++i
 	};
 }
-// node_modules/oniguruma-parser/dist/utils.js
+// ../../../../../../../../../Desktop/lilos/plugins/node_modules/oniguruma-parser/dist/utils.js
 function o(e) {
 	if ([...e].length !== 1) throw Error(`Expected "${e}" to be a single code point`);
 	return e.codePointAt(0);
@@ -105,7 +105,7 @@ function u(e, t) {
 	if (e == null) throw Error(t ?? "Value expected");
 	return e;
 }
-// node_modules/oniguruma-parser/dist/tokenizer/tokenize.js
+// ../../../../../../../../../Desktop/lilos/plugins/node_modules/oniguruma-parser/dist/tokenizer/tokenize.js
 var d = l`\[\^?`, f = `c.? | C(?:-.?)?|${l`[pP]\{(?:\^?[-\x20_]*[A-Za-z][-\x20\w]*\})?`}|${l`x[89A-Fa-f]\p{AHex}(?:\\x[89A-Fa-f]\p{AHex})*`}|${l`u(?:\p{AHex}{4})? | x\{[^\}]*\}? | x\p{AHex}{0,2}`}|${l`o\{[^\}]*\}?`}|${l`\d{1,3}`}`, p = /[?*+][?+]?|\{(?:\d+(?:,\d*)?|,\d+)\}\??/, m = new RegExp(l`
   \\ (?:
     ${f}
@@ -587,7 +587,7 @@ function Ee(e) {
 	}
 	return t;
 }
-// node_modules/oniguruma-parser/dist/parser/node-utils.js
+// ../../../../../../../../../Desktop/lilos/plugins/node_modules/oniguruma-parser/dist/parser/node-utils.js
 function De(e, t) {
 	if (!Array.isArray(e.body)) throw Error("Expected node with body array");
 	if (e.body.length !== 1) return !1;
@@ -608,7 +608,7 @@ var ke = /* @__PURE__ */ new Set([
 	"Quantifier",
 	"Subroutine"
 ]);
-// node_modules/oniguruma-parser/dist/parser/parse.js
+// ../../../../../../../../../Desktop/lilos/plugins/node_modules/oniguruma-parser/dist/parser/parse.js
 function Ae(e, t = {}) {
 	let n = {
 		flags: "",
@@ -1024,7 +1024,7 @@ function rt(e, t) {
 function it(e) {
 	return u(e, "Unclosed group");
 }
-// node_modules/oniguruma-parser/dist/traverser/traverse.js
+// ../../../../../../../../../Desktop/lilos/plugins/node_modules/oniguruma-parser/dist/traverser/traverse.js
 function M(e, t, n = null) {
 	function r(e, t) {
 		for (let n = 0; n < e.length; n++) {
@@ -1105,7 +1105,7 @@ function P(e) {
 	if (typeof e != "number") throw Error("Numeric key expected");
 	return e;
 }
-// node_modules/regex/src/utils-internals.js
+// ../../../../../../../../../Desktop/lilos/plugins/node_modules/regex/src/utils-internals.js
 var at = String.raw`\(\?(?:[:=!>A-Za-z\-]|<[=!]|\(DEFINE\))`;
 function ot(e, t) {
 	for (let n = 0; n < e.length; n++) e[n] >= t && e[n]++;
@@ -1113,7 +1113,7 @@ function ot(e, t) {
 function st(e, t, n, r) {
 	return e.slice(0, t) + r + e.slice(t + n.length);
 }
-// node_modules/regex-utilities/src/index.js
+// ../../../../../../../../../Desktop/lilos/plugins/node_modules/regex-utilities/src/index.js
 var F = Object.freeze({
 	DEFAULT: "DEFAULT",
 	CHAR_CLASS: "CHAR_CLASS"
@@ -1163,7 +1163,7 @@ function dt(e, t) {
 	}
 	return e.slice(t, r);
 }
-// node_modules/regex/src/atomic.js
+// ../../../../../../../../../Desktop/lilos/plugins/node_modules/regex/src/atomic.js
 var ft = new RegExp(String.raw`(?<noncapturingStart>${at})|(?<capturingStart>\((?:\?<[^>]+>)?)|\\?.`, "gsu");
 function pt(e, t) {
 	let n = t?.hiddenCaptures ?? [], r = t?.captureTransfers ?? /* @__PURE__ */ new Map();
@@ -1255,7 +1255,7 @@ function gt(e) {
 	}
 	return { pattern: e };
 }
-// node_modules/regex-recursion/src/index.js
+// ../../../../../../../../../Desktop/lilos/plugins/node_modules/regex-recursion/src/index.js
 var L = String.raw, R = L`\(\?R=(?<rDepth>[^\)]+)\)|${L`\\g<(?<gRNameOrNum>[^>&]+)&R=(?<gRDepth>[^>]+)>`}`, z = L`\(\?<(?![=!])(?<captureName>[^>]+)>`, _t = L`${z}|(?<unnamed>\()(?!\?)`, B = new RegExp(L`${z}|${R}|\(\?|\\?.`, "gsu"), V = "Cannot use multiple overlapping recursions";
 function vt(e, t) {
 	let { hiddenCaptures: n, mode: r } = {
@@ -1365,7 +1365,7 @@ function Ct(e, t, n, r, i, a) {
 	}
 	return e;
 }
-// node_modules/oniguruma-to-es/dist/esm/index.js
+// ../../../../../../../../../Desktop/lilos/plugins/node_modules/oniguruma-to-es/dist/esm/index.js
 var H = String.fromCodePoint, U = String.raw, W = {}, G = globalThis.RegExp;
 W.flagGroups = (() => {
 	try {
@@ -2325,7 +2325,7 @@ function kn(e, t) {
 	}
 	return s;
 }
-// node_modules/@shikijs/engine-javascript/dist/engine-compile.mjs
+// ../../../../../../../../../Desktop/lilos/plugins/node_modules/@shikijs/engine-javascript/dist/engine-compile.mjs
 function An(e, t) {
 	return On(e, {
 		global: !0,
@@ -2354,7 +2354,7 @@ function jn(e = {}) {
 		createString: a
 	};
 }
-// node_modules/@shikijs/engine-javascript/dist/engine-raw.mjs
+// ../../../../../../../../../Desktop/lilos/plugins/node_modules/@shikijs/engine-javascript/dist/engine-raw.mjs
 function Mn() {
 	let e = {
 		cache: /* @__PURE__ */ new Map(),
