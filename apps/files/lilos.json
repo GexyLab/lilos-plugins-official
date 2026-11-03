@@ -1,6 +1,6 @@
 {
   "id": "files",
-  "version": "1.17.0",
+  "version": "1.18.0",
   "kind": "local",
   "name": "File Manager",
   "description": "Browse, search and organize files and folders: tags, links, desktop links, trash, info and preview.",
@@ -89,6 +89,11 @@
       "module": "netfs-azblob",
       "optional": true,
       "reason": "Azure Blob Storage in Network"
+    },
+    {
+      "module": "netfs-local",
+      "optional": true,
+      "reason": "Folders of this computer in Network (with the program lilOS)"
     }
   ],
   "permissions": [
@@ -244,7 +249,7 @@
   "locales": "locales.json",
   "files": {
     "dist/index-CM3ZOa5Z.css": "sha256-uvM5ZpT1WTQ3C4MM/wCxKiXDjmJUrbUALsEUl5lMB8Y=",
-    "dist/index.js": "sha256-ATlOwzoLCCLhAR6I323Af3Yy9DyMpqqVxROYSt4MGD8=",
-    "locales.json": "sha256-xQdWspuKfyoVSX3+ZzBAdsjVvuLW4cb3pc/ScWWxja0="
+    "dist/index.js": "sha256-FcIii1AUfk1BD2NjTaKziyQOMKOP0uFt3edjDRRRV8k=",
+    "locales.json": "sha256-QNr8RAClLjihZ++SG5mTSYSEdFcDd3sr9JHMgrDSd20="
   }
 }

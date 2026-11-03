@@ -1,5 +1,12 @@
 # Changelog di lilOS
 
+## 1.23.0 — 2026-11-03
+
+- **Nuova funzionalità — il programma lilOS.** lilOS gira anche nella sua finestra, senza browser, su Windows, macOS e Linux: si scarica da https://github.com/GexyLab/lilos/releases. Il programma può installare lilOS sul computer (kernel e PostgreSQL compresi), collegarsi a un server lilOS o al lilOS già installato. Da qui la pagina sa quando gira nel programma: numero di notifiche sull'icona, notifiche del sistema, link lilos://, scelta dei dispositivi (porte seriali, USB) fatta da lilOS
+- **Nuova funzionalità — file trascinati dal computer.** I file e le cartelle trascinati dal computer sulla scrivania o in una cartella aperta vengono copiati in lilOS, anche nel browser
+- **Nuova funzionalità — Rete › Questo computer.** Le nuove installazioni hanno il modulo netfs-local: le cartelle del computer su cui gira il kernel si collegano in Rete (gli amministratori qualsiasi cartella, gli altri utenti solo quelle permesse)
+- **Miglioramento — per gli sviluppatori.** SDK 0.15.0: `host` (cosa offre il programma lilOS) e gli eventi `device.attach` / `device.detach` nei pipe. Il kernel controlla la password di un amministratore senza aprire una sessione (serve per uscire dalla modalità kiosk del programma)
+
 ## 1.22.0 — 2026-11-03
 
 - **Sicurezza** (con più utenti): i moduli di Rete e del Terminale si collegano solo agli indirizzi che il kernel ha controllato, invece di risolvere di nuovo il nome del server da soli (*DNS rebinding*). Vale con i moduli aggiornati (repository ufficiale v1.51.0). Aggiorna subito lilOS e i moduli se più persone usano lo stesso lilOS
