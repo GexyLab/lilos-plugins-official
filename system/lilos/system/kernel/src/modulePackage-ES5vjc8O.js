@@ -1,0 +1,1 @@
+export{n as adoptModule,i as checkModule,o as installDependencies,s as writeModule}from"./modulePackage-Dlfdlqg6.js";

@@ -1,0 +1,1 @@
+export{n as checkSystem}from"./systemPackage-CapPAORE.js";

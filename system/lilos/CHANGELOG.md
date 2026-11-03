@@ -1,5 +1,16 @@
 # Changelog di lilOS
 
+## 1.30.0 — 2026-11-04
+
+Comprende anche la 1.28.0 e la 1.29.0.
+
+- **Nuova funzionalità — nuova schermata di accesso.** Accesso, licenza, avvio e messaggi prima di lilOS hanno due metà: a sinistra il pannello di lilOS con lo stato della connessione e la versione, a destra il modulo. È scura di default; il pulsante in alto a destra la fa chiara, e il browser se lo ricorda. Il blocco e la sessione scaduta mostrano l'ora e l'avatar, con solo la password.
+- **Nuova funzionalità — «Resta connesso».** Spento, la sessione finisce quando si chiude il browser; acceso (come prima), dura finché non scade.
+- **Miglioramento — password e tentativi.** L'occhio mostra la password, compare l'avviso del Bloc Maiusc, dopo troppi tentativi sbagliati il pulsante conta i secondi; «Password dimenticata?» spiega a chi chiedere.
+- **Miglioramento — avvio.** Dopo l'accesso si vedono i passi fino al desktop. Se il kernel non risponde, lilOS riprova da solo (5, 10, poi ogni 30 secondi).
+- **Nuova funzionalità — «Mostra sul desktop».** Con il tasto destro su un'app del menu applicazioni la rimetti sul desktop del workspace in cui sei, se l'avevi tolta.
+- **Miglioramento — per gli sviluppatori.** SDK 0.18.0: `kernel.login(nome, password, { remember })` e `KernelError.retryAfter`. Una copia di sviluppo di lilOS può leggere app e moduli da un repository locale (`apps.devRepository`); per chi ha lilOS installato non cambia niente.
+
 ## 1.27.0 — 2026-11-03
 
 Comprende anche la 1.25.0 e la 1.26.0.
