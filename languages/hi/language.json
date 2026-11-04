@@ -1,0 +1,11 @@
+{
+  "id": "lang-hi",
+  "language": "hi",
+  "name": "हिन्दी",
+  "englishName": "Hindi",
+  "version": "1.0.0",
+  "lilos": ">=1.32.0",
+  "files": {
+    "strings.json": "sha256-Y063e4ubH3eF3Ee6MqeySePJuvRBKFAxnijaZvUiadM="
+  }
+}

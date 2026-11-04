@@ -1,0 +1,11 @@
+{
+  "id": "lang-uk",
+  "language": "uk",
+  "name": "Українська",
+  "englishName": "Ukrainian",
+  "version": "1.0.0",
+  "lilos": ">=1.32.0",
+  "files": {
+    "strings.json": "sha256-vC2MGLldGCBMKGUwih9gKpIXtYZ1N8sjzVWEIyPXCig="
+  }
+}

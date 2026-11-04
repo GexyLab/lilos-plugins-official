@@ -1,0 +1,11 @@
+{
+  "id": "lang-it",
+  "language": "it",
+  "name": "Italiano",
+  "englishName": "Italian",
+  "version": "1.0.0",
+  "lilos": ">=1.32.0",
+  "files": {
+    "strings.json": "sha256-m4b/+G+bMNN5Ns8nEffHPXpJIlMYCcURDLo8/jJ8gkg="
+  }
+}

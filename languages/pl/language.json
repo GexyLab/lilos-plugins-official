@@ -1,0 +1,11 @@
+{
+  "id": "lang-pl",
+  "language": "pl",
+  "name": "Polski",
+  "englishName": "Polish",
+  "version": "1.0.0",
+  "lilos": ">=1.32.0",
+  "files": {
+    "strings.json": "sha256-RUnnVJRhRXKp/r40WvhrU8Y/3V7HKw8uCThDx/WfWro="
+  }
+}

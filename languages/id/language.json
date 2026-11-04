@@ -1,0 +1,11 @@
+{
+  "id": "lang-id",
+  "language": "id",
+  "name": "Bahasa Indonesia",
+  "englishName": "Indonesian",
+  "version": "1.0.0",
+  "lilos": ">=1.32.0",
+  "files": {
+    "strings.json": "sha256-Eu/nda2ccrmxNG8IhlOlwERVULsPDPsJpRQR4+f4CsM="
+  }
+}

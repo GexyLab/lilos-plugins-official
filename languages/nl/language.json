@@ -1,0 +1,11 @@
+{
+  "id": "lang-nl",
+  "language": "nl",
+  "name": "Nederlands",
+  "englishName": "Dutch",
+  "version": "1.0.0",
+  "lilos": ">=1.32.0",
+  "files": {
+    "strings.json": "sha256-lNCWw+dwC9x1CtoFjUngQI4Q2bhbVKVb8FVcIOtL80I="
+  }
+}

@@ -1,5 +1,12 @@
 # Changelog di lilOS
 
+## 1.32.0 — 2026-11-04
+
+- **Nuova funzionalità — lilOS in altre lingue.** I testi di lilOS (scrivania, barra, menu applicazioni, pagina utente, finestre di sistema, accesso) e i messaggi del kernel arrivano da un pacchetto di lingua: si installa da AppStore → Lingue (qualsiasi utente, vale per tutti) e si sceglie in Pannello di controllo → Lingua. 20 lingue disponibili; le app usano le proprie traduzioni.
+- **Nuova funzionalità — arabo e urdu da destra a sinistra.** lilOS si specchia: barra, menu, finestre di sistema e frecce della tastiera seguono la lingua; le app restano nella direzione della loro lingua.
+- **Da fare dopo l'aggiornamento — l'italiano è un pacchetto.** Senza pacchetto lilOS è in inglese: installa «Italiano» da AppStore → Lingue e sceglilo in Pannello di controllo → Lingua.
+- **Miglioramento — messaggi del kernel nella tua lingua**, invece che sempre in italiano.
+
 ## 1.31.0 — 2026-11-04
 
 - **Nuova funzionalità — widget sulla scrivania.** Un'app di sistema può mostrare sulla scrivania i file di un suo tipo con un proprio widget, al posto dell'icona: la prima è **Note adesive** (da installare dall'AppStore), i cui file `.sticky` diventano foglietti colorati da scrivere lì sopra. Si selezionano, si spostano, vanno nelle workarea e nel Cestino come le icone; «Riordina icone» li lascia dove sono; nella minimappa hanno il loro colore. Senza l'app, o scegliendo un'altra app per quel tipo di file, tornano icone.

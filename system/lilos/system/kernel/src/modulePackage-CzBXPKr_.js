@@ -1,1 +1,0 @@
-export{n as adoptModule,i as checkModule,o as installDependencies,s as writeModule}from"./modulePackage-DVWPK00m.js";
