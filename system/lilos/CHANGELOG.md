@@ -1,5 +1,11 @@
 # Changelog di lilOS
 
+## 1.31.0 — 2026-11-04
+
+- **Nuova funzionalità — widget sulla scrivania.** Un'app di sistema può mostrare sulla scrivania i file di un suo tipo con un proprio widget, al posto dell'icona: la prima è **Note adesive** (da installare dall'AppStore), i cui file `.sticky` diventano foglietti colorati da scrivere lì sopra. Si selezionano, si spostano, vanno nelle workarea e nel Cestino come le icone; «Riordina icone» li lascia dove sono; nella minimappa hanno il loro colore. Senza l'app, o scegliendo un'altra app per quel tipo di file, tornano icone.
+- **Nuova funzionalità — Nuovo → Nota adesiva** nel tasto destro della scrivania, con Note adesive installata. Se avevi personalizzato quel menu, ripristinalo per vederla (Pannello di controllo → Usabilità → Menu contestuale).
+- **Miglioramento — per gli sviluppatori.** SDK 0.19.0: `fs.everywhere`, `fs.bring`, `visible` nelle azioni dei menu, il glifo `note`; il manifesto accetta `contributes.widgets[].fileType` e il permesso `desktop.widget` ora ha effetto per le app di sistema.
+
 ## 1.30.0 — 2026-11-04
 
 Comprende anche la 1.28.0 e la 1.29.0.
