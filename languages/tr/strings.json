@@ -121,8 +121,8 @@
     "notStarted": "{app} başlatılamadı: {message}"
   },
   "apps.methods": {
-    "fileTooBig": "Dosya çok büyük",
-    "textTooLong": "Metin çok uzun",
+    "fileTooBig": "Dosya çok büyük: lilOS en fazla {max} boyutunda dosya kaydeder",
+    "textTooLong": "Metin çok uzun: en fazla {max}",
     "denied": "İzin reddedildi: {permission}",
     "deniedContent": "İzin reddedildi: bir içeriği kendisine ait olarak yalnızca file.read ve file.write pipe’larına sahip bir uygulama işaretleyebilir",
     "fileGone": "Dosya artık yok",
@@ -773,6 +773,11 @@
     "required": "Kullanıcı adı ve parola gereklidir",
     "signInFirst": "Önce oturum açın"
   },
+  "kernel.api.settings": {
+    "signIn": "Önce oturum açın",
+    "admin": "Çekirdeğin ayarlarını yalnızca bir yönetici görebilir",
+    "user": "Kullanıcı bulunamadı"
+  },
   "kernel.api.store": {
     "signIn": "Önce oturum açın",
     "adminOnly": "Yalnızca yöneticiler",
@@ -969,6 +974,20 @@
     "wantsOne": "{name}, {id} {range} istiyor: {version} uygun değil",
     "wants": "{name}, {id} {range} istiyor",
     "wantsMany": "{list}: {version} uygun değil"
+  },
+  "kernel.files": {
+    "tooBig": "Dosya çok büyük ({size}): lilOS en fazla {max} boyutunda dosya kaydeder",
+    "quota": "Yeterli alan yok: alanınızdan {free} kaldı",
+    "quotaNear": "Alanınızın %{percent} kadarını kullandınız ({used} / {quota})",
+    "readWhole": "Dosya tek seferde okunamayacak kadar büyük ({size}, en fazla {max})",
+    "text": "Metin çok uzun ({size}, en fazla {max})",
+    "noUpload": "Karşıya yükleme bulunamadı: bitti ya da çok uzun süre boşta kaldı",
+    "offset": "Karşıya yükleme {received}. bayta ulaştı",
+    "uploadSize": "Karşıya yüklemenin boyutu geçerli değil",
+    "tooMany": "Aynı anda çok fazla karşıya yükleme",
+    "notFile": "Bu bir dosya değil",
+    "ended": "Karşıya yükleme kesildi",
+    "sizeDiffers": "Karşıya yüklemenin boyutundan fazla bayt"
   },
   "kernel.http": {
     "badPath": "Adres geçerli değil",
@@ -1636,6 +1655,17 @@
     "answerTooLarge": "Yanıt çok büyük (en fazla 5 MB)",
     "fileTooLarge": "Dosya çok büyük",
     "unknown": "Bilinmeyen işlev: {name}"
+  },
+  "kernel.settings": {
+    "unknown": "Bilinmeyen ayar: {key}",
+    "value": "{key} için geçersiz değer",
+    "noZero": "{key} 0 olamaz",
+    "min": "{key} en az {min} olmalıdır",
+    "max": "{key} en fazla {max} olmalıdır",
+    "perUser": "{key} tek bir kullanıcı için ayarlanamaz",
+    "user": "Kullanıcı bulunamadı",
+    "admin": "Çekirdeğin ayarlarını yalnızca bir yönetici değiştirebilir",
+    "changes": "Değişiklikler geçerli değil"
   },
   "kernel.sources": {
     "repo": "Depo geçerli değil (sahip/ad)",

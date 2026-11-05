@@ -121,8 +121,8 @@
     "notStarted": "{app} no se ha iniciado: {message}"
   },
   "apps.methods": {
-    "fileTooBig": "Archivo demasiado grande",
-    "textTooLong": "Texto demasiado largo",
+    "fileTooBig": "Archivo demasiado grande: lilOS guarda archivos de hasta {max}",
+    "textTooLong": "Texto demasiado largo: como máximo {max}",
     "denied": "Permiso denegado: {permission}",
     "deniedContent": "Permiso denegado: solo una app con los pipes file.read y file.write puede marcar un contenido como suyo",
     "fileGone": "El archivo ya no existe",
@@ -790,6 +790,11 @@
     "required": "El nombre de usuario y la contraseña son obligatorios",
     "signInFirst": "Inicia sesión primero"
   },
+  "kernel.api.settings": {
+    "signIn": "Inicia sesión primero",
+    "admin": "Solo un administrador ve los ajustes del kernel",
+    "user": "El usuario no existe"
+  },
   "kernel.api.store": {
     "signIn": "Inicia sesión primero",
     "adminOnly": "Solo administradores",
@@ -987,6 +992,20 @@
     "wantsOne": "{name} quiere {id} {range}: la {version} no sirve",
     "wants": "{name} quiere {id} {range}",
     "wantsMany": "{list}: la {version} no sirve"
+  },
+  "kernel.files": {
+    "tooBig": "Archivo demasiado grande ({size}): lilOS guarda archivos de hasta {max}",
+    "quota": "Espacio insuficiente: te quedan {free} de tu espacio",
+    "quotaNear": "Has usado el {percent} % de tu espacio ({used} de {quota})",
+    "readWhole": "Archivo demasiado grande para leerlo de una vez ({size}, como máximo {max})",
+    "text": "Texto demasiado largo ({size}, como máximo {max})",
+    "noUpload": "Subida no encontrada: terminó o estuvo inactiva demasiado tiempo",
+    "offset": "La subida va por el byte {received}",
+    "uploadSize": "Tamaño de la subida no válido",
+    "tooMany": "Demasiadas subidas a la vez",
+    "notFile": "No es un archivo",
+    "ended": "Subida interrumpida",
+    "sizeDiffers": "Más bytes que el tamaño de la subida"
   },
   "kernel.http": {
     "badPath": "Dirección no válida",
@@ -1668,6 +1687,17 @@
     "answerTooLarge": "Respuesta demasiado grande (como máximo 5 MB)",
     "fileTooLarge": "Archivo demasiado grande",
     "unknown": "Función desconocida: {name}"
+  },
+  "kernel.settings": {
+    "unknown": "Ajuste desconocido: {key}",
+    "value": "Valor no válido para {key}",
+    "noZero": "{key} no puede ser 0",
+    "min": "{key} debe ser como mínimo {min}",
+    "max": "{key} debe ser como máximo {max}",
+    "perUser": "{key} no se puede asignar a un solo usuario",
+    "user": "El usuario no existe",
+    "admin": "Solo un administrador cambia los ajustes del kernel",
+    "changes": "Cambios no válidos"
   },
   "kernel.sources": {
     "repo": "Repositorio no válido (propietario/nombre)",

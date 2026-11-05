@@ -121,8 +121,8 @@
     "notStarted": "{app} não foi iniciado: {message}"
   },
   "apps.methods": {
-    "fileTooBig": "Arquivo grande demais",
-    "textTooLong": "Texto longo demais",
+    "fileTooBig": "Arquivo grande demais: o lilOS salva arquivos de até {max}",
+    "textTooLong": "Texto longo demais: no máximo {max}",
     "denied": "Permissão negada: {permission}",
     "deniedContent": "Permissão negada: somente um app com os pipes file.read e file.write pode marcar um conteúdo como seu",
     "fileGone": "O arquivo não existe mais",
@@ -790,6 +790,11 @@
     "required": "Nome de usuário e senha são obrigatórios",
     "signInFirst": "Faça login primeiro"
   },
+  "kernel.api.settings": {
+    "signIn": "Faça login primeiro",
+    "admin": "Somente um administrador vê as configurações do kernel",
+    "user": "Usuário não encontrado"
+  },
   "kernel.api.store": {
     "signIn": "Faça login primeiro",
     "adminOnly": "Somente administradores",
@@ -987,6 +992,20 @@
     "wantsOne": "{name} quer {id} {range}: a {version} não serve",
     "wants": "{name} quer {id} {range}",
     "wantsMany": "{list}: a {version} não serve"
+  },
+  "kernel.files": {
+    "tooBig": "Arquivo grande demais ({size}): o lilOS salva arquivos de até {max}",
+    "quota": "Espaço insuficiente: restam {free} do seu espaço",
+    "quotaNear": "Você usou {percent}% do seu espaço ({used} de {quota})",
+    "readWhole": "Arquivo grande demais para ler de uma vez ({size}, no máximo {max})",
+    "text": "Texto longo demais ({size}, no máximo {max})",
+    "noUpload": "Envio não encontrado: ele terminou ou ficou parado por tempo demais",
+    "offset": "O envio está no byte {received}",
+    "uploadSize": "Tamanho do envio inválido",
+    "tooMany": "Envios demais ao mesmo tempo",
+    "notFile": "Não é um arquivo",
+    "ended": "Envio interrompido",
+    "sizeDiffers": "Mais bytes do que o tamanho do envio"
   },
   "kernel.http": {
     "badPath": "Endereço inválido",
@@ -1668,6 +1687,17 @@
     "answerTooLarge": "Resposta grande demais (no máximo 5 MB)",
     "fileTooLarge": "Arquivo grande demais",
     "unknown": "Função desconhecida: {name}"
+  },
+  "kernel.settings": {
+    "unknown": "Configuração desconhecida: {key}",
+    "value": "Valor inválido para {key}",
+    "noZero": "{key} não pode ser 0",
+    "min": "{key} deve ser pelo menos {min}",
+    "max": "{key} deve ser no máximo {max}",
+    "perUser": "{key} não pode ser definido para um único usuário",
+    "user": "Usuário não encontrado",
+    "admin": "Somente um administrador altera as configurações do kernel",
+    "changes": "Alterações inválidas"
   },
   "kernel.sources": {
     "repo": "Repositório inválido (proprietário/nome)",

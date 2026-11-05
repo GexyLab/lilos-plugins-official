@@ -121,8 +121,8 @@
     "notStarted": "{app} did not start: {message}"
   },
   "apps.methods": {
-    "fileTooBig": "File too large",
-    "textTooLong": "Text too long",
+    "fileTooBig": "File too large: lilOS saves files up to {max}",
+    "textTooLong": "Text too long: at most {max}",
     "denied": "Permission denied: {permission}",
     "deniedContent": "Permission denied: only an app with the file.read and file.write pipes can mark a content as its own",
     "fileGone": "The file no longer exists",
@@ -790,6 +790,11 @@
     "required": "User name and password are required",
     "signInFirst": "Sign in first"
   },
+  "kernel.api.settings": {
+    "signIn": "Sign in first",
+    "admin": "Only an administrator sees the settings of the kernel",
+    "user": "User not found"
+  },
   "kernel.api.store": {
     "signIn": "Sign in first",
     "adminOnly": "Administrators only",
@@ -987,6 +992,20 @@
     "wantsOne": "{name} wants {id} {range}: {version} will not do",
     "wants": "{name} wants {id} {range}",
     "wantsMany": "{list}: {version} will not do"
+  },
+  "kernel.files": {
+    "tooBig": "File too large ({size}): lilOS saves files up to {max}",
+    "quota": "Not enough space: {free} of your space is left",
+    "quotaNear": "You have used {percent}% of your space ({used} of {quota})",
+    "readWhole": "File too large to read at once ({size}, at most {max})",
+    "text": "Text too long ({size}, at most {max})",
+    "noUpload": "Upload not found: it ended, or it was idle for too long",
+    "offset": "The upload is at byte {received}",
+    "uploadSize": "Size of the upload not valid",
+    "tooMany": "Too many uploads at once",
+    "notFile": "Not a file",
+    "ended": "Upload interrupted",
+    "sizeDiffers": "More bytes than the size of the upload"
   },
   "kernel.http": {
     "badPath": "Address not valid",
@@ -1668,6 +1687,17 @@
     "answerTooLarge": "Response too large (at most 5 MB)",
     "fileTooLarge": "File too large",
     "unknown": "Unknown function: {name}"
+  },
+  "kernel.settings": {
+    "unknown": "Unknown setting: {key}",
+    "value": "Value not valid for {key}",
+    "noZero": "{key} cannot be 0",
+    "min": "{key} must be at least {min}",
+    "max": "{key} must be at most {max}",
+    "perUser": "{key} cannot be set for a single user",
+    "user": "User not found",
+    "admin": "Only an administrator changes the settings of the kernel",
+    "changes": "Changes not valid"
   },
   "kernel.sources": {
     "repo": "Repository not valid (owner/name)",

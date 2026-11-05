@@ -121,8 +121,8 @@
     "notStarted": "{app} n’a pas démarré : {message}"
   },
   "apps.methods": {
-    "fileTooBig": "Fichier trop volumineux",
-    "textTooLong": "Texte trop long",
+    "fileTooBig": "Fichier trop volumineux : lilOS enregistre des fichiers jusqu’à {max}",
+    "textTooLong": "Texte trop long : au plus {max}",
     "denied": "Autorisation refusée : {permission}",
     "deniedContent": "Autorisation refusée : seule une app disposant des pipes file.read et file.write peut marquer un contenu comme le sien",
     "fileGone": "Le fichier n’existe plus",
@@ -796,6 +796,11 @@
     "required": "Le nom d’utilisateur et le mot de passe sont obligatoires",
     "signInFirst": "Connectez-vous d’abord"
   },
+  "kernel.api.settings": {
+    "signIn": "Connectez-vous d’abord",
+    "admin": "Seul un administrateur voit les paramètres du kernel",
+    "user": "Utilisateur introuvable"
+  },
   "kernel.api.store": {
     "signIn": "Connectez-vous d’abord",
     "adminOnly": "Réservé aux administrateurs",
@@ -993,6 +998,20 @@
     "wantsOne": "{name} veut {id} {range} : la version {version} ne convient pas",
     "wants": "{name} veut {id} {range}",
     "wantsMany": "{list} : la version {version} ne convient pas"
+  },
+  "kernel.files": {
+    "tooBig": "Fichier trop volumineux ({size}) : lilOS enregistre des fichiers jusqu’à {max}",
+    "quota": "Espace insuffisant : il vous reste {free} de votre espace",
+    "quotaNear": "Vous avez utilisé {percent} % de votre espace ({used} sur {quota})",
+    "readWhole": "Fichier trop volumineux pour être lu en une fois ({size}, au plus {max})",
+    "text": "Texte trop long ({size}, au plus {max})",
+    "noUpload": "Chargement introuvable : il est terminé, ou il est resté inactif trop longtemps",
+    "offset": "Le chargement en est à l’octet {received}",
+    "uploadSize": "Taille du chargement non valide",
+    "tooMany": "Trop de chargements à la fois",
+    "notFile": "Ce n’est pas un fichier",
+    "ended": "Chargement interrompu",
+    "sizeDiffers": "Plus d’octets que la taille du chargement"
   },
   "kernel.http": {
     "badPath": "Adresse non valide",
@@ -1674,6 +1693,17 @@
     "answerTooLarge": "Réponse trop volumineuse (5 Mo au maximum)",
     "fileTooLarge": "Fichier trop volumineux",
     "unknown": "Fonction inconnue : {name}"
+  },
+  "kernel.settings": {
+    "unknown": "Paramètre inconnu : {key}",
+    "value": "Valeur non valide pour {key}",
+    "noZero": "{key} ne peut pas être 0",
+    "min": "{key} doit être au moins {min}",
+    "max": "{key} doit être au plus {max}",
+    "perUser": "{key} ne peut pas être défini pour un seul utilisateur",
+    "user": "Utilisateur introuvable",
+    "admin": "Seul un administrateur modifie les paramètres du kernel",
+    "changes": "Modifications non valides"
   },
   "kernel.sources": {
     "repo": "Dépôt non valide (propriétaire/nom)",

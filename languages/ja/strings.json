@@ -120,8 +120,8 @@
     "notStarted": "{app} は起動しませんでした：{message}"
   },
   "apps.methods": {
-    "fileTooBig": "ファイルが大きすぎます",
-    "textTooLong": "テキストが長すぎます",
+    "fileTooBig": "ファイルが大きすぎます：lilOS が保存できるファイルは {max} までです",
+    "textTooLong": "テキストが長すぎます：最大 {max}",
     "denied": "アクセス許可がありません：{permission}",
     "deniedContent": "アクセス許可がありません：コンテンツを自身のものとしてマークできるのは、file.read と file.write のパイプを持つアプリだけです",
     "fileGone": "ファイルはもう存在しません",
@@ -769,6 +769,11 @@
     "required": "ユーザー名とパスワードが必要です",
     "signInFirst": "先にサインインしてください"
   },
+  "kernel.api.settings": {
+    "signIn": "先にサインインしてください",
+    "admin": "カーネルの設定を表示できるのは管理者だけです",
+    "user": "ユーザーが見つかりません"
+  },
   "kernel.api.store": {
     "signIn": "先にサインインしてください",
     "adminOnly": "管理者のみ",
@@ -963,6 +968,20 @@
     "wantsOne": "{name} には {id} {range} が必要です。{version} では要件を満たしません",
     "wants": "{name} には {id} {range} が必要です",
     "wantsMany": "{list}：{version} では要件を満たしません"
+  },
+  "kernel.files": {
+    "tooBig": "ファイルが大きすぎます（{size}）：lilOS が保存できるファイルは {max} までです",
+    "quota": "空き容量が足りません：残りは {free} です",
+    "quotaNear": "容量の {percent}% を使用しています（{quota} 中 {used}）",
+    "readWhole": "ファイルが大きすぎて一度に読み込めません（{size}、最大 {max}）",
+    "text": "テキストが長すぎます（{size}、最大 {max}）",
+    "noUpload": "アップロードが見つかりません：終了したか、長時間停止していました",
+    "offset": "アップロードは {received} バイト目まで進んでいます",
+    "uploadSize": "アップロードのサイズが正しくありません",
+    "tooMany": "同時に実行中のアップロードが多すぎます",
+    "notFile": "ファイルではありません",
+    "ended": "アップロードが中断されました",
+    "sizeDiffers": "アップロードのサイズを超えるバイト数です"
   },
   "kernel.http": {
     "badPath": "無効なアドレス",
@@ -1630,6 +1649,17 @@
     "answerTooLarge": "応答が大きすぎます（最大 5 MB）",
     "fileTooLarge": "ファイルが大きすぎます",
     "unknown": "不明な関数：{name}"
+  },
+  "kernel.settings": {
+    "unknown": "不明な設定です：{key}",
+    "value": "{key} の値が正しくありません",
+    "noZero": "{key} を 0 にすることはできません",
+    "min": "{key} は {min} 以上にしてください",
+    "max": "{key} は {max} 以下にしてください",
+    "perUser": "{key} は個々のユーザーには設定できません",
+    "user": "ユーザーが見つかりません",
+    "admin": "カーネルの設定を変更できるのは管理者だけです",
+    "changes": "無効な変更"
   },
   "kernel.sources": {
     "repo": "無効なリポジトリ（owner/name）",

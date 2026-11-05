@@ -23,46 +23,46 @@ function _e(t, n) {
 	};
 }
 // src/settings/i18n.js
-var F = _e("settings", {
-	en: /* @__PURE__ */ JSON.parse("{\"strings\":{\"window.title\":\"Control Panel\",\"cloud.onedrive.label\":\"OneDrive\",\"cloud.onedrive.description\":\"Shared folders, Upload to OneDrive and open, Office online.\",\"cloud.onedrive.keywords\":\"onedrive microsoft office online azure word excel powerpoint shared\",\"cloud.onedrive.settings\":\"OneDrive (for everyone on this lilOS)\",\"cloud.gdrive.label\":\"Google Drive\",\"cloud.gdrive.description\":\"Shared with me, the format of Google documents.\",\"cloud.gdrive.keywords\":\"google drive docs sheets slides cloud shared export\",\"cloud.gdrive.settings\":\"Google Drive (for everyone on this lilOS)\",\"cloud.gphotos.label\":\"Google Photos\",\"cloud.gphotos.description\":\"Import from Google Photos and the albums lilOS makes.\",\"cloud.gphotos.keywords\":\"google photos picker album import cloud\",\"cloud.gphotos.settings\":\"Google Photos (for everyone on this lilOS)\",\"cloud.azblob.label\":\"Azure Blob Storage\",\"cloud.azblob.description\":\"Signing in with Microsoft Entra (account key and SAS need nothing).\",\"cloud.azblob.keywords\":\"azure blob storage entra microsoft container sas key data lake\",\"cloud.azblob.settings\":\"Azure Blob Storage (for everyone on this lilOS)\",\"cloud.localfolders.label\":\"Computer folders\",\"cloud.localfolders.description\":\"Which folders of the kernel's computer the users who are not administrators may connect in Network.\",\"cloud.localfolders.keywords\":\"folders computer local disk usb network permissions\",\"cloud.localfolders.settings\":\"Folders of this computer (for everyone on this lilOS)\",\"cloud.localfolders.steps.title\":\"How it works\",\"cloud.localfolders.steps.label\":\"Who connects what\",\"cloud.localfolders.steps.1\":\"Administrators connect any folder of the computer the kernel runs on (Network → Connect to a server → This computer).\",\"cloud.localfolders.steps.2\":\"The other users connect only the folders listed here, or folders inside them, with the permissions of the computer's user that runs the kernel.\",\"cloud.nfs.label\":\"NFS\",\"cloud.nfs.description\":\"The UID and GID each user has on NFS servers.\",\"cloud.nfs.keywords\":\"nfs uid gid nas linux export identity\",\"cloud.nfs.settings\":\"Identities on NFS servers (for everyone on this lilOS)\",\"cloud.nfs.you\":\"Your user name\",\"cloud.nfs.you.description\":\"The name to write in your line\",\"cloud.nfs.steps.title\":\"On the NFS server\",\"cloud.nfs.steps.label\":\"What to check\",\"cloud.nfs.steps.1\":\"The folder is exported to the address of the computer running lilOS's kernel, with NFSv3 over TCP.\",\"cloud.nfs.steps.2\":\"If lilOS's kernel cannot use a port below 1024 (Linux without privileges), allow other ports: «insecure» in /etc/exports, «Allow connections from non-privileged ports» on Synology.\",\"cloud.nfs.steps.3\":\"The UID and GID here are those of the users on the server: whoever has them reads and writes their files.\",\"cloud.nfs.steps.4\":\"With several users, the local network must be open to the kernel (net.allowPrivate or net.allow in config.json).\",\"cloud.status\":\"State\",\"cloud.adminOnly\":\"Only an administrator changes these settings\",\"cloud.ready\":\"Ready\",\"cloud.notReady\":\"Not set yet\",\"cloud.error\":\"Settings not read\",\"cloud.saved\":\"Saved\",\"cloud.notSaved\":\"Not saved\",\"cloud.addresses.title\":\"Addresses to register\",\"cloud.redirect.label\":\"Sign-in window\",\"cloud.redirect.google\":\"This lilOS's address, as Google sends the window back to it\",\"cloud.redirect.unusable\":\"lilOS is open on http outside this computer: the sign-in window does not work here, use the sign-in by pasting the address (or open lilOS on https)\",\"cloud.byHand.label\":\"Sign-in by pasting the address\",\"cloud.byHand.google\":\"Where Google ends when lilOS is not on https: a page that does not open, whose address the user pastes\",\"cloud.copy\":\"Copy\",\"cloud.copied\":\"Copied\",\"cloud.azblob.steps.title\":\"How to sign in with Microsoft Entra\",\"cloud.azblob.steps.label\":\"Steps\",\"cloud.azblob.steps.1\":\"Only to sign in with a Microsoft account: with the account key or a SAS token nothing is needed.\",\"cloud.azblob.steps.2\":\"The Microsoft app (its tab here) needs the API permission Azure Storage → user_impersonation (delegated).\",\"cloud.azblob.steps.3\":\"On the storage account, give users the role «Storage Blob Data Contributor» (Access control).\",\"cloud.microsoft.label\":\"Microsoft app\",\"cloud.microsoft.description\":\"The app on Azure that OneDrive and Azure Blob Storage sign in with.\",\"cloud.microsoft.keywords\":\"microsoft azure entra app registration client id tenant onedrive blob\",\"cloud.microsoft.settings\":\"App on Azure (for everyone on this lilOS)\",\"cloud.microsoft.steps.title\":\"How to register the app on Azure\",\"cloud.microsoft.steps.label\":\"Steps\",\"cloud.microsoft.steps.1\":\"portal.azure.com → App registrations → New registration (a free Azure account is enough).\",\"cloud.microsoft.steps.2\":\"Supported account types: the same as «Accounts allowed» here.\",\"cloud.microsoft.steps.3\":\"Authentication → Mobile and desktop applications: the two addresses above; Allow public client flows: Yes.\",\"cloud.microsoft.steps.4\":\"API permissions, delegated: for OneDrive Microsoft Graph Files.ReadWrite, User.Read, offline_access (Files.ReadWrite.All for the shared folders); for Azure Blob Storage Azure Storage → user_impersonation.\",\"cloud.microsoft.steps.5\":\"Copy the Application (client) ID into the field above.\",\"cloud.google.label\":\"Google project\",\"cloud.google.description\":\"The Google Cloud project that Google Drive and Google Photos sign in with.\",\"cloud.google.keywords\":\"google cloud project oauth client id secret drive photos\",\"cloud.google.settings\":\"Google Cloud project (for everyone on this lilOS)\",\"cloud.google.steps.title\":\"How to make the project on Google Cloud\",\"cloud.google.steps.label\":\"Steps\",\"cloud.google.steps.1\":\"console.cloud.google.com → New project (for example «lilOS»).\",\"cloud.google.steps.2\":\"APIs & Services → Library → enable Google Drive API; for Google Photos also Google Photos Picker API and Photos Library API.\",\"cloud.google.steps.3\":\"OAuth consent screen: Internal with Google Workspace; otherwise External, then Publish app (in Testing the sign-in expires every 7 days). Scopes: …/auth/drive; for Google Photos photospicker.mediaitems.readonly, photoslibrary.appendonly, photoslibrary.readonly.appcreateddata, photoslibrary.edit.appcreateddata.\",\"cloud.google.steps.4\":\"Credentials → Create OAuth client ID → Web application, with the two addresses above as authorized redirect URIs (or Desktop app: then always by pasting the address).\",\"cloud.google.steps.5\":\"Copy the client ID and the client secret above.\",\"cloud.google.steps.6\":\"On first sign-in Google says the app is not verified: it is your project, Continue.\",\"cloud.google.steps.7\":\"Since 2025 Google lets apps see only the photos the user picks and the albums the app makes.\",\"cloud.uses.microsoft\":\"Microsoft app\",\"cloud.uses.google\":\"Google project\",\"cloud.uses.description\":\"Signing in uses the app registered with the provider: set once in its own tab, for every service of that provider.\",\"cloud.uses.open\":\"Open\",\"cloud.signAgain\":\"The connections ask to sign in again, to accept the new permissions.\",\"cloud.redirect.microsoft\":\"This lilOS's address, as Microsoft sends the window back to it\",\"cloud.byHand.microsoft\":\"Where Microsoft ends when lilOS is not on https: a page that does not open, whose address the user pastes\",\"onedrive.upload.title\":\"Upload to OneDrive and open\",\"onedrive.upload.mount.label\":\"Connection\",\"onedrive.upload.mount.description\":\"Where the Office documents of your Home go before they open in Office online.\",\"onedrive.upload.mount.none\":\"Connect OneDrive first: File Manager → Rete → +.\",\"onedrive.upload.mount.ask\":\"Ask each time\",\"onedrive.upload.folder.label\":\"Folder\",\"onedrive.upload.folder.description\":\"On OneDrive (made if missing). The original stays in your Home: what you change in Office is changed in the copy.\",\"onedrive.upload.exists.label\":\"A file with the same name\",\"onedrive.upload.exists.description\":\"When the folder on OneDrive has one already.\",\"onedrive.upload.exists.ask\":\"Ask\",\"onedrive.upload.exists.keep\":\"Keep both\",\"onedrive.upload.exists.replace\":\"Replace it\",\"onedrive.office.title\":\"Office documents\",\"onedrive.office.doubleClick.label\":\"Double click opens Office online\",\"onedrive.office.doubleClick.description\":\"Word, Excel and PowerPoint documents of OneDrive, when no app of lilOS is chosen for their type (Usability → File types).\",\"group.system\":\"System\",\"group.data\":\"Data\",\"common.name\":\"Name\",\"common.color\":\"Color\",\"common.items\":\"Items\",\"common.create\":\"Create\",\"common.add\":\"Add\",\"common.addMore\":\"Add…\",\"common.remove\":\"Remove\",\"common.delete\":\"Delete…\",\"common.deleteNow\":\"Delete\",\"common.reset\":\"Reset\",\"common.confirm\":\"Confirm\",\"common.loading\":\"Loading…\",\"common.unavailable\":\"Not available\",\"common.yes\":\"Yes\",\"common.no\":\"No\",\"appearance.label\":\"Appearance\",\"appearance.description\":\"Colors and motion of the interface.\",\"appearance.colors.label\":\"Colors\",\"appearance.theme.label\":\"Theme\",\"appearance.theme.description\":\"Light or dark: desk, taskbar, menus and windows\",\"appearance.theme.keywords\":\"theme light dark night mode\",\"appearance.theme.light\":\"Light\",\"appearance.theme.dark\":\"Dark\",\"appearance.accent.title\":\"Accent color\",\"appearance.accent.description\":\"Selection, buttons, active tabs and logo\",\"appearance.accent.keywords\":\"accent theme highlight\",\"appearance.motion.label\":\"Motion\",\"appearance.animations.label\":\"Animations\",\"appearance.animations.description\":\"View movements, menus and transitions. If the operating system asks for reduced motion, they stay reduced.\",\"appearance.animations.keywords\":\"motion movement transitions\",\"language.label\":\"Language\",\"language.description\":\"The language of lilOS and apps: their texts, dates and numbers.\",\"language.title\":\"System language\",\"language.row.description\":\"Apps without this language use English. lilOS’s own texts are still in Italian.\",\"language.row.packs\":\"lilOS’s own texts come from the language pack of this language (English needs none). Each app uses its own translation if it has one, otherwise English.\",\"language.more.label\":\"More languages\",\"language.more.description\":\"The language packs of the official repository, in the AppStore: any user can install one, and it is there for everyone.\",\"language.more.button\":\"Open AppStore\",\"language.more.keywords\":\"more languages language pack install appstore translation\",\"language.keywords\":\"language translation locale english italian dates numbers\",\"language.auto\":\"Automatic: {name}\",\"desk.label\":\"Desk\",\"desk.description\":\"How the infinite desk behaves.\",\"desk.fixed.title\":\"Fixed items\",\"desk.fixed.label\":\"On the desk\",\"desk.fixed.descriptionSwitchable\":\"The ones turned on are on the desk of every workspace. They open and move like other items, but cannot be renamed or deleted: you remove them here.\",\"desk.fixed.description\":\"They are on the desk of every workspace. They open and move like other items, but cannot be renamed or deleted.\",\"desk.fixed.keywords\":\"fixed items desk show hide delete {name}\",\"desk.fixed.toggle\":\"{name} on the desk\",\"desk.fixed.toggleIn\":\"{name} on the desk of {workspace}\",\"desk.fixed.always\":\"Fixed\",\"desk.fixed.item.home.name\":\"Home\",\"desk.fixed.item.home.description\":\"The main folder, with all the others\",\"desk.fixed.item.documents.name\":\"Documenti\",\"desk.fixed.item.documents.description\":\"The Documenti folder, shared by every workspace\",\"desk.fixed.item.images.name\":\"Immagini\",\"desk.fixed.item.images.description\":\"The Immagini folder, shared by every workspace\",\"desk.fixed.item.files.name\":\"File Manager\",\"desk.fixed.item.files.description\":\"Opens the File Manager\",\"desk.fixed.item.downloads.name\":\"Download\",\"desk.fixed.item.downloads.description\":\"The Download folder, shared by every workspace\",\"desk.fixed.item.trash.name\":\"Trash\",\"desk.fixed.item.trash.description\":\"Opens the trash; files and folders can be dragged onto it\",\"desk.fixed.descriptionWorkspace\":\"The ones turned on are on this workspace's desk. They open and move like other items, but cannot be renamed or deleted: you remove them here.\",\"desk.fixed.descriptionAll\":\"Turn one on or off in every workspace at once; new workspaces get the same. Each workspace can then change it in its own tab.\",\"desk.fixed.some\":\"On in {on} of {n} workspaces\",\"desk.fixed.toggleAll\":\"{name} on every desk\",\"desk.fixed.moved.label\":\"Each workspace has its own\",\"desk.fixed.moved.description\":\"Choose them in Workspaces: in each workspace's tab, or in All for every desk.\",\"desk.fixed.moved.keywords\":\"fixed items desk home documents trash workspace\",\"desk.fixed.moved.open\":\"Open\",\"desk.placement.title\":\"Placement\",\"desk.snap.label\":\"Snap to grid\",\"desk.snap.description\":\"Dragged items line up on an invisible grid\",\"desk.snap.keywords\":\"icons snap grid align\",\"desk.previews.title\":\"Icons\",\"desk.previews.label\":\"Show file previews\",\"desk.previews.description\":\"Files show a small image of what they contain, made by the app that opens them (Photo, Editor…), in place of their icon\",\"desk.previews.keywords\":\"previews thumbnails icons images files\",\"desk.background.label\":\"Background\",\"desk.background.color.title\":\"Color\",\"desk.background.color.description\":\"Behind the items, and around images that are transparent\",\"desk.background.color.keywords\":\"background color desk wallpaper\",\"desk.background.custom.label\":\"Other color\",\"desk.background.custom.description\":\"Any color you like\",\"desk.background.theme.label\":\"Theme color\",\"desk.background.theme.description\":\"Back to the color of the light or dark theme\",\"desk.background.theme.button\":\"Use the theme color\",\"desk.background.image.title\":\"Image\",\"desk.background.image.label\":\"Background image\",\"desk.background.image.keywords\":\"background image wallpaper picture photo desk\",\"desk.background.image.current\":\"«{name}»: as tall as the desk, in its own proportions (a wider image is cut at the sides); it does not move or zoom with the desk\",\"desk.background.image.none\":\"None: only the color. In the menu of an image on the desk: Use as desktop background\",\"desk.background.image.choose\":\"Choose…\",\"desk.background.image.pick\":\"Choose the background image\",\"desk.background.image.remove.label\":\"Remove the image\",\"desk.background.image.remove.description\":\"The file stays where it is\",\"desk.background.image.remove.button\":\"Remove\",\"desk.overview.label\":\"Overview\",\"desk.overview.title\":\"Bottom-right panel\",\"desk.minimap.label\":\"Show the minimap\",\"desk.minimap.keywords\":\"map minimap thumbnail\",\"workspaces.label\":\"Workspaces\",\"workspaces.description\":\"Separate desks, each with its own items, windows and apps. Files outside the desk belong to everyone.\",\"workspaces.current.label\":\"This workspace\",\"workspaces.current.title\":\"Workspace\",\"workspaces.all.label\":\"All\",\"workspaces.name.keywords\":\"rename workspace name\",\"workspaces.name.field\":\"Workspace name\",\"workspaces.description.label\":\"Description\",\"workspaces.description.description\":\"A line about what the workspace is for, under its name at the bottom of the start menu\",\"workspaces.description.keywords\":\"workspace description notes start menu\",\"workspaces.description.field\":\"Workspace description\",\"workspaces.description.placeholder\":\"What you use it for\",\"workspaces.color.description\":\"The dot in the taskbar and next to its files in the File Manager\",\"workspaces.color.keywords\":\"workspace color\",\"workspaces.owned.label\":\"Files, folders and shortcuts\",\"workspaces.owned.description\":\"Created in this workspace, on the desk and in shared folders\",\"workspaces.apps.title\":\"Apps\",\"workspaces.apps.system\":\"System app: it is in every workspace\",\"workspaces.apps.installed\":\"Installed in lilOS: you can hide it here\",\"workspaces.apps.keywords\":\"app hide show {name}\",\"workspaces.apps.alwaysVisible\":\"Always visible\",\"workspaces.apps.toggle\":\"{name} visible in this workspace\",\"workspaces.apps.toggleIn\":\"{name} visible in {workspace}\",\"workspaces.list.current\":\"{name} (current)\",\"workspaces.list.owned\":{\"one\":\"{n} item created\",\"other\":\"{n} items created\"},\"workspaces.list.apps\":{\"one\":\"{n} app\",\"other\":\"{n} apps\"},\"workspaces.list.keywords\":\"workspace switch delete\",\"workspaces.list.switch\":\"Switch to it\",\"workspaces.switch.label\":\"Go to this workspace\",\"workspaces.new.label\":\"New workspace\",\"workspaces.new.description\":\"With an empty desk and every app visible\",\"workspaces.taskbar.title\":\"Taskbar\",\"workspaces.taskbar.label\":\"Workspaces in the taskbar\",\"workspaces.taskbar.description\":\"Only the current one, or a button for each workspace in a row, to change with one click\",\"workspaces.taskbar.keywords\":\"taskbar bar bottom workspace list all current\",\"workspaces.taskbar.current\":\"Current only\",\"workspaces.taskbar.all\":\"All\",\"workspaces.deleting.title\":\"Deleting a workspace\",\"workspaces.deleting.files.label\":\"Files stay\",\"workspaces.deleting.files.description\":\"Its desk becomes the folder Documenti/Scrivania di <name> (if it is not empty); files created elsewhere stay where they are, marked as its own.\",\"workspaces.deleting.windows.label\":\"Windows stay\",\"workspaces.deleting.windows.description\":\"Its open windows move to the current workspace, with their unsaved changes. Workareas, view and hidden apps are lost.\",\"tags.label\":\"Tags\",\"tags.description\":\"Colored labels to find files and folders wherever they are. A hidden tag hides its items.\",\"tags.new.title\":\"New tag\",\"tags.new.pending\":{\"one\":\"The new tag will go on {n} selected item\",\"other\":\"The new tag will go on {n} selected items\"},\"tags.new.description\":\"Then assign it from the right-click menu → Tag, on the desk and in the File Manager\",\"tags.new.keywords\":\"new tag create label\",\"tags.new.placeholder\":\"For example: Urgent\",\"tags.new.field\":\"Name of the new tag\",\"tags.name.keywords\":\"rename tag\",\"tags.name.field\":\"Name of the tag {name}\",\"tags.color.keywords\":\"tag color\",\"tags.visible.label\":\"Visible\",\"tags.visible.on\":\"Items with this tag are shown everywhere\",\"tags.visible.off\":\"Items with this tag are hidden everywhere: you find them in File Manager → Tags\",\"tags.visible.keywords\":\"hide show hidden invisible tag\",\"tags.visible.toggle\":\"Tag {name} visible\",\"tags.items.description\":{\"one\":\"{n} item in this workspace and in shared folders\",\"other\":\"{n} items in this workspace and in shared folders\"},\"tags.items.show\":\"Show in File Manager\",\"tags.items.delete\":\"Delete the tag\",\"usability.label\":\"Usability\",\"usability.description\":\"Keyboard, mouse, apps that open files, context menus and trash.\",\"shortcuts.label\":\"Shortcuts\",\"shortcuts.title\":\"Keyboard shortcuts\",\"shortcuts.all.label\":\"All shortcuts\",\"shortcuts.all.description\":\"Changes apply right away. To record a combination press +, then the keys; Esc cancels.\",\"shortcuts.all.reset\":\"Reset all\",\"shortcuts.keywords\":\"shortcut keys {keys}\",\"shortcuts.mouse.title\":\"Mouse\",\"shortcuts.lasso.label\":\"Freehand selection\",\"shortcuts.lasso.description\":\"Draw a closed path: the items inside it are selected\",\"shortcuts.lasso.keywords\":\"lasso freehand path selection alt\",\"shortcuts.rectangle.label\":\"Rectangle selection\",\"shortcuts.rectangle.control\":\"Drag on the background\",\"shortcuts.addToSelection.label\":\"Add to the selection\",\"shortcuts.addToSelection.control\":\"Ctrl or Shift + click or drag\",\"shortcuts.pan.label\":\"Move around the desk\",\"shortcuts.pan.control\":\"Space + drag, or middle button\",\"shortcuts.fixed.title\":\"Fixed keys\",\"shortcuts.navigate.label\":\"Move through menus, lists and tabs\",\"shortcuts.navigate.control\":\"Arrows, Enter, Esc\",\"shortcuts.rename.label\":\"Confirm or cancel renaming\",\"shortcuts.rename.control\":\"Enter, Esc\",\"fileTypes.label\":\"File types\",\"fileTypes.title\":\"Apps by file type\",\"fileTypes.all.label\":\"All file types\",\"fileTypes.all.description\":\"When you open a file, lilOS uses the app chosen here. With “Ask every time” the Open with window appears.\",\"fileTypes.all.reset\":\"Reset all\",\"fileTypes.noExtension\":\"No extension\",\"fileTypes.default\":\"Default: {app}\",\"fileTypes.noDefault\":\"No default app\",\"fileTypes.keywords\":\"file type extension open with {ext}\",\"fileTypes.field\":\"App for .{ext}\",\"fileTypes.fieldNoExtension\":\"App for files without an extension\",\"fileTypes.ask\":\"Ask every time\",\"fileTypes.others\":\"Others\",\"menu.label\":\"Context menu\",\"menu.separator\":\"— Separator —\",\"menu.submenu\":{\"one\":\"Submenu · {n} item\",\"other\":\"Submenu · {n} items\"},\"menu.create.folder\":\"Creates the folder “{name}”\",\"menu.create.file\":\"Creates the file “{name}”\",\"menu.create.fileFromTemplate\":\"Creates the file “{name}” from the template {template}\",\"menu.create.fileWithContent\":\"Creates the file “{name}” with initial content\",\"menu.create.deletedTemplate\":\"(deleted file)\",\"menu.launch\":\"Opens the app {name}\",\"menu.action\":\"Action\",\"menu.keywords\":\"context menu item separator new\",\"menu.moveUp\":\"Move up\",\"menu.moveDown\":\"Move down\",\"menu.target.root\":\"Main menu\",\"menu.target.inside\":\"Inside “{name}”\",\"menu.target.label\":\"Where\",\"menu.item.label\":\"Item\",\"menu.item.description\":\"An action or opening an app\",\"menu.item.field\":\"Item to add\",\"menu.item.open\":\"Open {name}\",\"menu.separatorRow.label\":\"Separator\",\"menu.separatorRow.description\":\"A line to group items\",\"menu.new.label\":\"New item in “{name}”\",\"menu.new.description\":\"Creates a file or a folder with this name; a file can start from the contents of a template\",\"menu.new.labelField\":\"Label\",\"menu.new.labelPlaceholder\":\"Label (e.g. Style sheet)\",\"menu.new.nameField\":\"Name of the file or folder\",\"menu.new.namePlaceholder\":\"Name (e.g. style.css)\",\"menu.new.kind\":\"Type\",\"menu.new.kindFile\":\"File\",\"menu.new.kindFolder\":\"Folder\",\"menu.new.missing\":\"A label and a name are needed\",\"menu.template.button\":\"Template…\",\"menu.template.chosen\":\"Template: {name}\",\"menu.template.title\":\"Choose the template file\",\"menu.template.text\":\"The new file will start with the contents of this file.\",\"menu.defaults.label\":\"Default items\",\"menu.defaults.custom\":\"The menu has been customized\",\"menu.defaults.default\":\"The menu is the default one\",\"trash.label\":\"Trash\",\"trash.deleting.title\":\"Deleting\",\"trash.confirm.label\":\"Ask for confirmation\",\"trash.confirm.description\":\"Before deleting files and folders, a small menu asks you to confirm\",\"trash.confirm.keywords\":\"confirm delete remove ask\",\"trash.permanent.label\":\"Delete permanently\",\"trash.permanent.description\":\"Deleted items skip the trash: they can be recovered only with Ctrl Z, while the page stays open\",\"trash.permanent.keywords\":\"trash permanent immediately delete skip\",\"trash.retention.label\":\"Keep items for\",\"trash.retention.description\":\"After this time, what is in the trash is deleted permanently\",\"trash.retention.keywords\":\"retention duration days automatic cleanup empty\",\"trash.retention.field\":\"Keep items in the trash for\",\"trash.retention.days\":{\"one\":\"{n} day\",\"other\":\"{n} days\"},\"trash.retention.forever\":\"Forever\",\"trash.contents.label\":\"Contents\",\"trash.contents.description\":{\"one\":\"{n} item · {size}\",\"other\":\"{n} items · {size}\"},\"trash.contents.empty\":\"The trash is empty\",\"trash.contents.keywords\":\"open trash restore\",\"trash.contents.open\":\"Open the trash\",\"trash.empty.label\":\"Empty the trash\",\"trash.empty.description\":\"Permanently deletes everything in it\",\"trash.empty.keywords\":\"empty trash\",\"trash.empty.button\":\"Empty…\",\"trash.empty.confirm\":\"Empty\",\"trash.empty.none\":\"Empty\",\"apps.label\":\"Apps\",\"apps.description\":\"How installed apps run.\",\"apps.security.label\":\"Security\",\"apps.execution.title\":\"Running apps\",\"apps.isolated.label\":\"Run apps isolated\",\"apps.isolated.description\":\"Each app runs in a sandbox and sees only what its permissions allow. If you turn this off, apps run in lilOS’s page and in a Web Worker: faster, but they can do everything you can do. Applies from the next time each app opens.\",\"apps.isolated.adminOnly\":\"Only an administrator can change it.\",\"apps.isolated.keywords\":\"security isolation sandbox iframe worker\",\"apps.isolated.failed\":\"Not changed: {error}\",\"apps.system.label\":\"System apps\",\"apps.system.description\":\"File Manager, Editor, Control Panel and AppStore are part of lilOS and always run inside lilOS.\",\"apps.installed.title\":\"Installed apps\",\"apps.installed.keywords\":\"security isolation\",\"apps.installed.shared\":\"Like the other apps\",\"apps.installed.own\":\"Chosen for this app\",\"apps.installed.properties\":\"Properties…\",\"apps.installed.none\":\"No apps installed besides the system ones\",\"apps.mode.isolated\":\"Isolated\",\"apps.mode.open\":\"Not isolated\",\"apps.mode.system\":\"Inside lilOS\",\"apps.mode.remote\":\"Isolated, on its own site\",\"startup.label\":\"Startup\",\"startup.description\":\"Services and apps that start by themselves when lilOS starts and when you sign in.\",\"startup.options.label\":\"Options\",\"startup.services.label\":\"Services\",\"startup.apps.label\":\"Apps\",\"startup.auto.title\":\"Automatic startup\",\"startup.openApps.label\":\"Open apps when you sign in\",\"startup.openApps.description\":\"The apps chosen in Apps open, with their parameters. Only in the first lilOS tab of this browser: the others open empty.\",\"startup.openApps.keywords\":\"startup automatic sign-in login autorun\",\"startup.trouble.title\":\"If something goes wrong\",\"startup.safe.label\":\"Start without apps\",\"startup.safe.description\":\"Just once: open lilOS with ?avvio=no at the end of the address. Saved choices are kept.\",\"startup.safe.keywords\":\"safe start startup no apps avvio=no\",\"startup.safe.active\":\"Active now\",\"startup.apps.title\":\"Open when you sign in\",\"startup.apps.hint\":\"In the workspace lilOS opens in, in the order of the list. Turn off every entry point of an app and the app leaves the list.\",\"startup.apps.none\":\"No app opens by itself.\",\"startup.apps.oneEntry\":\"1 entry point\",\"startup.apps.entries\":{\"one\":\"{on} of {n} entry point\",\"other\":\"{on} of {n} entry points\"},\"startup.apps.remove\":\"Remove from startup\",\"startup.apps.allAdded\":\"All apps are already in startup\",\"startup.apps.add\":\"Add an app to startup\",\"startup.apps.addDescription\":\"Its main window opens; then choose other entry points and parameters\",\"startup.params.of\":\"{entry} of {app}\",\"startup.params.undescribed\":\"This entry point does not describe its parameters: they reach the app as they are, as args.\",\"startup.params.json\":\"Parameters (JSON)\",\"startup.params.jsonOf\":\"Parameters (JSON) of {name}\",\"startup.params.invalidJson\":\"Not valid JSON\",\"startup.params.notSaved\":\"Not saved: {error}\",\"services.unsupported\":\"This version of lilOS has no app services\",\"services.status.off\":\"Off\",\"services.status.starting\":\"Starting…\",\"services.status.error\":\"Stopped: {error}\",\"services.status.unknownError\":\"error\",\"services.status.restarting\":\"Restarting… (it had stopped: {error})\",\"services.status.onNow\":\"On for less than a minute\",\"services.status.onMinutes\":{\"one\":\"On for {n} minute\",\"other\":\"On for {n} minutes\"},\"services.status.onHours\":{\"one\":\"On for {n} hour\",\"other\":\"On for {n} hours\"},\"services.status.onSince\":\"On since {date}\",\"services.auto.label\":\"Start services automatically\",\"services.auto.noEngine\":\"The kernel has no services engine (services-isolate module)\",\"services.auto.description\":\"When you sign in, your services chosen in Services start. The ones an administrator chose for everyone start anyway.\",\"services.auto.keywords\":\"services startup automatic background kernel\",\"services.title\":\"Installed services\",\"services.noEngine\":\"The kernel has no services engine: it needs the services-isolate module (AppStore → Kernel).\",\"services.none\":\"No installed app has services.\",\"services.hint\":\"The parts of apps that work in the kernel, without a window, even with lilOS closed. “At system startup” applies to every user and is chosen by an administrator; “At sign-in” only to you.\",\"services.startup.none\":\"Never\",\"services.startup.login\":\"At sign-in\",\"services.startup.system\":\"At system startup\",\"services.startup.field\":\"Startup of {name}\",\"services.restart\":\"Restart\",\"services.restartOf\":\"Restart {name}\",\"services.stop\":\"Stop\",\"services.start\":\"Start\",\"services.byAdmin\":\"chosen by an administrator\",\"services.log.label\":\"Log\",\"services.log.title\":\"Log of {name}\",\"services.log.empty\":\"No lines: the service has not started yet.\",\"storage.label\":\"Storage\",\"storage.description.kernel\":\"lilOS data saved in your user folder.\",\"storage.description.browser\":\"lilOS data saved in this browser.\",\"storage.space.title\":\"Space\",\"storage.used.label\":\"Space used\",\"storage.used.description\":\"Positions, view and settings\",\"storage.contents.label\":\"File contents\",\"storage.contents.description\":\"Text saved in files\",\"storage.reset.title\":\"Reset\",\"storage.defaults.label\":\"Default settings\",\"storage.defaults.description\":\"Resets settings, shortcuts, file type apps and menus to their initial values\",\"storage.initial.label\":\"Initial desk and files\",\"storage.initial.description\":\"Deletes all the folders and files created, the workspaces, the tags, the saved positions and view, then reloads lilOS\",\"storage.initial.keywords\":\"reset factory desktop desk workspace tag\",\"storage.initial.button\":\"Reset…\",\"storage.initial.confirm\":\"Delete and reload\",\"computer.label\":\"Computer\",\"computer.description\":\"The program lilOS on this computer: start, window, devices and servers. These settings belong to the computer, not to your user.\",\"computer.loading\":\"Reading from the program…\",\"computer.error\":\"Not changed: {error}\",\"computer.program.label\":\"Program\",\"computer.program.title\":\"Program\",\"computer.program.version\":\"Version of the program\",\"computer.program.system\":\"Operating system\",\"computer.program.engine\":\"Page engine\",\"computer.program.kernel\":\"lilOS on this computer\",\"computer.program.kernelHint\":\"The kernel and the database the program runs here.\",\"computer.updates.title\":\"Updates of the program\",\"computer.updates.label\":\"Updates\",\"computer.updates.description\":\"Only the program: lilOS itself updates from the AppStore, as always.\",\"computer.updates.mac\":\"On macOS the program is not signed and cannot replace itself: a notification says when a new version is out.\",\"computer.updates.auto\":\"Automatic\",\"computer.updates.notify\":\"Notify me\",\"computer.updates.off\":\"Never\",\"computer.updates.check\":\"Last check\",\"computer.updates.checkButton\":\"Check now\",\"computer.updates.install\":\"Restart and update\",\"computer.updates.download\":\"Download\",\"computer.updates.never\":\"Not checked yet in this session.\",\"computer.updates.dev\":\"Development copy: no updates.\",\"computer.updates.current\":\"The program is up to date.\",\"computer.updates.available\":\"Version {version} is available.\",\"computer.updates.downloaded\":\"Version {version} is ready: it is installed when the program quits.\",\"computer.updates.failed\":\"Check failed: {error}\",\"computer.updates.checking\":\"Checking…\",\"computer.start.title\":\"Start and window\",\"computer.start.login\":\"Start with the computer\",\"computer.start.loginHint\":\"The kernel starts when you sign in to the computer; the window stays closed until you open it.\",\"computer.start.tray\":\"Closing the window keeps lilOS in the tray\",\"computer.start.trayHint\":\"Otherwise closing the window quits the program (and stops the kernel of this computer).\",\"computer.start.notifications\":\"System notifications\",\"computer.start.notificationsHint\":\"lilOS's notifications also appear in the computer's notification center when the window is not in front.\",\"computer.screen.label\":\"Screen\",\"computer.screen.title\":\"How lilOS is shown\",\"computer.screen.mode\":\"Mode\",\"computer.screen.window\":\"Window\",\"computer.screen.fullscreen\":\"Full screen\",\"computer.screen.kiosk\":\"Kiosk\",\"computer.screen.windowHint\":\"A window of the computer, with its frame.\",\"computer.screen.fullscreenHint\":\"lilOS covers the whole screen, the computer's taskbar or Dock too. F11 goes in and out.\",\"computer.screen.kioskHint\":\"lilOS stays full screen and cannot be closed: only an administrator of lilOS turns it off. With «Start with the computer» it is the only thing the computer shows.\",\"computer.screen.leave\":\"Leave the kiosk\",\"computer.screen.leaveHint\":\"Only an administrator of lilOS can do it.\",\"computer.screen.leaveButton\":\"Leave the kiosk\",\"computer.screen.leaveTitle\":\"Leave the kiosk\",\"computer.screen.leaveText\":\"An administrator of lilOS signs in to let lilOS out of the kiosk.\",\"computer.screen.adminName\":\"Administrator\",\"computer.screen.adminPassword\":\"Password\",\"computer.screen.notAdmin\":\"This user is not an administrator.\",\"computer.screen.monitor\":\"Monitor\",\"computer.screen.monitorHint\":\"Where lilOS goes in full screen and in kiosk.\",\"computer.screen.monitorSame\":\"The one the window is on\",\"computer.screen.primary\":\"main\",\"computer.screen.keys\":\"System keys to lilOS in full screen\",\"computer.screen.keysHint.win32\":\"The Windows key, Alt+Tab and Esc reach lilOS (Keyboard Lock). Ctrl+Alt+Del always stays with Windows.\",\"computer.screen.keysHint.darwin\":\"Esc and the other keys reach lilOS; in kiosk ⌘Tab and force quit are blocked by the system.\",\"computer.screen.keysHint.linux\":\"The keys reach lilOS (Keyboard Lock); in the session «lilOS» everything goes to lilOS.\",\"computer.screen.limitsTitle\":\"What the system allows\",\"computer.screen.limits.win32\":\"Windows always keeps Ctrl+Alt+Del. Putting lilOS in place of the Windows desktop (Shell Launcher) is only in Windows Enterprise and Education: on Home and Pro use kiosk with «Start with the computer».\",\"computer.screen.limits.darwin\":\"macOS hides the Dock and the menu bar and blocks ⌘Tab and force quit in kiosk. It does not let a program replace the Finder: for a dedicated Mac use an account of its own with lilOS in kiosk at start.\",\"computer.screen.limits.linux\":\"With the .deb or .rpm package, run once «sudo sh /opt/lilOS/resources/session/install-session.sh» (it needs cage): the session «lilOS» appears on the login screen and lilOS is the whole desktop.\",\"computer.hardware.label\":\"Hardware\",\"computer.hardware.title\":\"Use of devices\",\"computer.hardware.rule\":\"Apps use devices\",\"computer.hardware.ask\":\"Asking every time\",\"computer.hardware.declared\":\"Apps that declare it\",\"computer.hardware.all\":\"All apps\",\"computer.hardware.askHint\":\"Every port or device is picked by you in a lilOS window, once per device.\",\"computer.hardware.declaredHint\":\"The apps whose permissions (seen at installation) include a device use all of them without asking.\",\"computer.hardware.allHint\":\"Every app sees and uses every device without asking: only for dedicated computers (kiosks, laboratories).\",\"computer.hardware.adminOnly\":\"Only an administrator changes it.\",\"computer.hardware.devices\":\"What the computer has\",\"computer.hardware.none\":\"None\",\"computer.hardware.unnamed\":\"Without a name\",\"computer.hardware.cameras\":\"Cameras\",\"computer.hardware.microphones\":\"Microphones\",\"computer.hardware.serial\":\"Serial ports\",\"computer.hardware.usb\":\"USB devices\",\"computer.hardware.hid\":\"Input devices (HID)\",\"computer.hardware.gpu\":\"Graphics cards\",\"computer.hardware.active\":\"in use\",\"computer.hardware.webgpu\":\"WebGPU\",\"computer.hardware.printers\":\"Printers\",\"computer.hardware.default\":\"default\",\"computer.hardware.displays\":\"Monitors\",\"computer.hardware.drives\":\"Removable drives\",\"computer.hardware.driveSpace\":\"{free} free of {size}\",\"computer.hardware.eject\":\"Eject\",\"computer.hardware.noDrives\":\"No USB stick or memory card connected.\",\"computer.hardware.refresh\":\"Read again\",\"computer.folders.title\":\"Folders of the computer in Network\",\"computer.folders.readOnly\":\"read only\",\"computer.folders.none\":\"None yet: add the folders you want to use in lilOS.\",\"computer.folders.add\":\"Add a folder\",\"computer.folders.addHint\":\"Chosen with the computer's dialog: it appears in Network › This computer and is read and written where it is.\",\"computer.folders.addButton\":\"Choose…\",\"computer.folders.added\":\"«{name}» is in Network › This computer\",\"computer.hardware.portNumber\":\"Port {n}\",\"computer.credits.title\":\"Credits of the program\",\"computer.credits.site\":\"Site\",\"computer.servers.label\":\"Servers\",\"computer.servers.title\":\"The lilOS this program opens\",\"computer.servers.current\":\"this window\",\"computer.servers.trusted\":\"trusted\",\"computer.servers.untrusted\":\"not trusted: it cannot touch the computer\",\"computer.servers.status.running\":\"running\",\"computer.servers.status.starting\":\"starting\",\"computer.servers.status.stopped\":\"stopped\",\"computer.servers.status.failed\":\"stopped by an error\",\"computer.servers.open\":\"Open\",\"computer.servers.browser\":\"Open in the browser\",\"computer.servers.restart\":\"Restart the kernel\",\"computer.servers.remove\":\"Remove\",\"computer.servers.removeConfirm\":\"Remove it?\",\"computer.servers.addTitle\":\"Add a server\",\"computer.servers.address\":\"Address\",\"computer.servers.addressHint\":\"https:// (http:// only for this computer). Each server opens in its own window, with its own sign-in.\",\"computer.servers.trust\":\"Trusted server\",\"computer.servers.trustHint\":\"It may open files on this computer and change the program's settings. Only for servers you control.\",\"computer.servers.add\":\"Add\",\"about.label\":\"About\",\"about.description\":\"Version, environment and credits.\",\"about.version\":\"Version\",\"about.sdkVersion\":\"SDK version\",\"about.language\":\"Language\",\"about.browser\":\"Browser\",\"about.unknownBrowser\":\"Unknown\",\"credits.label\":\"Credits\",\"credits.libraries\":\"Libraries\",\"credits.indirect\":\"Libraries used by other libraries\",\"credits.fonts\":\"Fonts\",\"credits.tools\":\"Tools\",\"credits.usedBy\":\"used by {users}\",\"credits.via\":\"brought by {libraries}, in {users}\",\"credits.builds\":\"builds lilOS and its apps\",\"credits.optional\":\"optional\",\"credits.module\":\"{name} (kernel module)\",\"credits.fontUsedBy\":\"used by {users}\",\"credits.site\":\"Website\",\"credits.siteOf\":\"Website of {name}\",\"credits.keywords\":\"credits acknowledgements license libraries open source thanks\",\"userPage.label\":\"User page\",\"userPage.description\":\"What the page opened from your name shows\",\"userPage.title\":\"User page\",\"userPage.open.label\":\"Opened from your name\",\"userPage.open.description\":\"Click your name in the taskbar or at the bottom of the menu. Your name and photo are always there: choose here what else it shows.\",\"userPage.keywords\":\"user page profile account photo lock sign out restart {name}\",\"userPage.toggle\":\"{name} on the user page\",\"userPage.group.header\":\"Header\",\"userPage.group.actions\":\"Actions\",\"userPage.group.account\":\"Account\",\"userPage.group.session\":\"This session\",\"userPage.group.footer\":\"Footer\",\"userPage.item.details.name\":\"Username and role\",\"userPage.item.details.description\":\"Under your name: the name you sign in with and whether you are an administrator\",\"userPage.item.lock.name\":\"Lock\",\"userPage.item.lock.description\":\"Covers the screen until you enter your password again; apps stay open\",\"userPage.item.logout.name\":\"Sign out\",\"userPage.item.logout.description\":\"Saves, closes the apps and goes back to the sign-in screen\",\"userPage.item.restart.name\":\"Restart the system\",\"userPage.item.restart.description\":\"Restarts the lilOS kernel for every user; administrators only\",\"userPage.item.photo.name\":\"Profile photo\",\"userPage.item.photo.description\":\"Choose, change or remove your photo\",\"userPage.item.theme.name\":\"Theme\",\"userPage.item.theme.description\":\"Light or dark\",\"userPage.item.language.name\":\"Language\",\"userPage.item.language.description\":\"The language of apps\",\"userPage.item.settings.name\":\"All settings\",\"userPage.item.settings.description\":\"Opens Control Panel\",\"userPage.item.workspace.name\":\"Workspace\",\"userPage.item.workspace.description\":\"The one you are in and how many there are\",\"userPage.item.windows.name\":\"Open windows\",\"userPage.item.windows.description\":\"How many windows are open and how many apps work in the background\",\"userPage.item.startup.name\":\"At startup\",\"userPage.item.startup.description\":\"How many apps open when you come in\",\"userPage.item.storage.name\":\"Space used\",\"userPage.item.storage.description\":\"How much your files take up\",\"userPage.item.about.name\":\"lilOS version\",\"userPage.item.about.description\":\"The lilOS version and the address you are connected to\",\"notifications.label\":\"Notifications\",\"notifications.description\":\"How notifications appear when they arrive, and how many are kept\",\"notifications.arrive.title\":\"When they arrive\",\"notifications.shown.label\":\"Shown together\",\"notifications.shown.description\":\"How many appear one above the other over the notification area of the taskbar. Past this number the older ones are not shown there, but stay in the list.\",\"notifications.shown.keywords\":\"notifications bar popup tray count\",\"notifications.shown.field\":\"Notifications shown together\",\"notifications.seconds.label\":\"How long they stay\",\"notifications.seconds.description\":\"Seconds after the last one arrived. With the pointer over them they stay until you move it away.\",\"notifications.seconds.keywords\":\"notifications time seconds duration\",\"notifications.seconds.field\":\"How long notifications stay\",\"notifications.seconds.value\":{\"one\":\"{n} second\",\"other\":\"{n} seconds\"},\"notifications.list.title\":\"List\",\"notifications.keep.label\":\"Notifications kept\",\"notifications.keep.description\":\"When one more arrives the oldest is deleted. The bell in the notification area lists them all.\",\"notifications.keep.page\":\"Without the kernel's notifications module they are kept only until lilOS reloads.\",\"notifications.keep.keywords\":\"notifications history list keep limit\",\"notifications.keep.field\":\"Notifications kept\",\"notifications.test.label\":\"Try\",\"notifications.test.description\":\"Sends you a notification, to see how it looks.\",\"notifications.test.button\":\"Send a test notification\",\"notifications.test.text\":\"Test notification: notifications work.\",\"notifications.error\":\"Not saved: {message}\",\"@name\":\"Control Panel\",\"@description\":\"Appearance, language, desk, user page, workspaces, notifications, tags, shortcuts, file types, startup services and apps, storage.\",\"@entrypoints.main.params.tab.label\":\"Section\",\"@entrypoints.main.params.tab.options.appearance.label\":\"Appearance\",\"@entrypoints.main.params.tab.options.language.label\":\"Language\",\"@entrypoints.main.params.tab.options.desk.label\":\"Desk\",\"@entrypoints.main.params.tab.options.userpage.label\":\"User page\",\"@entrypoints.main.params.tab.options.workspaces.label\":\"Workspaces\",\"@entrypoints.main.params.tab.options.notifications.label\":\"Notifications\",\"@entrypoints.main.params.tab.options.tags.label\":\"Tags\",\"@entrypoints.main.params.tab.options.usability.label\":\"Usability\",\"@entrypoints.main.params.tab.options.apps.label\":\"Apps\",\"@entrypoints.main.params.tab.options.startup.label\":\"Startup\",\"@entrypoints.main.params.tab.options.onedrive.label\":\"OneDrive\",\"@entrypoints.main.params.tab.options.microsoft.label\":\"Microsoft app\",\"@entrypoints.main.params.tab.options.google.label\":\"Google project\",\"@entrypoints.main.params.tab.options.storage.label\":\"Storage\",\"@entrypoints.main.params.tab.options.about.label\":\"About\",\"pipes.label\":\"Pipes\",\"pipes.title\":\"Pipes on events\",\"pipes.keywords\":\"pipes events handlers order chain\",\"pipes.intro.label\":\"What apps do when something happens\",\"pipes.intro.description\":\"Apps can step in when a file is opened, read or saved, or look at what happens in the system; an app can also add events of its own. Below, each event with its handlers in the order they run ({count} events in all). The after stage runs in the reverse order of before.\",\"pipes.unsupported\":\"This version of lilOS has no pipes\",\"pipes.lilos\":\"lilOS\",\"pipes.up\":\"Up\",\"pipes.down\":\"Down\",\"pipes.stage.before\":\"Before\",\"pipes.stage.after\":\"After\",\"pipes.band.first\":\"among the first\",\"pipes.band.middle\":\"in the middle\",\"pipes.band.last\":\"among the last\",\"pipes.where.all\":\"every item\",\"pipes.where.system\":\"chosen by lilOS\",\"pipes.where.own\":\"the files it marked\",\"pipes.where.ext\":\"files {list}\",\"pipes.where.type.file\":\"files\",\"pipes.where.type.folder\":\"folders\",\"pipes.where.type.app\":\"app shortcuts\",\"pipes.where.app\":\"apps {list}\",\"pipes.reset.label\":\"Order of the handlers\",\"pipes.reset.description\":\"You changed it: go back to the order of installation\",\"pipes.idle.title\":\"Events without handlers\",\"pipes.idle.description\":\"{count} events: no app handles them now\",\"pipes.idle.none\":\"Every event has a handler\",\"pipes.owned\":\"{label} (of {app})\",\"pipes.event.file.open\":\"Opening a file\",\"pipes.event.file.read\":\"Reading a file\",\"pipes.event.file.write\":\"Saving a file\",\"pipes.event.app.launch\":\"Starting an app\",\"pipes.event.file.create\":\"Creating an item\",\"pipes.event.file.rename\":\"Renaming\",\"pipes.event.file.move\":\"Moving\",\"pipes.event.file.copy\":\"Copying a file\",\"pipes.event.file.remove\":\"Deleting for good\",\"pipes.event.trash.put\":\"Moving to the Trash\",\"pipes.event.trash.restore\":\"Restoring from the Trash\",\"pipes.event.trash.purge\":\"Emptying the Trash\",\"pipes.event.tags.assign\":\"Tags of an item\",\"pipes.event.window.open\":\"Opening a window\",\"pipes.event.device.attach\":\"Device connected\",\"pipes.event.device.detach\":\"Device disconnected\",\"pipes.event.window.close\":\"Closing a window\",\"pipes.event.workspace.switch\":\"Changing workspace\",\"pipes.event.settings.change\":\"Changing a setting\",\"pipes.event.system.ready\":\"System ready\",\"pipes.event.session.login\":\"User signed in\",\"pipes.event.session.logout\":\"Signing out\",\"pipes.event.apps.install\":\"Installing an app\",\"pipes.event.apps.update\":\"Updating an app\",\"pipes.event.apps.remove\":\"Removing an app\",\"pipes.event.permissions.change\":\"Permissions of an app\",\"pipes.event.settings.system\":\"System settings\",\"pipes.event.pipes.change\":\"Subscriptions to pipes\",\"network.label\":\"Network\",\"network.description\":\"Where the kernel may connect for users: Rete folder, Terminal, NetTest\",\"network.loading\":\"Reading the rules…\",\"network.error\":\"The rules could not be read\",\"network.saved\":\"Network rules saved\",\"network.single\":\"One user, no sign-in\",\"network.singleText\":\"Now the kernel connects anywhere, as you could yourself. These rules apply when users sign in to lilOS.\",\"network.exception\":\"Exceptions for the users\",\"network.local.label\":\"This computer (localhost)\",\"network.local.description\":\"127.0.0.1 and ::1: test servers, databases and services on the computer of the kernel. Users could reach the kernel’s own services too: open it only if you trust them.\",\"network.private.label\":\"The whole local network\",\"network.private.description\":\"10.x, 172.16–31.x, 192.168.x, 100.64.x and the private IPv6 addresses: printers, NAS, routers, the office’s servers.\",\"network.ranges.label\":\"Only these addresses\",\"network.ranges.description\":\"Addresses or ranges allowed even when the rest stays closed, separated by commas: 192.168.1.50/32 (one NAS), 10.0.5.0/24.\",\"network.always\":\"Always closed, whatever the exceptions: link-local addresses (cloud metadata, 169.254.x), multicast and reserved addresses. A name is checked again at every connection, on the address it really points to.\"}}"),
-	it: /* @__PURE__ */ JSON.parse("{\"strings\":{\"window.title\":\"Pannello di controllo\",\"cloud.onedrive.label\":\"OneDrive\",\"cloud.onedrive.description\":\"Le cartelle condivise, Carica su OneDrive e apri, Office online.\",\"cloud.onedrive.keywords\":\"onedrive microsoft office online azure word excel powerpoint condivisi condivise\",\"cloud.onedrive.settings\":\"OneDrive (per tutti su questo lilOS)\",\"cloud.gdrive.label\":\"Google Drive\",\"cloud.gdrive.description\":\"Condivisi con me, il formato dei documenti Google.\",\"cloud.gdrive.keywords\":\"google drive documenti fogli presentazioni cloud condivisi esporta\",\"cloud.gdrive.settings\":\"Google Drive (per tutti su questo lilOS)\",\"cloud.gphotos.label\":\"Google Foto\",\"cloud.gphotos.description\":\"Importa da Google Foto e gli album creati da lilOS.\",\"cloud.gphotos.keywords\":\"google foto picker album importa cloud\",\"cloud.gphotos.settings\":\"Google Foto (per tutti su questo lilOS)\",\"cloud.azblob.label\":\"Azure Blob Storage\",\"cloud.azblob.description\":\"L’accesso con Microsoft Entra (chiave dell’account e SAS non chiedono niente).\",\"cloud.azblob.keywords\":\"azure blob storage entra microsoft contenitore sas chiave data lake\",\"cloud.azblob.settings\":\"Azure Blob Storage (per tutti su questo lilOS)\",\"cloud.localfolders.label\":\"Cartelle del computer\",\"cloud.localfolders.description\":\"Quali cartelle del computer del kernel possono collegare in Rete gli utenti che non sono amministratori.\",\"cloud.localfolders.keywords\":\"cartelle computer locale disco usb rete permessi\",\"cloud.localfolders.settings\":\"Cartelle di questo computer (per tutti su questo lilOS)\",\"cloud.localfolders.steps.title\":\"Come funziona\",\"cloud.localfolders.steps.label\":\"Chi collega cosa\",\"cloud.localfolders.steps.1\":\"Gli amministratori collegano qualsiasi cartella del computer su cui gira il kernel (Rete → Connetti a un server → Questo computer).\",\"cloud.localfolders.steps.2\":\"Gli altri utenti collegano solo le cartelle elencate qui, o cartelle dentro di esse, con i permessi dell'utente del computer che fa girare il kernel.\",\"cloud.nfs.label\":\"NFS\",\"cloud.nfs.description\":\"UID e GID di ogni utente sui server NFS.\",\"cloud.nfs.keywords\":\"nfs uid gid nas linux esportazione identità\",\"cloud.nfs.settings\":\"Identità sui server NFS (per tutti su questo lilOS)\",\"cloud.nfs.you\":\"Il tuo nome utente\",\"cloud.nfs.you.description\":\"Il nome da scrivere nella tua riga\",\"cloud.nfs.steps.title\":\"Sul server NFS\",\"cloud.nfs.steps.label\":\"Cosa controllare\",\"cloud.nfs.steps.1\":\"La cartella è esportata all’indirizzo del computer su cui gira il kernel di lilOS, con NFSv3 su TCP.\",\"cloud.nfs.steps.2\":\"Se il kernel di lilOS non può usare una porta sotto la 1024 (Linux senza privilegi), permetti le altre porte: «insecure» in /etc/exports, «Consenti connessioni da porte non privilegiate» su Synology.\",\"cloud.nfs.steps.3\":\"UID e GID qui sono quelli degli utenti sul server: chi li ha legge e scrive i loro file.\",\"cloud.nfs.steps.4\":\"Con più utenti, la rete locale deve essere aperta al kernel (net.allowPrivate o net.allow in config.json).\",\"cloud.status\":\"Stato\",\"cloud.adminOnly\":\"Solo un amministratore cambia queste impostazioni\",\"cloud.ready\":\"Pronto\",\"cloud.notReady\":\"Non ancora impostato\",\"cloud.error\":\"Impostazioni non lette\",\"cloud.saved\":\"Salvato\",\"cloud.notSaved\":\"Non salvato\",\"cloud.addresses.title\":\"Indirizzi da registrare\",\"cloud.redirect.label\":\"Finestra di accesso\",\"cloud.redirect.google\":\"L’indirizzo di questo lilOS, a cui Google rimanda la finestra\",\"cloud.redirect.unusable\":\"lilOS è aperto su http fuori da questo computer: qui la finestra di accesso non funziona, si accede incollando l’indirizzo (o apri lilOS su https)\",\"cloud.byHand.label\":\"Accesso incollando l’indirizzo\",\"cloud.byHand.google\":\"Dove Google finisce quando lilOS non è su https: una pagina che non si apre, di cui l’utente incolla l’indirizzo\",\"cloud.copy\":\"Copia\",\"cloud.copied\":\"Copiato\",\"cloud.azblob.steps.title\":\"Come accedere con Microsoft Entra\",\"cloud.azblob.steps.label\":\"Passi\",\"cloud.azblob.steps.1\":\"Solo per l’accesso con un account Microsoft: con la chiave dell’account o un token SAS non serve niente.\",\"cloud.azblob.steps.2\":\"L’app Microsoft (la sua scheda qui) deve avere l’autorizzazione API Azure Storage → user_impersonation (delegata).\",\"cloud.azblob.steps.3\":\"Sull’account di archiviazione dai agli utenti il ruolo «Collaboratore ai dati dei BLOB di archiviazione» (Controllo di accesso).\",\"cloud.microsoft.label\":\"App Microsoft\",\"cloud.microsoft.description\":\"L’app su Azure con cui accedono OneDrive e Azure Blob Storage.\",\"cloud.microsoft.keywords\":\"microsoft azure entra registrazione app client id tenant onedrive blob\",\"cloud.microsoft.settings\":\"App su Azure (per tutti su questo lilOS)\",\"cloud.microsoft.steps.title\":\"Come registrare l’app su Azure\",\"cloud.microsoft.steps.label\":\"Passi\",\"cloud.microsoft.steps.1\":\"portal.azure.com → Registrazioni app → Nuova registrazione (basta un account Azure gratuito).\",\"cloud.microsoft.steps.2\":\"Tipi di account supportati: gli stessi di «Account ammessi» qui.\",\"cloud.microsoft.steps.3\":\"Autenticazione → Applicazioni per dispositivi mobili e desktop: i due indirizzi qui sopra; Consenti flussi client pubblici: Sì.\",\"cloud.microsoft.steps.4\":\"Autorizzazioni API, delegate: per OneDrive Microsoft Graph Files.ReadWrite, User.Read, offline_access (Files.ReadWrite.All per le cartelle condivise); per Azure Blob Storage Azure Storage → user_impersonation.\",\"cloud.microsoft.steps.5\":\"Copia l’ID dell’applicazione (client) nel campo qui sopra.\",\"cloud.google.label\":\"Progetto Google\",\"cloud.google.description\":\"Il progetto Google Cloud con cui accedono Google Drive e Google Foto.\",\"cloud.google.keywords\":\"google cloud progetto oauth client id segreto drive foto\",\"cloud.google.settings\":\"Progetto Google Cloud (per tutti su questo lilOS)\",\"cloud.google.steps.title\":\"Come creare il progetto su Google Cloud\",\"cloud.google.steps.label\":\"Passi\",\"cloud.google.steps.1\":\"console.cloud.google.com → Nuovo progetto (per esempio «lilOS»).\",\"cloud.google.steps.2\":\"API e servizi → Libreria → abilita Google Drive API; per Google Foto anche Google Photos Picker API e Photos Library API.\",\"cloud.google.steps.3\":\"Schermata di consenso OAuth: Interno con Google Workspace; altrimenti Esterno, poi Pubblica l’app (in «Test» l’accesso scade ogni 7 giorni). Ambiti: …/auth/drive; per Google Foto photospicker.mediaitems.readonly, photoslibrary.appendonly, photoslibrary.readonly.appcreateddata, photoslibrary.edit.appcreateddata.\",\"cloud.google.steps.4\":\"Credenziali → Crea ID client OAuth → Applicazione web, con i due indirizzi qui sopra come URI di reindirizzamento autorizzati (oppure App desktop: allora sempre incollando l’indirizzo).\",\"cloud.google.steps.5\":\"Copia l’ID client e il segreto client qui sopra.\",\"cloud.google.steps.6\":\"Al primo accesso Google dice che l’app non è verificata: è il tuo progetto, Continua.\",\"cloud.google.steps.7\":\"Dal 2025 Google fa vedere alle app solo le foto che l’utente sceglie e gli album creati dall’app.\",\"cloud.uses.microsoft\":\"App Microsoft\",\"cloud.uses.google\":\"Progetto Google\",\"cloud.uses.description\":\"L’accesso usa l’app registrata presso il fornitore: si imposta una volta nella sua scheda, per tutti i servizi di quel fornitore.\",\"cloud.uses.open\":\"Apri\",\"cloud.signAgain\":\"Le connessioni chiedono di rifare l’accesso, per accettare i nuovi permessi.\",\"cloud.redirect.microsoft\":\"L’indirizzo di questo lilOS, a cui Microsoft rimanda la finestra\",\"cloud.byHand.microsoft\":\"Dove Microsoft finisce quando lilOS non è su https: una pagina che non si apre, di cui l’utente incolla l’indirizzo\",\"onedrive.upload.title\":\"Carica su OneDrive e apri\",\"onedrive.upload.mount.label\":\"Connessione\",\"onedrive.upload.mount.description\":\"Dove vanno i documenti Office della tua Home prima di aprirsi in Office online.\",\"onedrive.upload.mount.none\":\"Prima collega OneDrive: File Manager → Rete → +.\",\"onedrive.upload.mount.ask\":\"Chiedi ogni volta\",\"onedrive.upload.folder.label\":\"Cartella\",\"onedrive.upload.folder.description\":\"Su OneDrive (creata se manca). L’originale resta nella Home: quello che cambi in Office cambia nella copia.\",\"onedrive.upload.exists.label\":\"Un file con lo stesso nome\",\"onedrive.upload.exists.description\":\"Quando la cartella su OneDrive ne ha già uno.\",\"onedrive.upload.exists.ask\":\"Chiedi\",\"onedrive.upload.exists.keep\":\"Tieni entrambi\",\"onedrive.upload.exists.replace\":\"Sostituiscilo\",\"onedrive.office.title\":\"Documenti Office\",\"onedrive.office.doubleClick.label\":\"Il doppio clic apre Office online\",\"onedrive.office.doubleClick.description\":\"Documenti Word, Excel e PowerPoint di OneDrive, quando per il loro tipo non è scelta un’app di lilOS (Usabilità → Tipi di file).\",\"group.system\":\"Sistema\",\"group.data\":\"Dati\",\"common.name\":\"Nome\",\"common.color\":\"Colore\",\"common.items\":\"Elementi\",\"common.create\":\"Crea\",\"common.add\":\"Aggiungi\",\"common.addMore\":\"Aggiungi…\",\"common.remove\":\"Togli\",\"common.delete\":\"Elimina…\",\"common.deleteNow\":\"Elimina\",\"common.reset\":\"Ripristina\",\"common.confirm\":\"Conferma\",\"common.loading\":\"Lettura…\",\"common.unavailable\":\"Non disponibile\",\"common.yes\":\"Sì\",\"common.no\":\"No\",\"appearance.label\":\"Aspetto\",\"appearance.description\":\"Colori e movimento dell’interfaccia.\",\"appearance.colors.label\":\"Colori\",\"appearance.theme.label\":\"Tema\",\"appearance.theme.description\":\"Chiaro o scuro: scrivania, barra, menu e finestre\",\"appearance.theme.keywords\":\"tema chiaro scuro dark light notte\",\"appearance.theme.light\":\"Chiaro\",\"appearance.theme.dark\":\"Scuro\",\"appearance.accent.title\":\"Colore principale\",\"appearance.accent.description\":\"Selezione, pulsanti, tab attivi e logo\",\"appearance.accent.keywords\":\"accento tema\",\"appearance.motion.label\":\"Movimento\",\"appearance.animations.label\":\"Animazioni\",\"appearance.animations.description\":\"Spostamenti della vista, menu e transizioni. Se il sistema operativo chiede movimento ridotto, restano ridotte.\",\"appearance.animations.keywords\":\"movimento transizioni\",\"language.label\":\"Lingua\",\"language.description\":\"La lingua di lilOS e delle app: i testi, le date e i numeri.\",\"language.title\":\"Lingua del sistema\",\"language.row.description\":\"Le app che non hanno questa lingua usano l’inglese. I testi di lilOS sono ancora in italiano.\",\"language.row.packs\":\"I testi di lilOS vengono dal pacchetto di questa lingua (l’inglese non ne ha bisogno). Ogni app usa la propria traduzione se ce l’ha, altrimenti l’inglese.\",\"language.more.label\":\"Altre lingue\",\"language.more.description\":\"I pacchetti di lingua del repository ufficiale, nell’AppStore: ogni utente può installarne uno, e vale per tutti.\",\"language.more.button\":\"Apri AppStore\",\"language.more.keywords\":\"altre lingue pacchetto lingua installa appstore traduzione\",\"language.keywords\":\"lingua traduzione inglese italiano date numeri language locale\",\"language.auto\":\"Automatica: {name}\",\"desk.label\":\"Scrivania\",\"desk.description\":\"Comportamento della scrivania infinita.\",\"desk.fixed.title\":\"Elementi fissi\",\"desk.fixed.label\":\"Sulla scrivania\",\"desk.fixed.descriptionSwitchable\":\"Quelli attivi ci sono sulla scrivania di ogni workspace. Si aprono e si spostano come gli altri, ma non si rinominano e non si eliminano: si tolgono da qui.\",\"desk.fixed.description\":\"Ci sono sulla scrivania di ogni workspace. Si aprono e si spostano come gli altri, ma non si rinominano e non si eliminano.\",\"desk.fixed.keywords\":\"elementi fissi scrivania mostra nascondi elimina {name}\",\"desk.fixed.toggle\":\"{name} sulla scrivania\",\"desk.fixed.toggleIn\":\"{name} sulla scrivania di {workspace}\",\"desk.fixed.always\":\"Fisso\",\"desk.fixed.item.home.name\":\"Home\",\"desk.fixed.item.home.description\":\"La cartella principale, con tutte le altre\",\"desk.fixed.item.documents.name\":\"Documenti\",\"desk.fixed.item.documents.description\":\"La cartella Documenti, condivisa da tutti i workspace\",\"desk.fixed.item.images.name\":\"Immagini\",\"desk.fixed.item.images.description\":\"La cartella Immagini, condivisa da tutti i workspace\",\"desk.fixed.item.files.name\":\"File Manager\",\"desk.fixed.item.files.description\":\"Apre il File Manager\",\"desk.fixed.item.downloads.name\":\"Download\",\"desk.fixed.item.downloads.description\":\"La cartella Download, condivisa da tutti i workspace\",\"desk.fixed.item.trash.name\":\"Cestino\",\"desk.fixed.item.trash.description\":\"Apre il cestino; ci si possono trascinare file e cartelle\",\"desk.fixed.descriptionWorkspace\":\"Quelli attivi ci sono sulla scrivania di questo workspace. Si aprono e si spostano come gli altri, ma non si rinominano e non si eliminano: si tolgono da qui.\",\"desk.fixed.descriptionAll\":\"Accendi o spegni un elemento in tutti i workspace insieme; i workspace nuovi lo hanno uguale. Ogni workspace poi lo può cambiare nel suo tab.\",\"desk.fixed.some\":\"Acceso in {on} workspace su {n}\",\"desk.fixed.toggleAll\":\"{name} su tutte le scrivanie\",\"desk.fixed.moved.label\":\"Ogni workspace ha i suoi\",\"desk.fixed.moved.description\":\"Si scelgono in Workspace: nel tab di ogni workspace, o in Tutti per tutte le scrivanie.\",\"desk.fixed.moved.keywords\":\"elementi fissi scrivania home documenti cestino workspace\",\"desk.fixed.moved.open\":\"Apri\",\"desk.placement.title\":\"Posizionamento\",\"desk.snap.label\":\"Allinea alla griglia\",\"desk.snap.description\":\"Gli elementi trascinati si allineano a una griglia invisibile\",\"desk.snap.keywords\":\"icone snap\",\"desk.previews.title\":\"Icone\",\"desk.previews.label\":\"Mostra l’anteprima dei file\",\"desk.previews.description\":\"Al posto dell’icona, i file mostrano una piccola immagine di quello che contengono, fatta dall’app che li apre (Photo, Editor…)\",\"desk.previews.keywords\":\"anteprime miniature icone immagini file\",\"desk.background.label\":\"Sfondo\",\"desk.background.color.title\":\"Colore\",\"desk.background.color.description\":\"Dietro gli elementi, e intorno alle immagini trasparenti\",\"desk.background.color.keywords\":\"sfondo colore scrivania desktop\",\"desk.background.custom.label\":\"Altro colore\",\"desk.background.custom.description\":\"Un colore a scelta\",\"desk.background.theme.label\":\"Colore del tema\",\"desk.background.theme.description\":\"Torna al colore del tema chiaro o scuro\",\"desk.background.theme.button\":\"Usa il colore del tema\",\"desk.background.image.title\":\"Immagine\",\"desk.background.image.label\":\"Immagine di sfondo\",\"desk.background.image.keywords\":\"sfondo immagine foto scrivania desktop wallpaper\",\"desk.background.image.current\":\"«{name}»: alta quanto la scrivania, con le sue proporzioni (se è più larga si taglia ai lati); non si sposta né si ingrandisce con lei\",\"desk.background.image.none\":\"Nessuna: solo il colore. Nel menu di un'immagine sulla scrivania: Usa come sfondo desktop\",\"desk.background.image.choose\":\"Scegli…\",\"desk.background.image.pick\":\"Scegli l'immagine di sfondo\",\"desk.background.image.remove.label\":\"Togli l'immagine\",\"desk.background.image.remove.description\":\"Il file resta dov'è\",\"desk.background.image.remove.button\":\"Togli\",\"desk.overview.label\":\"Panoramica\",\"desk.overview.title\":\"Pannello in basso a destra\",\"desk.minimap.label\":\"Mostra la minimappa\",\"desk.minimap.keywords\":\"mappa miniatura\",\"workspaces.label\":\"Workspace\",\"workspaces.description\":\"Scrivanie separate, ognuna con i suoi elementi, finestre e app. I file fuori dalla scrivania sono di tutti.\",\"workspaces.current.label\":\"Questo workspace\",\"workspaces.current.title\":\"Workspace\",\"workspaces.all.label\":\"Tutti\",\"workspaces.name.keywords\":\"rinomina workspace\",\"workspaces.name.field\":\"Nome del workspace\",\"workspaces.description.label\":\"Descrizione\",\"workspaces.description.description\":\"Una riga su a cosa serve il workspace, sotto il suo nome in fondo al menu di avvio\",\"workspaces.description.keywords\":\"descrizione workspace note menu di avvio\",\"workspaces.description.field\":\"Descrizione del workspace\",\"workspaces.description.placeholder\":\"A cosa ti serve\",\"workspaces.color.description\":\"Il pallino nella barra in basso e accanto ai suoi file nel File Manager\",\"workspaces.color.keywords\":\"colore workspace\",\"workspaces.owned.label\":\"File, cartelle e collegamenti\",\"workspaces.owned.description\":\"Creati in questo workspace, sulla scrivania e nelle cartelle condivise\",\"workspaces.apps.title\":\"App\",\"workspaces.apps.system\":\"App di sistema: c’è in ogni workspace\",\"workspaces.apps.installed\":\"Installata in lilOS: qui la puoi nascondere\",\"workspaces.apps.keywords\":\"app nascondi mostra {name}\",\"workspaces.apps.alwaysVisible\":\"Sempre visibile\",\"workspaces.apps.toggle\":\"{name} visibile in questo workspace\",\"workspaces.apps.toggleIn\":\"{name} visibile in {workspace}\",\"workspaces.list.current\":\"{name} (attuale)\",\"workspaces.list.owned\":{\"one\":\"{n} elemento creato\",\"other\":\"{n} elementi creati\"},\"workspaces.list.apps\":{\"one\":\"{n} app\",\"other\":\"{n} app\"},\"workspaces.list.keywords\":\"workspace passa elimina\",\"workspaces.list.switch\":\"Passa a questo\",\"workspaces.switch.label\":\"Vai a questo workspace\",\"workspaces.new.label\":\"Nuovo workspace\",\"workspaces.new.description\":\"Con la scrivania vuota e tutte le app visibili\",\"workspaces.taskbar.title\":\"Barra delle applicazioni\",\"workspaces.taskbar.label\":\"Workspace nella barra\",\"workspaces.taskbar.description\":\"Solo quello attuale, oppure un pulsante per ogni workspace in fila, per cambiare con un clic\",\"workspaces.taskbar.keywords\":\"barra applicazioni in basso workspace elenco tutti attuale\",\"workspaces.taskbar.current\":\"Solo l'attuale\",\"workspaces.taskbar.all\":\"Tutti\",\"workspaces.deleting.title\":\"Eliminare un workspace\",\"workspaces.deleting.files.label\":\"I file restano\",\"workspaces.deleting.files.description\":\"La sua scrivania diventa la cartella Documenti/Scrivania di <nome> (se non è vuota); i file creati altrove restano dove sono, segnati come suoi.\",\"workspaces.deleting.windows.label\":\"Le finestre restano\",\"workspaces.deleting.windows.description\":\"Le sue finestre aperte passano nel workspace attuale, con le modifiche non salvate. Workarea, vista e app nascoste si perdono.\",\"tags.label\":\"Tag\",\"tags.description\":\"Etichette colorate per ritrovare file e cartelle ovunque siano. Un tag invisibile nasconde i suoi elementi.\",\"tags.new.title\":\"Nuovo tag\",\"tags.new.pending\":{\"one\":\"Il nuovo tag andrà su {n} elemento selezionato\",\"other\":\"Il nuovo tag andrà su {n} elementi selezionati\"},\"tags.new.description\":\"Poi si assegna dal menu del tasto destro → Tag, sulla scrivania e nel File Manager\",\"tags.new.keywords\":\"nuovo tag crea etichetta\",\"tags.new.placeholder\":\"Per esempio: Urgente\",\"tags.new.field\":\"Nome del nuovo tag\",\"tags.name.keywords\":\"rinomina tag\",\"tags.name.field\":\"Nome del tag {name}\",\"tags.color.keywords\":\"colore tag\",\"tags.visible.label\":\"Visibile\",\"tags.visible.on\":\"Gli elementi con questo tag si vedono ovunque\",\"tags.visible.off\":\"Gli elementi con questo tag sono nascosti ovunque: si ritrovano nel File Manager → Tag\",\"tags.visible.keywords\":\"nascondi mostra invisibile tag\",\"tags.visible.toggle\":\"Tag {name} visibile\",\"tags.items.description\":{\"one\":\"{n} elemento in questo workspace e nelle cartelle condivise\",\"other\":\"{n} elementi in questo workspace e nelle cartelle condivise\"},\"tags.items.show\":\"Mostra nel File Manager\",\"tags.items.delete\":\"Elimina il tag\",\"usability.label\":\"Usabilità\",\"usability.description\":\"Tastiera, mouse, app che aprono i file, menu contestuali e cestino.\",\"shortcuts.label\":\"Scorciatoie\",\"shortcuts.title\":\"Scorciatoie da tastiera\",\"shortcuts.all.label\":\"Tutte le scorciatoie\",\"shortcuts.all.description\":\"Le modifiche valgono subito. Per registrare una combinazione premi +, poi i tasti; Esc annulla.\",\"shortcuts.all.reset\":\"Ripristina tutte\",\"shortcuts.keywords\":\"scorciatoia tasti {keys}\",\"shortcuts.mouse.title\":\"Mouse\",\"shortcuts.lasso.label\":\"Selezione a mano libera\",\"shortcuts.lasso.description\":\"Disegna un percorso chiuso: si selezionano gli elementi che contiene\",\"shortcuts.lasso.keywords\":\"lazo lasso percorso selezione alt\",\"shortcuts.rectangle.label\":\"Selezione a rettangolo\",\"shortcuts.rectangle.control\":\"Trascina sullo sfondo\",\"shortcuts.addToSelection.label\":\"Aggiungere alla selezione\",\"shortcuts.addToSelection.control\":\"Ctrl o Shift + clic o trascinamento\",\"shortcuts.pan.label\":\"Spostarsi sulla scrivania\",\"shortcuts.pan.control\":\"Spazio + trascina, o tasto centrale\",\"shortcuts.fixed.title\":\"Tasti fissi\",\"shortcuts.navigate.label\":\"Muoversi nei menu, nelle liste e nei tab\",\"shortcuts.navigate.control\":\"Frecce, Invio, Esc\",\"shortcuts.rename.label\":\"Confermare o annullare la rinomina\",\"shortcuts.rename.control\":\"Invio, Esc\",\"fileTypes.label\":\"Tipi di file\",\"fileTypes.title\":\"App per tipo di file\",\"fileTypes.all.label\":\"Tutti i tipi di file\",\"fileTypes.all.description\":\"Aprendo un file, lilOS usa l’app scelta qui. Con «Chiedi ogni volta» compare la finestra Apri con.\",\"fileTypes.all.reset\":\"Ripristina tutti\",\"fileTypes.noExtension\":\"Senza estensione\",\"fileTypes.default\":\"Predefinita: {app}\",\"fileTypes.noDefault\":\"Nessuna app predefinita\",\"fileTypes.keywords\":\"tipo file estensione apri con {ext}\",\"fileTypes.field\":\"App per .{ext}\",\"fileTypes.fieldNoExtension\":\"App per i file senza estensione\",\"fileTypes.ask\":\"Chiedi ogni volta\",\"fileTypes.others\":\"Altri\",\"menu.label\":\"Menu contestuale\",\"menu.separator\":\"— Separatore —\",\"menu.submenu\":{\"one\":\"Sottomenu · {n} voce\",\"other\":\"Sottomenu · {n} voci\"},\"menu.create.folder\":\"Crea la cartella «{name}»\",\"menu.create.file\":\"Crea il file «{name}»\",\"menu.create.fileFromTemplate\":\"Crea il file «{name}» dal modello {template}\",\"menu.create.fileWithContent\":\"Crea il file «{name}» con un contenuto iniziale\",\"menu.create.deletedTemplate\":\"(file eliminato)\",\"menu.launch\":\"Apre l’app {name}\",\"menu.action\":\"Azione\",\"menu.keywords\":\"menu contestuale voce separatore nuovo\",\"menu.moveUp\":\"Sposta su\",\"menu.moveDown\":\"Sposta giù\",\"menu.target.root\":\"Menu principale\",\"menu.target.inside\":\"Dentro «{name}»\",\"menu.target.label\":\"Dove\",\"menu.item.label\":\"Voce\",\"menu.item.description\":\"Un’azione o l’apertura di un’app\",\"menu.item.field\":\"Voce da aggiungere\",\"menu.item.open\":\"Apri {name}\",\"menu.separatorRow.label\":\"Separatore\",\"menu.separatorRow.description\":\"Una linea per raggruppare le voci\",\"menu.new.label\":\"Nuovo elemento in «{name}»\",\"menu.new.description\":\"Crea un file o una cartella con questo nome; un file può partire dal contenuto di un modello\",\"menu.new.labelField\":\"Etichetta\",\"menu.new.labelPlaceholder\":\"Etichetta (es. Foglio di stile)\",\"menu.new.nameField\":\"Nome del file o della cartella\",\"menu.new.namePlaceholder\":\"Nome (es. stile.css)\",\"menu.new.kind\":\"Tipo\",\"menu.new.kindFile\":\"File\",\"menu.new.kindFolder\":\"Cartella\",\"menu.new.missing\":\"Servono l’etichetta e il nome\",\"menu.template.button\":\"Modello…\",\"menu.template.chosen\":\"Modello: {name}\",\"menu.template.title\":\"Scegli il file modello\",\"menu.template.text\":\"Il nuovo file partirà con il contenuto di questo file.\",\"menu.defaults.label\":\"Voci predefinite\",\"menu.defaults.custom\":\"Il menu è stato personalizzato\",\"menu.defaults.default\":\"Il menu è quello predefinito\",\"trash.label\":\"Cestino\",\"trash.deleting.title\":\"Eliminazione\",\"trash.confirm.label\":\"Chiedi conferma\",\"trash.confirm.description\":\"Prima di eliminare file e cartelle, un piccolo menu chiede di confermare\",\"trash.confirm.keywords\":\"conferma elimina cancella domanda\",\"trash.permanent.label\":\"Elimina definitivamente\",\"trash.permanent.description\":\"Gli elementi eliminati non passano dal cestino: si recuperano solo con Ctrl Z, finché la pagina resta aperta\",\"trash.permanent.keywords\":\"cestino definitivo subito cancella salta\",\"trash.retention.label\":\"Conserva gli elementi per\",\"trash.retention.description\":\"Passato questo tempo, quello che è nel cestino viene eliminato definitivamente\",\"trash.retention.keywords\":\"retention durata giorni pulizia automatica svuota\",\"trash.retention.field\":\"Conserva gli elementi nel cestino per\",\"trash.retention.days\":{\"one\":\"{n} giorno\",\"other\":\"{n} giorni\"},\"trash.retention.forever\":\"Per sempre\",\"trash.contents.label\":\"Contenuto\",\"trash.contents.description\":{\"one\":\"{n} elemento · {size}\",\"other\":\"{n} elementi · {size}\"},\"trash.contents.empty\":\"Il cestino è vuoto\",\"trash.contents.keywords\":\"apri cestino ripristina\",\"trash.contents.open\":\"Apri il cestino\",\"trash.empty.label\":\"Svuota il cestino\",\"trash.empty.description\":\"Elimina definitivamente tutto quello che contiene\",\"trash.empty.keywords\":\"svuota cestino\",\"trash.empty.button\":\"Svuota…\",\"trash.empty.confirm\":\"Svuota\",\"trash.empty.none\":\"Vuoto\",\"apps.label\":\"App\",\"apps.description\":\"Come girano le app installate.\",\"apps.security.label\":\"Sicurezza\",\"apps.execution.title\":\"Esecuzione delle app\",\"apps.isolated.label\":\"Esegui le app isolate\",\"apps.isolated.description\":\"Ogni app gira in una sandbox e vede solo quello che i suoi permessi le concedono. Se lo togli, le app girano nella pagina di lilOS e in un Web Worker: più veloci, ma possono fare tutto quello che puoi fare tu. Vale dalla prossima apertura di ogni app.\",\"apps.isolated.adminOnly\":\"Solo un amministratore la cambia.\",\"apps.isolated.keywords\":\"sicurezza isolamento sandbox iframe worker\",\"apps.isolated.failed\":\"Non cambiata: {error}\",\"apps.system.label\":\"App di sistema\",\"apps.system.description\":\"File Manager, Editor, Pannello di controllo e AppStore fanno parte di lilOS e girano sempre dentro lilOS.\",\"apps.installed.title\":\"App installate\",\"apps.installed.keywords\":\"sicurezza isolamento\",\"apps.installed.shared\":\"Come le altre app\",\"apps.installed.own\":\"Scelta per questa app\",\"apps.installed.properties\":\"Proprietà…\",\"apps.installed.none\":\"Nessuna app installata oltre a quelle di sistema\",\"apps.mode.isolated\":\"Isolata\",\"apps.mode.open\":\"Non isolata\",\"apps.mode.system\":\"Dentro lilOS\",\"apps.mode.remote\":\"Isolata, nel suo sito\",\"startup.label\":\"Avvio\",\"startup.description\":\"Servizi e app che partono da soli all’avvio di lilOS e quando entri.\",\"startup.options.label\":\"Opzioni\",\"startup.services.label\":\"Servizi\",\"startup.apps.label\":\"App\",\"startup.auto.title\":\"Avvio automatico\",\"startup.openApps.label\":\"Apri le app quando entri\",\"startup.openApps.description\":\"Si aprono le app scelte in App, con i loro parametri. Solo nella prima scheda di lilOS di questo browser: le altre si aprono vuote.\",\"startup.openApps.keywords\":\"avvio automatico accesso login esecuzione automatica\",\"startup.trouble.title\":\"Se qualcosa non va\",\"startup.safe.label\":\"Avvio senza app\",\"startup.safe.description\":\"Per una volta sola: apri lilOS con ?avvio=no in fondo all’indirizzo. Le scelte salvate restano.\",\"startup.safe.keywords\":\"avvio sicuro avvio=no\",\"startup.safe.active\":\"Attivo ora\",\"startup.apps.title\":\"Si aprono quando entri\",\"startup.apps.hint\":\"Nel workspace in cui si apre lilOS, nell’ordine dell’elenco. Togli tutti i punti d’ingresso di un’app e l’app esce dall’elenco.\",\"startup.apps.none\":\"Nessuna app si apre da sola.\",\"startup.apps.oneEntry\":\"1 punto d’ingresso\",\"startup.apps.entries\":{\"one\":\"{on} di {n} punto d’ingresso\",\"other\":\"{on} di {n} punti d’ingresso\"},\"startup.apps.remove\":\"Rimuovi dall’avvio\",\"startup.apps.allAdded\":\"Tutte le app sono già all’avvio\",\"startup.apps.add\":\"Aggiungi un’app all’avvio\",\"startup.apps.addDescription\":\"Si apre la sua finestra principale; poi scegli altri punti d’ingresso e parametri\",\"startup.params.of\":\"{entry} di {app}\",\"startup.params.undescribed\":\"Questo punto d’ingresso non descrive i suoi parametri: arrivano all’app così come sono, come args.\",\"startup.params.json\":\"Parametri (JSON)\",\"startup.params.jsonOf\":\"Parametri (JSON) di {name}\",\"startup.params.invalidJson\":\"Non è JSON valido\",\"startup.params.notSaved\":\"Non salvati: {error}\",\"services.unsupported\":\"Questa versione di lilOS non ha i servizi delle app\",\"services.status.off\":\"Spento\",\"services.status.starting\":\"Si avvia…\",\"services.status.error\":\"Fermo: {error}\",\"services.status.unknownError\":\"errore\",\"services.status.restarting\":\"Riparte… (si era fermato: {error})\",\"services.status.onNow\":\"Acceso da meno di un minuto\",\"services.status.onMinutes\":{\"one\":\"Acceso da {n} minuto\",\"other\":\"Acceso da {n} minuti\"},\"services.status.onHours\":{\"one\":\"Acceso da {n} ora\",\"other\":\"Acceso da {n} ore\"},\"services.status.onSince\":\"Acceso dal {date}\",\"services.auto.label\":\"Avvia i servizi automaticamente\",\"services.auto.noEngine\":\"Il kernel non ha il motore dei servizi (modulo services-isolate)\",\"services.auto.description\":\"Quando entri partono i tuoi servizi scelti in Servizi. Quelli scelti da un amministratore per tutti partono comunque.\",\"services.auto.keywords\":\"servizi avvio automatico background kernel\",\"services.title\":\"Servizi installati\",\"services.noEngine\":\"Il kernel non ha il motore dei servizi: serve il modulo services-isolate (AppStore → Kernel).\",\"services.none\":\"Nessuna app installata ha servizi.\",\"services.hint\":\"Le parti delle app che lavorano nel kernel, senza finestra, anche con lilOS chiuso. «All’avvio del sistema» vale per tutti gli utenti e lo sceglie un amministratore; «All’accesso» solo per te.\",\"services.startup.none\":\"Non si avvia\",\"services.startup.login\":\"All’accesso\",\"services.startup.system\":\"All’avvio del sistema\",\"services.startup.field\":\"Avvio di {name}\",\"services.restart\":\"Riavvia\",\"services.restartOf\":\"Riavvia {name}\",\"services.stop\":\"Spegni\",\"services.start\":\"Accendi\",\"services.byAdmin\":\"scelto da un amministratore\",\"services.log.label\":\"Registro\",\"services.log.title\":\"Registro di {name}\",\"services.log.empty\":\"Nessuna riga: il servizio non è ancora partito.\",\"storage.label\":\"Archiviazione\",\"storage.description.kernel\":\"Dati di lilOS salvati nella tua cartella utente.\",\"storage.description.browser\":\"Dati di lilOS salvati in questo browser.\",\"storage.space.title\":\"Spazio\",\"storage.used.label\":\"Spazio usato\",\"storage.used.description\":\"Posizioni, vista e impostazioni\",\"storage.contents.label\":\"Contenuto dei file\",\"storage.contents.description\":\"Testo salvato nei file\",\"storage.reset.title\":\"Ripristino\",\"storage.defaults.label\":\"Impostazioni predefinite\",\"storage.defaults.description\":\"Riporta impostazioni, scorciatoie, app dei tipi di file e menu ai valori iniziali\",\"storage.initial.label\":\"Scrivania e file iniziali\",\"storage.initial.description\":\"Elimina tutte le cartelle e i file creati, i workspace, i tag, le posizioni e la vista salvate, poi ricarica lilOS\",\"storage.initial.keywords\":\"reset desktop workspace tag\",\"storage.initial.button\":\"Ripristina…\",\"storage.initial.confirm\":\"Elimina e ricarica\",\"computer.label\":\"Computer\",\"computer.description\":\"Il programma lilOS su questo computer: avvio, finestra, dispositivi e server. Queste impostazioni sono del computer, non del tuo utente.\",\"computer.loading\":\"Leggo dal programma…\",\"computer.error\":\"Non cambiato: {error}\",\"computer.program.label\":\"Programma\",\"computer.program.title\":\"Programma\",\"computer.program.version\":\"Versione del programma\",\"computer.program.system\":\"Sistema operativo\",\"computer.program.engine\":\"Motore della pagina\",\"computer.program.kernel\":\"lilOS su questo computer\",\"computer.program.kernelHint\":\"Il kernel e il database che il programma fa girare qui.\",\"computer.updates.title\":\"Aggiornamenti del programma\",\"computer.updates.label\":\"Aggiornamenti\",\"computer.updates.description\":\"Solo il programma: lilOS si aggiorna dall'AppStore, come sempre.\",\"computer.updates.mac\":\"Su macOS il programma non è firmato e non può sostituirsi da solo: una notifica avvisa quando esce una nuova versione.\",\"computer.updates.auto\":\"Automatici\",\"computer.updates.notify\":\"Avvisami\",\"computer.updates.off\":\"Mai\",\"computer.updates.check\":\"Ultimo controllo\",\"computer.updates.checkButton\":\"Controlla ora\",\"computer.updates.install\":\"Riavvia e aggiorna\",\"computer.updates.download\":\"Scarica\",\"computer.updates.never\":\"Non ancora controllato in questa sessione.\",\"computer.updates.dev\":\"Copia di sviluppo: niente aggiornamenti.\",\"computer.updates.current\":\"Il programma è aggiornato.\",\"computer.updates.available\":\"È disponibile la versione {version}.\",\"computer.updates.downloaded\":\"La versione {version} è pronta: si installa quando esci dal programma.\",\"computer.updates.failed\":\"Controllo non riuscito: {error}\",\"computer.updates.checking\":\"Controllo…\",\"computer.start.title\":\"Avvio e finestra\",\"computer.start.login\":\"Avvia con il computer\",\"computer.start.loginHint\":\"Il kernel parte quando accedi al computer; la finestra resta chiusa finché non la apri.\",\"computer.start.tray\":\"Chiudendo la finestra lilOS resta nell'area di notifica\",\"computer.start.trayHint\":\"Altrimenti chiudere la finestra chiude il programma (e ferma il kernel di questo computer).\",\"computer.start.notifications\":\"Notifiche del sistema\",\"computer.start.notificationsHint\":\"Le notifiche di lilOS compaiono anche nel centro notifiche del computer quando la finestra non è in primo piano.\",\"computer.screen.label\":\"Schermo\",\"computer.screen.title\":\"Come si vede lilOS\",\"computer.screen.mode\":\"Modo\",\"computer.screen.window\":\"Finestra\",\"computer.screen.fullscreen\":\"Schermo intero\",\"computer.screen.kiosk\":\"Kiosk\",\"computer.screen.windowHint\":\"Una finestra del computer, con la sua cornice.\",\"computer.screen.fullscreenHint\":\"lilOS copre tutto lo schermo, anche la barra o il Dock del computer. F11 entra ed esce.\",\"computer.screen.kioskHint\":\"lilOS resta a schermo intero e non si chiude: solo un amministratore di lilOS lo toglie. Con «Avvia con il computer» è l'unica cosa che il computer mostra.\",\"computer.screen.leave\":\"Esci dal kiosk\",\"computer.screen.leaveHint\":\"Lo può fare solo un amministratore di lilOS.\",\"computer.screen.leaveButton\":\"Esci dal kiosk\",\"computer.screen.leaveTitle\":\"Esci dal kiosk\",\"computer.screen.leaveText\":\"Un amministratore di lilOS accede per far uscire lilOS dal kiosk.\",\"computer.screen.adminName\":\"Amministratore\",\"computer.screen.adminPassword\":\"Password\",\"computer.screen.notAdmin\":\"Questo utente non è un amministratore.\",\"computer.screen.monitor\":\"Monitor\",\"computer.screen.monitorHint\":\"Dove va lilOS a schermo intero e in kiosk.\",\"computer.screen.monitorSame\":\"Quello su cui è la finestra\",\"computer.screen.primary\":\"principale\",\"computer.screen.keys\":\"Tasti di sistema a lilOS a schermo intero\",\"computer.screen.keysHint.win32\":\"Il tasto Windows, Alt+Tab ed Esc arrivano a lilOS (Keyboard Lock). Ctrl+Alt+Canc resta sempre di Windows.\",\"computer.screen.keysHint.darwin\":\"Esc e gli altri tasti arrivano a lilOS; in kiosk ⌘Tab e l'uscita forzata li blocca il sistema.\",\"computer.screen.keysHint.linux\":\"I tasti arrivano a lilOS (Keyboard Lock); nella sessione «lilOS» va tutto a lilOS.\",\"computer.screen.limitsTitle\":\"Cosa permette il sistema\",\"computer.screen.limits.win32\":\"Windows tiene sempre Ctrl+Alt+Canc. Mettere lilOS al posto del desktop di Windows (Shell Launcher) c'è solo in Windows Enterprise ed Education: su Home e Pro usa il kiosk con «Avvia con il computer».\",\"computer.screen.limits.darwin\":\"macOS in kiosk nasconde Dock e barra dei menu e blocca ⌘Tab e l'uscita forzata. Non lascia sostituire il Finder: per un Mac dedicato usa un account apposta con lilOS in kiosk all'avvio.\",\"computer.screen.limits.linux\":\"Con il pacchetto .deb o .rpm esegui una volta «sudo sh /opt/lilOS/resources/session/install-session.sh» (serve cage): nella schermata di accesso compare la sessione «lilOS» e lilOS è il desktop intero.\",\"computer.hardware.label\":\"Hardware\",\"computer.hardware.title\":\"Uso dei dispositivi\",\"computer.hardware.rule\":\"Le app usano i dispositivi\",\"computer.hardware.ask\":\"Chiedendo ogni volta\",\"computer.hardware.declared\":\"App che lo dichiarano\",\"computer.hardware.all\":\"Tutte le app\",\"computer.hardware.askHint\":\"Ogni porta o dispositivo lo scegli tu in una finestra di lilOS, una volta per dispositivo.\",\"computer.hardware.declaredHint\":\"Le app che tra i permessi (visti all'installazione) hanno un dispositivo li usano tutti senza chiedere.\",\"computer.hardware.allHint\":\"Ogni app vede e usa ogni dispositivo senza chiedere: solo per computer dedicati (kiosk, laboratori).\",\"computer.hardware.adminOnly\":\"Lo cambia solo un amministratore.\",\"computer.hardware.devices\":\"Cosa ha il computer\",\"computer.hardware.none\":\"Nessuno\",\"computer.hardware.unnamed\":\"Senza nome\",\"computer.hardware.cameras\":\"Fotocamere\",\"computer.hardware.microphones\":\"Microfoni\",\"computer.hardware.serial\":\"Porte seriali\",\"computer.hardware.usb\":\"Dispositivi USB\",\"computer.hardware.hid\":\"Dispositivi di input (HID)\",\"computer.hardware.gpu\":\"Schede grafiche\",\"computer.hardware.active\":\"in uso\",\"computer.hardware.webgpu\":\"WebGPU\",\"computer.hardware.printers\":\"Stampanti\",\"computer.hardware.default\":\"predefinita\",\"computer.hardware.displays\":\"Monitor\",\"computer.hardware.drives\":\"Unità rimovibili\",\"computer.hardware.driveSpace\":\"{free} liberi su {size}\",\"computer.hardware.eject\":\"Espelli\",\"computer.hardware.noDrives\":\"Nessuna chiavetta USB o scheda di memoria collegata.\",\"computer.hardware.refresh\":\"Leggi di nuovo\",\"computer.folders.title\":\"Cartelle del computer in Rete\",\"computer.folders.readOnly\":\"sola lettura\",\"computer.folders.none\":\"Nessuna per ora: aggiungi le cartelle che vuoi usare in lilOS.\",\"computer.folders.add\":\"Aggiungi una cartella\",\"computer.folders.addHint\":\"Si sceglie con il dialogo del computer: compare in Rete › Questo computer e si legge e scrive dove sta.\",\"computer.folders.addButton\":\"Scegli…\",\"computer.folders.added\":\"«{name}» è in Rete › Questo computer\",\"computer.hardware.portNumber\":\"Porta {n}\",\"computer.credits.title\":\"Riconoscimenti del programma\",\"computer.credits.site\":\"Sito\",\"computer.servers.label\":\"Server\",\"computer.servers.title\":\"I lilOS che questo programma apre\",\"computer.servers.current\":\"questa finestra\",\"computer.servers.trusted\":\"di fiducia\",\"computer.servers.untrusted\":\"non di fiducia: non può toccare il computer\",\"computer.servers.status.running\":\"attivo\",\"computer.servers.status.starting\":\"in avvio\",\"computer.servers.status.stopped\":\"fermo\",\"computer.servers.status.failed\":\"fermo per un errore\",\"computer.servers.open\":\"Apri\",\"computer.servers.browser\":\"Apri nel browser\",\"computer.servers.restart\":\"Riavvia il kernel\",\"computer.servers.remove\":\"Togli\",\"computer.servers.removeConfirm\":\"Toglierlo?\",\"computer.servers.addTitle\":\"Aggiungi un server\",\"computer.servers.address\":\"Indirizzo\",\"computer.servers.addressHint\":\"https:// (http:// solo per questo computer). Ogni server si apre nella sua finestra, con il suo accesso.\",\"computer.servers.trust\":\"Server di fiducia\",\"computer.servers.trustHint\":\"Può aprire file su questo computer e cambiare le impostazioni del programma. Solo per server che controlli tu.\",\"computer.servers.add\":\"Aggiungi\",\"about.label\":\"Informazioni\",\"about.description\":\"Versione, ambiente e riconoscimenti.\",\"about.version\":\"Versione\",\"about.sdkVersion\":\"Versione dell’SDK\",\"about.language\":\"Lingua\",\"about.browser\":\"Browser\",\"about.unknownBrowser\":\"Sconosciuto\",\"credits.label\":\"Riconoscimenti\",\"credits.libraries\":\"Librerie\",\"credits.indirect\":\"Librerie usate da altre librerie\",\"credits.fonts\":\"Font\",\"credits.tools\":\"Strumenti\",\"credits.usedBy\":\"usata da {users}\",\"credits.via\":\"portata da {libraries}, in {users}\",\"credits.builds\":\"costruisce lilOS e le sue app\",\"credits.optional\":\"facoltativa\",\"credits.module\":\"{name} (modulo del kernel)\",\"credits.fontUsedBy\":\"usato da {users}\",\"credits.site\":\"Sito\",\"credits.siteOf\":\"Sito di {name}\",\"credits.keywords\":\"credits riconoscimenti crediti licenza licenze librerie open source grazie\",\"userPage.label\":\"Pagina utente\",\"userPage.description\":\"Cosa mostra la pagina che si apre dal tuo nome\",\"userPage.title\":\"Pagina utente\",\"userPage.open.label\":\"Si apre dal tuo nome\",\"userPage.open.description\":\"Clicca il tuo nome nella barra in basso o in fondo al menu. Nome e foto ci sono sempre: qui scegli cos’altro mostra.\",\"userPage.keywords\":\"pagina utente profilo account foto blocca chiudi sessione esci riavvia {name}\",\"userPage.toggle\":\"{name} nella pagina utente\",\"userPage.group.header\":\"Intestazione\",\"userPage.group.actions\":\"Azioni\",\"userPage.group.account\":\"Account\",\"userPage.group.session\":\"Questa sessione\",\"userPage.group.footer\":\"Piè di pagina\",\"userPage.item.details.name\":\"Nome utente e ruolo\",\"userPage.item.details.description\":\"Sotto il nome: il nome con cui accedi e se sei amministratore\",\"userPage.item.lock.name\":\"Blocca\",\"userPage.item.lock.description\":\"Copre lo schermo finché non inserisci di nuovo la password; le app restano aperte\",\"userPage.item.logout.name\":\"Chiudi sessione\",\"userPage.item.logout.description\":\"Salva, chiude le app e torna alla schermata di accesso\",\"userPage.item.restart.name\":\"Riavvia il sistema\",\"userPage.item.restart.description\":\"Riavvia il kernel di lilOS per tutti gli utenti; solo per gli amministratori\",\"userPage.item.photo.name\":\"Foto profilo\",\"userPage.item.photo.description\":\"Scegliere, cambiare o togliere la foto\",\"userPage.item.theme.name\":\"Tema\",\"userPage.item.theme.description\":\"Chiaro o scuro\",\"userPage.item.language.name\":\"Lingua\",\"userPage.item.language.description\":\"La lingua delle app\",\"userPage.item.settings.name\":\"Tutte le impostazioni\",\"userPage.item.settings.description\":\"Apre il Pannello di controllo\",\"userPage.item.workspace.name\":\"Workspace\",\"userPage.item.workspace.description\":\"Quello in cui sei e quanti ce ne sono\",\"userPage.item.windows.name\":\"Finestre aperte\",\"userPage.item.windows.description\":\"Quante finestre sono aperte e quante app lavorano in background\",\"userPage.item.startup.name\":\"All’avvio\",\"userPage.item.startup.description\":\"Quante app si aprono quando entri\",\"userPage.item.storage.name\":\"Spazio usato\",\"userPage.item.storage.description\":\"Quanto occupano i tuoi file\",\"userPage.item.about.name\":\"Versione di lilOS\",\"userPage.item.about.description\":\"La versione di lilOS e l’indirizzo a cui sei collegato\",\"notifications.label\":\"Notifiche\",\"notifications.description\":\"Come compaiono le notifiche quando arrivano, e quante se ne conservano\",\"notifications.arrive.title\":\"Quando arrivano\",\"notifications.shown.label\":\"Mostrate insieme\",\"notifications.shown.description\":\"Quante ne compaiono una sopra l'altra sopra l'area di notifica della barra delle applicazioni. Oltre questo numero le più vecchie non si vedono lì, ma restano nell'elenco.\",\"notifications.shown.keywords\":\"notifiche barra avvisi area di notifica numero\",\"notifications.shown.field\":\"Notifiche mostrate insieme\",\"notifications.seconds.label\":\"Per quanto restano visibili\",\"notifications.seconds.description\":\"Secondi dopo l'ultima arrivata. Con il puntatore sopra restano finché non lo sposti.\",\"notifications.seconds.keywords\":\"notifiche tempo secondi durata\",\"notifications.seconds.field\":\"Per quanto restano visibili le notifiche\",\"notifications.seconds.value\":{\"one\":\"{n} secondo\",\"other\":\"{n} secondi\"},\"notifications.list.title\":\"Elenco\",\"notifications.keep.label\":\"Notifiche conservate\",\"notifications.keep.description\":\"Quando ne arriva una in più si cancella la più vecchia. La campanella nell'area di notifica le elenca tutte.\",\"notifications.keep.page\":\"Senza il modulo delle notifiche del kernel restano solo finché lilOS non si ricarica.\",\"notifications.keep.keywords\":\"notifiche cronologia elenco conservare limite\",\"notifications.keep.field\":\"Notifiche conservate\",\"notifications.test.label\":\"Prova\",\"notifications.test.description\":\"Ti manda una notifica, per vedere come appare.\",\"notifications.test.button\":\"Invia una notifica di prova\",\"notifications.test.text\":\"Notifica di prova: le notifiche funzionano.\",\"notifications.error\":\"Non salvato: {message}\",\"@name\":\"Pannello di controllo\",\"@description\":\"Aspetto, lingua, scrivania, pagina utente, workspace, notifiche, tag, scorciatoie, tipi di file, servizi e app all’avvio, archiviazione.\",\"@entrypoints.main.params.tab.label\":\"Sezione\",\"@entrypoints.main.params.tab.options.appearance.label\":\"Aspetto\",\"@entrypoints.main.params.tab.options.language.label\":\"Lingua\",\"@entrypoints.main.params.tab.options.desk.label\":\"Scrivania\",\"@entrypoints.main.params.tab.options.userpage.label\":\"Pagina utente\",\"@entrypoints.main.params.tab.options.workspaces.label\":\"Workspace\",\"@entrypoints.main.params.tab.options.notifications.label\":\"Notifiche\",\"@entrypoints.main.params.tab.options.tags.label\":\"Tag\",\"@entrypoints.main.params.tab.options.usability.label\":\"Usabilità\",\"@entrypoints.main.params.tab.options.apps.label\":\"App\",\"@entrypoints.main.params.tab.options.startup.label\":\"Avvio\",\"@entrypoints.main.params.tab.options.onedrive.label\":\"OneDrive\",\"@entrypoints.main.params.tab.options.microsoft.label\":\"App Microsoft\",\"@entrypoints.main.params.tab.options.google.label\":\"Progetto Google\",\"@entrypoints.main.params.tab.options.storage.label\":\"Archiviazione\",\"@entrypoints.main.params.tab.options.about.label\":\"Informazioni\",\"pipes.label\":\"Pipe\",\"pipes.title\":\"Pipe sugli eventi\",\"pipes.keywords\":\"pipe eventi handler ordine catena\",\"pipes.intro.label\":\"Cosa fanno le app quando succede qualcosa\",\"pipes.intro.description\":\"Le app possono intervenire quando un file si apre, si legge o si salva, oppure guardare cosa succede nel sistema; un’app può anche aggiungere eventi suoi. Qui sotto, ogni evento con i suoi handler nell’ordine in cui partono ({count} eventi in tutto). La fase dopo scorre in ordine inverso rispetto a prima.\",\"pipes.unsupported\":\"Questa versione di lilOS non ha le pipe\",\"pipes.lilos\":\"lilOS\",\"pipes.up\":\"Su\",\"pipes.down\":\"Giù\",\"pipes.stage.before\":\"Prima\",\"pipes.stage.after\":\"Dopo\",\"pipes.band.first\":\"tra i primi\",\"pipes.band.middle\":\"in mezzo\",\"pipes.band.last\":\"tra gli ultimi\",\"pipes.where.all\":\"ogni elemento\",\"pipes.where.system\":\"scelti da lilOS\",\"pipes.where.own\":\"i file che ha segnato\",\"pipes.where.ext\":\"file {list}\",\"pipes.where.type.file\":\"file\",\"pipes.where.type.folder\":\"cartelle\",\"pipes.where.type.app\":\"collegamenti alle app\",\"pipes.where.app\":\"app {list}\",\"pipes.reset.label\":\"Ordine degli handler\",\"pipes.reset.description\":\"L’hai cambiato: torna all’ordine di installazione\",\"pipes.idle.title\":\"Eventi senza handler\",\"pipes.idle.description\":\"{count} eventi: per ora nessuna app li gestisce\",\"pipes.idle.none\":\"Ogni evento ha un handler\",\"pipes.owned\":\"{label} (di {app})\",\"pipes.event.file.open\":\"Apertura di un file\",\"pipes.event.file.read\":\"Lettura di un file\",\"pipes.event.file.write\":\"Salvataggio di un file\",\"pipes.event.app.launch\":\"Avvio di un’app\",\"pipes.event.file.create\":\"Creazione di un elemento\",\"pipes.event.file.rename\":\"Cambio di nome\",\"pipes.event.file.move\":\"Spostamento\",\"pipes.event.file.copy\":\"Copia di un file\",\"pipes.event.file.remove\":\"Eliminazione definitiva\",\"pipes.event.trash.put\":\"Spostamento nel Cestino\",\"pipes.event.trash.restore\":\"Ripristino dal Cestino\",\"pipes.event.trash.purge\":\"Svuotamento del Cestino\",\"pipes.event.tags.assign\":\"Tag di un elemento\",\"pipes.event.window.open\":\"Apertura di una finestra\",\"pipes.event.device.attach\":\"Collegamento di un dispositivo\",\"pipes.event.device.detach\":\"Scollegamento di un dispositivo\",\"pipes.event.window.close\":\"Chiusura di una finestra\",\"pipes.event.workspace.switch\":\"Cambio di workspace\",\"pipes.event.settings.change\":\"Cambio di un’impostazione\",\"pipes.event.system.ready\":\"Sistema pronto\",\"pipes.event.session.login\":\"Utente entrato\",\"pipes.event.session.logout\":\"Uscita dall’account\",\"pipes.event.apps.install\":\"Installazione di un’app\",\"pipes.event.apps.update\":\"Aggiornamento di un’app\",\"pipes.event.apps.remove\":\"Rimozione di un’app\",\"pipes.event.permissions.change\":\"Permessi di un’app\",\"pipes.event.settings.system\":\"Impostazioni di sistema\",\"pipes.event.pipes.change\":\"Iscrizioni alle pipe\",\"network.label\":\"Rete\",\"network.description\":\"Dove il kernel può collegarsi per gli utenti: cartella Rete, Terminale, NetTest\",\"network.loading\":\"Lettura delle regole…\",\"network.error\":\"Non è stato possibile leggere le regole\",\"network.saved\":\"Regole di rete salvate\",\"network.single\":\"Un solo utente, senza accesso\",\"network.singleText\":\"Adesso il kernel si collega ovunque, come potresti fare tu. Queste regole valgono quando gli utenti accedono a lilOS.\",\"network.exception\":\"Eccezioni per gli utenti\",\"network.local.label\":\"Questo computer (localhost)\",\"network.local.description\":\"127.0.0.1 e ::1: server di prova, database e servizi sul computer del kernel. Gli utenti raggiungerebbero anche i servizi del kernel stesso: aprilo solo se ti fidi di loro.\",\"network.private.label\":\"Tutta la rete locale\",\"network.private.description\":\"10.x, 172.16–31.x, 192.168.x, 100.64.x e gli indirizzi IPv6 privati: stampanti, NAS, router, i server dell’ufficio.\",\"network.ranges.label\":\"Solo questi indirizzi\",\"network.ranges.description\":\"Indirizzi o intervalli permessi anche quando il resto resta chiuso, separati da virgole: 192.168.1.50/32 (un NAS), 10.0.5.0/24.\",\"network.always\":\"Sempre chiusi, qualunque eccezione: indirizzi link-local (metadati del cloud, 169.254.x), multicast e indirizzi riservati. Un nome si controlla di nuovo a ogni connessione, sull’indirizzo a cui punta davvero.\"}}")
-}), { t: I } = F;
+var ve = _e("settings", {
+	en: /* @__PURE__ */ JSON.parse("{\"strings\":{\"window.title\":\"Control Panel\",\"cloud.onedrive.label\":\"OneDrive\",\"cloud.onedrive.description\":\"Shared folders, Upload to OneDrive and open, Office online.\",\"cloud.onedrive.keywords\":\"onedrive microsoft office online azure word excel powerpoint shared\",\"cloud.onedrive.settings\":\"OneDrive (for everyone on this lilOS)\",\"cloud.gdrive.label\":\"Google Drive\",\"cloud.gdrive.description\":\"Shared with me, the format of Google documents.\",\"cloud.gdrive.keywords\":\"google drive docs sheets slides cloud shared export\",\"cloud.gdrive.settings\":\"Google Drive (for everyone on this lilOS)\",\"cloud.gphotos.label\":\"Google Photos\",\"cloud.gphotos.description\":\"Import from Google Photos and the albums lilOS makes.\",\"cloud.gphotos.keywords\":\"google photos picker album import cloud\",\"cloud.gphotos.settings\":\"Google Photos (for everyone on this lilOS)\",\"cloud.azblob.label\":\"Azure Blob Storage\",\"cloud.azblob.description\":\"Signing in with Microsoft Entra (account key and SAS need nothing).\",\"cloud.azblob.keywords\":\"azure blob storage entra microsoft container sas key data lake\",\"cloud.azblob.settings\":\"Azure Blob Storage (for everyone on this lilOS)\",\"cloud.localfolders.label\":\"Computer folders\",\"cloud.localfolders.description\":\"Which folders of the kernel's computer the users who are not administrators may connect in Network.\",\"cloud.localfolders.keywords\":\"folders computer local disk usb network permissions\",\"cloud.localfolders.settings\":\"Folders of this computer (for everyone on this lilOS)\",\"cloud.localfolders.steps.title\":\"How it works\",\"cloud.localfolders.steps.label\":\"Who connects what\",\"cloud.localfolders.steps.1\":\"Administrators connect any folder of the computer the kernel runs on (Network → Connect to a server → This computer).\",\"cloud.localfolders.steps.2\":\"The other users connect only the folders listed here, or folders inside them, with the permissions of the computer's user that runs the kernel.\",\"cloud.nfs.label\":\"NFS\",\"cloud.nfs.description\":\"The UID and GID each user has on NFS servers.\",\"cloud.nfs.keywords\":\"nfs uid gid nas linux export identity\",\"cloud.nfs.settings\":\"Identities on NFS servers (for everyone on this lilOS)\",\"cloud.nfs.you\":\"Your user name\",\"cloud.nfs.you.description\":\"The name to write in your line\",\"cloud.nfs.steps.title\":\"On the NFS server\",\"cloud.nfs.steps.label\":\"What to check\",\"cloud.nfs.steps.1\":\"The folder is exported to the address of the computer running lilOS's kernel, with NFSv3 over TCP.\",\"cloud.nfs.steps.2\":\"If lilOS's kernel cannot use a port below 1024 (Linux without privileges), allow other ports: «insecure» in /etc/exports, «Allow connections from non-privileged ports» on Synology.\",\"cloud.nfs.steps.3\":\"The UID and GID here are those of the users on the server: whoever has them reads and writes their files.\",\"cloud.nfs.steps.4\":\"With several users, the local network must be open to the kernel (net.allowPrivate or net.allow in config.json).\",\"cloud.status\":\"State\",\"cloud.adminOnly\":\"Only an administrator changes these settings\",\"cloud.ready\":\"Ready\",\"cloud.notReady\":\"Not set yet\",\"cloud.error\":\"Settings not read\",\"cloud.saved\":\"Saved\",\"cloud.notSaved\":\"Not saved\",\"cloud.addresses.title\":\"Addresses to register\",\"cloud.redirect.label\":\"Sign-in window\",\"cloud.redirect.google\":\"This lilOS's address, as Google sends the window back to it\",\"cloud.redirect.unusable\":\"lilOS is open on http outside this computer: the sign-in window does not work here, use the sign-in by pasting the address (or open lilOS on https)\",\"cloud.byHand.label\":\"Sign-in by pasting the address\",\"cloud.byHand.google\":\"Where Google ends when lilOS is not on https: a page that does not open, whose address the user pastes\",\"cloud.copy\":\"Copy\",\"cloud.copied\":\"Copied\",\"cloud.azblob.steps.title\":\"How to sign in with Microsoft Entra\",\"cloud.azblob.steps.label\":\"Steps\",\"cloud.azblob.steps.1\":\"Only to sign in with a Microsoft account: with the account key or a SAS token nothing is needed.\",\"cloud.azblob.steps.2\":\"The Microsoft app (its tab here) needs the API permission Azure Storage → user_impersonation (delegated).\",\"cloud.azblob.steps.3\":\"On the storage account, give users the role «Storage Blob Data Contributor» (Access control).\",\"cloud.microsoft.label\":\"Microsoft app\",\"cloud.microsoft.description\":\"The app on Azure that OneDrive and Azure Blob Storage sign in with.\",\"cloud.microsoft.keywords\":\"microsoft azure entra app registration client id tenant onedrive blob\",\"cloud.microsoft.settings\":\"App on Azure (for everyone on this lilOS)\",\"cloud.microsoft.steps.title\":\"How to register the app on Azure\",\"cloud.microsoft.steps.label\":\"Steps\",\"cloud.microsoft.steps.1\":\"portal.azure.com → App registrations → New registration (a free Azure account is enough).\",\"cloud.microsoft.steps.2\":\"Supported account types: the same as «Accounts allowed» here.\",\"cloud.microsoft.steps.3\":\"Authentication → Mobile and desktop applications: the two addresses above; Allow public client flows: Yes.\",\"cloud.microsoft.steps.4\":\"API permissions, delegated: for OneDrive Microsoft Graph Files.ReadWrite, User.Read, offline_access (Files.ReadWrite.All for the shared folders); for Azure Blob Storage Azure Storage → user_impersonation.\",\"cloud.microsoft.steps.5\":\"Copy the Application (client) ID into the field above.\",\"cloud.google.label\":\"Google project\",\"cloud.google.description\":\"The Google Cloud project that Google Drive and Google Photos sign in with.\",\"cloud.google.keywords\":\"google cloud project oauth client id secret drive photos\",\"cloud.google.settings\":\"Google Cloud project (for everyone on this lilOS)\",\"cloud.google.steps.title\":\"How to make the project on Google Cloud\",\"cloud.google.steps.label\":\"Steps\",\"cloud.google.steps.1\":\"console.cloud.google.com → New project (for example «lilOS»).\",\"cloud.google.steps.2\":\"APIs & Services → Library → enable Google Drive API; for Google Photos also Google Photos Picker API and Photos Library API.\",\"cloud.google.steps.3\":\"OAuth consent screen: Internal with Google Workspace; otherwise External, then Publish app (in Testing the sign-in expires every 7 days). Scopes: …/auth/drive; for Google Photos photospicker.mediaitems.readonly, photoslibrary.appendonly, photoslibrary.readonly.appcreateddata, photoslibrary.edit.appcreateddata.\",\"cloud.google.steps.4\":\"Credentials → Create OAuth client ID → Web application, with the two addresses above as authorized redirect URIs (or Desktop app: then always by pasting the address).\",\"cloud.google.steps.5\":\"Copy the client ID and the client secret above.\",\"cloud.google.steps.6\":\"On first sign-in Google says the app is not verified: it is your project, Continue.\",\"cloud.google.steps.7\":\"Since 2025 Google lets apps see only the photos the user picks and the albums the app makes.\",\"cloud.uses.microsoft\":\"Microsoft app\",\"cloud.uses.google\":\"Google project\",\"cloud.uses.description\":\"Signing in uses the app registered with the provider: set once in its own tab, for every service of that provider.\",\"cloud.uses.open\":\"Open\",\"cloud.signAgain\":\"The connections ask to sign in again, to accept the new permissions.\",\"cloud.redirect.microsoft\":\"This lilOS's address, as Microsoft sends the window back to it\",\"cloud.byHand.microsoft\":\"Where Microsoft ends when lilOS is not on https: a page that does not open, whose address the user pastes\",\"onedrive.upload.title\":\"Upload to OneDrive and open\",\"onedrive.upload.mount.label\":\"Connection\",\"onedrive.upload.mount.description\":\"Where the Office documents of your Home go before they open in Office online.\",\"onedrive.upload.mount.none\":\"Connect OneDrive first: File Manager → Rete → +.\",\"onedrive.upload.mount.ask\":\"Ask each time\",\"onedrive.upload.folder.label\":\"Folder\",\"onedrive.upload.folder.description\":\"On OneDrive (made if missing). The original stays in your Home: what you change in Office is changed in the copy.\",\"onedrive.upload.exists.label\":\"A file with the same name\",\"onedrive.upload.exists.description\":\"When the folder on OneDrive has one already.\",\"onedrive.upload.exists.ask\":\"Ask\",\"onedrive.upload.exists.keep\":\"Keep both\",\"onedrive.upload.exists.replace\":\"Replace it\",\"onedrive.office.title\":\"Office documents\",\"onedrive.office.doubleClick.label\":\"Double click opens Office online\",\"onedrive.office.doubleClick.description\":\"Word, Excel and PowerPoint documents of OneDrive, when no app of lilOS is chosen for their type (Usability → File types).\",\"group.system\":\"System\",\"group.data\":\"Data\",\"common.name\":\"Name\",\"common.color\":\"Color\",\"common.items\":\"Items\",\"common.create\":\"Create\",\"common.add\":\"Add\",\"common.addMore\":\"Add…\",\"common.remove\":\"Remove\",\"common.delete\":\"Delete…\",\"common.deleteNow\":\"Delete\",\"common.reset\":\"Reset\",\"common.confirm\":\"Confirm\",\"common.loading\":\"Loading…\",\"common.unavailable\":\"Not available\",\"common.yes\":\"Yes\",\"common.no\":\"No\",\"appearance.label\":\"Appearance\",\"appearance.description\":\"Colors and motion of the interface.\",\"appearance.colors.label\":\"Colors\",\"appearance.theme.label\":\"Theme\",\"appearance.theme.description\":\"Light or dark: desk, taskbar, menus and windows\",\"appearance.theme.keywords\":\"theme light dark night mode\",\"appearance.theme.light\":\"Light\",\"appearance.theme.dark\":\"Dark\",\"appearance.accent.title\":\"Accent color\",\"appearance.accent.description\":\"Selection, buttons, active tabs and logo\",\"appearance.accent.keywords\":\"accent theme highlight\",\"appearance.motion.label\":\"Motion\",\"appearance.animations.label\":\"Animations\",\"appearance.animations.description\":\"View movements, menus and transitions. If the operating system asks for reduced motion, they stay reduced.\",\"appearance.animations.keywords\":\"motion movement transitions\",\"language.label\":\"Language\",\"language.description\":\"The language of lilOS and apps: their texts, dates and numbers.\",\"language.title\":\"System language\",\"language.row.description\":\"Apps without this language use English. lilOS’s own texts are still in Italian.\",\"language.row.packs\":\"lilOS’s own texts come from the language pack of this language (English needs none). Each app uses its own translation if it has one, otherwise English.\",\"language.more.label\":\"More languages\",\"language.more.description\":\"The language packs of the official repository, in the AppStore: any user can install one, and it is there for everyone.\",\"language.more.button\":\"Open AppStore\",\"language.more.keywords\":\"more languages language pack install appstore translation\",\"language.keywords\":\"language translation locale english italian dates numbers\",\"language.auto\":\"Automatic: {name}\",\"desk.label\":\"Desk\",\"desk.description\":\"How the infinite desk behaves.\",\"desk.fixed.title\":\"Fixed items\",\"desk.fixed.label\":\"On the desk\",\"desk.fixed.descriptionSwitchable\":\"The ones turned on are on the desk of every workspace. They open and move like other items, but cannot be renamed or deleted: you remove them here.\",\"desk.fixed.description\":\"They are on the desk of every workspace. They open and move like other items, but cannot be renamed or deleted.\",\"desk.fixed.keywords\":\"fixed items desk show hide delete {name}\",\"desk.fixed.toggle\":\"{name} on the desk\",\"desk.fixed.toggleIn\":\"{name} on the desk of {workspace}\",\"desk.fixed.always\":\"Fixed\",\"desk.fixed.item.home.name\":\"Home\",\"desk.fixed.item.home.description\":\"The main folder, with all the others\",\"desk.fixed.item.documents.name\":\"Documenti\",\"desk.fixed.item.documents.description\":\"The Documenti folder, shared by every workspace\",\"desk.fixed.item.images.name\":\"Immagini\",\"desk.fixed.item.images.description\":\"The Immagini folder, shared by every workspace\",\"desk.fixed.item.files.name\":\"File Manager\",\"desk.fixed.item.files.description\":\"Opens the File Manager\",\"desk.fixed.item.downloads.name\":\"Download\",\"desk.fixed.item.downloads.description\":\"The Download folder, shared by every workspace\",\"desk.fixed.item.trash.name\":\"Trash\",\"desk.fixed.item.trash.description\":\"Opens the trash; files and folders can be dragged onto it\",\"desk.fixed.descriptionWorkspace\":\"The ones turned on are on this workspace's desk. They open and move like other items, but cannot be renamed or deleted: you remove them here.\",\"desk.fixed.descriptionAll\":\"Turn one on or off in every workspace at once; new workspaces get the same. Each workspace can then change it in its own tab.\",\"desk.fixed.some\":\"On in {on} of {n} workspaces\",\"desk.fixed.toggleAll\":\"{name} on every desk\",\"desk.fixed.moved.label\":\"Each workspace has its own\",\"desk.fixed.moved.description\":\"Choose them in Workspaces: in each workspace's tab, or in All for every desk.\",\"desk.fixed.moved.keywords\":\"fixed items desk home documents trash workspace\",\"desk.fixed.moved.open\":\"Open\",\"desk.placement.title\":\"Placement\",\"desk.snap.label\":\"Snap to grid\",\"desk.snap.description\":\"Dragged items line up on an invisible grid\",\"desk.snap.keywords\":\"icons snap grid align\",\"desk.previews.title\":\"Icons\",\"desk.previews.label\":\"Show file previews\",\"desk.previews.description\":\"Files show a small image of what they contain, made by the app that opens them (Photo, Editor…), in place of their icon\",\"desk.previews.keywords\":\"previews thumbnails icons images files\",\"desk.background.label\":\"Background\",\"desk.background.color.title\":\"Color\",\"desk.background.color.description\":\"Behind the items, and around images that are transparent\",\"desk.background.color.keywords\":\"background color desk wallpaper\",\"desk.background.custom.label\":\"Other color\",\"desk.background.custom.description\":\"Any color you like\",\"desk.background.theme.label\":\"Theme color\",\"desk.background.theme.description\":\"Back to the color of the light or dark theme\",\"desk.background.theme.button\":\"Use the theme color\",\"desk.background.image.title\":\"Image\",\"desk.background.image.label\":\"Background image\",\"desk.background.image.keywords\":\"background image wallpaper picture photo desk\",\"desk.background.image.current\":\"«{name}»: as tall as the desk, in its own proportions (a wider image is cut at the sides); it does not move or zoom with the desk\",\"desk.background.image.none\":\"None: only the color. In the menu of an image on the desk: Use as desktop background\",\"desk.background.image.choose\":\"Choose…\",\"desk.background.image.pick\":\"Choose the background image\",\"desk.background.image.remove.label\":\"Remove the image\",\"desk.background.image.remove.description\":\"The file stays where it is\",\"desk.background.image.remove.button\":\"Remove\",\"desk.overview.label\":\"Overview\",\"desk.overview.title\":\"Bottom-right panel\",\"desk.minimap.label\":\"Show the minimap\",\"desk.minimap.keywords\":\"map minimap thumbnail\",\"workspaces.label\":\"Workspaces\",\"workspaces.description\":\"Separate desks, each with its own items, windows and apps. Files outside the desk belong to everyone.\",\"workspaces.current.label\":\"This workspace\",\"workspaces.current.title\":\"Workspace\",\"workspaces.all.label\":\"All\",\"workspaces.name.keywords\":\"rename workspace name\",\"workspaces.name.field\":\"Workspace name\",\"workspaces.description.label\":\"Description\",\"workspaces.description.description\":\"A line about what the workspace is for, under its name at the bottom of the start menu\",\"workspaces.description.keywords\":\"workspace description notes start menu\",\"workspaces.description.field\":\"Workspace description\",\"workspaces.description.placeholder\":\"What you use it for\",\"workspaces.color.description\":\"The dot in the taskbar and next to its files in the File Manager\",\"workspaces.color.keywords\":\"workspace color\",\"workspaces.owned.label\":\"Files, folders and shortcuts\",\"workspaces.owned.description\":\"Created in this workspace, on the desk and in shared folders\",\"workspaces.apps.title\":\"Apps\",\"workspaces.apps.system\":\"System app: it is in every workspace\",\"workspaces.apps.installed\":\"Installed in lilOS: you can hide it here\",\"workspaces.apps.keywords\":\"app hide show {name}\",\"workspaces.apps.alwaysVisible\":\"Always visible\",\"workspaces.apps.toggle\":\"{name} visible in this workspace\",\"workspaces.apps.toggleIn\":\"{name} visible in {workspace}\",\"workspaces.list.current\":\"{name} (current)\",\"workspaces.list.owned\":{\"one\":\"{n} item created\",\"other\":\"{n} items created\"},\"workspaces.list.apps\":{\"one\":\"{n} app\",\"other\":\"{n} apps\"},\"workspaces.list.keywords\":\"workspace switch delete\",\"workspaces.list.switch\":\"Switch to it\",\"workspaces.switch.label\":\"Go to this workspace\",\"workspaces.new.label\":\"New workspace\",\"workspaces.new.description\":\"With an empty desk and every app visible\",\"workspaces.taskbar.title\":\"Taskbar\",\"workspaces.taskbar.label\":\"Workspaces in the taskbar\",\"workspaces.taskbar.description\":\"Only the current one, or a button for each workspace in a row, to change with one click\",\"workspaces.taskbar.keywords\":\"taskbar bar bottom workspace list all current\",\"workspaces.taskbar.current\":\"Current only\",\"workspaces.taskbar.all\":\"All\",\"workspaces.deleting.title\":\"Deleting a workspace\",\"workspaces.deleting.files.label\":\"Files stay\",\"workspaces.deleting.files.description\":\"Its desk becomes the folder Documenti/Scrivania di <name> (if it is not empty); files created elsewhere stay where they are, marked as its own.\",\"workspaces.deleting.windows.label\":\"Windows stay\",\"workspaces.deleting.windows.description\":\"Its open windows move to the current workspace, with their unsaved changes. Workareas, view and hidden apps are lost.\",\"tags.label\":\"Tags\",\"tags.description\":\"Colored labels to find files and folders wherever they are. A hidden tag hides its items.\",\"tags.new.title\":\"New tag\",\"tags.new.pending\":{\"one\":\"The new tag will go on {n} selected item\",\"other\":\"The new tag will go on {n} selected items\"},\"tags.new.description\":\"Then assign it from the right-click menu → Tag, on the desk and in the File Manager\",\"tags.new.keywords\":\"new tag create label\",\"tags.new.placeholder\":\"For example: Urgent\",\"tags.new.field\":\"Name of the new tag\",\"tags.name.keywords\":\"rename tag\",\"tags.name.field\":\"Name of the tag {name}\",\"tags.color.keywords\":\"tag color\",\"tags.visible.label\":\"Visible\",\"tags.visible.on\":\"Items with this tag are shown everywhere\",\"tags.visible.off\":\"Items with this tag are hidden everywhere: you find them in File Manager → Tags\",\"tags.visible.keywords\":\"hide show hidden invisible tag\",\"tags.visible.toggle\":\"Tag {name} visible\",\"tags.items.description\":{\"one\":\"{n} item in this workspace and in shared folders\",\"other\":\"{n} items in this workspace and in shared folders\"},\"tags.items.show\":\"Show in File Manager\",\"tags.items.delete\":\"Delete the tag\",\"usability.label\":\"Usability\",\"usability.description\":\"Keyboard, mouse, apps that open files, context menus and trash.\",\"shortcuts.label\":\"Shortcuts\",\"shortcuts.title\":\"Keyboard shortcuts\",\"shortcuts.all.label\":\"All shortcuts\",\"shortcuts.all.description\":\"Changes apply right away. To record a combination press +, then the keys; Esc cancels.\",\"shortcuts.all.reset\":\"Reset all\",\"shortcuts.keywords\":\"shortcut keys {keys}\",\"shortcuts.mouse.title\":\"Mouse\",\"shortcuts.lasso.label\":\"Freehand selection\",\"shortcuts.lasso.description\":\"Draw a closed path: the items inside it are selected\",\"shortcuts.lasso.keywords\":\"lasso freehand path selection alt\",\"shortcuts.rectangle.label\":\"Rectangle selection\",\"shortcuts.rectangle.control\":\"Drag on the background\",\"shortcuts.addToSelection.label\":\"Add to the selection\",\"shortcuts.addToSelection.control\":\"Ctrl or Shift + click or drag\",\"shortcuts.pan.label\":\"Move around the desk\",\"shortcuts.pan.control\":\"Space + drag, or middle button\",\"shortcuts.fixed.title\":\"Fixed keys\",\"shortcuts.navigate.label\":\"Move through menus, lists and tabs\",\"shortcuts.navigate.control\":\"Arrows, Enter, Esc\",\"shortcuts.rename.label\":\"Confirm or cancel renaming\",\"shortcuts.rename.control\":\"Enter, Esc\",\"fileTypes.label\":\"File types\",\"fileTypes.title\":\"Apps by file type\",\"fileTypes.all.label\":\"All file types\",\"fileTypes.all.description\":\"When you open a file, lilOS uses the app chosen here. With “Ask every time” the Open with window appears.\",\"fileTypes.all.reset\":\"Reset all\",\"fileTypes.noExtension\":\"No extension\",\"fileTypes.default\":\"Default: {app}\",\"fileTypes.noDefault\":\"No default app\",\"fileTypes.keywords\":\"file type extension open with {ext}\",\"fileTypes.field\":\"App for .{ext}\",\"fileTypes.fieldNoExtension\":\"App for files without an extension\",\"fileTypes.ask\":\"Ask every time\",\"fileTypes.others\":\"Others\",\"menu.label\":\"Context menu\",\"menu.separator\":\"— Separator —\",\"menu.submenu\":{\"one\":\"Submenu · {n} item\",\"other\":\"Submenu · {n} items\"},\"menu.create.folder\":\"Creates the folder “{name}”\",\"menu.create.file\":\"Creates the file “{name}”\",\"menu.create.fileFromTemplate\":\"Creates the file “{name}” from the template {template}\",\"menu.create.fileWithContent\":\"Creates the file “{name}” with initial content\",\"menu.create.deletedTemplate\":\"(deleted file)\",\"menu.launch\":\"Opens the app {name}\",\"menu.action\":\"Action\",\"menu.keywords\":\"context menu item separator new\",\"menu.moveUp\":\"Move up\",\"menu.moveDown\":\"Move down\",\"menu.target.root\":\"Main menu\",\"menu.target.inside\":\"Inside “{name}”\",\"menu.target.label\":\"Where\",\"menu.item.label\":\"Item\",\"menu.item.description\":\"An action or opening an app\",\"menu.item.field\":\"Item to add\",\"menu.item.open\":\"Open {name}\",\"menu.separatorRow.label\":\"Separator\",\"menu.separatorRow.description\":\"A line to group items\",\"menu.new.label\":\"New item in “{name}”\",\"menu.new.description\":\"Creates a file or a folder with this name; a file can start from the contents of a template\",\"menu.new.labelField\":\"Label\",\"menu.new.labelPlaceholder\":\"Label (e.g. Style sheet)\",\"menu.new.nameField\":\"Name of the file or folder\",\"menu.new.namePlaceholder\":\"Name (e.g. style.css)\",\"menu.new.kind\":\"Type\",\"menu.new.kindFile\":\"File\",\"menu.new.kindFolder\":\"Folder\",\"menu.new.missing\":\"A label and a name are needed\",\"menu.template.button\":\"Template…\",\"menu.template.chosen\":\"Template: {name}\",\"menu.template.title\":\"Choose the template file\",\"menu.template.text\":\"The new file will start with the contents of this file.\",\"menu.defaults.label\":\"Default items\",\"menu.defaults.custom\":\"The menu has been customized\",\"menu.defaults.default\":\"The menu is the default one\",\"trash.label\":\"Trash\",\"trash.deleting.title\":\"Deleting\",\"trash.confirm.label\":\"Ask for confirmation\",\"trash.confirm.description\":\"Before deleting files and folders, a small menu asks you to confirm\",\"trash.confirm.keywords\":\"confirm delete remove ask\",\"trash.permanent.label\":\"Delete permanently\",\"trash.permanent.description\":\"Deleted items skip the trash: they can be recovered only with Ctrl Z, while the page stays open\",\"trash.permanent.keywords\":\"trash permanent immediately delete skip\",\"trash.retention.label\":\"Keep items for\",\"trash.retention.description\":\"After this time, what is in the trash is deleted permanently\",\"trash.retention.keywords\":\"retention duration days automatic cleanup empty\",\"trash.retention.field\":\"Keep items in the trash for\",\"trash.retention.days\":{\"one\":\"{n} day\",\"other\":\"{n} days\"},\"trash.retention.forever\":\"Forever\",\"trash.contents.label\":\"Contents\",\"trash.contents.description\":{\"one\":\"{n} item · {size}\",\"other\":\"{n} items · {size}\"},\"trash.contents.empty\":\"The trash is empty\",\"trash.contents.keywords\":\"open trash restore\",\"trash.contents.open\":\"Open the trash\",\"trash.empty.label\":\"Empty the trash\",\"trash.empty.description\":\"Permanently deletes everything in it\",\"trash.empty.keywords\":\"empty trash\",\"trash.empty.button\":\"Empty…\",\"trash.empty.confirm\":\"Empty\",\"trash.empty.none\":\"Empty\",\"apps.label\":\"Apps\",\"apps.description\":\"How installed apps run.\",\"apps.security.label\":\"Security\",\"apps.execution.title\":\"Running apps\",\"apps.isolated.label\":\"Run apps isolated\",\"apps.isolated.description\":\"Each app runs in a sandbox and sees only what its permissions allow. If you turn this off, apps run in lilOS’s page and in a Web Worker: faster, but they can do everything you can do. Applies from the next time each app opens.\",\"apps.isolated.adminOnly\":\"Only an administrator can change it.\",\"apps.isolated.keywords\":\"security isolation sandbox iframe worker\",\"apps.isolated.failed\":\"Not changed: {error}\",\"apps.system.label\":\"System apps\",\"apps.system.description\":\"File Manager, Editor, Control Panel and AppStore are part of lilOS and always run inside lilOS.\",\"apps.installed.title\":\"Installed apps\",\"apps.installed.keywords\":\"security isolation\",\"apps.installed.shared\":\"Like the other apps\",\"apps.installed.own\":\"Chosen for this app\",\"apps.installed.properties\":\"Properties…\",\"apps.installed.none\":\"No apps installed besides the system ones\",\"apps.mode.isolated\":\"Isolated\",\"apps.mode.open\":\"Not isolated\",\"apps.mode.system\":\"Inside lilOS\",\"apps.mode.remote\":\"Isolated, on its own site\",\"startup.label\":\"Startup\",\"startup.description\":\"Services and apps that start by themselves when lilOS starts and when you sign in.\",\"startup.options.label\":\"Options\",\"startup.services.label\":\"Services\",\"startup.apps.label\":\"Apps\",\"startup.auto.title\":\"Automatic startup\",\"startup.openApps.label\":\"Open apps when you sign in\",\"startup.openApps.description\":\"The apps chosen in Apps open, with their parameters. Only in the first lilOS tab of this browser: the others open empty.\",\"startup.openApps.keywords\":\"startup automatic sign-in login autorun\",\"startup.trouble.title\":\"If something goes wrong\",\"startup.safe.label\":\"Start without apps\",\"startup.safe.description\":\"Just once: open lilOS with ?avvio=no at the end of the address. Saved choices are kept.\",\"startup.safe.keywords\":\"safe start startup no apps avvio=no\",\"startup.safe.active\":\"Active now\",\"startup.apps.title\":\"Open when you sign in\",\"startup.apps.hint\":\"In the workspace lilOS opens in, in the order of the list. Turn off every entry point of an app and the app leaves the list.\",\"startup.apps.none\":\"No app opens by itself.\",\"startup.apps.oneEntry\":\"1 entry point\",\"startup.apps.entries\":{\"one\":\"{on} of {n} entry point\",\"other\":\"{on} of {n} entry points\"},\"startup.apps.remove\":\"Remove from startup\",\"startup.apps.allAdded\":\"All apps are already in startup\",\"startup.apps.add\":\"Add an app to startup\",\"startup.apps.addDescription\":\"Its main window opens; then choose other entry points and parameters\",\"startup.params.of\":\"{entry} of {app}\",\"startup.params.undescribed\":\"This entry point does not describe its parameters: they reach the app as they are, as args.\",\"startup.params.json\":\"Parameters (JSON)\",\"startup.params.jsonOf\":\"Parameters (JSON) of {name}\",\"startup.params.invalidJson\":\"Not valid JSON\",\"startup.params.notSaved\":\"Not saved: {error}\",\"services.unsupported\":\"This version of lilOS has no app services\",\"services.status.off\":\"Off\",\"services.status.starting\":\"Starting…\",\"services.status.error\":\"Stopped: {error}\",\"services.status.unknownError\":\"error\",\"services.status.restarting\":\"Restarting… (it had stopped: {error})\",\"services.status.onNow\":\"On for less than a minute\",\"services.status.onMinutes\":{\"one\":\"On for {n} minute\",\"other\":\"On for {n} minutes\"},\"services.status.onHours\":{\"one\":\"On for {n} hour\",\"other\":\"On for {n} hours\"},\"services.status.onSince\":\"On since {date}\",\"services.auto.label\":\"Start services automatically\",\"services.auto.noEngine\":\"The kernel has no services engine (services-isolate module)\",\"services.auto.description\":\"When you sign in, your services chosen in Services start. The ones an administrator chose for everyone start anyway.\",\"services.auto.keywords\":\"services startup automatic background kernel\",\"services.title\":\"Installed services\",\"services.noEngine\":\"The kernel has no services engine: it needs the services-isolate module (AppStore → Kernel).\",\"services.none\":\"No installed app has services.\",\"services.hint\":\"The parts of apps that work in the kernel, without a window, even with lilOS closed. “At system startup” applies to every user and is chosen by an administrator; “At sign-in” only to you.\",\"services.startup.none\":\"Never\",\"services.startup.login\":\"At sign-in\",\"services.startup.system\":\"At system startup\",\"services.startup.field\":\"Startup of {name}\",\"services.restart\":\"Restart\",\"services.restartOf\":\"Restart {name}\",\"services.stop\":\"Stop\",\"services.start\":\"Start\",\"services.byAdmin\":\"chosen by an administrator\",\"services.log.label\":\"Log\",\"services.log.title\":\"Log of {name}\",\"services.log.empty\":\"No lines: the service has not started yet.\",\"storage.label\":\"Storage\",\"storage.description.kernel\":\"Your space, the limits of files and every user's space.\",\"storage.description.browser\":\"lilOS data saved in this browser.\",\"storage.space.title\":\"Space\",\"storage.used.label\":\"lilOS data\",\"storage.used.description\":\"Positions, view and settings\",\"storage.contents.label\":\"File contents\",\"storage.contents.description\":\"Text saved in files\",\"storage.reset.title\":\"Reset\",\"storage.defaults.label\":\"Default settings\",\"storage.defaults.description\":\"Resets settings, shortcuts, file type apps and menus to their initial values\",\"storage.initial.label\":\"Initial desk and files\",\"storage.initial.description\":\"Deletes all the folders and files created, the workspaces, the tags, the saved positions and view, then reloads lilOS\",\"storage.initial.keywords\":\"reset factory desktop desk workspace tag\",\"storage.initial.button\":\"Reset…\",\"storage.initial.confirm\":\"Delete and reload\",\"storage.mine.label\":\"My space\",\"storage.mine.title\":\"Your space\",\"storage.limits.label\":\"Limits\",\"storage.users.label\":\"Users\",\"storage.quota.label\":\"Space used\",\"storage.quota.description\":\"All your files, the trash included\",\"storage.quota.none\":\"All your files, the trash included: no limit set\",\"storage.quota.of\":\"{used} of {quota}\",\"storage.quota.noLimit\":\"{used}\",\"storage.maxFile.label\":\"Biggest file\",\"storage.maxFile.description\":\"The size up to which lilOS saves a file\",\"storage.unlimited\":\"No limit\",\"storage.limits.title\":\"File limits\",\"storage.pieces.title\":\"Pieces\",\"storage.limits.keywords\":\"limit size file quota space upload pieces megabyte gigabyte\",\"storage.limits.saved\":\"Saved in the kernel's configuration and valid at once, without restarting it.\",\"storage.setting.maxFileSize.label\":\"Maximum size of a file\",\"storage.setting.maxFileSize.description\":\"A bigger file is not saved in the home. 0 = no limit.\",\"storage.setting.maxReadWhole.label\":\"Reading at once\",\"storage.setting.maxReadWhole.description\":\"Past this size a file is read only as a stream: apps that open it whole in memory refuse it. 0 = no limit.\",\"storage.setting.maxText.label\":\"Text\",\"storage.setting.maxText.description\":\"The longest text read or saved as text (Editor, Sticky notes). 0 = no limit.\",\"storage.setting.uploadPiece.label\":\"Upload pieces\",\"storage.setting.uploadPiece.description\":\"A bigger file goes from the browser in several requests of this size, and an interrupted upload goes on from where it was. Lower it if a proxy in front of lilOS limits the requests. 0 = one request.\",\"storage.setting.inlineMax.label\":\"Small files in one row\",\"storage.setting.inlineMax.description\":\"Up to this size the content stays in the file's row and is read with one request to the database; past it, it goes in pieces. 0 = always in pieces (64 MB at most).\",\"storage.setting.dbChunk.label\":\"Pieces in the database\",\"storage.setting.dbChunk.description\":\"The size of each piece saved. It counts for the files written from now on: those already saved stay as they are. From 256 KB to 16 MB.\",\"storage.setting.cacheMax.label\":\"Copy in the browser\",\"storage.setting.cacheMax.description\":\"The browser keeps a copy of the files opened up to this size, to show them when the kernel does not answer. 0 = of all of them.\",\"storage.setting.quota.label\":\"Default quota\",\"storage.setting.quota.description\":\"The space of every user who has no quota of their own. 0 = no limit.\",\"storage.source.default\":\"Default\",\"storage.source.local\":\"Changed\",\"storage.source.user\":\"Own\",\"storage.source.locked\":\"Managed\",\"storage.reset\":\"Reset\",\"storage.size.unit\":\"Unit of {name}\",\"storage.size.invalid\":\"Write a number, 0 or more\",\"storage.mine.files\":\"Space of your files\",\"storage.size.noZero\":\"{name} cannot be 0\",\"storage.size.min\":\"{name}: at least {min}\",\"storage.size.max\":\"{name}: at most {max}\",\"storage.users.default.title\":\"Quota\",\"storage.users.title\":\"Users\",\"storage.users.admin\":\"administrator\",\"storage.users.quotaOf\":\"Quota of {name}\",\"storage.users.useDefault\":\"Use the default\",\"storage.users.custom\":\"Customize\",\"storage.users.unavailable\":\"Quotas not available\",\"storage.users.unavailableText\":\"The file system module of the kernel does not say the space used (fs-postgres 1.2.0 or newer does): update it from the AppStore.\",\"storage.error\":\"Settings of the kernel not read\",\"storage.retry\":\"Try again\",\"storage.loading\":\"Loading…\",\"computer.label\":\"Computer\",\"computer.description\":\"The program lilOS on this computer: start, window, devices and servers. These settings belong to the computer, not to your user.\",\"computer.loading\":\"Reading from the program…\",\"computer.error\":\"Not changed: {error}\",\"computer.program.label\":\"Program\",\"computer.program.title\":\"Program\",\"computer.program.version\":\"Version of the program\",\"computer.program.system\":\"Operating system\",\"computer.program.engine\":\"Page engine\",\"computer.program.kernel\":\"lilOS on this computer\",\"computer.program.kernelHint\":\"The kernel and the database the program runs here.\",\"computer.updates.title\":\"Updates of the program\",\"computer.updates.label\":\"Updates\",\"computer.updates.description\":\"Only the program: lilOS itself updates from the AppStore, as always.\",\"computer.updates.mac\":\"On macOS the program is not signed and cannot replace itself: a notification says when a new version is out.\",\"computer.updates.auto\":\"Automatic\",\"computer.updates.notify\":\"Notify me\",\"computer.updates.off\":\"Never\",\"computer.updates.check\":\"Last check\",\"computer.updates.checkButton\":\"Check now\",\"computer.updates.install\":\"Restart and update\",\"computer.updates.download\":\"Download\",\"computer.updates.never\":\"Not checked yet in this session.\",\"computer.updates.dev\":\"Development copy: no updates.\",\"computer.updates.current\":\"The program is up to date.\",\"computer.updates.available\":\"Version {version} is available.\",\"computer.updates.downloaded\":\"Version {version} is ready: it is installed when the program quits.\",\"computer.updates.failed\":\"Check failed: {error}\",\"computer.updates.checking\":\"Checking…\",\"computer.start.title\":\"Start and window\",\"computer.start.login\":\"Start with the computer\",\"computer.start.loginHint\":\"The kernel starts when you sign in to the computer; the window stays closed until you open it.\",\"computer.start.tray\":\"Closing the window keeps lilOS in the tray\",\"computer.start.trayHint\":\"Otherwise closing the window quits the program (and stops the kernel of this computer).\",\"computer.start.notifications\":\"System notifications\",\"computer.start.notificationsHint\":\"lilOS's notifications also appear in the computer's notification center when the window is not in front.\",\"computer.screen.label\":\"Screen\",\"computer.screen.title\":\"How lilOS is shown\",\"computer.screen.mode\":\"Mode\",\"computer.screen.window\":\"Window\",\"computer.screen.fullscreen\":\"Full screen\",\"computer.screen.kiosk\":\"Kiosk\",\"computer.screen.windowHint\":\"A window of the computer, with its frame.\",\"computer.screen.fullscreenHint\":\"lilOS covers the whole screen, the computer's taskbar or Dock too. F11 goes in and out.\",\"computer.screen.kioskHint\":\"lilOS stays full screen and cannot be closed: only an administrator of lilOS turns it off. With «Start with the computer» it is the only thing the computer shows.\",\"computer.screen.leave\":\"Leave the kiosk\",\"computer.screen.leaveHint\":\"Only an administrator of lilOS can do it.\",\"computer.screen.leaveButton\":\"Leave the kiosk\",\"computer.screen.leaveTitle\":\"Leave the kiosk\",\"computer.screen.leaveText\":\"An administrator of lilOS signs in to let lilOS out of the kiosk.\",\"computer.screen.adminName\":\"Administrator\",\"computer.screen.adminPassword\":\"Password\",\"computer.screen.notAdmin\":\"This user is not an administrator.\",\"computer.screen.monitor\":\"Monitor\",\"computer.screen.monitorHint\":\"Where lilOS goes in full screen and in kiosk.\",\"computer.screen.monitorSame\":\"The one the window is on\",\"computer.screen.primary\":\"main\",\"computer.screen.keys\":\"System keys to lilOS in full screen\",\"computer.screen.keysHint.win32\":\"The Windows key, Alt+Tab and Esc reach lilOS (Keyboard Lock). Ctrl+Alt+Del always stays with Windows.\",\"computer.screen.keysHint.darwin\":\"Esc and the other keys reach lilOS; in kiosk ⌘Tab and force quit are blocked by the system.\",\"computer.screen.keysHint.linux\":\"The keys reach lilOS (Keyboard Lock); in the session «lilOS» everything goes to lilOS.\",\"computer.screen.limitsTitle\":\"What the system allows\",\"computer.screen.limits.win32\":\"Windows always keeps Ctrl+Alt+Del. Putting lilOS in place of the Windows desktop (Shell Launcher) is only in Windows Enterprise and Education: on Home and Pro use kiosk with «Start with the computer».\",\"computer.screen.limits.darwin\":\"macOS hides the Dock and the menu bar and blocks ⌘Tab and force quit in kiosk. It does not let a program replace the Finder: for a dedicated Mac use an account of its own with lilOS in kiosk at start.\",\"computer.screen.limits.linux\":\"With the .deb or .rpm package, run once «sudo sh /opt/lilOS/resources/session/install-session.sh» (it needs cage): the session «lilOS» appears on the login screen and lilOS is the whole desktop.\",\"computer.hardware.label\":\"Hardware\",\"computer.hardware.title\":\"Use of devices\",\"computer.hardware.rule\":\"Apps use devices\",\"computer.hardware.ask\":\"Asking every time\",\"computer.hardware.declared\":\"Apps that declare it\",\"computer.hardware.all\":\"All apps\",\"computer.hardware.askHint\":\"Every port or device is picked by you in a lilOS window, once per device.\",\"computer.hardware.declaredHint\":\"The apps whose permissions (seen at installation) include a device use all of them without asking.\",\"computer.hardware.allHint\":\"Every app sees and uses every device without asking: only for dedicated computers (kiosks, laboratories).\",\"computer.hardware.adminOnly\":\"Only an administrator changes it.\",\"computer.hardware.devices\":\"What the computer has\",\"computer.hardware.none\":\"None\",\"computer.hardware.unnamed\":\"Without a name\",\"computer.hardware.cameras\":\"Cameras\",\"computer.hardware.microphones\":\"Microphones\",\"computer.hardware.serial\":\"Serial ports\",\"computer.hardware.usb\":\"USB devices\",\"computer.hardware.hid\":\"Input devices (HID)\",\"computer.hardware.gpu\":\"Graphics cards\",\"computer.hardware.active\":\"in use\",\"computer.hardware.webgpu\":\"WebGPU\",\"computer.hardware.printers\":\"Printers\",\"computer.hardware.default\":\"default\",\"computer.hardware.displays\":\"Monitors\",\"computer.hardware.drives\":\"Removable drives\",\"computer.hardware.driveSpace\":\"{free} free of {size}\",\"computer.hardware.eject\":\"Eject\",\"computer.hardware.noDrives\":\"No USB stick or memory card connected.\",\"computer.hardware.refresh\":\"Read again\",\"computer.folders.title\":\"Folders of the computer in Network\",\"computer.folders.readOnly\":\"read only\",\"computer.folders.none\":\"None yet: add the folders you want to use in lilOS.\",\"computer.folders.add\":\"Add a folder\",\"computer.folders.addHint\":\"Chosen with the computer's dialog: it appears in Network › This computer and is read and written where it is.\",\"computer.folders.addButton\":\"Choose…\",\"computer.folders.added\":\"«{name}» is in Network › This computer\",\"computer.hardware.portNumber\":\"Port {n}\",\"computer.credits.title\":\"Credits of the program\",\"computer.credits.site\":\"Site\",\"computer.servers.label\":\"Servers\",\"computer.servers.title\":\"The lilOS this program opens\",\"computer.servers.current\":\"this window\",\"computer.servers.trusted\":\"trusted\",\"computer.servers.untrusted\":\"not trusted: it cannot touch the computer\",\"computer.servers.status.running\":\"running\",\"computer.servers.status.starting\":\"starting\",\"computer.servers.status.stopped\":\"stopped\",\"computer.servers.status.failed\":\"stopped by an error\",\"computer.servers.open\":\"Open\",\"computer.servers.browser\":\"Open in the browser\",\"computer.servers.restart\":\"Restart the kernel\",\"computer.servers.remove\":\"Remove\",\"computer.servers.removeConfirm\":\"Remove it?\",\"computer.servers.addTitle\":\"Add a server\",\"computer.servers.address\":\"Address\",\"computer.servers.addressHint\":\"https:// (http:// only for this computer). Each server opens in its own window, with its own sign-in.\",\"computer.servers.trust\":\"Trusted server\",\"computer.servers.trustHint\":\"It may open files on this computer and change the program's settings. Only for servers you control.\",\"computer.servers.add\":\"Add\",\"about.label\":\"About\",\"about.description\":\"Version, environment and credits.\",\"about.version\":\"Version\",\"about.sdkVersion\":\"SDK version\",\"about.language\":\"Language\",\"about.browser\":\"Browser\",\"about.unknownBrowser\":\"Unknown\",\"credits.label\":\"Credits\",\"credits.libraries\":\"Libraries\",\"credits.indirect\":\"Libraries used by other libraries\",\"credits.fonts\":\"Fonts\",\"credits.tools\":\"Tools\",\"credits.usedBy\":\"used by {users}\",\"credits.via\":\"brought by {libraries}, in {users}\",\"credits.builds\":\"builds lilOS and its apps\",\"credits.optional\":\"optional\",\"credits.module\":\"{name} (kernel module)\",\"credits.fontUsedBy\":\"used by {users}\",\"credits.site\":\"Website\",\"credits.siteOf\":\"Website of {name}\",\"credits.keywords\":\"credits acknowledgements license libraries open source thanks\",\"userPage.label\":\"User page\",\"userPage.description\":\"What the page opened from your name shows\",\"userPage.title\":\"User page\",\"userPage.open.label\":\"Opened from your name\",\"userPage.open.description\":\"Click your name in the taskbar or at the bottom of the menu. Your name and photo are always there: choose here what else it shows.\",\"userPage.keywords\":\"user page profile account photo lock sign out restart {name}\",\"userPage.toggle\":\"{name} on the user page\",\"userPage.group.header\":\"Header\",\"userPage.group.actions\":\"Actions\",\"userPage.group.account\":\"Account\",\"userPage.group.session\":\"This session\",\"userPage.group.footer\":\"Footer\",\"userPage.item.details.name\":\"Username and role\",\"userPage.item.details.description\":\"Under your name: the name you sign in with and whether you are an administrator\",\"userPage.item.lock.name\":\"Lock\",\"userPage.item.lock.description\":\"Covers the screen until you enter your password again; apps stay open\",\"userPage.item.logout.name\":\"Sign out\",\"userPage.item.logout.description\":\"Saves, closes the apps and goes back to the sign-in screen\",\"userPage.item.restart.name\":\"Restart the system\",\"userPage.item.restart.description\":\"Restarts the lilOS kernel for every user; administrators only\",\"userPage.item.photo.name\":\"Profile photo\",\"userPage.item.photo.description\":\"Choose, change or remove your photo\",\"userPage.item.theme.name\":\"Theme\",\"userPage.item.theme.description\":\"Light or dark\",\"userPage.item.language.name\":\"Language\",\"userPage.item.language.description\":\"The language of apps\",\"userPage.item.settings.name\":\"All settings\",\"userPage.item.settings.description\":\"Opens Control Panel\",\"userPage.item.workspace.name\":\"Workspace\",\"userPage.item.workspace.description\":\"The one you are in and how many there are\",\"userPage.item.windows.name\":\"Open windows\",\"userPage.item.windows.description\":\"How many windows are open and how many apps work in the background\",\"userPage.item.startup.name\":\"At startup\",\"userPage.item.startup.description\":\"How many apps open when you come in\",\"userPage.item.storage.name\":\"Space used\",\"userPage.item.storage.description\":\"How much your files take up\",\"userPage.item.about.name\":\"lilOS version\",\"userPage.item.about.description\":\"The lilOS version and the address you are connected to\",\"notifications.label\":\"Notifications\",\"notifications.description\":\"How notifications appear when they arrive, and how many are kept\",\"notifications.arrive.title\":\"When they arrive\",\"notifications.shown.label\":\"Shown together\",\"notifications.shown.description\":\"How many appear one above the other over the notification area of the taskbar. Past this number the older ones are not shown there, but stay in the list.\",\"notifications.shown.keywords\":\"notifications bar popup tray count\",\"notifications.shown.field\":\"Notifications shown together\",\"notifications.seconds.label\":\"How long they stay\",\"notifications.seconds.description\":\"Seconds after the last one arrived. With the pointer over them they stay until you move it away.\",\"notifications.seconds.keywords\":\"notifications time seconds duration\",\"notifications.seconds.field\":\"How long notifications stay\",\"notifications.seconds.value\":{\"one\":\"{n} second\",\"other\":\"{n} seconds\"},\"notifications.list.title\":\"List\",\"notifications.keep.label\":\"Notifications kept\",\"notifications.keep.description\":\"When one more arrives the oldest is deleted. The bell in the notification area lists them all.\",\"notifications.keep.page\":\"Without the kernel's notifications module they are kept only until lilOS reloads.\",\"notifications.keep.keywords\":\"notifications history list keep limit\",\"notifications.keep.field\":\"Notifications kept\",\"notifications.test.label\":\"Try\",\"notifications.test.description\":\"Sends you a notification, to see how it looks.\",\"notifications.test.button\":\"Send a test notification\",\"notifications.test.text\":\"Test notification: notifications work.\",\"notifications.error\":\"Not saved: {message}\",\"@name\":\"Control Panel\",\"@description\":\"Appearance, language, desk, user page, workspaces, notifications, tags, shortcuts, file types, startup services and apps, storage.\",\"@entrypoints.main.params.tab.label\":\"Section\",\"@entrypoints.main.params.tab.options.appearance.label\":\"Appearance\",\"@entrypoints.main.params.tab.options.language.label\":\"Language\",\"@entrypoints.main.params.tab.options.desk.label\":\"Desk\",\"@entrypoints.main.params.tab.options.userpage.label\":\"User page\",\"@entrypoints.main.params.tab.options.workspaces.label\":\"Workspaces\",\"@entrypoints.main.params.tab.options.notifications.label\":\"Notifications\",\"@entrypoints.main.params.tab.options.tags.label\":\"Tags\",\"@entrypoints.main.params.tab.options.usability.label\":\"Usability\",\"@entrypoints.main.params.tab.options.apps.label\":\"Apps\",\"@entrypoints.main.params.tab.options.startup.label\":\"Startup\",\"@entrypoints.main.params.tab.options.onedrive.label\":\"OneDrive\",\"@entrypoints.main.params.tab.options.microsoft.label\":\"Microsoft app\",\"@entrypoints.main.params.tab.options.google.label\":\"Google project\",\"@entrypoints.main.params.tab.options.storage.label\":\"Storage\",\"@entrypoints.main.params.tab.options.about.label\":\"About\",\"pipes.label\":\"Pipes\",\"pipes.title\":\"Pipes on events\",\"pipes.keywords\":\"pipes events handlers order chain\",\"pipes.intro.label\":\"What apps do when something happens\",\"pipes.intro.description\":\"Apps can step in when a file is opened, read or saved, or look at what happens in the system; an app can also add events of its own. Below, each event with its handlers in the order they run ({count} events in all). The after stage runs in the reverse order of before.\",\"pipes.unsupported\":\"This version of lilOS has no pipes\",\"pipes.lilos\":\"lilOS\",\"pipes.up\":\"Up\",\"pipes.down\":\"Down\",\"pipes.stage.before\":\"Before\",\"pipes.stage.after\":\"After\",\"pipes.band.first\":\"among the first\",\"pipes.band.middle\":\"in the middle\",\"pipes.band.last\":\"among the last\",\"pipes.where.all\":\"every item\",\"pipes.where.system\":\"chosen by lilOS\",\"pipes.where.own\":\"the files it marked\",\"pipes.where.ext\":\"files {list}\",\"pipes.where.type.file\":\"files\",\"pipes.where.type.folder\":\"folders\",\"pipes.where.type.app\":\"app shortcuts\",\"pipes.where.app\":\"apps {list}\",\"pipes.reset.label\":\"Order of the handlers\",\"pipes.reset.description\":\"You changed it: go back to the order of installation\",\"pipes.idle.title\":\"Events without handlers\",\"pipes.idle.description\":\"{count} events: no app handles them now\",\"pipes.idle.none\":\"Every event has a handler\",\"pipes.owned\":\"{label} (of {app})\",\"pipes.event.file.open\":\"Opening a file\",\"pipes.event.file.read\":\"Reading a file\",\"pipes.event.file.write\":\"Saving a file\",\"pipes.event.app.launch\":\"Starting an app\",\"pipes.event.file.create\":\"Creating an item\",\"pipes.event.file.rename\":\"Renaming\",\"pipes.event.file.move\":\"Moving\",\"pipes.event.file.copy\":\"Copying a file\",\"pipes.event.file.remove\":\"Deleting for good\",\"pipes.event.trash.put\":\"Moving to the Trash\",\"pipes.event.trash.restore\":\"Restoring from the Trash\",\"pipes.event.trash.purge\":\"Emptying the Trash\",\"pipes.event.tags.assign\":\"Tags of an item\",\"pipes.event.window.open\":\"Opening a window\",\"pipes.event.device.attach\":\"Device connected\",\"pipes.event.device.detach\":\"Device disconnected\",\"pipes.event.window.close\":\"Closing a window\",\"pipes.event.workspace.switch\":\"Changing workspace\",\"pipes.event.settings.change\":\"Changing a setting\",\"pipes.event.system.ready\":\"System ready\",\"pipes.event.session.login\":\"User signed in\",\"pipes.event.session.logout\":\"Signing out\",\"pipes.event.apps.install\":\"Installing an app\",\"pipes.event.apps.update\":\"Updating an app\",\"pipes.event.apps.remove\":\"Removing an app\",\"pipes.event.permissions.change\":\"Permissions of an app\",\"pipes.event.settings.system\":\"System settings\",\"pipes.event.pipes.change\":\"Subscriptions to pipes\",\"network.label\":\"Network\",\"network.description\":\"Where the kernel may connect for users: Rete folder, Terminal, NetTest\",\"network.loading\":\"Reading the rules…\",\"network.error\":\"The rules could not be read\",\"network.saved\":\"Network rules saved\",\"network.single\":\"One user, no sign-in\",\"network.singleText\":\"Now the kernel connects anywhere, as you could yourself. These rules apply when users sign in to lilOS.\",\"network.exception\":\"Exceptions for the users\",\"network.local.label\":\"This computer (localhost)\",\"network.local.description\":\"127.0.0.1 and ::1: test servers, databases and services on the computer of the kernel. Users could reach the kernel’s own services too: open it only if you trust them.\",\"network.private.label\":\"The whole local network\",\"network.private.description\":\"10.x, 172.16–31.x, 192.168.x, 100.64.x and the private IPv6 addresses: printers, NAS, routers, the office’s servers.\",\"network.ranges.label\":\"Only these addresses\",\"network.ranges.description\":\"Addresses or ranges allowed even when the rest stays closed, separated by commas: 192.168.1.50/32 (one NAS), 10.0.5.0/24.\",\"network.always\":\"Always closed, whatever the exceptions: link-local addresses (cloud metadata, 169.254.x), multicast and reserved addresses. A name is checked again at every connection, on the address it really points to.\"}}"),
+	it: /* @__PURE__ */ JSON.parse("{\"strings\":{\"window.title\":\"Pannello di controllo\",\"cloud.onedrive.label\":\"OneDrive\",\"cloud.onedrive.description\":\"Le cartelle condivise, Carica su OneDrive e apri, Office online.\",\"cloud.onedrive.keywords\":\"onedrive microsoft office online azure word excel powerpoint condivisi condivise\",\"cloud.onedrive.settings\":\"OneDrive (per tutti su questo lilOS)\",\"cloud.gdrive.label\":\"Google Drive\",\"cloud.gdrive.description\":\"Condivisi con me, il formato dei documenti Google.\",\"cloud.gdrive.keywords\":\"google drive documenti fogli presentazioni cloud condivisi esporta\",\"cloud.gdrive.settings\":\"Google Drive (per tutti su questo lilOS)\",\"cloud.gphotos.label\":\"Google Foto\",\"cloud.gphotos.description\":\"Importa da Google Foto e gli album creati da lilOS.\",\"cloud.gphotos.keywords\":\"google foto picker album importa cloud\",\"cloud.gphotos.settings\":\"Google Foto (per tutti su questo lilOS)\",\"cloud.azblob.label\":\"Azure Blob Storage\",\"cloud.azblob.description\":\"L’accesso con Microsoft Entra (chiave dell’account e SAS non chiedono niente).\",\"cloud.azblob.keywords\":\"azure blob storage entra microsoft contenitore sas chiave data lake\",\"cloud.azblob.settings\":\"Azure Blob Storage (per tutti su questo lilOS)\",\"cloud.localfolders.label\":\"Cartelle del computer\",\"cloud.localfolders.description\":\"Quali cartelle del computer del kernel possono collegare in Rete gli utenti che non sono amministratori.\",\"cloud.localfolders.keywords\":\"cartelle computer locale disco usb rete permessi\",\"cloud.localfolders.settings\":\"Cartelle di questo computer (per tutti su questo lilOS)\",\"cloud.localfolders.steps.title\":\"Come funziona\",\"cloud.localfolders.steps.label\":\"Chi collega cosa\",\"cloud.localfolders.steps.1\":\"Gli amministratori collegano qualsiasi cartella del computer su cui gira il kernel (Rete → Connetti a un server → Questo computer).\",\"cloud.localfolders.steps.2\":\"Gli altri utenti collegano solo le cartelle elencate qui, o cartelle dentro di esse, con i permessi dell'utente del computer che fa girare il kernel.\",\"cloud.nfs.label\":\"NFS\",\"cloud.nfs.description\":\"UID e GID di ogni utente sui server NFS.\",\"cloud.nfs.keywords\":\"nfs uid gid nas linux esportazione identità\",\"cloud.nfs.settings\":\"Identità sui server NFS (per tutti su questo lilOS)\",\"cloud.nfs.you\":\"Il tuo nome utente\",\"cloud.nfs.you.description\":\"Il nome da scrivere nella tua riga\",\"cloud.nfs.steps.title\":\"Sul server NFS\",\"cloud.nfs.steps.label\":\"Cosa controllare\",\"cloud.nfs.steps.1\":\"La cartella è esportata all’indirizzo del computer su cui gira il kernel di lilOS, con NFSv3 su TCP.\",\"cloud.nfs.steps.2\":\"Se il kernel di lilOS non può usare una porta sotto la 1024 (Linux senza privilegi), permetti le altre porte: «insecure» in /etc/exports, «Consenti connessioni da porte non privilegiate» su Synology.\",\"cloud.nfs.steps.3\":\"UID e GID qui sono quelli degli utenti sul server: chi li ha legge e scrive i loro file.\",\"cloud.nfs.steps.4\":\"Con più utenti, la rete locale deve essere aperta al kernel (net.allowPrivate o net.allow in config.json).\",\"cloud.status\":\"Stato\",\"cloud.adminOnly\":\"Solo un amministratore cambia queste impostazioni\",\"cloud.ready\":\"Pronto\",\"cloud.notReady\":\"Non ancora impostato\",\"cloud.error\":\"Impostazioni non lette\",\"cloud.saved\":\"Salvato\",\"cloud.notSaved\":\"Non salvato\",\"cloud.addresses.title\":\"Indirizzi da registrare\",\"cloud.redirect.label\":\"Finestra di accesso\",\"cloud.redirect.google\":\"L’indirizzo di questo lilOS, a cui Google rimanda la finestra\",\"cloud.redirect.unusable\":\"lilOS è aperto su http fuori da questo computer: qui la finestra di accesso non funziona, si accede incollando l’indirizzo (o apri lilOS su https)\",\"cloud.byHand.label\":\"Accesso incollando l’indirizzo\",\"cloud.byHand.google\":\"Dove Google finisce quando lilOS non è su https: una pagina che non si apre, di cui l’utente incolla l’indirizzo\",\"cloud.copy\":\"Copia\",\"cloud.copied\":\"Copiato\",\"cloud.azblob.steps.title\":\"Come accedere con Microsoft Entra\",\"cloud.azblob.steps.label\":\"Passi\",\"cloud.azblob.steps.1\":\"Solo per l’accesso con un account Microsoft: con la chiave dell’account o un token SAS non serve niente.\",\"cloud.azblob.steps.2\":\"L’app Microsoft (la sua scheda qui) deve avere l’autorizzazione API Azure Storage → user_impersonation (delegata).\",\"cloud.azblob.steps.3\":\"Sull’account di archiviazione dai agli utenti il ruolo «Collaboratore ai dati dei BLOB di archiviazione» (Controllo di accesso).\",\"cloud.microsoft.label\":\"App Microsoft\",\"cloud.microsoft.description\":\"L’app su Azure con cui accedono OneDrive e Azure Blob Storage.\",\"cloud.microsoft.keywords\":\"microsoft azure entra registrazione app client id tenant onedrive blob\",\"cloud.microsoft.settings\":\"App su Azure (per tutti su questo lilOS)\",\"cloud.microsoft.steps.title\":\"Come registrare l’app su Azure\",\"cloud.microsoft.steps.label\":\"Passi\",\"cloud.microsoft.steps.1\":\"portal.azure.com → Registrazioni app → Nuova registrazione (basta un account Azure gratuito).\",\"cloud.microsoft.steps.2\":\"Tipi di account supportati: gli stessi di «Account ammessi» qui.\",\"cloud.microsoft.steps.3\":\"Autenticazione → Applicazioni per dispositivi mobili e desktop: i due indirizzi qui sopra; Consenti flussi client pubblici: Sì.\",\"cloud.microsoft.steps.4\":\"Autorizzazioni API, delegate: per OneDrive Microsoft Graph Files.ReadWrite, User.Read, offline_access (Files.ReadWrite.All per le cartelle condivise); per Azure Blob Storage Azure Storage → user_impersonation.\",\"cloud.microsoft.steps.5\":\"Copia l’ID dell’applicazione (client) nel campo qui sopra.\",\"cloud.google.label\":\"Progetto Google\",\"cloud.google.description\":\"Il progetto Google Cloud con cui accedono Google Drive e Google Foto.\",\"cloud.google.keywords\":\"google cloud progetto oauth client id segreto drive foto\",\"cloud.google.settings\":\"Progetto Google Cloud (per tutti su questo lilOS)\",\"cloud.google.steps.title\":\"Come creare il progetto su Google Cloud\",\"cloud.google.steps.label\":\"Passi\",\"cloud.google.steps.1\":\"console.cloud.google.com → Nuovo progetto (per esempio «lilOS»).\",\"cloud.google.steps.2\":\"API e servizi → Libreria → abilita Google Drive API; per Google Foto anche Google Photos Picker API e Photos Library API.\",\"cloud.google.steps.3\":\"Schermata di consenso OAuth: Interno con Google Workspace; altrimenti Esterno, poi Pubblica l’app (in «Test» l’accesso scade ogni 7 giorni). Ambiti: …/auth/drive; per Google Foto photospicker.mediaitems.readonly, photoslibrary.appendonly, photoslibrary.readonly.appcreateddata, photoslibrary.edit.appcreateddata.\",\"cloud.google.steps.4\":\"Credenziali → Crea ID client OAuth → Applicazione web, con i due indirizzi qui sopra come URI di reindirizzamento autorizzati (oppure App desktop: allora sempre incollando l’indirizzo).\",\"cloud.google.steps.5\":\"Copia l’ID client e il segreto client qui sopra.\",\"cloud.google.steps.6\":\"Al primo accesso Google dice che l’app non è verificata: è il tuo progetto, Continua.\",\"cloud.google.steps.7\":\"Dal 2025 Google fa vedere alle app solo le foto che l’utente sceglie e gli album creati dall’app.\",\"cloud.uses.microsoft\":\"App Microsoft\",\"cloud.uses.google\":\"Progetto Google\",\"cloud.uses.description\":\"L’accesso usa l’app registrata presso il fornitore: si imposta una volta nella sua scheda, per tutti i servizi di quel fornitore.\",\"cloud.uses.open\":\"Apri\",\"cloud.signAgain\":\"Le connessioni chiedono di rifare l’accesso, per accettare i nuovi permessi.\",\"cloud.redirect.microsoft\":\"L’indirizzo di questo lilOS, a cui Microsoft rimanda la finestra\",\"cloud.byHand.microsoft\":\"Dove Microsoft finisce quando lilOS non è su https: una pagina che non si apre, di cui l’utente incolla l’indirizzo\",\"onedrive.upload.title\":\"Carica su OneDrive e apri\",\"onedrive.upload.mount.label\":\"Connessione\",\"onedrive.upload.mount.description\":\"Dove vanno i documenti Office della tua Home prima di aprirsi in Office online.\",\"onedrive.upload.mount.none\":\"Prima collega OneDrive: File Manager → Rete → +.\",\"onedrive.upload.mount.ask\":\"Chiedi ogni volta\",\"onedrive.upload.folder.label\":\"Cartella\",\"onedrive.upload.folder.description\":\"Su OneDrive (creata se manca). L’originale resta nella Home: quello che cambi in Office cambia nella copia.\",\"onedrive.upload.exists.label\":\"Un file con lo stesso nome\",\"onedrive.upload.exists.description\":\"Quando la cartella su OneDrive ne ha già uno.\",\"onedrive.upload.exists.ask\":\"Chiedi\",\"onedrive.upload.exists.keep\":\"Tieni entrambi\",\"onedrive.upload.exists.replace\":\"Sostituiscilo\",\"onedrive.office.title\":\"Documenti Office\",\"onedrive.office.doubleClick.label\":\"Il doppio clic apre Office online\",\"onedrive.office.doubleClick.description\":\"Documenti Word, Excel e PowerPoint di OneDrive, quando per il loro tipo non è scelta un’app di lilOS (Usabilità → Tipi di file).\",\"group.system\":\"Sistema\",\"group.data\":\"Dati\",\"common.name\":\"Nome\",\"common.color\":\"Colore\",\"common.items\":\"Elementi\",\"common.create\":\"Crea\",\"common.add\":\"Aggiungi\",\"common.addMore\":\"Aggiungi…\",\"common.remove\":\"Togli\",\"common.delete\":\"Elimina…\",\"common.deleteNow\":\"Elimina\",\"common.reset\":\"Ripristina\",\"common.confirm\":\"Conferma\",\"common.loading\":\"Lettura…\",\"common.unavailable\":\"Non disponibile\",\"common.yes\":\"Sì\",\"common.no\":\"No\",\"appearance.label\":\"Aspetto\",\"appearance.description\":\"Colori e movimento dell’interfaccia.\",\"appearance.colors.label\":\"Colori\",\"appearance.theme.label\":\"Tema\",\"appearance.theme.description\":\"Chiaro o scuro: scrivania, barra, menu e finestre\",\"appearance.theme.keywords\":\"tema chiaro scuro dark light notte\",\"appearance.theme.light\":\"Chiaro\",\"appearance.theme.dark\":\"Scuro\",\"appearance.accent.title\":\"Colore principale\",\"appearance.accent.description\":\"Selezione, pulsanti, tab attivi e logo\",\"appearance.accent.keywords\":\"accento tema\",\"appearance.motion.label\":\"Movimento\",\"appearance.animations.label\":\"Animazioni\",\"appearance.animations.description\":\"Spostamenti della vista, menu e transizioni. Se il sistema operativo chiede movimento ridotto, restano ridotte.\",\"appearance.animations.keywords\":\"movimento transizioni\",\"language.label\":\"Lingua\",\"language.description\":\"La lingua di lilOS e delle app: i testi, le date e i numeri.\",\"language.title\":\"Lingua del sistema\",\"language.row.description\":\"Le app che non hanno questa lingua usano l’inglese. I testi di lilOS sono ancora in italiano.\",\"language.row.packs\":\"I testi di lilOS vengono dal pacchetto di questa lingua (l’inglese non ne ha bisogno). Ogni app usa la propria traduzione se ce l’ha, altrimenti l’inglese.\",\"language.more.label\":\"Altre lingue\",\"language.more.description\":\"I pacchetti di lingua del repository ufficiale, nell’AppStore: ogni utente può installarne uno, e vale per tutti.\",\"language.more.button\":\"Apri AppStore\",\"language.more.keywords\":\"altre lingue pacchetto lingua installa appstore traduzione\",\"language.keywords\":\"lingua traduzione inglese italiano date numeri language locale\",\"language.auto\":\"Automatica: {name}\",\"desk.label\":\"Scrivania\",\"desk.description\":\"Comportamento della scrivania infinita.\",\"desk.fixed.title\":\"Elementi fissi\",\"desk.fixed.label\":\"Sulla scrivania\",\"desk.fixed.descriptionSwitchable\":\"Quelli attivi ci sono sulla scrivania di ogni workspace. Si aprono e si spostano come gli altri, ma non si rinominano e non si eliminano: si tolgono da qui.\",\"desk.fixed.description\":\"Ci sono sulla scrivania di ogni workspace. Si aprono e si spostano come gli altri, ma non si rinominano e non si eliminano.\",\"desk.fixed.keywords\":\"elementi fissi scrivania mostra nascondi elimina {name}\",\"desk.fixed.toggle\":\"{name} sulla scrivania\",\"desk.fixed.toggleIn\":\"{name} sulla scrivania di {workspace}\",\"desk.fixed.always\":\"Fisso\",\"desk.fixed.item.home.name\":\"Home\",\"desk.fixed.item.home.description\":\"La cartella principale, con tutte le altre\",\"desk.fixed.item.documents.name\":\"Documenti\",\"desk.fixed.item.documents.description\":\"La cartella Documenti, condivisa da tutti i workspace\",\"desk.fixed.item.images.name\":\"Immagini\",\"desk.fixed.item.images.description\":\"La cartella Immagini, condivisa da tutti i workspace\",\"desk.fixed.item.files.name\":\"File Manager\",\"desk.fixed.item.files.description\":\"Apre il File Manager\",\"desk.fixed.item.downloads.name\":\"Download\",\"desk.fixed.item.downloads.description\":\"La cartella Download, condivisa da tutti i workspace\",\"desk.fixed.item.trash.name\":\"Cestino\",\"desk.fixed.item.trash.description\":\"Apre il cestino; ci si possono trascinare file e cartelle\",\"desk.fixed.descriptionWorkspace\":\"Quelli attivi ci sono sulla scrivania di questo workspace. Si aprono e si spostano come gli altri, ma non si rinominano e non si eliminano: si tolgono da qui.\",\"desk.fixed.descriptionAll\":\"Accendi o spegni un elemento in tutti i workspace insieme; i workspace nuovi lo hanno uguale. Ogni workspace poi lo può cambiare nel suo tab.\",\"desk.fixed.some\":\"Acceso in {on} workspace su {n}\",\"desk.fixed.toggleAll\":\"{name} su tutte le scrivanie\",\"desk.fixed.moved.label\":\"Ogni workspace ha i suoi\",\"desk.fixed.moved.description\":\"Si scelgono in Workspace: nel tab di ogni workspace, o in Tutti per tutte le scrivanie.\",\"desk.fixed.moved.keywords\":\"elementi fissi scrivania home documenti cestino workspace\",\"desk.fixed.moved.open\":\"Apri\",\"desk.placement.title\":\"Posizionamento\",\"desk.snap.label\":\"Allinea alla griglia\",\"desk.snap.description\":\"Gli elementi trascinati si allineano a una griglia invisibile\",\"desk.snap.keywords\":\"icone snap\",\"desk.previews.title\":\"Icone\",\"desk.previews.label\":\"Mostra l’anteprima dei file\",\"desk.previews.description\":\"Al posto dell’icona, i file mostrano una piccola immagine di quello che contengono, fatta dall’app che li apre (Photo, Editor…)\",\"desk.previews.keywords\":\"anteprime miniature icone immagini file\",\"desk.background.label\":\"Sfondo\",\"desk.background.color.title\":\"Colore\",\"desk.background.color.description\":\"Dietro gli elementi, e intorno alle immagini trasparenti\",\"desk.background.color.keywords\":\"sfondo colore scrivania desktop\",\"desk.background.custom.label\":\"Altro colore\",\"desk.background.custom.description\":\"Un colore a scelta\",\"desk.background.theme.label\":\"Colore del tema\",\"desk.background.theme.description\":\"Torna al colore del tema chiaro o scuro\",\"desk.background.theme.button\":\"Usa il colore del tema\",\"desk.background.image.title\":\"Immagine\",\"desk.background.image.label\":\"Immagine di sfondo\",\"desk.background.image.keywords\":\"sfondo immagine foto scrivania desktop wallpaper\",\"desk.background.image.current\":\"«{name}»: alta quanto la scrivania, con le sue proporzioni (se è più larga si taglia ai lati); non si sposta né si ingrandisce con lei\",\"desk.background.image.none\":\"Nessuna: solo il colore. Nel menu di un'immagine sulla scrivania: Usa come sfondo desktop\",\"desk.background.image.choose\":\"Scegli…\",\"desk.background.image.pick\":\"Scegli l'immagine di sfondo\",\"desk.background.image.remove.label\":\"Togli l'immagine\",\"desk.background.image.remove.description\":\"Il file resta dov'è\",\"desk.background.image.remove.button\":\"Togli\",\"desk.overview.label\":\"Panoramica\",\"desk.overview.title\":\"Pannello in basso a destra\",\"desk.minimap.label\":\"Mostra la minimappa\",\"desk.minimap.keywords\":\"mappa miniatura\",\"workspaces.label\":\"Workspace\",\"workspaces.description\":\"Scrivanie separate, ognuna con i suoi elementi, finestre e app. I file fuori dalla scrivania sono di tutti.\",\"workspaces.current.label\":\"Questo workspace\",\"workspaces.current.title\":\"Workspace\",\"workspaces.all.label\":\"Tutti\",\"workspaces.name.keywords\":\"rinomina workspace\",\"workspaces.name.field\":\"Nome del workspace\",\"workspaces.description.label\":\"Descrizione\",\"workspaces.description.description\":\"Una riga su a cosa serve il workspace, sotto il suo nome in fondo al menu di avvio\",\"workspaces.description.keywords\":\"descrizione workspace note menu di avvio\",\"workspaces.description.field\":\"Descrizione del workspace\",\"workspaces.description.placeholder\":\"A cosa ti serve\",\"workspaces.color.description\":\"Il pallino nella barra in basso e accanto ai suoi file nel File Manager\",\"workspaces.color.keywords\":\"colore workspace\",\"workspaces.owned.label\":\"File, cartelle e collegamenti\",\"workspaces.owned.description\":\"Creati in questo workspace, sulla scrivania e nelle cartelle condivise\",\"workspaces.apps.title\":\"App\",\"workspaces.apps.system\":\"App di sistema: c’è in ogni workspace\",\"workspaces.apps.installed\":\"Installata in lilOS: qui la puoi nascondere\",\"workspaces.apps.keywords\":\"app nascondi mostra {name}\",\"workspaces.apps.alwaysVisible\":\"Sempre visibile\",\"workspaces.apps.toggle\":\"{name} visibile in questo workspace\",\"workspaces.apps.toggleIn\":\"{name} visibile in {workspace}\",\"workspaces.list.current\":\"{name} (attuale)\",\"workspaces.list.owned\":{\"one\":\"{n} elemento creato\",\"other\":\"{n} elementi creati\"},\"workspaces.list.apps\":{\"one\":\"{n} app\",\"other\":\"{n} app\"},\"workspaces.list.keywords\":\"workspace passa elimina\",\"workspaces.list.switch\":\"Passa a questo\",\"workspaces.switch.label\":\"Vai a questo workspace\",\"workspaces.new.label\":\"Nuovo workspace\",\"workspaces.new.description\":\"Con la scrivania vuota e tutte le app visibili\",\"workspaces.taskbar.title\":\"Barra delle applicazioni\",\"workspaces.taskbar.label\":\"Workspace nella barra\",\"workspaces.taskbar.description\":\"Solo quello attuale, oppure un pulsante per ogni workspace in fila, per cambiare con un clic\",\"workspaces.taskbar.keywords\":\"barra applicazioni in basso workspace elenco tutti attuale\",\"workspaces.taskbar.current\":\"Solo l'attuale\",\"workspaces.taskbar.all\":\"Tutti\",\"workspaces.deleting.title\":\"Eliminare un workspace\",\"workspaces.deleting.files.label\":\"I file restano\",\"workspaces.deleting.files.description\":\"La sua scrivania diventa la cartella Documenti/Scrivania di <nome> (se non è vuota); i file creati altrove restano dove sono, segnati come suoi.\",\"workspaces.deleting.windows.label\":\"Le finestre restano\",\"workspaces.deleting.windows.description\":\"Le sue finestre aperte passano nel workspace attuale, con le modifiche non salvate. Workarea, vista e app nascoste si perdono.\",\"tags.label\":\"Tag\",\"tags.description\":\"Etichette colorate per ritrovare file e cartelle ovunque siano. Un tag invisibile nasconde i suoi elementi.\",\"tags.new.title\":\"Nuovo tag\",\"tags.new.pending\":{\"one\":\"Il nuovo tag andrà su {n} elemento selezionato\",\"other\":\"Il nuovo tag andrà su {n} elementi selezionati\"},\"tags.new.description\":\"Poi si assegna dal menu del tasto destro → Tag, sulla scrivania e nel File Manager\",\"tags.new.keywords\":\"nuovo tag crea etichetta\",\"tags.new.placeholder\":\"Per esempio: Urgente\",\"tags.new.field\":\"Nome del nuovo tag\",\"tags.name.keywords\":\"rinomina tag\",\"tags.name.field\":\"Nome del tag {name}\",\"tags.color.keywords\":\"colore tag\",\"tags.visible.label\":\"Visibile\",\"tags.visible.on\":\"Gli elementi con questo tag si vedono ovunque\",\"tags.visible.off\":\"Gli elementi con questo tag sono nascosti ovunque: si ritrovano nel File Manager → Tag\",\"tags.visible.keywords\":\"nascondi mostra invisibile tag\",\"tags.visible.toggle\":\"Tag {name} visibile\",\"tags.items.description\":{\"one\":\"{n} elemento in questo workspace e nelle cartelle condivise\",\"other\":\"{n} elementi in questo workspace e nelle cartelle condivise\"},\"tags.items.show\":\"Mostra nel File Manager\",\"tags.items.delete\":\"Elimina il tag\",\"usability.label\":\"Usabilità\",\"usability.description\":\"Tastiera, mouse, app che aprono i file, menu contestuali e cestino.\",\"shortcuts.label\":\"Scorciatoie\",\"shortcuts.title\":\"Scorciatoie da tastiera\",\"shortcuts.all.label\":\"Tutte le scorciatoie\",\"shortcuts.all.description\":\"Le modifiche valgono subito. Per registrare una combinazione premi +, poi i tasti; Esc annulla.\",\"shortcuts.all.reset\":\"Ripristina tutte\",\"shortcuts.keywords\":\"scorciatoia tasti {keys}\",\"shortcuts.mouse.title\":\"Mouse\",\"shortcuts.lasso.label\":\"Selezione a mano libera\",\"shortcuts.lasso.description\":\"Disegna un percorso chiuso: si selezionano gli elementi che contiene\",\"shortcuts.lasso.keywords\":\"lazo lasso percorso selezione alt\",\"shortcuts.rectangle.label\":\"Selezione a rettangolo\",\"shortcuts.rectangle.control\":\"Trascina sullo sfondo\",\"shortcuts.addToSelection.label\":\"Aggiungere alla selezione\",\"shortcuts.addToSelection.control\":\"Ctrl o Shift + clic o trascinamento\",\"shortcuts.pan.label\":\"Spostarsi sulla scrivania\",\"shortcuts.pan.control\":\"Spazio + trascina, o tasto centrale\",\"shortcuts.fixed.title\":\"Tasti fissi\",\"shortcuts.navigate.label\":\"Muoversi nei menu, nelle liste e nei tab\",\"shortcuts.navigate.control\":\"Frecce, Invio, Esc\",\"shortcuts.rename.label\":\"Confermare o annullare la rinomina\",\"shortcuts.rename.control\":\"Invio, Esc\",\"fileTypes.label\":\"Tipi di file\",\"fileTypes.title\":\"App per tipo di file\",\"fileTypes.all.label\":\"Tutti i tipi di file\",\"fileTypes.all.description\":\"Aprendo un file, lilOS usa l’app scelta qui. Con «Chiedi ogni volta» compare la finestra Apri con.\",\"fileTypes.all.reset\":\"Ripristina tutti\",\"fileTypes.noExtension\":\"Senza estensione\",\"fileTypes.default\":\"Predefinita: {app}\",\"fileTypes.noDefault\":\"Nessuna app predefinita\",\"fileTypes.keywords\":\"tipo file estensione apri con {ext}\",\"fileTypes.field\":\"App per .{ext}\",\"fileTypes.fieldNoExtension\":\"App per i file senza estensione\",\"fileTypes.ask\":\"Chiedi ogni volta\",\"fileTypes.others\":\"Altri\",\"menu.label\":\"Menu contestuale\",\"menu.separator\":\"— Separatore —\",\"menu.submenu\":{\"one\":\"Sottomenu · {n} voce\",\"other\":\"Sottomenu · {n} voci\"},\"menu.create.folder\":\"Crea la cartella «{name}»\",\"menu.create.file\":\"Crea il file «{name}»\",\"menu.create.fileFromTemplate\":\"Crea il file «{name}» dal modello {template}\",\"menu.create.fileWithContent\":\"Crea il file «{name}» con un contenuto iniziale\",\"menu.create.deletedTemplate\":\"(file eliminato)\",\"menu.launch\":\"Apre l’app {name}\",\"menu.action\":\"Azione\",\"menu.keywords\":\"menu contestuale voce separatore nuovo\",\"menu.moveUp\":\"Sposta su\",\"menu.moveDown\":\"Sposta giù\",\"menu.target.root\":\"Menu principale\",\"menu.target.inside\":\"Dentro «{name}»\",\"menu.target.label\":\"Dove\",\"menu.item.label\":\"Voce\",\"menu.item.description\":\"Un’azione o l’apertura di un’app\",\"menu.item.field\":\"Voce da aggiungere\",\"menu.item.open\":\"Apri {name}\",\"menu.separatorRow.label\":\"Separatore\",\"menu.separatorRow.description\":\"Una linea per raggruppare le voci\",\"menu.new.label\":\"Nuovo elemento in «{name}»\",\"menu.new.description\":\"Crea un file o una cartella con questo nome; un file può partire dal contenuto di un modello\",\"menu.new.labelField\":\"Etichetta\",\"menu.new.labelPlaceholder\":\"Etichetta (es. Foglio di stile)\",\"menu.new.nameField\":\"Nome del file o della cartella\",\"menu.new.namePlaceholder\":\"Nome (es. stile.css)\",\"menu.new.kind\":\"Tipo\",\"menu.new.kindFile\":\"File\",\"menu.new.kindFolder\":\"Cartella\",\"menu.new.missing\":\"Servono l’etichetta e il nome\",\"menu.template.button\":\"Modello…\",\"menu.template.chosen\":\"Modello: {name}\",\"menu.template.title\":\"Scegli il file modello\",\"menu.template.text\":\"Il nuovo file partirà con il contenuto di questo file.\",\"menu.defaults.label\":\"Voci predefinite\",\"menu.defaults.custom\":\"Il menu è stato personalizzato\",\"menu.defaults.default\":\"Il menu è quello predefinito\",\"trash.label\":\"Cestino\",\"trash.deleting.title\":\"Eliminazione\",\"trash.confirm.label\":\"Chiedi conferma\",\"trash.confirm.description\":\"Prima di eliminare file e cartelle, un piccolo menu chiede di confermare\",\"trash.confirm.keywords\":\"conferma elimina cancella domanda\",\"trash.permanent.label\":\"Elimina definitivamente\",\"trash.permanent.description\":\"Gli elementi eliminati non passano dal cestino: si recuperano solo con Ctrl Z, finché la pagina resta aperta\",\"trash.permanent.keywords\":\"cestino definitivo subito cancella salta\",\"trash.retention.label\":\"Conserva gli elementi per\",\"trash.retention.description\":\"Passato questo tempo, quello che è nel cestino viene eliminato definitivamente\",\"trash.retention.keywords\":\"retention durata giorni pulizia automatica svuota\",\"trash.retention.field\":\"Conserva gli elementi nel cestino per\",\"trash.retention.days\":{\"one\":\"{n} giorno\",\"other\":\"{n} giorni\"},\"trash.retention.forever\":\"Per sempre\",\"trash.contents.label\":\"Contenuto\",\"trash.contents.description\":{\"one\":\"{n} elemento · {size}\",\"other\":\"{n} elementi · {size}\"},\"trash.contents.empty\":\"Il cestino è vuoto\",\"trash.contents.keywords\":\"apri cestino ripristina\",\"trash.contents.open\":\"Apri il cestino\",\"trash.empty.label\":\"Svuota il cestino\",\"trash.empty.description\":\"Elimina definitivamente tutto quello che contiene\",\"trash.empty.keywords\":\"svuota cestino\",\"trash.empty.button\":\"Svuota…\",\"trash.empty.confirm\":\"Svuota\",\"trash.empty.none\":\"Vuoto\",\"apps.label\":\"App\",\"apps.description\":\"Come girano le app installate.\",\"apps.security.label\":\"Sicurezza\",\"apps.execution.title\":\"Esecuzione delle app\",\"apps.isolated.label\":\"Esegui le app isolate\",\"apps.isolated.description\":\"Ogni app gira in una sandbox e vede solo quello che i suoi permessi le concedono. Se lo togli, le app girano nella pagina di lilOS e in un Web Worker: più veloci, ma possono fare tutto quello che puoi fare tu. Vale dalla prossima apertura di ogni app.\",\"apps.isolated.adminOnly\":\"Solo un amministratore la cambia.\",\"apps.isolated.keywords\":\"sicurezza isolamento sandbox iframe worker\",\"apps.isolated.failed\":\"Non cambiata: {error}\",\"apps.system.label\":\"App di sistema\",\"apps.system.description\":\"File Manager, Editor, Pannello di controllo e AppStore fanno parte di lilOS e girano sempre dentro lilOS.\",\"apps.installed.title\":\"App installate\",\"apps.installed.keywords\":\"sicurezza isolamento\",\"apps.installed.shared\":\"Come le altre app\",\"apps.installed.own\":\"Scelta per questa app\",\"apps.installed.properties\":\"Proprietà…\",\"apps.installed.none\":\"Nessuna app installata oltre a quelle di sistema\",\"apps.mode.isolated\":\"Isolata\",\"apps.mode.open\":\"Non isolata\",\"apps.mode.system\":\"Dentro lilOS\",\"apps.mode.remote\":\"Isolata, nel suo sito\",\"startup.label\":\"Avvio\",\"startup.description\":\"Servizi e app che partono da soli all’avvio di lilOS e quando entri.\",\"startup.options.label\":\"Opzioni\",\"startup.services.label\":\"Servizi\",\"startup.apps.label\":\"App\",\"startup.auto.title\":\"Avvio automatico\",\"startup.openApps.label\":\"Apri le app quando entri\",\"startup.openApps.description\":\"Si aprono le app scelte in App, con i loro parametri. Solo nella prima scheda di lilOS di questo browser: le altre si aprono vuote.\",\"startup.openApps.keywords\":\"avvio automatico accesso login esecuzione automatica\",\"startup.trouble.title\":\"Se qualcosa non va\",\"startup.safe.label\":\"Avvio senza app\",\"startup.safe.description\":\"Per una volta sola: apri lilOS con ?avvio=no in fondo all’indirizzo. Le scelte salvate restano.\",\"startup.safe.keywords\":\"avvio sicuro avvio=no\",\"startup.safe.active\":\"Attivo ora\",\"startup.apps.title\":\"Si aprono quando entri\",\"startup.apps.hint\":\"Nel workspace in cui si apre lilOS, nell’ordine dell’elenco. Togli tutti i punti d’ingresso di un’app e l’app esce dall’elenco.\",\"startup.apps.none\":\"Nessuna app si apre da sola.\",\"startup.apps.oneEntry\":\"1 punto d’ingresso\",\"startup.apps.entries\":{\"one\":\"{on} di {n} punto d’ingresso\",\"other\":\"{on} di {n} punti d’ingresso\"},\"startup.apps.remove\":\"Rimuovi dall’avvio\",\"startup.apps.allAdded\":\"Tutte le app sono già all’avvio\",\"startup.apps.add\":\"Aggiungi un’app all’avvio\",\"startup.apps.addDescription\":\"Si apre la sua finestra principale; poi scegli altri punti d’ingresso e parametri\",\"startup.params.of\":\"{entry} di {app}\",\"startup.params.undescribed\":\"Questo punto d’ingresso non descrive i suoi parametri: arrivano all’app così come sono, come args.\",\"startup.params.json\":\"Parametri (JSON)\",\"startup.params.jsonOf\":\"Parametri (JSON) di {name}\",\"startup.params.invalidJson\":\"Non è JSON valido\",\"startup.params.notSaved\":\"Non salvati: {error}\",\"services.unsupported\":\"Questa versione di lilOS non ha i servizi delle app\",\"services.status.off\":\"Spento\",\"services.status.starting\":\"Si avvia…\",\"services.status.error\":\"Fermo: {error}\",\"services.status.unknownError\":\"errore\",\"services.status.restarting\":\"Riparte… (si era fermato: {error})\",\"services.status.onNow\":\"Acceso da meno di un minuto\",\"services.status.onMinutes\":{\"one\":\"Acceso da {n} minuto\",\"other\":\"Acceso da {n} minuti\"},\"services.status.onHours\":{\"one\":\"Acceso da {n} ora\",\"other\":\"Acceso da {n} ore\"},\"services.status.onSince\":\"Acceso dal {date}\",\"services.auto.label\":\"Avvia i servizi automaticamente\",\"services.auto.noEngine\":\"Il kernel non ha il motore dei servizi (modulo services-isolate)\",\"services.auto.description\":\"Quando entri partono i tuoi servizi scelti in Servizi. Quelli scelti da un amministratore per tutti partono comunque.\",\"services.auto.keywords\":\"servizi avvio automatico background kernel\",\"services.title\":\"Servizi installati\",\"services.noEngine\":\"Il kernel non ha il motore dei servizi: serve il modulo services-isolate (AppStore → Kernel).\",\"services.none\":\"Nessuna app installata ha servizi.\",\"services.hint\":\"Le parti delle app che lavorano nel kernel, senza finestra, anche con lilOS chiuso. «All’avvio del sistema» vale per tutti gli utenti e lo sceglie un amministratore; «All’accesso» solo per te.\",\"services.startup.none\":\"Non si avvia\",\"services.startup.login\":\"All’accesso\",\"services.startup.system\":\"All’avvio del sistema\",\"services.startup.field\":\"Avvio di {name}\",\"services.restart\":\"Riavvia\",\"services.restartOf\":\"Riavvia {name}\",\"services.stop\":\"Spegni\",\"services.start\":\"Accendi\",\"services.byAdmin\":\"scelto da un amministratore\",\"services.log.label\":\"Registro\",\"services.log.title\":\"Registro di {name}\",\"services.log.empty\":\"Nessuna riga: il servizio non è ancora partito.\",\"storage.label\":\"Archiviazione\",\"storage.description.kernel\":\"Il tuo spazio, i limiti dei file e lo spazio di ogni utente.\",\"storage.description.browser\":\"Dati di lilOS salvati in questo browser.\",\"storage.space.title\":\"Spazio\",\"storage.used.label\":\"Dati di lilOS\",\"storage.used.description\":\"Posizioni, vista e impostazioni\",\"storage.contents.label\":\"Contenuto dei file\",\"storage.contents.description\":\"Testo salvato nei file\",\"storage.reset.title\":\"Ripristino\",\"storage.defaults.label\":\"Impostazioni predefinite\",\"storage.defaults.description\":\"Riporta impostazioni, scorciatoie, app dei tipi di file e menu ai valori iniziali\",\"storage.initial.label\":\"Scrivania e file iniziali\",\"storage.initial.description\":\"Elimina tutte le cartelle e i file creati, i workspace, i tag, le posizioni e la vista salvate, poi ricarica lilOS\",\"storage.initial.keywords\":\"reset desktop workspace tag\",\"storage.initial.button\":\"Ripristina…\",\"storage.initial.confirm\":\"Elimina e ricarica\",\"storage.mine.label\":\"Il mio spazio\",\"storage.mine.title\":\"Il tuo spazio\",\"storage.limits.label\":\"Limiti\",\"storage.users.label\":\"Utenti\",\"storage.quota.label\":\"Spazio usato\",\"storage.quota.description\":\"Tutti i tuoi file, cestino compreso\",\"storage.quota.none\":\"Tutti i tuoi file, cestino compreso: nessun limite\",\"storage.quota.of\":\"{used} di {quota}\",\"storage.quota.noLimit\":\"{used}\",\"storage.maxFile.label\":\"File più grande\",\"storage.maxFile.description\":\"La dimensione fino a cui lilOS salva un file\",\"storage.unlimited\":\"Senza limite\",\"storage.limits.title\":\"Limiti dei file\",\"storage.pieces.title\":\"Pezzi\",\"storage.limits.keywords\":\"limite dimensione file quota spazio caricamento pezzi megabyte gigabyte\",\"storage.limits.saved\":\"Salvate nella configurazione del kernel e valide subito, senza riavviarlo.\",\"storage.setting.maxFileSize.label\":\"Dimensione massima di un file\",\"storage.setting.maxFileSize.description\":\"Un file più grande non si salva nella home. 0 = senza limite.\",\"storage.setting.maxReadWhole.label\":\"Lettura in una volta\",\"storage.setting.maxReadWhole.description\":\"Oltre questa dimensione un file si legge solo a flusso: le app che lo aprono tutto in memoria lo rifiutano. 0 = senza limite.\",\"storage.setting.maxText.label\":\"Testo\",\"storage.setting.maxText.description\":\"Il testo più lungo che si legge o si salva come testo (Editor, Note adesive). 0 = senza limite.\",\"storage.setting.uploadPiece.label\":\"Pezzi di caricamento\",\"storage.setting.uploadPiece.description\":\"Un file più grande si carica dal browser in più richieste di questa dimensione, e un invio interrotto riparte da dove era arrivato. Abbassalo se un proxy davanti a lilOS limita le richieste. 0 = una richiesta sola.\",\"storage.setting.inlineMax.label\":\"File piccoli in una riga\",\"storage.setting.inlineMax.description\":\"Fino a questa dimensione il contenuto sta nella riga del file, che si legge con una sola richiesta al database; oltre, va in pezzi. 0 = sempre in pezzi (massimo 64 MB).\",\"storage.setting.dbChunk.label\":\"Pezzi nel database\",\"storage.setting.dbChunk.description\":\"La dimensione di ogni pezzo salvato. Vale per i file scritti da ora; quelli già salvati restano come sono. Da 256 KB a 16 MB.\",\"storage.setting.cacheMax.label\":\"Copia nel browser\",\"storage.setting.cacheMax.description\":\"Il browser tiene una copia dei file aperti fino a questa dimensione, per mostrarli quando il kernel non risponde. 0 = di tutti.\",\"storage.setting.quota.label\":\"Quota predefinita\",\"storage.setting.quota.description\":\"Lo spazio di ogni utente che non ne ha una sua. 0 = senza limite.\",\"storage.source.default\":\"Predefinito\",\"storage.source.local\":\"Modificato\",\"storage.source.user\":\"Personale\",\"storage.source.locked\":\"Gestito\",\"storage.reset\":\"Ripristina\",\"storage.size.unit\":\"Unità di {name}\",\"storage.size.invalid\":\"Scrivi un numero, 0 o più\",\"storage.mine.files\":\"Spazio dei tuoi file\",\"storage.size.noZero\":\"{name} non può essere 0\",\"storage.size.min\":\"{name}: almeno {min}\",\"storage.size.max\":\"{name}: al massimo {max}\",\"storage.users.default.title\":\"Quota\",\"storage.users.title\":\"Utenti\",\"storage.users.admin\":\"amministratore\",\"storage.users.quotaOf\":\"Quota di {name}\",\"storage.users.useDefault\":\"Usa la predefinita\",\"storage.users.custom\":\"Personalizza\",\"storage.users.unavailable\":\"Quote non disponibili\",\"storage.users.unavailableText\":\"Il modulo del file system del kernel non dice lo spazio usato (lo fa fs-postgres 1.2.0 o più recente): aggiornalo dall'AppStore.\",\"storage.error\":\"Impostazioni del kernel non lette\",\"storage.retry\":\"Riprova\",\"storage.loading\":\"Caricamento…\",\"computer.label\":\"Computer\",\"computer.description\":\"Il programma lilOS su questo computer: avvio, finestra, dispositivi e server. Queste impostazioni sono del computer, non del tuo utente.\",\"computer.loading\":\"Leggo dal programma…\",\"computer.error\":\"Non cambiato: {error}\",\"computer.program.label\":\"Programma\",\"computer.program.title\":\"Programma\",\"computer.program.version\":\"Versione del programma\",\"computer.program.system\":\"Sistema operativo\",\"computer.program.engine\":\"Motore della pagina\",\"computer.program.kernel\":\"lilOS su questo computer\",\"computer.program.kernelHint\":\"Il kernel e il database che il programma fa girare qui.\",\"computer.updates.title\":\"Aggiornamenti del programma\",\"computer.updates.label\":\"Aggiornamenti\",\"computer.updates.description\":\"Solo il programma: lilOS si aggiorna dall'AppStore, come sempre.\",\"computer.updates.mac\":\"Su macOS il programma non è firmato e non può sostituirsi da solo: una notifica avvisa quando esce una nuova versione.\",\"computer.updates.auto\":\"Automatici\",\"computer.updates.notify\":\"Avvisami\",\"computer.updates.off\":\"Mai\",\"computer.updates.check\":\"Ultimo controllo\",\"computer.updates.checkButton\":\"Controlla ora\",\"computer.updates.install\":\"Riavvia e aggiorna\",\"computer.updates.download\":\"Scarica\",\"computer.updates.never\":\"Non ancora controllato in questa sessione.\",\"computer.updates.dev\":\"Copia di sviluppo: niente aggiornamenti.\",\"computer.updates.current\":\"Il programma è aggiornato.\",\"computer.updates.available\":\"È disponibile la versione {version}.\",\"computer.updates.downloaded\":\"La versione {version} è pronta: si installa quando esci dal programma.\",\"computer.updates.failed\":\"Controllo non riuscito: {error}\",\"computer.updates.checking\":\"Controllo…\",\"computer.start.title\":\"Avvio e finestra\",\"computer.start.login\":\"Avvia con il computer\",\"computer.start.loginHint\":\"Il kernel parte quando accedi al computer; la finestra resta chiusa finché non la apri.\",\"computer.start.tray\":\"Chiudendo la finestra lilOS resta nell'area di notifica\",\"computer.start.trayHint\":\"Altrimenti chiudere la finestra chiude il programma (e ferma il kernel di questo computer).\",\"computer.start.notifications\":\"Notifiche del sistema\",\"computer.start.notificationsHint\":\"Le notifiche di lilOS compaiono anche nel centro notifiche del computer quando la finestra non è in primo piano.\",\"computer.screen.label\":\"Schermo\",\"computer.screen.title\":\"Come si vede lilOS\",\"computer.screen.mode\":\"Modo\",\"computer.screen.window\":\"Finestra\",\"computer.screen.fullscreen\":\"Schermo intero\",\"computer.screen.kiosk\":\"Kiosk\",\"computer.screen.windowHint\":\"Una finestra del computer, con la sua cornice.\",\"computer.screen.fullscreenHint\":\"lilOS copre tutto lo schermo, anche la barra o il Dock del computer. F11 entra ed esce.\",\"computer.screen.kioskHint\":\"lilOS resta a schermo intero e non si chiude: solo un amministratore di lilOS lo toglie. Con «Avvia con il computer» è l'unica cosa che il computer mostra.\",\"computer.screen.leave\":\"Esci dal kiosk\",\"computer.screen.leaveHint\":\"Lo può fare solo un amministratore di lilOS.\",\"computer.screen.leaveButton\":\"Esci dal kiosk\",\"computer.screen.leaveTitle\":\"Esci dal kiosk\",\"computer.screen.leaveText\":\"Un amministratore di lilOS accede per far uscire lilOS dal kiosk.\",\"computer.screen.adminName\":\"Amministratore\",\"computer.screen.adminPassword\":\"Password\",\"computer.screen.notAdmin\":\"Questo utente non è un amministratore.\",\"computer.screen.monitor\":\"Monitor\",\"computer.screen.monitorHint\":\"Dove va lilOS a schermo intero e in kiosk.\",\"computer.screen.monitorSame\":\"Quello su cui è la finestra\",\"computer.screen.primary\":\"principale\",\"computer.screen.keys\":\"Tasti di sistema a lilOS a schermo intero\",\"computer.screen.keysHint.win32\":\"Il tasto Windows, Alt+Tab ed Esc arrivano a lilOS (Keyboard Lock). Ctrl+Alt+Canc resta sempre di Windows.\",\"computer.screen.keysHint.darwin\":\"Esc e gli altri tasti arrivano a lilOS; in kiosk ⌘Tab e l'uscita forzata li blocca il sistema.\",\"computer.screen.keysHint.linux\":\"I tasti arrivano a lilOS (Keyboard Lock); nella sessione «lilOS» va tutto a lilOS.\",\"computer.screen.limitsTitle\":\"Cosa permette il sistema\",\"computer.screen.limits.win32\":\"Windows tiene sempre Ctrl+Alt+Canc. Mettere lilOS al posto del desktop di Windows (Shell Launcher) c'è solo in Windows Enterprise ed Education: su Home e Pro usa il kiosk con «Avvia con il computer».\",\"computer.screen.limits.darwin\":\"macOS in kiosk nasconde Dock e barra dei menu e blocca ⌘Tab e l'uscita forzata. Non lascia sostituire il Finder: per un Mac dedicato usa un account apposta con lilOS in kiosk all'avvio.\",\"computer.screen.limits.linux\":\"Con il pacchetto .deb o .rpm esegui una volta «sudo sh /opt/lilOS/resources/session/install-session.sh» (serve cage): nella schermata di accesso compare la sessione «lilOS» e lilOS è il desktop intero.\",\"computer.hardware.label\":\"Hardware\",\"computer.hardware.title\":\"Uso dei dispositivi\",\"computer.hardware.rule\":\"Le app usano i dispositivi\",\"computer.hardware.ask\":\"Chiedendo ogni volta\",\"computer.hardware.declared\":\"App che lo dichiarano\",\"computer.hardware.all\":\"Tutte le app\",\"computer.hardware.askHint\":\"Ogni porta o dispositivo lo scegli tu in una finestra di lilOS, una volta per dispositivo.\",\"computer.hardware.declaredHint\":\"Le app che tra i permessi (visti all'installazione) hanno un dispositivo li usano tutti senza chiedere.\",\"computer.hardware.allHint\":\"Ogni app vede e usa ogni dispositivo senza chiedere: solo per computer dedicati (kiosk, laboratori).\",\"computer.hardware.adminOnly\":\"Lo cambia solo un amministratore.\",\"computer.hardware.devices\":\"Cosa ha il computer\",\"computer.hardware.none\":\"Nessuno\",\"computer.hardware.unnamed\":\"Senza nome\",\"computer.hardware.cameras\":\"Fotocamere\",\"computer.hardware.microphones\":\"Microfoni\",\"computer.hardware.serial\":\"Porte seriali\",\"computer.hardware.usb\":\"Dispositivi USB\",\"computer.hardware.hid\":\"Dispositivi di input (HID)\",\"computer.hardware.gpu\":\"Schede grafiche\",\"computer.hardware.active\":\"in uso\",\"computer.hardware.webgpu\":\"WebGPU\",\"computer.hardware.printers\":\"Stampanti\",\"computer.hardware.default\":\"predefinita\",\"computer.hardware.displays\":\"Monitor\",\"computer.hardware.drives\":\"Unità rimovibili\",\"computer.hardware.driveSpace\":\"{free} liberi su {size}\",\"computer.hardware.eject\":\"Espelli\",\"computer.hardware.noDrives\":\"Nessuna chiavetta USB o scheda di memoria collegata.\",\"computer.hardware.refresh\":\"Leggi di nuovo\",\"computer.folders.title\":\"Cartelle del computer in Rete\",\"computer.folders.readOnly\":\"sola lettura\",\"computer.folders.none\":\"Nessuna per ora: aggiungi le cartelle che vuoi usare in lilOS.\",\"computer.folders.add\":\"Aggiungi una cartella\",\"computer.folders.addHint\":\"Si sceglie con il dialogo del computer: compare in Rete › Questo computer e si legge e scrive dove sta.\",\"computer.folders.addButton\":\"Scegli…\",\"computer.folders.added\":\"«{name}» è in Rete › Questo computer\",\"computer.hardware.portNumber\":\"Porta {n}\",\"computer.credits.title\":\"Riconoscimenti del programma\",\"computer.credits.site\":\"Sito\",\"computer.servers.label\":\"Server\",\"computer.servers.title\":\"I lilOS che questo programma apre\",\"computer.servers.current\":\"questa finestra\",\"computer.servers.trusted\":\"di fiducia\",\"computer.servers.untrusted\":\"non di fiducia: non può toccare il computer\",\"computer.servers.status.running\":\"attivo\",\"computer.servers.status.starting\":\"in avvio\",\"computer.servers.status.stopped\":\"fermo\",\"computer.servers.status.failed\":\"fermo per un errore\",\"computer.servers.open\":\"Apri\",\"computer.servers.browser\":\"Apri nel browser\",\"computer.servers.restart\":\"Riavvia il kernel\",\"computer.servers.remove\":\"Togli\",\"computer.servers.removeConfirm\":\"Toglierlo?\",\"computer.servers.addTitle\":\"Aggiungi un server\",\"computer.servers.address\":\"Indirizzo\",\"computer.servers.addressHint\":\"https:// (http:// solo per questo computer). Ogni server si apre nella sua finestra, con il suo accesso.\",\"computer.servers.trust\":\"Server di fiducia\",\"computer.servers.trustHint\":\"Può aprire file su questo computer e cambiare le impostazioni del programma. Solo per server che controlli tu.\",\"computer.servers.add\":\"Aggiungi\",\"about.label\":\"Informazioni\",\"about.description\":\"Versione, ambiente e riconoscimenti.\",\"about.version\":\"Versione\",\"about.sdkVersion\":\"Versione dell’SDK\",\"about.language\":\"Lingua\",\"about.browser\":\"Browser\",\"about.unknownBrowser\":\"Sconosciuto\",\"credits.label\":\"Riconoscimenti\",\"credits.libraries\":\"Librerie\",\"credits.indirect\":\"Librerie usate da altre librerie\",\"credits.fonts\":\"Font\",\"credits.tools\":\"Strumenti\",\"credits.usedBy\":\"usata da {users}\",\"credits.via\":\"portata da {libraries}, in {users}\",\"credits.builds\":\"costruisce lilOS e le sue app\",\"credits.optional\":\"facoltativa\",\"credits.module\":\"{name} (modulo del kernel)\",\"credits.fontUsedBy\":\"usato da {users}\",\"credits.site\":\"Sito\",\"credits.siteOf\":\"Sito di {name}\",\"credits.keywords\":\"credits riconoscimenti crediti licenza licenze librerie open source grazie\",\"userPage.label\":\"Pagina utente\",\"userPage.description\":\"Cosa mostra la pagina che si apre dal tuo nome\",\"userPage.title\":\"Pagina utente\",\"userPage.open.label\":\"Si apre dal tuo nome\",\"userPage.open.description\":\"Clicca il tuo nome nella barra in basso o in fondo al menu. Nome e foto ci sono sempre: qui scegli cos’altro mostra.\",\"userPage.keywords\":\"pagina utente profilo account foto blocca chiudi sessione esci riavvia {name}\",\"userPage.toggle\":\"{name} nella pagina utente\",\"userPage.group.header\":\"Intestazione\",\"userPage.group.actions\":\"Azioni\",\"userPage.group.account\":\"Account\",\"userPage.group.session\":\"Questa sessione\",\"userPage.group.footer\":\"Piè di pagina\",\"userPage.item.details.name\":\"Nome utente e ruolo\",\"userPage.item.details.description\":\"Sotto il nome: il nome con cui accedi e se sei amministratore\",\"userPage.item.lock.name\":\"Blocca\",\"userPage.item.lock.description\":\"Copre lo schermo finché non inserisci di nuovo la password; le app restano aperte\",\"userPage.item.logout.name\":\"Chiudi sessione\",\"userPage.item.logout.description\":\"Salva, chiude le app e torna alla schermata di accesso\",\"userPage.item.restart.name\":\"Riavvia il sistema\",\"userPage.item.restart.description\":\"Riavvia il kernel di lilOS per tutti gli utenti; solo per gli amministratori\",\"userPage.item.photo.name\":\"Foto profilo\",\"userPage.item.photo.description\":\"Scegliere, cambiare o togliere la foto\",\"userPage.item.theme.name\":\"Tema\",\"userPage.item.theme.description\":\"Chiaro o scuro\",\"userPage.item.language.name\":\"Lingua\",\"userPage.item.language.description\":\"La lingua delle app\",\"userPage.item.settings.name\":\"Tutte le impostazioni\",\"userPage.item.settings.description\":\"Apre il Pannello di controllo\",\"userPage.item.workspace.name\":\"Workspace\",\"userPage.item.workspace.description\":\"Quello in cui sei e quanti ce ne sono\",\"userPage.item.windows.name\":\"Finestre aperte\",\"userPage.item.windows.description\":\"Quante finestre sono aperte e quante app lavorano in background\",\"userPage.item.startup.name\":\"All’avvio\",\"userPage.item.startup.description\":\"Quante app si aprono quando entri\",\"userPage.item.storage.name\":\"Spazio usato\",\"userPage.item.storage.description\":\"Quanto occupano i tuoi file\",\"userPage.item.about.name\":\"Versione di lilOS\",\"userPage.item.about.description\":\"La versione di lilOS e l’indirizzo a cui sei collegato\",\"notifications.label\":\"Notifiche\",\"notifications.description\":\"Come compaiono le notifiche quando arrivano, e quante se ne conservano\",\"notifications.arrive.title\":\"Quando arrivano\",\"notifications.shown.label\":\"Mostrate insieme\",\"notifications.shown.description\":\"Quante ne compaiono una sopra l'altra sopra l'area di notifica della barra delle applicazioni. Oltre questo numero le più vecchie non si vedono lì, ma restano nell'elenco.\",\"notifications.shown.keywords\":\"notifiche barra avvisi area di notifica numero\",\"notifications.shown.field\":\"Notifiche mostrate insieme\",\"notifications.seconds.label\":\"Per quanto restano visibili\",\"notifications.seconds.description\":\"Secondi dopo l'ultima arrivata. Con il puntatore sopra restano finché non lo sposti.\",\"notifications.seconds.keywords\":\"notifiche tempo secondi durata\",\"notifications.seconds.field\":\"Per quanto restano visibili le notifiche\",\"notifications.seconds.value\":{\"one\":\"{n} secondo\",\"other\":\"{n} secondi\"},\"notifications.list.title\":\"Elenco\",\"notifications.keep.label\":\"Notifiche conservate\",\"notifications.keep.description\":\"Quando ne arriva una in più si cancella la più vecchia. La campanella nell'area di notifica le elenca tutte.\",\"notifications.keep.page\":\"Senza il modulo delle notifiche del kernel restano solo finché lilOS non si ricarica.\",\"notifications.keep.keywords\":\"notifiche cronologia elenco conservare limite\",\"notifications.keep.field\":\"Notifiche conservate\",\"notifications.test.label\":\"Prova\",\"notifications.test.description\":\"Ti manda una notifica, per vedere come appare.\",\"notifications.test.button\":\"Invia una notifica di prova\",\"notifications.test.text\":\"Notifica di prova: le notifiche funzionano.\",\"notifications.error\":\"Non salvato: {message}\",\"@name\":\"Pannello di controllo\",\"@description\":\"Aspetto, lingua, scrivania, pagina utente, workspace, notifiche, tag, scorciatoie, tipi di file, servizi e app all’avvio, archiviazione.\",\"@entrypoints.main.params.tab.label\":\"Sezione\",\"@entrypoints.main.params.tab.options.appearance.label\":\"Aspetto\",\"@entrypoints.main.params.tab.options.language.label\":\"Lingua\",\"@entrypoints.main.params.tab.options.desk.label\":\"Scrivania\",\"@entrypoints.main.params.tab.options.userpage.label\":\"Pagina utente\",\"@entrypoints.main.params.tab.options.workspaces.label\":\"Workspace\",\"@entrypoints.main.params.tab.options.notifications.label\":\"Notifiche\",\"@entrypoints.main.params.tab.options.tags.label\":\"Tag\",\"@entrypoints.main.params.tab.options.usability.label\":\"Usabilità\",\"@entrypoints.main.params.tab.options.apps.label\":\"App\",\"@entrypoints.main.params.tab.options.startup.label\":\"Avvio\",\"@entrypoints.main.params.tab.options.onedrive.label\":\"OneDrive\",\"@entrypoints.main.params.tab.options.microsoft.label\":\"App Microsoft\",\"@entrypoints.main.params.tab.options.google.label\":\"Progetto Google\",\"@entrypoints.main.params.tab.options.storage.label\":\"Archiviazione\",\"@entrypoints.main.params.tab.options.about.label\":\"Informazioni\",\"pipes.label\":\"Pipe\",\"pipes.title\":\"Pipe sugli eventi\",\"pipes.keywords\":\"pipe eventi handler ordine catena\",\"pipes.intro.label\":\"Cosa fanno le app quando succede qualcosa\",\"pipes.intro.description\":\"Le app possono intervenire quando un file si apre, si legge o si salva, oppure guardare cosa succede nel sistema; un’app può anche aggiungere eventi suoi. Qui sotto, ogni evento con i suoi handler nell’ordine in cui partono ({count} eventi in tutto). La fase dopo scorre in ordine inverso rispetto a prima.\",\"pipes.unsupported\":\"Questa versione di lilOS non ha le pipe\",\"pipes.lilos\":\"lilOS\",\"pipes.up\":\"Su\",\"pipes.down\":\"Giù\",\"pipes.stage.before\":\"Prima\",\"pipes.stage.after\":\"Dopo\",\"pipes.band.first\":\"tra i primi\",\"pipes.band.middle\":\"in mezzo\",\"pipes.band.last\":\"tra gli ultimi\",\"pipes.where.all\":\"ogni elemento\",\"pipes.where.system\":\"scelti da lilOS\",\"pipes.where.own\":\"i file che ha segnato\",\"pipes.where.ext\":\"file {list}\",\"pipes.where.type.file\":\"file\",\"pipes.where.type.folder\":\"cartelle\",\"pipes.where.type.app\":\"collegamenti alle app\",\"pipes.where.app\":\"app {list}\",\"pipes.reset.label\":\"Ordine degli handler\",\"pipes.reset.description\":\"L’hai cambiato: torna all’ordine di installazione\",\"pipes.idle.title\":\"Eventi senza handler\",\"pipes.idle.description\":\"{count} eventi: per ora nessuna app li gestisce\",\"pipes.idle.none\":\"Ogni evento ha un handler\",\"pipes.owned\":\"{label} (di {app})\",\"pipes.event.file.open\":\"Apertura di un file\",\"pipes.event.file.read\":\"Lettura di un file\",\"pipes.event.file.write\":\"Salvataggio di un file\",\"pipes.event.app.launch\":\"Avvio di un’app\",\"pipes.event.file.create\":\"Creazione di un elemento\",\"pipes.event.file.rename\":\"Cambio di nome\",\"pipes.event.file.move\":\"Spostamento\",\"pipes.event.file.copy\":\"Copia di un file\",\"pipes.event.file.remove\":\"Eliminazione definitiva\",\"pipes.event.trash.put\":\"Spostamento nel Cestino\",\"pipes.event.trash.restore\":\"Ripristino dal Cestino\",\"pipes.event.trash.purge\":\"Svuotamento del Cestino\",\"pipes.event.tags.assign\":\"Tag di un elemento\",\"pipes.event.window.open\":\"Apertura di una finestra\",\"pipes.event.device.attach\":\"Collegamento di un dispositivo\",\"pipes.event.device.detach\":\"Scollegamento di un dispositivo\",\"pipes.event.window.close\":\"Chiusura di una finestra\",\"pipes.event.workspace.switch\":\"Cambio di workspace\",\"pipes.event.settings.change\":\"Cambio di un’impostazione\",\"pipes.event.system.ready\":\"Sistema pronto\",\"pipes.event.session.login\":\"Utente entrato\",\"pipes.event.session.logout\":\"Uscita dall’account\",\"pipes.event.apps.install\":\"Installazione di un’app\",\"pipes.event.apps.update\":\"Aggiornamento di un’app\",\"pipes.event.apps.remove\":\"Rimozione di un’app\",\"pipes.event.permissions.change\":\"Permessi di un’app\",\"pipes.event.settings.system\":\"Impostazioni di sistema\",\"pipes.event.pipes.change\":\"Iscrizioni alle pipe\",\"network.label\":\"Rete\",\"network.description\":\"Dove il kernel può collegarsi per gli utenti: cartella Rete, Terminale, NetTest\",\"network.loading\":\"Lettura delle regole…\",\"network.error\":\"Non è stato possibile leggere le regole\",\"network.saved\":\"Regole di rete salvate\",\"network.single\":\"Un solo utente, senza accesso\",\"network.singleText\":\"Adesso il kernel si collega ovunque, come potresti fare tu. Queste regole valgono quando gli utenti accedono a lilOS.\",\"network.exception\":\"Eccezioni per gli utenti\",\"network.local.label\":\"Questo computer (localhost)\",\"network.local.description\":\"127.0.0.1 e ::1: server di prova, database e servizi sul computer del kernel. Gli utenti raggiungerebbero anche i servizi del kernel stesso: aprilo solo se ti fidi di loro.\",\"network.private.label\":\"Tutta la rete locale\",\"network.private.description\":\"10.x, 172.16–31.x, 192.168.x, 100.64.x e gli indirizzi IPv6 privati: stampanti, NAS, router, i server dell’ufficio.\",\"network.ranges.label\":\"Solo questi indirizzi\",\"network.ranges.description\":\"Indirizzi o intervalli permessi anche quando il resto resta chiuso, separati da virgole: 192.168.1.50/32 (un NAS), 10.0.5.0/24.\",\"network.always\":\"Sempre chiusi, qualunque eccezione: indirizzi link-local (metadati del cloud, 169.254.x), multicast e indirizzi riservati. Un nome si controlla di nuovo a ogni connessione, sull’indirizzo a cui punta davvero.\"}}")
+}), { t: F } = ve;
 // src/settings/menuEditor.js
-function ve(e, { openWindow: t, rerender: n, confirmButton: r }) {
+function ye(e, { openWindow: t, rerender: n, confirmButton: r }) {
 	let i = h.layout(e), o = (t) => {
 		h.setLayout(e, t), n();
 	}, s = (e) => {
 		if (e.type === "separator") return {
-			label: I("menu.separator"),
+			label: F("menu.separator"),
 			description: ""
 		};
 		if (e.type === "submenu") return {
 			label: e.label,
-			description: I("menu.submenu", { n: e.items.length })
+			description: F("menu.submenu", { n: e.items.length })
 		};
 		let t = h.action(e.action), n = e.label ?? t?.label ?? e.action;
 		if (e.action === "desktop.create") {
 			let t = e.params.name;
 			return e.params.kind === "folder" ? {
 				label: n,
-				description: I("menu.create.folder", { name: t })
+				description: F("menu.create.folder", { name: t })
 			} : e.params.template ? {
 				label: n,
-				description: I("menu.create.fileFromTemplate", {
+				description: F("menu.create.fileFromTemplate", {
 					name: t,
-					template: u.exists(e.params.template) ? u.path(e.params.template) : I("menu.create.deletedTemplate")
+					template: u.exists(e.params.template) ? u.path(e.params.template) : F("menu.create.deletedTemplate")
 				})
 			} : {
 				label: n,
-				description: e.params.content ? I("menu.create.fileWithContent", { name: t }) : I("menu.create.file", { name: t })
+				description: e.params.content ? F("menu.create.fileWithContent", { name: t }) : F("menu.create.file", { name: t })
 			};
 		}
 		return e.action === "app.launch" ? {
 			label: n,
-			description: I("menu.launch", { name: M.find((t) => t.id === e.params.app)?.name ?? e.params.app })
+			description: F("menu.launch", { name: M.find((t) => t.id === e.params.app)?.name ?? e.params.app })
 		} : {
 			label: n,
-			description: I("menu.action")
+			description: F("menu.action")
 		};
 	}, c = (e, t) => {
 		let n = structuredClone(i);
@@ -82,8 +82,8 @@ function ve(e, { openWindow: t, rerender: n, confirmButton: r }) {
 		return {
 			label: t.length === 2 ? `↳ ${r}` : r,
 			description: i,
-			keywords: I("menu.keywords"),
-			control: d("div", { class: "mm-ctl" }, o("arrowUp", I("menu.moveUp"), () => l(t, -1), a === 0), o("arrowDown", I("menu.moveDown"), () => l(t, 1), a === n - 1), o("x", I("common.remove"), () => p(t)))
+			keywords: F("menu.keywords"),
+			control: d("div", { class: "mm-ctl" }, o("arrowUp", F("menu.moveUp"), () => l(t, -1), a === 0), o("arrowDown", F("menu.moveDown"), () => l(t, 1), a === n - 1), o("x", F("common.remove"), () => p(t)))
 		};
 	}, g = [];
 	i.forEach((e, t) => {
@@ -91,70 +91,70 @@ function ve(e, { openWindow: t, rerender: n, confirmButton: r }) {
 	});
 	let _ = i.map((e, t) => [e, t]).filter(([e]) => e.type === "submenu"), v = [{
 		value: "root",
-		label: I("menu.target.root")
+		label: F("menu.target.root")
 	}, ..._.map(([e, t]) => ({
 		value: String(t),
-		label: I("menu.target.inside", { name: e.label })
+		label: F("menu.target.inside", { name: e.label })
 	}))], y = (e, t) => o(c(e === "root" ? [0] : [Number(e), 0], (e) => e.push(t))), x = h.actions(e).filter((e) => e.id !== "desktop.create" && e.id !== "app.launch"), S = b({
 		value: x[0]?.id,
-		label: I("menu.item.field"),
+		label: F("menu.item.field"),
 		options: [...x.map((e) => ({
 			value: e.id,
 			label: e.label
 		})), ...M.filter((e) => e.load).map((e) => ({
 			value: `app:${e.id}`,
-			label: I("menu.item.open", { name: e.name })
+			label: F("menu.item.open", { name: e.name })
 		}))]
 	}), C = b({
 		value: "root",
 		options: v,
-		label: I("menu.target.label")
+		label: F("menu.target.label")
 	}), w = b({
 		value: "root",
 		options: v,
-		label: I("menu.target.label")
+		label: F("menu.target.label")
 	}), T = _[0], E = O({
-		placeholder: I("menu.new.labelPlaceholder"),
-		label: I("menu.new.labelField")
+		placeholder: F("menu.new.labelPlaceholder"),
+		label: F("menu.new.labelField")
 	}), D = O({
-		placeholder: I("menu.new.namePlaceholder"),
-		label: I("menu.new.nameField")
+		placeholder: F("menu.new.namePlaceholder"),
+		label: F("menu.new.nameField")
 	}), k = b({
 		value: "file",
 		options: [{
 			value: "file",
-			label: I("menu.new.kindFile")
+			label: F("menu.new.kindFile")
 		}, {
 			value: "folder",
-			label: I("menu.new.kindFolder")
+			label: F("menu.new.kindFolder")
 		}],
-		label: I("menu.new.kind")
+		label: F("menu.new.kind")
 	}), A = null, j = a({
-		label: I("menu.template.button"),
+		label: F("menu.template.button"),
 		onClick: async () => {
 			let e = await de(t, {
-				title: I("menu.template.title"),
-				text: I("menu.template.text")
+				title: F("menu.template.title"),
+				text: F("menu.template.text")
 			});
-			e && (A = e.id, j.textContent = I("menu.template.chosen", { name: e.name }));
+			e && (A = e.id, j.textContent = F("menu.template.chosen", { name: e.name }));
 		}
 	}), ee = d("small", { class: "mm-note" });
 	return [{
 		title: h.list().find((t) => t.id === e)?.label ?? e,
 		rows: g
 	}, {
-		title: I("common.add"),
+		title: F("common.add"),
 		rows: [
 			{
-				label: I("menu.item.label"),
-				description: I("menu.item.description"),
+				label: F("menu.item.label"),
+				description: F("menu.item.description"),
 				control: d("div", { class: "mm-add" }, S, C, a({
-					label: I("common.add"),
+					label: F("common.add"),
 					onClick: () => {
 						let e = S.value, t = e.startsWith("app:") ? {
 							type: "action",
 							action: "app.launch",
-							label: I("menu.item.open", { name: M.find((t) => t.id === e.slice(4))?.name }),
+							label: F("menu.item.open", { name: M.find((t) => t.id === e.slice(4))?.name }),
 							params: { app: e.slice(4) }
 						} : {
 							type: "action",
@@ -165,23 +165,23 @@ function ve(e, { openWindow: t, rerender: n, confirmButton: r }) {
 				}))
 			},
 			{
-				label: I("menu.separatorRow.label"),
-				description: I("menu.separatorRow.description"),
+				label: F("menu.separatorRow.label"),
+				description: F("menu.separatorRow.description"),
 				control: d("div", { class: "mm-add" }, w, a({
-					label: I("common.add"),
+					label: F("common.add"),
 					onClick: () => y(w.value, { type: "separator" })
 				}))
 			},
 			...T ? [{
-				label: I("menu.new.label", { name: T[0].label }),
-				description: I("menu.new.description"),
+				label: F("menu.new.label", { name: T[0].label }),
+				description: F("menu.new.description"),
 				control: d("div", { class: "mm-add" }, E, D, k, j, a({
-					label: I("common.add"),
+					label: F("common.add"),
 					primary: !0,
 					onClick: () => {
 						let e = E.value.trim(), t = D.value.trim();
 						if (!e || !t) {
-							ee.textContent = I("menu.new.missing");
+							ee.textContent = F("menu.new.missing");
 							return;
 						}
 						let n = {
@@ -200,9 +200,9 @@ function ve(e, { openWindow: t, rerender: n, confirmButton: r }) {
 				}), ee)
 			}] : [],
 			{
-				label: I("menu.defaults.label"),
-				description: h.isCustom(e) ? I("menu.defaults.custom") : I("menu.defaults.default"),
-				control: r(I("common.reset"), I("common.confirm"), () => {
+				label: F("menu.defaults.label"),
+				description: h.isCustom(e) ? F("menu.defaults.custom") : F("menu.defaults.default"),
+				control: r(F("common.reset"), F("common.confirm"), () => {
 					h.reset(e), n();
 				})
 			}
@@ -210,7 +210,7 @@ function ve(e, { openWindow: t, rerender: n, confirmButton: r }) {
 	}];
 }
 // src/shared/paramsForm.js
-function ye(e, t, { t: n, label: r = e.label, onChange: i = null, pickFile: o = null, pathAs: s = "id", live: c = !1, locked: l = !1, empty: p = !0 } = {}) {
+function be(e, t, { t: n, label: r = e.label, onChange: i = null, pickFile: o = null, pathAs: s = "id", live: c = !1, locked: l = !1, empty: p = !0 } = {}) {
 	let m = e.type ?? "text", h = e.required === !0, g = t ?? (m === "files" ? [] : null), _ = (e, t) => i?.(e) === !1 ? (t(), !1) : (g = e, !0), v = c ? "input" : "change", y = b();
 	if (l) for (let e of [y.el, ...y.el.querySelectorAll("input, select, button, textarea")]) "disabled" in e && (e.disabled = !0);
 	return y;
@@ -381,9 +381,9 @@ function ye(e, t, { t: n, label: r = e.label, onChange: i = null, pickFile: o = 
 		};
 	}
 }
-function be(e, t = {}, { t: n, onChange: r = null, context: i = "", ...a } = {}) {
+function xe(e, t = {}, { t: n, onChange: r = null, context: i = "", ...a } = {}) {
 	let o = { ...t }, s = /* @__PURE__ */ new Map(), c = Object.entries(e ?? {}).flatMap(([e, t]) => {
-		let c = ye(t, Object.hasOwn(o, e) ? o[e] : t.default, {
+		let c = be(t, Object.hasOwn(o, e) ? o[e] : t.default, {
 			...a,
 			t: n,
 			label: i ? `${t.label} (${i})` : t.label,
@@ -419,118 +419,118 @@ function be(e, t = {}, { t: n, onChange: r = null, context: i = "", ...a } = {})
 	};
 }
 // src/settings/services.js
-var L = null, xe = null;
-function R(e) {
-	j.services ? xe ??= j.services.list().then((e) => {
-		L = e;
+var I = null, Se = null;
+function Ce(e) {
+	j.services ? Se ??= j.services.list().then((e) => {
+		I = e;
 	}, (e) => {
-		L = { error: e.message };
+		I = { error: e.message };
 	}).finally(() => {
-		xe = null, e();
-	}) : L = { get error() {
-		return I("services.unsupported");
+		Se = null, e();
+	}) : I = { get error() {
+		return F("services.unsupported");
 	} };
 }
-function Se(e) {
-	return j.services?.on("change", () => R(e)) ?? null;
-}
-function Ce(e) {
-	let t = Math.round((Date.now() - e) / 6e4);
-	if (t < 1) return I("services.status.onNow");
-	if (t < 60) return I("services.status.onMinutes", { n: t });
-	let n = Math.round(t / 60);
-	return n < 48 ? I("services.status.onHours", { n }) : I("services.status.onSince", { date: F.date(e) });
-}
 function we(e) {
-	return e.status === "on" ? Ce(e.since) : e.status === "starting" && e.error ? I("services.status.restarting", { error: e.error }) : e.status === "error" ? I("services.status.error", { error: e.error ?? I("services.status.unknownError") }) : e.status === "off" ? I("services.status.off") : e.status === "starting" ? I("services.status.starting") : e.status;
+	return j.services?.on("change", () => Ce(e)) ?? null;
 }
-var z = async (e, t) => {
+function Te(e) {
+	let t = Math.round((Date.now() - e) / 6e4);
+	if (t < 1) return F("services.status.onNow");
+	if (t < 60) return F("services.status.onMinutes", { n: t });
+	let n = Math.round(t / 60);
+	return n < 48 ? F("services.status.onHours", { n }) : F("services.status.onSince", { date: ve.date(e) });
+}
+function Ee(e) {
+	return e.status === "on" ? Te(e.since) : e.status === "starting" && e.error ? F("services.status.restarting", { error: e.error }) : e.status === "error" ? F("services.status.error", { error: e.error ?? F("services.status.unknownError") }) : e.status === "off" ? F("services.status.off") : e.status === "starting" ? F("services.status.starting") : e.status;
+}
+var L = async (e, t) => {
 	try {
 		await e();
 	} catch (e) {
 		k(e.message, { timeout: 7e3 });
 	}
-	R(t);
+	Ce(t);
 };
-function Te(e) {
-	L || R(e);
-	let t = L && !L.error && L.available, n = A({
-		value: t ? L.enabled : !1,
-		label: I("services.auto.label"),
-		onChange: (t) => z(() => j.services.setEnabled(t), e)
+function De(e) {
+	I || Ce(e);
+	let t = I && !I.error && I.available, n = A({
+		value: t ? I.enabled : !1,
+		label: F("services.auto.label"),
+		onChange: (t) => L(() => j.services.setEnabled(t), e)
 	});
 	return n.disabled = !t, {
-		label: I("services.auto.label"),
-		description: L ? L.error ? L.error : L.available ? I("services.auto.description") : I("services.auto.noEngine") : I("common.loading"),
-		keywords: I("services.auto.keywords"),
+		label: F("services.auto.label"),
+		description: I ? I.error ? I.error : I.available ? F("services.auto.description") : F("services.auto.noEngine") : F("common.loading"),
+		keywords: F("services.auto.keywords"),
 		control: n
 	};
 }
-function Ee(e) {
-	L || R(e.rerender);
+function Oe(e) {
+	I || Ce(e.rerender);
 	let t = (e) => [{
-		title: I("services.title"),
+		title: F("services.title"),
 		rows: [{ label: e }]
 	}];
-	return L ? L.error ? t(L.error) : L.available ? L.services.length ? [{
-		title: I("services.title"),
-		content: () => d("div", { class: "su-apps" }, d("p", { class: "su-hint" }, I("services.hint")), d("div", { class: "st-card su-app" }, L.services.flatMap((t) => De(t, e))))
-	}] : t(I("services.none")) : t(I("services.noEngine")) : t(I("common.loading"));
+	return I ? I.error ? t(I.error) : I.available ? I.services.length ? [{
+		title: F("services.title"),
+		content: () => d("div", { class: "su-apps" }, d("p", { class: "su-hint" }, F("services.hint")), d("div", { class: "st-card su-app" }, I.services.flatMap((t) => ke(t, e))))
+	}] : t(F("services.none")) : t(F("services.noEngine")) : t(F("common.loading"));
 }
-function De(e, t) {
+function ke(e, t) {
 	let { rerender: n } = t, r = `${e.name} · ${e.label}`, i = [
 		{
 			value: "none",
-			label: I("services.startup.none")
+			label: F("services.startup.none")
 		},
 		{
 			value: "login",
-			label: I("services.startup.login")
+			label: F("services.startup.login")
 		},
-		...L.admin || e.startup === "system" ? [{
+		...I.admin || e.startup === "system" ? [{
 			value: "system",
-			label: I("services.startup.system")
+			label: F("services.startup.system")
 		}] : []
 	], s = b({
 		value: e.startup,
 		options: i,
-		label: I("services.startup.field", { name: r }),
-		onChange: (t) => z(() => j.services.setStartup(e.app, e.entry, t), n)
+		label: F("services.startup.field", { name: r }),
+		onChange: (t) => L(() => j.services.setStartup(e.app, e.entry, t), n)
 	});
-	s.disabled = e.system && !L.admin;
+	s.disabled = e.system && !I.admin;
 	let c = e.status === "on" || e.status === "starting", l = d("button", {
 		class: "ctl-btn su-clear",
 		type: "button",
-		title: I("services.restart"),
-		"aria-label": I("services.restartOf", { name: r })
+		title: F("services.restart"),
+		"aria-label": F("services.restartOf", { name: r })
 	}, f("redo"));
-	l.disabled = !e.canControl || !c, l.addEventListener("click", () => z(() => j.services.restart(e.app, e.entry), n));
+	l.disabled = !e.canControl || !c, l.addEventListener("click", () => L(() => j.services.restart(e.app, e.entry), n));
 	let u = a({
-		label: I(c ? "services.stop" : "services.start"),
+		label: F(c ? "services.stop" : "services.start"),
 		spinner: !0,
-		onClick: () => z(() => j.services[c ? "stop" : "start"](e.app, e.entry), n)
+		onClick: () => L(() => j.services[c ? "stop" : "start"](e.app, e.entry), n)
 	});
 	u.disabled = !e.canControl, u.classList.add("su-power");
 	let p = a({
-		label: I("services.log.label"),
-		onClick: () => ke(e, t)
+		label: F("services.log.label"),
+		onClick: () => je(e, t)
 	});
-	p.disabled = e.system && !L.admin;
-	let m = d("div", { class: "st-row su-service" }, o(e, "su-icon"), d("div", { class: "st-label" }, d("b", {}, r), d("small", {}, d("span", { class: `su-state ${e.status}` }, we(e)), " · ", d("code", {}, e.entry), e.system && !L.admin ? ` · ${I("services.byAdmin")}` : "")), s, l, u, p);
-	return e.params && e.startup !== "none" ? [m, Oe(e, t)] : [m];
+	p.disabled = e.system && !I.admin;
+	let m = d("div", { class: "st-row su-service" }, o(e, "su-icon"), d("div", { class: "st-label" }, d("b", {}, r), d("small", {}, d("span", { class: `su-state ${e.status}` }, Ee(e)), " · ", d("code", {}, e.entry), e.system && !I.admin ? ` · ${F("services.byAdmin")}` : "")), s, l, u, p);
+	return e.params && e.startup !== "none" ? [m, Ae(e, t)] : [m];
 }
-function Oe(e, { openWindow: t, rerender: n }) {
-	let r = be(e.params, e.values, {
-		t: I,
+function Ae(e, { openWindow: t, rerender: n }) {
+	let r = xe(e.params, e.values, {
+		t: F,
 		pathAs: "tilde",
-		locked: e.system && !L.admin,
+		locked: e.system && !I.admin,
 		context: `${e.name} · ${e.label}`,
 		pickFile: (e) => de(t, e),
-		onChange: (t) => z(() => j.services.setStartup(e.app, e.entry, e.startup, t), n)
+		onChange: (t) => L(() => j.services.setStartup(e.app, e.entry, e.startup, t), n)
 	});
 	return d("div", { class: "su-params" }, r.el);
 }
-async function ke(e, { openWindow: t }) {
+async function je(e, { openWindow: t }) {
 	let n;
 	try {
 		n = await j.services.log(e.app, e.entry);
@@ -538,7 +538,7 @@ async function ke(e, { openWindow: t }) {
 		return k(e.message, { timeout: 7e3 });
 	}
 	let r = new i({
-		title: I("services.log.title", { name: `${e.name} · ${e.label}` }),
+		title: F("services.log.title", { name: `${e.name} · ${e.label}` }),
 		icon: "list",
 		width: 620,
 		height: 380
@@ -546,46 +546,46 @@ async function ke(e, { openWindow: t }) {
 	r.body.append(d("div", {
 		class: "su-log",
 		tabindex: "0",
-		"aria-label": I("services.log.label")
-	}, n.length ? n.map((e) => d("div", { class: `su-line ${e.level}` }, d("span", {}, a(e.at)), ` ${e.text}`)) : d("p", { class: "su-empty" }, I("services.log.empty")))), t(r);
+		"aria-label": F("services.log.label")
+	}, n.length ? n.map((e) => d("div", { class: `su-line ${e.level}` }, d("span", {}, a(e.at)), ` ${e.text}`)) : d("p", { class: "su-empty" }, F("services.log.empty")))), t(r);
 }
 // src/settings/startup.js
-function Ae({ rerender: e }) {
+function Me({ rerender: e }) {
 	return [{
-		title: I("startup.auto.title"),
-		rows: [Te(e), {
-			label: I("startup.openApps.label"),
-			description: I("startup.openApps.description"),
-			keywords: I("startup.openApps.keywords"),
+		title: F("startup.auto.title"),
+		rows: [De(e), {
+			label: F("startup.openApps.label"),
+			description: F("startup.openApps.description"),
+			keywords: F("startup.openApps.keywords"),
 			control: A({
 				value: S.get("startupApps"),
-				label: I("startup.openApps.label"),
+				label: F("startup.openApps.label"),
 				onChange: (e) => S.set("startupApps", e)
 			})
 		}]
 	}, {
-		title: I("startup.trouble.title"),
+		title: F("startup.trouble.title"),
 		rows: [{
-			label: I("startup.safe.label"),
-			description: I("startup.safe.description"),
-			keywords: I("startup.safe.keywords"),
-			control: N.skipped ? I("startup.safe.active") : ""
+			label: F("startup.safe.label"),
+			description: F("startup.safe.description"),
+			keywords: F("startup.safe.keywords"),
+			control: N.skipped ? F("startup.safe.active") : ""
 		}]
 	}];
 }
-function je(e) {
+function Ne(e) {
 	let t = N.apps().filter((e) => M.some((t) => t.id === e.app));
 	return [{
-		title: I("startup.apps.title"),
-		content: () => d("div", { class: "su-apps" }, d("p", { class: "su-hint" }, I("startup.apps.hint")), t.length ? t.map((t) => Me(t, e)) : d("p", { class: "su-empty" }, I("startup.apps.none")), Pe(t, e))
+		title: F("startup.apps.title"),
+		content: () => d("div", { class: "su-apps" }, d("p", { class: "su-hint" }, F("startup.apps.hint")), t.length ? t.map((t) => Pe(t, e)) : d("p", { class: "su-empty" }, F("startup.apps.none")), Ie(t, e))
 	}];
 }
-function Me(e, t) {
-	let n = M.find((t) => t.id === e.app), r = N.windowEntries(n.id), i = new Map(e.entries.map((e) => [e.entry, e.params])), s = r.filter((e) => i.has(e.entry)).length, c = d("div", { class: "st-row su-head" }, o(n, "su-icon"), d("div", { class: "st-label" }, d("b", {}, n.name), d("small", {}, r.length === 1 ? I("startup.apps.oneEntry") : I("startup.apps.entries", {
+function Pe(e, t) {
+	let n = M.find((t) => t.id === e.app), r = N.windowEntries(n.id), i = new Map(e.entries.map((e) => [e.entry, e.params])), s = r.filter((e) => i.has(e.entry)).length, c = d("div", { class: "st-row su-head" }, o(n, "su-icon"), d("div", { class: "st-label" }, d("b", {}, n.name), d("small", {}, r.length === 1 ? F("startup.apps.oneEntry") : F("startup.apps.entries", {
 		on: s,
 		n: r.length
 	}))), a({
-		label: I("startup.apps.remove"),
+		label: F("startup.apps.remove"),
 		onClick: () => {
 			N.removeApp(n.id), t.rerender();
 		}
@@ -602,21 +602,21 @@ function Me(e, t) {
 				t.rerender();
 			}
 		}), d("div", { class: "st-label" }, d("b", {}, e.label), d("small", {}, d("code", {}, e.entry))));
-		return r ? [a, Ne(n, e, i.get(e.entry), t)] : [a];
+		return r ? [a, Fe(n, e, i.get(e.entry), t)] : [a];
 	});
 	return d("div", { class: "st-card su-app" }, c, l);
 }
-function Ne(e, t, n, { openWindow: r }) {
-	let i = I("startup.params.of", {
+function Fe(e, t, n, { openWindow: r }) {
+	let i = F("startup.params.of", {
 		entry: t.label,
 		app: e.name
 	});
 	if (!t.params) {
-		let r = I("startup.params.undescribed"), a = d("span", { class: "su-note" }, r), o = d("textarea", {
+		let r = F("startup.params.undescribed"), a = d("span", { class: "su-note" }, r), o = d("textarea", {
 			class: "su-json",
 			spellcheck: "false",
 			placeholder: "{ }",
-			"aria-label": I("startup.params.jsonOf", { name: i })
+			"aria-label": F("startup.params.jsonOf", { name: i })
 		});
 		return o.value = Object.keys(n).length ? JSON.stringify(n) : "", o.addEventListener("change", () => {
 			let n = o.value.trim();
@@ -625,16 +625,16 @@ function Ne(e, t, n, { openWindow: r }) {
 				try {
 					i = n ? JSON.parse(n) : {};
 				} catch {
-					throw Error(I("startup.params.invalidJson"));
+					throw Error(F("startup.params.invalidJson"));
 				}
 				N.setParams(e.id, t.entry, i), o.removeAttribute("aria-invalid"), a.classList.remove("bad"), a.textContent = r;
 			} catch (e) {
-				o.setAttribute("aria-invalid", "true"), a.classList.add("bad"), a.textContent = I("startup.params.notSaved", { error: e.message });
+				o.setAttribute("aria-invalid", "true"), a.classList.add("bad"), a.textContent = F("startup.params.notSaved", { error: e.message });
 			}
-		}), d("div", { class: "su-params su-params-json" }, d("span", { class: "su-plabel" }, I("startup.params.json")), d("span"), o, a);
+		}), d("div", { class: "su-params su-params-json" }, d("span", { class: "su-plabel" }, F("startup.params.json")), d("span"), o, a);
 	}
-	let a = be(t.params, n, {
-		t: I,
+	let a = xe(t.params, n, {
+		t: F,
 		context: i,
 		pickFile: (e) => de(r, e),
 		onChange: (n) => {
@@ -647,12 +647,12 @@ function Ne(e, t, n, { openWindow: r }) {
 	});
 	return d("div", { class: "su-params" }, a.el);
 }
-function Pe(e, { rerender: t }) {
+function Ie(e, { rerender: t }) {
 	let n = a({
-		label: I("common.addMore"),
+		label: F("common.addMore"),
 		onClick: () => {
 			let r = M.filter((t) => t.load && !e.some((e) => e.app === t.id) && N.windowEntries(t.id).length).sort((e, t) => e.name.localeCompare(t.name));
-			if (!r.length) return k(I("startup.apps.allAdded"));
+			if (!r.length) return k(F("startup.apps.allAdded"));
 			let i = n.getBoundingClientRect();
 			v(i.left, i.bottom + 4, r.map((e) => ({
 				label: e.name,
@@ -668,27 +668,27 @@ function Pe(e, { rerender: t }) {
 			})));
 		}
 	});
-	return d("div", { class: "st-row su-add" }, d("span", { class: "su-plus" }, f("plus")), d("div", { class: "st-label" }, d("b", {}, I("startup.apps.add")), d("small", {}, I("startup.apps.addDescription"))), n);
+	return d("div", { class: "st-row su-add" }, d("span", { class: "su-plus" }, f("plus")), d("div", { class: "st-label" }, d("b", {}, F("startup.apps.add")), d("small", {}, F("startup.apps.addDescription"))), n);
 }
 // src/settings/pipes.js
-var Fe = ["before", "after"], Ie = (e) => {
-	let t = `pipes.event.${e.name}`, n = I(t);
+var Le = ["before", "after"], Re = (e) => {
+	let t = `pipes.event.${e.name}`, n = F(t);
 	return n === t ? e.label : n;
-}, Le = (e) => {
-	if (!e.owner) return Ie(e);
+}, ze = (e) => {
+	if (!e.owner) return Re(e);
 	let t = M.find((t) => t.id === e.owner)?.name ?? e.owner;
-	return I("pipes.owned", {
-		label: Ie(e),
+	return F("pipes.owned", {
+		label: Re(e),
 		app: t
 	});
 };
-function Re(e) {
-	if (!e) return I("pipes.where.all");
-	if (typeof e == "string") return I("pipes.where.system");
+function Be(e) {
+	if (!e) return F("pipes.where.all");
+	if (typeof e == "string") return F("pipes.where.system");
 	let t = [];
-	return e.meta === "own" && t.push(I("pipes.where.own")), e.ext && t.push(I("pipes.where.ext", { list: e.ext.map((e) => `.${e}`).join(" ") })), e.type && t.push(I(`pipes.where.type.${e.type}`)), e.app && t.push(I("pipes.where.app", { list: e.app.join(", ") })), t.join(" · ");
+	return e.meta === "own" && t.push(F("pipes.where.own")), e.ext && t.push(F("pipes.where.ext", { list: e.ext.map((e) => `.${e}`).join(" ") })), e.type && t.push(F(`pipes.where.type.${e.type}`)), e.app && t.push(F("pipes.where.app", { list: e.app.join(", ") })), t.join(" · ");
 }
-function ze(e, t, n, r) {
+function Ve(e, t, n, r) {
 	let i = e.chain(t.name, n);
 	if (!i.length) return [];
 	let o = n === "after" ? [...i].reverse() : i, s = (a, o) => {
@@ -696,83 +696,83 @@ function ze(e, t, n, r) {
 		[s[c], s[l]] = [s[l], s[c]], e.setOrder(t.name, n, s), r();
 	};
 	return o.map((e, t) => {
-		let r = e.position, i = (e) => !!e?.app && e.position === r, c = !!e.app && i(o[t - 1]), l = !!e.app && i(o[t + 1]), u = e.app ? e.entry && e.entry !== "main" ? `${e.name} · ${e.entry}` : e.name : I("pipes.lilos"), f = a({
-			label: I("pipes.up"),
+		let r = e.position, i = (e) => !!e?.app && e.position === r, c = !!e.app && i(o[t - 1]), l = !!e.app && i(o[t + 1]), u = e.app ? e.entry && e.entry !== "main" ? `${e.name} · ${e.entry}` : e.name : F("pipes.lilos"), f = a({
+			label: F("pipes.up"),
 			onClick: () => s(t, -1)
 		}), p = a({
-			label: I("pipes.down"),
+			label: F("pipes.down"),
 			onClick: () => s(t, 1)
 		});
 		return f.disabled = !c, p.disabled = !l, {
 			label: `${t + 1}. ${u}`,
-			description: `${I(`pipes.stage.${n}`)} · ${I(`pipes.band.${r}`)} · ${Re(e.where)}`,
-			keywords: I("pipes.keywords"),
+			description: `${F(`pipes.stage.${n}`)} · ${F(`pipes.band.${r}`)} · ${Be(e.where)}`,
+			keywords: F("pipes.keywords"),
 			control: c || l ? d("span", { class: "pipes-move" }, f, p) : null
 		};
 	});
 }
-function Be({ rerender: t }) {
+function He({ rerender: t }) {
 	let n = e.pipes;
 	if (!n) return [{
-		title: I("pipes.title"),
-		rows: [{ label: I("pipes.unsupported") }]
+		title: F("pipes.title"),
+		rows: [{ label: F("pipes.unsupported") }]
 	}];
-	let r = n.catalog(), i = r.filter((e) => Fe.some((t) => n.chain(e.name, t).length)), o = [{
-		title: I("pipes.title"),
+	let r = n.catalog(), i = r.filter((e) => Le.some((t) => n.chain(e.name, t).length)), o = [{
+		title: F("pipes.title"),
 		rows: [{
-			label: I("pipes.intro.label"),
-			description: I("pipes.intro.description", { count: r.length }),
-			keywords: I("pipes.keywords")
+			label: F("pipes.intro.label"),
+			description: F("pipes.intro.description", { count: r.length }),
+			keywords: F("pipes.keywords")
 		}]
 	}];
 	for (let e of i) {
-		let r = Fe.flatMap((r) => ze(n, e, r, t));
-		Fe.some((t) => n.isCustomOrder(e.name, t)) && r.push({
-			label: I("pipes.reset.label"),
-			description: I("pipes.reset.description"),
+		let r = Le.flatMap((r) => Ve(n, e, r, t));
+		Le.some((t) => n.isCustomOrder(e.name, t)) && r.push({
+			label: F("pipes.reset.label"),
+			description: F("pipes.reset.description"),
 			control: a({
-				label: I("common.reset"),
+				label: F("common.reset"),
 				onClick: () => {
-					Fe.forEach((t) => n.setOrder(e.name, t, null)), t();
+					Le.forEach((t) => n.setOrder(e.name, t, null)), t();
 				}
 			})
 		}), o.push({
-			title: `${Le(e)} · ${e.name}`,
+			title: `${ze(e)} · ${e.name}`,
 			rows: r
 		});
 	}
 	let s = r.filter((e) => !i.includes(e));
 	return o.push({
-		title: I("pipes.idle.title"),
+		title: F("pipes.idle.title"),
 		rows: s.length ? [{
-			label: s.map(Le).join(", "),
-			description: I("pipes.idle.description", { count: s.length })
-		}] : [{ label: I("pipes.idle.none") }]
+			label: s.map(ze).join(", "),
+			description: F("pipes.idle.description", { count: s.length })
+		}] : [{ label: F("pipes.idle.none") }]
 	}), o;
 }
-var Ve = (t) => e.pipes?.on("change", t) ?? null, { h: B, uid: He, toggle: Ue, textField: We, actionButton: Ge, fs: Ke } = e, qe = (e, t) => !e.when || Object.entries(e.when).every(([e, n]) => Array.isArray(n) ? n.includes(t[e]) : t[e] === n), Je = (t) => e.net?.text?.(t) ?? (typeof t == "string" ? t : ""), Ye = (e) => e.secret || e.type === "password";
-function Xe(e, t) {
-	for (let n of e) !Ye(n) && n.type !== "signin" && t[n.key] === void 0 && n.default !== void 0 && (t[n.key] = n.default);
+var Ue = (t) => e.pipes?.on("change", t) ?? null, { h: R, uid: We, toggle: Ge, textField: Ke, actionButton: qe, fs: Je } = e, Ye = (e, t) => !e.when || Object.entries(e.when).every(([e, n]) => Array.isArray(n) ? n.includes(t[e]) : t[e] === n), Xe = (t) => e.net?.text?.(t) ?? (typeof t == "string" ? t : ""), Ze = (e) => e.secret || e.type === "password";
+function Qe(e, t) {
+	for (let n of e) !Ze(n) && n.type !== "signin" && t[n.key] === void 0 && n.default !== void 0 && (t[n.key] = n.default);
 	return t;
 }
-var Ze = (e, t) => (e.options ?? []).find((e) => String(e.value) === t)?.value;
-function Qe(e, t, n, r = {}) {
-	return B("select", {
+var $e = (e, t) => (e.options ?? []).find((e) => String(e.value) === t)?.value;
+function et(e, t, n, r = {}) {
+	return R("select", {
 		class: "ctl-select",
 		...r
-	}, ...(e.options ?? []).map((e) => B("option", {
+	}, ...(e.options ?? []).map((e) => R("option", {
 		value: String(e.value),
 		selected: e.value === t,
 		disabled: !!e.disabled
 	}, n(e.label))));
 }
-function $e(e, t, { t: n, save: r, secrets: i = [], text: a = Je, keywords: o } = {}) {
-	let s = Xe(e, { ...t });
-	return e.filter((e) => e.type !== "signin" && e.type !== "file" && qe(e, s)).map((e) => ({
+function tt(e, t, { t: n, save: r, secrets: i = [], text: a = Xe, keywords: o } = {}) {
+	let s = Qe(e, { ...t });
+	return e.filter((e) => e.type !== "signin" && e.type !== "file" && Ye(e, s)).map((e) => ({
 		label: a(e.label),
 		description: e.hint ? a(e.hint) : void 0,
 		keywords: o,
-		control: () => et(e, s[e.key], {
+		control: () => nt(e, s[e.key], {
 			t: n,
 			save: r,
 			set: i.includes(e.key),
@@ -780,19 +780,19 @@ function $e(e, t, { t: n, save: r, secrets: i = [], text: a = Je, keywords: o } 
 		})
 	}));
 }
-function et(e, t, { t: n, save: r, set: i, text: a }) {
+function nt(e, t, { t: n, save: r, set: i, text: a }) {
 	let o = a(e.label);
-	if (e.type === "checkbox") return Ue({
+	if (e.type === "checkbox") return Ge({
 		value: t === !0,
 		label: o,
 		onChange: (t) => r(e, t)
 	});
 	if (e.type === "select") {
-		let n = Qe(e, t, a, { "aria-label": o });
-		return n.addEventListener("change", () => r(e, Ze(e, n.value))), n;
+		let n = et(e, t, a, { "aria-label": o });
+		return n.addEventListener("change", () => r(e, $e(e, n.value))), n;
 	}
-	if (Ye(e)) {
-		let t = B("input", {
+	if (Ze(e)) {
+		let t = R("input", {
 			class: "ctl-text sh-setting-text",
 			type: "password",
 			autocomplete: "new-password",
@@ -801,14 +801,14 @@ function et(e, t, { t: n, save: r, set: i, text: a }) {
 		});
 		return t.addEventListener("change", () => {
 			t.value.trim() && r(e, t.value.trim());
-		}), B("div", { class: "sh-setting-secret" }, t, i ? Ge({
+		}), R("div", { class: "sh-setting-secret" }, t, i ? qe({
 			label: n("shared.fields.secretRemove"),
 			danger: !0,
 			onClick: () => r(e, null)
 		}) : null);
 	}
 	if (e.type === "textarea") {
-		let n = B("textarea", {
+		let n = R("textarea", {
 			class: "ctl-text sh-setting-area",
 			rows: "5",
 			spellcheck: "false",
@@ -818,7 +818,7 @@ function et(e, t, { t: n, save: r, set: i, text: a }) {
 		return n.value = t ?? "", n.addEventListener("change", () => r(e, n.value)), n;
 	}
 	if (e.type === "number") {
-		let n = B("input", {
+		let n = R("input", {
 			class: "ctl-text sh-setting-number",
 			type: "number",
 			placeholder: e.placeholder ?? "",
@@ -828,7 +828,7 @@ function et(e, t, { t: n, save: r, set: i, text: a }) {
 		});
 		return n.value = t ?? "", n.addEventListener("change", () => r(e, n.value === "" ? "" : Number(n.value))), n;
 	}
-	let s = We({
+	let s = Ke({
 		value: t ?? "",
 		placeholder: e.placeholder ?? "",
 		label: o,
@@ -837,116 +837,116 @@ function et(e, t, { t: n, save: r, set: i, text: a }) {
 	return s.classList.add("sh-setting-text"), s;
 }
 // src/settings/onedrive.js
-var tt = "onedrive", nt = {
+var rt = "onedrive", it = {
 	mount: null,
 	folder: "/lilOS",
 	ifExists: "ask",
 	doubleClick: !0
 };
-function rt() {
-	let e = T.get(tt, {}) ?? {};
+function at() {
+	let e = T.get(rt, {}) ?? {};
 	return {
-		...nt,
+		...it,
 		...e && typeof e == "object" && !Array.isArray(e) ? e : {}
 	};
 }
-var V = (e, t) => T.set(tt, {
-	...rt(),
+var ot = (e, t) => T.set(rt, {
+	...at(),
 	[e]: t
-}), it = () => [at(), ot()];
-function at() {
-	let e = rt(), t = _.mounts().filter((e) => e.protocol === "onedrive");
+}), st = () => [ct(), lt()];
+function ct() {
+	let e = at(), t = _.mounts().filter((e) => e.protocol === "onedrive");
 	return {
-		title: I("onedrive.upload.title"),
+		title: F("onedrive.upload.title"),
 		rows: [
 			{
-				label: I("onedrive.upload.mount.label"),
-				description: t.length ? I("onedrive.upload.mount.description") : I("onedrive.upload.mount.none"),
-				keywords: I("cloud.onedrive.keywords"),
+				label: F("onedrive.upload.mount.label"),
+				description: t.length ? F("onedrive.upload.mount.description") : F("onedrive.upload.mount.none"),
+				keywords: F("cloud.onedrive.keywords"),
 				control: () => {
 					let n = [{
 						value: "",
-						label: I("onedrive.upload.mount.ask")
+						label: F("onedrive.upload.mount.ask")
 					}, ...t.map((e) => ({
 						value: e.id,
 						label: `${e.name} · ${e.values?.account ?? e.address}`
 					}))], r = b({
 						value: t.some((t) => t.id === e.mount) ? e.mount : "",
 						options: n,
-						label: I("onedrive.upload.mount.label"),
-						onChange: (e) => V("mount", e || null)
+						label: F("onedrive.upload.mount.label"),
+						onChange: (e) => ot("mount", e || null)
 					});
 					return r.disabled = !t.length, r;
 				}
 			},
 			{
-				label: I("onedrive.upload.folder.label"),
-				description: I("onedrive.upload.folder.description"),
-				keywords: I("cloud.onedrive.keywords"),
+				label: F("onedrive.upload.folder.label"),
+				description: F("onedrive.upload.folder.description"),
+				keywords: F("cloud.onedrive.keywords"),
 				control: () => {
 					let t = O({
 						value: e.folder,
-						placeholder: nt.folder,
-						label: I("onedrive.upload.folder.label"),
-						onChange: (e) => V("folder", st(e))
+						placeholder: it.folder,
+						label: F("onedrive.upload.folder.label"),
+						onChange: (e) => ot("folder", ut(e))
 					});
 					return t.classList.add("od-text"), t;
 				}
 			},
 			{
-				label: I("onedrive.upload.exists.label"),
-				description: I("onedrive.upload.exists.description"),
-				keywords: I("cloud.onedrive.keywords"),
+				label: F("onedrive.upload.exists.label"),
+				description: F("onedrive.upload.exists.description"),
+				keywords: F("cloud.onedrive.keywords"),
 				control: () => b({
 					value: e.ifExists,
-					label: I("onedrive.upload.exists.label"),
+					label: F("onedrive.upload.exists.label"),
 					options: [
 						{
 							value: "ask",
-							label: I("onedrive.upload.exists.ask")
+							label: F("onedrive.upload.exists.ask")
 						},
 						{
 							value: "keep",
-							label: I("onedrive.upload.exists.keep")
+							label: F("onedrive.upload.exists.keep")
 						},
 						{
 							value: "replace",
-							label: I("onedrive.upload.exists.replace")
+							label: F("onedrive.upload.exists.replace")
 						}
 					],
-					onChange: (e) => V("ifExists", e)
+					onChange: (e) => ot("ifExists", e)
 				})
 			}
 		]
 	};
 }
-function ot() {
+function lt() {
 	return {
-		title: I("onedrive.office.title"),
+		title: F("onedrive.office.title"),
 		rows: [{
-			label: I("onedrive.office.doubleClick.label"),
-			description: I("onedrive.office.doubleClick.description"),
-			keywords: I("cloud.onedrive.keywords"),
+			label: F("onedrive.office.doubleClick.label"),
+			description: F("onedrive.office.doubleClick.description"),
+			keywords: F("cloud.onedrive.keywords"),
 			control: () => A({
-				value: rt().doubleClick !== !1,
-				label: I("onedrive.office.doubleClick.label"),
-				onChange: (e) => V("doubleClick", e)
+				value: at().doubleClick !== !1,
+				label: F("onedrive.office.doubleClick.label"),
+				onChange: (e) => ot("doubleClick", e)
 			})
 		}]
 	};
 }
-function st(e) {
+function ut(e) {
 	let t = String(e ?? "").split(/[/\\]+/).map((e) => e.trim()).filter((e) => e && e !== "." && e !== "..");
-	return t.length ? `/${t.join("/")}` : nt.folder;
+	return t.length ? `/${t.join("/")}` : it.folder;
 }
 // src/settings/cloud.js
-var H = {
+var z = {
 	onedrive: {
 		module: "netfs-onedrive",
 		icon: "cloud",
 		uses: "microsoft",
 		signAgain: ["shared"],
-		sections: it
+		sections: st
 	},
 	gdrive: {
 		module: "netfs-google",
@@ -989,140 +989,140 @@ var H = {
 		protocols: ["gdrive", "gphotos"],
 		steps: 7
 	}
-}, ct = [
+}, dt = [
 	"clientId",
 	"clientSecret",
 	"clientType",
 	"accounts",
 	"tenant"
-], lt = "/api/net/signin/callback", ut = "http://127.0.0.1:53682/", U = /* @__PURE__ */ new Map(), dt = /* @__PURE__ */ new Map(), ft = /* @__PURE__ */ new Map(), pt = () => p.user?.role === "admin", mt = (e) => !!_.protocols?.some((t) => t.id === e), ht = (e) => H[e].protocols ?? [e];
-function gt(e) {
-	return Object.entries(H).filter(([e]) => ht(e).some(mt)).map(([t, n]) => ({
+], ft = "/api/net/signin/callback", pt = "http://127.0.0.1:53682/", B = /* @__PURE__ */ new Map(), mt = /* @__PURE__ */ new Map(), ht = /* @__PURE__ */ new Map(), gt = () => p.user?.role === "admin", _t = (e) => !!_.protocols?.some((t) => t.id === e), vt = (e) => z[e].protocols ?? [e];
+function yt(e) {
+	return Object.entries(z).filter(([e]) => vt(e).some(_t)).map(([t, n]) => ({
 		id: t,
 		icon: n.icon,
 		get label() {
-			return I(`cloud.${t}.label`);
+			return F(`cloud.${t}.label`);
 		},
 		get description() {
-			return I(`cloud.${t}.description`);
+			return F(`cloud.${t}.description`);
 		},
-		sections: () => bt(t, e)
+		sections: () => Ct(t, e)
 	}));
 }
-var _t = (e) => Object.hasOwn(H, e);
-function vt(e) {
-	U.delete(e), ft.delete(e);
+var bt = (e) => Object.hasOwn(z, e);
+function xt(e) {
+	B.delete(e), ht.delete(e);
 }
-function yt(e, t) {
-	if (!pt()) {
-		U.set(e, { readOnly: !0 });
+function St(e, t) {
+	if (!gt()) {
+		B.set(e, { readOnly: !0 });
 		return;
 	}
-	if (dt.has(e)) return;
-	let n = H[e], r = n.app ? m.oauthApps().then((e) => e.find((e) => e.id === n.app) ?? { error: "" }) : m.settings(n.module);
-	dt.set(e, r.then((t) => U.set(e, t), (t) => U.set(e, { error: t.message })).finally(() => {
-		dt.delete(e), t();
+	if (mt.has(e)) return;
+	let n = z[e], r = n.app ? m.oauthApps().then((e) => e.find((e) => e.id === n.app) ?? { error: "" }) : m.settings(n.module);
+	mt.set(e, r.then((t) => B.set(e, t), (t) => B.set(e, { error: t.message })).finally(() => {
+		mt.delete(e), t();
 	}));
 }
-function bt(e, t) {
-	U.has(e) || yt(e, t.rerender);
-	let n = H[e], r = [xt(e, t)];
-	return n.app && r.push(Ct(n.app)), n.steps && r.push({
-		title: I(`cloud.${e}.steps.title`),
+function Ct(e, t) {
+	B.has(e) || St(e, t.rerender);
+	let n = z[e], r = [wt(e, t)];
+	return n.app && r.push(Et(n.app)), n.steps && r.push({
+		title: F(`cloud.${e}.steps.title`),
 		rows: [{
-			label: I(`cloud.${e}.steps.label`),
-			control: () => d("ol", { class: "od-steps" }, ...Array.from({ length: n.steps }, (t, n) => d("li", {}, I(`cloud.${e}.steps.${n + 1}`))))
+			label: F(`cloud.${e}.steps.label`),
+			control: () => d("ol", { class: "od-steps" }, ...Array.from({ length: n.steps }, (t, n) => d("li", {}, F(`cloud.${e}.steps.${n + 1}`))))
 		}]
 	}), n.sections && r.push(...n.sections(t)), r;
 }
-function xt(e, { rerender: t, select: n }) {
-	let r = H[e], i = U.get(e), o = [];
-	if (!i) o.push({ label: I("common.loading") });
+function wt(e, { rerender: t, select: n }) {
+	let r = z[e], i = B.get(e), o = [];
+	if (!i) o.push({ label: F("common.loading") });
 	else if (i.error) o.push({
-		label: I("cloud.error"),
+		label: F("cloud.error"),
 		description: i.error
 	});
 	else if (i.readOnly) {
-		let t = ht(e).filter(mt).every((e) => !_.protocols.find((t) => t.id === e).notReady);
+		let t = vt(e).filter(_t).every((e) => !_.protocols.find((t) => t.id === e).notReady);
 		o.push({
-			label: I("cloud.status"),
-			description: I("cloud.adminOnly"),
-			control: I(t ? "cloud.ready" : "cloud.notReady")
+			label: F("cloud.status"),
+			description: F("cloud.adminOnly"),
+			control: F(t ? "cloud.ready" : "cloud.notReady")
 		});
 	} else {
-		let n = /* @__PURE__ */ new Set([...r.hide ?? [], ...r.module ? ct : []]), a = i.fields.filter((e) => !n.has(e.key));
-		o.push(...$e(a, i.values, {
-			t: I,
+		let n = /* @__PURE__ */ new Set([...r.hide ?? [], ...r.module ? dt : []]), a = i.fields.filter((e) => !n.has(e.key));
+		o.push(...tt(a, i.values, {
+			t: F,
 			secrets: i.secrets ?? [],
-			keywords: I(`cloud.${e}.keywords`),
-			save: (n, r) => St(e, n, r, t)
+			keywords: F(`cloud.${e}.keywords`),
+			save: (n, r) => Tt(e, n, r, t)
 		})), r.app && i.ready && o.push({
-			label: I("cloud.status"),
+			label: F("cloud.status"),
 			description: _.text(i.ready),
-			control: I("cloud.notReady")
+			control: F("cloud.notReady")
 		}), e === "nfs" && o.push({
-			label: I("cloud.nfs.you"),
-			description: I("cloud.nfs.you.description"),
+			label: F("cloud.nfs.you"),
+			description: F("cloud.nfs.you.description"),
 			control: () => d("code", {}, p.user?.username ?? "")
 		});
-		let s = ft.get(e);
+		let s = ht.get(e);
 		s && o.push({
-			label: s.ok ? I("cloud.saved") : I("cloud.notSaved"),
+			label: s.ok ? F("cloud.saved") : F("cloud.notSaved"),
 			description: s.text
 		});
 	}
 	return r.uses && o.push({
-		label: I(`cloud.uses.${r.uses}`),
-		description: I("cloud.uses.description"),
-		keywords: I(`cloud.${e}.keywords`),
+		label: F(`cloud.uses.${r.uses}`),
+		description: F("cloud.uses.description"),
+		keywords: F(`cloud.${e}.keywords`),
 		control: () => a({
-			label: I("cloud.uses.open"),
+			label: F("cloud.uses.open"),
 			onClick: () => n(r.uses)
 		})
 	}), {
-		title: I(`cloud.${e}.settings`),
+		title: F(`cloud.${e}.settings`),
 		rows: o
 	};
 }
-async function St(e, t, n, r) {
-	let i = H[e], a = U.get(e), o = Object.fromEntries(Object.entries(a.values).filter(([e]) => a.fields.some((t) => t.key === e && t.type !== "password")));
+async function Tt(e, t, n, r) {
+	let i = z[e], a = B.get(e), o = Object.fromEntries(Object.entries(a.values).filter(([e]) => a.fields.some((t) => t.key === e && t.type !== "password")));
 	t.type === "password" ? o[t.key] = n : n === "" || n === void 0 ? delete o[t.key] : o[t.key] = n;
 	try {
-		U.set(e, await (i.app ? m.saveOAuthApp(i.app, o) : m.saveSettings(i.module, o))), ft.set(e, {
+		B.set(e, await (i.app ? m.saveOAuthApp(i.app, o) : m.saveSettings(i.module, o))), ht.set(e, {
 			ok: !0,
-			text: i.signAgain?.includes(t.key) ? I("cloud.signAgain") : ""
+			text: i.signAgain?.includes(t.key) ? F("cloud.signAgain") : ""
 		}), await _.load();
 	} catch (t) {
-		ft.set(e, {
+		ht.set(e, {
 			ok: !1,
 			text: t.message
 		});
 	}
 	r();
 }
-function Ct(e) {
+function Et(e) {
 	let t = (e) => a({
-		label: I("cloud.copy"),
-		onClick: () => navigator.clipboard?.writeText(e).then(() => k(I("cloud.copied")), () => {})
-	}), n = `${location.origin}${lt}`, r = location.protocol === "https:" || [
+		label: F("cloud.copy"),
+		onClick: () => navigator.clipboard?.writeText(e).then(() => k(F("cloud.copied")), () => {})
+	}), n = `${location.origin}${ft}`, r = location.protocol === "https:" || [
 		"localhost",
 		"127.0.0.1",
 		"[::1]"
 	].includes(location.hostname);
 	return {
-		title: I("cloud.addresses.title"),
+		title: F("cloud.addresses.title"),
 		rows: [{
-			label: I("cloud.redirect.label"),
-			description: I(r ? `cloud.redirect.${e}` : "cloud.redirect.unusable"),
+			label: F("cloud.redirect.label"),
+			description: F(r ? `cloud.redirect.${e}` : "cloud.redirect.unusable"),
 			control: () => d("div", { class: "od-redirect" }, d("code", {}, n), t(n))
 		}, {
-			label: I("cloud.byHand.label"),
-			description: I(`cloud.byHand.${e}`),
-			control: () => d("div", { class: "od-redirect" }, d("code", {}, ut), t(ut))
+			label: F("cloud.byHand.label"),
+			description: F(`cloud.byHand.${e}`),
+			control: () => d("div", { class: "od-redirect" }, d("code", {}, pt), t(pt))
 		}]
 	};
 }
-var wt = {
+var Dt = {
 	libraries: [
 		{
 			kind: "library",
@@ -2048,59 +2048,59 @@ var wt = {
 	}
 };
 // src/settings/credits.js
-function Tt(e) {
+function Ot(e) {
 	if (e === "lilos") return "lilOS";
-	if (e.startsWith("module:")) return I("credits.module", { name: e.slice(7) });
-	let t = wt.names[e];
-	return t?.[F.lang] ?? t?.en ?? e;
+	if (e.startsWith("module:")) return F("credits.module", { name: e.slice(7) });
+	let t = Dt.names[e];
+	return t?.[ve.lang] ?? t?.en ?? e;
 }
-function Et(e) {
-	let t = e.usedBy.map(Tt).join(", "), n = e.kind === "tool" ? I("credits.builds") : e.kind === "font" ? I("credits.fontUsedBy", { users: t }) : e.via ? I("credits.via", {
+function kt(e) {
+	let t = e.usedBy.map(Ot).join(", "), n = e.kind === "tool" ? F("credits.builds") : e.kind === "font" ? F("credits.fontUsedBy", { users: t }) : e.via ? F("credits.via", {
 		libraries: e.via.join(", "),
 		users: t
-	}) : I("credits.usedBy", { users: t });
+	}) : F("credits.usedBy", { users: t });
 	return {
 		label: e.version ? `${e.name} ${e.version}` : e.name,
 		description: [
 			e.license,
 			e.copyright,
 			n,
-			e.optional && I("credits.optional")
+			e.optional && F("credits.optional")
 		].filter(Boolean).join(" · "),
-		keywords: `${I("credits.keywords")} ${e.license} ${t}`,
+		keywords: `${F("credits.keywords")} ${e.license} ${t}`,
 		control: () => d("a", {
 			class: "credits-link",
 			href: e.url,
 			target: "_blank",
 			rel: "noopener noreferrer",
 			title: e.url,
-			"aria-label": I("credits.siteOf", { name: e.name })
-		}, I("credits.site"))
+			"aria-label": F("credits.siteOf", { name: e.name })
+		}, F("credits.site"))
 	};
 }
-function Dt() {
-	let e = (e) => wt.libraries.filter((t) => t.kind === e), t = e("library").filter((e) => !e.via), n = e("library").filter((e) => e.via);
+function At() {
+	let e = (e) => Dt.libraries.filter((t) => t.kind === e), t = e("library").filter((e) => !e.via), n = e("library").filter((e) => e.via);
 	return [
 		{
-			title: I("credits.libraries"),
-			rows: t.map(Et)
+			title: F("credits.libraries"),
+			rows: t.map(kt)
 		},
 		{
-			title: I("credits.indirect"),
-			rows: n.map(Et)
+			title: F("credits.indirect"),
+			rows: n.map(kt)
 		},
 		{
-			title: I("credits.fonts"),
-			rows: e("font").map(Et)
+			title: F("credits.fonts"),
+			rows: e("font").map(kt)
 		},
 		{
-			title: I("credits.tools"),
-			rows: e("tool").map(Et)
+			title: F("credits.tools"),
+			rows: e("tool").map(kt)
 		}
 	].filter((e) => e.rows.length);
 }
 // src/settings/computer.js
-var W = () => e.host?.native ? e.host : null, Ot = () => !p.user || p.user.role === "admin", G = {
+var V = () => e.host?.native ? e.host : null, jt = () => !p.user || p.user.role === "admin", H = {
 	info: null,
 	settings: null,
 	devices: null,
@@ -2110,14 +2110,14 @@ var W = () => e.host?.native ? e.host : null, Ot = () => !p.user || p.user.role 
 	updates: null,
 	loading: null
 };
-function K(e, t = [
+function U(e, t = [
 	"info",
 	"settings",
 	"servers",
 	"local",
 	"displays"
 ]) {
-	let n = W();
+	let n = V();
 	if (!n) return;
 	let r = {
 		info: () => n.info(),
@@ -2127,105 +2127,105 @@ function K(e, t = [
 		displays: () => n.displays(),
 		devices: () => n.devices.list()
 	};
-	return G.loading = Promise.all(t.map((e) => r[e]().then((t) => {
-		G[e] = t;
-	}, () => {}))).then(() => e()), G.loading;
+	return H.loading = Promise.all(t.map((e) => r[e]().then((t) => {
+		H[e] = t;
+	}, () => {}))).then(() => e()), H.loading;
 }
-var kt = !1;
-function At({ rerender: t }) {
-	let n = W();
-	return n ? (kt || (kt = !0, n.on("settings", (e) => {
-		G.settings = e, t();
+var Mt = !1;
+function Nt({ rerender: t }) {
+	let n = V();
+	return n ? (Mt || (Mt = !0, n.on("settings", (e) => {
+		H.settings = e, t();
 	}), n.on("drives", (e) => {
-		G.devices && (G.devices.drives = e, t());
-	}), e.net?.on?.("mounts", () => t()), K(t)), {
+		H.devices && (H.devices.drives = e, t());
+	}), e.net?.on?.("mounts", () => t()), U(t)), {
 		id: "computer",
 		icon: "monitor",
 		get label() {
-			return I("computer.label");
+			return F("computer.label");
 		},
 		get description() {
-			return I("computer.description");
+			return F("computer.description");
 		},
 		subtabs: [
 			{
 				id: "program",
 				get label() {
-					return I("computer.program.label");
+					return F("computer.program.label");
 				},
-				sections: () => Mt(t)
+				sections: () => Ft(t)
 			},
 			{
 				id: "screen",
 				get label() {
-					return I("computer.screen.label");
-				},
-				sections: () => Pt(t)
-			},
-			{
-				id: "hardware",
-				get label() {
-					return I("computer.hardware.label");
+					return F("computer.screen.label");
 				},
 				sections: () => Lt(t)
 			},
 			{
+				id: "hardware",
+				get label() {
+					return F("computer.hardware.label");
+				},
+				sections: () => Bt(t)
+			},
+			{
 				id: "servers",
 				get label() {
-					return I("computer.servers.label");
+					return F("computer.servers.label");
 				},
-				sections: () => Rt(t)
+				sections: () => Vt(t)
 			}
 		]
 	}) : null;
 }
-var q = () => [{
+var W = () => [{
 	title: "",
 	rows: [{
-		label: I("computer.loading"),
+		label: F("computer.loading"),
 		control: ""
 	}]
 }];
-function J(e, t, n) {
-	return W().settings.set(e, t).then((e) => {
-		G.settings = e, n();
-	}, (e) => k(I("computer.error", { error: e.message }), { level: "error" }));
+function G(e, t, n) {
+	return V().settings.set(e, t).then((e) => {
+		H.settings = e, n();
+	}, (e) => k(F("computer.error", { error: e.message }), { level: "error" }));
 }
-var jt = {
+var Pt = {
 	win32: "Windows",
 	darwin: "macOS",
 	linux: "Linux"
 };
-function Mt(t) {
-	let { info: n, settings: r } = G;
-	if (!n || !r) return q();
+function Ft(t) {
+	let { info: n, settings: r } = H;
+	if (!n || !r) return W();
 	let i = n.os === "darwin", o = n.runtime, s = [
 		{
-			label: I("computer.program.version"),
+			label: F("computer.program.version"),
 			control: n.program
 		},
 		{
-			label: I("computer.program.system"),
-			control: `${jt[n.os] ?? n.os} ${n.osVersion} · ${n.arch}`
+			label: F("computer.program.system"),
+			control: `${Pt[n.os] ?? n.os} ${n.osVersion} · ${n.arch}`
 		},
 		{
-			label: I("computer.program.engine"),
+			label: F("computer.program.engine"),
 			control: `Electron ${n.electron} · Chromium ${n.chrome}`
 		}
 	];
 	n.profile.kind === "local" && o && s.push({
-		label: I("computer.program.kernel"),
-		description: I("computer.program.kernelHint"),
+		label: F("computer.program.kernel"),
+		description: F("computer.program.kernelHint"),
 		control: `lilOS ${n.lilos ?? "?"} · Node.js ${o.node} · PostgreSQL ${String(o.postgres).split("-")[0]} · git ${o.git}`
 	});
 	let c = Array.isArray(n.credits) ? n.credits : [];
 	return [
 		{
-			title: I("computer.program.title"),
+			title: F("computer.program.title"),
 			rows: s
 		},
 		...c.length ? [{
-			title: I("computer.credits.title"),
+			title: F("computer.credits.title"),
 			rows: c.map((t) => ({
 				label: `${t.name} ${t.version ?? ""}`.trim(),
 				description: `${t.license} · ${t.copyright}${t.use ? ` · ${typeof t.use == "string" ? t.use : e.net?.text?.(t.use) ?? t.use.en}` : ""}`,
@@ -2234,176 +2234,176 @@ function Mt(t) {
 					href: t.url,
 					target: "_blank",
 					rel: "noopener noreferrer"
-				}, I("computer.credits.site")) : ""
+				}, F("computer.credits.site")) : ""
 			}))
 		}] : [],
 		{
-			title: I("computer.updates.title"),
+			title: F("computer.updates.title"),
 			rows: [{
-				label: I("computer.updates.label"),
-				description: I(i ? "computer.updates.mac" : "computer.updates.description"),
+				label: F("computer.updates.label"),
+				description: F(i ? "computer.updates.mac" : "computer.updates.description"),
 				control: b({
 					value: r.updates,
-					label: I("computer.updates.label"),
-					onChange: (e) => J("updates", e, t),
+					label: F("computer.updates.label"),
+					onChange: (e) => G("updates", e, t),
 					options: [
 						{
 							value: "auto",
-							label: I("computer.updates.auto"),
+							label: F("computer.updates.auto"),
 							disabled: i
 						},
 						{
 							value: "notify",
-							label: I("computer.updates.notify")
+							label: F("computer.updates.notify")
 						},
 						{
 							value: "off",
-							label: I("computer.updates.off")
+							label: F("computer.updates.off")
 						}
 					]
 				})
 			}, {
-				label: I("computer.updates.check"),
-				description: Nt(),
+				label: F("computer.updates.check"),
+				description: It(),
 				control: d("span", { class: "cp-actions" }, a({
-					label: I("computer.updates.checkButton"),
+					label: F("computer.updates.checkButton"),
 					spinner: !0,
-					onClick: () => W().updates.check().then((e) => {
-						G.updates = e, t();
+					onClick: () => V().updates.check().then((e) => {
+						H.updates = e, t();
 					})
-				}), ["available", "downloaded"].includes(G.updates?.status) ? a({
-					label: G.updates.status === "downloaded" ? I("computer.updates.install") : I("computer.updates.download"),
+				}), ["available", "downloaded"].includes(H.updates?.status) ? a({
+					label: H.updates.status === "downloaded" ? F("computer.updates.install") : F("computer.updates.download"),
 					primary: !0,
-					onClick: () => W().updates.install()
+					onClick: () => V().updates.install()
 				}) : null)
 			}]
 		},
 		{
-			title: I("computer.start.title"),
+			title: F("computer.start.title"),
 			rows: [
 				{
-					label: I("computer.start.login"),
-					description: I("computer.start.loginHint"),
+					label: F("computer.start.login"),
+					description: F("computer.start.loginHint"),
 					control: A({
 						value: r.startAtLogin,
-						label: I("computer.start.login"),
-						onChange: (e) => J("startAtLogin", e, t)
+						label: F("computer.start.login"),
+						onChange: (e) => G("startAtLogin", e, t)
 					})
 				},
 				{
-					label: I("computer.start.tray"),
-					description: I("computer.start.trayHint"),
+					label: F("computer.start.tray"),
+					description: F("computer.start.trayHint"),
 					control: A({
 						value: r.stayInTray,
-						label: I("computer.start.tray"),
-						onChange: (e) => J("stayInTray", e, t)
+						label: F("computer.start.tray"),
+						onChange: (e) => G("stayInTray", e, t)
 					})
 				},
 				{
-					label: I("computer.start.notifications"),
-					description: I("computer.start.notificationsHint"),
+					label: F("computer.start.notifications"),
+					description: F("computer.start.notificationsHint"),
 					control: A({
 						value: r.notifications,
-						label: I("computer.start.notifications"),
-						onChange: (e) => J("notifications", e, t)
+						label: F("computer.start.notifications"),
+						onChange: (e) => G("notifications", e, t)
 					})
 				}
 			]
 		}
 	];
 }
-function Nt() {
-	let e = G.updates;
-	return e ? e.status === "dev" ? I("computer.updates.dev") : e.status === "current" ? I("computer.updates.current") : e.status === "available" ? I("computer.updates.available", { version: e.version }) : e.status === "downloaded" ? I("computer.updates.downloaded", { version: e.version }) : e.status === "error" ? I("computer.updates.failed", { error: e.error ?? "" }) : I("computer.updates.checking") : I("computer.updates.never");
+function It() {
+	let e = H.updates;
+	return e ? e.status === "dev" ? F("computer.updates.dev") : e.status === "current" ? F("computer.updates.current") : e.status === "available" ? F("computer.updates.available", { version: e.version }) : e.status === "downloaded" ? F("computer.updates.downloaded", { version: e.version }) : e.status === "error" ? F("computer.updates.failed", { error: e.error ?? "" }) : F("computer.updates.checking") : F("computer.updates.never");
 }
-function Pt(e) {
-	let { info: t, settings: n, displays: r } = G;
-	if (!t || !n) return q();
-	let i = Ot(), o = n.display === "kiosk", s = [{
-		label: I("computer.screen.mode"),
-		description: I(`computer.screen.${n.display}Hint`),
+function Lt(e) {
+	let { info: t, settings: n, displays: r } = H;
+	if (!t || !n) return W();
+	let i = jt(), o = n.display === "kiosk", s = [{
+		label: F("computer.screen.mode"),
+		description: F(`computer.screen.${n.display}Hint`),
 		control: y({
 			value: n.display,
-			label: I("computer.screen.mode"),
+			label: F("computer.screen.mode"),
 			options: [
 				{
 					value: "window",
-					label: I("computer.screen.window"),
+					label: F("computer.screen.window"),
 					disabled: o && !i
 				},
 				{
 					value: "fullscreen",
-					label: I("computer.screen.fullscreen"),
+					label: F("computer.screen.fullscreen"),
 					disabled: o && !i
 				},
 				{
 					value: "kiosk",
-					label: I("computer.screen.kiosk"),
+					label: F("computer.screen.kiosk"),
 					disabled: !i
 				}
 			],
-			onChange: (t) => J("display", t, e)
+			onChange: (t) => G("display", t, e)
 		})
 	}];
 	return o && !i && s.push({
-		label: I("computer.screen.leave"),
-		description: I("computer.screen.leaveHint"),
+		label: F("computer.screen.leave"),
+		description: F("computer.screen.leaveHint"),
 		control: a({
-			label: I("computer.screen.leaveButton"),
-			onClick: () => Ft(e)
+			label: F("computer.screen.leaveButton"),
+			onClick: () => Rt(e)
 		})
 	}), r.length > 1 && s.push({
-		label: I("computer.screen.monitor"),
-		description: I("computer.screen.monitorHint"),
+		label: F("computer.screen.monitor"),
+		description: F("computer.screen.monitorHint"),
 		control: b({
 			value: n.monitor ?? "",
-			label: I("computer.screen.monitor"),
+			label: F("computer.screen.monitor"),
 			options: [{
 				value: "",
-				label: I("computer.screen.monitorSame")
+				label: F("computer.screen.monitorSame")
 			}, ...r.map((e) => ({
 				value: String(e.id),
-				label: `${e.label}${e.primary ? ` (${I("computer.screen.primary")})` : ""} · ${e.width}×${e.height}`
+				label: `${e.label}${e.primary ? ` (${F("computer.screen.primary")})` : ""} · ${e.width}×${e.height}`
 			}))],
-			onChange: (t) => J("monitor", t === "" ? null : Number(t), e)
+			onChange: (t) => G("monitor", t === "" ? null : Number(t), e)
 		})
 	}), s.push({
-		label: I("computer.screen.keys"),
-		description: I(`computer.screen.keysHint.${t.os}`),
+		label: F("computer.screen.keys"),
+		description: F(`computer.screen.keysHint.${t.os}`),
 		control: A({
 			value: n.kioskKeys,
-			label: I("computer.screen.keys"),
-			onChange: (t) => J("kioskKeys", t, e)
+			label: F("computer.screen.keys"),
+			onChange: (t) => G("kioskKeys", t, e)
 		})
 	}), [{
-		title: I("computer.screen.title"),
+		title: F("computer.screen.title"),
 		rows: s
 	}, {
-		title: I("computer.screen.limitsTitle"),
+		title: F("computer.screen.limitsTitle"),
 		rows: [{
-			label: I(`computer.screen.limits.${t.os}`),
+			label: F(`computer.screen.limits.${t.os}`),
 			control: ""
 		}]
 	}];
 }
-async function Ft(e) {
+async function Rt(e) {
 	(await g(null, {
 		icon: "warning",
-		title: I("computer.screen.leaveTitle"),
-		text: I("computer.screen.leaveText"),
+		title: F("computer.screen.leaveTitle"),
+		text: F("computer.screen.leaveText"),
 		fields: [{
 			name: "username",
-			label: I("computer.screen.adminName"),
+			label: F("computer.screen.adminName"),
 			required: !0
 		}, {
 			name: "password",
 			type: "password",
-			label: I("computer.screen.adminPassword"),
+			label: F("computer.screen.adminPassword"),
 			required: !0
 		}],
 		buttons: ["cancel", {
 			value: "ok",
-			label: I("computer.screen.leaveButton"),
+			label: F("computer.screen.leaveButton"),
 			primary: !0
 		}],
 		validate: async (e) => {
@@ -2411,75 +2411,75 @@ async function Ft(e) {
 				username: e.username,
 				password: e.password
 			}).catch((e) => ({ error: e.message }));
-			return t?.error ? t.error : t?.role === "admin" || I("computer.screen.notAdmin");
+			return t?.error ? t.error : t?.role === "admin" || F("computer.screen.notAdmin");
 		}
-	}))?.button === "ok" && J("display", "window", e);
+	}))?.button === "ok" && G("display", "window", e);
 }
-var It = [
+var zt = [
 	"ask",
 	"declared",
 	"all"
 ];
-function Lt(e) {
-	let { settings: t, devices: n } = G;
-	if (!t) return q();
-	!n && !G.devicesLoading && (G.devicesLoading = !0, K(e, ["devices"]).finally(() => {
-		G.devicesLoading = !1;
+function Bt(e) {
+	let { settings: t, devices: n } = H;
+	if (!t) return W();
+	!n && !H.devicesLoading && (H.devicesLoading = !0, U(e, ["devices"]).finally(() => {
+		H.devicesLoading = !1;
 	}));
 	let r = [{
-		title: I("computer.hardware.title"),
+		title: F("computer.hardware.title"),
 		rows: [{
-			label: I("computer.hardware.rule"),
-			description: `${I(`computer.hardware.${t.hardware}Hint`)}${Ot() ? "" : ` ${I("computer.hardware.adminOnly")}`}`,
+			label: F("computer.hardware.rule"),
+			description: `${F(`computer.hardware.${t.hardware}Hint`)}${jt() ? "" : ` ${F("computer.hardware.adminOnly")}`}`,
 			control: b({
 				value: t.hardware,
-				label: I("computer.hardware.rule"),
-				disabled: !Ot(),
-				options: It.map((e) => ({
+				label: F("computer.hardware.rule"),
+				disabled: !jt(),
+				options: zt.map((e) => ({
 					value: e,
-					label: I(`computer.hardware.${e}`)
+					label: F(`computer.hardware.${e}`)
 				})),
-				onChange: (t) => J("hardware", t, e)
+				onChange: (t) => G("hardware", t, e)
 			})
 		}]
 	}];
-	if (!n) return [...r, ...q()];
+	if (!n) return [...r, ...W()];
 	let i = (e, t) => e.map((e) => e.name || e.displayName || t), o = (e) => e.vendorId != null && e.productId != null ? ` · ${e.vendorId.toString(16).padStart(4, "0")}:${e.productId.toString(16).padStart(4, "0")}` : "", s = (e, t) => ({
 		label: e,
-		description: t.length ? t.join(" · ") : I("computer.hardware.none"),
+		description: t.length ? t.join(" · ") : F("computer.hardware.none"),
 		control: String(t.length)
 	});
 	return r.push({
-		title: I("computer.hardware.devices"),
+		title: F("computer.hardware.devices"),
 		rows: [
-			s(I("computer.hardware.cameras"), i(n.cameras, I("computer.hardware.unnamed"))),
-			s(I("computer.hardware.microphones"), i(n.microphones, I("computer.hardware.unnamed"))),
-			s(I("computer.hardware.serial"), n.serial.map((e, t) => e.vendorId == null ? I("computer.hardware.portNumber", { n: t + 1 }) : `USB${o(e)}`)),
-			s(I("computer.hardware.usb"), n.usb.map((e) => `${e.name ?? I("computer.hardware.unnamed")}${o(e)}`)),
-			s(I("computer.hardware.hid"), n.hid.map((e) => `${e.name ?? I("computer.hardware.unnamed")}${o(e)}`)),
-			s(I("computer.hardware.gpu"), n.gpu.map((e) => `${e.name ?? `${e.vendorId}:${e.deviceId}`}${e.active ? ` (${I("computer.hardware.active")})` : ""}`)),
+			s(F("computer.hardware.cameras"), i(n.cameras, F("computer.hardware.unnamed"))),
+			s(F("computer.hardware.microphones"), i(n.microphones, F("computer.hardware.unnamed"))),
+			s(F("computer.hardware.serial"), n.serial.map((e, t) => e.vendorId == null ? F("computer.hardware.portNumber", { n: t + 1 }) : `USB${o(e)}`)),
+			s(F("computer.hardware.usb"), n.usb.map((e) => `${e.name ?? F("computer.hardware.unnamed")}${o(e)}`)),
+			s(F("computer.hardware.hid"), n.hid.map((e) => `${e.name ?? F("computer.hardware.unnamed")}${o(e)}`)),
+			s(F("computer.hardware.gpu"), n.gpu.map((e) => `${e.name ?? `${e.vendorId}:${e.deviceId}`}${e.active ? ` (${F("computer.hardware.active")})` : ""}`)),
 			{
-				label: I("computer.hardware.webgpu"),
+				label: F("computer.hardware.webgpu"),
 				control: n.gpuFeatures?.webgpu ?? "—"
 			},
-			s(I("computer.hardware.printers"), n.printers.map((e) => `${e.displayName}${e.default ? ` (${I("computer.hardware.default")})` : ""}`)),
-			s(I("computer.hardware.displays"), n.displays.map((e) => `${e.label} ${e.width}×${e.height}`))
+			s(F("computer.hardware.printers"), n.printers.map((e) => `${e.displayName}${e.default ? ` (${F("computer.hardware.default")})` : ""}`)),
+			s(F("computer.hardware.displays"), n.displays.map((e) => `${e.label} ${e.width}×${e.height}`))
 		]
 	}), r.push({
-		title: I("computer.hardware.drives"),
+		title: F("computer.hardware.drives"),
 		rows: n.drives.length ? n.drives.map((e) => ({
 			label: e.name,
-			description: I("computer.hardware.driveSpace", {
+			description: F("computer.hardware.driveSpace", {
 				free: l(e.free),
 				size: l(e.size)
 			}),
 			control: a({
-				label: I("computer.hardware.eject"),
+				label: F("computer.hardware.eject"),
 				spinner: !0,
-				onClick: () => W().devices.eject(e.id).catch((e) => k(e.message, { level: "error" }))
+				onClick: () => V().devices.eject(e.id).catch((e) => k(e.message, { level: "error" }))
 			})
 		})) : [{
-			label: I("computer.hardware.noDrives"),
+			label: F("computer.hardware.noDrives"),
 			control: ""
 		}]
 	}), r.push({
@@ -2487,40 +2487,40 @@ function Lt(e) {
 		rows: [{
 			label: "",
 			control: a({
-				label: I("computer.hardware.refresh"),
+				label: F("computer.hardware.refresh"),
 				spinner: !0,
-				onClick: () => K(e, ["devices"])
+				onClick: () => U(e, ["devices"])
 			})
 		}]
 	}), r;
 }
-function Rt(t) {
-	let { servers: n, local: r } = G;
-	if (!n) return q();
-	let i = W().trusted, o = n.map((e) => {
-		let n = e.kind === "local" ? I(`computer.servers.status.${e.status ?? "stopped"}`) : e.trusted ? I("computer.servers.trusted") : I("computer.servers.untrusted");
+function Vt(t) {
+	let { servers: n, local: r } = H;
+	if (!n) return W();
+	let i = V().trusted, o = n.map((e) => {
+		let n = e.kind === "local" ? F(`computer.servers.status.${e.status ?? "stopped"}`) : e.trusted ? F("computer.servers.trusted") : F("computer.servers.untrusted");
 		return {
-			label: `${e.name}${e.current ? ` · ${I("computer.servers.current")}` : ""}`,
+			label: `${e.name}${e.current ? ` · ${F("computer.servers.current")}` : ""}`,
 			description: `${e.url ?? ""} · ${n}${e.version ? ` · lilOS ${e.version}` : ""}`,
 			control: d("span", { class: "cp-actions" }, !e.current && i ? a({
-				label: I("computer.servers.open"),
-				onClick: () => W().servers.open(e.id)
+				label: F("computer.servers.open"),
+				onClick: () => V().servers.open(e.id)
 			}) : null, e.kind === "local" && i ? a({
-				label: I("computer.servers.browser"),
-				onClick: () => W().local.openInBrowser()
+				label: F("computer.servers.browser"),
+				onClick: () => V().local.openInBrowser()
 			}) : null, e.kind === "local" && i && r?.status === "running" && !e.current ? a({
-				label: I("computer.servers.restart"),
+				label: F("computer.servers.restart"),
 				spinner: !0,
-				onClick: () => W().local.restart()
+				onClick: () => V().local.restart()
 			}) : null, e.kind === "remote" && !e.current && i ? a({
-				label: I("computer.servers.remove"),
-				confirm: I("computer.servers.removeConfirm"),
+				label: F("computer.servers.remove"),
+				confirm: F("computer.servers.removeConfirm"),
 				danger: !0,
-				onClick: () => W().servers.remove(e.id).then(() => K(t, ["servers"]))
+				onClick: () => V().servers.remove(e.id).then(() => U(t, ["servers"]))
 			}) : null)
 		};
 	}), s = [{
-		title: I("computer.servers.title"),
+		title: F("computer.servers.title"),
 		rows: o
 	}];
 	if (i) {
@@ -2529,17 +2529,17 @@ function Rt(t) {
 			trusted: !1
 		};
 		s.push({
-			title: I("computer.servers.addTitle"),
+			title: F("computer.servers.addTitle"),
 			rows: [
 				{
-					label: I("computer.servers.address"),
-					description: I("computer.servers.addressHint"),
+					label: F("computer.servers.address"),
+					description: F("computer.servers.addressHint"),
 					control: O({
 						value: "",
 						placeholder: "https://lilos.azienda.it",
 						type: "url",
 						mono: !0,
-						label: I("computer.servers.address"),
+						label: F("computer.servers.address"),
 						onInput: (t) => {
 							e.url = t;
 						},
@@ -2549,11 +2549,11 @@ function Rt(t) {
 					})
 				},
 				{
-					label: I("computer.servers.trust"),
-					description: I("computer.servers.trustHint"),
+					label: F("computer.servers.trust"),
+					description: F("computer.servers.trustHint"),
 					control: A({
 						value: !1,
-						label: I("computer.servers.trust"),
+						label: F("computer.servers.trust"),
 						onChange: (t) => {
 							e.trusted = t;
 						}
@@ -2562,23 +2562,23 @@ function Rt(t) {
 				{
 					label: "",
 					control: a({
-						label: I("computer.servers.add"),
+						label: F("computer.servers.add"),
 						primary: !0,
 						spinner: !0,
-						onClick: () => W().servers.add({
+						onClick: () => V().servers.add({
 							url: e.url,
 							trusted: e.trusted
-						}).then(() => K(t, ["servers"])).catch((e) => k(e.message, { level: "error" }))
+						}).then(() => U(t, ["servers"])).catch((e) => k(e.message, { level: "error" }))
 					})
 				}
 			]
 		});
 	}
-	return G.info?.profile?.thisComputer && e.net?.protocols?.some((e) => e.id === "local") && s.push(zt(t)), s;
+	return H.info?.profile?.thisComputer && e.net?.protocols?.some((e) => e.id === "local") && s.push(Ht(t)), s;
 }
-function zt(t) {
+function Ht(t) {
 	let n = new Set(Object.values(T.get("desktop-drives", {}) ?? {})), r = e.net.mounts().filter((e) => e.protocol === "local" && !n.has(e.id)), i = async () => {
-		let n = await W().pickFolder();
+		let n = await V().pickFolder();
 		if (n) {
 			try {
 				let t = n.split(/[\\/]/).filter(Boolean).pop() || n, r = await e.net.create({
@@ -2591,32 +2591,32 @@ function zt(t) {
 					auto: !0,
 					remember: !0
 				});
-				await e.net.connect(r.id).catch(() => {}), k(I("computer.folders.added", { name: t }), { level: "success" });
+				await e.net.connect(r.id).catch(() => {}), k(F("computer.folders.added", { name: t }), { level: "success" });
 			} catch (e) {
-				k(I("computer.error", { error: e.message }), { level: "error" });
+				k(F("computer.error", { error: e.message }), { level: "error" });
 			}
 			t();
 		}
 	};
 	return {
-		title: I("computer.folders.title"),
+		title: F("computer.folders.title"),
 		rows: [...r.length ? r.map((n) => ({
 			label: n.name,
-			description: `${n.values?.folder ?? ""}${n.values?.readOnly ? ` · ${I("computer.folders.readOnly")}` : ""}`,
+			description: `${n.values?.folder ?? ""}${n.values?.readOnly ? ` · ${F("computer.folders.readOnly")}` : ""}`,
 			control: a({
-				label: I("computer.servers.remove"),
-				confirm: I("computer.servers.removeConfirm"),
+				label: F("computer.servers.remove"),
+				confirm: F("computer.servers.removeConfirm"),
 				danger: !0,
 				onClick: () => e.net.remove(n.id).then(t, (e) => k(e.message, { level: "error" }))
 			})
 		})) : [{
-			label: I("computer.folders.none"),
+			label: F("computer.folders.none"),
 			control: ""
 		}], {
-			label: I("computer.folders.add"),
-			description: I("computer.folders.addHint"),
+			label: F("computer.folders.add"),
+			description: F("computer.folders.addHint"),
 			control: a({
-				label: I("computer.folders.addButton"),
+				label: F("computer.folders.addButton"),
 				spinner: !0,
 				onClick: i
 			})
@@ -2624,55 +2624,55 @@ function zt(t) {
 	};
 }
 // src/settings/network.js
-var Y = {
+var K = {
 	rules: null,
 	error: "",
 	loading: !1
-}, Bt = () => p.user?.role === "admin";
-function Vt(t) {
-	Y.loading || (Y.loading = !0, e.net.rules().then((e) => {
-		Y.rules = e, Y.error = "";
+}, Ut = () => p.user?.role === "admin";
+function Wt(t) {
+	K.loading || (K.loading = !0, e.net.rules().then((e) => {
+		K.rules = e, K.error = "";
 	}, (e) => {
-		Y.error = e.message;
+		K.error = e.message;
 	}).finally(() => {
-		Y.loading = !1, t();
+		K.loading = !1, t();
 	}));
 }
-async function Ht(t, n) {
+async function Gt(t, n) {
 	try {
-		Y.rules = await e.net.setRules(t), k(I("network.saved"));
+		K.rules = await e.net.setRules(t), k(F("network.saved"));
 	} catch (e) {
 		k(e.message, { level: "error" });
 	}
 	n();
 }
-function Ut({ rerender: t }) {
-	return !p.connected || typeof e.net?.rules != "function" || !Bt() ? null : {
+function Kt({ rerender: t }) {
+	return !p.connected || typeof e.net?.rules != "function" || !Ut() ? null : {
 		id: "network",
 		icon: "globe",
 		get label() {
-			return I("network.label");
+			return F("network.label");
 		},
 		get description() {
-			return I("network.description");
+			return F("network.description");
 		},
-		sections: () => Wt(t)
+		sections: () => qt(t)
 	};
 }
-function Wt(e) {
-	if (!Y.rules && !Y.error && Vt(e), Y.error) return [{
+function qt(e) {
+	if (!K.rules && !K.error && Wt(e), K.error) return [{
 		title: "",
 		rows: [{
-			label: I("network.error"),
-			description: Y.error,
+			label: F("network.error"),
+			description: K.error,
 			control: ""
 		}]
 	}];
-	let t = Y.rules;
+	let t = K.rules;
 	if (!t) return [{
 		title: "",
 		rows: [{
-			label: I("network.loading"),
+			label: F("network.loading"),
 			control: ""
 		}]
 	}];
@@ -2681,39 +2681,39 @@ function Wt(e) {
 		placeholder: "192.168.1.50/32, 10.0.5.0/24",
 		mono: !0,
 		className: "set-wide",
-		onChange: (t) => Ht({ allow: String(t).split(/[\s,;]+/).filter(Boolean) }, e)
+		onChange: (t) => Gt({ allow: String(t).split(/[\s,;]+/).filter(Boolean) }, e)
 	});
 	return [
 		...t.multiUser ? [] : [{
 			title: "",
 			rows: [{
-				label: I("network.single"),
-				description: I("network.singleText"),
+				label: F("network.single"),
+				description: F("network.singleText"),
 				control: ""
 			}]
 		}],
 		{
-			title: I("network.exception"),
+			title: F("network.exception"),
 			rows: [
 				{
-					label: I("network.local.label"),
-					description: I("network.local.description"),
+					label: F("network.local.label"),
+					description: F("network.local.description"),
 					control: A({
 						value: t.allowLocal,
-						onChange: (t) => Ht({ allowLocal: t }, e)
+						onChange: (t) => Gt({ allowLocal: t }, e)
 					})
 				},
 				{
-					label: I("network.private.label"),
-					description: I("network.private.description"),
+					label: F("network.private.label"),
+					description: F("network.private.description"),
 					control: A({
 						value: t.allowPrivate,
-						onChange: (t) => Ht({ allowPrivate: t }, e)
+						onChange: (t) => Gt({ allowPrivate: t }, e)
 					})
 				},
 				{
-					label: I("network.ranges.label"),
-					description: I("network.ranges.description"),
+					label: F("network.ranges.label"),
+					description: F("network.ranges.description"),
 					control: n
 				}
 			]
@@ -2722,50 +2722,347 @@ function Wt(e) {
 			title: "",
 			rows: [{
 				label: "",
-				description: I("network.always"),
+				description: F("network.always"),
 				control: d("span")
 			}]
 		}
 	];
 }
+// src/settings/storage.js
+var Jt = 1024, q = Jt * 1024, Yt = q * 1024, Xt = [
+	["KB", Jt],
+	["MB", q],
+	["GB", Yt],
+	["TB", Yt * 1024]
+], Zt = [
+	"files.maxFileSize",
+	"files.maxReadWhole",
+	"files.maxText"
+], Qt = [
+	"files.uploadPiece",
+	"files.inlineMax",
+	"files.dbChunk",
+	"files.cacheMax"
+], J = {
+	items: null,
+	quotas: !0,
+	users: null,
+	limits: null,
+	error: "",
+	loading: !1
+}, $t = () => p.user?.role === "admin", en = () => p.connected && typeof e.kernelSettings?.list == "function", tn = (e) => e.slice(e.indexOf(".") + 1);
+function nn() {
+	J.items = J.users = J.limits = null, J.error = "";
+}
+function rn(t) {
+	if (J.loading) return;
+	J.loading = !0;
+	let n = e.kernelSettings, r = $t();
+	Promise.all([
+		n.limits({ fresh: !0 }),
+		r ? n.list() : null,
+		r ? n.users() : null
+	]).then(([e, t, n]) => {
+		J.limits = e, t && (J.items = t.items, J.quotas = t.quotas !== !1), J.users = n, J.error = "";
+	}, (e) => {
+		J.error = e.message;
+	}).finally(() => {
+		J.loading = !1, t();
+	});
+}
+var an = (e) => (!J.limits && !J.error && rn(e), !!J.limits);
+async function Y(t, n) {
+	try {
+		let n = await e.kernelSettings.update(t);
+		t.user || (J.items = n.items), J.users = null, J.limits = null;
+	} catch (e) {
+		k(e.message, { level: "error" });
+	}
+	rn(n);
+}
+function on(e, t = q) {
+	return e ? [...Xt].reverse().find(([, t]) => e >= t && e % t === 0)?.[1] ?? [...Xt].reverse().find(([, t]) => e >= t)?.[1] ?? Jt : t;
+}
+var sn = (t) => new Intl.NumberFormat(e.locale?.code || void 0, {
+	maximumFractionDigits: 2,
+	useGrouping: !1
+}).format(t);
+function cn({ value: e, onChange: t, label: n, disabled: r = !1, fallbackUnit: i = q, item: a = null }) {
+	let o = on(e, i), s = d("input", {
+		class: "ctl-text set-size-n",
+		type: "text",
+		inputmode: "decimal",
+		"aria-label": n,
+		disabled: r
+	});
+	s.value = sn(e / o);
+	let c = d("select", {
+		class: "ctl-select set-size-u",
+		"aria-label": F("storage.size.unit", { name: n }),
+		disabled: r
+	}, Xt.map(([e, t]) => d("option", {
+		value: String(t),
+		selected: t === o
+	}, e))), u = (t) => {
+		k(t, { level: "error" }), o = on(e, i), c.value = String(o), s.value = sn(e / o);
+	}, f = () => {
+		let r = String(s.value).trim().replace(/\s/g, "").replace(",", "."), i = Number(r);
+		if (!r || !Number.isFinite(i) || i < 0) return u(F("storage.size.invalid"));
+		let c = Math.round(i * o);
+		if (a) {
+			if (c === 0 && !a.zero) return u(F("storage.size.noZero", { name: n }));
+			if (c > 0 && a.min != null && c < a.min) return u(F("storage.size.min", {
+				name: n,
+				min: l(a.min)
+			}));
+			if (c > 0 && a.max != null && c > a.max) return u(F("storage.size.max", {
+				name: n,
+				max: l(a.max)
+			}));
+		}
+		c !== e && t(c);
+	};
+	return s.addEventListener("change", f), s.addEventListener("keydown", (e) => {
+		e.key === "Enter" && s.blur();
+	}), c.addEventListener("change", () => {
+		o = Number(c.value), f();
+	}), d("span", { class: "set-size" }, [s, c]);
+}
+var ln = (e) => d("span", { class: `set-badge set-badge-${e}` }, F(`storage.source.${e}`));
+function un(e, t, { user: n = null, label: r, description: i } = {}) {
+	let o = tn(e.key);
+	return r ??= F(`storage.setting.${o}.label`), {
+		label: r,
+		description: i ?? F(`storage.setting.${o}.description`),
+		keywords: F("storage.limits.keywords"),
+		control: () => d("span", { class: "set-size-row" }, [
+			e.source !== "default" && !e.locked ? a({
+				label: F("storage.reset"),
+				onClick: () => Y({
+					reset: [e.key],
+					...n && { user: n }
+				}, t)
+			}) : null,
+			e.value === 0 && e.zero === "unlimited" ? d("span", { class: "set-size-hint" }, F("storage.unlimited")) : null,
+			ln(e.locked ? "locked" : e.source),
+			cn({
+				value: e.value,
+				label: r,
+				item: e,
+				disabled: e.locked,
+				fallbackUnit: o === "quota" ? Yt : q,
+				onChange: (r) => Y({
+					set: { [e.key]: r },
+					...n && { user: n }
+				}, t)
+			})
+		])
+	};
+}
+function dn(e, t) {
+	if (e == null) return F("common.unavailable");
+	if (!t) return d("span", { class: "set-quota" }, [d("span", {}, F("storage.quota.noLimit", { used: l(e) }))]);
+	let n = Math.min(1, e / t), r = n >= 1 ? "full" : n >= .9 ? "warn" : "";
+	return d("span", { class: "set-quota" }, [d("span", {}, F("storage.quota.of", {
+		used: l(e),
+		quota: l(t)
+	})), d("span", {
+		class: `set-bar ${r}`,
+		role: "meter",
+		"aria-valuemin": "0",
+		"aria-valuemax": "100",
+		"aria-valuenow": String(Math.round(n * 100)),
+		"aria-label": F("storage.quota.label")
+	}, d("i", { style: `width:${Math.round(n * 100)}%` }))]);
+}
+var fn = (e) => J.error ? [{
+	title: "",
+	rows: [{
+		label: F("storage.error"),
+		description: J.error,
+		control: a({
+			label: F("storage.retry"),
+			onClick: () => {
+				nn(), rn(e);
+			}
+		})
+	}]
+}] : [{
+	title: "",
+	rows: [{
+		label: F("storage.loading"),
+		control: ""
+	}]
+}];
+function pn(e, t) {
+	if (!en()) return e();
+	if (!an(t)) return [...J.error ? fn(t) : [], ...e()];
+	let n = J.limits;
+	return [{
+		title: F("storage.mine.title"),
+		rows: [{
+			label: F("storage.mine.files"),
+			description: n.quota ? F("storage.quota.description") : F("storage.quota.none"),
+			keywords: F("storage.limits.keywords"),
+			control: dn(n.used, n.quota)
+		}, {
+			label: F("storage.maxFile.label"),
+			description: F("storage.maxFile.description"),
+			control: n.maxFileSize ? l(n.maxFileSize) : F("storage.unlimited")
+		}]
+	}, ...e()];
+}
+function mn(e) {
+	if (!an(e) || !J.items) return fn(e);
+	let t = new Map(J.items.map((e) => [e.key, e])), n = (n) => n.filter((e) => t.has(e)).map((n) => un(t.get(n), e));
+	return [
+		{
+			title: F("storage.limits.title"),
+			rows: n(Zt)
+		},
+		{
+			title: F("storage.pieces.title"),
+			rows: n(Qt)
+		},
+		{
+			title: "",
+			rows: [{
+				label: "",
+				description: F("storage.limits.saved"),
+				control: d("span")
+			}]
+		}
+	];
+}
+function hn(e) {
+	if (!an(e) || !J.items) return fn(e);
+	let t = J.items.find((e) => e.key === "files.quota");
+	if (!J.quotas || !t) return [{
+		title: "",
+		rows: [{
+			label: F("storage.users.unavailable"),
+			description: F("storage.users.unavailableText"),
+			control: ""
+		}]
+	}];
+	let n = J.users ?? [];
+	return [{
+		title: F("storage.users.default.title"),
+		rows: [un(t, e, {
+			label: F("storage.setting.quota.label"),
+			description: F("storage.setting.quota.description")
+		})]
+	}, {
+		title: F("storage.users.title"),
+		rows: n.map((n) => ({
+			label: n.name || n.username,
+			description: [n.username, n.role === "admin" ? F("storage.users.admin") : null].filter(Boolean).join(" · "),
+			keywords: `${n.username} ${n.name ?? ""}`,
+			control: () => d("span", { class: "set-user-quota" }, [dn(n.used, n.quota), n.own ? d("span", { class: "set-size-row" }, [
+				a({
+					label: F("storage.users.useDefault"),
+					onClick: () => Y({
+						reset: ["files.quota"],
+						user: n.id
+					}, e)
+				}),
+				n.quota === 0 ? d("span", { class: "set-size-hint" }, F("storage.unlimited")) : null,
+				ln("user"),
+				cn({
+					value: n.quota,
+					label: F("storage.users.quotaOf", { name: n.name || n.username }),
+					item: t,
+					fallbackUnit: Yt,
+					onChange: (t) => Y({
+						set: { "files.quota": t },
+						user: n.id
+					}, e)
+				})
+			]) : a({
+				label: F("storage.users.custom"),
+				onClick: () => Y({
+					set: { "files.quota": t.value },
+					user: n.id
+				}, e)
+			})])
+		}))
+	}];
+}
+function gn({ own: e, rerender: t }) {
+	let n = en() ? [{
+		id: "mine",
+		get label() {
+			return F("storage.mine.label");
+		},
+		sections: () => pn(e, t)
+	}, ...$t() ? [{
+		id: "limits",
+		get label() {
+			return F("storage.limits.label");
+		},
+		sections: () => mn(t)
+	}, {
+		id: "users",
+		get label() {
+			return F("storage.users.label");
+		},
+		sections: () => hn(t)
+	}] : []] : null;
+	return {
+		id: "storage",
+		icon: "disk",
+		get label() {
+			return F("storage.label");
+		},
+		get description() {
+			return p.connected ? F("storage.description.kernel") : F("storage.description.browser");
+		},
+		...n ? { subtabs: n } : { sections: e }
+	};
+}
+function _n(t) {
+	return !en() || typeof e.kernelSettings.on != "function" ? () => {} : e.kernelSettings.on("change", () => {
+		nn(), t();
+	});
+}
 // src/settings/SettingsApp.js
 var X = null;
-function Gt(e) {
+function vn(e) {
 	let t = P(), n = t?.list().find((t) => t.id === e);
 	return n ? [
 		{
-			title: I("workspaces.current.title"),
+			title: F("workspaces.current.title"),
 			rows: [
 				{
-					label: I("common.name"),
-					keywords: I("workspaces.name.keywords"),
+					label: F("common.name"),
+					keywords: F("workspaces.name.keywords"),
 					control: () => {
 						let e = O({
 							value: n.name,
-							label: I("workspaces.name.field"),
+							label: F("workspaces.name.field"),
 							onChange: (e) => t.rename(n.id, e)
 						});
 						return e.maxLength = re.MAX_NAME, e;
 					}
 				},
 				t.setDescription && {
-					label: I("workspaces.description.label"),
-					description: I("workspaces.description.description"),
-					keywords: I("workspaces.description.keywords"),
+					label: F("workspaces.description.label"),
+					description: F("workspaces.description.description"),
+					keywords: F("workspaces.description.keywords"),
 					control: () => {
 						let e = O({
 							value: n.description ?? "",
-							placeholder: I("workspaces.description.placeholder"),
-							label: I("workspaces.description.field"),
+							placeholder: F("workspaces.description.placeholder"),
+							label: F("workspaces.description.field"),
 							onChange: (e) => t.setDescription(n.id, e)
 						});
 						return e.maxLength = re.MAX_DESCRIPTION ?? 200, e;
 					}
 				},
 				{
-					label: I("common.color"),
-					description: I("workspaces.color.description"),
-					keywords: I("workspaces.color.keywords"),
+					label: F("common.color"),
+					description: F("workspaces.color.description"),
+					keywords: F("workspaces.color.keywords"),
 					control: () => E({
 						value: n.color,
 						colors: ee,
@@ -2773,29 +3070,29 @@ function Gt(e) {
 					})
 				},
 				{
-					label: I("workspaces.owned.label"),
-					description: I("workspaces.owned.description"),
+					label: F("workspaces.owned.label"),
+					description: F("workspaces.owned.description"),
 					control: String(t.ownedCount(n.id))
 				},
 				e !== t.currentId && {
-					label: I("workspaces.switch.label"),
-					keywords: I("workspaces.list.keywords"),
+					label: F("workspaces.switch.label"),
+					keywords: F("workspaces.list.keywords"),
 					control: () => a({
-						label: I("workspaces.list.switch"),
+						label: F("workspaces.list.switch"),
 						onClick: () => t.switchTo(e)
 					})
 				}
 			].filter(Boolean)
 		},
 		{
-			title: I("workspaces.apps.title"),
+			title: F("workspaces.apps.title"),
 			rows: M.map((r) => ({
 				label: r.name,
-				description: r.system ? I("workspaces.apps.system") : I("workspaces.apps.installed"),
-				keywords: I("workspaces.apps.keywords", { name: r.name }),
-				control: r.system ? I("workspaces.apps.alwaysVisible") : () => A({
+				description: r.system ? F("workspaces.apps.system") : F("workspaces.apps.installed"),
+				keywords: F("workspaces.apps.keywords", { name: r.name }),
+				control: r.system ? F("workspaces.apps.alwaysVisible") : () => A({
 					value: t.isInstalled(r.id, e),
-					label: e === t.currentId ? I("workspaces.apps.toggle", { name: r.name }) : I("workspaces.apps.toggleIn", {
+					label: e === t.currentId ? F("workspaces.apps.toggle", { name: r.name }) : F("workspaces.apps.toggleIn", {
 						name: r.name,
 						workspace: n.name
 					}),
@@ -2803,86 +3100,86 @@ function Gt(e) {
 				})
 			}))
 		},
-		...rn(e)
+		...An(e)
 	] : [];
 }
-var Kt = {
+var yn = {
 	id: "current",
 	get label() {
-		return I("workspaces.current.label");
+		return F("workspaces.current.label");
 	},
-	sections: () => Gt(P()?.currentId)
-}, qt = {
+	sections: () => vn(P()?.currentId)
+}, bn = {
 	id: "all",
 	get label() {
-		return I("workspaces.all.label");
+		return F("workspaces.all.label");
 	},
-	sections: Zt
-}, Jt = /* @__PURE__ */ new Map();
-function Yt() {
+	sections: wn
+}, xn = /* @__PURE__ */ new Map();
+function Sn() {
 	let e = P();
 	return [
-		Kt,
-		...(e?.list() ?? []).filter((t) => t.id !== e.currentId).map((e) => (Jt.has(e.id) || Jt.set(e.id, {
+		yn,
+		...(e?.list() ?? []).filter((t) => t.id !== e.currentId).map((e) => (xn.has(e.id) || xn.set(e.id, {
 			id: `ws-${e.id}`,
 			get label() {
 				return P()?.describe(e.id)?.name ?? "";
 			},
-			sections: () => Gt(e.id)
-		}), Jt.get(e.id))),
-		qt
+			sections: () => vn(e.id)
+		}), xn.get(e.id))),
+		bn
 	];
 }
-function Xt(e) {
+function Cn(e) {
 	try {
 		return S.get(e), !0;
 	} catch {
 		return !1;
 	}
 }
-function Zt() {
+function wn() {
 	let e = P();
 	if (!e) return [];
 	let t = e.list();
 	return [
-		Xt("taskbarWorkspaces") && {
-			title: I("workspaces.taskbar.title"),
+		Cn("taskbarWorkspaces") && {
+			title: F("workspaces.taskbar.title"),
 			rows: [{
-				label: I("workspaces.taskbar.label"),
-				description: I("workspaces.taskbar.description"),
-				keywords: I("workspaces.taskbar.keywords"),
+				label: F("workspaces.taskbar.label"),
+				description: F("workspaces.taskbar.description"),
+				keywords: F("workspaces.taskbar.keywords"),
 				control: y({
 					value: S.get("taskbarWorkspaces") === "all" ? "all" : "current",
-					label: I("workspaces.taskbar.label"),
+					label: F("workspaces.taskbar.label"),
 					options: [{
 						value: "current",
-						label: I("workspaces.taskbar.current")
+						label: F("workspaces.taskbar.current")
 					}, {
 						value: "all",
-						label: I("workspaces.taskbar.all")
+						label: F("workspaces.taskbar.all")
 					}],
 					onChange: (e) => S.set("taskbarWorkspaces", e)
 				})
 			}]
 		},
 		{
-			title: I("workspaces.label"),
+			title: F("workspaces.label"),
 			rows: [...t.map((n) => {
 				let r = n.id === e.currentId, i = M.filter((t) => e.isInstalled(t.id, n.id)).length;
 				return {
-					label: r ? I("workspaces.list.current", { name: n.name }) : n.name,
-					description: `${I("workspaces.list.owned", { n: e.ownedCount(n.id) })} · ${I("workspaces.list.apps", { n: i })}`,
-					keywords: I("workspaces.list.keywords"),
+					label: r ? F("workspaces.list.current", { name: n.name }) : n.name,
+					description: `${F("workspaces.list.owned", { n: e.ownedCount(n.id) })} · ${F("workspaces.list.apps", { n: i })}`,
+					keywords: F("workspaces.list.keywords"),
 					control: () => d("div", { class: "ws-settings-actions" }, r ? null : a({
-						label: I("workspaces.list.switch"),
+						label: F("workspaces.list.switch"),
 						onClick: () => e.switchTo(n.id)
-					}), t.length > 1 ? $(I("common.delete"), I("common.deleteNow"), () => e.remove(n.id)) : null)
+					}), t.length > 1 ? $(F("common.delete"), F("common.deleteNow"), () => e.remove(n.id)) : null)
 				};
 			}), {
-				label: I("workspaces.new.label"),
-				description: I("workspaces.new.description"),
+				label: F("workspaces.new.label"),
+				description: F("workspaces.new.description"),
 				control: a({
-					label: I("common.create"),
+					label: F("common.create"),
 					onClick: () => {
 						let t = e.create();
 						t && e.switchTo(t);
@@ -2890,21 +3187,21 @@ function Zt() {
 				})
 			}]
 		},
-		...an(),
+		...jn(),
 		{
-			title: I("workspaces.deleting.title"),
+			title: F("workspaces.deleting.title"),
 			rows: [{
-				label: I("workspaces.deleting.files.label"),
-				description: I("workspaces.deleting.files.description")
+				label: F("workspaces.deleting.files.label"),
+				description: F("workspaces.deleting.files.description")
 			}, {
-				label: I("workspaces.deleting.windows.label"),
-				description: I("workspaces.deleting.windows.description")
+				label: F("workspaces.deleting.windows.label"),
+				description: F("workspaces.deleting.windows.description")
 			}]
 		}
 	].filter(Boolean);
 }
 var Z = [];
-function Qt() {
+function Tn() {
 	let e = (e) => {
 		try {
 			let t = D.create({ name: e.value });
@@ -2914,20 +3211,20 @@ function Qt() {
 		}
 	}, t = Z.filter((e) => u.exists(e)).length;
 	return [{
-		title: I("tags.new.title"),
+		title: F("tags.new.title"),
 		rows: [{
-			label: I("common.name"),
-			description: t ? I("tags.new.pending", { n: t }) : I("tags.new.description"),
-			keywords: I("tags.new.keywords"),
+			label: F("common.name"),
+			description: t ? F("tags.new.pending", { n: t }) : F("tags.new.description"),
+			keywords: F("tags.new.keywords"),
 			control: () => {
 				let t = O({
-					placeholder: I("tags.new.placeholder"),
-					label: I("tags.new.field")
+					placeholder: F("tags.new.placeholder"),
+					label: F("tags.new.field")
 				});
 				return t.maxLength = 30, t.classList.add("tag-new-name"), t.addEventListener("keydown", (n) => {
 					n.key === "Enter" && (n.preventDefault(), e(t));
 				}), d("div", { class: "tag-settings-actions" }, t, a({
-					label: I("common.create"),
+					label: F("common.create"),
 					primary: !0,
 					onClick: () => e(t)
 				}));
@@ -2937,12 +3234,12 @@ function Qt() {
 		title: e.name,
 		rows: [
 			{
-				label: I("common.name"),
-				keywords: I("tags.name.keywords"),
+				label: F("common.name"),
+				keywords: F("tags.name.keywords"),
 				control: () => {
 					let t = O({
 						value: e.name,
-						label: I("tags.name.field", { name: e.name }),
+						label: F("tags.name.field", { name: e.name }),
 						onChange: (n) => {
 							try {
 								D.rename(e.id, n);
@@ -2955,8 +3252,8 @@ function Qt() {
 				}
 			},
 			{
-				label: I("common.color"),
-				keywords: I("tags.color.keywords"),
+				label: F("common.color"),
+				keywords: F("tags.color.keywords"),
 				control: () => E({
 					value: e.color,
 					colors: r,
@@ -2964,27 +3261,27 @@ function Qt() {
 				})
 			},
 			{
-				label: I("tags.visible.label"),
-				description: e.visible ? I("tags.visible.on") : I("tags.visible.off"),
-				keywords: I("tags.visible.keywords"),
+				label: F("tags.visible.label"),
+				description: e.visible ? F("tags.visible.on") : F("tags.visible.off"),
+				keywords: F("tags.visible.keywords"),
 				control: () => A({
 					value: e.visible,
-					label: I("tags.visible.toggle", { name: e.name }),
+					label: F("tags.visible.toggle", { name: e.name }),
 					onChange: (t) => D.setVisible(e.id, t)
 				})
 			},
 			{
-				label: I("common.items"),
-				description: I("tags.items.description", { n: u.tagged(e.id).length }),
+				label: F("common.items"),
+				description: F("tags.items.description", { n: u.tagged(e.id).length }),
 				control: () => d("div", { class: "tag-settings-actions" }, a({
-					label: I("tags.items.show"),
+					label: F("tags.items.show"),
 					onClick: () => ue("files", { tag: e.id })
-				}), $(I("common.delete"), I("tags.items.delete"), () => D.remove(e.id)))
+				}), $(F("common.delete"), F("tags.items.delete"), () => D.remove(e.id)))
 			}
 		]
 	}))];
 }
-var $t = [
+var En = [
 	"home",
 	"documents",
 	"images",
@@ -2992,104 +3289,104 @@ var $t = [
 	"downloads",
 	"trash"
 ];
-function en(e) {
-	return $t.includes(e.key) ? {
+function Dn(e) {
+	return En.includes(e.key) ? {
 		...e,
-		name: I(`desk.fixed.item.${e.key}.name`),
-		description: I(`desk.fixed.item.${e.key}.description`)
+		name: F(`desk.fixed.item.${e.key}.name`),
+		description: F(`desk.fixed.item.${e.key}.description`)
 	} : e;
 }
-function tn(e, t) {
-	let n = (j.DESK_FIXED_ITEMS ?? []).map(en);
+function On(e, t) {
+	let n = (j.DESK_FIXED_ITEMS ?? []).map(Dn);
 	return n.length ? [{
-		title: I("desk.fixed.title"),
+		title: F("desk.fixed.title"),
 		rows: [{
-			label: I("desk.fixed.label"),
+			label: F("desk.fixed.label"),
 			description: e
 		}, ...n.map((e) => ({
 			label: e.name,
 			description: e.description,
-			keywords: I("desk.fixed.keywords", { name: e.name }),
+			keywords: F("desk.fixed.keywords", { name: e.name }),
 			...t(e)
 		}))]
 	}] : [];
 }
-var nn = () => typeof j.setFixedShownEverywhere == "function";
-function rn(e) {
-	if (!nn()) return [];
-	let t = P(), n = (n) => e === t?.currentId ? I("desk.fixed.toggle", { name: n }) : I("desk.fixed.toggleIn", {
+var kn = () => typeof j.setFixedShownEverywhere == "function";
+function An(e) {
+	if (!kn()) return [];
+	let t = P(), n = (n) => e === t?.currentId ? F("desk.fixed.toggle", { name: n }) : F("desk.fixed.toggleIn", {
 		name: n,
 		workspace: t?.describe(e)?.name ?? ""
 	});
-	return tn(I("desk.fixed.descriptionWorkspace"), (t) => ({ control: () => A({
+	return On(F("desk.fixed.descriptionWorkspace"), (t) => ({ control: () => A({
 		value: j.isFixedShown(t.key, e),
 		label: n(t.name),
 		onChange: (n) => j.setFixedShown(t.key, n, e)
 	}) }));
 }
-function an() {
+function jn() {
 	let e = P();
-	if (nn() && e) {
+	if (kn() && e) {
 		let t = e.list();
-		return tn(I("desk.fixed.descriptionAll"), (e) => {
+		return On(F("desk.fixed.descriptionAll"), (e) => {
 			let n = t.filter((t) => j.isFixedShown(e.key, t.id)).length;
 			return {
-				description: n && n < t.length ? I("desk.fixed.some", {
+				description: n && n < t.length ? F("desk.fixed.some", {
 					on: n,
 					n: t.length
 				}) : e.description,
 				control: () => A({
 					value: n === t.length,
-					label: I("desk.fixed.toggleAll", { name: e.name }),
+					label: F("desk.fixed.toggleAll", { name: e.name }),
 					onChange: (t) => j.setFixedShownEverywhere(e.key, t)
 				})
 			};
 		});
 	}
 	let t = typeof j.setFixedShown == "function";
-	return tn(I(t ? "desk.fixed.descriptionSwitchable" : "desk.fixed.description"), (e) => ({ control: t ? () => A({
+	return On(F(t ? "desk.fixed.descriptionSwitchable" : "desk.fixed.description"), (e) => ({ control: t ? () => A({
 		value: j.isFixedShown(e.key),
-		label: I("desk.fixed.toggle", { name: e.name }),
+		label: F("desk.fixed.toggle", { name: e.name }),
 		onChange: (t) => j.setFixedShown(e.key, t)
-	}) : I("desk.fixed.always") }));
+	}) : F("desk.fixed.always") }));
 }
-function on() {
+function Mn() {
 	return (j.DESK_FIXED_ITEMS ?? []).length ? [{
-		title: I("desk.fixed.title"),
+		title: F("desk.fixed.title"),
 		rows: [{
-			label: I("desk.fixed.moved.label"),
-			description: I("desk.fixed.moved.description"),
-			keywords: I("desk.fixed.moved.keywords"),
+			label: F("desk.fixed.moved.label"),
+			description: F("desk.fixed.moved.description"),
+			keywords: F("desk.fixed.moved.keywords"),
 			control: () => a({
-				label: I("desk.fixed.moved.open"),
+				label: F("desk.fixed.moved.open"),
 				onClick: () => X?.select("workspaces", "current")
 			})
 		}]
 	}] : [];
 }
-function sn(e, t) {
+function Nn(e, t) {
 	let n = d("input", {
 		class: "desk-color-field",
 		type: "color",
-		"aria-label": I("desk.background.custom.label")
+		"aria-label": F("desk.background.custom.label")
 	});
 	return n.value = /^#[0-9a-f]{6}$/i.test(e) ? e : "#1f2227", n.addEventListener("change", () => t(n.value)), n;
 }
-function cn(e) {
+function Pn(e) {
 	let t = S.get("deskColor"), n = j.wallpaperInfo(), r = async () => {
 		let t = await j.pickFile(e, {
-			title: I("desk.background.image.pick"),
+			title: F("desk.background.image.pick"),
 			exts: j.WALLPAPER_EXTS
 		});
 		t && await j.setWallpaper(t.id);
 	};
 	return [{
-		title: I("desk.background.color.title"),
+		title: F("desk.background.color.title"),
 		rows: [
 			{
-				label: I("common.color"),
-				description: I("desk.background.color.description"),
-				keywords: I("desk.background.color.keywords"),
+				label: F("common.color"),
+				description: F("desk.background.color.description"),
+				keywords: F("desk.background.color.keywords"),
 				control: () => {
 					let e = E({
 						value: t,
@@ -3100,36 +3397,36 @@ function cn(e) {
 				}
 			},
 			{
-				label: I("desk.background.custom.label"),
-				description: I("desk.background.custom.description"),
-				keywords: I("desk.background.color.keywords"),
-				control: () => sn(t, (e) => S.set("deskColor", e))
+				label: F("desk.background.custom.label"),
+				description: F("desk.background.custom.description"),
+				keywords: F("desk.background.color.keywords"),
+				control: () => Nn(t, (e) => S.set("deskColor", e))
 			},
 			t && {
-				label: I("desk.background.theme.label"),
-				description: I("desk.background.theme.description"),
+				label: F("desk.background.theme.label"),
+				description: F("desk.background.theme.description"),
 				control: () => a({
-					label: I("desk.background.theme.button"),
+					label: F("desk.background.theme.button"),
 					onClick: () => S.set("deskColor", "")
 				})
 			}
 		].filter(Boolean)
 	}, {
-		title: I("desk.background.image.title"),
+		title: F("desk.background.image.title"),
 		rows: [{
-			label: I("desk.background.image.label"),
-			keywords: I("desk.background.image.keywords"),
-			description: n ? I("desk.background.image.current", { name: n.name }) : I("desk.background.image.none"),
+			label: F("desk.background.image.label"),
+			keywords: F("desk.background.image.keywords"),
+			description: n ? F("desk.background.image.current", { name: n.name }) : F("desk.background.image.none"),
 			control: () => a({
-				label: I("desk.background.image.choose"),
+				label: F("desk.background.image.choose"),
 				spinner: !0,
 				onClick: r
 			})
 		}, n && {
-			label: I("desk.background.image.remove.label"),
-			description: I("desk.background.image.remove.description"),
+			label: F("desk.background.image.remove.label"),
+			description: F("desk.background.image.remove.description"),
 			control: () => a({
-				label: I("desk.background.image.remove.button"),
+				label: F("desk.background.image.remove.button"),
 				onClick: () => j.clearWallpaper()
 			})
 		}].filter(Boolean)
@@ -3138,7 +3435,7 @@ function cn(e) {
 var Q = (e) => () => A({
 	value: S.get(e),
 	onChange: (t) => S.set(e, t)
-}), ln = {
+}), Fn = {
 	groups: [
 		"header",
 		"actions",
@@ -3162,16 +3459,16 @@ var Q = (e) => () => A({
 		"about"
 	]
 };
-function un() {
-	let e = j.USER_PAGE_ITEMS ?? [], t = (e) => ln.groups.includes(e.key) ? I(`userPage.group.${e.key}`) : e.name, n = (e) => ln.items.includes(e.key) ? {
-		name: I(`userPage.item.${e.key}.name`),
-		description: I(`userPage.item.${e.key}.description`)
+function In() {
+	let e = j.USER_PAGE_ITEMS ?? [], t = (e) => Fn.groups.includes(e.key) ? F(`userPage.group.${e.key}`) : e.name, n = (e) => Fn.items.includes(e.key) ? {
+		name: F(`userPage.item.${e.key}.name`),
+		description: F(`userPage.item.${e.key}.description`)
 	} : e;
 	return [{
-		title: I("userPage.title"),
+		title: F("userPage.title"),
 		rows: [{
-			label: I("userPage.open.label"),
-			description: I("userPage.open.description")
+			label: F("userPage.open.label"),
+			description: F("userPage.open.description")
 		}]
 	}, ...(j.USER_PAGE_GROUPS ?? []).map((r) => ({
 		title: t(r),
@@ -3180,36 +3477,36 @@ function un() {
 			return {
 				label: t,
 				description: r,
-				keywords: I("userPage.keywords", { name: t }),
+				keywords: F("userPage.keywords", { name: t }),
 				control: () => A({
 					value: j.isUserPageShown(e.key),
-					label: I("userPage.toggle", { name: t }),
+					label: F("userPage.toggle", { name: t }),
 					onChange: (t) => j.setUserPageShown(e.key, t)
 				})
 			};
 		})
 	})).filter((e) => e.rows.length)];
 }
-var dn = [
+var Ln = [
 	"system",
 	"desk",
 	"items",
 	"windows"
 ];
-function fn() {
+function Rn() {
 	let e = new Set(le()), t = /* @__PURE__ */ new Set(), n = (e) => {
 		t.add(e);
 		let n = oe(e);
 		return {
-			label: e ? `.${e}` : I("fileTypes.noExtension"),
-			description: n ? I("fileTypes.default", { app: n.name }) : I("fileTypes.noDefault"),
-			keywords: I("fileTypes.keywords", { ext: e }),
+			label: e ? `.${e}` : F("fileTypes.noExtension"),
+			description: n ? F("fileTypes.default", { app: n.name }) : F("fileTypes.noDefault"),
+			keywords: F("fileTypes.keywords", { ext: e }),
 			control: () => b({
 				value: ie(e)?.id ?? "ask",
-				label: e ? I("fileTypes.field", { ext: e }) : I("fileTypes.fieldNoExtension"),
+				label: e ? F("fileTypes.field", { ext: e }) : F("fileTypes.fieldNoExtension"),
 				options: [{
 					value: "ask",
-					label: I("fileTypes.ask")
+					label: F("fileTypes.ask")
 				}, ...ce().map((e) => ({
 					value: e.id,
 					label: e.name
@@ -3223,109 +3520,109 @@ function fn() {
 	})).filter((e) => e.rows.length), i = [...e].filter((e) => !t.has(e)).sort((e, t) => e === "" ? -1 : t === "" ? 1 : e.localeCompare(t));
 	return [
 		{
-			title: I("fileTypes.title"),
+			title: F("fileTypes.title"),
 			rows: [{
-				label: I("fileTypes.all.label"),
-				description: I("fileTypes.all.description"),
-				control: $(I("fileTypes.all.reset"), I("common.confirm"), () => {
+				label: F("fileTypes.all.label"),
+				description: F("fileTypes.all.description"),
+				control: $(F("fileTypes.all.reset"), F("common.confirm"), () => {
 					fe(), X?.render();
 				})
 			}]
 		},
 		...r,
 		...i.length ? [{
-			title: I("fileTypes.others"),
+			title: F("fileTypes.others"),
 			rows: i.map(n)
 		}] : []
 	];
 }
-function pn() {
+function zn() {
 	let e = u.trashed(), t = e.reduce((e, t) => e + t.bytes, 0);
 	return [{
-		title: I("trash.deleting.title"),
+		title: F("trash.deleting.title"),
 		rows: [{
-			label: I("trash.confirm.label"),
-			description: I("trash.confirm.description"),
-			keywords: I("trash.confirm.keywords"),
+			label: F("trash.confirm.label"),
+			description: F("trash.confirm.description"),
+			keywords: F("trash.confirm.keywords"),
 			control: Q("deleteConfirm")
 		}, {
-			label: I("trash.permanent.label"),
-			description: I("trash.permanent.description"),
-			keywords: I("trash.permanent.keywords"),
+			label: F("trash.permanent.label"),
+			description: F("trash.permanent.description"),
+			keywords: F("trash.permanent.keywords"),
 			control: Q("deletePermanent")
 		}]
 	}, {
-		title: I("trash.label"),
+		title: F("trash.label"),
 		rows: [
 			{
-				label: I("trash.retention.label"),
-				description: I("trash.retention.description"),
-				keywords: I("trash.retention.keywords"),
+				label: F("trash.retention.label"),
+				description: F("trash.retention.description"),
+				keywords: F("trash.retention.keywords"),
 				control: () => {
 					let e = S.get("trashRetention"), t = ne.some((t) => t.value === e) ? ne : [...ne, {
 						value: e,
-						label: e > 0 ? I("trash.retention.days", { n: e }) : I("trash.retention.forever")
+						label: e > 0 ? F("trash.retention.days", { n: e }) : F("trash.retention.forever")
 					}];
 					return b({
 						value: e,
-						label: I("trash.retention.field"),
+						label: F("trash.retention.field"),
 						options: t,
 						onChange: (e) => S.set("trashRetention", Number(e))
 					});
 				}
 			},
 			{
-				label: I("trash.contents.label"),
-				description: e.length ? I("trash.contents.description", {
+				label: F("trash.contents.label"),
+				description: e.length ? F("trash.contents.description", {
 					n: e.length,
-					size: vn(t)
-				}) : I("trash.contents.empty"),
-				keywords: I("trash.contents.keywords"),
+					size: Wn(t)
+				}) : F("trash.contents.empty"),
+				keywords: F("trash.contents.keywords"),
 				control: a({
-					label: I("trash.contents.open"),
+					label: F("trash.contents.open"),
 					onClick: () => ue("files", { trash: !0 })
 				})
 			},
 			{
-				label: I("trash.empty.label"),
-				description: I("trash.empty.description"),
-				keywords: I("trash.empty.keywords"),
-				control: e.length ? $(I("trash.empty.button"), I("trash.empty.confirm"), () => u.purgeTrash()) : I("trash.empty.none")
+				label: F("trash.empty.label"),
+				description: F("trash.empty.description"),
+				keywords: F("trash.empty.keywords"),
+				control: e.length ? $(F("trash.empty.button"), F("trash.empty.confirm"), () => u.purgeTrash()) : F("trash.empty.none")
 			}
 		]
 	}];
 }
-function mn() {
+function Bn() {
 	let e = /* @__PURE__ */ new Map();
 	for (let t of w.list()) e.has(t.group) || e.set(t.group, []), e.get(t.group).push(t);
 	let t = (e) => {
-		let t = dn.indexOf(String(e[0]?.id ?? "").split(".")[0]);
-		return t < 0 ? dn.length : t;
+		let t = Ln.indexOf(String(e[0]?.id ?? "").split(".")[0]);
+		return t < 0 ? Ln.length : t;
 	};
 	return [
 		{
-			title: I("shortcuts.title"),
+			title: F("shortcuts.title"),
 			rows: [{
-				label: I("shortcuts.all.label"),
-				description: I("shortcuts.all.description"),
-				control: $(I("shortcuts.all.reset"), I("common.confirm"), () => w.resetAll())
+				label: F("shortcuts.all.label"),
+				description: F("shortcuts.all.description"),
+				control: $(F("shortcuts.all.reset"), F("common.confirm"), () => w.resetAll())
 			}]
 		},
 		...[...e].sort(([, e], [, n]) => t(e) - t(n)).map(([e, t]) => ({
 			title: e,
 			rows: t.map((e) => ({
 				label: e.label,
-				keywords: I("shortcuts.keywords", { keys: e.keys.map((e) => w.format(e)).join(" ") }),
+				keywords: F("shortcuts.keywords", { keys: e.keys.map((e) => w.format(e)).join(" ") }),
 				control: C(e.id)
 			}))
 		})),
 		{
-			title: I("shortcuts.mouse.title"),
+			title: F("shortcuts.mouse.title"),
 			rows: [
 				{
-					label: I("shortcuts.lasso.label"),
-					description: I("shortcuts.lasso.description"),
-					keywords: I("shortcuts.lasso.keywords"),
+					label: F("shortcuts.lasso.label"),
+					description: F("shortcuts.lasso.description"),
+					keywords: F("shortcuts.lasso.keywords"),
 					control: () => b({
 						value: S.get("lasso"),
 						options: te,
@@ -3333,75 +3630,75 @@ function mn() {
 					})
 				},
 				{
-					label: I("shortcuts.rectangle.label"),
-					control: I("shortcuts.rectangle.control")
+					label: F("shortcuts.rectangle.label"),
+					control: F("shortcuts.rectangle.control")
 				},
 				{
-					label: I("shortcuts.addToSelection.label"),
-					control: I("shortcuts.addToSelection.control")
+					label: F("shortcuts.addToSelection.label"),
+					control: F("shortcuts.addToSelection.control")
 				},
 				{
-					label: I("shortcuts.pan.label"),
-					control: I("shortcuts.pan.control")
+					label: F("shortcuts.pan.label"),
+					control: F("shortcuts.pan.control")
 				}
 			]
 		},
 		{
-			title: I("shortcuts.fixed.title"),
+			title: F("shortcuts.fixed.title"),
 			rows: [{
-				label: I("shortcuts.navigate.label"),
-				control: I("shortcuts.navigate.control")
+				label: F("shortcuts.navigate.label"),
+				control: F("shortcuts.navigate.control")
 			}, {
-				label: I("shortcuts.rename.label"),
-				control: I("shortcuts.rename.control")
+				label: F("shortcuts.rename.label"),
+				control: F("shortcuts.rename.control")
 			}]
 		}
 	];
 }
-var hn = () => ({
-	isolated: I("apps.mode.isolated"),
-	open: I("apps.mode.open"),
-	system: I("apps.mode.system"),
-	remote: I("apps.mode.remote")
+var Vn = () => ({
+	isolated: F("apps.mode.isolated"),
+	open: F("apps.mode.open"),
+	system: F("apps.mode.system"),
+	remote: F("apps.mode.remote")
 });
-function gn() {
+function Hn() {
 	let e = ae(), { isolated: t } = s.security(), n = M.filter((e) => e.package && !e.package.system);
 	return [{
-		title: I("apps.execution.title"),
+		title: F("apps.execution.title"),
 		rows: [{
-			label: I("apps.isolated.label"),
-			description: I(e ? "apps.isolated.description" : "apps.isolated.adminOnly"),
-			keywords: I("apps.isolated.keywords"),
+			label: F("apps.isolated.label"),
+			description: F(e ? "apps.isolated.description" : "apps.isolated.adminOnly"),
+			keywords: F("apps.isolated.keywords"),
 			control: e ? A({
 				value: t,
-				label: I("apps.isolated.label"),
+				label: F("apps.isolated.label"),
 				onChange: async (e) => {
 					try {
 						await s.setSecurity({ isolated: e });
 					} catch (e) {
-						k(I("apps.isolated.failed", { error: e.message }));
+						k(F("apps.isolated.failed", { error: e.message }));
 					}
 					X?.render();
 				}
-			}) : I(t ? "common.yes" : "common.no")
+			}) : F(t ? "common.yes" : "common.no")
 		}, {
-			label: I("apps.system.label"),
-			description: I("apps.system.description")
+			label: F("apps.system.label"),
+			description: F("apps.system.description")
 		}]
 	}, {
-		title: I("apps.installed.title"),
+		title: F("apps.installed.title"),
 		rows: n.length ? n.map((e) => {
-			let t = se(e.package), n = t.fixed ? t.reason : t.own === null ? I("apps.installed.shared") : I("apps.installed.own");
+			let t = se(e.package), n = t.fixed ? t.reason : t.own === null ? F("apps.installed.shared") : F("apps.installed.own");
 			return {
 				label: e.name,
-				description: `${hn()[t.mode]} · ${n}`,
-				keywords: I("apps.installed.keywords"),
+				description: `${Vn()[t.mode]} · ${n}`,
+				keywords: F("apps.installed.keywords"),
 				control: a({
-					label: I("apps.installed.properties"),
+					label: F("apps.installed.properties"),
 					onClick: () => he(e.id)
 				})
 			};
-		}) : [{ label: I("apps.installed.none") }]
+		}) : [{ label: F("apps.installed.none") }]
 	}];
 }
 function $(e, t, n) {
@@ -3414,48 +3711,48 @@ function $(e, t, n) {
 		}
 	});
 }
-function _n() {
+function Un() {
 	return T.bytes();
 }
-var vn = (e) => e == null ? I("common.unavailable") : l(e), yn = [
+var Wn = (e) => e == null ? F("common.unavailable") : l(e), Gn = [
 	[/Edg\/(\d+)/, "Edge"],
 	[/Firefox\/(\d+)/, "Firefox"],
 	[/Chrome\/(\d+)/, "Chrome"],
 	[/Version\/(\d+).*Safari/, "Safari"]
 ];
-function bn() {
-	for (let [e, t] of yn) {
+function Kn() {
+	for (let [e, t] of Gn) {
 		let n = navigator.userAgent.match(e);
 		if (n) return `${t} ${n[1]}`;
 	}
-	return I("about.unknownBrowser");
+	return F("about.unknownBrowser");
 }
-function xn(e, t = e) {
+function qn(e, t = e) {
 	try {
 		return new Intl.DisplayNames([t], { type: "language" }).of(e) ?? e;
 	} catch {
 		return e;
 	}
 }
-function Sn() {
+function Jn() {
 	let t = S.get("language"), n = [...e.LANGUAGES ?? []], r = e.locale?.language, i = t !== "auto" && !n.includes(t) && e.locale?.code === t && r && r !== "en" && n.includes(r) ? r : t;
 	i !== "auto" && !n.includes(i) && n.push(i);
 	let o = (t) => {
-		let n = e.locale?.packs?.find((e) => e.language === t)?.name ?? xn(t);
+		let n = e.locale?.packs?.find((e) => e.language === t)?.name ?? qn(t);
 		return n.charAt(0).toUpperCase() + n.slice(1);
 	}, s = !!e.languagePacks;
 	return [{
-		title: I("language.title"),
+		title: F("language.title"),
 		rows: [{
-			label: I("language.label"),
-			description: I(s ? "language.row.packs" : "language.row.description"),
-			keywords: I("language.keywords"),
+			label: F("language.label"),
+			description: F(s ? "language.row.packs" : "language.row.description"),
+			keywords: F("language.keywords"),
 			control: () => b({
 				value: i,
-				label: I("language.label"),
+				label: F("language.label"),
 				options: [{
 					value: "auto",
-					label: I("language.auto", { name: xn(navigator.language || "en", F.lang) })
+					label: F("language.auto", { name: qn(navigator.language || "en", ve.lang) })
 				}, ...n.map((e) => ({
 					value: e,
 					label: o(e)
@@ -3463,17 +3760,17 @@ function Sn() {
 				onChange: (e) => S.set("language", e)
 			})
 		}, s && {
-			label: I("language.more.label"),
-			description: I("language.more.description"),
-			keywords: I("language.more.keywords"),
+			label: F("language.more.label"),
+			description: F("language.more.description"),
+			keywords: F("language.more.keywords"),
 			control: a({
-				label: I("language.more.button"),
+				label: F("language.more.button"),
 				onClick: () => ue("appstore", { tab: "languages" })
 			})
 		}].filter(Boolean)
 	}];
 }
-var Cn = [
+var Yn = [
 	1,
 	2,
 	3,
@@ -3483,7 +3780,7 @@ var Cn = [
 	7,
 	8,
 	10
-], wn = [
+], Xn = [
 	3,
 	5,
 	8,
@@ -3491,14 +3788,14 @@ var Cn = [
 	15,
 	30,
 	60
-], Tn = [
+], Zn = [
 	10,
 	20,
 	50,
 	100,
 	200
 ];
-function En({ value: e, values: t, label: n, text: r = String, onChange: i }) {
+function Qn({ value: e, values: t, label: n, text: r = String, onChange: i }) {
 	let a = t.includes(e) ? t : [...t, e].sort((e, t) => e - t);
 	return b({
 		value: e,
@@ -3510,106 +3807,106 @@ function En({ value: e, values: t, label: n, text: r = String, onChange: i }) {
 		onChange: (e) => i(Number(e))
 	});
 }
-function Dn() {
-	let { notifications: t } = e, n = (e) => k(I("notifications.error", { message: e.message }));
+function $n() {
+	let { notifications: t } = e, n = (e) => k(F("notifications.error", { message: e.message }));
 	return [{
-		title: I("notifications.arrive.title"),
+		title: F("notifications.arrive.title"),
 		rows: [{
-			label: I("notifications.shown.label"),
-			description: I("notifications.shown.description"),
-			keywords: I("notifications.shown.keywords"),
-			control: () => En({
+			label: F("notifications.shown.label"),
+			description: F("notifications.shown.description"),
+			keywords: F("notifications.shown.keywords"),
+			control: () => Qn({
 				value: S.get("notifyShown"),
-				values: Cn,
-				label: I("notifications.shown.field"),
+				values: Yn,
+				label: F("notifications.shown.field"),
 				onChange: (e) => S.set("notifyShown", e)
 			})
 		}, {
-			label: I("notifications.seconds.label"),
-			description: I("notifications.seconds.description"),
-			keywords: I("notifications.seconds.keywords"),
-			control: () => En({
+			label: F("notifications.seconds.label"),
+			description: F("notifications.seconds.description"),
+			keywords: F("notifications.seconds.keywords"),
+			control: () => Qn({
 				value: S.get("notifySeconds"),
-				values: wn,
-				label: I("notifications.seconds.field"),
-				text: (e) => I("notifications.seconds.value", { n: e }),
+				values: Xn,
+				label: F("notifications.seconds.field"),
+				text: (e) => F("notifications.seconds.value", { n: e }),
 				onChange: (e) => S.set("notifySeconds", e)
 			})
 		}]
 	}, {
-		title: I("notifications.list.title"),
+		title: F("notifications.list.title"),
 		rows: [{
-			label: I("notifications.keep.label"),
-			keywords: I("notifications.keep.keywords"),
-			description: t.available ? I("notifications.keep.description") : `${I("notifications.keep.description")} ${I("notifications.keep.page")}`,
-			control: () => En({
+			label: F("notifications.keep.label"),
+			keywords: F("notifications.keep.keywords"),
+			description: t.available ? F("notifications.keep.description") : `${F("notifications.keep.description")} ${F("notifications.keep.page")}`,
+			control: () => Qn({
 				value: t.keep,
-				values: Tn,
-				label: I("notifications.keep.field"),
+				values: Zn,
+				label: F("notifications.keep.field"),
 				onChange: (e) => t.setKeep(e).catch(n)
 			})
 		}, {
-			label: I("notifications.test.label"),
-			description: I("notifications.test.description"),
+			label: F("notifications.test.label"),
+			description: F("notifications.test.description"),
 			control: a({
-				label: I("notifications.test.button"),
+				label: F("notifications.test.button"),
 				onClick: () => t.send({
 					app: "settings",
-					text: I("notifications.test.text")
+					text: F("notifications.test.text")
 				}).catch(n)
 			})
 		}]
 	}];
 }
-function On({ openWindow: r, args: i } = {}) {
+function er({ openWindow: r, args: i } = {}) {
 	let a = new n({
-		title: I("window.title"),
+		title: F("window.title"),
 		icon: "gear",
 		width: 760,
 		height: 500,
 		tabs: [
 			{ get group() {
-				return I("group.system");
+				return F("group.system");
 			} },
 			{
 				id: "appearance",
 				icon: "palette",
 				get label() {
-					return I("appearance.label");
+					return F("appearance.label");
 				},
 				get description() {
-					return I("appearance.description");
+					return F("appearance.description");
 				},
 				subtabs: [{
 					id: "colors",
 					get label() {
-						return I("appearance.colors.label");
+						return F("appearance.colors.label");
 					},
 					sections: () => [{
-						title: I("appearance.theme.label"),
+						title: F("appearance.theme.label"),
 						rows: [{
-							label: I("appearance.theme.label"),
-							description: I("appearance.theme.description"),
-							keywords: I("appearance.theme.keywords"),
+							label: F("appearance.theme.label"),
+							description: F("appearance.theme.description"),
+							keywords: F("appearance.theme.keywords"),
 							control: y({
 								value: S.get("theme"),
-								label: I("appearance.theme.label"),
+								label: F("appearance.theme.label"),
 								options: [{
 									value: "light",
-									label: I("appearance.theme.light")
+									label: F("appearance.theme.light")
 								}, {
 									value: "dark",
-									label: I("appearance.theme.dark")
+									label: F("appearance.theme.dark")
 								}],
 								onChange: (e) => S.set("theme", e)
 							})
 						}]
 					}, {
-						title: I("appearance.accent.title"),
+						title: F("appearance.accent.title"),
 						rows: [{
-							label: I("common.color"),
-							description: I("appearance.accent.description"),
-							keywords: I("appearance.accent.keywords"),
+							label: F("common.color"),
+							description: F("appearance.accent.description"),
+							keywords: F("appearance.accent.keywords"),
 							control: E({
 								value: S.get("accent"),
 								colors: ee,
@@ -3620,14 +3917,14 @@ function On({ openWindow: r, args: i } = {}) {
 				}, {
 					id: "motion",
 					get label() {
-						return I("appearance.motion.label");
+						return F("appearance.motion.label");
 					},
 					sections: () => [{
-						title: I("appearance.animations.label"),
+						title: F("appearance.animations.label"),
 						rows: [{
-							label: I("appearance.animations.label"),
-							description: I("appearance.animations.description"),
-							keywords: I("appearance.animations.keywords"),
+							label: F("appearance.animations.label"),
+							description: F("appearance.animations.description"),
+							keywords: F("appearance.animations.keywords"),
 							control: Q("motion")
 						}]
 					}]
@@ -3637,45 +3934,45 @@ function On({ openWindow: r, args: i } = {}) {
 				id: "language",
 				icon: "globe",
 				get label() {
-					return I("language.label");
+					return F("language.label");
 				},
 				get description() {
-					return I("language.description");
+					return F("language.description");
 				},
-				sections: Sn
+				sections: Jn
 			},
 			{
 				id: "desk",
 				icon: "grid",
 				get label() {
-					return I("desk.label");
+					return F("desk.label");
 				},
 				get description() {
-					return I("desk.description");
+					return F("desk.description");
 				},
 				subtabs: [
 					{
 						id: "items",
 						get label() {
-							return I("common.items");
+							return F("common.items");
 						},
 						sections: () => [
-							...on(),
+							...Mn(),
 							{
-								title: I("desk.placement.title"),
+								title: F("desk.placement.title"),
 								rows: [{
-									label: I("desk.snap.label"),
-									description: I("desk.snap.description"),
-									keywords: I("desk.snap.keywords"),
+									label: F("desk.snap.label"),
+									description: F("desk.snap.description"),
+									keywords: F("desk.snap.keywords"),
 									control: Q("snap")
 								}]
 							},
 							typeof j.fileThumbnail == "function" && {
-								title: I("desk.previews.title"),
+								title: F("desk.previews.title"),
 								rows: [{
-									label: I("desk.previews.label"),
-									description: I("desk.previews.description"),
-									keywords: I("desk.previews.keywords"),
+									label: F("desk.previews.label"),
+									description: F("desk.previews.description"),
+									keywords: F("desk.previews.keywords"),
 									control: Q("deskPreviews")
 								}]
 							}
@@ -3684,20 +3981,20 @@ function On({ openWindow: r, args: i } = {}) {
 					typeof j.setWallpaper == "function" && {
 						id: "background",
 						get label() {
-							return I("desk.background.label");
+							return F("desk.background.label");
 						},
-						sections: () => cn(r)
+						sections: () => Pn(r)
 					},
 					{
 						id: "overview",
 						get label() {
-							return I("desk.overview.label");
+							return F("desk.overview.label");
 						},
 						sections: () => [{
-							title: I("desk.overview.title"),
+							title: F("desk.overview.title"),
 							rows: [{
-								label: I("desk.minimap.label"),
-								keywords: I("desk.minimap.keywords"),
+								label: F("desk.minimap.label"),
+								keywords: F("desk.minimap.keywords"),
 								control: Q("minimap")
 							}]
 						}]
@@ -3708,78 +4005,78 @@ function On({ openWindow: r, args: i } = {}) {
 				id: "userpage",
 				icon: "user",
 				get label() {
-					return I("userPage.label");
+					return F("userPage.label");
 				},
 				get description() {
-					return I("userPage.description");
+					return F("userPage.description");
 				},
-				sections: un
+				sections: In
 			},
 			{
 				id: "workspaces",
 				icon: "workspace",
 				get label() {
-					return I("workspaces.label");
+					return F("workspaces.label");
 				},
 				get description() {
-					return I("workspaces.description");
+					return F("workspaces.description");
 				},
 				get subtabs() {
-					return Yt();
+					return Sn();
 				}
 			},
 			e.notifications && {
 				id: "notifications",
 				icon: "bell",
 				get label() {
-					return I("notifications.label");
+					return F("notifications.label");
 				},
 				get description() {
-					return I("notifications.description");
+					return F("notifications.description");
 				},
-				sections: Dn
+				sections: $n
 			},
 			{
 				id: "tags",
 				icon: "tag",
 				get label() {
-					return I("tags.label");
+					return F("tags.label");
 				},
 				get description() {
-					return I("tags.description");
+					return F("tags.description");
 				},
-				sections: Qt
+				sections: Tn
 			},
 			{
 				id: "usability",
 				icon: "accessibility",
 				get label() {
-					return I("usability.label");
+					return F("usability.label");
 				},
 				get description() {
-					return I("usability.description");
+					return F("usability.description");
 				},
 				subtabs: [
 					{
 						id: "shortcuts",
 						get label() {
-							return I("shortcuts.label");
+							return F("shortcuts.label");
 						},
-						sections: mn
+						sections: Bn
 					},
 					{
 						id: "filetypes",
 						get label() {
-							return I("fileTypes.label");
+							return F("fileTypes.label");
 						},
-						sections: fn
+						sections: Rn
 					},
 					{
 						id: "contextmenu",
 						get label() {
-							return I("menu.label");
+							return F("menu.label");
 						},
-						sections: () => ve("desktop.background", {
+						sections: () => ye("desktop.background", {
 							openWindow: r,
 							confirmButton: $,
 							rerender: () => X?.render()
@@ -3788,9 +4085,9 @@ function On({ openWindow: r, args: i } = {}) {
 					{
 						id: "trash",
 						get label() {
-							return I("trash.label");
+							return F("trash.label");
 						},
-						sections: pn
+						sections: zn
 					}
 				]
 			},
@@ -3798,48 +4095,48 @@ function On({ openWindow: r, args: i } = {}) {
 				id: "apps",
 				icon: "window",
 				get label() {
-					return I("apps.label");
+					return F("apps.label");
 				},
 				get description() {
-					return I("apps.description");
+					return F("apps.description");
 				},
 				subtabs: [{
 					id: "security",
 					get label() {
-						return I("apps.security.label");
+						return F("apps.security.label");
 					},
-					sections: gn
+					sections: Hn
 				}, {
 					id: "pipes",
 					get label() {
-						return I("pipes.label");
+						return F("pipes.label");
 					},
-					sections: () => Be({ rerender: () => X?.render() })
+					sections: () => He({ rerender: () => X?.render() })
 				}]
 			},
 			{
 				id: "startup",
 				icon: "power",
 				get label() {
-					return I("startup.label");
+					return F("startup.label");
 				},
 				get description() {
-					return I("startup.description");
+					return F("startup.description");
 				},
 				subtabs: [
 					{
 						id: "options",
 						get label() {
-							return I("startup.options.label");
+							return F("startup.options.label");
 						},
-						sections: () => Ae({ rerender: () => X?.render() })
+						sections: () => Me({ rerender: () => X?.render() })
 					},
 					{
 						id: "services",
 						get label() {
-							return I("startup.services.label");
+							return F("startup.services.label");
 						},
-						sections: () => Ee({
+						sections: () => Oe({
 							openWindow: r,
 							rerender: () => X?.render()
 						})
@@ -3847,50 +4144,43 @@ function On({ openWindow: r, args: i } = {}) {
 					{
 						id: "apps",
 						get label() {
-							return I("startup.apps.label");
+							return F("startup.apps.label");
 						},
-						sections: () => je({
+						sections: () => Ne({
 							openWindow: r,
 							rerender: () => X?.render()
 						})
 					}
 				]
 			},
-			Ut({ rerender: () => X?.render() }),
-			At({ rerender: () => X?.render() }),
-			...gt({
+			Kt({ rerender: () => X?.render() }),
+			Nt({ rerender: () => X?.render() }),
+			...yt({
 				rerender: () => X?.render(),
 				select: (e) => X?.select(e)
 			}),
 			{ get group() {
-				return I("group.data");
+				return F("group.data");
 			} },
-			{
-				id: "storage",
-				icon: "disk",
-				get label() {
-					return I("storage.label");
-				},
-				get description() {
-					return p.connected ? I("storage.description.kernel") : I("storage.description.browser");
-				},
-				sections: () => [{
-					title: I("storage.space.title"),
+			gn({
+				rerender: () => X?.render(),
+				own: () => [{
+					title: F("storage.space.title"),
 					rows: [{
-						label: I("storage.used.label"),
-						description: I("storage.used.description"),
-						control: vn(_n())
+						label: F("storage.used.label"),
+						description: F("storage.used.description"),
+						control: Wn(Un())
 					}, {
-						label: I("storage.contents.label"),
-						description: I("storage.contents.description"),
-						control: vn(u.usage(u.root)?.bytes)
+						label: F("storage.contents.label"),
+						description: F("storage.contents.description"),
+						control: Wn(u.usage(u.root)?.bytes)
 					}]
 				}, {
-					title: I("storage.reset.title"),
+					title: F("storage.reset.title"),
 					rows: [{
-						label: I("storage.defaults.label"),
-						description: I("storage.defaults.description"),
-						control: $(I("common.reset"), I("common.confirm"), () => {
+						label: F("storage.defaults.label"),
+						description: F("storage.defaults.description"),
+						control: $(F("common.reset"), F("common.confirm"), () => {
 							[
 								"accent",
 								"theme",
@@ -3910,10 +4200,10 @@ function On({ openWindow: r, args: i } = {}) {
 							].forEach((e) => S.reset(e)), w.resetAll(), fe(), h.list().forEach((e) => h.reset(e.id));
 						})
 					}, {
-						label: I("storage.initial.label"),
-						description: I("storage.initial.description"),
-						keywords: I("storage.initial.keywords"),
-						control: $(I("storage.initial.button"), I("storage.initial.confirm"), async () => {
+						label: F("storage.initial.label"),
+						description: F("storage.initial.description"),
+						keywords: F("storage.initial.keywords"),
+						control: $(F("storage.initial.button"), F("storage.initial.confirm"), async () => {
 							await u.reset(), [
 								"workspaces",
 								"tags",
@@ -3928,16 +4218,16 @@ function On({ openWindow: r, args: i } = {}) {
 						})
 					}]
 				}]
-			},
+			}),
 			{ group: "" },
 			{
 				id: "about",
 				icon: "info",
 				get label() {
-					return I("about.label");
+					return F("about.label");
 				},
 				get description() {
-					return I("about.description");
+					return F("about.description");
 				},
 				subtabs: [{
 					id: "system",
@@ -3946,29 +4236,29 @@ function On({ openWindow: r, args: i } = {}) {
 						title: "lilOS",
 						rows: [
 							{
-								label: I("about.version"),
+								label: F("about.version"),
 								control: ge
 							},
 							{
-								label: I("about.sdkVersion"),
+								label: F("about.sdkVersion"),
 								control: t
 							},
 							{
-								label: I("about.language"),
+								label: F("about.language"),
 								control: x.locale
 							},
 							{
-								label: I("about.browser"),
-								control: bn()
+								label: F("about.browser"),
+								control: Kn()
 							}
 						]
 					}]
 				}, {
 					id: "credits",
 					get label() {
-						return I("credits.label");
+						return F("credits.label");
 					},
-					sections: Dt
+					sections: At
 				}]
 			}
 		].filter(Boolean)
@@ -3981,19 +4271,19 @@ function On({ openWindow: r, args: i } = {}) {
 	let c = () => a.view.tab?.subtabs?.length && !a.view.subtab ? a.view.select(a.view.tab.id) : a.view.render(), l = [P()?.on("change", c), P()?.on("switch", c)], d = u.on("trash", () => a.view.render()), f = D.on("change", () => a.view.render()), m = [
 		s.on("change", () => a.view.render()),
 		s.on("security", () => a.view.render()),
-		Se(() => a.view.render()),
-		Ve(() => a.view.render())
-	], g = S.on("change:deskHidden", () => a.view.render()), _ = [S.on("change:deskColor", () => a.view.render()), j.wallpaper?.on("change", () => a.view.render())], v = () => a.setTitle(I("window.title"), a.view.tab?.label ?? "");
+		we(() => a.view.render()),
+		Ue(() => a.view.render())
+	], g = S.on("change:deskHidden", () => a.view.render()), _ = [S.on("change:deskColor", () => a.view.render()), j.wallpaper?.on("change", () => a.view.render())], v = () => a.setTitle(F("window.title"), a.view.tab?.label ?? "");
 	a.view.on("select", v), a.view.on("select", () => {
-		_t(a.view.tab?.id) && (vt(a.view.tab.id), a.view.render());
+		bt(a.view.tab?.id) && (xt(a.view.tab.id), a.view.render()), a.view.tab?.id === "storage" && (nn(), a.view.render());
 	});
-	let b = e.net?.on?.("mounts", () => {
+	let b = _n(() => a.view.render()), C = e.net?.on?.("mounts", () => {
 		a.view.tab?.id === "onedrive" && a.view.render();
-	}), C = e.locale?.on("change", () => {
+	}), O = e.locale?.on("change", () => {
 		a.view.render(), v();
-	}), O = e.locale?.on("languages", () => a.view.render());
+	}), k = e.locale?.on("languages", () => a.view.render());
 	return a.on("destroy", () => {
-		l.forEach((e) => e?.()), d(), f(), g(), _.forEach((e) => e?.()), C?.(), O?.(), m.forEach((e) => e?.()), b?.(), X === a.view && (X = null);
+		l.forEach((e) => e?.()), d(), f(), g(), _.forEach((e) => e?.()), O?.(), k?.(), m.forEach((e) => e?.()), C?.(), b(), X === a.view && (X = null);
 	}), a;
 }
-export { On as default };
+export { er as default };

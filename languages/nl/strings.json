@@ -121,8 +121,8 @@
     "notStarted": "{app} is niet gestart: {message}"
   },
   "apps.methods": {
-    "fileTooBig": "Bestand te groot",
-    "textTooLong": "Tekst te lang",
+    "fileTooBig": "Bestand te groot: lilOS slaat bestanden op tot {max}",
+    "textTooLong": "Tekst te lang: hoogstens {max}",
     "denied": "Machtiging geweigerd: {permission}",
     "deniedContent": "Machtiging geweigerd: alleen een app met de pipes file.read en file.write kan een inhoud als de hare markeren",
     "fileGone": "Het bestand bestaat niet meer",
@@ -790,6 +790,11 @@
     "required": "Gebruikersnaam en wachtwoord zijn verplicht",
     "signInFirst": "Meld je eerst aan"
   },
+  "kernel.api.settings": {
+    "signIn": "Meld je eerst aan",
+    "admin": "Alleen een beheerder ziet de instellingen van de kernel",
+    "user": "Gebruiker niet gevonden"
+  },
   "kernel.api.store": {
     "signIn": "Meld je eerst aan",
     "adminOnly": "Alleen voor beheerders",
@@ -987,6 +992,20 @@
     "wantsOne": "{name} wil {id} {range}: {version} voldoet niet",
     "wants": "{name} wil {id} {range}",
     "wantsMany": "{list}: {version} voldoet niet"
+  },
+  "kernel.files": {
+    "tooBig": "Bestand te groot ({size}): lilOS slaat bestanden op tot {max}",
+    "quota": "Niet genoeg ruimte: je hebt nog {free} van je ruimte over",
+    "quotaNear": "Je hebt {percent}% van je ruimte gebruikt ({used} van {quota})",
+    "readWhole": "Bestand te groot om in één keer te lezen ({size}, hoogstens {max})",
+    "text": "Tekst te lang ({size}, hoogstens {max})",
+    "noUpload": "Upload niet gevonden: hij is klaar, of stond te lang stil",
+    "offset": "De upload is bij byte {received}",
+    "uploadSize": "Ongeldige grootte van de upload",
+    "tooMany": "Te veel uploads tegelijk",
+    "notFile": "Het is geen bestand",
+    "ended": "Upload onderbroken",
+    "sizeDiffers": "Meer bytes dan de grootte van de upload"
   },
   "kernel.http": {
     "badPath": "Ongeldig adres",
@@ -1668,6 +1687,17 @@
     "answerTooLarge": "Antwoord te groot (maximaal 5 MB)",
     "fileTooLarge": "Bestand te groot",
     "unknown": "Onbekende functie: {name}"
+  },
+  "kernel.settings": {
+    "unknown": "Onbekende instelling: {key}",
+    "value": "Ongeldige waarde voor {key}",
+    "noZero": "{key} mag niet 0 zijn",
+    "min": "{key} moet minstens {min} zijn",
+    "max": "{key} mag hoogstens {max} zijn",
+    "perUser": "{key} kan niet voor één gebruiker worden ingesteld",
+    "user": "Gebruiker niet gevonden",
+    "admin": "Alleen een beheerder wijzigt de instellingen van de kernel",
+    "changes": "Ongeldige wijzigingen"
   },
   "kernel.sources": {
     "repo": "Ongeldige repository (eigenaar/naam)",

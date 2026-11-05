@@ -1,6 +1,6 @@
 {
   "id": "settings",
-  "version": "1.21.0",
+  "version": "1.22.0",
   "kind": "local",
   "name": "Control Panel",
   "description": "Appearance, language, desk, user page, workspaces, notifications, tags, shortcuts, file types, startup services and apps, storage.",
@@ -78,14 +78,6 @@
               "label": "Google project"
             },
             {
-              "value": "microsoft",
-              "label": "Microsoft app"
-            },
-            {
-              "value": "google",
-              "label": "Google project"
-            },
-            {
               "value": "storage",
               "label": "Storage"
             },
@@ -106,12 +98,12 @@
   ],
   "entry": "dist/index.js",
   "styles": [
-    "dist/index-DvYfjjkG.css"
+    "dist/index-BjZ-6x_W.css"
   ],
   "locales": "locales.json",
   "files": {
-    "dist/index-DvYfjjkG.css": "sha256-VZZ44x4hrfOKnAawIO2OGBMFxJW7COjjSBWPeaFT5BI=",
-    "dist/index.js": "sha256-dKCoCUfzHEVIBux7vloJpqde8LvTMTHya/WkIsB0Z4Y=",
-    "locales.json": "sha256-/GDeLphKS2nsVEZSSkIfyN/rVVpAZ/FwHXpWFuqiqGM="
+    "dist/index-BjZ-6x_W.css": "sha256-97/m3wxD0sE9lv+PheTpkQg+OXxrnkF1LnKJSRu6X0U=",
+    "dist/index.js": "sha256-w2HDPCP5IVDM3G3JZ/PnhCJsU+ilJPpioYJzHi1ytvU=",
+    "locales.json": "sha256-zpKXrHoif5Bih3YOj5pcIX1xUyYFrQo4LQGb+7ycfn8="
   }
 }

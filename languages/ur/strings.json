@@ -121,8 +121,8 @@
     "notStarted": "{app} شروع نہیں ہوئی: {message}"
   },
   "apps.methods": {
-    "fileTooBig": "فائل بہت بڑی ہے",
-    "textTooLong": "متن بہت طویل ہے",
+    "fileTooBig": "فائل بہت بڑی ہے: lilOS {max} تک کی فائلیں محفوظ کرتا ہے",
+    "textTooLong": "متن بہت طویل ہے: زیادہ سے زیادہ {max}",
     "denied": "اجازت نہیں دی گئی: {permission}",
     "deniedContent": "اجازت نہیں دی گئی: صرف file.read اور file.write پائپس والی ایپ کسی مواد کو اپنا قرار دے سکتی ہے",
     "fileGone": "فائل اب موجود نہیں",
@@ -790,6 +790,11 @@
     "required": "صارف نام اور پاس ورڈ ضروری ہیں",
     "signInFirst": "پہلے سائن ان کریں"
   },
+  "kernel.api.settings": {
+    "signIn": "پہلے سائن ان کریں",
+    "admin": "صرف منتظم kernel کی ترتیبات دیکھتا ہے",
+    "user": "صارف نہیں ملا"
+  },
   "kernel.api.store": {
     "signIn": "پہلے سائن ان کریں",
     "adminOnly": "صرف منتظمین کے لیے",
@@ -987,6 +992,20 @@
     "wantsOne": "{name} کو {id} {range} چاہیے: {version} کافی نہیں",
     "wants": "{name} کو {id} {range} چاہیے",
     "wantsMany": "{list}: {version} کافی نہیں"
+  },
+  "kernel.files": {
+    "tooBig": "فائل بہت بڑی ہے ({size}): lilOS {max} تک کی فائلیں محفوظ کرتا ہے",
+    "quota": "کافی جگہ نہیں: آپ کی جگہ میں سے {free} باقی ہے",
+    "quotaNear": "آپ نے اپنی جگہ کا {percent}% استعمال کر لیا ہے ({quota} میں سے {used})",
+    "readWhole": "فائل ایک ہی بار میں پڑھنے کے لیے بہت بڑی ہے ({size}، زیادہ سے زیادہ {max})",
+    "text": "متن بہت طویل ہے ({size}، زیادہ سے زیادہ {max})",
+    "noUpload": "اپ لوڈ نہیں ملا: یہ ختم ہو گیا، یا بہت دیر تک رکا رہا",
+    "offset": "اپ لوڈ بائٹ {received} پر ہے",
+    "uploadSize": "اپ لوڈ کا سائز درست نہیں",
+    "tooMany": "ایک ساتھ بہت زیادہ اپ لوڈ",
+    "notFile": "یہ فائل نہیں ہے",
+    "ended": "اپ لوڈ منقطع ہو گیا",
+    "sizeDiffers": "اپ لوڈ کے سائز سے زیادہ بائٹس"
   },
   "kernel.http": {
     "badPath": "غلط پتا",
@@ -1668,6 +1687,17 @@
     "answerTooLarge": "جواب بہت بڑا ہے (زیادہ سے زیادہ 5 MB)",
     "fileTooLarge": "فائل بہت بڑی ہے",
     "unknown": "نامعلوم فنکشن: {name}"
+  },
+  "kernel.settings": {
+    "unknown": "نامعلوم ترتیب: {key}",
+    "value": "{key} کے لیے غلط قدر",
+    "noZero": "{key} 0 نہیں ہو سکتا",
+    "min": "{key} کم از کم {min} ہونا چاہیے",
+    "max": "{key} زیادہ سے زیادہ {max} ہونا چاہیے",
+    "perUser": "{key} کسی ایک صارف کے لیے مقرر نہیں کیا جا سکتا",
+    "user": "صارف نہیں ملا",
+    "admin": "صرف منتظم kernel کی ترتیبات تبدیل کرتا ہے",
+    "changes": "غلط تبدیلیاں"
   },
   "kernel.sources": {
     "repo": "غلط ریپوزیٹری (owner/name)",

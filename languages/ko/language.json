@@ -3,9 +3,9 @@
   "language": "ko",
   "name": "한국어",
   "englishName": "Korean",
-  "version": "1.0.0",
-  "lilos": ">=1.32.0",
+  "version": "1.1.0",
+  "lilos": ">=1.33.0",
   "files": {
-    "strings.json": "sha256-rC6GeHB2f/c8LNvLuqpyz1M2deK/QuPxr0yaPap5Zts="
+    "strings.json": "sha256-Ag8zp/dZM69e5AsiIX91TAwMAgIB315kjwa97sguotQ="
   }
 }

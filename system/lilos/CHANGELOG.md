@@ -1,5 +1,13 @@
 # Changelog di lilOS
 
+## 1.33.0 — 2026-11-05
+
+- **Nuova funzionalità — file fino a 1 GB.** Il limite di 10 MB per file non c'è più: il kernel salva i file a flusso e il predefinito è 1 GB. Un amministratore lo cambia in Pannello di controllo → Archiviazione → Limiti (0 = senza limite).
+- **Nuova funzionalità — quota di spazio per utente.** Una quota predefinita (0 = senza limite, come prima) e quote personali in Archiviazione → Utenti. Conta tutta la home, cestino compreso; oltre la quota si rifiuta solo ciò che fa crescere lo spazio. Al 90% arriva una notifica.
+- **Nuova funzionalità — Il mio spazio e caricamenti a pezzi.** Ogni utente vede spazio usato, quota e dimensione massima di un file; i file grandi vanno al kernel a pezzi e un invio interrotto riparte da dove era arrivato.
+- **Miglioramento — soglie configurabili.** Lettura in memoria, testo, pezzi nel database, copia nel browser e pezzi di caricamento sono impostazioni del kernel (anche in `lilos-install.json` → `kernel.settings`).
+- **SDK 0.21.0.** Nuovo `kernelSettings`; per i moduli `ctx.settings` e `fs.usage()`; codice d'errore `quota` (507).
+
 ## 1.32.0 — 2026-11-04
 
 - **Nuova funzionalità — lilOS in altre lingue.** I testi di lilOS (scrivania, barra, menu applicazioni, pagina utente, finestre di sistema, accesso) e i messaggi del kernel arrivano da un pacchetto di lingua: si installa da AppStore → Lingue (qualsiasi utente, vale per tutti) e si sceglie in Pannello di controllo → Lingua. 20 lingue disponibili; le app usano le proprie traduzioni.

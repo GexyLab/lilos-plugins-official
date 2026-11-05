@@ -120,8 +120,8 @@
     "notStarted": "{app} tidak dimulai: {message}"
   },
   "apps.methods": {
-    "fileTooBig": "File terlalu besar",
-    "textTooLong": "Teks terlalu panjang",
+    "fileTooBig": "File terlalu besar: lilOS menyimpan file hingga {max}",
+    "textTooLong": "Teks terlalu panjang: maksimal {max}",
     "denied": "Izin ditolak: {permission}",
     "deniedContent": "Izin ditolak: hanya aplikasi dengan pipe file.read dan file.write yang dapat menandai konten sebagai miliknya",
     "fileGone": "File sudah tidak ada",
@@ -769,6 +769,11 @@
     "required": "Nama pengguna dan kata sandi wajib diisi",
     "signInFirst": "Masuk terlebih dahulu"
   },
+  "kernel.api.settings": {
+    "signIn": "Masuk terlebih dahulu",
+    "admin": "Hanya administrator yang dapat melihat pengaturan kernel",
+    "user": "Pengguna tidak ditemukan"
+  },
   "kernel.api.store": {
     "signIn": "Masuk terlebih dahulu",
     "adminOnly": "Hanya administrator",
@@ -963,6 +968,20 @@
     "wantsOne": "{name} menginginkan {id} {range}: {version} tidak memenuhi",
     "wants": "{name} menginginkan {id} {range}",
     "wantsMany": "{list}: {version} tidak memenuhi"
+  },
+  "kernel.files": {
+    "tooBig": "File terlalu besar ({size}): lilOS menyimpan file hingga {max}",
+    "quota": "Ruang tidak cukup: ruang Anda tersisa {free}",
+    "quotaNear": "Anda telah memakai {percent}% ruang Anda ({used} dari {quota})",
+    "readWhole": "File terlalu besar untuk dibaca sekaligus ({size}, maksimal {max})",
+    "text": "Teks terlalu panjang ({size}, maksimal {max})",
+    "noUpload": "Unggahan tidak ditemukan: sudah selesai, atau terlalu lama tidak aktif",
+    "offset": "Unggahan sudah sampai byte {received}",
+    "uploadSize": "Ukuran unggahan tidak valid",
+    "tooMany": "Terlalu banyak unggahan sekaligus",
+    "notFile": "Ini bukan file",
+    "ended": "Unggahan terputus",
+    "sizeDiffers": "Byte lebih banyak dari ukuran unggahan"
   },
   "kernel.http": {
     "badPath": "Alamat tidak valid",
@@ -1630,6 +1649,17 @@
     "answerTooLarge": "Respons terlalu besar (paling banyak 5 MB)",
     "fileTooLarge": "File terlalu besar",
     "unknown": "Fungsi tidak dikenal: {name}"
+  },
+  "kernel.settings": {
+    "unknown": "Pengaturan tidak dikenal: {key}",
+    "value": "Nilai tidak valid untuk {key}",
+    "noZero": "{key} tidak boleh 0",
+    "min": "{key} minimal harus {min}",
+    "max": "{key} maksimal harus {max}",
+    "perUser": "{key} tidak dapat diatur untuk satu pengguna saja",
+    "user": "Pengguna tidak ditemukan",
+    "admin": "Hanya administrator yang mengubah pengaturan kernel",
+    "changes": "Perubahan tidak valid"
   },
   "kernel.sources": {
     "repo": "Repositori tidak valid (owner/name)",
