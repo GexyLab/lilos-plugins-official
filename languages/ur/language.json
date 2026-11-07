@@ -3,7 +3,7 @@
   "language": "ur",
   "name": "اردو",
   "englishName": "Urdu",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "lilos": ">=1.35.0",
   "files": {
     "strings.json": "sha256-XpAdDSDDlu+wnnl8IjKNAxZMrfcOU6wKCx04LFgDAoE="

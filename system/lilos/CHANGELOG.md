@@ -1,5 +1,10 @@
 # Changelog di lilOS
 
+## 1.35.1 — 2026-11-07
+
+- **Miglioramento — citazioni senza virgolette.** Nelle schermate di accesso e di blocco la citazione è in corsivo, con l'autore sotto.
+- **Miglioramento — citazioni come si conoscono in ogni lingua.** In inglese le battute originali dei film; nelle altre lingue, dove trovate, le battute dei sottotitoli e le versioni che circolano in quella lingua, invece di una traduzione dall'italiano (aggiorna il pacchetto della tua lingua).
+
 ## 1.35.0 — 2026-11-07
 
 Comprende anche la 1.34.0.
