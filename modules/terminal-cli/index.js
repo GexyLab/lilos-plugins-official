@@ -1,0 +1,1 @@
+import{dirname as e,join as t}from"node:path";import{fileURLToPath as n,pathToFileURL as r}from"node:url";var i=e(n(import.meta.url)),a={async init(){},commands:{async sh(e){let{main:n}=await import(r(t(i,`cli.js`)).href);return n(e)}}};export{a as default};

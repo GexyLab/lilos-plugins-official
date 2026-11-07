@@ -1,5 +1,13 @@
 # Changelog di lilOS
 
+## 1.35.0 — 2026-11-07
+
+Comprende anche la 1.34.0.
+
+- **Nuova funzionalità — citazioni nelle schermate di accesso e di blocco.** Al posto dell'elenco a sinistra c'è una citazione da film e scienziati, con l'autore sotto: scelta a caso, ogni 2 minuti lascia il posto a un'altra con una dissolvenza.
+- **Nuova funzionalità — lilOS senza interfaccia.** Con `"ui": false` in `config.json` (o `install.js --no-ui`) il kernel non serve la pagina di lilOS e lo si gestisce dalla riga di comando con il comando `lilos` (modulo `terminal-cli`). La licenza si accetta nella console all'avvio, oppure con `--accept-license`.
+- **Correzione bug — installazione nuova.** `tools/install.js` si fermava leggendo il catalogo del repository ufficiale (dalla 1.32.0), quindi un'installazione nuova che prendeva i moduli da lì non andava a buon fine.
+
 ## 1.33.0 — 2026-11-05
 
 - **Nuova funzionalità — file fino a 1 GB.** Il limite di 10 MB per file non c'è più: il kernel salva i file a flusso e il predefinito è 1 GB. Un amministratore lo cambia in Pannello di controllo → Archiviazione → Limiti (0 = senza limite).

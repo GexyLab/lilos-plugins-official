@@ -1,0 +1,1 @@
+export{n as checkSystem}from"./systemPackage-Cb2Ip8iP.js";

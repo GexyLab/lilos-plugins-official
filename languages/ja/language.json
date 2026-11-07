@@ -3,9 +3,9 @@
   "language": "ja",
   "name": "日本語",
   "englishName": "Japanese",
-  "version": "1.1.0",
-  "lilos": ">=1.33.0",
+  "version": "1.2.0",
+  "lilos": ">=1.35.0",
   "files": {
-    "strings.json": "sha256-mXb5K3eg6IjSw6m769bnTd/VoCHf/qnXiPkxLZfYI6Y="
+    "strings.json": "sha256-39IrslxiFvZVMZF4jBqiUbNk5q91EDzM218HTSdCbrQ="
   }
 }
