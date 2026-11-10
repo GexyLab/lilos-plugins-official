@@ -1,14 +1,14 @@
 {
   "name": "lilos",
-  "version": "1.35.1",
+  "version": "1.36.0",
   "kernel": 1,
   "sdk": [
     "1",
     "2"
   ],
   "node": 22,
-  "commit": "8ee8f96103987f0d5b96a404e0f1620efa189ae5",
-  "date": "2026-11-07",
+  "commit": "fc7ac6184bba4b30b1d68355d65b09437c67456c",
+  "date": "2026-11-10",
   "files": {
     "EULA.md": "sha256-ACsC0GIVznsVJo3ertofUyFre0vAq8kXDRJMZn2TWOM=",
     "package.json": "sha256-+eIoEoTo8Q1ydUjHGd993yoTtyp85aX5Sc7P3UtKB5Y=",
@@ -30,7 +30,7 @@
     "system/kernel/src/image-ChCu5JkW.js": "sha256-0MPJ3cM2ak4g7uq6yIiiS0ZO7XS32QbmwfkvyljfVeU=",
     "system/kernel/src/install.js": "sha256-XsyQd08ovdDVzRf2m312dF58iwyAuYhgJrKpW5Yy7Wk=",
     "system/kernel/src/installSettings-DN-7vXeU.js": "sha256-kZlXG0NGNC3SSTZOLwA81qzSc4qDYwUPmahTSM8mpPo=",
-    "system/kernel/src/main.js": "sha256-4BXALDddCI2v4y53oN+EVjty11SkcEo8Z8io9biZ/rc=",
+    "system/kernel/src/main.js": "sha256-sXDVrADHSnYA8qn6QdtPwgo8iA6mqSyHMvmCl82ydZk=",
     "system/kernel/src/makeImage.js": "sha256-C+opbxIEEzSWBphK8hIH5ppBRGUblzwUFKLvMz/ya7c=",
     "system/kernel/src/manifest-2LJMmMw5.js": "sha256-cwsvmQttEb0ciCEMZpg8bnE+3xj6N9mHXZqUQVCdK10=",
     "system/kernel/src/manifest-C5hevGsE.js": "sha256-iCXSd4a3t3knfxtro6N2CVDzbf+St9+d/u6iVsIUMLo=",
@@ -51,15 +51,15 @@
     "system/kernel/tools/install.js": "sha256-p3+rMq/XX2uNKekSMpPZuU5wClIQb0bVcDOpRCYRhag=",
     "system/kernel/tools/lilos-install.json": "sha256-dEOqrQQdHvVCLpHdp3AlTe2E7CKm0rwKEqwxiFDs/0E=",
     "system/kernel/tools/pack.js": "sha256-CY8f9MV3Rqg/pRIwIf0j+QA6z8cawjA9zZrDqmxOLH0=",
-    "web/assets/boot-ChyVGB57.js": "sha256-GADC+4yp26Oii6GcqK/QJe/orgxXYoBnsivUTwfWWDw=",
+    "web/assets/boot-BKcDhER8.js": "sha256-fnqaJfh37kZxhJ3hHEwAUaYHjI2fPcBEduWFPb0Z1J0=",
     "web/assets/boot-DjKSTPiI.css": "sha256-DupNJh/3Xfq/Ev6o5FpMBLsek/68WkvNB+/i+knJ9qk=",
+    "web/assets/index-BAnIga9i.js": "sha256-EWsuilJzMhUMs0uuLaUgo+LI+FieFxxXhiG7oNGj4WA=",
     "web/assets/index-Dx3l-BDz.css": "sha256-NCEpZQl3D8fduR8vrH0x2PpsSj6g3at45l92kETny00=",
-    "web/assets/index-iILeSuAs.js": "sha256-Tqyi+ZUEqbggCLHttX1L6X5TTlcHdw4i/JMACMG7zco=",
+    "web/assets/system-BYLqJkWf.js": "sha256-7mPY63Tp2+OPfPEJGYANWlgiJQsCRSO1lfC4nWNhqbk=",
     "web/assets/system-DZVUWD9x.css": "sha256-n+gX0alxHO5maoGstFHY47jTiPL8xs8NtnTfXj5mroE=",
-    "web/assets/system-dBIXsN3Y.js": "sha256-Yd0apxJfHZxgHIDxinj59DvIzpXDRQPIgKUwH/MvcSM=",
     "web/favicon.svg": "sha256-79XhGd7Mhuct5Q4XQ5QnMYkI6NOXEZcwROrWH9/9aiA=",
     "web/host/sdk.js": "sha256-Gx96ks/eyrV3qcJzpipg5yp/2bONsGovDdHZhTuUGnY=",
     "web/host/system.js": "sha256-cb6VWLCdkKJ3kRHFSc/6NiIM93qwGFSHbal9f3GaX0s=",
-    "web/index.html": "sha256-z7H2r+OF+sfoPcqX6YYMevEIK5rbyswi//u5GTrpzNs="
+    "web/index.html": "sha256-JUqffAHruZY7L0YYF8ucEs0KjKw5AebFKUdWCbdf5to="
   }
 }

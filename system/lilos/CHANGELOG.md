@@ -1,5 +1,11 @@
 # Changelog di lilOS
 
+## 1.36.0 — 2026-11-10
+
+- **Nuova funzionalità — Ctrl + doppio clic apre una cartella in una finestra nuova.** Il doppio clic su una cartella della scrivania o di una workarea la apre ancora nella finestra del File Manager già aperta; con **Ctrl** premuto (⌘ sul Mac) si apre in una finestra tutta sua. Vale anche per Home, Documenti, Immagini, Download, il Cestino e i collegamenti a una cartella.
+- **Miglioramento — citazioni solo nella tua lingua.** Le schermate di accesso e di blocco mostrano solo le citazioni tradotte nel pacchetto di lingua in uso: con un pacchetto più vecchio non compaiono più citazioni in inglese.
+- **Miglioramento — lingue aggiornate da sole.** A ogni avvio lilOS aggiorna le lingue installate se il repository ufficiale ne ha una versione più nuova adatta: dopo un aggiornamento di lilOS i testi nuovi arrivano nella tua lingua senza passare dall'AppStore.
+
 ## 1.35.1 — 2026-11-07
 
 - **Miglioramento — citazioni senza virgolette.** Nelle schermate di accesso e di blocco la citazione è in corsivo, con l'autore sotto.
