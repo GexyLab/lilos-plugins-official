@@ -637,16 +637,16 @@ function H({ id: e = null, copy: n = null, prefill: m = {} }, g) {
 		users: [],
 		runtime: !1
 	}, ee = !1, j = !x && !n, M = "", F = a("div", {
-		class: "ed-steps",
+		class: "sce-steps",
 		role: "tablist"
-	}), L = a("div", { class: "ed-main" }), R = a("aside", {
-		class: "ed-side",
+	}), L = a("div", { class: "sce-main" }), R = a("aside", {
+		class: "sce-side",
 		"aria-live": "polite"
 	}), re = a("p", {
-		class: "ed-error",
+		class: "sce-error",
 		role: "alert"
-	}), H = a("div", { class: "ed-foot" });
-	T.body.append(a("div", { class: "ed" }, F, a("div", { class: "ed-body" }, L, R), re, H)), (async () => {
+	}), H = a("div", { class: "sce-foot" });
+	T.body.append(a("div", { class: "sce" }, F, a("div", { class: "sce-body" }, L, R), re, H)), (async () => {
 		try {
 			let [t, r] = await Promise.all([l.catalog(), l.overview()]);
 			A = t, ee = r.admin;
@@ -663,11 +663,11 @@ function H({ id: e = null, copy: n = null, prefill: m = {} }, g) {
 		}
 		j = !0, Z();
 	})();
-	let U = (e, t, n) => a(t?.matches?.("input, select, textarea") ? "label" : "div", { class: "ed-field" }, a("span", { class: "ed-label" }, e), t, n ? a("small", { class: "ed-hint" }, n) : null), W = (e, t, { small: n = !1, ...r } = {}) => p({
+	let U = (e, t, n) => a(t?.matches?.("input, select, textarea") ? "label" : "div", { class: "sce-field" }, a("span", { class: "sce-label" }, e), t, n ? a("small", { class: "sce-hint" }, n) : null), W = (e, t, { small: n = !1, ...r } = {}) => p({
 		...r,
 		value: e ?? "",
 		onInput: t,
-		className: n ? "ed-small" : ""
+		className: n ? "sce-small" : ""
 	}), G = (e, t, { rows: n, mono: r = !1, placeholder: i = null, maxLength: o = null } = {}) => {
 		let s = a("textarea", {
 			class: `ctl-text${r ? " mono" : ""}`,
@@ -704,7 +704,7 @@ function H({ id: e = null, copy: n = null, prefill: m = {} }, g) {
 		kind: e,
 		title: t,
 		...n && { exts: n }
-	}), ie = (e, t, n) => a("div", { class: "ed-place" }, a("span", { class: "ctl-text ed-path" }, o(e?.mount ? "globe" : "folder"), e?.label || a("span", { class: "ed-ph" }, v("editor.choose"))), a("button", {
+	}), ie = (e, t, n) => a("div", { class: "sce-place" }, a("span", { class: "ctl-text sce-path" }, o(e?.mount ? "globe" : "folder"), e?.label || a("span", { class: "sce-ph" }, v("editor.choose"))), a("button", {
 		class: "ctl-btn",
 		type: "button",
 		onclick: async () => {
@@ -727,10 +727,10 @@ function H({ id: e = null, copy: n = null, prefill: m = {} }, g) {
 				k = t, Z();
 			}
 		}, a("i", {}, t < k ? "✓" : String(t + 1)), e))), !j) {
-			N(L, a("p", { class: "ed-hint" }, v("editor.loading")));
+			N(L, a("p", { class: "sce-hint" }, v("editor.loading")));
 			return;
 		}
-		N(L, ...m.from ? [a("p", { class: "ed-warn" }, o("info"), v("editor.proposedBy", { app: h.getApp(m.from)?.name ?? m.from }))] : [], ...[
+		N(L, ...m.from ? [a("p", { class: "sce-warn" }, o("info"), v("editor.proposedBy", { app: h.getApp(m.from)?.name ?? m.from }))] : [], ...[
 			oe,
 			ue,
 			fe
@@ -766,7 +766,7 @@ function H({ id: e = null, copy: n = null, prefill: m = {} }, g) {
 	}
 	function oe() {
 		let e = h.isInstalled("automata"), t = h.isInstalled("nettest"), n = a("div", {
-			class: "ed-types",
+			class: "sce-types",
 			role: "radiogroup",
 			"aria-label": v("step.what")
 		}, y.map((n) => {
@@ -778,7 +778,7 @@ function H({ id: e = null, copy: n = null, prefill: m = {} }, g) {
 			return a("button", {
 				type: "button",
 				role: "radio",
-				class: `ed-type${D.what.type === n.type ? " on" : ""}`,
+				class: `sce-type${D.what.type === n.type ? " on" : ""}`,
 				"aria-checked": String(D.what.type === n.type),
 				disabled: r || x && D.what.type !== n.type && !!D.app,
 				onclick: () => {
@@ -786,7 +786,7 @@ function H({ id: e = null, copy: n = null, prefill: m = {} }, g) {
 				}
 			}, a("span", { class: `sc-kico k-${n.type}` }, o(n.glyph)), a("b", {}, v(`kind.${n.type}.name`)), a("span", { class: `sc-where${n.where === "browser" ? " br" : ""}` }, v(`where.${n.where}`)), a("small", {}, r && (n.type === "automation" || n.type === "collection") ? v(`kind.${n.type}.missing`) : v(`kind.${n.type}.hint`)));
 		}));
-		return [a("div", { class: "ed-what" }, n, a("div", { class: "ed-form" }, ...se(D.what)))];
+		return [a("div", { class: "sce-what" }, n, a("div", { class: "sce-form" }, ...se(D.what)))];
 	}
 	function se(e) {
 		if (e.type === "notify") {
@@ -832,7 +832,7 @@ function H({ id: e = null, copy: n = null, prefill: m = {} }, g) {
 						args: null
 					}, Q();
 				})),
-				t === "file" ? U(v("notify.file"), a("div", { class: "ed-place" }, a("span", { class: "ctl-text ed-path" }, o("file"), e.open.label || a("span", { class: "ed-ph" }, v("editor.choose"))), a("button", {
+				t === "file" ? U(v("notify.file"), a("div", { class: "sce-place" }, a("span", { class: "ctl-text sce-path" }, o("file"), e.open.label || a("span", { class: "sce-ph" }, v("editor.choose"))), a("button", {
 					class: "ctl-btn",
 					type: "button",
 					onclick: async () => {
@@ -883,12 +883,12 @@ function H({ id: e = null, copy: n = null, prefill: m = {} }, g) {
 					onChange: (t) => {
 						e.params = t;
 					}
-				}).el : a("p", { class: "ed-hint" }, v("service.noParams")),
-				a("p", { class: "ed-hint" }, v("service.hint"))
+				}).el : a("p", { class: "sce-hint" }, v("service.noParams")),
+				a("p", { class: "sce-hint" }, v("service.hint"))
 			];
 		}
 		if (e.type === "copy") return [
-			a("div", { class: "ed-two" }, U(v("copy.from"), ie(e.from, v("copy.from"), (t) => {
+			a("div", { class: "sce-two" }, U(v("copy.from"), ie(e.from, v("copy.from"), (t) => {
 				e.from = t, Q();
 			})), U(v("copy.to"), ie(e.to, v("copy.to"), (t) => {
 				e.to = t, Q();
@@ -919,7 +919,7 @@ function H({ id: e = null, copy: n = null, prefill: m = {} }, g) {
 			U(v("copy.exclude"), W(e.exclude.join(", "), (t) => {
 				e.exclude = t.split(",").map((e) => e.trim()).filter(Boolean);
 			}, { placeholder: "*.tmp, ~$*, .cache" }), v("copy.excludeHint")),
-			a("p", { class: "ed-hint" }, v("copy.hint"))
+			a("p", { class: "sce-hint" }, v("copy.hint"))
 		];
 		if (e.type === "command") {
 			let t = !!e.host || e._ssh;
@@ -947,7 +947,7 @@ function H({ id: e = null, copy: n = null, prefill: m = {} }, g) {
 					mono: !0,
 					placeholder: v("command.placeholder")
 				}), v(t ? "command.sshHint" : "command.hint")),
-				t ? null : U(v("command.cwd"), a("div", { class: "ed-place" }, a("span", { class: "ctl-text ed-path" }, o("folder"), e.cwdLabel || "~"), a("button", {
+				t ? null : U(v("command.cwd"), a("div", { class: "sce-place" }, a("span", { class: "ctl-text sce-path" }, o("folder"), e.cwdLabel || "~"), a("button", {
 					class: "ctl-btn",
 					type: "button",
 					onclick: async () => {
@@ -959,12 +959,12 @@ function H({ id: e = null, copy: n = null, prefill: m = {} }, g) {
 			];
 		}
 		if (e.type === "web") {
-			let t = a("div", { class: "ed-headers" }, e.headers.map((t, n) => a("div", { class: "ed-header" }, W(t.name, (e) => {
+			let t = a("div", { class: "sce-headers" }, e.headers.map((t, n) => a("div", { class: "sce-header" }, W(t.name, (e) => {
 				t.name = e;
 			}, {
 				placeholder: v("web.headerName"),
 				label: v("web.headerName")
-			}), t.secret && t.set && t.value === void 0 ? a("span", { class: "ctl-text ed-secret" }, "••••••••", a("button", {
+			}), t.secret && t.set && t.value === void 0 ? a("span", { class: "ctl-text sce-secret" }, "••••••••", a("button", {
 				class: "sc-link",
 				type: "button",
 				onclick: () => {
@@ -988,7 +988,7 @@ function H({ id: e = null, copy: n = null, prefill: m = {} }, g) {
 				}
 			}, o("x"))))), n = typeof e.expect.status == "number" ? "n" : e.expect.status;
 			return [
-				a("div", { class: "ed-url" }, q(e.method, [
+				a("div", { class: "sce-url" }, q(e.method, [
 					"GET",
 					"HEAD",
 					"POST",
@@ -1037,7 +1037,7 @@ function H({ id: e = null, copy: n = null, prefill: m = {} }, g) {
 					rows: 4,
 					mono: !0
 				}))) : null,
-				a("div", { class: "ed-two" }, U(v("web.status"), a("div", { class: "ed-line" }, q(n, [
+				a("div", { class: "sce-two" }, U(v("web.status"), a("div", { class: "sce-line" }, q(n, [
 					{
 						value: "2xx",
 						label: "200–299"
@@ -1062,7 +1062,7 @@ function H({ id: e = null, copy: n = null, prefill: m = {} }, g) {
 				}) : null)), U(v("web.contains"), W(e.expect.contains ?? "", (t) => {
 					e.expect.contains = t || null;
 				}, { placeholder: v("web.containsPh") }))),
-				U(v("web.timeout"), a("div", { class: "ed-line" }, W(e.timeoutS, (t) => {
+				U(v("web.timeout"), a("div", { class: "sce-line" }, W(e.timeoutS, (t) => {
 					e.timeoutS = Math.max(1, Math.min(300, Number(t) || 30));
 				}, {
 					type: "number",
@@ -1071,7 +1071,7 @@ function H({ id: e = null, copy: n = null, prefill: m = {} }, g) {
 					small: !0
 				}), a("span", {}, v("web.seconds")))),
 				le(e, ["replace", "dated"]),
-				a("p", { class: "ed-hint" }, v("web.hint"))
+				a("p", { class: "sce-hint" }, v("web.hint"))
 			];
 		}
 		if (e.type === "open") {
@@ -1096,7 +1096,7 @@ function H({ id: e = null, copy: n = null, prefill: m = {} }, g) {
 					label: e.name
 				})), (t) => {
 					e.app = t, e.label = n.find((e) => e.id === t)?.name ?? t, $();
-				})) : U(v("open.file"), a("div", { class: "ed-place" }, a("span", { class: "ctl-text ed-path" }, o("file"), e.label || a("span", { class: "ed-ph" }, v("editor.choose"))), a("button", {
+				})) : U(v("open.file"), a("div", { class: "sce-place" }, a("span", { class: "ctl-text sce-path" }, o("file"), e.label || a("span", { class: "sce-ph" }, v("editor.choose"))), a("button", {
 					class: "ctl-btn",
 					type: "button",
 					onclick: async () => {
@@ -1104,17 +1104,17 @@ function H({ id: e = null, copy: n = null, prefill: m = {} }, g) {
 						t && (e.file = t.id, e.label = C(t.id), Q());
 					}
 				}, v("editor.choose")))),
-				a("p", { class: "ed-warn" }, o("window"), v("open.browserHint"))
+				a("p", { class: "sce-warn" }, o("window"), v("open.browserHint"))
 			];
 		}
-		return e.type === "collection" ? ce(e) : [U(v("automation.file"), a("div", { class: "ed-place" }, a("span", { class: "ctl-text ed-path" }, o("automation"), e.label || a("span", { class: "ed-ph" }, v("editor.choose"))), a("button", {
+		return e.type === "collection" ? ce(e) : [U(v("automation.file"), a("div", { class: "sce-place" }, a("span", { class: "ctl-text sce-path" }, o("automation"), e.label || a("span", { class: "sce-ph" }, v("editor.choose"))), a("button", {
 			class: "ctl-btn",
 			type: "button",
 			onclick: async () => {
 				let t = await X("file", v("automation.file"), ["automata"]);
 				t && (e.file = t.id, e.label = C(t.id), Q());
 			}
-		}, v("editor.choose")))), a("p", { class: "ed-warn" }, o("window"), v("automation.hint"))];
+		}, v("editor.choose")))), a("p", { class: "sce-warn" }, o("window"), v("automation.hint"))];
 	}
 	function ce(e) {
 		let t = a("select", {
@@ -1132,7 +1132,7 @@ function H({ id: e = null, copy: n = null, prefill: m = {} }, g) {
 				dataset: { name: String(n.name ?? "") }
 			}, String(n.name ?? n.id)));
 		}).catch(() => {}), [
-			U(v("collection.file"), a("div", { class: "ed-place" }, a("span", { class: "ctl-text ed-path" }, o("bolt"), e.label || a("span", { class: "ed-ph" }, v("editor.choose"))), a("button", {
+			U(v("collection.file"), a("div", { class: "sce-place" }, a("span", { class: "ctl-text sce-path" }, o("bolt"), e.label || a("span", { class: "sce-ph" }, v("editor.choose"))), a("button", {
 				class: "ctl-btn",
 				type: "button",
 				onclick: async () => {
@@ -1141,19 +1141,19 @@ function H({ id: e = null, copy: n = null, prefill: m = {} }, g) {
 				}
 			}, v("editor.choose")))),
 			U(v("collection.env"), t),
-			a("p", { class: "ed-warn" }, o("monitor"), v("collection.hint"))
+			a("p", { class: "sce-warn" }, o("monitor"), v("collection.hint"))
 		];
 	}
 	function le(e, t) {
 		let n = !!e.saveTo;
-		return U(v("saveTo.title"), a("div", { class: "ed-saveto" }, K(n, (n) => {
+		return U(v("saveTo.title"), a("div", { class: "sce-saveto" }, K(n, (n) => {
 			e.saveTo = n ? {
 				folder: "root",
 				label: "~",
 				name: e.type === "web" ? "risposta.txt" : "output.txt",
 				mode: t[0]
 			} : null, Q();
-		}, v(e.type === "web" ? "saveTo.web" : "saveTo.command")), n ? a("div", { class: "ed-line" }, a("button", {
+		}, v(e.type === "web" ? "saveTo.web" : "saveTo.command")), n ? a("div", { class: "sce-line" }, a("button", {
 			class: "ctl-btn",
 			type: "button",
 			onclick: async () => {
@@ -1197,7 +1197,7 @@ function H({ id: e = null, copy: n = null, prefill: m = {} }, g) {
 			}
 			e.mode = t, Q();
 		})];
-		if (e.mode === "once") t.push(a("div", { class: "ed-two" }, U(v("when.date"), W(e.once.slice(0, 10), (t) => {
+		if (e.mode === "once") t.push(a("div", { class: "sce-two" }, U(v("when.date"), W(e.once.slice(0, 10), (t) => {
 			e.once = `${t}T${e.once.slice(11)}`, $();
 		}, { type: "date" })), U(v("when.time"), W(e.once.slice(11), (t) => {
 			e.once = `${e.once.slice(0, 10)}T${t}`, $();
@@ -1207,7 +1207,7 @@ function H({ id: e = null, copy: n = null, prefill: m = {} }, g) {
 		}, { mono: !0 }), v("when.cronHint")));
 		else {
 			let n = e.every.unit;
-			if (t.push(U(v("when.every"), a("div", { class: "ed-line" }, W(e.every.n, (t) => {
+			if (t.push(U(v("when.every"), a("div", { class: "sce-line" }, W(e.every.n, (t) => {
 				e.every.n = Math.max(1, Number(t) || 1), $();
 			}, {
 				type: "number",
@@ -1220,7 +1220,7 @@ function H({ id: e = null, copy: n = null, prefill: m = {} }, g) {
 			})), (t) => {
 				e.every.unit = t, Q();
 			}, v("when.unit"))))), (n === "week" || n === "minute" || n === "hour") && t.push(U(v(n === "week" ? "when.on" : "when.onlyDays"), a("div", {
-				class: "ed-days",
+				class: "sce-days",
 				role: "group"
 			}, P.map((t) => a("button", {
 				type: "button",
@@ -1229,7 +1229,7 @@ function H({ id: e = null, copy: n = null, prefill: m = {} }, g) {
 				onclick: () => {
 					e.days = e.days.includes(t) ? e.days.filter((e) => e !== t) : [...e.days, t].sort(), e.days.length || (e.days = [t]), Q();
 				}
-			}, v(`day.${t}.short`)))))), n === "minute" || n === "hour") t.push(U(v("when.between"), a("div", { class: "ed-line" }, K(!!e.between, (t) => {
+			}, v(`day.${t}.short`)))))), n === "minute" || n === "hour") t.push(U(v("when.between"), a("div", { class: "sce-line" }, K(!!e.between, (t) => {
 				e.between = t ? ["09:00", "18:00"] : null, Q();
 			}, null, v("when.between")), e.between ? W(e.between[0], (t) => {
 				e.between[0] = t, $();
@@ -1245,7 +1245,7 @@ function H({ id: e = null, copy: n = null, prefill: m = {} }, g) {
 			else {
 				if (n === "month" || n === "year") {
 					let r = e.monthly;
-					t.push(U(v("when.onDay"), a("div", { class: "ed-line" }, n === "year" ? q(e.month, Array.from({ length: 12 }, (e, t) => ({
+					t.push(U(v("when.onDay"), a("div", { class: "sce-line" }, n === "year" ? q(e.month, Array.from({ length: 12 }, (e, t) => ({
 						value: t + 1,
 						label: _.date(Date.UTC(2e3, t, 1), {
 							month: "long",
@@ -1294,7 +1294,7 @@ function H({ id: e = null, copy: n = null, prefill: m = {} }, g) {
 						r.weekday = Number(e), $();
 					}, v("when.weekday")) : null)));
 				}
-				t.push(U(v("when.at"), a("div", { class: "ed-times" }, e.times.map((t, n) => a("span", { class: "ed-chip" }, W(t, (t) => {
+				t.push(U(v("when.at"), a("div", { class: "sce-times" }, e.times.map((t, n) => a("span", { class: "sce-chip" }, W(t, (t) => {
 					e.times[n] = t, $();
 				}, {
 					type: "time",
@@ -1315,9 +1315,9 @@ function H({ id: e = null, copy: n = null, prefill: m = {} }, g) {
 				}, o("plus"), v("when.addTime")))));
 			}
 		}
-		return e.mode === "once" ? t.push(U(v("when.zone"), de(e))) : (t.push(a("div", { class: "ed-two" }, U(v("when.start"), W(e.start, (t) => {
+		return e.mode === "once" ? t.push(U(v("when.zone"), de(e))) : (t.push(a("div", { class: "sce-two" }, U(v("when.start"), W(e.start, (t) => {
 			e.start = t, $();
-		}, { type: "datetime-local" })), U(v("when.zone"), de(e)))), t.push(U(v("when.end"), a("div", { class: "ed-line" }, Y(e.endKind, [
+		}, { type: "datetime-local" })), U(v("when.zone"), de(e)))), t.push(U(v("when.end"), a("div", { class: "sce-line" }, Y(e.endKind, [
 			{
 				value: "never",
 				label: v("when.never")
@@ -1395,14 +1395,14 @@ function H({ id: e = null, copy: n = null, prefill: m = {} }, g) {
 			], (t) => {
 				e.overlap = t;
 			})),
-			a("div", { class: "ed-two" }, U(v("opt.timeout"), a("div", { class: "ed-line" }, W(e.timeoutMin, (t) => {
+			a("div", { class: "sce-two" }, U(v("opt.timeout"), a("div", { class: "sce-line" }, W(e.timeoutMin, (t) => {
 				e.timeoutMin = Math.max(1, Math.min(1440, Number(t) || 60));
 			}, {
 				type: "number",
 				min: 1,
 				max: 1440,
 				small: !0
-			}), a("span", {}, v("opt.minutes")))), U(v("opt.retries"), a("div", { class: "ed-line" }, W(e.retries, (t) => {
+			}), a("span", {}, v("opt.minutes")))), U(v("opt.retries"), a("div", { class: "sce-line" }, W(e.retries, (t) => {
 				e.retries = Math.max(0, Math.min(5, Number(t) || 0));
 			}, {
 				type: "number",
@@ -1471,14 +1471,14 @@ function H({ id: e = null, copy: n = null, prefill: m = {} }, g) {
 		} catch (e) {
 			t = e.message;
 		}
-		let n = [a("div", { class: "sc-sub" }, v("side.words")), a("div", { class: "ed-words" }, e ? l.describe(e) : "—")];
-		if (e && n.push(a("div", { class: "ed-tz" }, e.tz)), t && n.push(a("p", { class: "ed-bad" }, t)), e) {
+		let n = [a("div", { class: "sc-sub" }, v("side.words")), a("div", { class: "sce-words" }, e ? l.describe(e) : "—")];
+		if (e && n.push(a("div", { class: "sce-tz" }, e.tz)), t && n.push(a("p", { class: "sce-bad" }, t)), e) {
 			let t = l.rules.between(e, Date.now(), Date.now() + 158112e6, 6);
-			n.push(a("div", { class: "sc-sub" }, v("side.next")), t.length ? a("div", { class: "sc-nexts" }, t.map((e) => a("span", {}, a("b", {}, O(e))))) : a("p", { class: "ed-hint" }, v("side.noMore")));
+			n.push(a("div", { class: "sc-sub" }, v("side.next")), t.length ? a("div", { class: "sc-nexts" }, t.map((e) => a("span", {}, a("b", {}, O(e))))) : a("p", { class: "sce-hint" }, v("side.noMore")));
 			let r = l.rules.toCron(e);
-			r && n.push(a("div", { class: "sc-sub" }, v("side.cron")), a("code", { class: "ed-cron" }, r));
+			r && n.push(a("div", { class: "sc-sub" }, v("side.cron")), a("code", { class: "sce-cron" }, r));
 		}
-		n.push(a("div", { class: "sc-sub" }, v("side.what")), a("div", { class: "ed-summary" }, a("span", { class: `sc-kico k-${D.what.type}` }, o(b(D.what.type).glyph)), E(D.what, A) || v(`kind.${D.what.type}.name`))), b(D.what.type).where === "browser" && n.push(a("p", { class: "ed-warn" }, o("window"), v("side.browser"))), N(R, ...n);
+		n.push(a("div", { class: "sc-sub" }, v("side.what")), a("div", { class: "sce-summary" }, a("span", { class: `sc-kico k-${D.what.type}` }, o(b(D.what.type).glyph)), E(D.what, A) || v(`kind.${D.what.type}.name`))), b(D.what.type).where === "browser" && n.push(a("p", { class: "sce-warn" }, o("window"), v("side.browser"))), N(R, ...n);
 	}
 	function he() {
 		let e = I(D.what);

@@ -1,6 +1,6 @@
 {
   "id": "scheduler",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "kind": "local",
   "name": "Scheduler",
   "description": "Operations at a date and time or repeated, also with lilOS closed: reminders, backups of folders, web requests, NetTest collections, Terminal commands, apps' services, opening apps and files, automations.",
@@ -123,12 +123,12 @@
   },
   "entry": "dist/index.js",
   "styles": [
-    "dist/index-BlE3etuc.css"
+    "dist/index-ChmZEvy3.css"
   ],
   "locales": "locales.json",
   "files": {
-    "dist/index-BlE3etuc.css": "sha256-l8yp9A7lqiMkl0T6PLkX0YoSd+L4MknIJbgkGP/5fNA=",
-    "dist/index.js": "sha256-1A7+MdEmdPWjS3mHiYcbHUobdXaLrYGrEQ083Zu3iSk=",
+    "dist/index-ChmZEvy3.css": "sha256-Ig4l6CRuXE2MX6qTLsUjDoOnXjkPEAMY6agbDz3F9hE=",
+    "dist/index.js": "sha256-+qdlMeOGV5p7w3GHHK0Ss9mjiSVNgOVTAo77fE6o5FQ=",
     "locales.json": "sha256-zBUOHGLgU5CYnbqRUG9qxj/YAezVbpJs/4S1ExJAxKs="
   }
 }
