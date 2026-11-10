@@ -1866,6 +1866,26 @@
     "reload.now": "Reîncărcați acum",
     "reload.later": "Mai târziu"
   },
+  "logic": {
+    "asks": "{name}: consola {console} cere ceva",
+    "failed": "{name} s-a oprit: {error}",
+    "consoleTitle": "Consola {name}",
+    "consoleAll": "Consolă",
+    "noWindows": "{name} nu are ferestre",
+    "notRunning": "{name} nu rulează: activează-l în Logic Studio",
+    "gone": "Programul nu mai există",
+    "badApp": "Aceasta nu este o aplicație creată cu Logic Studio sau îi lipsesc fișierele",
+    "consentTitle": "Executați «{name}»?",
+    "consentText": "Această aplicație a fost creată cu Logic Studio și rulează în numele dvs. Poate:",
+    "consentFrom": "Din {path}. Rulați-o numai dacă aveți încredere în cine a creat-o.",
+    "capFiles": "să citească și să modifice fișierele dvs.",
+    "capNet": "să facă cereri pe internet",
+    "capNotify": "să vă trimită notificări",
+    "capEvents": "să trimită evenimente către lilOS-ul dvs.",
+    "run": "Executați",
+    "cancel": "Anulați",
+    "appFailed": "{name} nu a pornit: {error}"
+  },
   "messageBox": {
     "ok": "OK",
     "cancel": "Anulați",
@@ -2011,6 +2031,46 @@
     "failed": "Conectarea a eșuat",
     "noAskAddress": "Lipsește askAddress"
   },
+  "sdk.charts": {
+    "table": "Afișează ca tabel",
+    "chart": "Afișează ca grafic",
+    "png": "Salvează ca PNG",
+    "csv": "Salvează ca CSV",
+    "empty": "Fără date",
+    "other": "Altele",
+    "series": "Serie",
+    "value": "Valoare",
+    "count": "Număr",
+    "share": "Pondere",
+    "name": "Nume",
+    "from": "De la",
+    "to": "Până la",
+    "time": "Timp",
+    "category": "Categorie",
+    "axis": "Axă",
+    "point": "Punct",
+    "total": "total",
+    "on": "activat",
+    "off": "dezactivat",
+    "more": "Sunt afișate doar primele {n} rânduri.",
+    "hidden": "ascuns",
+    "summarySeries": "{n} serii",
+    "summaryPoints": "{n} puncte",
+    "summaryRange": "valori de la {a} la {b}",
+    "keys": "Săgeți: treci între valori. Enter: alege.",
+    "line": "Grafic cu linii",
+    "area": "Grafic cu arii",
+    "column": "Grafic cu coloane",
+    "bar": "Grafic cu bare",
+    "pie": "Grafic circular",
+    "scatter": "Grafic de dispersie",
+    "histogram": "Histogramă",
+    "live": "Grafic în timp real",
+    "step": "Stări în timp",
+    "heatmap": "Hartă termică",
+    "radar": "Grafic radar",
+    "spark": "Sparkline"
+  },
   "sdk.fs": {
     "notForNet": "Indisponibil pentru fișierele unei conexiuni de rețea",
     "badWorkspace": "Spațiu de lucru nevalid",
@@ -2049,6 +2109,28 @@
     "status": "Eroare {status}",
     "badModule": "Modul nevalid",
     "badPath": "Cale nevalidă"
+  },
+  "sdk.logic": {
+    "noGrow": "Aici nu se pot adăuga porturi",
+    "maxAdded": "Cel mult {n} porturi adăugate",
+    "unknownBlock": "Bloc necunoscut",
+    "onlyAdded": "Se pot elimina doar porturile adăugate",
+    "notSchema": "Aceasta nu este o schemă Logic Studio (.lsch)",
+    "notWindow": "Aceasta nu este o fereastră Logic Studio (.lsui)",
+    "notProject": "Acesta nu este un proiect Logic Studio (.lsproj)",
+    "intoContainer": "Componentele se pun doar într-un container",
+    "unknownComponent": "Componentă necunoscută",
+    "mainConsole": "Consola principală nu poate fi eliminată",
+    "error": "Excepție",
+    "missing": "Pachetul lipsește"
+  },
+  "sdk.logicConsole": {
+    "hint": "Enter trimite · Esc anulează",
+    "answer": "Răspuns",
+    "text": "text",
+    "number": "număr",
+    "bool": "da/nu",
+    "key": "o tastă"
   },
   "sdk.menus": {
     "unknown": "Meniu neînregistrat: {id}"
@@ -2385,7 +2467,9 @@
     "moveDown": "Mutați în jos",
     "onDesk": "Deja pe desktop",
     "showOnDesk": "Afișați pe desktop",
-    "backOnDesk": "„{name}” este din nou pe desktop"
+    "backOnDesk": "„{name}” este din nou pe desktop",
+    "projects": "Proiecte",
+    "projectHint": "Un proiect Logic Studio în execuție: fereastra lui principală"
   },
   "system": {
     "unsaved": "Modificările nu au fost salvate: {error}. Se reîncearcă…",

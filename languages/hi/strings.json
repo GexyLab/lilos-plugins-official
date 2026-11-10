@@ -1820,6 +1820,26 @@
     "reload.now": "अभी फिर से लोड करें",
     "reload.later": "बाद में"
   },
+  "logic": {
+    "asks": "{name}: कंसोल {console} कुछ पूछ रहा है",
+    "failed": "{name} रुक गया: {error}",
+    "consoleTitle": "कंसोल {name}",
+    "consoleAll": "कंसोल",
+    "noWindows": "{name} की कोई विंडो नहीं है",
+    "notRunning": "{name} चल नहीं रहा: इसे Logic Studio में चालू करें",
+    "gone": "प्रोग्राम अब मौजूद नहीं है",
+    "badApp": "यह Logic Studio से बना ऐप नहीं है, या इसकी फ़ाइलें गायब हैं",
+    "consentTitle": "«{name}» चलाएँ?",
+    "consentText": "यह ऐप Logic Studio से बना है और आपके नाम से चलता है। यह कर सकता है:",
+    "consentFrom": "{path} से। इसे तभी चलाएँ जब आप इसे बनाने वाले पर भरोसा करते हों।",
+    "capFiles": "आपकी फ़ाइलें पढ़ना और बदलना",
+    "capNet": "इंटरनेट पर अनुरोध भेजना",
+    "capNotify": "आपको सूचनाएँ भेजना",
+    "capEvents": "आपके lilOS को इवेंट भेजना",
+    "run": "चलाएँ",
+    "cancel": "रद्द करें",
+    "appFailed": "{name} शुरू नहीं हुआ: {error}"
+  },
   "messageBox": {
     "ok": "ठीक है",
     "cancel": "रद्द करें",
@@ -1961,6 +1981,46 @@
     "failed": "साइन-इन विफल रहा",
     "noAskAddress": "askAddress मौजूद नहीं है"
   },
+  "sdk.charts": {
+    "table": "तालिका के रूप में दिखाएँ",
+    "chart": "चार्ट के रूप में दिखाएँ",
+    "png": "PNG के रूप में सहेजें",
+    "csv": "CSV के रूप में सहेजें",
+    "empty": "कोई डेटा नहीं",
+    "other": "अन्य",
+    "series": "श्रृंखला",
+    "value": "मान",
+    "count": "गिनती",
+    "share": "हिस्सा",
+    "name": "नाम",
+    "from": "से",
+    "to": "तक",
+    "time": "समय",
+    "category": "श्रेणी",
+    "axis": "अक्ष",
+    "point": "बिंदु",
+    "total": "कुल",
+    "on": "चालू",
+    "off": "बंद",
+    "more": "केवल पहली {n} पंक्तियाँ दिखाई गई हैं।",
+    "hidden": "छिपा हुआ",
+    "summarySeries": "{n} श्रृंखला",
+    "summaryPoints": "{n} बिंदु",
+    "summaryRange": "{a} से {b} तक के मान",
+    "keys": "तीर: मानों के बीच जाएँ। Enter: चुनें।",
+    "line": "लाइन चार्ट",
+    "area": "एरिया चार्ट",
+    "column": "कॉलम चार्ट",
+    "bar": "बार चार्ट",
+    "pie": "पाई चार्ट",
+    "scatter": "स्कैटर चार्ट",
+    "histogram": "हिस्टोग्राम",
+    "live": "रीयल-टाइम चार्ट",
+    "step": "समय के साथ स्थितियाँ",
+    "heatmap": "हीट मैप",
+    "radar": "रडार चार्ट",
+    "spark": "स्पार्कलाइन"
+  },
   "sdk.fs": {
     "notForNet": "नेटवर्क कनेक्शन की फ़ाइलों के लिए उपलब्ध नहीं",
     "badWorkspace": "अमान्य कार्यस्थान",
@@ -1999,6 +2059,28 @@
     "status": "त्रुटि {status}",
     "badModule": "अमान्य मॉड्यूल",
     "badPath": "अमान्य पथ"
+  },
+  "sdk.logic": {
+    "noGrow": "इसमें पोर्ट जोड़े नहीं जा सकते",
+    "maxAdded": "अधिकतम {n} जोड़े गए पोर्ट",
+    "unknownBlock": "अज्ञात ब्लॉक",
+    "onlyAdded": "केवल जोड़े गए पोर्ट हटाए जा सकते हैं",
+    "notSchema": "यह Logic Studio का स्कीमा (.lsch) नहीं है",
+    "notWindow": "यह Logic Studio की विंडो (.lsui) नहीं है",
+    "notProject": "यह Logic Studio का प्रोजेक्ट (.lsproj) नहीं है",
+    "intoContainer": "कॉम्पोनेंट केवल कंटेनर के अंदर रखे जाते हैं",
+    "unknownComponent": "अज्ञात कॉम्पोनेंट",
+    "mainConsole": "मुख्य कंसोल हटाया नहीं जा सकता",
+    "error": "अपवाद",
+    "missing": "पैकेज गायब है"
+  },
+  "sdk.logicConsole": {
+    "hint": "Enter भेजता है · Esc रद्द करता है",
+    "answer": "उत्तर",
+    "text": "टेक्स्ट",
+    "number": "संख्या",
+    "bool": "हाँ/नहीं",
+    "key": "एक कुंजी"
   },
   "sdk.menus": {
     "unknown": "मेनू पंजीकृत नहीं है: {id}"
@@ -2323,7 +2405,9 @@
     "moveDown": "नीचे ले जाएँ",
     "onDesk": "पहले से डेस्कटॉप पर है",
     "showOnDesk": "डेस्कटॉप पर दिखाएँ",
-    "backOnDesk": "“{name}” वापस डेस्कटॉप पर है"
+    "backOnDesk": "“{name}” वापस डेस्कटॉप पर है",
+    "projects": "प्रोजेक्ट",
+    "projectHint": "चलता हुआ Logic Studio प्रोजेक्ट: उसकी मुख्य विंडो"
   },
   "system": {
     "unsaved": "परिवर्तन सहेजे नहीं गए: {error}। फिर से प्रयास किया जा रहा है…",

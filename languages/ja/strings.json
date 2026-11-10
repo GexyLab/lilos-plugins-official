@@ -1782,6 +1782,26 @@
     "reload.now": "今すぐ再読み込み",
     "reload.later": "後で"
   },
+  "logic": {
+    "asks": "{name}: コンソール {console} が何かを求めています",
+    "failed": "{name} が停止しました: {error}",
+    "consoleTitle": "コンソール {name}",
+    "consoleAll": "コンソール",
+    "noWindows": "{name} にはウィンドウがありません",
+    "notRunning": "{name} は実行されていません: Logic Studio で有効にしてください",
+    "gone": "プログラムが見つかりません",
+    "badApp": "Logic Studio で作られたアプリではないか、ファイルが足りません",
+    "consentTitle": "「{name}」を実行しますか？",
+    "consentText": "このアプリは Logic Studio で作られ、あなたの権限で実行されます。次のことができます：",
+    "consentFrom": "{path} から。作成者を信頼できる場合のみ実行してください。",
+    "capFiles": "ファイルの読み取りと変更",
+    "capNet": "インターネットへのリクエスト",
+    "capNotify": "通知の送信",
+    "capEvents": "lilOS へのイベントの送信",
+    "run": "実行",
+    "cancel": "キャンセル",
+    "appFailed": "{name} を起動できませんでした: {error}"
+  },
   "messageBox": {
     "ok": "OK",
     "cancel": "キャンセル",
@@ -1919,6 +1939,46 @@
     "failed": "サインインに失敗しました",
     "noAskAddress": "askAddress がありません"
   },
+  "sdk.charts": {
+    "table": "表として表示",
+    "chart": "グラフとして表示",
+    "png": "PNG として保存",
+    "csv": "CSV として保存",
+    "empty": "データがありません",
+    "other": "その他",
+    "series": "系列",
+    "value": "値",
+    "count": "件数",
+    "share": "割合",
+    "name": "名前",
+    "from": "開始",
+    "to": "終了",
+    "time": "時間",
+    "category": "カテゴリ",
+    "axis": "軸",
+    "point": "点",
+    "total": "合計",
+    "on": "オン",
+    "off": "オフ",
+    "more": "最初の {n} 行のみ表示しています。",
+    "hidden": "非表示",
+    "summarySeries": "{n} 系列",
+    "summaryPoints": "{n} 点",
+    "summaryRange": "{a} から {b} までの値",
+    "keys": "矢印キー: 値の間を移動。Enter: 選択。",
+    "line": "折れ線グラフ",
+    "area": "面グラフ",
+    "column": "縦棒グラフ",
+    "bar": "横棒グラフ",
+    "pie": "円グラフ",
+    "scatter": "散布図",
+    "histogram": "ヒストグラム",
+    "live": "リアルタイムグラフ",
+    "step": "時間による状態",
+    "heatmap": "ヒートマップ",
+    "radar": "レーダーチャート",
+    "spark": "スパークライン"
+  },
   "sdk.fs": {
     "notForNet": "ネットワーク接続のファイルには使用できません",
     "badWorkspace": "無効なワークスペース",
@@ -1957,6 +2017,28 @@
     "status": "エラー {status}",
     "badModule": "無効なモジュール",
     "badPath": "無効なパス"
+  },
+  "sdk.logic": {
+    "noGrow": "これにはポートを追加できません",
+    "maxAdded": "追加できるポートは最大 {n} 個です",
+    "unknownBlock": "不明なブロック",
+    "onlyAdded": "削除できるのは追加したポートだけです",
+    "notSchema": "Logic Studio のスキーマ (.lsch) ではありません",
+    "notWindow": "Logic Studio のウィンドウ (.lsui) ではありません",
+    "notProject": "Logic Studio のプロジェクト (.lsproj) ではありません",
+    "intoContainer": "コンポーネントはコンテナの中にのみ置けます",
+    "unknownComponent": "不明なコンポーネント",
+    "mainConsole": "メインコンソールは削除できません",
+    "error": "例外",
+    "missing": "パッケージがありません"
+  },
+  "sdk.logicConsole": {
+    "hint": "Enter で送信 · Esc で取り消し",
+    "answer": "回答",
+    "text": "テキスト",
+    "number": "数値",
+    "bool": "はい/いいえ",
+    "key": "キー"
   },
   "sdk.menus": {
     "unknown": "メニューが登録されていません：{id}"
@@ -2269,7 +2351,9 @@
     "moveDown": "下へ移動",
     "onDesk": "すでにデスクトップにあります",
     "showOnDesk": "デスクトップに表示",
-    "backOnDesk": "「{name}」がデスクトップに戻りました"
+    "backOnDesk": "「{name}」がデスクトップに戻りました",
+    "projects": "プロジェクト",
+    "projectHint": "実行中の Logic Studio プロジェクト: そのメインウィンドウ"
   },
   "system": {
     "unsaved": "変更は保存されていません：{error}。再試行しています…",

@@ -1,13 +1,13 @@
 {
   "name": "lilos",
-  "version": "1.36.0",
+  "version": "1.37.0",
   "kernel": 1,
   "sdk": [
     "1",
     "2"
   ],
   "node": 22,
-  "commit": "fc7ac6184bba4b30b1d68355d65b09437c67456c",
+  "commit": "d8b03b25fcf712f1b27a50e74f17f264ac976449",
   "date": "2026-11-10",
   "files": {
     "EULA.md": "sha256-ACsC0GIVznsVJo3ertofUyFre0vAq8kXDRJMZn2TWOM=",
@@ -51,15 +51,15 @@
     "system/kernel/tools/install.js": "sha256-p3+rMq/XX2uNKekSMpPZuU5wClIQb0bVcDOpRCYRhag=",
     "system/kernel/tools/lilos-install.json": "sha256-dEOqrQQdHvVCLpHdp3AlTe2E7CKm0rwKEqwxiFDs/0E=",
     "system/kernel/tools/pack.js": "sha256-CY8f9MV3Rqg/pRIwIf0j+QA6z8cawjA9zZrDqmxOLH0=",
-    "web/assets/boot-BKcDhER8.js": "sha256-fnqaJfh37kZxhJ3hHEwAUaYHjI2fPcBEduWFPb0Z1J0=",
-    "web/assets/boot-DjKSTPiI.css": "sha256-DupNJh/3Xfq/Ev6o5FpMBLsek/68WkvNB+/i+knJ9qk=",
-    "web/assets/index-BAnIga9i.js": "sha256-EWsuilJzMhUMs0uuLaUgo+LI+FieFxxXhiG7oNGj4WA=",
+    "web/assets/boot-Cr9jJqcw.js": "sha256-VUMCBAWQL81wJWbIi4ZTe5utrbyge8w/XV8rPwh8QV0=",
+    "web/assets/boot-DNwsQK1i.css": "sha256-k2SyG7Laj1GYocBN6JAh6qSVY8gsGOuEfQFhYGGgjQo=",
+    "web/assets/index-C7Cn-6EU.js": "sha256-m5jxeIOlAWtguVQq97aCHKc0F2hrEuL9l7GTPB3iV00=",
     "web/assets/index-Dx3l-BDz.css": "sha256-NCEpZQl3D8fduR8vrH0x2PpsSj6g3at45l92kETny00=",
-    "web/assets/system-BYLqJkWf.js": "sha256-7mPY63Tp2+OPfPEJGYANWlgiJQsCRSO1lfC4nWNhqbk=",
+    "web/assets/system-BbU5VzYo.js": "sha256-t8PVo9Vj5xzY0NaDdAvyGsHeigfOrb3y6o58rNRrEOk=",
     "web/assets/system-DZVUWD9x.css": "sha256-n+gX0alxHO5maoGstFHY47jTiPL8xs8NtnTfXj5mroE=",
     "web/favicon.svg": "sha256-79XhGd7Mhuct5Q4XQ5QnMYkI6NOXEZcwROrWH9/9aiA=",
-    "web/host/sdk.js": "sha256-Gx96ks/eyrV3qcJzpipg5yp/2bONsGovDdHZhTuUGnY=",
-    "web/host/system.js": "sha256-cb6VWLCdkKJ3kRHFSc/6NiIM93qwGFSHbal9f3GaX0s=",
-    "web/index.html": "sha256-JUqffAHruZY7L0YYF8ucEs0KjKw5AebFKUdWCbdf5to="
+    "web/host/sdk.js": "sha256-Vj22NIZCdcmiMGIYTNehN2ZJBqW5U7UdQSGdZ+Azsq8=",
+    "web/host/system.js": "sha256-Mrw6MmxeqGrZbaGgYunxnaSegfmtbV2fSOJ7vjJdpmk=",
+    "web/index.html": "sha256-/ZT1GEEOvTKnv3YqOTFUzsGS240LRGqkY2BwHGgbA58="
   }
 }

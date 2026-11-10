@@ -1820,6 +1820,26 @@
     "reload.now": "Nu opnieuw laden",
     "reload.later": "Later"
   },
+  "logic": {
+    "asks": "{name}: de console {console} vraagt iets",
+    "failed": "{name} is gestopt: {error}",
+    "consoleTitle": "Console {name}",
+    "consoleAll": "Console",
+    "noWindows": "{name} heeft geen vensters",
+    "notRunning": "{name} draait niet: activeer het in Logic Studio",
+    "gone": "Het programma is er niet meer",
+    "badApp": "Dit is geen app gemaakt met Logic Studio, of de bestanden ontbreken",
+    "consentTitle": "«{name}» uitvoeren?",
+    "consentText": "Deze app is gemaakt met Logic Studio en draait onder jouw naam. Ze kan:",
+    "consentFrom": "Van {path}. Voer haar alleen uit als je de maker vertrouwt.",
+    "capFiles": "je bestanden lezen en wijzigen",
+    "capNet": "verzoeken op internet doen",
+    "capNotify": "je meldingen sturen",
+    "capEvents": "gebeurtenissen naar je lilOS sturen",
+    "run": "Uitvoeren",
+    "cancel": "Annuleren",
+    "appFailed": "{name} is niet gestart: {error}"
+  },
   "messageBox": {
     "ok": "OK",
     "cancel": "Annuleren",
@@ -1961,6 +1981,46 @@
     "failed": "Aanmelding mislukt",
     "noAskAddress": "askAddress ontbreekt"
   },
+  "sdk.charts": {
+    "table": "Weergeven als tabel",
+    "chart": "Weergeven als grafiek",
+    "png": "Opslaan als PNG",
+    "csv": "Opslaan als CSV",
+    "empty": "Geen gegevens",
+    "other": "Overig",
+    "series": "Reeks",
+    "value": "Waarde",
+    "count": "Aantal",
+    "share": "Aandeel",
+    "name": "Naam",
+    "from": "Van",
+    "to": "Tot",
+    "time": "Tijd",
+    "category": "Categorie",
+    "axis": "As",
+    "point": "Punt",
+    "total": "totaal",
+    "on": "aan",
+    "off": "uit",
+    "more": "Alleen de eerste {n} rijen worden getoond.",
+    "hidden": "verborgen",
+    "summarySeries": "{n} reeksen",
+    "summaryPoints": "{n} punten",
+    "summaryRange": "waarden van {a} tot {b}",
+    "keys": "Pijlen: tussen de waarden bewegen. Enter: kiezen.",
+    "line": "Lijngrafiek",
+    "area": "Vlakdiagram",
+    "column": "Kolomdiagram",
+    "bar": "Staafdiagram",
+    "pie": "Cirkeldiagram",
+    "scatter": "Spreidingsdiagram",
+    "histogram": "Histogram",
+    "live": "Realtime grafiek",
+    "step": "Toestanden in de tijd",
+    "heatmap": "Heatmap",
+    "radar": "Radardiagram",
+    "spark": "Sparkline"
+  },
   "sdk.fs": {
     "notForNet": "Niet beschikbaar voor de bestanden van een netwerkverbinding",
     "badWorkspace": "Ongeldige workspace",
@@ -1999,6 +2059,28 @@
     "status": "Fout {status}",
     "badModule": "Ongeldige module",
     "badPath": "Ongeldig pad"
+  },
+  "sdk.logic": {
+    "noGrow": "Hier kunnen geen poorten worden toegevoegd",
+    "maxAdded": "Hoogstens {n} toegevoegde poorten",
+    "unknownBlock": "Onbekend blok",
+    "onlyAdded": "Alleen toegevoegde poorten kunnen worden verwijderd",
+    "notSchema": "Dit is geen Logic Studio-schema (.lsch)",
+    "notWindow": "Dit is geen Logic Studio-venster (.lsui)",
+    "notProject": "Dit is geen Logic Studio-project (.lsproj)",
+    "intoContainer": "Componenten horen alleen in een container",
+    "unknownComponent": "Onbekende component",
+    "mainConsole": "De hoofdconsole kan niet worden verwijderd",
+    "error": "Uitzondering",
+    "missing": "Het pakket ontbreekt"
+  },
+  "sdk.logicConsole": {
+    "hint": "Enter verstuurt · Esc annuleert",
+    "answer": "Antwoord",
+    "text": "tekst",
+    "number": "getal",
+    "bool": "ja/nee",
+    "key": "een toets"
   },
   "sdk.menus": {
     "unknown": "Menu niet geregistreerd: {id}"
@@ -2323,7 +2405,9 @@
     "moveDown": "Omlaag",
     "onDesk": "Al op het bureaublad",
     "showOnDesk": "Tonen op het bureaublad",
-    "backOnDesk": "‘{name}’ staat weer op het bureaublad"
+    "backOnDesk": "‘{name}’ staat weer op het bureaublad",
+    "projects": "Projecten",
+    "projectHint": "Een draaiend Logic Studio-project: het hoofdvenster"
   },
   "system": {
     "unsaved": "Wijzigingen niet opgeslagen: {error}. Opnieuw proberen…",

@@ -1782,6 +1782,26 @@
     "reload.now": "지금 새로 고침",
     "reload.later": "나중에"
   },
+  "logic": {
+    "asks": "{name}: 콘솔 {console}에서 무언가를 요청합니다",
+    "failed": "{name}이(가) 중지되었습니다: {error}",
+    "consoleTitle": "콘솔 {name}",
+    "consoleAll": "콘솔",
+    "noWindows": "{name}에는 창이 없습니다",
+    "notRunning": "{name}이(가) 실행 중이 아닙니다: Logic Studio에서 활성화하세요",
+    "gone": "프로그램이 더 이상 없습니다",
+    "badApp": "Logic Studio로 만든 앱이 아니거나 파일이 없습니다",
+    "consentTitle": "«{name}»을(를) 실행할까요?",
+    "consentText": "이 앱은 Logic Studio로 만들어졌으며 내 권한으로 실행됩니다. 다음을 할 수 있습니다:",
+    "consentFrom": "{path}에서 가져왔습니다. 만든 사람을 신뢰할 때만 실행하세요.",
+    "capFiles": "내 파일 읽기 및 변경",
+    "capNet": "인터넷에 요청 보내기",
+    "capNotify": "알림 보내기",
+    "capEvents": "내 lilOS로 이벤트 보내기",
+    "run": "실행",
+    "cancel": "취소",
+    "appFailed": "{name}을(를) 시작하지 못했습니다: {error}"
+  },
   "messageBox": {
     "ok": "확인",
     "cancel": "취소",
@@ -1919,6 +1939,46 @@
     "failed": "로그인하지 못했습니다",
     "noAskAddress": "askAddress가 없습니다"
   },
+  "sdk.charts": {
+    "table": "표로 보기",
+    "chart": "차트로 보기",
+    "png": "PNG로 저장",
+    "csv": "CSV로 저장",
+    "empty": "데이터 없음",
+    "other": "기타",
+    "series": "계열",
+    "value": "값",
+    "count": "개수",
+    "share": "비율",
+    "name": "이름",
+    "from": "시작",
+    "to": "끝",
+    "time": "시간",
+    "category": "범주",
+    "axis": "축",
+    "point": "점",
+    "total": "합계",
+    "on": "켜짐",
+    "off": "꺼짐",
+    "more": "처음 {n}개 행만 표시됩니다.",
+    "hidden": "숨김",
+    "summarySeries": "계열 {n}개",
+    "summaryPoints": "점 {n}개",
+    "summaryRange": "{a}부터 {b}까지의 값",
+    "keys": "화살표: 값 사이 이동. Enter: 선택.",
+    "line": "꺾은선형 차트",
+    "area": "영역형 차트",
+    "column": "세로 막대형 차트",
+    "bar": "가로 막대형 차트",
+    "pie": "원형 차트",
+    "scatter": "분산형 차트",
+    "histogram": "히스토그램",
+    "live": "실시간 차트",
+    "step": "시간에 따른 상태",
+    "heatmap": "히트맵",
+    "radar": "방사형 차트",
+    "spark": "스파크라인"
+  },
   "sdk.fs": {
     "notForNet": "네트워크 연결의 파일에는 사용할 수 없습니다",
     "badWorkspace": "잘못된 작업 공간",
@@ -1957,6 +2017,28 @@
     "status": "오류 {status}",
     "badModule": "잘못된 모듈",
     "badPath": "잘못된 경로"
+  },
+  "sdk.logic": {
+    "noGrow": "여기에는 포트를 추가할 수 없습니다",
+    "maxAdded": "추가 포트는 최대 {n}개입니다",
+    "unknownBlock": "알 수 없는 블록",
+    "onlyAdded": "추가한 포트만 제거할 수 있습니다",
+    "notSchema": "Logic Studio 스키마(.lsch)가 아닙니다",
+    "notWindow": "Logic Studio 창(.lsui)이 아닙니다",
+    "notProject": "Logic Studio 프로젝트(.lsproj)가 아닙니다",
+    "intoContainer": "구성 요소는 컨테이너 안에만 넣을 수 있습니다",
+    "unknownComponent": "알 수 없는 구성 요소",
+    "mainConsole": "기본 콘솔은 제거할 수 없습니다",
+    "error": "예외",
+    "missing": "패키지가 없습니다"
+  },
+  "sdk.logicConsole": {
+    "hint": "Enter로 전송 · Esc로 취소",
+    "answer": "응답",
+    "text": "텍스트",
+    "number": "숫자",
+    "bool": "예/아니요",
+    "key": "키"
   },
   "sdk.menus": {
     "unknown": "등록되지 않은 메뉴: {id}"
@@ -2269,7 +2351,9 @@
     "moveDown": "아래로 이동",
     "onDesk": "이미 바탕 화면에 있음",
     "showOnDesk": "바탕 화면에 표시",
-    "backOnDesk": "“{name}”이(가) 바탕 화면에 다시 표시됩니다"
+    "backOnDesk": "“{name}”이(가) 바탕 화면에 다시 표시됩니다",
+    "projects": "프로젝트",
+    "projectHint": "실행 중인 Logic Studio 프로젝트: 해당 기본 창"
   },
   "system": {
     "unsaved": "변경 사항이 저장되지 않았습니다: {error}. 다시 시도하는 중…",

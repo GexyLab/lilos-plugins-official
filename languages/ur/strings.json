@@ -1820,6 +1820,26 @@
     "reload.now": "ابھی دوبارہ لوڈ کریں",
     "reload.later": "بعد میں"
   },
+  "logic": {
+    "asks": "{name}: کنسول {console} کچھ پوچھ رہا ہے",
+    "failed": "{name} رک گیا: {error}",
+    "consoleTitle": "کنسول {name}",
+    "consoleAll": "کنسول",
+    "noWindows": "{name} کی کوئی ونڈو نہیں",
+    "notRunning": "{name} نہیں چل رہا: اسے Logic Studio میں فعال کریں",
+    "gone": "پروگرام اب موجود نہیں",
+    "badApp": "یہ Logic Studio سے بنی ایپ نہیں ہے، یا اس کی فائلیں غائب ہیں",
+    "consentTitle": "«{name}» چلائیں؟",
+    "consentText": "یہ ایپ Logic Studio سے بنائی گئی ہے اور آپ کے نام پر چلتی ہے۔ یہ کر سکتی ہے:",
+    "consentFrom": "{path} سے۔ اسے صرف تب چلائیں جب آپ بنانے والے پر بھروسا کرتے ہوں۔",
+    "capFiles": "آپ کی فائلیں پڑھنا اور بدلنا",
+    "capNet": "انٹرنیٹ پر درخواستیں بھیجنا",
+    "capNotify": "آپ کو اطلاعات بھیجنا",
+    "capEvents": "آپ کے lilOS کو ایونٹس بھیجنا",
+    "run": "چلائیں",
+    "cancel": "منسوخ کریں",
+    "appFailed": "{name} شروع نہیں ہوا: {error}"
+  },
   "messageBox": {
     "ok": "ٹھیک ہے",
     "cancel": "منسوخ کریں",
@@ -1961,6 +1981,46 @@
     "failed": "سائن ان ناکام ہو گیا",
     "noAskAddress": "askAddress موجود نہیں"
   },
+  "sdk.charts": {
+    "table": "جدول کے طور پر دکھائیں",
+    "chart": "چارٹ کے طور پر دکھائیں",
+    "png": "PNG کے طور پر محفوظ کریں",
+    "csv": "CSV کے طور پر محفوظ کریں",
+    "empty": "کوئی ڈیٹا نہیں",
+    "other": "دیگر",
+    "series": "سلسلہ",
+    "value": "قدر",
+    "count": "شمار",
+    "share": "حصہ",
+    "name": "نام",
+    "from": "سے",
+    "to": "تک",
+    "time": "وقت",
+    "category": "زمرہ",
+    "axis": "محور",
+    "point": "نقطہ",
+    "total": "کل",
+    "on": "آن",
+    "off": "آف",
+    "more": "صرف پہلی {n} قطاریں دکھائی گئی ہیں۔",
+    "hidden": "چھپا ہوا",
+    "summarySeries": "{n} سلسلے",
+    "summaryPoints": "{n} نقطے",
+    "summaryRange": "{a} سے {b} تک کی قدریں",
+    "keys": "تیر: قدروں کے درمیان جائیں۔ Enter: منتخب کریں۔",
+    "line": "لائن چارٹ",
+    "area": "ایریا چارٹ",
+    "column": "کالم چارٹ",
+    "bar": "بار چارٹ",
+    "pie": "پائی چارٹ",
+    "scatter": "اسکیٹر چارٹ",
+    "histogram": "ہسٹوگرام",
+    "live": "ریئل ٹائم چارٹ",
+    "step": "وقت کے ساتھ حالتیں",
+    "heatmap": "ہیٹ میپ",
+    "radar": "ریڈار چارٹ",
+    "spark": "اسپارک لائن"
+  },
   "sdk.fs": {
     "notForNet": "نیٹ ورک کنکشن کی فائلوں کے لیے دستیاب نہیں",
     "badWorkspace": "غلط ورک اسپیس",
@@ -1999,6 +2059,28 @@
     "status": "خرابی {status}",
     "badModule": "غلط ماڈیول",
     "badPath": "غلط راستہ"
+  },
+  "sdk.logic": {
+    "noGrow": "اس میں پورٹس شامل نہیں کیے جا سکتے",
+    "maxAdded": "زیادہ سے زیادہ {n} شامل کردہ پورٹس",
+    "unknownBlock": "نامعلوم بلاک",
+    "onlyAdded": "صرف شامل کردہ پورٹس ہٹائے جا سکتے ہیں",
+    "notSchema": "یہ Logic Studio کا اسکیما (.lsch) نہیں ہے",
+    "notWindow": "یہ Logic Studio کی ونڈو (.lsui) نہیں ہے",
+    "notProject": "یہ Logic Studio کا پروجیکٹ (.lsproj) نہیں ہے",
+    "intoContainer": "اجزاء صرف کنٹینر کے اندر رکھے جاتے ہیں",
+    "unknownComponent": "نامعلوم جزو",
+    "mainConsole": "مرکزی کنسول ہٹایا نہیں جا سکتا",
+    "error": "استثنا",
+    "missing": "پیکیج غائب ہے"
+  },
+  "sdk.logicConsole": {
+    "hint": "Enter بھیجتا ہے · Esc منسوخ کرتا ہے",
+    "answer": "جواب",
+    "text": "متن",
+    "number": "نمبر",
+    "bool": "ہاں/نہیں",
+    "key": "ایک کلید"
   },
   "sdk.menus": {
     "unknown": "مینیو رجسٹر نہیں ہے: {id}"
@@ -2323,7 +2405,9 @@
     "moveDown": "نیچے منتقل کریں",
     "onDesk": "پہلے سے ڈیسک ٹاپ پر ہے",
     "showOnDesk": "ڈیسک ٹاپ پر دکھائیں",
-    "backOnDesk": "«{name}» دوبارہ ڈیسک ٹاپ پر ہے"
+    "backOnDesk": "«{name}» دوبارہ ڈیسک ٹاپ پر ہے",
+    "projects": "پروجیکٹس",
+    "projectHint": "چلتا ہوا Logic Studio پروجیکٹ: اس کی مرکزی ونڈو"
   },
   "system": {
     "unsaved": "تبدیلیاں محفوظ نہیں ہوئیں: {error}۔ دوبارہ کوشش کی جا رہی ہے…",

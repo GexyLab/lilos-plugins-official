@@ -1,5 +1,13 @@
 # Changelog di lilOS
 
+## 1.37.0 — 2026-11-10
+
+- **Nuova funzionalità — Logic Studio.** Blocchi logici collegati tra loro, come in OpenBack: i dati passano sui collegamenti e ogni blocco ci fa qualcosa. Con l'app **Logic Studio IDE** (dall'AppStore) si creano progetti di schemi e di finestre fatte di Componenti UI (pulsanti, interruttori, indicatori, tabelle, grafici…), si provano con i valori dal vivo e si attivano: un progetto attivo gira nel motore di lilOS anche a lilOS chiuso. I blocchi e le componenti arrivano con i moduli del kernel (motore `logicstudio-engine` e pacchetti `logicstudio-*`).
+- **Nuova funzionalità — le finestre dei progetti le apre lilOS.** Il menu applicazioni ha la scheda **Progetti**, con i progetti attivi: un clic apre la loro finestra principale, senza Logic Studio. Le console dei progetti si aprono come sceglie il progetto (tutte, solo quando chiedono un dato, mai, o tutte in una), e quando una console chiede un dato senza finestre aperte arriva una notifica.
+- **Nuova funzionalità — app fatte con Logic Studio, eseguite senza installarle.** «Crea app» in Logic Studio fa il pacchetto di un'app nella cartella App create: aprendo il suo file .lsapp lilOS la esegue, solo per te e finché le sue finestre restano aperte. Prima di eseguire un'app che usa i tuoi file, la rete, le notifiche o gli eventi, lilOS chiede il permesso.
+- **Nuova funzionalità — Pannello di controllo → Logic Studio.** Quello che usano i tuoi programmi; per gli amministratori i limiti per tutti, le quote di ogni utente, i programmi in esecuzione e i pacchetti installati.
+- **Per gli sviluppatori — SDK 0.22.0.** `logic` (il motore), il modello di schemi, finestre e progetti, `LogicCanvas`, `LogicUI`, le console e la libreria dei grafici `chart`. Dettagli nella documentazione (decisione D88).
+
 ## 1.36.0 — 2026-11-10
 
 - **Nuova funzionalità — Ctrl + doppio clic apre una cartella in una finestra nuova.** Il doppio clic su una cartella della scrivania o di una workarea la apre ancora nella finestra del File Manager già aperta; con **Ctrl** premuto (⌘ sul Mac) si apre in una finestra tutta sua. Vale anche per Home, Documenti, Immagini, Download, il Cestino e i collegamenti a una cartella.

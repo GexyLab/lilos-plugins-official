@@ -3,9 +3,9 @@
   "language": "nl",
   "name": "Nederlands",
   "englishName": "Dutch",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "lilos": ">=1.35.0",
   "files": {
-    "strings.json": "sha256-7jivQZ5P3P5/MFdCIowmtzPs6q9wWS2aH7U0qVvm58I="
+    "strings.json": "sha256-xaVk9xhFcmiThGP7lpHTjB+gWx21ummIY8uGPsapyXQ="
   }
 }

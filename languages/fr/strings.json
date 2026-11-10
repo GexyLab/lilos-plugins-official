@@ -1826,6 +1826,26 @@
     "reload.now": "Recharger maintenant",
     "reload.later": "Plus tard"
   },
+  "logic": {
+    "asks": "{name} : la console {console} demande quelque chose",
+    "failed": "{name} s'est arrêté : {error}",
+    "consoleTitle": "Console {name}",
+    "consoleAll": "Console",
+    "noWindows": "{name} n'a aucune fenêtre",
+    "notRunning": "{name} n'est pas en cours d'exécution : activez-le dans Logic Studio",
+    "gone": "Le programme n'existe plus",
+    "badApp": "Ce n'est pas une app créée par Logic Studio, ou ses fichiers sont absents",
+    "consentTitle": "Exécuter « {name} » ?",
+    "consentText": "Cette application a été créée avec Logic Studio et s’exécute en votre nom. Elle peut :",
+    "consentFrom": "Depuis {path}. Ne l’exécutez que si vous faites confiance à son auteur.",
+    "capFiles": "lire et modifier vos fichiers",
+    "capNet": "faire des requêtes sur internet",
+    "capNotify": "vous envoyer des notifications",
+    "capEvents": "envoyer des événements à votre lilOS",
+    "run": "Exécuter",
+    "cancel": "Annuler",
+    "appFailed": "{name} n'a pas démarré : {error}"
+  },
   "messageBox": {
     "ok": "OK",
     "cancel": "Annuler",
@@ -1967,6 +1987,46 @@
     "failed": "Échec de la connexion",
     "noAskAddress": "askAddress est manquant"
   },
+  "sdk.charts": {
+    "table": "Afficher en tableau",
+    "chart": "Afficher en graphique",
+    "png": "Enregistrer en PNG",
+    "csv": "Enregistrer en CSV",
+    "empty": "Aucune donnée",
+    "other": "Autre",
+    "series": "Série",
+    "value": "Valeur",
+    "count": "Nombre",
+    "share": "Part",
+    "name": "Nom",
+    "from": "De",
+    "to": "À",
+    "time": "Temps",
+    "category": "Catégorie",
+    "axis": "Axe",
+    "point": "Point",
+    "total": "total",
+    "on": "activé",
+    "off": "désactivé",
+    "more": "Seules les {n} premières lignes sont affichées.",
+    "hidden": "masqué",
+    "summarySeries": "{n} séries",
+    "summaryPoints": "{n} points",
+    "summaryRange": "valeurs de {a} à {b}",
+    "keys": "Flèches : se déplacer entre les valeurs. Entrée : choisir.",
+    "line": "Graphique en courbes",
+    "area": "Graphique en aires",
+    "column": "Graphique en colonnes",
+    "bar": "Graphique en barres",
+    "pie": "Graphique en secteurs",
+    "scatter": "Nuage de points",
+    "histogram": "Histogramme",
+    "live": "Graphique en temps réel",
+    "step": "États dans le temps",
+    "heatmap": "Carte de chaleur",
+    "radar": "Graphique radar",
+    "spark": "Sparkline"
+  },
   "sdk.fs": {
     "notForNet": "Non disponible pour les fichiers d’une connexion réseau",
     "badWorkspace": "Espace de travail non valide",
@@ -2005,6 +2065,28 @@
     "status": "Erreur {status}",
     "badModule": "Module non valide",
     "badPath": "Chemin non valide"
+  },
+  "sdk.logic": {
+    "noGrow": "Celui-ci n'accepte pas l'ajout de ports",
+    "maxAdded": "Au plus {n} ports ajoutés",
+    "unknownBlock": "Bloc inconnu",
+    "onlyAdded": "Seuls les ports ajoutés peuvent être supprimés",
+    "notSchema": "Ce n'est pas un schéma Logic Studio (.lsch)",
+    "notWindow": "Ce n'est pas une fenêtre Logic Studio (.lsui)",
+    "notProject": "Ce n'est pas un projet Logic Studio (.lsproj)",
+    "intoContainer": "Les composants vont uniquement dans un conteneur",
+    "unknownComponent": "Composant inconnu",
+    "mainConsole": "La console principale ne peut pas être supprimée",
+    "error": "Exception",
+    "missing": "Le paquet est absent"
+  },
+  "sdk.logicConsole": {
+    "hint": "Entrée envoie · Échap annule",
+    "answer": "Réponse",
+    "text": "texte",
+    "number": "nombre",
+    "bool": "oui/non",
+    "key": "une touche"
   },
   "sdk.menus": {
     "unknown": "Menu non enregistré : {id}"
@@ -2329,7 +2411,9 @@
     "moveDown": "Descendre",
     "onDesk": "Déjà sur le bureau",
     "showOnDesk": "Afficher sur le bureau",
-    "backOnDesk": "« {name} » est de retour sur le bureau"
+    "backOnDesk": "« {name} » est de retour sur le bureau",
+    "projects": "Projets",
+    "projectHint": "Un projet Logic Studio en cours d'exécution : sa fenêtre principale"
   },
   "system": {
     "unsaved": "Modifications non enregistrées : {error}. Nouvelle tentative…",

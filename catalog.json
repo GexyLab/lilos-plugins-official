@@ -13,7 +13,8 @@
     "apps/automata",
     "apps/scheduler",
     "apps/nettest",
-    "apps/stickynotes"
+    "apps/stickynotes",
+    "apps/logicstudio"
   ],
   "modules": [
     "modules/users-basic",
@@ -36,7 +37,14 @@
     "modules/term-rlogin",
     "modules/term-supdup",
     "modules/call-grpc",
-    "modules/call-mqtt"
+    "modules/call-mqtt",
+    "modules/logicstudio-engine",
+    "modules/logicstudio-core",
+    "modules/logicstudio-collections",
+    "modules/logicstudio-ui",
+    "modules/logicstudio-charts",
+    "modules/logicstudio-lilos",
+    "modules/logicstudio-net"
   ],
   "system": "system/lilos",
   "languages": [

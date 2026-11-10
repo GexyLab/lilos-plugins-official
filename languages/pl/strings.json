@@ -1896,6 +1896,26 @@
     "reload.now": "Odśwież teraz",
     "reload.later": "Później"
   },
+  "logic": {
+    "asks": "{name}: konsola {console} o coś pyta",
+    "failed": "{name} zatrzymał się: {error}",
+    "consoleTitle": "Konsola {name}",
+    "consoleAll": "Konsola",
+    "noWindows": "{name} nie ma okien",
+    "notRunning": "{name} nie jest uruchomiony: włącz go w Logic Studio",
+    "gone": "Programu już nie ma",
+    "badApp": "To nie jest aplikacja utworzona w Logic Studio albo brakuje jej plików",
+    "consentTitle": "Uruchomić «{name}»?",
+    "consentText": "Ta aplikacja została utworzona w Logic Studio i działa w Twoim imieniu. Może:",
+    "consentFrom": "Z {path}. Uruchamiaj ją tylko wtedy, gdy ufasz jej autorowi.",
+    "capFiles": "odczytywać i zmieniać Twoje pliki",
+    "capNet": "wysyłać żądania w internecie",
+    "capNotify": "wysyłać Ci powiadomienia",
+    "capEvents": "wysyłać zdarzenia do Twojego lilOS",
+    "run": "Uruchom",
+    "cancel": "Anuluj",
+    "appFailed": "{name} nie uruchomił się: {error}"
+  },
   "messageBox": {
     "ok": "OK",
     "cancel": "Anuluj",
@@ -2045,6 +2065,46 @@
     "failed": "Logowanie nie powiodło się",
     "noAskAddress": "Brak askAddress"
   },
+  "sdk.charts": {
+    "table": "Pokaż jako tabelę",
+    "chart": "Pokaż jako wykres",
+    "png": "Zapisz jako PNG",
+    "csv": "Zapisz jako CSV",
+    "empty": "Brak danych",
+    "other": "Inne",
+    "series": "Seria",
+    "value": "Wartość",
+    "count": "Liczba",
+    "share": "Udział",
+    "name": "Nazwa",
+    "from": "Od",
+    "to": "Do",
+    "time": "Czas",
+    "category": "Kategoria",
+    "axis": "Oś",
+    "point": "Punkt",
+    "total": "razem",
+    "on": "włączone",
+    "off": "wyłączone",
+    "more": "Pokazano tylko pierwsze {n} wierszy.",
+    "hidden": "ukryte",
+    "summarySeries": "{n} serii",
+    "summaryPoints": "{n} punktów",
+    "summaryRange": "wartości od {a} do {b}",
+    "keys": "Strzałki: przechodzenie między wartościami. Enter: wybierz.",
+    "line": "Wykres liniowy",
+    "area": "Wykres warstwowy",
+    "column": "Wykres kolumnowy",
+    "bar": "Wykres słupkowy",
+    "pie": "Wykres kołowy",
+    "scatter": "Wykres punktowy",
+    "histogram": "Histogram",
+    "live": "Wykres w czasie rzeczywistym",
+    "step": "Stany w czasie",
+    "heatmap": "Mapa cieplna",
+    "radar": "Wykres radarowy",
+    "spark": "Sparkline"
+  },
   "sdk.fs": {
     "notForNet": "Niedostępne dla plików połączenia sieciowego",
     "badWorkspace": "Nieprawidłowy obszar roboczy",
@@ -2083,6 +2143,28 @@
     "status": "Błąd {status}",
     "badModule": "Nieprawidłowy moduł",
     "badPath": "Nieprawidłowa ścieżka"
+  },
+  "sdk.logic": {
+    "noGrow": "Tu nie można dodawać portów",
+    "maxAdded": "Najwyżej {n} dodanych portów",
+    "unknownBlock": "Nieznany blok",
+    "onlyAdded": "Można usunąć tylko dodane porty",
+    "notSchema": "To nie jest schemat Logic Studio (.lsch)",
+    "notWindow": "To nie jest okno Logic Studio (.lsui)",
+    "notProject": "To nie jest projekt Logic Studio (.lsproj)",
+    "intoContainer": "Komponenty trafiają tylko do kontenera",
+    "unknownComponent": "Nieznany komponent",
+    "mainConsole": "Konsoli głównej nie można usunąć",
+    "error": "Wyjątek",
+    "missing": "Brakuje pakietu"
+  },
+  "sdk.logicConsole": {
+    "hint": "Enter wysyła · Esc anuluje",
+    "answer": "Odpowiedź",
+    "text": "tekst",
+    "number": "liczba",
+    "bool": "tak/nie",
+    "key": "klawisz"
   },
   "sdk.menus": {
     "unknown": "Menu niezarejestrowane: {id}"
@@ -2431,7 +2513,9 @@
     "moveDown": "Przenieś w dół",
     "onDesk": "Już jest na pulpicie",
     "showOnDesk": "Pokaż na pulpicie",
-    "backOnDesk": "„{name}” wrócił na pulpit"
+    "backOnDesk": "„{name}” wrócił na pulpit",
+    "projects": "Projekty",
+    "projectHint": "Uruchomiony projekt Logic Studio: jego okno główne"
   },
   "system": {
     "unsaved": "Nie zapisano zmian: {error}. Ponawianie…",

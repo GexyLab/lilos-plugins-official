@@ -1782,6 +1782,26 @@
     "reload.now": "Muat ulang sekarang",
     "reload.later": "Nanti"
   },
+  "logic": {
+    "asks": "{name}: konsol {console} menanyakan sesuatu",
+    "failed": "{name} berhenti: {error}",
+    "consoleTitle": "Konsol {name}",
+    "consoleAll": "Konsol",
+    "noWindows": "{name} tidak punya jendela",
+    "notRunning": "{name} tidak berjalan: aktifkan di Logic Studio",
+    "gone": "Program tidak ada lagi",
+    "badApp": "Ini bukan aplikasi buatan Logic Studio, atau filenya hilang",
+    "consentTitle": "Jalankan «{name}»?",
+    "consentText": "Aplikasi ini dibuat dengan Logic Studio dan berjalan atas nama Anda. Aplikasi ini dapat:",
+    "consentFrom": "Dari {path}. Jalankan hanya jika Anda memercayai pembuatnya.",
+    "capFiles": "membaca dan mengubah file Anda",
+    "capNet": "membuat permintaan ke internet",
+    "capNotify": "mengirimi Anda notifikasi",
+    "capEvents": "mengirim peristiwa ke lilOS Anda",
+    "run": "Jalankan",
+    "cancel": "Batal",
+    "appFailed": "{name} tidak dapat dimulai: {error}"
+  },
   "messageBox": {
     "ok": "OK",
     "cancel": "Batal",
@@ -1919,6 +1939,46 @@
     "failed": "Gagal masuk",
     "noAskAddress": "askAddress tidak ada"
   },
+  "sdk.charts": {
+    "table": "Tampilkan sebagai tabel",
+    "chart": "Tampilkan sebagai grafik",
+    "png": "Simpan sebagai PNG",
+    "csv": "Simpan sebagai CSV",
+    "empty": "Tidak ada data",
+    "other": "Lainnya",
+    "series": "Seri",
+    "value": "Nilai",
+    "count": "Jumlah",
+    "share": "Porsi",
+    "name": "Nama",
+    "from": "Dari",
+    "to": "Sampai",
+    "time": "Waktu",
+    "category": "Kategori",
+    "axis": "Sumbu",
+    "point": "Titik",
+    "total": "total",
+    "on": "hidup",
+    "off": "mati",
+    "more": "Hanya {n} baris pertama yang ditampilkan.",
+    "hidden": "tersembunyi",
+    "summarySeries": "{n} seri",
+    "summaryPoints": "{n} titik",
+    "summaryRange": "nilai dari {a} sampai {b}",
+    "keys": "Panah: berpindah antar nilai. Enter: pilih.",
+    "line": "Grafik garis",
+    "area": "Grafik area",
+    "column": "Grafik kolom",
+    "bar": "Grafik batang",
+    "pie": "Grafik lingkaran",
+    "scatter": "Grafik sebar",
+    "histogram": "Histogram",
+    "live": "Grafik waktu nyata",
+    "step": "Status dari waktu ke waktu",
+    "heatmap": "Peta panas",
+    "radar": "Grafik radar",
+    "spark": "Sparkline"
+  },
   "sdk.fs": {
     "notForNet": "Tidak tersedia untuk file koneksi jaringan",
     "badWorkspace": "Ruang kerja tidak valid",
@@ -1957,6 +2017,28 @@
     "status": "Kesalahan {status}",
     "badModule": "Modul tidak valid",
     "badPath": "Jalur tidak valid"
+  },
+  "sdk.logic": {
+    "noGrow": "Ini tidak memungkinkan penambahan port",
+    "maxAdded": "Paling banyak {n} port tambahan",
+    "unknownBlock": "Blok tidak dikenal",
+    "onlyAdded": "Hanya port tambahan yang dapat dihapus",
+    "notSchema": "Ini bukan skema Logic Studio (.lsch)",
+    "notWindow": "Ini bukan jendela Logic Studio (.lsui)",
+    "notProject": "Ini bukan proyek Logic Studio (.lsproj)",
+    "intoContainer": "Komponen hanya masuk ke dalam kontainer",
+    "unknownComponent": "Komponen tidak dikenal",
+    "mainConsole": "Konsol utama tidak dapat dihapus",
+    "error": "Pengecualian",
+    "missing": "Paket hilang"
+  },
+  "sdk.logicConsole": {
+    "hint": "Enter mengirim · Esc membatalkan",
+    "answer": "Jawaban",
+    "text": "teks",
+    "number": "angka",
+    "bool": "ya/tidak",
+    "key": "sebuah tombol"
   },
   "sdk.menus": {
     "unknown": "Menu tidak terdaftar: {id}"
@@ -2269,7 +2351,9 @@
     "moveDown": "Pindahkan ke bawah",
     "onDesk": "Sudah ada di desktop",
     "showOnDesk": "Tampilkan di desktop",
-    "backOnDesk": "“{name}” kembali ada di desktop"
+    "backOnDesk": "“{name}” kembali ada di desktop",
+    "projects": "Proyek",
+    "projectHint": "Proyek Logic Studio yang sedang berjalan: jendela utamanya"
   },
   "system": {
     "unsaved": "Perubahan tidak disimpan: {error}. Mencoba lagi…",

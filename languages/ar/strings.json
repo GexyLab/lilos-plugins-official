@@ -1952,6 +1952,26 @@
     "reload.now": "إعادة التحميل الآن",
     "reload.later": "لاحقًا"
   },
+  "logic": {
+    "asks": "{name}: وحدة التحكم {console} تطلب شيئًا",
+    "failed": "توقف {name}: {error}",
+    "consoleTitle": "وحدة التحكم {name}",
+    "consoleAll": "وحدة التحكم",
+    "noWindows": "{name} ليس له نوافذ",
+    "notRunning": "{name} غير قيد التشغيل: فعّله في Logic Studio",
+    "gone": "البرنامج لم يعد موجودًا",
+    "badApp": "هذا ليس تطبيقًا أنشأه Logic Studio، أو ملفاته مفقودة",
+    "consentTitle": "تشغيل «{name}»؟",
+    "consentText": "أُنشئ هذا التطبيق باستخدام Logic Studio ويعمل باسمك. يمكنه:",
+    "consentFrom": "من {path}. لا تشغّله إلا إذا كنت تثق بمن أنشأه.",
+    "capFiles": "قراءة ملفاتك وتغييرها",
+    "capNet": "إرسال طلبات عبر الإنترنت",
+    "capNotify": "إرسال إشعارات إليك",
+    "capEvents": "إرسال أحداث إلى lilOS لديك",
+    "run": "تشغيل",
+    "cancel": "إلغاء",
+    "appFailed": "لم يبدأ {name}: {error}"
+  },
   "messageBox": {
     "ok": "موافق",
     "cancel": "إلغاء",
@@ -2109,6 +2129,46 @@
     "failed": "فشل تسجيل الدخول",
     "noAskAddress": "askAddress مفقودة"
   },
+  "sdk.charts": {
+    "table": "عرض كجدول",
+    "chart": "عرض كمخطط",
+    "png": "حفظ كـ PNG",
+    "csv": "حفظ كـ CSV",
+    "empty": "لا توجد بيانات",
+    "other": "أخرى",
+    "series": "سلسلة",
+    "value": "القيمة",
+    "count": "العدد",
+    "share": "الحصة",
+    "name": "الاسم",
+    "from": "من",
+    "to": "إلى",
+    "time": "الوقت",
+    "category": "الفئة",
+    "axis": "المحور",
+    "point": "نقطة",
+    "total": "الإجمالي",
+    "on": "مفعّل",
+    "off": "معطّل",
+    "more": "تُعرض أول {n} صفوف فقط.",
+    "hidden": "مخفي",
+    "summarySeries": "{n} سلاسل",
+    "summaryPoints": "{n} نقاط",
+    "summaryRange": "قيم من {a} إلى {b}",
+    "keys": "الأسهم: التنقل بين القيم. Enter: اختيار.",
+    "line": "مخطط خطي",
+    "area": "مخطط مساحي",
+    "column": "مخطط أعمدة",
+    "bar": "مخطط شريطي",
+    "pie": "مخطط دائري",
+    "scatter": "مخطط انتشار",
+    "histogram": "مدرج تكراري",
+    "live": "مخطط فوري",
+    "step": "الحالات عبر الزمن",
+    "heatmap": "خريطة حرارية",
+    "radar": "مخطط راداري",
+    "spark": "مخطط مصغّر"
+  },
   "sdk.fs": {
     "notForNet": "غير متاح لملفات اتصال الشبكة",
     "badWorkspace": "مساحة عمل غير صالحة",
@@ -2147,6 +2207,28 @@
     "status": "خطأ {status}",
     "badModule": "وحدة غير صالحة",
     "badPath": "مسار غير صالح"
+  },
+  "sdk.logic": {
+    "noGrow": "هذا لا يسمح بإضافة منافذ",
+    "maxAdded": "{n} منافذ مضافة كحد أقصى",
+    "unknownBlock": "كتلة غير معروفة",
+    "onlyAdded": "يمكن إزالة المنافذ المضافة فقط",
+    "notSchema": "هذا ليس مخططًا من Logic Studio (.lsch)",
+    "notWindow": "هذه ليست نافذة من Logic Studio (.lsui)",
+    "notProject": "هذا ليس مشروعًا من Logic Studio (.lsproj)",
+    "intoContainer": "تُوضع المكوّنات داخل حاوية فقط",
+    "unknownComponent": "مكوّن غير معروف",
+    "mainConsole": "لا يمكن إزالة وحدة التحكم الرئيسية",
+    "error": "استثناء",
+    "missing": "الحزمة مفقودة"
+  },
+  "sdk.logicConsole": {
+    "hint": "Enter يرسل · Esc يلغي",
+    "answer": "إجابة",
+    "text": "نص",
+    "number": "رقم",
+    "bool": "نعم/لا",
+    "key": "مفتاح"
   },
   "sdk.menus": {
     "unknown": "القائمة غير مسجّلة: {id}"
@@ -2519,7 +2601,9 @@
     "moveDown": "نقل لأسفل",
     "onDesk": "موجود بالفعل على سطح المكتب",
     "showOnDesk": "إظهار على سطح المكتب",
-    "backOnDesk": "عاد «{name}» إلى سطح المكتب"
+    "backOnDesk": "عاد «{name}» إلى سطح المكتب",
+    "projects": "المشاريع",
+    "projectHint": "مشروع Logic Studio قيد التشغيل: نافذته الرئيسية"
   },
   "system": {
     "unsaved": "لم يتم حفظ التغييرات: {error}. جارٍ إعادة المحاولة…",

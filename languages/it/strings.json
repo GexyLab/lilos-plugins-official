@@ -1814,6 +1814,26 @@
     "reload.now": "Ricarica ora",
     "reload.later": "Più tardi"
   },
+  "logic": {
+    "asks": "{name}: la console {console} chiede qualcosa",
+    "failed": "{name} si è fermato: {error}",
+    "consoleTitle": "Console {name}",
+    "consoleAll": "Console",
+    "noWindows": "{name} non ha finestre",
+    "notRunning": "{name} non è in esecuzione: attivalo in Logic Studio",
+    "gone": "Il programma non c'è più",
+    "badApp": "Questa non è un'app creata da Logic Studio, oppure mancano i suoi file",
+    "consentTitle": "Eseguire «{name}»?",
+    "consentText": "Questa app è stata fatta con Logic Studio e gira a tuo nome. Può:",
+    "consentFrom": "Da {path}. Eseguila solo se ti fidi di chi l'ha fatta.",
+    "capFiles": "leggere e cambiare i tuoi file",
+    "capNet": "fare richieste su internet",
+    "capNotify": "mandarti notifiche",
+    "capEvents": "mandare eventi al tuo lilOS",
+    "run": "Esegui",
+    "cancel": "Annulla",
+    "appFailed": "{name} non è partito: {error}"
+  },
   "messageBox": {
     "ok": "OK",
     "cancel": "Annulla",
@@ -1955,6 +1975,46 @@
     "failed": "Accesso non riuscito",
     "noAskAddress": "askAddress mancante"
   },
+  "sdk.charts": {
+    "table": "Mostra come tabella",
+    "chart": "Mostra come grafico",
+    "png": "Salva come PNG",
+    "csv": "Salva come CSV",
+    "empty": "Nessun dato",
+    "other": "Altro",
+    "series": "Serie",
+    "value": "Valore",
+    "count": "Conteggio",
+    "share": "Quota",
+    "name": "Nome",
+    "from": "Da",
+    "to": "A",
+    "time": "Tempo",
+    "category": "Categoria",
+    "axis": "Asse",
+    "point": "Punto",
+    "total": "totale",
+    "on": "acceso",
+    "off": "spento",
+    "more": "Sono mostrate solo le prime {n} righe.",
+    "hidden": "nascosto",
+    "summarySeries": "{n} serie",
+    "summaryPoints": "{n} punti",
+    "summaryRange": "valori da {a} a {b}",
+    "keys": "Frecce: spostati tra i valori. Invio: scegli.",
+    "line": "Grafico a linee",
+    "area": "Grafico ad area",
+    "column": "Grafico a colonne",
+    "bar": "Grafico a barre",
+    "pie": "Grafico a torta",
+    "scatter": "Grafico a dispersione",
+    "histogram": "Istogramma",
+    "live": "Grafico in tempo reale",
+    "step": "Stati nel tempo",
+    "heatmap": "Mappa di calore",
+    "radar": "Grafico radar",
+    "spark": "Sparkline"
+  },
   "sdk.fs": {
     "notForNet": "Non disponibile per i file di una connessione di rete",
     "badWorkspace": "Workspace non valido",
@@ -1993,6 +2053,28 @@
     "status": "Errore {status}",
     "badModule": "Modulo non valido",
     "badPath": "Percorso non valido"
+  },
+  "sdk.logic": {
+    "noGrow": "Questo non permette di aggiungere porte",
+    "maxAdded": "Al massimo {n} porte aggiunte",
+    "unknownBlock": "Blocco sconosciuto",
+    "onlyAdded": "Si possono togliere solo le porte aggiunte",
+    "notSchema": "Questo non è uno schema di Logic Studio (.lsch)",
+    "notWindow": "Questa non è una finestra di Logic Studio (.lsui)",
+    "notProject": "Questo non è un progetto di Logic Studio (.lsproj)",
+    "intoContainer": "I componenti vanno solo dentro un contenitore",
+    "unknownComponent": "Componente sconosciuto",
+    "mainConsole": "La console principale non si può togliere",
+    "error": "Eccezione",
+    "missing": "Il pacchetto non c'è"
+  },
+  "sdk.logicConsole": {
+    "hint": "Invio manda · Esc annulla",
+    "answer": "Risposta",
+    "text": "testo",
+    "number": "numero",
+    "bool": "sì/no",
+    "key": "un tasto"
   },
   "sdk.menus": {
     "unknown": "Menu non registrato: {id}"
@@ -2317,7 +2399,9 @@
     "moveDown": "Sposta giù",
     "onDesk": "Già sul desktop",
     "showOnDesk": "Mostra sul desktop",
-    "backOnDesk": "«{name}» è di nuovo sul desktop"
+    "backOnDesk": "«{name}» è di nuovo sul desktop",
+    "projects": "Progetti",
+    "projectHint": "Un progetto di Logic Studio in esecuzione: la sua finestra principale"
   },
   "system": {
     "unsaved": "Modifiche non salvate: {error}. Riprovo…",

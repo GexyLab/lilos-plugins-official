@@ -1,0 +1,1 @@
+import{join as e}from"node:path";var t=null,n={async init(n){n.provide(`logicblock.core`,{api:1}),t=await n.service(`logicstudio`).register({name:n.name,version:n.version,label:{en:`Base blocks`,it:`Blocchi di base`},blocks:e(n.dir,`blocks.js`)})},async stop(){t?.unregister()}};export{n as default};

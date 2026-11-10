@@ -1,0 +1,1 @@
+import{join as e}from"node:path";var t=null,n={async init(n){n.provide(`logicui.ui`,{api:1}),t=await n.service(`logicstudio`).register({name:n.name,version:n.version,label:{en:`Standard UI components`,it:`Componenti UI standard`},components:e(n.dir,`components.js`)})},async stop(){t?.unregister()}};export{n as default};

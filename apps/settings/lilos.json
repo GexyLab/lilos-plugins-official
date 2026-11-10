@@ -1,6 +1,6 @@
 {
   "id": "settings",
-  "version": "1.22.0",
+  "version": "1.23.0",
   "kind": "local",
   "name": "Control Panel",
   "description": "Appearance, language, desk, user page, workspaces, notifications, tags, shortcuts, file types, startup services and apps, storage.",
@@ -98,12 +98,12 @@
   ],
   "entry": "dist/index.js",
   "styles": [
-    "dist/index-BjZ-6x_W.css"
+    "dist/index-t6OEzA2p.css"
   ],
   "locales": "locales.json",
   "files": {
-    "dist/index-BjZ-6x_W.css": "sha256-97/m3wxD0sE9lv+PheTpkQg+OXxrnkF1LnKJSRu6X0U=",
-    "dist/index.js": "sha256-w2HDPCP5IVDM3G3JZ/PnhCJsU+ilJPpioYJzHi1ytvU=",
-    "locales.json": "sha256-zpKXrHoif5Bih3YOj5pcIX1xUyYFrQo4LQGb+7ycfn8="
+    "dist/index-t6OEzA2p.css": "sha256-V+bMqkfUNjQG8Za/uFZY4y0gvh3zAhbGaCBnPm8XxNk=",
+    "dist/index.js": "sha256-HFaa2r4YAfn1Mbyyy/Ji8+gauE6lMKLZV1doYBWDjn0=",
+    "locales.json": "sha256-968qwtE+424Qy24uTHiZq90zSDNoFlNfaB0BneJZrs0="
   }
 }

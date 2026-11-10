@@ -1820,6 +1820,26 @@
     "reload.now": "Jetzt neu laden",
     "reload.later": "Später"
   },
+  "logic": {
+    "asks": "{name}: Die Konsole {console} fragt etwas",
+    "failed": "{name} wurde angehalten: {error}",
+    "consoleTitle": "Konsole {name}",
+    "consoleAll": "Konsole",
+    "noWindows": "{name} hat keine Fenster",
+    "notRunning": "{name} läuft nicht: In Logic Studio aktivieren",
+    "gone": "Das Programm ist nicht mehr da",
+    "badApp": "Das ist keine mit Logic Studio erstellte App, oder ihre Dateien fehlen",
+    "consentTitle": "„{name}“ ausführen?",
+    "consentText": "Diese App wurde mit Logic Studio erstellt und läuft unter deinem Namen. Sie kann:",
+    "consentFrom": "Von {path}. Führe sie nur aus, wenn du der Person vertraust, die sie erstellt hat.",
+    "capFiles": "deine Dateien lesen und ändern",
+    "capNet": "Anfragen im Internet senden",
+    "capNotify": "dir Benachrichtigungen senden",
+    "capEvents": "Ereignisse an dein lilOS senden",
+    "run": "Ausführen",
+    "cancel": "Abbrechen",
+    "appFailed": "{name} wurde nicht gestartet: {error}"
+  },
   "messageBox": {
     "ok": "OK",
     "cancel": "Abbrechen",
@@ -1961,6 +1981,46 @@
     "failed": "Anmeldung fehlgeschlagen",
     "noAskAddress": "askAddress fehlt"
   },
+  "sdk.charts": {
+    "table": "Als Tabelle anzeigen",
+    "chart": "Als Diagramm anzeigen",
+    "png": "Als PNG speichern",
+    "csv": "Als CSV speichern",
+    "empty": "Keine Daten",
+    "other": "Andere",
+    "series": "Reihe",
+    "value": "Wert",
+    "count": "Anzahl",
+    "share": "Anteil",
+    "name": "Name",
+    "from": "Von",
+    "to": "Bis",
+    "time": "Zeit",
+    "category": "Kategorie",
+    "axis": "Achse",
+    "point": "Punkt",
+    "total": "gesamt",
+    "on": "an",
+    "off": "aus",
+    "more": "Nur die ersten {n} Zeilen werden angezeigt.",
+    "hidden": "ausgeblendet",
+    "summarySeries": "{n} Reihen",
+    "summaryPoints": "{n} Punkte",
+    "summaryRange": "Werte von {a} bis {b}",
+    "keys": "Pfeile: zwischen den Werten wechseln. Eingabe: auswählen.",
+    "line": "Liniendiagramm",
+    "area": "Flächendiagramm",
+    "column": "Säulendiagramm",
+    "bar": "Balkendiagramm",
+    "pie": "Kreisdiagramm",
+    "scatter": "Streudiagramm",
+    "histogram": "Histogramm",
+    "live": "Echtzeit-Diagramm",
+    "step": "Zustände über die Zeit",
+    "heatmap": "Heatmap",
+    "radar": "Netzdiagramm",
+    "spark": "Sparkline"
+  },
   "sdk.fs": {
     "notForNet": "Für Dateien einer Netzwerkverbindung nicht verfügbar",
     "badWorkspace": "Ungültiger Workspace",
@@ -1999,6 +2059,28 @@
     "status": "Fehler {status}",
     "badModule": "Ungültiges Modul",
     "badPath": "Ungültiger Pfad"
+  },
+  "sdk.logic": {
+    "noGrow": "Hier können keine Anschlüsse hinzugefügt werden",
+    "maxAdded": "Höchstens {n} hinzugefügte Anschlüsse",
+    "unknownBlock": "Unbekannter Block",
+    "onlyAdded": "Nur hinzugefügte Anschlüsse können entfernt werden",
+    "notSchema": "Das ist kein Logic-Studio-Schema (.lsch)",
+    "notWindow": "Das ist kein Logic-Studio-Fenster (.lsui)",
+    "notProject": "Das ist kein Logic-Studio-Projekt (.lsproj)",
+    "intoContainer": "Komponenten gehören nur in einen Container",
+    "unknownComponent": "Unbekannte Komponente",
+    "mainConsole": "Die Hauptkonsole kann nicht entfernt werden",
+    "error": "Ausnahme",
+    "missing": "Das Paket fehlt"
+  },
+  "sdk.logicConsole": {
+    "hint": "Eingabe sendet · Esc bricht ab",
+    "answer": "Antwort",
+    "text": "Text",
+    "number": "Zahl",
+    "bool": "Ja/Nein",
+    "key": "eine Taste"
   },
   "sdk.menus": {
     "unknown": "Menü nicht registriert: {id}"
@@ -2323,7 +2405,9 @@
     "moveDown": "Nach unten",
     "onDesk": "Bereits auf dem Schreibtisch",
     "showOnDesk": "Auf dem Schreibtisch anzeigen",
-    "backOnDesk": "„{name}“ ist wieder auf dem Schreibtisch"
+    "backOnDesk": "„{name}“ ist wieder auf dem Schreibtisch",
+    "projects": "Projekte",
+    "projectHint": "Ein laufendes Logic-Studio-Projekt: sein Hauptfenster"
   },
   "system": {
     "unsaved": "Änderungen nicht gespeichert: {error}. Neuer Versuch…",

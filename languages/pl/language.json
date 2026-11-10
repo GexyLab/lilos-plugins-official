@@ -3,9 +3,9 @@
   "language": "pl",
   "name": "Polski",
   "englishName": "Polish",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "lilos": ">=1.35.0",
   "files": {
-    "strings.json": "sha256-2xf+hek1A8GWsH7E83aTwPMzrnzPsRKYakDbuRdIQeI="
+    "strings.json": "sha256-fje9uTEpoQIeOXEDglCETSM3p5m+3R6kk2zH5t/5KRI="
   }
 }

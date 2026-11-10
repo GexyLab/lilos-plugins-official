@@ -3,9 +3,9 @@
   "language": "pt-BR",
   "name": "Português (Brasil)",
   "englishName": "Portuguese (Brazil)",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "lilos": ">=1.35.0",
   "files": {
-    "strings.json": "sha256-FF1pJ9h7NlORKJf18DorXVSWVAs8V1i/UL2yoML3JJg="
+    "strings.json": "sha256-s8fHPzaJY9GGHtY5N80Div6M0CWq2XPhJFH8lbAnRAA="
   }
 }

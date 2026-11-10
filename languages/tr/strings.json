@@ -1788,6 +1788,26 @@
     "reload.now": "Şimdi yeniden yükle",
     "reload.later": "Daha sonra"
   },
+  "logic": {
+    "asks": "{name}: {console} konsolu bir şey soruyor",
+    "failed": "{name} durdu: {error}",
+    "consoleTitle": "{name} konsolu",
+    "consoleAll": "Konsol",
+    "noWindows": "{name} penceresi yok",
+    "notRunning": "{name} çalışmıyor: Logic Studio'da etkinleştirin",
+    "gone": "Program artık yok",
+    "badApp": "Bu, Logic Studio ile yapılmış bir uygulama değil ya da dosyaları eksik",
+    "consentTitle": "«{name}» çalıştırılsın mı?",
+    "consentText": "Bu uygulama Logic Studio ile yapıldı ve sizin adınıza çalışır. Şunları yapabilir:",
+    "consentFrom": "{path} konumundan. Yalnızca yapanına güveniyorsanız çalıştırın.",
+    "capFiles": "dosyalarınızı okuyup değiştirmek",
+    "capNet": "internette istek yapmak",
+    "capNotify": "size bildirim göndermek",
+    "capEvents": "lilOS’unuza olay göndermek",
+    "run": "Çalıştır",
+    "cancel": "İptal",
+    "appFailed": "{name} başlamadı: {error}"
+  },
   "messageBox": {
     "ok": "Tamam",
     "cancel": "İptal",
@@ -1925,6 +1945,46 @@
     "failed": "Oturum açılamadı",
     "noAskAddress": "askAddress eksik"
   },
+  "sdk.charts": {
+    "table": "Tablo olarak göster",
+    "chart": "Grafik olarak göster",
+    "png": "PNG olarak kaydet",
+    "csv": "CSV olarak kaydet",
+    "empty": "Veri yok",
+    "other": "Diğer",
+    "series": "Seri",
+    "value": "Değer",
+    "count": "Sayı",
+    "share": "Pay",
+    "name": "Ad",
+    "from": "Başlangıç",
+    "to": "Bitiş",
+    "time": "Zaman",
+    "category": "Kategori",
+    "axis": "Eksen",
+    "point": "Nokta",
+    "total": "toplam",
+    "on": "açık",
+    "off": "kapalı",
+    "more": "Yalnızca ilk {n} satır gösteriliyor.",
+    "hidden": "gizli",
+    "summarySeries": "{n} seri",
+    "summaryPoints": "{n} nokta",
+    "summaryRange": "{a} ile {b} arasındaki değerler",
+    "keys": "Oklar: değerler arasında gez. Enter: seç.",
+    "line": "Çizgi grafik",
+    "area": "Alan grafik",
+    "column": "Sütun grafik",
+    "bar": "Çubuk grafik",
+    "pie": "Pasta grafik",
+    "scatter": "Dağılım grafiği",
+    "histogram": "Histogram",
+    "live": "Gerçek zamanlı grafik",
+    "step": "Zaman içinde durumlar",
+    "heatmap": "Isı haritası",
+    "radar": "Radar grafik",
+    "spark": "Sparkline"
+  },
   "sdk.fs": {
     "notForNet": "Bir ağ bağlantısının dosyaları için kullanılamaz",
     "badWorkspace": "Geçersiz çalışma alanı",
@@ -1963,6 +2023,28 @@
     "status": "Hata {status}",
     "badModule": "Geçersiz modül",
     "badPath": "Geçersiz yol"
+  },
+  "sdk.logic": {
+    "noGrow": "Buna bağlantı noktası eklenemez",
+    "maxAdded": "En fazla {n} eklenmiş bağlantı noktası",
+    "unknownBlock": "Bilinmeyen blok",
+    "onlyAdded": "Yalnızca eklenen bağlantı noktaları kaldırılabilir",
+    "notSchema": "Bu bir Logic Studio şeması (.lsch) değil",
+    "notWindow": "Bu bir Logic Studio penceresi (.lsui) değil",
+    "notProject": "Bu bir Logic Studio projesi (.lsproj) değil",
+    "intoContainer": "Bileşenler yalnızca bir kapsayıcının içine konur",
+    "unknownComponent": "Bilinmeyen bileşen",
+    "mainConsole": "Ana konsol kaldırılamaz",
+    "error": "İstisna",
+    "missing": "Paket eksik"
+  },
+  "sdk.logicConsole": {
+    "hint": "Enter gönderir · Esc iptal eder",
+    "answer": "Yanıt",
+    "text": "metin",
+    "number": "sayı",
+    "bool": "evet/hayır",
+    "key": "bir tuş"
   },
   "sdk.menus": {
     "unknown": "Menü kayıtlı değil: {id}"
@@ -2282,7 +2364,9 @@
     "moveDown": "Aşağı taşı",
     "onDesk": "Zaten masaüstünde",
     "showOnDesk": "Masaüstünde göster",
-    "backOnDesk": "“{name}” yeniden masaüstünde"
+    "backOnDesk": "“{name}” yeniden masaüstünde",
+    "projects": "Projeler",
+    "projectHint": "Çalışan bir Logic Studio projesi: ana penceresi"
   },
   "system": {
     "unsaved": "Değişiklikler kaydedilmedi: {error}. Yeniden deneniyor…",

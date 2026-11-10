@@ -1820,6 +1820,26 @@
     "reload.now": "Recargar ahora",
     "reload.later": "Más tarde"
   },
+  "logic": {
+    "asks": "{name}: la consola {console} pide algo",
+    "failed": "{name} se detuvo: {error}",
+    "consoleTitle": "Consola {name}",
+    "consoleAll": "Consola",
+    "noWindows": "{name} no tiene ventanas",
+    "notRunning": "{name} no se está ejecutando: actívalo en Logic Studio",
+    "gone": "El programa ya no está",
+    "badApp": "Esta no es una app creada con Logic Studio, o faltan sus archivos",
+    "consentTitle": "¿Ejecutar «{name}»?",
+    "consentText": "Esta app se creó con Logic Studio y se ejecuta con tu identidad. Puede:",
+    "consentFrom": "Desde {path}. Ejecútala solo si confías en quien la creó.",
+    "capFiles": "leer y modificar tus archivos",
+    "capNet": "hacer solicitudes a internet",
+    "capNotify": "enviarte notificaciones",
+    "capEvents": "enviar eventos a tu lilOS",
+    "run": "Ejecutar",
+    "cancel": "Cancelar",
+    "appFailed": "{name} no se inició: {error}"
+  },
   "messageBox": {
     "ok": "Aceptar",
     "cancel": "Cancelar",
@@ -1961,6 +1981,46 @@
     "failed": "No se ha podido iniciar sesión",
     "noAskAddress": "Falta askAddress"
   },
+  "sdk.charts": {
+    "table": "Mostrar como tabla",
+    "chart": "Mostrar como gráfico",
+    "png": "Guardar como PNG",
+    "csv": "Guardar como CSV",
+    "empty": "Sin datos",
+    "other": "Otros",
+    "series": "Serie",
+    "value": "Valor",
+    "count": "Recuento",
+    "share": "Proporción",
+    "name": "Nombre",
+    "from": "Desde",
+    "to": "Hasta",
+    "time": "Tiempo",
+    "category": "Categoría",
+    "axis": "Eje",
+    "point": "Punto",
+    "total": "total",
+    "on": "activado",
+    "off": "desactivado",
+    "more": "Solo se muestran las primeras {n} filas.",
+    "hidden": "oculto",
+    "summarySeries": "{n} series",
+    "summaryPoints": "{n} puntos",
+    "summaryRange": "valores de {a} a {b}",
+    "keys": "Flechas: moverse entre los valores. Intro: elegir.",
+    "line": "Gráfico de líneas",
+    "area": "Gráfico de áreas",
+    "column": "Gráfico de columnas",
+    "bar": "Gráfico de barras",
+    "pie": "Gráfico circular",
+    "scatter": "Gráfico de dispersión",
+    "histogram": "Histograma",
+    "live": "Gráfico en tiempo real",
+    "step": "Estados en el tiempo",
+    "heatmap": "Mapa de calor",
+    "radar": "Gráfico de radar",
+    "spark": "Sparkline"
+  },
   "sdk.fs": {
     "notForNet": "No disponible para los archivos de una conexión de red",
     "badWorkspace": "Espacio de trabajo no válido",
@@ -1999,6 +2059,28 @@
     "status": "Error {status}",
     "badModule": "Módulo no válido",
     "badPath": "Ruta no válida"
+  },
+  "sdk.logic": {
+    "noGrow": "Este no permite añadir puertos",
+    "maxAdded": "Como máximo {n} puertos añadidos",
+    "unknownBlock": "Bloque desconocido",
+    "onlyAdded": "Solo se pueden quitar los puertos añadidos",
+    "notSchema": "Esto no es un esquema de Logic Studio (.lsch)",
+    "notWindow": "Esto no es una ventana de Logic Studio (.lsui)",
+    "notProject": "Esto no es un proyecto de Logic Studio (.lsproj)",
+    "intoContainer": "Los componentes solo van dentro de un contenedor",
+    "unknownComponent": "Componente desconocido",
+    "mainConsole": "La consola principal no se puede quitar",
+    "error": "Excepción",
+    "missing": "Falta el paquete"
+  },
+  "sdk.logicConsole": {
+    "hint": "Intro envía · Esc cancela",
+    "answer": "Respuesta",
+    "text": "texto",
+    "number": "número",
+    "bool": "sí/no",
+    "key": "una tecla"
   },
   "sdk.menus": {
     "unknown": "Menú no registrado: {id}"
@@ -2323,7 +2405,9 @@
     "moveDown": "Bajar",
     "onDesk": "Ya está en el escritorio",
     "showOnDesk": "Mostrar en el escritorio",
-    "backOnDesk": "«{name}» vuelve a estar en el escritorio"
+    "backOnDesk": "«{name}» vuelve a estar en el escritorio",
+    "projects": "Proyectos",
+    "projectHint": "Un proyecto de Logic Studio en ejecución: su ventana principal"
   },
   "system": {
     "unsaved": "Cambios no guardados: {error}. Reintentando…",
