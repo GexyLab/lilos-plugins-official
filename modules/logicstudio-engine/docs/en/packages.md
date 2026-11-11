@@ -119,7 +119,7 @@ When all goes well the log says: `Logic Studio: pacchetto logicstudio-esempio 1.
 |---|---|
 | `type` | `package.name`: `[a-z][a-z0-9]*\.[a-zA-Z][a-zA-Z0-9]{0,40}`, for example `esempio.media`. Unique among all packages |
 | `version` | An integer from 1. Raise it when you change the behaviour or the settings (see **upgrade**) |
-| `category` | Where it is in the **Blocks** tab: `value` (Values), `logic` (Logic), `math` (Math), `text` (Text), `object` (Objects), `list` (Lists), `matrix` (Matrices), `units` (Units), `geometry` (Geometry: plane and solid), `trig` (Trigonometry), `functions` (Functions), `integrals` (Integrals), `analysis` (Numerical analysis), `signal` (Signals), `time` (Time), `console` (Console), `schema` (Schema ports), `ui` (UI components), `lilos` (lilOS), `net` (Network), `hardware` (Hardware), `db` (Databases), `exception` (Exceptions). Another word, or nothing: **Other** |
+| `category` | Where it is in the **Blocks** tab: `value` (Values), `logic` (Logic), `math` (Math), `text` (Text), `object` (Objects), `list` (Lists), `matrix` (Matrices), `units` (Unit conversions), `geometry` (Geometry: plane and solid), `trig` (Trigonometry), `functions` (Functions), `integrals` (Integrals), `analysis` (Numerical analysis), `signal` (Signals), `time` (Time), `console` (Console), `schema` (Schema ports), `ui` (UI components), `lilos` (lilOS), `net` (Network), `hardware` (Hardware), `db` (Databases), `exception` (Exceptions). Another word, or nothing: **Other** |
 | `icon` | The name of a lilOS icon (`calculator`, `bell`, `globe`, `clock`, `lamp`…). Default `blocks` |
 | `label` | The name of the block: `{ en, it }` |
 | `description` | Optional: a sentence `{ en, it }` |
@@ -134,6 +134,8 @@ When all goes well the log says: `Logic Studio: pacchetto logicstudio-esempio 1.
 | `upgrade(config, from, added)` | Optional: upgrades the settings saved by an old version of the block |
 | `role` | Reserved for the base blocks (`schemaIn`, `schemaOut`, `component`, `catchAll`): do not use it |
 | `showError` | `true`: the **Exception** output is shown on the drawing from the start, instead of being hidden by default (from engine 1.4.1 and lilOS 1.44.0). For blocks whose purpose is to throw exceptions, like [Throw](core.throw) |
+| `obsolete` | A label `{ en, it }` (or `true`) for a block replaced by others. The engine still runs it in schemas already saved (from engine 1.8.0), the catalog gives it as `obsolete`, the IDE (from 1.17.0) does not show it in the **Blocks** list and writes the text in the **Properties** panel. For example `core.convert`, replaced by [Cast to number (Number())](core.toNumber) and the other four Casts |
+| `subcategory` | Optional, from engine 1.9.0 and IDE 1.18.0: `{ id, label: { en, it }, order }`, the **subcategory** inside the category, for categories with many blocks. `id`: letters and digits; `order`: an integer from 0 to 999 that orders the subcategories of the same category, across packages too (for example `logicstudio-plane` uses 0-2 and `logicstudio-solid` 3-4 in `geometry`). In the palette the blocks of a category with subcategories go under a smaller title; those without one go under **Others**. A value that is not valid counts as nothing; an older engine ignores it |
 
 A block without `run` keeps the values it receives and does nothing else (it is useful, for example, to a `loop` block that reads them at every turn).
 
@@ -339,6 +341,7 @@ Rules:
 | `type`, `version`, `label` | As for blocks (`esempio.semaforo`) |
 | `icon` | Default `window` |
 | `category` | In the **Components** tab: `text` (Text), `values` (Text and values), `commands` (Commands), `containers` (Containers), `charts` (Charts); other: **Other** |
+| `subcategory` | As for blocks |
 | `inputs` | The ports that **the schema sets** (a text to show, a value) |
 | `outputs` | The ports that **whoever uses the window sends** (pressed, the chosen value) |
 | `props` | The properties, in the window editor (see below) |

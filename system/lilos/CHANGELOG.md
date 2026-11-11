@@ -1,5 +1,12 @@
 # Changelog di lilOS
 
+## 1.52.0 — 2026-11-11
+
+- **Nuova funzionalità — un blocco per ogni costante in Logic Studio.** Le costanti (π, e, c, h, G, unità astronomica…) non si scelgono più da un menu: ognuna ha il suo blocco, nelle tre categorie nuove **Costanti matematiche**, **Costanti fisiche** e **Costanti astronomiche**. Serve il pacchetto Costanti 1.1.0 o successivo; questa versione di lilOS dà il colore alle tre categorie.
+- **Nuova funzionalità — un blocco per ogni Cast.** Al posto del Cast con il menu ci sono cinque blocchi: in numero, in testo, in sì/no, in testo JSON e da testo JSON (blocchi di base 1.6.0 o successivi).
+- **Da sapere.** I blocchi vecchi (le tre «Costanti…» con il menu e «Cast (converti tipo)») funzionano ancora negli schemi salvati, ma non sono più nell'elenco dei blocchi: le loro Proprietà dicono cosa usare al loro posto.
+- **Per gli sviluppatori.** SDK 0.37.0: colore delle categorie `constMath`, `constPhysics` e `constAstro` in `logic.css` (`--lc-const`). Nessuna API cambia.
+
 ## 1.51.1 — 2026-11-11
 
 - **Correzione bug — la cornice dei gruppi di Logic Studio segue i blocchi.** Spostando un blocco di un gruppo aperto, la cornice si allungava solo in altezza: in larghezza restava quella della sua intestazione, e i blocchi finivano fuori. Ora si allarga e si stringe con i blocchi in tutte e due le direzioni. Per gli sviluppatori: SDK 0.36.1, correzione in `LogicCanvas`.
