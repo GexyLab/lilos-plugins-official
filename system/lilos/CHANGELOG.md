@@ -1,5 +1,11 @@
 # Changelog di lilOS
 
+## 1.44.0 — 2026-11-11
+
+- **Nuova funzionalità — i gruppi di blocchi in Logic Studio.** Con Logic Studio IDE 1.7.0 i blocchi di uno schema si raggruppano (Ctrl+G) in una cornice che si può comprimere in un solo blocco, con la porta **Run** per farli partire e le porte esposte verso l'esterno.
+- **Miglioramento — gli impulsi tornano a «no».** Un impulso vale sì e subito dopo di nuovo no.
+- **Miglioramento — l'Exception del blocco Throw si vede da subito.** È la sua unica uscita, quindi non parte più nascosta.
+
 ## 1.42.0 — 2026-11-11
 
 - **Miglioramento — la porta «Exception» si vede bene.** In Logic Studio l'uscita degli errori di ogni blocco si chiama **Exception** in tutte le lingue ed è di un rosso acceso, anche quando non è collegata. Serve a Logic Studio IDE 1.6.0, che porta anche i nuovi blocchi per gestire le eccezioni.

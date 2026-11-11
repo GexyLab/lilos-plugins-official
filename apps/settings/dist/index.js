@@ -3170,7 +3170,8 @@ function An(e) {
 				"totalMemoryMb",
 				"runsPer10s",
 				"blockSeconds",
-				"testMinutes"
+				"testMinutes",
+				"maxThreads"
 			]), Y.settings.values, {
 				t: F,
 				save: r
