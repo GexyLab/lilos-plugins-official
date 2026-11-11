@@ -1,5 +1,9 @@
 # Changelog di lilOS
 
+## 1.41.0 — 2026-11-11
+
+- **Nuova funzionalità — porte nascoste di serie in Logic Studio.** Un blocco può avere porte che servono di rado e che partono nascoste: si mostrano con l'occhio accanto alla porta nelle Proprietà. Serve a Logic Studio IDE 1.5.0, per i nuovi ingressi **invia** e **imposta** del blocco **Costante · Variabile**.
+
 ## 1.40.0 — 2026-11-11
 
 - **Nuova funzionalità — la documentazione di Logic Studio.** Con Logic Studio IDE 1.4.0 ogni blocco e ogni componente ha la sua pagina, con porte, impostazioni, come funziona ed esempi, in italiano e in inglese. Si apre con il tasto destro → **Documentazione**, con **F1** o con il pulsante **?** nelle Proprietà.
