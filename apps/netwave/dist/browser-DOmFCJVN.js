@@ -1,4 +1,4 @@
-import { c as e, i as t, l as n, n as r, r as i, s as a, t as o } from "./i18n-BNs41huj.js";
+import { c as e, i as t, l as n, n as r, r as i, s as a, t as o } from "./i18n-DkMmN531.js";
 import { Emitter as s, Window as c, actionButton as l, comboFromEvent as u, fs as d, h as f, host as p, icon as m, messageBox as h, notifications as g, openMenu as _, uid as v } from "/host/sdk.js";
 import { launch as y, openFile as ee, pickFile as b } from "/host/system.js";
 // src/shared/TabBar.js
@@ -1913,10 +1913,10 @@ async function Oe(e) {
 }
 var $ = null;
 function ke(e) {
-	$ ??= import("./historyWindow-CnmI78mC.js"), $.then((t) => t.openHistory(e));
+	$ ??= import("./historyWindow-DoPit6Wn.js"), $.then((t) => t.openHistory(e));
 }
 var Ae = null;
 function je(e) {
-	Ae ??= import("./optionsWindow-DQvCvYJ8.js"), Ae.then((t) => t.openOptions(e));
+	Ae ??= import("./optionsWindow-D1eeltzP.js"), Ae.then((t) => t.openOptions(e));
 }
 export { L as a, U as i, Ee as n, De as r, Q as t };

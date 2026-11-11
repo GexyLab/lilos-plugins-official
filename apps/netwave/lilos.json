@@ -1,6 +1,6 @@
 {
   "id": "netwave",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "kind": "local",
   "name": "NetWave Browser",
   "description": "A web browser for lilOS: tabs in as many windows as you want, each window saved as a session with all its tabs, and a history of the pages and of the sessions opened. The pages run isolated from lilOS, in the lilOS program.",
@@ -55,12 +55,12 @@
   ],
   "locales": "locales.json",
   "files": {
-    "dist/browser-DmwxbmZ7.js": "sha256-n33+LI3noUPxTPbCBqcSQw+kFTI1BNUp2PDWdh1okKU=",
-    "dist/historyWindow-CnmI78mC.js": "sha256-iYK2VDkDyjg9e3CGnBXpJ9HliltuDMG/cWEBkqH6l9E=",
-    "dist/i18n-BNs41huj.js": "sha256-wK3Q8Yg4y1WYO2VOJhmQx1mzID96meOCmaABQQLlIr8=",
+    "dist/browser-DOmFCJVN.js": "sha256-XnfD1iyw6CqiYnLsUKKFhy8h3j679bsBYLLZJ1Kg/Jw=",
+    "dist/historyWindow-DoPit6Wn.js": "sha256-2iba5k2nBNMCtAmSqGAz447OwSgYi8iNT5unuUAK6Bo=",
+    "dist/i18n-DkMmN531.js": "sha256-nl2BoIb2c/i4baSkGNWJSif/y2YOd612mSSlRTOHbi4=",
     "dist/index-Csmk1tjz.css": "sha256-VTuqdQKVcOot8+zk4VfzeVRCr0Zm2i5dhTV8vlMgCxo=",
-    "dist/index.js": "sha256-cgTWW82FmyskqUHgDMmBk1+wr42ak+e8xT7U4CY4lWM=",
-    "dist/optionsWindow-DQvCvYJ8.js": "sha256-JukzGTgCYXNZgq4x7W5pN1QG6XYBoBuAx4yZoCqwmJk=",
-    "locales.json": "sha256-KBro3QbDfFPNi8ykyZiVbD5y1U978K++CpMFivSWuwk="
+    "dist/index.js": "sha256-7mctfwns8b6t1ZZS3fNBZD5ZlBg07DV07S10jDc6Cmc=",
+    "dist/optionsWindow-D1eeltzP.js": "sha256-BABe6PuolkO7lyJkZ99pz9kJdZOXnPq/oTJ3WcL+oJ4=",
+    "locales.json": "sha256-0h/wFO2Gqu9JFDLbXQgYGmaI5Byzo1de20yqs6fS9T0="
   }
 }

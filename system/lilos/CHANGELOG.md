@@ -1,5 +1,15 @@
 # Changelog di lilOS
 
+## 1.55.0 — 2026-11-11
+
+Comprende anche le 1.53.0 e 1.54.0, mai pubblicate da sole.
+
+- **Nuova funzionalità — collegamenti verso blocchi fuori vista (Logic Studio).** Quando un collegamento porta a un blocco che non si vede, sul bordo dello schema compare un'etichetta con il nome di quel blocco, dove il collegamento esce. I collegamenti di una porta che escono vicini hanno un'etichetta sola con tutti i nomi. Un clic sul nome porta il blocco al centro della vista e lo seleziona.
+- **Nuova funzionalità — blocchi specchiati e collegamenti con Ctrl (Logic Studio).** Un blocco si può girare (ingressi a destra, uscite a sinistra). Con **Ctrl** premuto, un clic su una porta e poi su altre del lato opposto le collega tutte alla prima. Serve a Logic Studio IDE 1.19.0 o successivo.
+- **Correzione bug — collegamento mentre lo trascini (Logic Studio).** Trascinando da un'uscita, il collegamento tratteggiato non si vedeva; ora segue il puntatore dal primo movimento.
+- **Nuova funzionalità — i siti web si aprono in NetWave.** Nel programma lilOS per il computer, i collegamenti a siti web nelle finestre di lilOS e delle app si aprono in NetWave Browser. Restano fuori download, accessi a un servizio (Google, Microsoft…), indirizzi di lilOS e del computer e app isolate. Si spegne in NetWave → Opzioni → Generali.
+- **Per gli sviluppatori.** SDK 0.39.0: `LogicCanvas.reveal(id)` e le etichette sul bordo; SDK 0.38.0: `LogicSchema.setMirror`, `LogicSchema.connectMany`, simbolo `mirror` in `icon()`.
+
 ## 1.52.0 — 2026-11-11
 
 - **Nuova funzionalità — un blocco per ogni costante in Logic Studio.** Le costanti (π, e, c, h, G, unità astronomica…) non si scelgono più da un menu: ognuna ha il suo blocco, nelle tre categorie nuove **Costanti matematiche**, **Costanti fisiche** e **Costanti astronomiche**. Serve il pacchetto Costanti 1.1.0 o successivo; questa versione di lilOS dà il colore alle tre categorie.

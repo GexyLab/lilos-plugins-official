@@ -1,4 +1,4 @@
-import { r as e } from "./browser-DmwxbmZ7.js";
+import { r as e } from "./browser-DOmFCJVN.js";
 var t = 2048, n = 1024, r = (e, r = n) => Number.isFinite(e) ? Math.min(t, Math.max(16, Math.round(e))) : r;
 function i(e, t, { size: i = n } = {}) {
 	e.handle(async (e) => typeof e?.file == "string" ? t(e.file, r(e.size, i)) : null);

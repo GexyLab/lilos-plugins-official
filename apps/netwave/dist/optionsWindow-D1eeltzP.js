@@ -1,4 +1,4 @@
-import { a as e, c as t, n, o as r, r as i, s as a } from "./i18n-BNs41huj.js";
+import { a as e, c as t, n, o as r, r as i, s as a } from "./i18n-DkMmN531.js";
 import { SettingsWindow as o, h as s, icon as c, messageBox as l, selectField as u, textField as d, toggle as f } from "/host/sdk.js";
 // src/netwave/optionsWindow.js
 var p = "netwave-options", m = null;
@@ -16,28 +16,40 @@ function h(i) {
 				label: n("options.general"),
 				icon: "gear",
 				description: n("options.generalText"),
-				sections: () => [{ rows: [{
-					label: n("options.home"),
-					description: n("options.homeText"),
-					control: d({
-						value: t.get("home"),
-						placeholder: n("options.homeEmpty"),
-						type: "url",
-						onChange: (e) => t.set("home", e.trim() ? a(e) ?? "" : "")
-					})
-				}, {
-					label: n("options.search"),
-					description: n("options.searchText"),
-					control: u({
-						value: t.get("search"),
+				sections: () => [{ rows: [
+					{
+						label: n("options.home"),
+						description: n("options.homeText"),
+						control: d({
+							value: t.get("home"),
+							placeholder: n("options.homeEmpty"),
+							type: "url",
+							onChange: (e) => t.set("home", e.trim() ? a(e) ?? "" : "")
+						})
+					},
+					{
 						label: n("options.search"),
-						options: r.map((e) => ({
-							value: e.id,
-							label: e.label
-						})),
-						onChange: (e) => t.set("search", e)
-					})
-				}] }]
+						description: n("options.searchText"),
+						control: u({
+							value: t.get("search"),
+							label: n("options.search"),
+							options: r.map((e) => ({
+								value: e.id,
+								label: e.label
+							})),
+							onChange: (e) => t.set("search", e)
+						})
+					},
+					{
+						label: n("options.openLinks"),
+						description: n("options.openLinksText"),
+						control: f({
+							value: t.get("openLinks"),
+							label: n("options.openLinks"),
+							onChange: (e) => t.set("openLinks", !!e)
+						})
+					}
+				] }]
 			},
 			{
 				id: "history",

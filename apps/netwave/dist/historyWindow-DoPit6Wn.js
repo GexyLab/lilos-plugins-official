@@ -1,6 +1,6 @@
-import { n as e, r as t, t as n } from "./i18n-BNs41huj.js";
-import { a as r, i, n as a, t as o } from "./browser-DmwxbmZ7.js";
-import { clearHistory as s } from "./optionsWindow-DQvCvYJ8.js";
+import { n as e, r as t, t as n } from "./i18n-DkMmN531.js";
+import { a as r, i, n as a, t as o } from "./browser-DOmFCJVN.js";
+import { clearHistory as s } from "./optionsWindow-D1eeltzP.js";
 import { Window as c, fs as l, h as u, icon as d, openMenu as f } from "/host/sdk.js";
 import { launch as p } from "/host/system.js";
 // src/netwave/historyWindow.js
