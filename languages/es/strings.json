@@ -677,6 +677,7 @@
     "code": "Código",
     "term": "Conexión de terminal",
     "nettest": "Colección de NetTest",
+    "nwsession": "Sesión de NetWave",
     "file": "Archivo"
   },
   "fsHistory": {

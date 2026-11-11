@@ -3,9 +3,9 @@
   "language": "ar",
   "name": "العربية",
   "englishName": "Arabic",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "lilos": ">=1.35.0",
   "files": {
-    "strings.json": "sha256-hrjcWAfYN6FTAo/59MLqHQoAMj/h5Y0pJI90yKqixC4="
+    "strings.json": "sha256-X2JP7CMrI8kyGlo8LcRR0xIDhD0u74fVXpCjm4GyPQA="
   }
 }

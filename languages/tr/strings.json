@@ -664,6 +664,7 @@
     "code": "Kod",
     "term": "Terminal bağlantısı",
     "nettest": "NetTest koleksiyonu",
+    "nwsession": "NetWave oturumu",
     "file": "Dosya"
   },
   "fsHistory": {

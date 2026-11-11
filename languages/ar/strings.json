@@ -741,6 +741,7 @@
     "code": "كود",
     "term": "اتصال طرفية",
     "nettest": "مجموعة NetTest",
+    "nwsession": "جلسة NetWave",
     "file": "ملف"
   },
   "fsHistory": {

@@ -3,9 +3,9 @@
   "language": "zh-Hans",
   "name": "简体中文",
   "englishName": "Chinese (Simplified)",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "lilos": ">=1.35.0",
   "files": {
-    "strings.json": "sha256-bogRivAJwLjunX4b0wa4wO2FWN6uFrWSlnLlKQ9OSD4="
+    "strings.json": "sha256-dEn2/U7dwMhkFzRS0aap7oFtTXqfgmXWS7pbyWAvS4A="
   }
 }

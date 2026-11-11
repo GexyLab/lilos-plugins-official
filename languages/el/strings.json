@@ -677,6 +677,7 @@
     "code": "Κώδικας",
     "term": "Σύνδεση τερματικού",
     "nettest": "Συλλογή NetTest",
+    "nwsession": "Συνεδρία NetWave",
     "file": "Αρχείο"
   },
   "fsHistory": {

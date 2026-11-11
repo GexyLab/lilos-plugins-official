@@ -1,5 +1,12 @@
 # Changelog di lilOS
 
+## 1.38.1 — 2026-11-11
+
+- **Nuova funzionalità — NetWave Browser.** Un browser dentro lilOS (dall'AppStore): schede in quante finestre vuoi, ogni finestra salvabile come sessione (`.nwsession`) con tutte le sue schede, cronologia delle pagine e delle sessioni, finestre private. Le pagine le mostra il programma lilOS, ognuna isolata in un processo e una sessione sua: non toccano mai lilOS né i tuoi file. In un browser normale NetWave avvisa e offre **Apri nel browser**. Serve il programma lilOS 0.5.1.
+- **Miglioramento — collegamenti web nel browser di lilOS.** I collegamenti web della scrivania si aprono in NetWave quando è installato e il programma lo permette, altrimenti nel tuo browser.
+- **Sicurezza — download delle pagine web letti a pezzi.** lilOS prende i file scaricati da NetWave un pezzo alla volta: un file grande non riempie più la memoria del programma.
+- **Per gli sviluppatori — SDK 0.23.1.** `host.web` e `WebPage` (pagine web mostrate dal programma, solo per server di fiducia), `download.read` restituisce un `Blob`, eventi `popupsDropped` ed `expired`; il tipo di file `nwsession`. Decisione D89 nella documentazione.
+
 ## 1.37.0 — 2026-11-10
 
 - **Nuova funzionalità — Logic Studio.** Blocchi logici collegati tra loro, come in OpenBack: i dati passano sui collegamenti e ogni blocco ci fa qualcosa. Con l'app **Logic Studio IDE** (dall'AppStore) si creano progetti di schemi e di finestre fatte di Componenti UI (pulsanti, interruttori, indicatori, tabelle, grafici…), si provano con i valori dal vivo e si attivano: un progetto attivo gira nel motore di lilOS anche a lilOS chiuso. I blocchi e le componenti arrivano con i moduli del kernel (motore `logicstudio-engine` e pacchetti `logicstudio-*`).
