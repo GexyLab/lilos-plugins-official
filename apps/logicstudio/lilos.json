@@ -1,6 +1,6 @@
 {
   "id": "logicstudio",
-  "version": "1.1.0",
+  "version": "1.2.1",
   "kind": "local",
   "name": "Logic Studio IDE",
   "description": "Logic blocks linked together, as in OpenBack: schemas, projects with windows made of UI components, consoles. The engine runs them in lilOS, also with lilOS closed.",
@@ -15,7 +15,7 @@
   },
   "sdk": "2",
   "system": true,
-  "lilos": ">=1.37.0",
+  "lilos": ">=1.39.0",
   "entrypoints": {
     "main": {
       "kind": "window"
@@ -48,12 +48,12 @@
   },
   "entry": "dist/index.js",
   "styles": [
-    "dist/index-C8AAAX6k.css"
+    "dist/index-Di0W7ek6.css"
   ],
   "locales": "locales.json",
   "files": {
-    "dist/index-C8AAAX6k.css": "sha256-AzcmSxmlGgIMWF6B/jPj2BZbMwbS3L9wj9yh9+21i28=",
-    "dist/index.js": "sha256-TloAKn5SKooOufTv0r3Ce5XzMK2xFNPUb3m+fjIc034=",
-    "locales.json": "sha256-wjjJcdOsQbvzU94urYrE/BIPgY/P8VvhhZPdnF/idi4="
+    "dist/index-Di0W7ek6.css": "sha256-72GIDGEyPnLxUMfglAu9U7dhb4E6WJoffBWeKVSlIyY=",
+    "dist/index.js": "sha256-1+riuyYB8KRoOFSWLe+6L53QQjWpbaXcol55k95Yi6Q=",
+    "locales.json": "sha256-ZagikgXprVSlzNHNbaGQLHuKnqFub1Tl6yx1h/ZI6Z8="
   }
 }

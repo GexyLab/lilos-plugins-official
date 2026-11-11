@@ -1,5 +1,10 @@
 # Changelog di lilOS
 
+## 1.39.0 — 2026-11-11
+
+- **Nuova funzionalità — porte nascoste nei blocchi di Logic Studio.** L'SDK 0.24.0 permette di nascondere le porte dei blocchi nel disegno degli schemi: le porte nascoste non compaiono, quelle collegate compaiono sempre. L'uscita Eccezione parte nascosta. Serve a Logic Studio IDE 1.2.1.
+- **Per gli sviluppatori.** Nuovo export `portHidden`, nuovo metodo `LogicSchema.setPortHidden` (una porta collegata non si nasconde), `portsOf` dà anche `hidden`; `LogicCanvas` ridisegna un blocco quando cambiano i suoi collegamenti.
+
 ## 1.38.2 — 2026-11-11
 
 - **Correzione — il tasto centrale dentro Logic Studio.** Trascinare con il tasto centrale (la rotella) dentro Logic Studio sposta solo la vista dello schema: non sposta più la scrivania, e con lei la finestra.
