@@ -2161,7 +2161,7 @@
     "intoContainer": "Компоненти розміщуються лише всередині контейнера",
     "unknownComponent": "Невідомий компонент",
     "mainConsole": "Головну консоль видалити не можна",
-    "error": "Виняток",
+    "error": "Exception",
     "missing": "Пакета бракує"
   },
   "sdk.logicConsole": {

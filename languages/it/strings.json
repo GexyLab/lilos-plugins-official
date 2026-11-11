@@ -2066,7 +2066,7 @@
     "intoContainer": "I componenti vanno solo dentro un contenitore",
     "unknownComponent": "Componente sconosciuto",
     "mainConsole": "La console principale non si può togliere",
-    "error": "Eccezione",
+    "error": "Exception",
     "missing": "Il pacchetto non c'è"
   },
   "sdk.logicConsole": {

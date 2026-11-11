@@ -3,9 +3,9 @@
   "language": "ro",
   "name": "Română",
   "englishName": "Romanian",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "lilos": ">=1.35.0",
   "files": {
-    "strings.json": "sha256-uP1Me35A9HifJM5+Vjrf9LXNhv6vlEW9I3Uvjzo1EmE="
+    "strings.json": "sha256-sVpXDXnDTBkqjvrNVcXYXfFFDo9/rKNqXa3Tasm5YgI="
   }
 }

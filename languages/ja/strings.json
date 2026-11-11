@@ -2030,7 +2030,7 @@
     "intoContainer": "コンポーネントはコンテナの中にのみ置けます",
     "unknownComponent": "不明なコンポーネント",
     "mainConsole": "メインコンソールは削除できません",
-    "error": "例外",
+    "error": "Exception",
     "missing": "パッケージがありません"
   },
   "sdk.logicConsole": {

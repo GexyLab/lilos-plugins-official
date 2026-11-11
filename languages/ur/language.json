@@ -3,9 +3,9 @@
   "language": "ur",
   "name": "اردو",
   "englishName": "Urdu",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "lilos": ">=1.35.0",
   "files": {
-    "strings.json": "sha256-YnzC4tKUhkAiHeH1ptHAAXQ5c8Kp8/32Fo5Qel1tm58="
+    "strings.json": "sha256-EtuKEENBodzqU5e+dSfgBusvnNwjdDATx7J1LBwo23M="
   }
 }

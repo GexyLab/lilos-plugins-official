@@ -1,5 +1,9 @@
 # Changelog di lilOS
 
+## 1.42.0 — 2026-11-11
+
+- **Miglioramento — la porta «Exception» si vede bene.** In Logic Studio l'uscita degli errori di ogni blocco si chiama **Exception** in tutte le lingue ed è di un rosso acceso, anche quando non è collegata. Serve a Logic Studio IDE 1.6.0, che porta anche i nuovi blocchi per gestire le eccezioni.
+
 ## 1.41.0 — 2026-11-11
 
 - **Nuova funzionalità — porte nascoste di serie in Logic Studio.** Un blocco può avere porte che servono di rado e che partono nascoste: si mostrano con l'occhio accanto alla porta nelle Proprietà. Serve a Logic Studio IDE 1.5.0, per i nuovi ingressi **invia** e **imposta** del blocco **Costante · Variabile**.
