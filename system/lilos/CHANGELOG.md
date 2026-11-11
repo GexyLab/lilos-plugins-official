@@ -1,5 +1,10 @@
 # Changelog di lilOS
 
+## 1.40.0 — 2026-11-11
+
+- **Nuova funzionalità — la documentazione di Logic Studio.** Con Logic Studio IDE 1.4.0 ogni blocco e ogni componente ha la sua pagina, con porte, impostazioni, come funziona ed esempi, in italiano e in inglese. Si apre con il tasto destro → **Documentazione**, con **F1** o con il pulsante **?** nelle Proprietà.
+- **Per gli sviluppatori — SDK 0.25.0.** Nuovo export `markdown(testo, { link })` (Markdown → nodi DOM, mai HTML; stili `.lilos-md`) e nuovi metodi `logic.docIndex(lang)` e `logic.doc(pack, page, lang)`. Un pacchetto di Logic Studio può dare la sua documentazione con `register({ docs })` (motore 1.1.0).
+
 ## 1.39.1 — 2026-11-11
 
 - **Miglioramento — l'oggetto di un'area della UI si riconosce.** Negli schemi di Logic Studio il blocco che rappresenta un'area di una finestra ha come titolo «UI > nome dell'area», così si distingue subito dagli altri blocchi. L'etichetta salvata nel file non cambia.

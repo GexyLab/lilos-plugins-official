@@ -1,13 +1,13 @@
 {
   "name": "lilos",
-  "version": "1.39.1",
+  "version": "1.40.0",
   "kernel": 1,
   "sdk": [
     "1",
     "2"
   ],
   "node": 22,
-  "commit": "9b0d43948de0622bd35b0917a77344095ef0e64b",
+  "commit": "e0e86a9674c356499c1af80022737917555ec7ce",
   "date": "2026-11-11",
   "files": {
     "EULA.md": "sha256-ACsC0GIVznsVJo3ertofUyFre0vAq8kXDRJMZn2TWOM=",
@@ -51,15 +51,15 @@
     "system/kernel/tools/install.js": "sha256-p3+rMq/XX2uNKekSMpPZuU5wClIQb0bVcDOpRCYRhag=",
     "system/kernel/tools/lilos-install.json": "sha256-dEOqrQQdHvVCLpHdp3AlTe2E7CKm0rwKEqwxiFDs/0E=",
     "system/kernel/tools/pack.js": "sha256-CY8f9MV3Rqg/pRIwIf0j+QA6z8cawjA9zZrDqmxOLH0=",
-    "web/assets/boot-CqJdlpN4.js": "sha256-ByaxCqtI5U0mzCJhyBeqKth8bCeLf6MAtyNhaOC9/cU=",
-    "web/assets/boot-DNwsQK1i.css": "sha256-k2SyG7Laj1GYocBN6JAh6qSVY8gsGOuEfQFhYGGgjQo=",
-    "web/assets/index-CxnwcJMQ.js": "sha256-4V9Hn7s4uxutqMvGlxuW/8Y69UhSx2GfqDSQcm4W0oE=",
+    "web/assets/boot-DUlNj30d.css": "sha256-HQD6R2p7Uh2HI6mQ1eGouB1tXqmsJFjhWcMnmn+D/Zo=",
+    "web/assets/boot-DVlmA_qV.js": "sha256-qFrHdIGN8hQdkUJD7Q5/kt51lduSU9u5a2IW3cZk4yc=",
+    "web/assets/index-BP7fAVnq.js": "sha256-jBgmw2UbWWPWiPJ49NOeYOCkko2NFMzyu+ML27Bnfuk=",
     "web/assets/index-Dx3l-BDz.css": "sha256-NCEpZQl3D8fduR8vrH0x2PpsSj6g3at45l92kETny00=",
+    "web/assets/system-DVrkdJ32.js": "sha256-SK7ySkoRLezFSNTvErocA+XD9CmviPqEuffTPNPrhAo=",
     "web/assets/system-DZVUWD9x.css": "sha256-n+gX0alxHO5maoGstFHY47jTiPL8xs8NtnTfXj5mroE=",
-    "web/assets/system-m-KayIEF.js": "sha256-IKGygCJCCz30zca+effFgj7o20MuTj8laC+sy88dthE=",
     "web/favicon.svg": "sha256-79XhGd7Mhuct5Q4XQ5QnMYkI6NOXEZcwROrWH9/9aiA=",
-    "web/host/sdk.js": "sha256-l/PpznoBnUO/9j/3TmcLQHiaMl+z3X0rpXANcQ0jqx8=",
+    "web/host/sdk.js": "sha256-5YbuJkDSV6wIFZajYGweiMiyvGaUlik/U96fyErnJd0=",
     "web/host/system.js": "sha256-Mrw6MmxeqGrZbaGgYunxnaSegfmtbV2fSOJ7vjJdpmk=",
-    "web/index.html": "sha256-by5eyVhZ9y2AISU3ZMbrGe6A6oYtVZ/Va/4tr1v99Uo="
+    "web/index.html": "sha256-LwVQUSWAhjJieUNC93H3RswUTEUQ1qgz2e9nyJ2VIg4="
   }
 }
