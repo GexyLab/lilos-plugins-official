@@ -1,5 +1,10 @@
 # Changelog di lilOS
 
+## 1.39.1 — 2026-11-11
+
+- **Miglioramento — l'oggetto di un'area della UI si riconosce.** Negli schemi di Logic Studio il blocco che rappresenta un'area di una finestra ha come titolo «UI > nome dell'area», così si distingue subito dagli altri blocchi. L'etichetta salvata nel file non cambia.
+- **Per gli sviluppatori — SDK 0.24.1.** `LogicCanvas` disegna il titolo dell'oggetto di un componente (ruolo `component`) con il prefisso «UI > ».
+
 ## 1.39.0 — 2026-11-11
 
 - **Nuova funzionalità — porte nascoste nei blocchi di Logic Studio.** L'SDK 0.24.0 permette di nascondere le porte dei blocchi nel disegno degli schemi: le porte nascoste non compaiono, quelle collegate compaiono sempre. L'uscita Eccezione parte nascosta. Serve a Logic Studio IDE 1.2.1.
