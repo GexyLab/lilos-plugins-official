@@ -1,0 +1,1 @@
+import{join as e}from"node:path";var t=null,n={async init(n){n.provide(`logicblock.constants`,{api:1}),t=await n.service(`logicstudio`).register({name:n.name,version:n.version,label:{en:`Constants`,it:`Costanti`},blocks:e(n.dir,`blocks.js`),docs:e(n.dir,`docs`)})},async stop(){t?.unregister()}};export{n as default};
