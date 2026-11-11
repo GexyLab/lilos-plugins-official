@@ -3,9 +3,9 @@
   "language": "hi",
   "name": "हिन्दी",
   "englishName": "Hindi",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "lilos": ">=1.35.0",
   "files": {
-    "strings.json": "sha256-1LkyF2kF1xN/TBrzjqzVwXKAIitt4MzN/ppwCl+PIAE="
+    "strings.json": "sha256-acdjiQg5lynHSsB3KBqAa2ggMnX3m56+zTQb5eKFws4="
   }
 }

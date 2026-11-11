@@ -3,9 +3,9 @@
   "language": "el",
   "name": "Ελληνικά",
   "englishName": "Greek",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "lilos": ">=1.35.0",
   "files": {
-    "strings.json": "sha256-jvF1SZXx6nJ3u9LvJqL8qphl6S9D3YcBD2RjhZzQPqI="
+    "strings.json": "sha256-9ktg/F+RfcOwvADc5x+RNrsqHwW1jLPP9keNXRNf2cY="
   }
 }

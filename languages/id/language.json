@@ -3,9 +3,9 @@
   "language": "id",
   "name": "Bahasa Indonesia",
   "englishName": "Indonesian",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "lilos": ">=1.35.0",
   "files": {
-    "strings.json": "sha256-5lMyyV/TchupNGjJbAzD6Nwby9/xuhEtQhzgnM7TCX0="
+    "strings.json": "sha256-vRH1gC0JN3f5uhWU+Mi9U0HDwNQ7DV2orF4iGj/eNcU="
   }
 }

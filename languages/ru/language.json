@@ -3,9 +3,9 @@
   "language": "ru",
   "name": "Русский",
   "englishName": "Russian",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "lilos": ">=1.35.0",
   "files": {
-    "strings.json": "sha256-GVtBXY2d/IffXK3UJv5sdUGgSzhaKOiP9q/8tIuD1dU="
+    "strings.json": "sha256-wc8fI1uurTxvuENBlIaM8vKfA49tm0uf5GYG8ZLYChM="
   }
 }

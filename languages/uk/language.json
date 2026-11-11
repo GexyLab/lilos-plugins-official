@@ -3,9 +3,9 @@
   "language": "uk",
   "name": "Українська",
   "englishName": "Ukrainian",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "lilos": ">=1.35.0",
   "files": {
-    "strings.json": "sha256-6M5u88XrZCSbNG8It0cenqudaHhnNfxjNDZFpFmk+WU="
+    "strings.json": "sha256-ew4V/8Ynqb2YR02zxDnhvsWuFSIZSRxpnIKs8kYC5Lc="
   }
 }

@@ -1,5 +1,11 @@
 # Changelog di lilOS
 
+## 1.51.0 — 2026-11-11
+
+- **Nuova funzionalità — Geometria piana, Analisi numerica e Hardware in Logic Studio.** Tre nuovi pacchetti di blocchi, che un amministratore installa dall'AppStore → Kernel: **Geometria piana** (rette, intersezioni, cerchi, poligoni, coniche, trasformazioni, figure in SVG), **Analisi numerica** (campionare una funzione, gradiente, massimi e minimi, successioni e serie, simulazione nel tempo, interpolazione, regressione, numeri complessi) e **Hardware** (porte seriali, USB, HID, webcam, audio, MIDI, informazioni di sistema, stampanti, GPIO e I²C su Linux). Le categorie nuove **Analisi numerica** e **Hardware** hanno la loro striscia colorata; **Geometria** ora raccoglie geometria piana e solida. Serve a Logic Studio IDE 1.16.0.
+- **Sicurezza — il consenso delle app di Logic Studio conta anche l'hardware.** Un'app fatta con «Crea app» che usa blocchi dell'hardware chiede, la prima volta, il permesso di usare l'hardware del computer su cui gira lilOS (porte seriali, USB, webcam, audio…). In più, di serie solo gli amministratori possono usare l'hardware: gli altri utenti solo se un amministratore lo permette in Pannello di controllo → Logic Studio → Hardware.
+- **Per gli sviluppatori — SDK 0.36.0.** Nuove categorie di blocchi `analysis` e `hardware` in `LogicCanvas` (`--lc-analysis`, `--lc-hardware`).
+
 ## 1.50.0 — 2026-11-11
 
 - **Nuova funzionalità — i blocchi dei database in Logic Studio.** Nella nuova categoria **Database** (striscia ocra e icona del cilindro) ci sono i blocchi dei pacchetti **Database (SQL)**, **MongoDB**, **Redis**, **InfluxDB** ed **Elasticsearch**, che un amministratore installa dall'AppStore → Kernel. Serve a Logic Studio IDE 1.15.0.

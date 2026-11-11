@@ -3,9 +3,9 @@
   "language": "tr",
   "name": "Türkçe",
   "englishName": "Turkish",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "lilos": ">=1.35.0",
   "files": {
-    "strings.json": "sha256-80bHPEYN3s6i1VJvAvYjAu/p67nWSAL8RZzPd0eH92E="
+    "strings.json": "sha256-Lw96dS1sn2DVmdl0Wl54KX4RDiQSb8Q/g2lupz27Fhc="
   }
 }
