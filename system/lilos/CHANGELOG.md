@@ -1,5 +1,14 @@
 # Changelog di lilOS
 
+## 1.50.0 — 2026-11-11
+
+- **Nuova funzionalità — i blocchi dei database in Logic Studio.** Nella nuova categoria **Database** (striscia ocra e icona del cilindro) ci sono i blocchi dei pacchetti **Database (SQL)**, **MongoDB**, **Redis**, **InfluxDB** ed **Elasticsearch**, che un amministratore installa dall'AppStore → Kernel. Serve a Logic Studio IDE 1.15.0.
+- **Sicurezza — le password dei blocchi sono cifrate.** La password che scrivi nelle Proprietà di un blocco (per esempio quella di un database) viene cifrata per te e per questo lilOS: lo schema tiene solo il testo cifrato, e solo il kernel la apre quando il blocco si connette.
+- **Sicurezza — il consenso delle app di Logic Studio conta anche i database.** Un'app fatta con «Crea app» che usa blocchi di database chiede, la prima volta, il permesso di fare richieste in rete (e di usare i tuoi file per SQLite).
+- **Nuova funzionalità — programmi da riga di comando (da 1.49.0).** Un progetto di Logic Studio si lancia dal Terminale con `lilos logic run`, con argomenti e un codice di uscita (categoria di blocchi **Programma**).
+- **Nuova funzionalità — testi e forme negli schemi (da 1.48.0).** Sul foglio di uno schema e nelle finestre dei progetti si scrivono testi e si disegnano forme, che si ridimensionano con il mouse.
+- **Per gli sviluppatori — SDK 0.33.0 → 0.35.0.** `logic.seal(valore)` per le impostazioni `secret`, simbolo `database` e categoria `db` (0.35.0); `logic.start` con `args` e `kind: 'cli'`, evento `finished`, categoria `program` (0.34.0); disegni in `LogicCanvas` (`role: 'drawing'`, `editText`) (0.33.0).
+
 ## 1.47.0 — 2026-11-11
 
 - **Nuova funzionalità — colori e simboli dei blocchi di matematica.** In Logic Studio i blocchi delle quattro nuove categorie **Geometria solida**, **Trigonometria**, **Funzioni** e **Integrali** (pacchetti che un amministratore installa dall'AppStore → Kernel) hanno la loro striscia colorata e le loro icone (cubo, triangolo, f(x), integrale). Serve a Logic Studio IDE 1.12.0.

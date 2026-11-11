@@ -119,7 +119,7 @@ Quando tutto va bene il log dice: `Logic Studio: pacchetto logicstudio-esempio 1
 |---|---|
 | `type` | `pacchetto.nome`: `[a-z][a-z0-9]*\.[a-zA-Z][a-zA-Z0-9]{0,40}`, per esempio `esempio.media`. Unico fra tutti i pacchetti |
 | `version` | Un intero da 1. Alzalo quando cambi il comportamento o le impostazioni (vedi **upgrade**) |
-| `category` | Dove sta nella scheda **Blocchi**: `value` (Valori), `logic` (Logica), `math` (Matematica), `text` (Testo), `object` (Oggetti), `list` (Liste), `matrix` (Matrici), `units` (Unità di misura), `geometry` (Geometria solida), `trig` (Trigonometria), `functions` (Funzioni), `integrals` (Integrali), `signal` (Segnali), `time` (Tempo), `console` (Console), `schema` (Porte di schema), `ui` (Componenti UI), `lilos` (lilOS), `net` (Rete), `exception` (Eccezioni). Un'altra parola, o niente: **Altro** |
+| `category` | Dove sta nella scheda **Blocchi**: `value` (Valori), `logic` (Logica), `math` (Matematica), `text` (Testo), `object` (Oggetti), `list` (Liste), `matrix` (Matrici), `units` (Unità di misura), `geometry` (Geometria solida), `trig` (Trigonometria), `functions` (Funzioni), `integrals` (Integrali), `signal` (Segnali), `time` (Tempo), `console` (Console), `schema` (Porte di schema), `ui` (Componenti UI), `lilos` (lilOS), `net` (Rete), `db` (Database), `exception` (Eccezioni). Un'altra parola, o niente: **Altro** |
 | `icon` | Il nome di un'icona di lilOS (`calculator`, `bell`, `globe`, `clock`, `lamp`…). Di serie `blocks` |
 | `label` | Il nome del blocco: `{ en, it }` |
 | `description` | Facoltativa: una frase `{ en, it }` |
@@ -173,6 +173,8 @@ L'utente può dare a ogni ingresso un **valore iniziale**, che il motore manda a
 | `checkbox` | Una casella | `true` / `false` |
 | `console` | La scelta di una console del progetto | L'id della console (`'main'` di serie) |
 | `json` | Un campo per un valore JSON | Il valore (o il testo, se non è JSON valido) |
+| `code` | Un testo su più righe, a caratteri fissi (una query SQL, un filtro…; al massimo `maxLength`, 20000 di serie) | Testo |
+| `secret` | Una password: quello che si scrive non si vede e non torna mai indietro; il motore lo **cifra** per l'utente su questo lilOS (motore 1.7.0) | Il testo cifrato `ls1:…` (o `''`): aprilo nell'azione con `tools.secret(testo)`, mai nel worker |
 
 - `default` è il valore di partenza: `b.config` ha sempre i predefiniti, coperti da quello che l'utente ha scelto.
 - `min`, `max` e `step` valgono solo per il campo dell'IDE: il motore **non** li controlla. Controlla tu i valori in `run`.
@@ -268,6 +270,8 @@ upgrade(config, from, added)   // → le impostazioni nuove, o { config: le impo
 | `b.ui(porta, valore)`, `b.exportPort(porta, valore)` | Riservati ai blocchi di base (l'oggetto di una componente, l'Uscita di schema) |
 | `b.now()` | L'ora, come `Date.now()` |
 | `b.limits` | I limiti che un blocco può leggere: `signalSamples`, i campioni al massimo di un segnale (Pannello di controllo → Logic Studio → Limiti; dal motore 1.5.0, prima manca) |
+| `b.args` | Gli argomenti del programma, una lista bloccata di testi: quelli scritti dopo il file in `lilos logic run FILE ARGOMENTI…`, o nel pulsante **Argomenti** dell'IDE per le prove; vuota se il programma è partito senza (dal motore 1.6.0, prima manca). Vedi [Argomenti (argv)](core.args) |
+| `b.exit(valore)` | Chiude tutto il programma con quel valore (copiato come JSON): il motore lo ferma e il programma ha `result: { value, at }`; conta solo la prima chiamata. Vedi [Exit](core.exit) e [I programmi](logicstudio-engine/programs) (dal motore 1.6.0) |
 | `b.signal` | Un `AbortSignal` che scatta quando il programma si ferma |
 
 I timer del motore si fermano da soli quando il programma si ferma. Quello che un timer lancia esce da **Exception**. Non usare `setTimeout` e `setInterval` di Node: non si fermerebbero con il programma.
@@ -312,6 +316,7 @@ actions: {
 | `tools.signal` | Un `AbortSignal` che scatta quando il programma si ferma: passalo a una richiesta lunga |
 | `tools.countNet()` | Conta una richiesta di rete nella quota dell'utente; lancia «Troppe richieste di rete: hai finito la quota di questo minuto» se è finita. Chiamalo **prima di ogni** richiesta (anche dei reindirizzamenti) |
 | `tools.emit(evento, dati)` | Manda un evento alle pagine di lilOS dell'utente |
+| `tools.secret(testo)` | (motore 1.7.0) Apre un'impostazione `secret` del blocco (`ls1:…`) per il proprietario del programma: una promessa con il testo in chiaro. Lancia «Password non leggibile: va inserita di nuovo nelle Proprietà del blocco (…)» se è stata cifrata da un altro utente o su un altro lilOS. Non mettere mai il testo in chiaro in un errore o in un registro |
 
 Regole:
 

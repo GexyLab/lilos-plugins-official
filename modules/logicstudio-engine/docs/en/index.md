@@ -12,6 +12,7 @@ The engine brings no blocks: blocks and UI components come from **packages**, ot
 - Keeps the **consoles** of the programs: the lines written by the blocks and the questions of the [Input (readline)](core.consoleRead) blocks.
 - Keeps the last values sent to the **windows** of the projects, so a window opened again is not empty.
 - Checks the **quotas** of each user and the **limits** for everybody.
+- **Encrypts the passwords** you type in the Properties of a block (for example a database's): the schema keeps only the encrypted text, bound to you and to this lilOS, and only the kernel opens it when the block connects. On another lilOS, or in a schema copied from another user, the password must be typed again.
 - Does in the kernel, **as you**, the things the blocks ask for that touch your data or the world outside: reading a file, sending a notification, making a web request.
 - Serves the IDE the catalog of the installed blocks and components and the documentation of the packages (these pages).
 
@@ -27,13 +28,14 @@ What it means for you:
 
 ## Test and active program
 
-There are three kinds of program:
+There are four kinds of program:
 
 | Kind | How it starts | What it runs | How long it lasts |
 |---|---|---|---|
 | **Test** | **Test** (or **F5**) in the IDE | The project as it is now in the editors, even if you have not saved it | At most 5 minutes (default), or until you press **Stop** or close the IDE |
 | **Active program** | **Activate** in the IDE | The **saved** project | Until you stop it: even with the IDE closed and with lilOS closed in the browser |
 | **App (not installed)** | Opening the `.lsapp` file of an app made with **Make app** | The copy of the project that is in the folder of the app | As long as its windows are open |
+| **Command line** | `lilos logic run FILE ARGUMENTS…` in a terminal (from engine 1.6.0) | The **saved** project, with the arguments | As long as the command waits for it: an [Exit](core.exit) block closes it with a value, **Ctrl+C** stops it; see [Programs](logicstudio-engine/programs) |
 
 A test is for seeing what happens: on the schemas you see the values that go along the links and the blocks that are working. It leaves nothing switched on. See [Test and activate](ide/run).
 
@@ -80,6 +82,11 @@ The blocks and components you see in the IDE are those of the packages installed
 | [Signals](logicstudio-signals) | Signal theory: generators, FFT, spectra, IIR and FIR filters, correlation, measures, modulation |
 | [lilOS blocks](logicstudio-lilos) | Notifications, files of your home, events to lilOS |
 | [Network blocks](logicstudio-net) | The HTTP request (fetch) block |
+| [Database blocks (SQL)](logicstudio-db) | PostgreSQL, MySQL and MariaDB, SQL Server, SQLite, Oracle, ClickHouse |
+| [MongoDB blocks](logicstudio-mongodb) | MongoDB documents: find, insert, update, aggregate, watch |
+| [Redis blocks](logicstudio-redis) | Redis keys, hashes, lists and channels |
+| [InfluxDB blocks](logicstudio-influxdb) | InfluxDB time series: write points, Flux, InfluxQL and SQL queries |
+| [Elasticsearch blocks](logicstudio-elasticsearch) | Elasticsearch and OpenSearch documents and searches |
 | [Standard UI components](logicstudio-ui) | Labels, buttons, fields, containers… for the windows |
 | [Charts](logicstudio-charts) | The charts as UI components |
 
