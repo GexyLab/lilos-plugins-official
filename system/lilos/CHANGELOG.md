@@ -1,5 +1,10 @@
 # Changelog di lilOS
 
+## 1.38.2 — 2026-11-11
+
+- **Correzione — il tasto centrale dentro Logic Studio.** Trascinare con il tasto centrale (la rotella) dentro Logic Studio sposta solo la vista dello schema: non sposta più la scrivania, e con lei la finestra.
+- **Per gli sviluppatori.** Un elemento con `data-pan="native"` (e quello che contiene) tiene il tasto centrale per sé: lì la scrivania non si sposta. La tela `LogicCanvas` dell'SDK (0.23.2) lo ha già.
+
 ## 1.38.1 — 2026-11-11
 
 - **Nuova funzionalità — NetWave Browser.** Un browser dentro lilOS (dall'AppStore): schede in quante finestre vuoi, ogni finestra salvabile come sessione (`.nwsession`) con tutte le sue schede, cronologia delle pagine e delle sessioni, finestre private. Le pagine le mostra il programma lilOS, ognuna isolata in un processo e una sessione sua: non toccano mai lilOS né i tuoi file. In un browser normale NetWave avvisa e offre **Apri nel browser**. Serve il programma lilOS 0.5.1.
