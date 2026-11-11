@@ -1,5 +1,9 @@
 # Changelog di lilOS
 
+## 1.51.1 — 2026-11-11
+
+- **Correzione bug — la cornice dei gruppi di Logic Studio segue i blocchi.** Spostando un blocco di un gruppo aperto, la cornice si allungava solo in altezza: in larghezza restava quella della sua intestazione, e i blocchi finivano fuori. Ora si allarga e si stringe con i blocchi in tutte e due le direzioni. Per gli sviluppatori: SDK 0.36.1, correzione in `LogicCanvas`.
+
 ## 1.51.0 — 2026-11-11
 
 - **Nuova funzionalità — Geometria piana, Analisi numerica e Hardware in Logic Studio.** Tre nuovi pacchetti di blocchi, che un amministratore installa dall'AppStore → Kernel: **Geometria piana** (rette, intersezioni, cerchi, poligoni, coniche, trasformazioni, figure in SVG), **Analisi numerica** (campionare una funzione, gradiente, massimi e minimi, successioni e serie, simulazione nel tempo, interpolazione, regressione, numeri complessi) e **Hardware** (porte seriali, USB, HID, webcam, audio, MIDI, informazioni di sistema, stampanti, GPIO e I²C su Linux). Le categorie nuove **Analisi numerica** e **Hardware** hanno la loro striscia colorata; **Geometria** ora raccoglie geometria piana e solida. Serve a Logic Studio IDE 1.16.0.
