@@ -1,0 +1,1 @@
+import{join as e}from"node:path";var t=null,n={async init(n){n.provide(`logicblock.solid`,{api:1}),t=await n.service(`logicstudio`).register({name:n.name,version:n.version,label:{en:`Solid geometry`,it:`Geometria solida`},blocks:e(n.dir,`blocks.js`),docs:e(n.dir,`docs`)})},async stop(){t?.unregister()}};export{n as default};

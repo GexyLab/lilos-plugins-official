@@ -1,5 +1,10 @@
 # Changelog di lilOS
 
+## 1.47.0 — 2026-11-11
+
+- **Nuova funzionalità — colori e simboli dei blocchi di matematica.** In Logic Studio i blocchi delle quattro nuove categorie **Geometria solida**, **Trigonometria**, **Funzioni** e **Integrali** (pacchetti che un amministratore installa dall'AppStore → Kernel) hanno la loro striscia colorata e le loro icone (cubo, triangolo, f(x), integrale). Serve a Logic Studio IDE 1.12.0.
+- **Per gli sviluppatori — SDK 0.32.0.** Nuovi simboli `cube`, `sphere`, `triangle`, `function` e `integral` di `icon()`; nuove categorie di blocchi `geometry`, `trig`, `functions` e `integrals` in `LogicCanvas`.
+
 ## 1.46.0 — 2026-11-11
 
 - **Nuova funzionalità — il colore e i simboli dei blocchi dei segnali.** In Logic Studio i blocchi della nuova categoria **Segnali** (pacchetto **Segnali**, che un amministratore installa dall'AppStore → Kernel) hanno la loro striscia rosa e le icone dell'onda e del filtro. Serve a Logic Studio IDE 1.11.0.
