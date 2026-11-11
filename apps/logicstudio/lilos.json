@@ -1,6 +1,6 @@
 {
   "id": "logicstudio",
-  "version": "1.9.0",
+  "version": "1.11.0",
   "kind": "local",
   "name": "Logic Studio IDE",
   "description": "Logic blocks linked together, as in OpenBack: schemas, projects with windows made of UI components, consoles. The engine runs them in lilOS, also with lilOS closed.",
@@ -15,7 +15,7 @@
   },
   "sdk": "2",
   "system": true,
-  "lilos": ">=1.43.0",
+  "lilos": ">=1.45.0",
   "entrypoints": {
     "main": {
       "kind": "window"
@@ -49,7 +49,7 @@
   },
   "entry": "dist/index.js",
   "styles": [
-    "dist/index-BogtuFYA.css"
+    "dist/index-wExeCMm8.css"
   ],
   "locales": "locales.json",
   "files": {
@@ -63,26 +63,26 @@
     "dist/create-app-DL92JJ6E.js": "sha256-so7qeH8FXdG5YcND5Cg0eDW2kIAdprWwEjb/yZwBA4w=",
     "dist/docs-CwZBfv32.js": "sha256-bMOCWR0/GWCjY6M0DnQsGZVf9KbnflRkAgDWT1gbuH8=",
     "dist/docs-DQZ0zRLz.js": "sha256-hNqFMdpGIAbNaR+x5kCzZ4QxwqorHQPO8cgr30cBSGk=",
-    "dist/en-DacLJ34c.js": "sha256-atMBuSWslg3xDiwvAWhoW/lDD2awQf3Cz98qw0Cfrhc=",
-    "dist/formats-DinFRdXU.js": "sha256-+e+C8HaNf/86bkV+cENqrkGsbMFLV4cBbVm52Pe3hXk=",
-    "dist/formats-Dm6mYS0q.js": "sha256-4vzQ3qR0nDzD2bzqfP3NJ+GvWinFAO0l1ItJWnso+Fo=",
+    "dist/en-a5Ma49lz.js": "sha256-2gSK8NAzU4re8MQtgFREO4Mf30r/AyVyRcal99HvFNI=",
+    "dist/formats-BlfnZKhS.js": "sha256-EDc5qa+fut95xUghxQema/DU+Z5zJtBKEbFD+H4CInI=",
+    "dist/formats-C2-AaNF_.js": "sha256-IgKPGt28FqSdQo/xlFtkI4Vp+QGz4Cs+nlhqm6SgYHs=",
     "dist/groups-D_wgFO8J.js": "sha256-yGOgIEuge5JM+I8mRrx5WQ0ZxITULKrxIWe4XWznTx8=",
     "dist/groups-qARP1JOM.js": "sha256-xZByf2ehAgXVNOAaZrcpS8bHfoYWVRhTrYwdpbOiQXU=",
-    "dist/index-BogtuFYA.css": "sha256-0Q8PpdAFxHMPjBfuI8JDHSdeY/lWQuubP+OYuKLGsr4=",
-    "dist/index.js": "sha256-ax7dYHAaFKYbIcWkgR9Qb1BLaq8ejGYEF7XK3yUESvw=",
-    "dist/it-DdRLjVrF.js": "sha256-wORVGHLnpgtZOd17Me42dT+lqys18LtQQpHCEE+MUuc=",
+    "dist/index-wExeCMm8.css": "sha256-aySMZalAo69WpwU8XoGHb1zzS8k+qzywcDHgK6akXZQ=",
+    "dist/index.js": "sha256-RUa42IjDUqCqW0D5mJQEhfqPnQdmQlQsxHRg3EOaR1w=",
+    "dist/it-BdDsymGM.js": "sha256-L8mavbfIaoBHbiMHb7D8t7zLtYgQelqjqpfj5n0Vsyw=",
     "dist/links-Dd445l89.js": "sha256-mo4yTFy+38lZoOZJycbgw+KNximDXpNRhs43oUhVaMY=",
     "dist/links-kLRXqV8E.js": "sha256-eagwtFv+UdXqxgDDNeGZHxZIx6hRdRGFTkM1ofeZ4KU=",
-    "dist/projects-B5kx90Dz.js": "sha256-HmRGNiq5qeld29z7puvq77SOXtwz0YGq+QoJYkD1acY=",
-    "dist/projects-sESAb_Xe.js": "sha256-YSOXgoLoLDVlNXYHcwA6RcxdgLxM4wo+sCC8MwblPhI=",
+    "dist/projects-BkhagYO2.js": "sha256-qcWKIri5Vq3mVTn8V59ay/q2gbLPvrKCNZMl04F6Jc8=",
+    "dist/projects-Cjcy3JIm.js": "sha256-QLXTZiP//1ZjsMZnI4SyEDY1FHsnIf7tYKarSvKCL/4=",
     "dist/run-DJVRb-s6.js": "sha256-vXrxJh5c/VCU81Bob0BkeLfJo6IiDKtkA22paF0V6sE=",
     "dist/run-DtRD52kt.js": "sha256-Sfk8dPTOVL1MI/9cofz3Shwj4Z9Ezv195sWFWLgNzx4=",
-    "dist/schemas-BWeIpaZu.js": "sha256-MnZuUvhvjUwhPz7rZe5SwJhFrssP7KCPdMX4Kah2UGs=",
-    "dist/schemas-DCSx_7pf.js": "sha256-wdaYJdMmmly50k6HdrZPgZdNcw8X/xWiqV1l/9D6QoU=",
+    "dist/schemas-8qrnw6oV.js": "sha256-qyDaCLxHazGZD/yAgsYvVf+cEpZBsoI6Jvr0y/ptwDY=",
+    "dist/schemas-C3qS5NdC.js": "sha256-dLCMRjk6WfKOmccqMDDiizHeII4+s9uzNTirZ/Ls9Cc=",
     "dist/shortcuts-BkGl08IM.js": "sha256-f5aIvmF6AFNuLV/4DxdwAemTClIyFwEGjdMpeHAYiZk=",
     "dist/shortcuts-CjEQDbNC.js": "sha256-uWsje4G4D9Ao9sohTlQoPL/PZcLIlPa1CYwcqxTa0Mw=",
-    "dist/windows-CcWhrLTJ.js": "sha256-ZmHUofvD/eRkwFADdUp0AWvvwYleiDdYVhcoXlw8j1Q=",
-    "dist/windows-DTGpJSKt.js": "sha256-DSOc4NjoMsroP/Y3IffItw/EQ+VhGCtpIqTbDpKtZAw=",
-    "locales.json": "sha256-vZ8Wyas0Nii+CgSAB4P99ECXuyJueSzurUl1Bx3mVXw="
+    "dist/windows-CNmA7S2Z.js": "sha256-YjBFJofcEuXnzKGQIDuZfEU2NTx6R0h7L/380j55ChQ=",
+    "dist/windows-CcrUY3sp.js": "sha256-wqeT3UXdqfQWE/Eje6+m0ct3A/vlUnJTs6kMp0+b8Gw=",
+    "locales.json": "sha256-tWAfMxEwdQVBJkiCzjHEGTOFhGEoh1aiMUGCiHWrH1Q="
   }
 }

@@ -1,9 +1,9 @@
 import * as e from "/host/sdk.js";
 import { Emitter as t, LOGIC_EXTENSIONS as n, LOGIC_FORMATS as r, LogicCanvas as i, LogicConsoleView as a, LogicConsoles as o, LogicProject as s, LogicSchema as c, LogicUI as l, LogicWindow as u, Window as d, actionButton as f, appIcon as p, checkbox as m, fs as h, h as g, icon as _, kernel as ee, linkKey as te, logic as v, markdown as ne, messageBox as y, openMenu as b, portsOf as x, radios as re, resizeHandle as ie, selectField as S, storage as C, textField as w, typesMatch as T } from "/host/sdk.js";
 import * as E from "/host/system.js";
-import { launch as ae, openFile as oe, pickFile as D } from "/host/system.js";
+import { launch as ae, openFile as oe, pickFile as se } from "/host/system.js";
 // src/shared/TabBar.js
-var se = class extends t {
+var ce = class extends t {
 	#e;
 	#t = /* @__PURE__ */ new Map();
 	#n = /* @__PURE__ */ new Map();
@@ -173,7 +173,7 @@ var se = class extends t {
 	}
 };
 // src/shared/i18n.js
-function ce(t, n) {
+function le(t, n) {
 	if (e.locale) return e.locale.forApp(t).i18n;
 	let r = {
 		...n.en.strings,
@@ -193,10 +193,10 @@ function ce(t, n) {
 	};
 }
 // src/logicstudio/i18n.js
-var O = ce("logicstudio", {
-	en: /* @__PURE__ */ JSON.parse("{\"strings\":{\"@name\":\"Logic Studio IDE\",\"@description\":\"Logic blocks linked together, as in OpenBack: schemas, projects with windows made of UI components, consoles. The engine runs them in lilOS, also with lilOS closed.\",\"app.name\":\"Logic Studio IDE\",\"tabs.label\":\"Open editors\",\"tabs.home\":\"Home\",\"tabs.map\":\"{name} · Map\",\"left.project\":\"Project\",\"left.blocks\":\"Blocks\",\"left.components\":\"Components\",\"left.resize\":\"Resize the panel\",\"common.save\":\"Save\",\"common.create\":\"Create\",\"common.ok\":\"OK\",\"tb.save\":\"Save\",\"tb.undo\":\"Undo (Ctrl+Z)\",\"tb.redo\":\"Redo (Ctrl+Y)\",\"tb.test\":\"Test\",\"tb.stop\":\"Stop\",\"tb.activate\":\"Activate\",\"tb.activateHint\":\"Run the saved project as an active program: it goes on with lilOS closed\",\"tb.map\":\"Map\",\"tb.home\":\"Home\",\"empty.text\":\"No open tabs.\",\"tb.options\":\"Project options\",\"tb.fit\":\"Fit\",\"tb.zoomIn\":\"Zoom in\",\"tb.zoomOut\":\"Zoom out\",\"tb.zoomReset\":\"Actual size\",\"tb.align\":\"Align\",\"tb.alignHint\":\"Line up the selected blocks, horizontally or vertically (select at least 2)\",\"align.left\":\"Left edges\",\"align.center\":\"Centres (horizontally)\",\"align.right\":\"Right edges\",\"align.spreadX\":\"Spread horizontally\",\"align.top\":\"Top edges\",\"align.middle\":\"Middles (vertically)\",\"align.bottom\":\"Bottom edges\",\"align.spreadY\":\"Spread vertically\",\"status.engine\":\"Logic Studio Engine · {n} packages\",\"status.noEngine\":\"The engine does not answer\",\"status.project\":\"Project {name}\",\"status.single\":\"A schema alone\",\"status.schema\":\"Blocks {blocks} / {maxBlocks} · links {links} / {maxLinks} · {zoom}%\",\"status.map\":\"{schemas} schemas · {windows} windows · {links} links between schemas\",\"open.uiAlone\":\"This window is not in a project\",\"open.uiAloneText\":\"A window (.lsui) opens with its project: no .lsproj was found in its folder or above.\",\"open.failed\":\"It could not be opened\",\"open.pick\":\"Open a project or a schema\",\"new.title\":\"New project\",\"new.text\":\"The project is a folder in «{folder}», with the folders schemi, ui and risorse.\",\"new.folder\":\"Logic Studio\",\"new.name\":\"Name\",\"new.default\":\"My project\",\"new.create\":\"Create\",\"close.unsaved\":\"«{name}» has changes not saved\",\"close.unsavedText\":\"If you do not save them, they are lost.\",\"close.discard\":\"Do not save\",\"close.project\":\"The project «{name}» has changes not saved\",\"close.saveAll\":\"Save all\",\"save.failed\":\"Saving failed\",\"ws.gone\":\"The file is not there any more\",\"ws.notLogic\":\"It is not a project (.lsproj) or a schema (.lsch) of Logic Studio\",\"ws.noName\":\"The project needs a name\",\"ws.missingFile\":\"The file {path} is missing\",\"ws.nameTaken\":\"The project already has an element called «{name}»\",\"ws.newFolder\":\"New folder\",\"explorer.none\":\"Open or create a project from Home.\",\"group.schemas\":\"Schemas\",\"group.windows\":\"Windows\",\"group.resources\":\"Resources\",\"explorer.new.schemas\":\"New schema\",\"explorer.new.windows\":\"New window\",\"explorer.new.resources\":\"Add a resource\",\"explorer.newFolder\":\"New folder\",\"explorer.open\":\"Open\",\"explorer.rename\":\"Rename\",\"explorer.remove\":\"Remove\",\"explorer.makeMain\":\"Make it the main window\",\"explorer.main\":\"Main window: opens from the apps menu\",\"explorer.unsaved\":\"Not saved\",\"explorer.name\":\"Name\",\"explorer.badName\":\"A name without / \\\\ : * ? \\\" < > |\",\"explorer.failed\":\"It could not be done\",\"explorer.removeItem\":\"Remove «{name}»?\",\"explorer.removeItemText\":\"It goes to the trash. Its links in the project are removed.\",\"explorer.removeFolder\":\"Remove the folder «{name}»?\",\"explorer.removeFolderText\":\"It goes to the trash with everything inside.\",\"entry.none\":\"Opens only from other windows of the app\",\"entry.file\":\"Opens a type of file\",\"entry.action\":\"Item in the menu of files\",\"entry.call\":\"Called by other apps\",\"entry.login\":\"When the user signs in\",\"entry.main\":\"Apps menu (main window)\",\"entry.extPlaceholder\":\"Extensions: csv, txt\",\"entry.label\":\"Label\",\"cat.blocks.value\":\"Values\",\"cat.blocks.logic\":\"Logic\",\"cat.blocks.math\":\"Math\",\"cat.blocks.text\":\"Text\",\"cat.blocks.object\":\"Objects\",\"cat.blocks.list\":\"Lists\",\"cat.blocks.matrix\":\"Matrices\",\"cat.blocks.units\":\"Units\",\"cat.blocks.time\":\"Time\",\"cat.blocks.console\":\"Console\",\"cat.blocks.schema\":\"Schema ports\",\"cat.blocks.ui\":\"UI components\",\"cat.blocks.lilos\":\"lilOS\",\"cat.blocks.net\":\"Network\",\"cat.blocks.exception\":\"Exceptions\",\"cat.blocks.other\":\"Other\",\"cat.components.text\":\"Text\",\"cat.components.values\":\"Text and values\",\"cat.components.commands\":\"Commands\",\"cat.components.containers\":\"Containers\",\"cat.components.charts\":\"Charts\",\"cat.components.other\":\"Other\",\"palette.search\":\"Search…\",\"palette.empty\":\"No package installed\",\"palette.noMatch\":\"Nothing found\",\"palette.noEngine\":\"The engine of Logic Studio does not answer\",\"palette.collapse\":\"Collapse\",\"palette.expand\":\"Expand\",\"palette.collapseAll\":\"Collapse all\",\"palette.expandAll\":\"Expand all\",\"port.error\":\"Exception\",\"block.missing\":\"The package is missing\",\"block.missingText\":\"This block ({type}) comes from a package that is not installed. Install it from the AppStore, or remove the block.\",\"limit.blocks\":\"At most {n} blocks per schema\",\"menu.duplicate\":\"Duplicate\",\"menu.label\":\"Label…\",\"menu.labelText\":\"A name for this block, shown on it instead of its kind.\",\"menu.openWindow\":\"Open its window\",\"menu.removeBlock\":\"Remove the block\",\"menu.removeBlocks\":{\"one\":\"Remove the block\",\"other\":\"Remove {n} blocks\"},\"menu.removeLink\":\"Remove the link\",\"menu.addHere\":\"Add a block here\",\"menu.selectAll\":\"Select all\",\"inspector.title\":\"Properties\",\"inspector.nothing\":\"Nothing selected\",\"inspector.many\":{\"one\":\"1 block selected\",\"other\":\"{n} blocks selected\"},\"inspector.links\":{\"one\":\"1 link selected\",\"other\":\"{n} links selected\"},\"inspector.schema\":\"Schema\",\"inspector.name\":\"Name\",\"inspector.blocks\":\"Blocks\",\"inspector.schemaPorts\":\"Schema ports\",\"inspector.noSchemaPorts\":\"No ports: add a Parameter (schema input) or Return (schema output) block to link this schema to the others of the project.\",\"inspector.schemaHint\":\"Schemas of a project are linked only through their schema ports, in the map.\",\"inspector.label\":\"Label\",\"inspector.settings\":\"Settings\",\"inspector.ports\":\"Ports\",\"inspector.block\":\"Block\",\"inspector.inputs\":\"Inputs\",\"inspector.outputs\":\"Outputs\",\"inspector.addInput\":\"Add input\",\"inspector.addOutput\":\"Add output\",\"inspector.addedCount\":\"Added: {n} of {max}\",\"inspector.basePort\":\"Base port: it cannot be removed\",\"inspector.ofComponent\":\"of the component\",\"inspector.up\":\"Move up\",\"inspector.down\":\"Move down\",\"inspector.removePort\":\"Remove\",\"inspector.hidePort\":\"Hide on the drawing\",\"inspector.showPort\":\"Show on the drawing\",\"inspector.linkedPort\":\"Linked: it cannot be hidden\",\"inspector.starts\":\"starts it\",\"inspector.startValue\":\"at start\",\"inspector.removeQ\":\"Remove the port «{name}»?\",\"inspector.removeLinks\":{\"one\":\"It has 1 link, which is removed too. Ctrl+Z puts them back.\",\"other\":\"It has {n} links, which are removed too. Ctrl+Z puts them back.\"},\"inspector.aloneHint\":\"In a project, this port can be linked to other schemas in the map.\",\"inspector.projectLinks\":\"Links in the project\",\"inspector.noProjectLinks\":\"Not linked yet: link it in the map.\",\"inspector.unlink\":\"Unlink\",\"inspector.inMap\":\"In the map\",\"inspector.component\":\"UI component\",\"inspector.componentAlone\":\"A schema alone has no windows.\",\"inspector.window\":\"Window\",\"inspector.componentName\":\"Component\",\"type.number\":\"number\",\"opt.type.number\":\"number\",\"type.bool\":\"yes/no\",\"opt.type.bool\":\"yes/no\",\"type.text\":\"text\",\"opt.type.text\":\"text\",\"type.object\":\"object\",\"opt.type.object\":\"object\",\"type.list\":\"list\",\"opt.type.list\":\"list\",\"type.matrix\":\"matrix\",\"opt.type.matrix\":\"matrix\",\"type.any\":\"any\",\"opt.type.any\":\"any\",\"type.pulse\":\"pulse\",\"opt.type.pulse\":\"pulse\",\"opt.op.eq\":\"a = b\",\"opt.op.ne\":\"a ≠ b\",\"opt.op.gt\":\"a > b\",\"opt.op.ge\":\"a ≥ b\",\"opt.op.lt\":\"a < b\",\"opt.op.le\":\"a ≤ b\",\"opt.op.min\":\"minimum\",\"opt.op.max\":\"maximum\",\"opt.op.avg\":\"average\",\"opt.op.abs\":\"absolute value\",\"opt.op.round\":\"round\",\"opt.op.floor\":\"round down\",\"opt.op.ceil\":\"round up\",\"opt.op.sqrt\":\"square root\",\"opt.op.neg\":\"change sign\",\"opt.op.sin\":\"sine\",\"opt.op.cos\":\"cosine\",\"opt.op.log\":\"natural log\",\"opt.op.exp\":\"exponential\",\"opt.op.upper\":\"UPPER CASE\",\"opt.op.lower\":\"lower case\",\"opt.op.trim\":\"trim spaces\",\"opt.op.length\":\"length\",\"opt.op.contains\":\"contains\",\"opt.op.replace\":\"replace\",\"opt.op.sum\":\"sum\",\"opt.level.normal\":\"normal\",\"opt.level.info\":\"information\",\"opt.level.warning\":\"warning\",\"opt.level.error\":\"error\",\"opt.format.text\":\"text\",\"opt.format.json\":\"readable JSON\",\"opt.kind.number\":\"number\",\"opt.kind.text\":\"text\",\"opt.kind.bool\":\"yes/no\",\"opt.kind.json\":\"JSON\",\"opt.kind.key\":\"a key\",\"opt.to.number\":\"number\",\"opt.to.text\":\"text\",\"opt.to.bool\":\"yes/no\",\"opt.to.json\":\"JSON text\",\"opt.to.parse\":\"from JSON text\",\"opt.order.asc\":\"ascending\",\"opt.order.desc\":\"descending\",\"opt.where.append\":\"at the end\",\"opt.where.prepend\":\"at the start\",\"kind.text\":\"text\",\"kind.number\":\"number\",\"kind.bool\":\"yes/no\",\"kind.key\":\"a key\",\"kind.test\":\"Test\",\"kind.active\":\"Active\",\"state.starting\":\"Starting\",\"state.running\":\"Running\",\"state.stopped\":\"Stopped\",\"state.failed\":\"Stopped by an error\",\"state.waiting\":\"Waiting for a package\",\"console.main\":\"Main\",\"console.mainHint\":\"The main console: it is always there and gets the exceptions no block handles\",\"console.asking\":\"Waiting for an answer\",\"console.detach\":\"Detach\",\"console.expand\":\"Show the panel\",\"console.collapse\":\"Hide the panel\",\"console.add\":\"New console\",\"console.idle\":\"Test the project to see its consoles here.\",\"console.hint\":\"Enter sends · Esc cancels\",\"console.windowTitle\":\"Console {name}\",\"problems.title\":\"Problems\",\"problems.none\":\"No problems\",\"problems.missingBlock\":\"The block {block} ({type}) comes from a package that is not installed\",\"problems.noWindow\":\"The block {block} stands for a component of the window «{window}», which is not there\",\"problems.noComponent\":\"The block {block} stands for the component «{component}», which is not there\",\"problems.noPortName\":\"A schema port has no name\",\"problems.noMain\":\"The project has windows but no main window\",\"run.testing\":\"Testing {time}\",\"run.saveFirst\":\"Save before activating?\",\"run.saveFirstText\":\"An active program runs the saved project.\",\"run.alreadyActive\":\"«{name}» is already active\",\"run.alreadyActiveText\":\"The active program stops and starts again with the project as it is now.\",\"run.replace\":\"Replace\",\"run.activated\":\"«{name}» is active\",\"run.activatedText\":\"It runs in lilOS also with this window and lilOS closed, until you stop it from Home.\",\"home.intro\":\"Logic blocks linked together: data go along the links and each block does something with them. A project groups schemas and windows; the engine runs it in lilOS.\",\"home.new\":\"New project\",\"home.open\":\"Open…\",\"home.recent\":\"Recent\",\"home.noRecent\":\"No project opened yet\",\"home.programs\":\"My programs\",\"home.noPrograms\":\"Nothing running: test a project, or activate it\",\"home.noEngine\":\"The engine of Logic Studio (module logicstudio-engine) is not installed or does not answer.\",\"home.appstore\":\"Open the AppStore\",\"home.colName\":\"Program\",\"home.colKind\":\"Kind\",\"home.colState\":\"State\",\"home.colSince\":\"Since\",\"home.openProject\":\"Open the project\",\"home.stop\":\"Stop\",\"home.forget\":\"Remove\",\"home.stopQ\":\"Stop «{name}»?\",\"home.stopText\":\"It does not start again with lilOS until you activate it again.\",\"home.usage\":\"What I use\",\"usage.active\":\"Active programs\",\"usage.tests\":\"Tests\",\"usage.net\":\"Network requests this minute\",\"usage.log\":\"Log\",\"usage.cpuMem\":\"At most {cpu}% of the CPU and {mem} MB of memory for all my programs.\",\"map.objectsIn\":\"{n} components · objects in {list}\",\"map.noObjects\":\"{n} components · no object in the schemas\",\"map.project\":\"Project\",\"map.main\":\"Main window\",\"map.links\":\"Links between schemas\",\"map.noLinks\":\"No links yet\",\"map.hint\":\"Drag from an output of a schema to an input of another to link them. Windows are reached through the objects of their components in the schemas.\",\"options.title\":\"Project options\",\"options.general\":\"General\",\"options.windows\":\"Windows\",\"options.consoles\":\"Consoles\",\"options.app\":\"The app and its windows\",\"options.name\":\"Name\",\"options.version\":\"Version\",\"options.versionHint\":\"Three numbers: 1.0.0\",\"options.description\":\"Description\",\"options.windowsHint\":\"lilOS opens the windows of the project. The main window is required: it opens from the apps menu.\",\"options.noWindows\":\"The project has no windows yet.\",\"options.main\":\"Main window\",\"options.mainHint\":\"It can be changed, never removed.\",\"options.window\":\"Window\",\"options.opensFrom\":\"Opens from\",\"options.unlinkedHint\":\"A window with no entry point opens only from another window of the app (a button with «Open a window»).\",\"options.consoleList\":\"Consoles of the project\",\"options.consoleName\":\"Name\",\"options.color\":\"Color\",\"options.keep\":\"Lines kept\",\"options.mainConsole\":\"fixed: renamed, never removed\",\"options.remove\":\"Remove\",\"options.removeHint\":\"Removing a console, its blocks write to the main one.\",\"options.newConsole\":\"Console {n}\",\"options.removeConsoleQ\":\"Remove the console «{name}»?\",\"options.outside\":\"Outside the IDE\",\"outside.all\":\"Show them all\",\"outside.all.hint\":\"each console opens in a window when the project starts\",\"outside.onInput\":\"Only when they ask for something\",\"outside.onInput.hint\":\"a console opens when an Input (readline) block waits\",\"outside.hidden\":\"Do not show them\",\"outside.hidden.hint\":\"nothing on screen: lines go to the log as «Copy to the log» says, questions get their default value\",\"outside.main\":\"All in the main console\",\"outside.main.hint\":\"one window, each line with the name of its console\",\"options.details\":\"Details\",\"options.closeAfter\":\"Close the console after the answer\",\"options.notify\":\"A notification when a console asks for something and the project has no windows open\",\"options.copyToLog\":\"Copy to the log of the project\",\"log.none\":\"nothing\",\"log.warnings\":\"warnings and errors\",\"log.all\":\"every line\",\"options.mainOpens\":\"With «All in the main console», the main one opens\",\"mainOpens.start\":\"when the project starts\",\"mainOpens.onInput\":\"when it asks for something\",\"options.consoleQuota\":\"Lines kept in memory count in your memory quota; lines copied to the log count in your log quota.\",\"options.appHint\":\"What the windows of the project share while it runs: also in the app made from it.\",\"options.keepValues\":\"A window opened again shows the last values at once\",\"options.keepValuesHint\":\"The engine keeps the last value sent to each component.\",\"options.syncCopies\":\"Copies of the same window stay in step\",\"options.syncCopiesHint\":\"The same window open on two devices shows the same values; a change on one shows on the other.\",\"options.commandsHint\":\"Buttons, switches and sliders send something only when someone uses them in an open window: nothing is pressed again when a window opens.\",\"status.window\":\"{n} components / {max} · {w} × {h}\",\"window.design\":\"Design\",\"window.preview\":\"Preview\",\"window.previewOf\":\"Preview\",\"window.window\":\"Window\",\"window.title\":\"Title\",\"window.width\":\"Width (px)\",\"window.height\":\"Height (px)\",\"window.resizable\":\"The user can resize it\",\"window.opens\":\"Opens from\",\"window.hint\":\"Add components from the palette on the left: a click puts it into the container selected, dragging puts it where the blue line shows.\",\"window.missing\":\"This component ({type}) comes from a package that is not installed.\",\"window.portsHint\":\"← what a schema sets, → what the user does. The schemas reach the component through its object.\",\"window.object\":\"Object in a schema\",\"window.openObject\":\"Open it in the schema\",\"window.noObject\":\"No schema has its object yet: without it the component shows and does nothing.\",\"window.inSchema\":\"In the schema\",\"window.makeObject\":\"Make its object\",\"window.askTitle\":\"Where does the logic block of «{name}» go?\",\"window.askText\":\"Every UI component has its object in a schema: the other blocks of that schema link to it. You can also make it later in Properties.\",\"window.newSchema\":\"New schema…\",\"window.later\":\"Later\",\"window.remove\":\"Remove the component\",\"window.removeQ\":\"Remove the component?\",\"window.removeObject\":\"Its object in the schema «{schema}» stays there and shows an error until you remove it too.\",\"limit.components\":\"At most {n} components per window\",\"action.none\":\"Nothing\",\"action.open\":\"Open a window\",\"action.close\":\"Close this window\",\"action.hint\":\"It also sends «pressed» to its object in the schema.\",\"opt.size.small\":\"small\",\"opt.size.normal\":\"normal\",\"opt.size.title\":\"title\",\"opt.align.start\":\"start\",\"opt.align.center\":\"center\",\"opt.align.end\":\"end\",\"opt.align.stretch\":\"stretch\",\"opt.variant.primary\":\"primary\",\"opt.variant.normal\":\"normal\",\"opt.variant.danger\":\"danger\",\"opt.color.green\":\"green\",\"opt.color.red\":\"red\",\"opt.color.yellow\":\"yellow\",\"opt.color.blue\":\"blue\",\"opt.fit.contain\":\"whole image\",\"opt.fit.cover\":\"fill the space\",\"opt.kind.date\":\"date\",\"opt.kind.time\":\"time\",\"opt.kind.datetime-local\":\"date and time\",\"opt.kind.file\":\"a file\",\"opt.kind.folder\":\"a folder\",\"opt.kind.line\":\"line\",\"opt.kind.space\":\"space\",\"home.openWindow\":\"Open its window\",\"tb.createApp\":\"Make app…\",\"tb.createAppHint\":\"Make a lilOS app from the project, and run it\",\"app.title\":\"Make an app from «{name}»\",\"app.text\":\"The app has the windows of the project and uses the engine of this lilOS. For now it is not installed: it runs from its folder, only for you, while its windows are open.\",\"app.where\":\"The package goes into {folder}<id>: open its .lsapp file to run it again.\",\"app.folder\":\"Apps made\",\"app.id\":\"Id\",\"app.badId\":\"Lower-case letters, digits and -, starting with a letter\",\"app.version\":\"Version\",\"app.description\":\"Description\",\"app.icon\":\"Icon\",\"app.color\":\"Color\",\"app.color.green\":\"green\",\"app.color.blue\":\"blue\",\"app.color.violet\":\"violet\",\"app.color.teal\":\"teal\",\"app.color.orange\":\"orange\",\"app.color.red\":\"red\",\"app.create\":\"Make\",\"app.createRun\":\"Make and run\",\"app.needsLilos\":\"Running apps made from projects needs lilOS 1.37.0 or later\",\"app.done\":\"«{name}» is ready\",\"app.doneText\":\"The package is in {path}. Open its .lsapp file to run it.\",\"app.failed\":\"The app could not be made\",\"app.appName\":\"Name of the app\",\"kind.app\":\"App (not installed)\",\"tb.docs\":\"Documentation\",\"menu.docs\":\"Documentation\",\"menu.docsSchema\":\"Documentation of the schema editor\",\"menu.docsWindow\":\"Documentation of the window editor\",\"menu.openObject\":\"Show its object in the schema\",\"palette.add\":\"Add\",\"docs.title\":\"Logic Studio documentation\",\"docs.back\":\"Back (Alt+←)\",\"docs.forward\":\"Forward (Alt+→)\",\"docs.home\":\"Start page\",\"docs.search\":\"Search the documentation\",\"docs.contents\":\"Contents\",\"docs.loading\":\"Loading…\",\"docs.failed\":\"The page could not be read: {error}\",\"docs.missingTitle\":\"Page not found\",\"docs.missingType\":\"«{name}» ({type}) has no documentation page yet.\",\"docs.missing\":\"There is no page at «{address}».\",\"docs.packIndex\":\"Go to the package's page\",\"docs.ide\":\"Guide to the IDE\",\"docs.overview\":\"Overview\",\"docs.noResults\":\"Nothing found.\",\"group.run\":\"Run\",\"group.name\":\"Group\",\"group.blocks\":\"{n} blocks\",\"group.thread\":\"Thread\",\"group.collapse\":\"Collapse\",\"group.expand\":\"Expand\",\"group.runOff\":\"Nothing is linked to Run: the blocks of the group do not start\",\"group.runOn\":\"Run is linked ({n}): at every pulse the group starts again, from its blocks that go by themselves (such as Value)\",\"group.runInside\":\"Inside the group, Run sends its pulse to {n} ports\",\"group.make\":\"Group\",\"group.addTo\":\"Add to group\",\"group.takeOut\":\"Take out of the group\",\"group.rename\":\"Rename group\",\"group.threadToggle\":\"Run in a thread of its own\",\"group.ungroup\":\"Ungroup\",\"group.remove\":\"Remove the group and its blocks\",\"group.manySel\":\"{blocks} blocks and {groups} groups selected\",\"group.collapsedField\":\"Collapsed into one block\",\"group.threadField\":\"Run in a thread of its own\",\"group.threadHint\":\"The blocks of the group run apart from the rest of the program: a slow block does not slow down the others. Each thread has half of your memory quota.\",\"group.threadNo\":\"Schema inputs and outputs and UI objects cannot be in a group with a thread of its own: the engine refuses the schema.\",\"group.exposed\":\"Exposed ports\",\"group.noExposed\":\"No port exposed: nothing outside the group reaches its blocks.\",\"group.exposeHint\":\"To expose a port, link it from outside the group, or use the button beside its eye in the properties of the block.\",\"group.expose\":\"Expose outside the group\",\"group.unexpose\":\"Do not expose\",\"group.unexposeQ\":\"Stop exposing «{name}»?\",\"group.inGroup\":\"In the group «{name}»\",\"group.show\":\"Show the group\"}}"),
-	it: /* @__PURE__ */ JSON.parse("{\"strings\":{\"@name\":\"Logic Studio IDE\",\"@description\":\"Blocchi logici collegati tra loro, come in OpenBack: schemi, progetti con finestre fatte di componenti UI, console. Il motore li fa girare in lilOS, anche a lilOS chiuso.\",\"app.name\":\"Logic Studio IDE\",\"tabs.label\":\"Editor aperti\",\"tabs.home\":\"Home\",\"tabs.map\":\"{name} · Mappa\",\"left.project\":\"Progetto\",\"left.blocks\":\"Blocchi\",\"left.components\":\"Componenti\",\"left.resize\":\"Ridimensiona il pannello\",\"common.save\":\"Salva\",\"common.create\":\"Crea\",\"common.ok\":\"OK\",\"tb.save\":\"Salva\",\"tb.undo\":\"Annulla (Ctrl+Z)\",\"tb.redo\":\"Ripeti (Ctrl+Y)\",\"tb.test\":\"Prova\",\"tb.stop\":\"Ferma\",\"tb.activate\":\"Attiva\",\"tb.activateHint\":\"Fa girare il progetto salvato come programma attivo: va avanti anche a lilOS chiuso\",\"tb.map\":\"Mappa\",\"tb.home\":\"Home\",\"empty.text\":\"Nessuna scheda aperta.\",\"tb.options\":\"Opzioni del progetto\",\"tb.fit\":\"Adatta\",\"tb.zoomIn\":\"Ingrandisci\",\"tb.zoomOut\":\"Rimpicciolisci\",\"tb.zoomReset\":\"Dimensione reale\",\"tb.align\":\"Allinea\",\"tb.alignHint\":\"Mette in fila i blocchi selezionati, in orizzontale o in verticale (selezionane almeno 2)\",\"align.left\":\"Bordi a sinistra\",\"align.center\":\"Centri (in orizzontale)\",\"align.right\":\"Bordi a destra\",\"align.spreadX\":\"Distribuisci in orizzontale\",\"align.top\":\"Bordi in alto\",\"align.middle\":\"Centri (in verticale)\",\"align.bottom\":\"Bordi in basso\",\"align.spreadY\":\"Distribuisci in verticale\",\"status.engine\":\"Logic Studio Engine · {n} pacchetti\",\"status.noEngine\":\"Il motore non risponde\",\"status.project\":\"Progetto {name}\",\"status.single\":\"Uno schema da solo\",\"status.schema\":\"Blocchi {blocks} / {maxBlocks} · collegamenti {links} / {maxLinks} · {zoom}%\",\"status.map\":\"{schemas} schemi · {windows} finestre · {links} collegamenti tra schemi\",\"open.uiAlone\":\"Questa finestra non è in un progetto\",\"open.uiAloneText\":\"Una finestra (.lsui) si apre con il suo progetto: nella sua cartella e in quelle sopra non c'è un .lsproj.\",\"open.failed\":\"Non si è potuto aprire\",\"open.pick\":\"Apri un progetto o uno schema\",\"new.title\":\"Nuovo progetto\",\"new.text\":\"Il progetto è una cartella in «{folder}», con le cartelle schemi, ui e risorse.\",\"new.folder\":\"Logic Studio\",\"new.name\":\"Nome\",\"new.default\":\"Il mio progetto\",\"new.create\":\"Crea\",\"close.unsaved\":\"«{name}» ha modifiche non salvate\",\"close.unsavedText\":\"Se non le salvi, si perdono.\",\"close.discard\":\"Non salvare\",\"close.project\":\"Il progetto «{name}» ha modifiche non salvate\",\"close.saveAll\":\"Salva tutto\",\"save.failed\":\"Salvataggio non riuscito\",\"ws.gone\":\"Il file non c'è più\",\"ws.notLogic\":\"Non è un progetto (.lsproj) o uno schema (.lsch) di Logic Studio\",\"ws.noName\":\"Il progetto ha bisogno di un nome\",\"ws.missingFile\":\"Manca il file {path}\",\"ws.nameTaken\":\"Il progetto ha già un elemento che si chiama «{name}»\",\"ws.newFolder\":\"Nuova cartella\",\"explorer.none\":\"Apri o crea un progetto dalla Home.\",\"group.schemas\":\"Schemi\",\"group.windows\":\"Finestre\",\"group.resources\":\"Risorse\",\"explorer.new.schemas\":\"Nuovo schema\",\"explorer.new.windows\":\"Nuova finestra\",\"explorer.new.resources\":\"Aggiungi una risorsa\",\"explorer.newFolder\":\"Nuova cartella\",\"explorer.open\":\"Apri\",\"explorer.rename\":\"Rinomina\",\"explorer.remove\":\"Elimina\",\"explorer.makeMain\":\"Rendila la finestra main\",\"explorer.main\":\"Finestra main: si apre dal menu applicazioni\",\"explorer.unsaved\":\"Non salvato\",\"explorer.name\":\"Nome\",\"explorer.badName\":\"Un nome senza / \\\\ : * ? \\\" < > |\",\"explorer.failed\":\"Non si è potuto fare\",\"explorer.removeItem\":\"Eliminare «{name}»?\",\"explorer.removeItemText\":\"Va nel cestino. I suoi collegamenti nel progetto vengono tolti.\",\"explorer.removeFolder\":\"Eliminare la cartella «{name}»?\",\"explorer.removeFolderText\":\"Va nel cestino con tutto quello che contiene.\",\"entry.none\":\"Si apre solo da altre finestre dell'app\",\"entry.file\":\"Apre un tipo di file\",\"entry.action\":\"Voce nel menu dei file\",\"entry.call\":\"Chiamata da altre app\",\"entry.login\":\"All'ingresso dell'utente\",\"entry.main\":\"Menu applicazioni (finestra main)\",\"entry.extPlaceholder\":\"Estensioni: csv, txt\",\"entry.label\":\"Etichetta\",\"cat.blocks.value\":\"Valori\",\"cat.blocks.logic\":\"Logica\",\"cat.blocks.math\":\"Matematica\",\"cat.blocks.text\":\"Testo\",\"cat.blocks.object\":\"Oggetti\",\"cat.blocks.list\":\"Liste\",\"cat.blocks.matrix\":\"Matrici\",\"cat.blocks.units\":\"Unità di misura\",\"cat.blocks.time\":\"Tempo\",\"cat.blocks.console\":\"Console\",\"cat.blocks.schema\":\"Porte di schema\",\"cat.blocks.ui\":\"Componenti UI\",\"cat.blocks.lilos\":\"lilOS\",\"cat.blocks.net\":\"Rete\",\"cat.blocks.exception\":\"Eccezioni\",\"cat.blocks.other\":\"Altro\",\"cat.components.text\":\"Testo\",\"cat.components.values\":\"Testo e valori\",\"cat.components.commands\":\"Comandi\",\"cat.components.containers\":\"Contenitori\",\"cat.components.charts\":\"Grafici\",\"cat.components.other\":\"Altro\",\"palette.search\":\"Cerca…\",\"palette.empty\":\"Nessun pacchetto installato\",\"palette.noMatch\":\"Non c'è niente\",\"palette.noEngine\":\"Il motore di Logic Studio non risponde\",\"palette.collapse\":\"Comprimi\",\"palette.expand\":\"Espandi\",\"palette.collapseAll\":\"Comprimi tutte\",\"palette.expandAll\":\"Espandi tutte\",\"port.error\":\"Exception\",\"block.missing\":\"Manca il pacchetto\",\"block.missingText\":\"Questo blocco ({type}) viene da un pacchetto che non è installato. Installalo dall'AppStore, o togli il blocco.\",\"limit.blocks\":\"Al massimo {n} blocchi per schema\",\"menu.duplicate\":\"Duplica\",\"menu.label\":\"Etichetta…\",\"menu.labelText\":\"Un nome per questo blocco, che si vede al posto del suo tipo.\",\"menu.openWindow\":\"Apri la sua finestra\",\"menu.removeBlock\":\"Elimina il blocco\",\"menu.removeBlocks\":{\"one\":\"Elimina il blocco\",\"other\":\"Elimina {n} blocchi\"},\"menu.removeLink\":\"Elimina il collegamento\",\"menu.addHere\":\"Aggiungi un blocco qui\",\"menu.selectAll\":\"Seleziona tutto\",\"inspector.title\":\"Proprietà\",\"inspector.nothing\":\"Niente di selezionato\",\"inspector.many\":{\"one\":\"1 blocco selezionato\",\"other\":\"{n} blocchi selezionati\"},\"inspector.links\":{\"one\":\"1 collegamento selezionato\",\"other\":\"{n} collegamenti selezionati\"},\"inspector.schema\":\"Schema\",\"inspector.name\":\"Nome\",\"inspector.blocks\":\"Blocchi\",\"inspector.schemaPorts\":\"Porte di schema\",\"inspector.noSchemaPorts\":\"Nessuna porta: aggiungi un blocco Parametro (ingresso di schema) o Return (uscita di schema) per collegare questo schema agli altri del progetto.\",\"inspector.schemaHint\":\"Gli schemi di un progetto si collegano solo con le loro porte di schema, nella mappa.\",\"inspector.label\":\"Etichetta\",\"inspector.settings\":\"Impostazioni\",\"inspector.ports\":\"Porte\",\"inspector.block\":\"Blocco\",\"inspector.inputs\":\"Ingressi\",\"inspector.outputs\":\"Uscite\",\"inspector.addInput\":\"Aggiungi ingresso\",\"inspector.addOutput\":\"Aggiungi uscita\",\"inspector.addedCount\":\"Aggiunte: {n} di {max}\",\"inspector.basePort\":\"Porta di base: non si toglie\",\"inspector.ofComponent\":\"della componente\",\"inspector.up\":\"Sposta su\",\"inspector.down\":\"Sposta giù\",\"inspector.removePort\":\"Togli\",\"inspector.hidePort\":\"Nascondi nel disegno\",\"inspector.showPort\":\"Mostra nel disegno\",\"inspector.linkedPort\":\"Collegata: non si può nascondere\",\"inspector.starts\":\"lo avvia\",\"inspector.startValue\":\"iniziale\",\"inspector.removeQ\":\"Togliere la porta «{name}»?\",\"inspector.removeLinks\":{\"one\":\"Ha 1 collegamento, che viene tolto. Ctrl+Z li rimette.\",\"other\":\"Ha {n} collegamenti, che vengono tolti. Ctrl+Z li rimette.\"},\"inspector.aloneHint\":\"In un progetto, questa porta si collega agli altri schemi nella mappa.\",\"inspector.projectLinks\":\"Collegamenti nel progetto\",\"inspector.noProjectLinks\":\"Non ancora collegata: collegala nella mappa.\",\"inspector.unlink\":\"Scollega\",\"inspector.inMap\":\"Nella mappa\",\"inspector.component\":\"Componente UI\",\"inspector.componentAlone\":\"Uno schema da solo non ha finestre.\",\"inspector.window\":\"Finestra\",\"inspector.componentName\":\"Componente\",\"type.number\":\"numero\",\"opt.type.number\":\"numero\",\"type.bool\":\"sì/no\",\"opt.type.bool\":\"sì/no\",\"type.text\":\"testo\",\"opt.type.text\":\"testo\",\"type.object\":\"oggetto\",\"opt.type.object\":\"oggetto\",\"type.list\":\"lista\",\"opt.type.list\":\"lista\",\"type.matrix\":\"matrice\",\"opt.type.matrix\":\"matrice\",\"type.any\":\"qualsiasi\",\"opt.type.any\":\"qualsiasi\",\"type.pulse\":\"impulso\",\"opt.type.pulse\":\"impulso\",\"opt.op.eq\":\"a = b\",\"opt.op.ne\":\"a ≠ b\",\"opt.op.gt\":\"a > b\",\"opt.op.ge\":\"a ≥ b\",\"opt.op.lt\":\"a < b\",\"opt.op.le\":\"a ≤ b\",\"opt.op.min\":\"minimo\",\"opt.op.max\":\"massimo\",\"opt.op.avg\":\"media\",\"opt.op.abs\":\"valore assoluto\",\"opt.op.round\":\"arrotonda\",\"opt.op.floor\":\"arrotonda per difetto\",\"opt.op.ceil\":\"arrotonda per eccesso\",\"opt.op.sqrt\":\"radice quadrata\",\"opt.op.neg\":\"cambia segno\",\"opt.op.sin\":\"seno\",\"opt.op.cos\":\"coseno\",\"opt.op.log\":\"logaritmo naturale\",\"opt.op.exp\":\"esponenziale\",\"opt.op.upper\":\"MAIUSCOLO\",\"opt.op.lower\":\"minuscolo\",\"opt.op.trim\":\"togli gli spazi ai lati\",\"opt.op.length\":\"lunghezza\",\"opt.op.contains\":\"contiene\",\"opt.op.replace\":\"sostituisci\",\"opt.op.sum\":\"somma\",\"opt.level.normal\":\"normale\",\"opt.level.info\":\"informazione\",\"opt.level.warning\":\"avviso\",\"opt.level.error\":\"errore\",\"opt.format.text\":\"testo\",\"opt.format.json\":\"JSON leggibile\",\"opt.kind.number\":\"numero\",\"opt.kind.text\":\"testo\",\"opt.kind.bool\":\"sì/no\",\"opt.kind.json\":\"JSON\",\"opt.kind.key\":\"un tasto\",\"opt.to.number\":\"numero\",\"opt.to.text\":\"testo\",\"opt.to.bool\":\"sì/no\",\"opt.to.json\":\"testo JSON\",\"opt.to.parse\":\"da testo JSON\",\"opt.order.asc\":\"crescente\",\"opt.order.desc\":\"decrescente\",\"opt.where.append\":\"in fondo\",\"opt.where.prepend\":\"all'inizio\",\"kind.text\":\"testo\",\"kind.number\":\"numero\",\"kind.bool\":\"sì/no\",\"kind.key\":\"un tasto\",\"kind.test\":\"Prova\",\"kind.active\":\"Attivo\",\"state.starting\":\"Si avvia\",\"state.running\":\"In esecuzione\",\"state.stopped\":\"Fermo\",\"state.failed\":\"Fermo per un errore\",\"state.waiting\":\"Aspetta un pacchetto\",\"console.main\":\"Principale\",\"console.mainHint\":\"La console principale: c'è sempre e riceve le eccezioni che nessun blocco gestisce\",\"console.asking\":\"Aspetta una risposta\",\"console.detach\":\"Stacca\",\"console.expand\":\"Mostra il pannello\",\"console.collapse\":\"Nascondi il pannello\",\"console.add\":\"Nuova console\",\"console.idle\":\"Prova il progetto per vedere qui le sue console.\",\"console.hint\":\"Invio manda · Esc annulla\",\"console.windowTitle\":\"Console {name}\",\"problems.title\":\"Problemi\",\"problems.none\":\"Nessun problema\",\"problems.missingBlock\":\"Il blocco {block} ({type}) viene da un pacchetto che non è installato\",\"problems.noWindow\":\"Il blocco {block} rappresenta una componente della finestra «{window}», che non c'è\",\"problems.noComponent\":\"Il blocco {block} rappresenta la componente «{component}», che non c'è\",\"problems.noPortName\":\"Una porta di schema non ha nome\",\"problems.noMain\":\"Il progetto ha finestre ma nessuna finestra main\",\"run.testing\":\"Prova in corso {time}\",\"run.saveFirst\":\"Salvare prima di attivare?\",\"run.saveFirstText\":\"Un programma attivo fa girare il progetto salvato.\",\"run.alreadyActive\":\"«{name}» è già attivo\",\"run.alreadyActiveText\":\"Il programma attivo si ferma e riparte con il progetto com'è adesso.\",\"run.replace\":\"Sostituisci\",\"run.activated\":\"«{name}» è attivo\",\"run.activatedText\":\"Gira in lilOS anche con questa finestra e lilOS chiusi, finché non lo fermi dalla Home.\",\"home.intro\":\"Blocchi logici collegati tra loro: i dati passano sui collegamenti e ogni blocco ci fa qualcosa. Un progetto riunisce schemi e finestre; il motore lo fa girare in lilOS.\",\"home.new\":\"Nuovo progetto\",\"home.open\":\"Apri…\",\"home.recent\":\"Recenti\",\"home.noRecent\":\"Nessun progetto aperto finora\",\"home.programs\":\"I miei programmi\",\"home.noPrograms\":\"Niente in esecuzione: prova un progetto, o attivalo\",\"home.noEngine\":\"Il motore di Logic Studio (modulo logicstudio-engine) non è installato o non risponde.\",\"home.appstore\":\"Apri l'AppStore\",\"home.colName\":\"Programma\",\"home.colKind\":\"Tipo\",\"home.colState\":\"Stato\",\"home.colSince\":\"Da\",\"home.openProject\":\"Apri il progetto\",\"home.stop\":\"Ferma\",\"home.forget\":\"Togli\",\"home.stopQ\":\"Fermare «{name}»?\",\"home.stopText\":\"Non riparte con lilOS finché non lo attivi di nuovo.\",\"home.usage\":\"Quello che uso\",\"usage.active\":\"Programmi attivi\",\"usage.tests\":\"Prove\",\"usage.net\":\"Richieste di rete in questo minuto\",\"usage.log\":\"Registro\",\"usage.cpuMem\":\"Al massimo il {cpu}% della CPU e {mem} MB di memoria per tutti i miei programmi.\",\"map.objectsIn\":\"{n} componenti · oggetti in {list}\",\"map.noObjects\":\"{n} componenti · nessun oggetto negli schemi\",\"map.project\":\"Progetto\",\"map.main\":\"Finestra main\",\"map.links\":\"Collegamenti tra schemi\",\"map.noLinks\":\"Nessun collegamento\",\"map.hint\":\"Trascina da un'uscita di uno schema a un ingresso di un altro per collegarli. Le finestre si raggiungono con gli oggetti delle loro componenti negli schemi.\",\"options.title\":\"Opzioni del progetto\",\"options.general\":\"Generale\",\"options.windows\":\"Finestre\",\"options.consoles\":\"Console\",\"options.app\":\"L'app e le sue finestre\",\"options.name\":\"Nome\",\"options.version\":\"Versione\",\"options.versionHint\":\"Tre numeri: 1.0.0\",\"options.description\":\"Descrizione\",\"options.windowsHint\":\"Le finestre del progetto le apre lilOS. La finestra main è obbligatoria: si apre dal menu applicazioni.\",\"options.noWindows\":\"Il progetto non ha ancora finestre.\",\"options.main\":\"Finestra main\",\"options.mainHint\":\"Si cambia, non si toglie.\",\"options.window\":\"Finestra\",\"options.opensFrom\":\"Si apre da\",\"options.unlinkedHint\":\"Una finestra senza punto d'ingresso si apre solo da un'altra finestra dell'app (un pulsante con «Apri una finestra»).\",\"options.consoleList\":\"Console del progetto\",\"options.consoleName\":\"Nome\",\"options.color\":\"Colore\",\"options.keep\":\"Righe tenute\",\"options.mainConsole\":\"fissa: si rinomina, non si toglie\",\"options.remove\":\"Togli\",\"options.removeHint\":\"Togliendo una console, i suoi blocchi passano alla principale.\",\"options.newConsole\":\"Console {n}\",\"options.removeConsoleQ\":\"Togliere la console «{name}»?\",\"options.outside\":\"Fuori dall'IDE\",\"outside.all\":\"Mostrale tutte\",\"outside.all.hint\":\"ogni console si apre in una finestra quando parte il progetto\",\"outside.onInput\":\"Solo quando chiedono un dato\",\"outside.onInput.hint\":\"una console si apre quando un blocco Input (readline) aspetta\",\"outside.hidden\":\"Non mostrarle\",\"outside.hidden.hint\":\"niente sullo schermo: le righe vanno nel registro come dice «Copia nel registro», le domande prendono il valore predefinito\",\"outside.main\":\"Tutte nella console principale\",\"outside.main.hint\":\"una finestra, ogni riga con il nome della sua console\",\"options.details\":\"Dettagli\",\"options.closeAfter\":\"Chiudi la console dopo la risposta\",\"options.notify\":\"Una notifica quando una console chiede un dato e il progetto non ha finestre aperte\",\"options.copyToLog\":\"Copia nel registro del progetto\",\"log.none\":\"niente\",\"log.warnings\":\"avvisi ed errori\",\"log.all\":\"tutte le righe\",\"options.mainOpens\":\"Con «Tutte nella principale», la principale si apre\",\"mainOpens.start\":\"all'avvio\",\"mainOpens.onInput\":\"quando chiede un dato\",\"options.consoleQuota\":\"Le righe tenute in memoria contano nella tua quota di memoria; quelle copiate nel registro nella quota del registro.\",\"options.appHint\":\"Cosa condividono le finestre del progetto mentre gira: anche nell'app fatta da questo progetto.\",\"options.keepValues\":\"Una finestra riaperta mostra subito gli ultimi valori\",\"options.keepValuesHint\":\"Il motore tiene l'ultimo valore mandato a ogni componente.\",\"options.syncCopies\":\"Le copie della stessa finestra restano allineate\",\"options.syncCopiesHint\":\"La stessa finestra aperta su due dispositivi mostra gli stessi valori; un cambiamento su una si vede sull'altra.\",\"options.commandsHint\":\"Pulsanti, interruttori e cursori mandano qualcosa solo quando qualcuno li usa in una finestra aperta: quando una finestra si apre non viene «ripremuto» niente.\",\"status.window\":\"{n} componenti / {max} · {w} × {h}\",\"window.design\":\"Progetta\",\"window.preview\":\"Anteprima\",\"window.previewOf\":\"Anteprima\",\"window.window\":\"Finestra\",\"window.title\":\"Titolo\",\"window.width\":\"Larghezza (px)\",\"window.height\":\"Altezza (px)\",\"window.resizable\":\"L'utente può ridimensionarla\",\"window.opens\":\"Si apre da\",\"window.hint\":\"Aggiungi le componenti dalla tavolozza a sinistra: un clic la mette nel contenitore selezionato, trascinandola va dove mostra la linea blu.\",\"window.missing\":\"Questa componente ({type}) viene da un pacchetto che non è installato.\",\"window.portsHint\":\"← quello che imposta uno schema, → quello che fa l'utente. Gli schemi raggiungono la componente con il suo oggetto.\",\"window.object\":\"Oggetto nello schema\",\"window.openObject\":\"Aprilo nello schema\",\"window.noObject\":\"Nessuno schema ha ancora il suo oggetto: senza, la componente si vede ma non fa niente.\",\"window.inSchema\":\"Nello schema\",\"window.makeObject\":\"Crea il suo oggetto\",\"window.askTitle\":\"In quale schema va il blocco logico di «{name}»?\",\"window.askText\":\"Ogni componente UI ha il suo oggetto in uno schema: gli altri blocchi di quello schema si collegano a lui. Puoi crearlo anche dopo, in Proprietà.\",\"window.newSchema\":\"Nuovo schema…\",\"window.later\":\"Dopo\",\"window.remove\":\"Elimina la componente\",\"window.removeQ\":\"Eliminare la componente?\",\"window.removeObject\":\"Il suo oggetto nello schema «{schema}» resta lì e segna un errore finché non togli anche quello.\",\"limit.components\":\"Al massimo {n} componenti per finestra\",\"action.none\":\"Niente\",\"action.open\":\"Apri una finestra\",\"action.close\":\"Chiudi questa finestra\",\"action.hint\":\"Manda anche «premuto» al suo oggetto nello schema.\",\"opt.size.small\":\"piccolo\",\"opt.size.normal\":\"normale\",\"opt.size.title\":\"titolo\",\"opt.align.start\":\"inizio\",\"opt.align.center\":\"centro\",\"opt.align.end\":\"fine\",\"opt.align.stretch\":\"tutta la larghezza\",\"opt.variant.primary\":\"principale\",\"opt.variant.normal\":\"normale\",\"opt.variant.danger\":\"pericolo\",\"opt.color.green\":\"verde\",\"opt.color.red\":\"rosso\",\"opt.color.yellow\":\"giallo\",\"opt.color.blue\":\"blu\",\"opt.fit.contain\":\"tutta l'immagine\",\"opt.fit.cover\":\"riempi lo spazio\",\"opt.kind.date\":\"data\",\"opt.kind.time\":\"ora\",\"opt.kind.datetime-local\":\"data e ora\",\"opt.kind.file\":\"un file\",\"opt.kind.folder\":\"una cartella\",\"opt.kind.line\":\"linea\",\"opt.kind.space\":\"spazio\",\"home.openWindow\":\"Apri la finestra\",\"tb.createApp\":\"Crea app…\",\"tb.createAppHint\":\"Fa un'app di lilOS dal progetto, e la esegue\",\"app.title\":\"Crea un'app da «{name}»\",\"app.text\":\"L'app ha le finestre del progetto e usa il motore di questo lilOS. Per ora non si installa: gira dalla sua cartella, solo per te, mentre le sue finestre sono aperte.\",\"app.where\":\"Il pacchetto va in {folder}<id>: apri il suo file .lsapp per eseguirla di nuovo.\",\"app.folder\":\"App create\",\"app.id\":\"Id\",\"app.badId\":\"Lettere minuscole, cifre e -, iniziando con una lettera\",\"app.version\":\"Versione\",\"app.description\":\"Descrizione\",\"app.icon\":\"Icona\",\"app.color\":\"Colore\",\"app.color.green\":\"verde\",\"app.color.blue\":\"blu\",\"app.color.violet\":\"viola\",\"app.color.teal\":\"verde acqua\",\"app.color.orange\":\"arancione\",\"app.color.red\":\"rosso\",\"app.create\":\"Crea\",\"app.createRun\":\"Crea ed esegui\",\"app.needsLilos\":\"Eseguire le app fatte dai progetti richiede lilOS 1.37.0 o successivo\",\"app.done\":\"«{name}» è pronta\",\"app.doneText\":\"Il pacchetto è in {path}. Apri il suo file .lsapp per eseguirla.\",\"app.failed\":\"Non si è potuta creare l'app\",\"app.appName\":\"Nome dell'app\",\"kind.app\":\"App (non installata)\",\"tb.docs\":\"Documentazione\",\"menu.docs\":\"Documentazione\",\"menu.docsSchema\":\"Documentazione dell'editor degli schemi\",\"menu.docsWindow\":\"Documentazione dell'editor delle finestre\",\"menu.openObject\":\"Mostra il suo oggetto nello schema\",\"palette.add\":\"Aggiungi\",\"docs.title\":\"Documentazione di Logic Studio\",\"docs.back\":\"Indietro (Alt+←)\",\"docs.forward\":\"Avanti (Alt+→)\",\"docs.home\":\"Pagina iniziale\",\"docs.search\":\"Cerca nella documentazione\",\"docs.contents\":\"Indice\",\"docs.loading\":\"Caricamento…\",\"docs.failed\":\"Non è stato possibile leggere la pagina: {error}\",\"docs.missingTitle\":\"Pagina non trovata\",\"docs.missingType\":\"«{name}» ({type}) non ha ancora una pagina di documentazione.\",\"docs.missing\":\"Non c'è nessuna pagina all'indirizzo «{address}».\",\"docs.packIndex\":\"Vai alla pagina del pacchetto\",\"docs.ide\":\"Guida dell'IDE\",\"docs.overview\":\"Panoramica\",\"docs.noResults\":\"Nessun risultato.\",\"group.run\":\"Run\",\"group.name\":\"Gruppo\",\"group.blocks\":\"{n} blocchi\",\"group.thread\":\"Thread\",\"group.collapse\":\"Comprimi\",\"group.expand\":\"Espandi\",\"group.runOff\":\"Run non è collegata: i blocchi del gruppo non partono\",\"group.runOn\":\"Run è collegata ({n}): a ogni impulso il gruppo riparte, dai blocchi che partono da soli (come Valore)\",\"group.runInside\":\"Dentro il gruppo, Run manda il suo impulso a {n} porte\",\"group.make\":\"Raggruppa\",\"group.addTo\":\"Aggiungi al gruppo\",\"group.takeOut\":\"Togli dal gruppo\",\"group.rename\":\"Rinomina il gruppo\",\"group.threadToggle\":\"Esegui in un thread a parte\",\"group.ungroup\":\"Sciogli il gruppo\",\"group.remove\":\"Elimina il gruppo e i suoi blocchi\",\"group.manySel\":\"{blocks} blocchi e {groups} gruppi selezionati\",\"group.collapsedField\":\"Compresso in un blocco\",\"group.threadField\":\"Esegui in un thread a parte\",\"group.threadHint\":\"I blocchi del gruppo girano a parte dal resto del programma: un blocco lento non rallenta gli altri. Ogni thread ha metà della tua quota di memoria.\",\"group.threadNo\":\"Ingressi e Uscite di schema e oggetti della UI non possono stare in un gruppo con un thread a parte: il motore rifiuta lo schema.\",\"group.exposed\":\"Porte esposte\",\"group.noExposed\":\"Nessuna porta esposta: niente fuori dal gruppo raggiunge i suoi blocchi.\",\"group.exposeHint\":\"Per esporre una porta collegala da fuori del gruppo, oppure usa il pulsante accanto al suo occhio nelle proprietà del blocco.\",\"group.expose\":\"Esponi fuori dal gruppo\",\"group.unexpose\":\"Non esporre\",\"group.unexposeQ\":\"Non esporre più «{name}»?\",\"group.inGroup\":\"Nel gruppo «{name}»\",\"group.show\":\"Mostra il gruppo\"}}")
-}), { t: k } = O, A = Object.freeze([
+var D = le("logicstudio", {
+	en: /* @__PURE__ */ JSON.parse("{\"strings\":{\"@name\":\"Logic Studio IDE\",\"@description\":\"Logic blocks linked together, as in OpenBack: schemas, projects with windows made of UI components, consoles. The engine runs them in lilOS, also with lilOS closed.\",\"app.name\":\"Logic Studio IDE\",\"tabs.label\":\"Open editors\",\"tabs.home\":\"Home\",\"tabs.map\":\"{name} · Map\",\"left.project\":\"Project\",\"left.blocks\":\"Blocks\",\"left.components\":\"Components\",\"left.resize\":\"Resize the panel\",\"common.save\":\"Save\",\"common.create\":\"Create\",\"common.ok\":\"OK\",\"tb.save\":\"Save\",\"tb.undo\":\"Undo (Ctrl+Z)\",\"tb.redo\":\"Redo (Ctrl+Y)\",\"tb.test\":\"Test\",\"tb.stop\":\"Stop\",\"tb.activate\":\"Activate\",\"tb.activateHint\":\"Run the saved project as an active program: it goes on with lilOS closed\",\"tb.map\":\"Map\",\"tb.home\":\"Home\",\"empty.text\":\"No open tabs.\",\"tb.options\":\"Project options\",\"tb.fit\":\"Fit\",\"tb.zoomIn\":\"Zoom in\",\"tb.zoomOut\":\"Zoom out\",\"tb.zoomReset\":\"Actual size\",\"tb.align\":\"Align\",\"tb.alignHint\":\"Line up the selected blocks, horizontally or vertically (select at least 2)\",\"align.left\":\"Left edges\",\"align.center\":\"Centres (horizontally)\",\"align.right\":\"Right edges\",\"align.spreadX\":\"Spread horizontally\",\"align.top\":\"Top edges\",\"align.middle\":\"Middles (vertically)\",\"align.bottom\":\"Bottom edges\",\"align.spreadY\":\"Spread vertically\",\"status.engine\":\"Logic Studio Engine · {n} packages\",\"status.noEngine\":\"The engine does not answer\",\"status.project\":\"Project {name}\",\"status.single\":\"A schema alone\",\"status.schema\":\"Blocks {blocks} / {maxBlocks} · links {links} / {maxLinks} · {zoom}%\",\"status.map\":\"{schemas} schemas · {windows} windows · {links} links between schemas\",\"open.uiAlone\":\"This window is not in a project\",\"open.uiAloneText\":\"A window (.lsui) opens with its project: no .lsproj was found in its folder or above.\",\"open.failed\":\"It could not be opened\",\"open.pick\":\"Open a project or a schema\",\"new.title\":\"New project\",\"new.text\":\"The project is a folder in «{folder}», with the folders schemi, ui and risorse.\",\"new.folder\":\"Logic Studio\",\"new.name\":\"Name\",\"new.default\":\"My project\",\"new.create\":\"Create\",\"close.unsaved\":\"«{name}» has changes not saved\",\"close.unsavedText\":\"If you do not save them, they are lost.\",\"close.discard\":\"Do not save\",\"close.project\":\"The project «{name}» has changes not saved\",\"close.saveAll\":\"Save all\",\"save.failed\":\"Saving failed\",\"ws.gone\":\"The file is not there any more\",\"ws.notLogic\":\"It is not a project (.lsproj) or a schema (.lsch) of Logic Studio\",\"ws.noName\":\"The project needs a name\",\"ws.missingFile\":\"The file {path} is missing\",\"ws.nameTaken\":\"The project already has an element called «{name}»\",\"ws.newFolder\":\"New folder\",\"explorer.none\":\"Open or create a project from Home.\",\"group.schemas\":\"Schemas\",\"group.windows\":\"Windows\",\"group.resources\":\"Resources\",\"explorer.new.schemas\":\"New schema\",\"explorer.new.windows\":\"New window\",\"explorer.new.resources\":\"Add a resource\",\"explorer.newFolder\":\"New folder\",\"explorer.open\":\"Open\",\"explorer.rename\":\"Rename\",\"explorer.remove\":\"Remove\",\"explorer.makeMain\":\"Make it the main window\",\"explorer.main\":\"Main window: opens from the apps menu\",\"explorer.unsaved\":\"Not saved\",\"explorer.name\":\"Name\",\"explorer.badName\":\"A name without / \\\\ : * ? \\\" < > |\",\"explorer.failed\":\"It could not be done\",\"explorer.removeItem\":\"Remove «{name}»?\",\"explorer.removeItemText\":\"It goes to the trash. Its links in the project are removed.\",\"explorer.removeFolder\":\"Remove the folder «{name}»?\",\"explorer.removeFolderText\":\"It goes to the trash with everything inside.\",\"entry.none\":\"Opens only from other windows of the app\",\"entry.file\":\"Opens a type of file\",\"entry.action\":\"Item in the menu of files\",\"entry.call\":\"Called by other apps\",\"entry.login\":\"When the user signs in\",\"entry.main\":\"Apps menu (main window)\",\"entry.extPlaceholder\":\"Extensions: csv, txt\",\"entry.label\":\"Label\",\"cat.blocks.value\":\"Values\",\"cat.blocks.logic\":\"Logic\",\"cat.blocks.math\":\"Math\",\"cat.blocks.text\":\"Text\",\"cat.blocks.object\":\"Objects\",\"cat.blocks.list\":\"Lists\",\"cat.blocks.matrix\":\"Matrices\",\"cat.blocks.units\":\"Units\",\"cat.blocks.signal\":\"Signals\",\"cat.blocks.time\":\"Time\",\"cat.blocks.console\":\"Console\",\"cat.blocks.schema\":\"Schema ports\",\"cat.blocks.ui\":\"UI components\",\"cat.blocks.lilos\":\"lilOS\",\"cat.blocks.net\":\"Network\",\"cat.blocks.exception\":\"Exceptions\",\"cat.blocks.other\":\"Other\",\"cat.components.text\":\"Text\",\"cat.components.values\":\"Text and values\",\"cat.components.commands\":\"Commands\",\"cat.components.containers\":\"Containers\",\"cat.components.charts\":\"Charts\",\"cat.components.other\":\"Other\",\"palette.search\":\"Search…\",\"palette.empty\":\"No package installed\",\"palette.noMatch\":\"Nothing found\",\"palette.noEngine\":\"The engine of Logic Studio does not answer\",\"palette.collapse\":\"Collapse\",\"palette.expand\":\"Expand\",\"palette.collapseAll\":\"Collapse all\",\"palette.expandAll\":\"Expand all\",\"port.error\":\"Exception\",\"block.missing\":\"The package is missing\",\"block.missingText\":\"This block ({type}) comes from a package that is not installed. Install it from the AppStore, or remove the block.\",\"limit.blocks\":\"At most {n} blocks per schema\",\"menu.duplicate\":\"Duplicate\",\"menu.label\":\"Label…\",\"menu.labelText\":\"A name for this block, shown on it instead of its kind.\",\"menu.openWindow\":\"Open its window\",\"menu.removeBlock\":\"Remove the block\",\"menu.removeBlocks\":{\"one\":\"Remove the block\",\"other\":\"Remove {n} blocks\"},\"menu.removeLink\":\"Remove the link\",\"menu.addHere\":\"Add a block here\",\"menu.selectAll\":\"Select all\",\"inspector.title\":\"Properties\",\"inspector.nothing\":\"Nothing selected\",\"inspector.many\":{\"one\":\"1 block selected\",\"other\":\"{n} blocks selected\"},\"inspector.links\":{\"one\":\"1 link selected\",\"other\":\"{n} links selected\"},\"inspector.schema\":\"Schema\",\"inspector.name\":\"Name\",\"inspector.blocks\":\"Blocks\",\"inspector.schemaPorts\":\"Schema ports\",\"inspector.noSchemaPorts\":\"No ports: add a Parameter (schema input) or Return (schema output) block to link this schema to the others of the project.\",\"inspector.schemaHint\":\"Schemas of a project are linked only through their schema ports, in the map.\",\"inspector.label\":\"Label\",\"inspector.settings\":\"Settings\",\"inspector.ports\":\"Ports\",\"inspector.block\":\"Block\",\"inspector.inputs\":\"Inputs\",\"inspector.outputs\":\"Outputs\",\"inspector.addInput\":\"Add input\",\"inspector.addOutput\":\"Add output\",\"inspector.addedCount\":\"Added: {n} of {max}\",\"inspector.basePort\":\"Base port: it cannot be removed\",\"inspector.ofComponent\":\"of the component\",\"inspector.up\":\"Move up\",\"inspector.down\":\"Move down\",\"inspector.removePort\":\"Remove\",\"inspector.hidePort\":\"Hide on the drawing\",\"inspector.showPort\":\"Show on the drawing\",\"inspector.linkedPort\":\"Linked: it cannot be hidden\",\"inspector.starts\":\"starts it\",\"inspector.startValue\":\"at start\",\"inspector.removeQ\":\"Remove the port «{name}»?\",\"inspector.removeLinks\":{\"one\":\"It has 1 link, which is removed too. Ctrl+Z puts them back.\",\"other\":\"It has {n} links, which are removed too. Ctrl+Z puts them back.\"},\"inspector.aloneHint\":\"In a project, this port can be linked to other schemas in the map.\",\"inspector.projectLinks\":\"Links in the project\",\"inspector.noProjectLinks\":\"Not linked yet: link it in the map.\",\"inspector.unlink\":\"Unlink\",\"inspector.inMap\":\"In the map\",\"inspector.component\":\"UI component\",\"inspector.componentAlone\":\"A schema alone has no windows.\",\"inspector.window\":\"Window\",\"inspector.componentName\":\"Component\",\"type.number\":\"number\",\"opt.type.number\":\"number\",\"type.bool\":\"yes/no\",\"opt.type.bool\":\"yes/no\",\"type.text\":\"text\",\"opt.type.text\":\"text\",\"type.object\":\"object\",\"opt.type.object\":\"object\",\"type.list\":\"list\",\"opt.type.list\":\"list\",\"type.matrix\":\"matrix\",\"opt.type.matrix\":\"matrix\",\"type.any\":\"any\",\"opt.type.any\":\"any\",\"type.pulse\":\"pulse\",\"opt.type.pulse\":\"pulse\",\"opt.op.eq\":\"a = b\",\"opt.op.ne\":\"a ≠ b\",\"opt.op.gt\":\"a > b\",\"opt.op.ge\":\"a ≥ b\",\"opt.op.lt\":\"a < b\",\"opt.op.le\":\"a ≤ b\",\"opt.op.min\":\"minimum\",\"opt.op.max\":\"maximum\",\"opt.op.avg\":\"average\",\"opt.op.abs\":\"absolute value\",\"opt.op.round\":\"round\",\"opt.op.floor\":\"round down\",\"opt.op.ceil\":\"round up\",\"opt.op.sqrt\":\"square root\",\"opt.op.neg\":\"change sign\",\"opt.op.sin\":\"sine\",\"opt.op.cos\":\"cosine\",\"opt.op.log\":\"natural log\",\"opt.op.exp\":\"exponential\",\"opt.op.upper\":\"UPPER CASE\",\"opt.op.lower\":\"lower case\",\"opt.op.trim\":\"trim spaces\",\"opt.op.length\":\"length\",\"opt.op.contains\":\"contains\",\"opt.op.replace\":\"replace\",\"opt.op.sum\":\"sum\",\"opt.level.normal\":\"normal\",\"opt.level.info\":\"information\",\"opt.level.warning\":\"warning\",\"opt.level.error\":\"error\",\"opt.format.text\":\"text\",\"opt.format.json\":\"readable JSON\",\"opt.kind.number\":\"number\",\"opt.kind.text\":\"text\",\"opt.kind.bool\":\"yes/no\",\"opt.kind.json\":\"JSON\",\"opt.kind.key\":\"a key\",\"opt.to.number\":\"number\",\"opt.to.text\":\"text\",\"opt.to.bool\":\"yes/no\",\"opt.to.json\":\"JSON text\",\"opt.to.parse\":\"from JSON text\",\"opt.order.asc\":\"ascending\",\"opt.order.desc\":\"descending\",\"opt.where.append\":\"at the end\",\"opt.where.prepend\":\"at the start\",\"kind.text\":\"text\",\"kind.number\":\"number\",\"kind.bool\":\"yes/no\",\"kind.key\":\"a key\",\"kind.test\":\"Test\",\"kind.active\":\"Active\",\"state.starting\":\"Starting\",\"state.running\":\"Running\",\"state.stopped\":\"Stopped\",\"state.failed\":\"Stopped by an error\",\"state.waiting\":\"Waiting for a package\",\"console.main\":\"Main\",\"console.mainHint\":\"The main console: it is always there and gets the exceptions no block handles\",\"console.asking\":\"Waiting for an answer\",\"console.detach\":\"Detach\",\"console.expand\":\"Show the panel\",\"console.collapse\":\"Hide the panel\",\"console.add\":\"New console\",\"console.idle\":\"Test the project to see its consoles here.\",\"console.hint\":\"Enter sends · Esc cancels\",\"console.windowTitle\":\"Console {name}\",\"problems.title\":\"Problems\",\"problems.none\":\"No problems\",\"problems.missingBlock\":\"The block {block} ({type}) comes from a package that is not installed\",\"problems.noWindow\":\"The block {block} stands for a component of the window «{window}», which is not there\",\"problems.noComponent\":\"The block {block} stands for the component «{component}», which is not there\",\"problems.noPortName\":\"A schema port has no name\",\"problems.noMain\":\"The project has windows but no main window\",\"run.testing\":\"Testing {time}\",\"run.saveFirst\":\"Save before activating?\",\"run.saveFirstText\":\"An active program runs the saved project.\",\"run.alreadyActive\":\"«{name}» is already active\",\"run.alreadyActiveText\":\"The active program stops and starts again with the project as it is now.\",\"run.replace\":\"Replace\",\"run.activated\":\"«{name}» is active\",\"run.activatedText\":\"It runs in lilOS also with this window and lilOS closed, until you stop it from Home.\",\"home.intro\":\"Logic blocks linked together: data go along the links and each block does something with them. A project groups schemas and windows; the engine runs it in lilOS.\",\"home.new\":\"New project\",\"home.open\":\"Open…\",\"home.recent\":\"Recent\",\"home.noRecent\":\"No project opened yet\",\"home.programs\":\"My programs\",\"home.noPrograms\":\"Nothing running: test a project, or activate it\",\"home.noEngine\":\"The engine of Logic Studio (module logicstudio-engine) is not installed or does not answer.\",\"home.appstore\":\"Open the AppStore\",\"home.colName\":\"Program\",\"home.colKind\":\"Kind\",\"home.colState\":\"State\",\"home.colSince\":\"Since\",\"home.openProject\":\"Open the project\",\"home.stop\":\"Stop\",\"home.forget\":\"Remove\",\"home.stopQ\":\"Stop «{name}»?\",\"home.stopText\":\"It does not start again with lilOS until you activate it again.\",\"home.usage\":\"What I use\",\"usage.active\":\"Active programs\",\"usage.tests\":\"Tests\",\"usage.net\":\"Network requests this minute\",\"usage.log\":\"Log\",\"usage.cpuMem\":\"At most {cpu}% of the CPU and {mem} MB of memory for all my programs.\",\"map.objectsIn\":\"{n} components · objects in {list}\",\"map.noObjects\":\"{n} components · no object in the schemas\",\"map.project\":\"Project\",\"map.main\":\"Main window\",\"map.links\":\"Links between schemas\",\"map.noLinks\":\"No links yet\",\"map.hint\":\"Drag from an output of a schema to an input of another to link them. Windows are reached through the objects of their components in the schemas.\",\"options.title\":\"Project options\",\"options.general\":\"General\",\"options.windows\":\"Windows\",\"options.consoles\":\"Consoles\",\"options.app\":\"The app and its windows\",\"options.name\":\"Name\",\"options.version\":\"Version\",\"options.versionHint\":\"Three numbers: 1.0.0\",\"options.description\":\"Description\",\"options.windowsHint\":\"lilOS opens the windows of the project. The main window is required: it opens from the apps menu.\",\"options.noWindows\":\"The project has no windows yet.\",\"options.main\":\"Main window\",\"options.mainHint\":\"It can be changed, never removed.\",\"options.window\":\"Window\",\"options.opensFrom\":\"Opens from\",\"options.unlinkedHint\":\"A window with no entry point opens only from another window of the app (a button with «Open a window»).\",\"options.consoleList\":\"Consoles of the project\",\"options.consoleName\":\"Name\",\"options.color\":\"Color\",\"options.keep\":\"Lines kept\",\"options.mainConsole\":\"fixed: renamed, never removed\",\"options.remove\":\"Remove\",\"options.removeHint\":\"Removing a console, its blocks write to the main one.\",\"options.newConsole\":\"Console {n}\",\"options.removeConsoleQ\":\"Remove the console «{name}»?\",\"options.outside\":\"Outside the IDE\",\"outside.all\":\"Show them all\",\"outside.all.hint\":\"each console opens in a window when the project starts\",\"outside.onInput\":\"Only when they ask for something\",\"outside.onInput.hint\":\"a console opens when an Input (readline) block waits\",\"outside.hidden\":\"Do not show them\",\"outside.hidden.hint\":\"nothing on screen: lines go to the log as «Copy to the log» says, questions get their default value\",\"outside.main\":\"All in the main console\",\"outside.main.hint\":\"one window, each line with the name of its console\",\"options.details\":\"Details\",\"options.closeAfter\":\"Close the console after the answer\",\"options.notify\":\"A notification when a console asks for something and the project has no windows open\",\"options.copyToLog\":\"Copy to the log of the project\",\"log.none\":\"nothing\",\"log.warnings\":\"warnings and errors\",\"log.all\":\"every line\",\"options.mainOpens\":\"With «All in the main console», the main one opens\",\"mainOpens.start\":\"when the project starts\",\"mainOpens.onInput\":\"when it asks for something\",\"options.consoleQuota\":\"Lines kept in memory count in your memory quota; lines copied to the log count in your log quota.\",\"options.appHint\":\"What the windows of the project share while it runs: also in the app made from it.\",\"options.keepValues\":\"A window opened again shows the last values at once\",\"options.keepValuesHint\":\"The engine keeps the last value sent to each component.\",\"options.syncCopies\":\"Copies of the same window stay in step\",\"options.syncCopiesHint\":\"The same window open on two devices shows the same values; a change on one shows on the other.\",\"options.commandsHint\":\"Buttons, switches and sliders send something only when someone uses them in an open window: nothing is pressed again when a window opens.\",\"status.window\":\"{n} components / {max} · {w} × {h}\",\"window.design\":\"Design\",\"window.preview\":\"Preview\",\"window.previewOf\":\"Preview\",\"window.window\":\"Window\",\"window.title\":\"Title\",\"window.width\":\"Width (px)\",\"window.height\":\"Height (px)\",\"window.resizable\":\"The user can resize it\",\"window.resize\":\"Drag to resize the window\",\"window.resizeHint\":\"Or drag the right edge, the bottom edge or the corner of the window. The size is that of its content, without the title bar.\",\"window.opening\":\"When it opens\",\"window.state\":\"State\",\"window.state.normal\":\"Normal\",\"window.state.maximized\":\"Maximized\",\"window.modal\":\"Dialog\",\"window.modalHint\":\"While it is open, the other windows of the app opened before it cannot be used: a click on them brings this one forward.\",\"window.onTop\":\"Always on top\",\"window.flag.modal\":\"Dialog\",\"window.flag.onTop\":\"On top\",\"window.opens\":\"Opens from\",\"window.hint\":\"Add components from the palette on the left: a click puts it into the container selected, dragging puts it where the blue line shows.\",\"window.missing\":\"This component ({type}) comes from a package that is not installed.\",\"window.portsHint\":\"← what a schema sets, → what the user does. The schemas reach the component through its object.\",\"window.object\":\"Object in a schema\",\"window.openObject\":\"Open it in the schema\",\"window.noObject\":\"No schema has its object yet: without it the component shows and does nothing.\",\"window.inSchema\":\"In the schema\",\"window.makeObject\":\"Make its object\",\"window.askTitle\":\"Where does the logic block of «{name}» go?\",\"window.askText\":\"Every UI component has its object in a schema: the other blocks of that schema link to it. You can also make it later in Properties.\",\"window.newSchema\":\"New schema…\",\"window.later\":\"Later\",\"window.remove\":\"Remove the component\",\"window.removeQ\":\"Remove the component?\",\"window.removeObject\":\"Its object in the schema «{schema}» stays there and shows an error until you remove it too.\",\"limit.components\":\"At most {n} components per window\",\"action.none\":\"Nothing\",\"action.open\":\"Open a window\",\"action.close\":\"Close this window\",\"action.hint\":\"It also sends «pressed» to its object in the schema.\",\"opt.size.small\":\"small\",\"opt.size.normal\":\"normal\",\"opt.size.title\":\"title\",\"opt.align.start\":\"start\",\"opt.align.center\":\"center\",\"opt.align.end\":\"end\",\"opt.align.stretch\":\"stretch\",\"opt.variant.primary\":\"primary\",\"opt.variant.normal\":\"normal\",\"opt.variant.danger\":\"danger\",\"opt.color.green\":\"green\",\"opt.color.red\":\"red\",\"opt.color.yellow\":\"yellow\",\"opt.color.blue\":\"blue\",\"opt.fit.contain\":\"whole image\",\"opt.fit.cover\":\"fill the space\",\"opt.kind.date\":\"date\",\"opt.kind.time\":\"time\",\"opt.kind.datetime-local\":\"date and time\",\"opt.kind.file\":\"a file\",\"opt.kind.folder\":\"a folder\",\"opt.kind.line\":\"line\",\"opt.kind.space\":\"space\",\"home.openWindow\":\"Open its window\",\"tb.createApp\":\"Make app…\",\"tb.createAppHint\":\"Make a lilOS app from the project, and run it\",\"app.title\":\"Make an app from «{name}»\",\"app.text\":\"The app has the windows of the project and uses the engine of this lilOS. For now it is not installed: it runs from its folder, only for you, while its windows are open.\",\"app.where\":\"The package goes into {folder}<id>: open its .lsapp file to run it again.\",\"app.folder\":\"Apps made\",\"app.id\":\"Id\",\"app.badId\":\"Lower-case letters, digits and -, starting with a letter\",\"app.version\":\"Version\",\"app.description\":\"Description\",\"app.icon\":\"Icon\",\"app.color\":\"Color\",\"app.color.green\":\"green\",\"app.color.blue\":\"blue\",\"app.color.violet\":\"violet\",\"app.color.teal\":\"teal\",\"app.color.orange\":\"orange\",\"app.color.red\":\"red\",\"app.create\":\"Make\",\"app.createRun\":\"Make and run\",\"app.needsLilos\":\"Running apps made from projects needs lilOS 1.37.0 or later\",\"app.done\":\"«{name}» is ready\",\"app.doneText\":\"The package is in {path}. Open its .lsapp file to run it.\",\"app.failed\":\"The app could not be made\",\"app.appName\":\"Name of the app\",\"kind.app\":\"App (not installed)\",\"tb.docs\":\"Documentation\",\"menu.docs\":\"Documentation\",\"menu.docsSchema\":\"Documentation of the schema editor\",\"menu.docsWindow\":\"Documentation of the window editor\",\"menu.openObject\":\"Show its object in the schema\",\"palette.add\":\"Add\",\"docs.title\":\"Logic Studio documentation\",\"docs.back\":\"Back (Alt+←)\",\"docs.forward\":\"Forward (Alt+→)\",\"docs.home\":\"Start page\",\"docs.search\":\"Search the documentation\",\"docs.contents\":\"Contents\",\"docs.loading\":\"Loading…\",\"docs.failed\":\"The page could not be read: {error}\",\"docs.missingTitle\":\"Page not found\",\"docs.missingType\":\"«{name}» ({type}) has no documentation page yet.\",\"docs.missing\":\"There is no page at «{address}».\",\"docs.packIndex\":\"Go to the package's page\",\"docs.ide\":\"Guide to the IDE\",\"docs.overview\":\"Overview\",\"docs.noResults\":\"Nothing found.\",\"group.run\":\"Run\",\"group.name\":\"Group\",\"group.blocks\":\"{n} blocks\",\"group.thread\":\"Thread\",\"group.collapse\":\"Collapse\",\"group.expand\":\"Expand\",\"group.runOff\":\"Nothing is linked to Run: the blocks of the group do not start\",\"group.runOn\":\"Run is linked ({n}): at every pulse the group starts again, from its blocks that go by themselves (such as Value)\",\"group.runInside\":\"Inside the group, Run sends its pulse to {n} ports\",\"group.make\":\"Group\",\"group.addTo\":\"Add to group\",\"group.takeOut\":\"Take out of the group\",\"group.rename\":\"Rename group\",\"group.threadToggle\":\"Run in a thread of its own\",\"group.ungroup\":\"Ungroup\",\"group.remove\":\"Remove the group and its blocks\",\"group.manySel\":\"{blocks} blocks and {groups} groups selected\",\"group.collapsedField\":\"Collapsed into one block\",\"group.threadField\":\"Run in a thread of its own\",\"group.threadHint\":\"The blocks of the group run apart from the rest of the program: a slow block does not slow down the others. Each thread has half of your memory quota.\",\"group.threadNo\":\"Schema inputs and outputs and UI objects cannot be in a group with a thread of its own: the engine refuses the schema.\",\"group.exposed\":\"Exposed ports\",\"group.noExposed\":\"No port exposed: nothing outside the group reaches its blocks.\",\"group.exposeHint\":\"To expose a port, link it from outside the group, or use the button beside its eye in the properties of the block.\",\"group.expose\":\"Expose outside the group\",\"group.unexpose\":\"Do not expose\",\"group.unexposeQ\":\"Stop exposing «{name}»?\",\"group.inGroup\":\"In the group «{name}»\",\"group.show\":\"Show the group\"}}"),
+	it: /* @__PURE__ */ JSON.parse("{\"strings\":{\"@name\":\"Logic Studio IDE\",\"@description\":\"Blocchi logici collegati tra loro, come in OpenBack: schemi, progetti con finestre fatte di componenti UI, console. Il motore li fa girare in lilOS, anche a lilOS chiuso.\",\"app.name\":\"Logic Studio IDE\",\"tabs.label\":\"Editor aperti\",\"tabs.home\":\"Home\",\"tabs.map\":\"{name} · Mappa\",\"left.project\":\"Progetto\",\"left.blocks\":\"Blocchi\",\"left.components\":\"Componenti\",\"left.resize\":\"Ridimensiona il pannello\",\"common.save\":\"Salva\",\"common.create\":\"Crea\",\"common.ok\":\"OK\",\"tb.save\":\"Salva\",\"tb.undo\":\"Annulla (Ctrl+Z)\",\"tb.redo\":\"Ripeti (Ctrl+Y)\",\"tb.test\":\"Prova\",\"tb.stop\":\"Ferma\",\"tb.activate\":\"Attiva\",\"tb.activateHint\":\"Fa girare il progetto salvato come programma attivo: va avanti anche a lilOS chiuso\",\"tb.map\":\"Mappa\",\"tb.home\":\"Home\",\"empty.text\":\"Nessuna scheda aperta.\",\"tb.options\":\"Opzioni del progetto\",\"tb.fit\":\"Adatta\",\"tb.zoomIn\":\"Ingrandisci\",\"tb.zoomOut\":\"Rimpicciolisci\",\"tb.zoomReset\":\"Dimensione reale\",\"tb.align\":\"Allinea\",\"tb.alignHint\":\"Mette in fila i blocchi selezionati, in orizzontale o in verticale (selezionane almeno 2)\",\"align.left\":\"Bordi a sinistra\",\"align.center\":\"Centri (in orizzontale)\",\"align.right\":\"Bordi a destra\",\"align.spreadX\":\"Distribuisci in orizzontale\",\"align.top\":\"Bordi in alto\",\"align.middle\":\"Centri (in verticale)\",\"align.bottom\":\"Bordi in basso\",\"align.spreadY\":\"Distribuisci in verticale\",\"status.engine\":\"Logic Studio Engine · {n} pacchetti\",\"status.noEngine\":\"Il motore non risponde\",\"status.project\":\"Progetto {name}\",\"status.single\":\"Uno schema da solo\",\"status.schema\":\"Blocchi {blocks} / {maxBlocks} · collegamenti {links} / {maxLinks} · {zoom}%\",\"status.map\":\"{schemas} schemi · {windows} finestre · {links} collegamenti tra schemi\",\"open.uiAlone\":\"Questa finestra non è in un progetto\",\"open.uiAloneText\":\"Una finestra (.lsui) si apre con il suo progetto: nella sua cartella e in quelle sopra non c'è un .lsproj.\",\"open.failed\":\"Non si è potuto aprire\",\"open.pick\":\"Apri un progetto o uno schema\",\"new.title\":\"Nuovo progetto\",\"new.text\":\"Il progetto è una cartella in «{folder}», con le cartelle schemi, ui e risorse.\",\"new.folder\":\"Logic Studio\",\"new.name\":\"Nome\",\"new.default\":\"Il mio progetto\",\"new.create\":\"Crea\",\"close.unsaved\":\"«{name}» ha modifiche non salvate\",\"close.unsavedText\":\"Se non le salvi, si perdono.\",\"close.discard\":\"Non salvare\",\"close.project\":\"Il progetto «{name}» ha modifiche non salvate\",\"close.saveAll\":\"Salva tutto\",\"save.failed\":\"Salvataggio non riuscito\",\"ws.gone\":\"Il file non c'è più\",\"ws.notLogic\":\"Non è un progetto (.lsproj) o uno schema (.lsch) di Logic Studio\",\"ws.noName\":\"Il progetto ha bisogno di un nome\",\"ws.missingFile\":\"Manca il file {path}\",\"ws.nameTaken\":\"Il progetto ha già un elemento che si chiama «{name}»\",\"ws.newFolder\":\"Nuova cartella\",\"explorer.none\":\"Apri o crea un progetto dalla Home.\",\"group.schemas\":\"Schemi\",\"group.windows\":\"Finestre\",\"group.resources\":\"Risorse\",\"explorer.new.schemas\":\"Nuovo schema\",\"explorer.new.windows\":\"Nuova finestra\",\"explorer.new.resources\":\"Aggiungi una risorsa\",\"explorer.newFolder\":\"Nuova cartella\",\"explorer.open\":\"Apri\",\"explorer.rename\":\"Rinomina\",\"explorer.remove\":\"Elimina\",\"explorer.makeMain\":\"Rendila la finestra main\",\"explorer.main\":\"Finestra main: si apre dal menu applicazioni\",\"explorer.unsaved\":\"Non salvato\",\"explorer.name\":\"Nome\",\"explorer.badName\":\"Un nome senza / \\\\ : * ? \\\" < > |\",\"explorer.failed\":\"Non si è potuto fare\",\"explorer.removeItem\":\"Eliminare «{name}»?\",\"explorer.removeItemText\":\"Va nel cestino. I suoi collegamenti nel progetto vengono tolti.\",\"explorer.removeFolder\":\"Eliminare la cartella «{name}»?\",\"explorer.removeFolderText\":\"Va nel cestino con tutto quello che contiene.\",\"entry.none\":\"Si apre solo da altre finestre dell'app\",\"entry.file\":\"Apre un tipo di file\",\"entry.action\":\"Voce nel menu dei file\",\"entry.call\":\"Chiamata da altre app\",\"entry.login\":\"All'ingresso dell'utente\",\"entry.main\":\"Menu applicazioni (finestra main)\",\"entry.extPlaceholder\":\"Estensioni: csv, txt\",\"entry.label\":\"Etichetta\",\"cat.blocks.value\":\"Valori\",\"cat.blocks.logic\":\"Logica\",\"cat.blocks.math\":\"Matematica\",\"cat.blocks.text\":\"Testo\",\"cat.blocks.object\":\"Oggetti\",\"cat.blocks.list\":\"Liste\",\"cat.blocks.matrix\":\"Matrici\",\"cat.blocks.units\":\"Unità di misura\",\"cat.blocks.signal\":\"Segnali\",\"cat.blocks.time\":\"Tempo\",\"cat.blocks.console\":\"Console\",\"cat.blocks.schema\":\"Porte di schema\",\"cat.blocks.ui\":\"Componenti UI\",\"cat.blocks.lilos\":\"lilOS\",\"cat.blocks.net\":\"Rete\",\"cat.blocks.exception\":\"Eccezioni\",\"cat.blocks.other\":\"Altro\",\"cat.components.text\":\"Testo\",\"cat.components.values\":\"Testo e valori\",\"cat.components.commands\":\"Comandi\",\"cat.components.containers\":\"Contenitori\",\"cat.components.charts\":\"Grafici\",\"cat.components.other\":\"Altro\",\"palette.search\":\"Cerca…\",\"palette.empty\":\"Nessun pacchetto installato\",\"palette.noMatch\":\"Non c'è niente\",\"palette.noEngine\":\"Il motore di Logic Studio non risponde\",\"palette.collapse\":\"Comprimi\",\"palette.expand\":\"Espandi\",\"palette.collapseAll\":\"Comprimi tutte\",\"palette.expandAll\":\"Espandi tutte\",\"port.error\":\"Exception\",\"block.missing\":\"Manca il pacchetto\",\"block.missingText\":\"Questo blocco ({type}) viene da un pacchetto che non è installato. Installalo dall'AppStore, o togli il blocco.\",\"limit.blocks\":\"Al massimo {n} blocchi per schema\",\"menu.duplicate\":\"Duplica\",\"menu.label\":\"Etichetta…\",\"menu.labelText\":\"Un nome per questo blocco, che si vede al posto del suo tipo.\",\"menu.openWindow\":\"Apri la sua finestra\",\"menu.removeBlock\":\"Elimina il blocco\",\"menu.removeBlocks\":{\"one\":\"Elimina il blocco\",\"other\":\"Elimina {n} blocchi\"},\"menu.removeLink\":\"Elimina il collegamento\",\"menu.addHere\":\"Aggiungi un blocco qui\",\"menu.selectAll\":\"Seleziona tutto\",\"inspector.title\":\"Proprietà\",\"inspector.nothing\":\"Niente di selezionato\",\"inspector.many\":{\"one\":\"1 blocco selezionato\",\"other\":\"{n} blocchi selezionati\"},\"inspector.links\":{\"one\":\"1 collegamento selezionato\",\"other\":\"{n} collegamenti selezionati\"},\"inspector.schema\":\"Schema\",\"inspector.name\":\"Nome\",\"inspector.blocks\":\"Blocchi\",\"inspector.schemaPorts\":\"Porte di schema\",\"inspector.noSchemaPorts\":\"Nessuna porta: aggiungi un blocco Parametro (ingresso di schema) o Return (uscita di schema) per collegare questo schema agli altri del progetto.\",\"inspector.schemaHint\":\"Gli schemi di un progetto si collegano solo con le loro porte di schema, nella mappa.\",\"inspector.label\":\"Etichetta\",\"inspector.settings\":\"Impostazioni\",\"inspector.ports\":\"Porte\",\"inspector.block\":\"Blocco\",\"inspector.inputs\":\"Ingressi\",\"inspector.outputs\":\"Uscite\",\"inspector.addInput\":\"Aggiungi ingresso\",\"inspector.addOutput\":\"Aggiungi uscita\",\"inspector.addedCount\":\"Aggiunte: {n} di {max}\",\"inspector.basePort\":\"Porta di base: non si toglie\",\"inspector.ofComponent\":\"della componente\",\"inspector.up\":\"Sposta su\",\"inspector.down\":\"Sposta giù\",\"inspector.removePort\":\"Togli\",\"inspector.hidePort\":\"Nascondi nel disegno\",\"inspector.showPort\":\"Mostra nel disegno\",\"inspector.linkedPort\":\"Collegata: non si può nascondere\",\"inspector.starts\":\"lo avvia\",\"inspector.startValue\":\"iniziale\",\"inspector.removeQ\":\"Togliere la porta «{name}»?\",\"inspector.removeLinks\":{\"one\":\"Ha 1 collegamento, che viene tolto. Ctrl+Z li rimette.\",\"other\":\"Ha {n} collegamenti, che vengono tolti. Ctrl+Z li rimette.\"},\"inspector.aloneHint\":\"In un progetto, questa porta si collega agli altri schemi nella mappa.\",\"inspector.projectLinks\":\"Collegamenti nel progetto\",\"inspector.noProjectLinks\":\"Non ancora collegata: collegala nella mappa.\",\"inspector.unlink\":\"Scollega\",\"inspector.inMap\":\"Nella mappa\",\"inspector.component\":\"Componente UI\",\"inspector.componentAlone\":\"Uno schema da solo non ha finestre.\",\"inspector.window\":\"Finestra\",\"inspector.componentName\":\"Componente\",\"type.number\":\"numero\",\"opt.type.number\":\"numero\",\"type.bool\":\"sì/no\",\"opt.type.bool\":\"sì/no\",\"type.text\":\"testo\",\"opt.type.text\":\"testo\",\"type.object\":\"oggetto\",\"opt.type.object\":\"oggetto\",\"type.list\":\"lista\",\"opt.type.list\":\"lista\",\"type.matrix\":\"matrice\",\"opt.type.matrix\":\"matrice\",\"type.any\":\"qualsiasi\",\"opt.type.any\":\"qualsiasi\",\"type.pulse\":\"impulso\",\"opt.type.pulse\":\"impulso\",\"opt.op.eq\":\"a = b\",\"opt.op.ne\":\"a ≠ b\",\"opt.op.gt\":\"a > b\",\"opt.op.ge\":\"a ≥ b\",\"opt.op.lt\":\"a < b\",\"opt.op.le\":\"a ≤ b\",\"opt.op.min\":\"minimo\",\"opt.op.max\":\"massimo\",\"opt.op.avg\":\"media\",\"opt.op.abs\":\"valore assoluto\",\"opt.op.round\":\"arrotonda\",\"opt.op.floor\":\"arrotonda per difetto\",\"opt.op.ceil\":\"arrotonda per eccesso\",\"opt.op.sqrt\":\"radice quadrata\",\"opt.op.neg\":\"cambia segno\",\"opt.op.sin\":\"seno\",\"opt.op.cos\":\"coseno\",\"opt.op.log\":\"logaritmo naturale\",\"opt.op.exp\":\"esponenziale\",\"opt.op.upper\":\"MAIUSCOLO\",\"opt.op.lower\":\"minuscolo\",\"opt.op.trim\":\"togli gli spazi ai lati\",\"opt.op.length\":\"lunghezza\",\"opt.op.contains\":\"contiene\",\"opt.op.replace\":\"sostituisci\",\"opt.op.sum\":\"somma\",\"opt.level.normal\":\"normale\",\"opt.level.info\":\"informazione\",\"opt.level.warning\":\"avviso\",\"opt.level.error\":\"errore\",\"opt.format.text\":\"testo\",\"opt.format.json\":\"JSON leggibile\",\"opt.kind.number\":\"numero\",\"opt.kind.text\":\"testo\",\"opt.kind.bool\":\"sì/no\",\"opt.kind.json\":\"JSON\",\"opt.kind.key\":\"un tasto\",\"opt.to.number\":\"numero\",\"opt.to.text\":\"testo\",\"opt.to.bool\":\"sì/no\",\"opt.to.json\":\"testo JSON\",\"opt.to.parse\":\"da testo JSON\",\"opt.order.asc\":\"crescente\",\"opt.order.desc\":\"decrescente\",\"opt.where.append\":\"in fondo\",\"opt.where.prepend\":\"all'inizio\",\"kind.text\":\"testo\",\"kind.number\":\"numero\",\"kind.bool\":\"sì/no\",\"kind.key\":\"un tasto\",\"kind.test\":\"Prova\",\"kind.active\":\"Attivo\",\"state.starting\":\"Si avvia\",\"state.running\":\"In esecuzione\",\"state.stopped\":\"Fermo\",\"state.failed\":\"Fermo per un errore\",\"state.waiting\":\"Aspetta un pacchetto\",\"console.main\":\"Principale\",\"console.mainHint\":\"La console principale: c'è sempre e riceve le eccezioni che nessun blocco gestisce\",\"console.asking\":\"Aspetta una risposta\",\"console.detach\":\"Stacca\",\"console.expand\":\"Mostra il pannello\",\"console.collapse\":\"Nascondi il pannello\",\"console.add\":\"Nuova console\",\"console.idle\":\"Prova il progetto per vedere qui le sue console.\",\"console.hint\":\"Invio manda · Esc annulla\",\"console.windowTitle\":\"Console {name}\",\"problems.title\":\"Problemi\",\"problems.none\":\"Nessun problema\",\"problems.missingBlock\":\"Il blocco {block} ({type}) viene da un pacchetto che non è installato\",\"problems.noWindow\":\"Il blocco {block} rappresenta una componente della finestra «{window}», che non c'è\",\"problems.noComponent\":\"Il blocco {block} rappresenta la componente «{component}», che non c'è\",\"problems.noPortName\":\"Una porta di schema non ha nome\",\"problems.noMain\":\"Il progetto ha finestre ma nessuna finestra main\",\"run.testing\":\"Prova in corso {time}\",\"run.saveFirst\":\"Salvare prima di attivare?\",\"run.saveFirstText\":\"Un programma attivo fa girare il progetto salvato.\",\"run.alreadyActive\":\"«{name}» è già attivo\",\"run.alreadyActiveText\":\"Il programma attivo si ferma e riparte con il progetto com'è adesso.\",\"run.replace\":\"Sostituisci\",\"run.activated\":\"«{name}» è attivo\",\"run.activatedText\":\"Gira in lilOS anche con questa finestra e lilOS chiusi, finché non lo fermi dalla Home.\",\"home.intro\":\"Blocchi logici collegati tra loro: i dati passano sui collegamenti e ogni blocco ci fa qualcosa. Un progetto riunisce schemi e finestre; il motore lo fa girare in lilOS.\",\"home.new\":\"Nuovo progetto\",\"home.open\":\"Apri…\",\"home.recent\":\"Recenti\",\"home.noRecent\":\"Nessun progetto aperto finora\",\"home.programs\":\"I miei programmi\",\"home.noPrograms\":\"Niente in esecuzione: prova un progetto, o attivalo\",\"home.noEngine\":\"Il motore di Logic Studio (modulo logicstudio-engine) non è installato o non risponde.\",\"home.appstore\":\"Apri l'AppStore\",\"home.colName\":\"Programma\",\"home.colKind\":\"Tipo\",\"home.colState\":\"Stato\",\"home.colSince\":\"Da\",\"home.openProject\":\"Apri il progetto\",\"home.stop\":\"Ferma\",\"home.forget\":\"Togli\",\"home.stopQ\":\"Fermare «{name}»?\",\"home.stopText\":\"Non riparte con lilOS finché non lo attivi di nuovo.\",\"home.usage\":\"Quello che uso\",\"usage.active\":\"Programmi attivi\",\"usage.tests\":\"Prove\",\"usage.net\":\"Richieste di rete in questo minuto\",\"usage.log\":\"Registro\",\"usage.cpuMem\":\"Al massimo il {cpu}% della CPU e {mem} MB di memoria per tutti i miei programmi.\",\"map.objectsIn\":\"{n} componenti · oggetti in {list}\",\"map.noObjects\":\"{n} componenti · nessun oggetto negli schemi\",\"map.project\":\"Progetto\",\"map.main\":\"Finestra main\",\"map.links\":\"Collegamenti tra schemi\",\"map.noLinks\":\"Nessun collegamento\",\"map.hint\":\"Trascina da un'uscita di uno schema a un ingresso di un altro per collegarli. Le finestre si raggiungono con gli oggetti delle loro componenti negli schemi.\",\"options.title\":\"Opzioni del progetto\",\"options.general\":\"Generale\",\"options.windows\":\"Finestre\",\"options.consoles\":\"Console\",\"options.app\":\"L'app e le sue finestre\",\"options.name\":\"Nome\",\"options.version\":\"Versione\",\"options.versionHint\":\"Tre numeri: 1.0.0\",\"options.description\":\"Descrizione\",\"options.windowsHint\":\"Le finestre del progetto le apre lilOS. La finestra main è obbligatoria: si apre dal menu applicazioni.\",\"options.noWindows\":\"Il progetto non ha ancora finestre.\",\"options.main\":\"Finestra main\",\"options.mainHint\":\"Si cambia, non si toglie.\",\"options.window\":\"Finestra\",\"options.opensFrom\":\"Si apre da\",\"options.unlinkedHint\":\"Una finestra senza punto d'ingresso si apre solo da un'altra finestra dell'app (un pulsante con «Apri una finestra»).\",\"options.consoleList\":\"Console del progetto\",\"options.consoleName\":\"Nome\",\"options.color\":\"Colore\",\"options.keep\":\"Righe tenute\",\"options.mainConsole\":\"fissa: si rinomina, non si toglie\",\"options.remove\":\"Togli\",\"options.removeHint\":\"Togliendo una console, i suoi blocchi passano alla principale.\",\"options.newConsole\":\"Console {n}\",\"options.removeConsoleQ\":\"Togliere la console «{name}»?\",\"options.outside\":\"Fuori dall'IDE\",\"outside.all\":\"Mostrale tutte\",\"outside.all.hint\":\"ogni console si apre in una finestra quando parte il progetto\",\"outside.onInput\":\"Solo quando chiedono un dato\",\"outside.onInput.hint\":\"una console si apre quando un blocco Input (readline) aspetta\",\"outside.hidden\":\"Non mostrarle\",\"outside.hidden.hint\":\"niente sullo schermo: le righe vanno nel registro come dice «Copia nel registro», le domande prendono il valore predefinito\",\"outside.main\":\"Tutte nella console principale\",\"outside.main.hint\":\"una finestra, ogni riga con il nome della sua console\",\"options.details\":\"Dettagli\",\"options.closeAfter\":\"Chiudi la console dopo la risposta\",\"options.notify\":\"Una notifica quando una console chiede un dato e il progetto non ha finestre aperte\",\"options.copyToLog\":\"Copia nel registro del progetto\",\"log.none\":\"niente\",\"log.warnings\":\"avvisi ed errori\",\"log.all\":\"tutte le righe\",\"options.mainOpens\":\"Con «Tutte nella principale», la principale si apre\",\"mainOpens.start\":\"all'avvio\",\"mainOpens.onInput\":\"quando chiede un dato\",\"options.consoleQuota\":\"Le righe tenute in memoria contano nella tua quota di memoria; quelle copiate nel registro nella quota del registro.\",\"options.appHint\":\"Cosa condividono le finestre del progetto mentre gira: anche nell'app fatta da questo progetto.\",\"options.keepValues\":\"Una finestra riaperta mostra subito gli ultimi valori\",\"options.keepValuesHint\":\"Il motore tiene l'ultimo valore mandato a ogni componente.\",\"options.syncCopies\":\"Le copie della stessa finestra restano allineate\",\"options.syncCopiesHint\":\"La stessa finestra aperta su due dispositivi mostra gli stessi valori; un cambiamento su una si vede sull'altra.\",\"options.commandsHint\":\"Pulsanti, interruttori e cursori mandano qualcosa solo quando qualcuno li usa in una finestra aperta: quando una finestra si apre non viene «ripremuto» niente.\",\"status.window\":\"{n} componenti / {max} · {w} × {h}\",\"window.design\":\"Progetta\",\"window.preview\":\"Anteprima\",\"window.previewOf\":\"Anteprima\",\"window.window\":\"Finestra\",\"window.title\":\"Titolo\",\"window.width\":\"Larghezza (px)\",\"window.height\":\"Altezza (px)\",\"window.resizable\":\"L'utente può ridimensionarla\",\"window.resize\":\"Trascina per ridimensionare la finestra\",\"window.resizeHint\":\"Oppure trascina il bordo destro, il bordo in basso o l'angolo della finestra. La dimensione è quella del contenuto, senza la barra del titolo.\",\"window.opening\":\"All'apertura\",\"window.state\":\"Stato\",\"window.state.normal\":\"Normale\",\"window.state.maximized\":\"Estesa\",\"window.modal\":\"Finestra di dialogo\",\"window.modalHint\":\"Finché è aperta, le altre finestre dell'app aperte prima non si possono usare: un clic su di loro porta avanti questa.\",\"window.onTop\":\"Sempre in primo piano\",\"window.flag.modal\":\"Dialogo\",\"window.flag.onTop\":\"In primo piano\",\"window.opens\":\"Si apre da\",\"window.hint\":\"Aggiungi le componenti dalla tavolozza a sinistra: un clic la mette nel contenitore selezionato, trascinandola va dove mostra la linea blu.\",\"window.missing\":\"Questa componente ({type}) viene da un pacchetto che non è installato.\",\"window.portsHint\":\"← quello che imposta uno schema, → quello che fa l'utente. Gli schemi raggiungono la componente con il suo oggetto.\",\"window.object\":\"Oggetto nello schema\",\"window.openObject\":\"Aprilo nello schema\",\"window.noObject\":\"Nessuno schema ha ancora il suo oggetto: senza, la componente si vede ma non fa niente.\",\"window.inSchema\":\"Nello schema\",\"window.makeObject\":\"Crea il suo oggetto\",\"window.askTitle\":\"In quale schema va il blocco logico di «{name}»?\",\"window.askText\":\"Ogni componente UI ha il suo oggetto in uno schema: gli altri blocchi di quello schema si collegano a lui. Puoi crearlo anche dopo, in Proprietà.\",\"window.newSchema\":\"Nuovo schema…\",\"window.later\":\"Dopo\",\"window.remove\":\"Elimina la componente\",\"window.removeQ\":\"Eliminare la componente?\",\"window.removeObject\":\"Il suo oggetto nello schema «{schema}» resta lì e segna un errore finché non togli anche quello.\",\"limit.components\":\"Al massimo {n} componenti per finestra\",\"action.none\":\"Niente\",\"action.open\":\"Apri una finestra\",\"action.close\":\"Chiudi questa finestra\",\"action.hint\":\"Manda anche «premuto» al suo oggetto nello schema.\",\"opt.size.small\":\"piccolo\",\"opt.size.normal\":\"normale\",\"opt.size.title\":\"titolo\",\"opt.align.start\":\"inizio\",\"opt.align.center\":\"centro\",\"opt.align.end\":\"fine\",\"opt.align.stretch\":\"tutta la larghezza\",\"opt.variant.primary\":\"principale\",\"opt.variant.normal\":\"normale\",\"opt.variant.danger\":\"pericolo\",\"opt.color.green\":\"verde\",\"opt.color.red\":\"rosso\",\"opt.color.yellow\":\"giallo\",\"opt.color.blue\":\"blu\",\"opt.fit.contain\":\"tutta l'immagine\",\"opt.fit.cover\":\"riempi lo spazio\",\"opt.kind.date\":\"data\",\"opt.kind.time\":\"ora\",\"opt.kind.datetime-local\":\"data e ora\",\"opt.kind.file\":\"un file\",\"opt.kind.folder\":\"una cartella\",\"opt.kind.line\":\"linea\",\"opt.kind.space\":\"spazio\",\"home.openWindow\":\"Apri la finestra\",\"tb.createApp\":\"Crea app…\",\"tb.createAppHint\":\"Fa un'app di lilOS dal progetto, e la esegue\",\"app.title\":\"Crea un'app da «{name}»\",\"app.text\":\"L'app ha le finestre del progetto e usa il motore di questo lilOS. Per ora non si installa: gira dalla sua cartella, solo per te, mentre le sue finestre sono aperte.\",\"app.where\":\"Il pacchetto va in {folder}<id>: apri il suo file .lsapp per eseguirla di nuovo.\",\"app.folder\":\"App create\",\"app.id\":\"Id\",\"app.badId\":\"Lettere minuscole, cifre e -, iniziando con una lettera\",\"app.version\":\"Versione\",\"app.description\":\"Descrizione\",\"app.icon\":\"Icona\",\"app.color\":\"Colore\",\"app.color.green\":\"verde\",\"app.color.blue\":\"blu\",\"app.color.violet\":\"viola\",\"app.color.teal\":\"verde acqua\",\"app.color.orange\":\"arancione\",\"app.color.red\":\"rosso\",\"app.create\":\"Crea\",\"app.createRun\":\"Crea ed esegui\",\"app.needsLilos\":\"Eseguire le app fatte dai progetti richiede lilOS 1.37.0 o successivo\",\"app.done\":\"«{name}» è pronta\",\"app.doneText\":\"Il pacchetto è in {path}. Apri il suo file .lsapp per eseguirla.\",\"app.failed\":\"Non si è potuta creare l'app\",\"app.appName\":\"Nome dell'app\",\"kind.app\":\"App (non installata)\",\"tb.docs\":\"Documentazione\",\"menu.docs\":\"Documentazione\",\"menu.docsSchema\":\"Documentazione dell'editor degli schemi\",\"menu.docsWindow\":\"Documentazione dell'editor delle finestre\",\"menu.openObject\":\"Mostra il suo oggetto nello schema\",\"palette.add\":\"Aggiungi\",\"docs.title\":\"Documentazione di Logic Studio\",\"docs.back\":\"Indietro (Alt+←)\",\"docs.forward\":\"Avanti (Alt+→)\",\"docs.home\":\"Pagina iniziale\",\"docs.search\":\"Cerca nella documentazione\",\"docs.contents\":\"Indice\",\"docs.loading\":\"Caricamento…\",\"docs.failed\":\"Non è stato possibile leggere la pagina: {error}\",\"docs.missingTitle\":\"Pagina non trovata\",\"docs.missingType\":\"«{name}» ({type}) non ha ancora una pagina di documentazione.\",\"docs.missing\":\"Non c'è nessuna pagina all'indirizzo «{address}».\",\"docs.packIndex\":\"Vai alla pagina del pacchetto\",\"docs.ide\":\"Guida dell'IDE\",\"docs.overview\":\"Panoramica\",\"docs.noResults\":\"Nessun risultato.\",\"group.run\":\"Run\",\"group.name\":\"Gruppo\",\"group.blocks\":\"{n} blocchi\",\"group.thread\":\"Thread\",\"group.collapse\":\"Comprimi\",\"group.expand\":\"Espandi\",\"group.runOff\":\"Run non è collegata: i blocchi del gruppo non partono\",\"group.runOn\":\"Run è collegata ({n}): a ogni impulso il gruppo riparte, dai blocchi che partono da soli (come Valore)\",\"group.runInside\":\"Dentro il gruppo, Run manda il suo impulso a {n} porte\",\"group.make\":\"Raggruppa\",\"group.addTo\":\"Aggiungi al gruppo\",\"group.takeOut\":\"Togli dal gruppo\",\"group.rename\":\"Rinomina il gruppo\",\"group.threadToggle\":\"Esegui in un thread a parte\",\"group.ungroup\":\"Sciogli il gruppo\",\"group.remove\":\"Elimina il gruppo e i suoi blocchi\",\"group.manySel\":\"{blocks} blocchi e {groups} gruppi selezionati\",\"group.collapsedField\":\"Compresso in un blocco\",\"group.threadField\":\"Esegui in un thread a parte\",\"group.threadHint\":\"I blocchi del gruppo girano a parte dal resto del programma: un blocco lento non rallenta gli altri. Ogni thread ha metà della tua quota di memoria.\",\"group.threadNo\":\"Ingressi e Uscite di schema e oggetti della UI non possono stare in un gruppo con un thread a parte: il motore rifiuta lo schema.\",\"group.exposed\":\"Porte esposte\",\"group.noExposed\":\"Nessuna porta esposta: niente fuori dal gruppo raggiunge i suoi blocchi.\",\"group.exposeHint\":\"Per esporre una porta collegala da fuori del gruppo, oppure usa il pulsante accanto al suo occhio nelle proprietà del blocco.\",\"group.expose\":\"Esponi fuori dal gruppo\",\"group.unexpose\":\"Non esporre\",\"group.unexposeQ\":\"Non esporre più «{name}»?\",\"group.inGroup\":\"Nel gruppo «{name}»\",\"group.show\":\"Mostra il gruppo\"}}")
+}), { t: O } = D, k = Object.freeze([
 	{
 		key: "schemas",
 		folder: "schemi",
@@ -212,7 +212,7 @@ var O = ce("logicstudio", {
 		folder: "risorse",
 		ext: null
 	}
-]), j = (e) => e.includes(".") ? e.slice(e.lastIndexOf(".") + 1).toLowerCase() : "", M = (e) => e.includes(".") ? e.slice(0, e.lastIndexOf(".")) : e, N = class e extends t {
+]), A = (e) => e.includes(".") ? e.slice(e.lastIndexOf(".") + 1).toLowerCase() : "", j = (e) => e.includes(".") ? e.slice(0, e.lastIndexOf(".")) : e, M = class e extends t {
 	project = null;
 	projectFile = null;
 	folder = null;
@@ -221,31 +221,31 @@ var O = ce("logicstudio", {
 	#t = /* @__PURE__ */ new Map();
 	static async open(t) {
 		let r = h.get(t);
-		if (!r) throw Error(k("ws.gone"));
-		let i = new e(), a = j(r.name);
+		if (!r) throw Error(O("ws.gone"));
+		let i = new e(), a = A(r.name);
 		if (a === n.project) i.project = s.parse(await h.read(t)), i.projectFile = t, i.folder = r.parent, i.#n(i.project, t), await i.#r();
 		else if (a === n.schema) {
 			i.single = t, i.folder = r.parent;
 			let e = c.parse(await h.read(t));
 			i.#e.set(r.name, e), i.#n(e, t);
-		} else throw Error(k("ws.notLogic"));
+		} else throw Error(O("ws.notLogic"));
 		return i;
 	}
 	static async create(e, t) {
 		let n = h.cleanName(String(t ?? ""));
-		if (!n) throw Error(k("ws.noName"));
+		if (!n) throw Error(O("ws.noName"));
 		let r = h.uniqueName(e, n), i = h.create(e, {
 			type: "folder",
 			name: r
 		});
-		for (let e of A) h.create(i.id, {
+		for (let e of k) h.create(i.id, {
 			type: "folder",
 			name: e.folder
 		});
-		let a = s.create(r), o = c.create("main"), l = u.create(r), d = h.create(P(i.id, "schemi").id, {
+		let a = s.create(r), o = c.create("main"), l = u.create(r), d = h.create(N(i.id, "schemi").id, {
 			type: "file",
 			name: "main.lsch"
-		}), f = h.create(P(i.id, "ui").id, {
+		}), f = h.create(N(i.id, "ui").id, {
 			type: "file",
 			name: "Principale.lsui"
 		});
@@ -259,12 +259,12 @@ var O = ce("logicstudio", {
 		return await h.write(p.id, a.toText()), p.id;
 	}
 	get name() {
-		return this.project?.data.name ?? M(h.get(this.single)?.name ?? "");
+		return this.project?.data.name ?? j(h.get(this.single)?.name ?? "");
 	}
 	get groups() {
-		return A.map((e) => ({
+		return k.map((e) => ({
 			...e,
-			folder: this.project ? P(this.folder, e.folder)?.id ?? null : null
+			folder: this.project ? N(this.folder, e.folder)?.id ?? null : null
 		}));
 	}
 	get dirty() {
@@ -276,11 +276,11 @@ var O = ce("logicstudio", {
 	}
 	nodeAt(e) {
 		let t = this.folder;
-		for (let n of String(e).split("/").filter(Boolean)) if (t = P(t, n)?.id, !t) return null;
+		for (let n of String(e).split("/").filter(Boolean)) if (t = N(t, n)?.id, !t) return null;
 		return h.get(t);
 	}
 	kindOf(e) {
-		let t = j(e);
+		let t = A(e);
 		return t === n.schema ? "schemas" : t === n.window ? "windows" : null;
 	}
 	nameOf(e, t) {
@@ -289,7 +289,7 @@ var O = ce("logicstudio", {
 	async doc(e) {
 		if (this.#e.has(e)) return this.#e.get(e);
 		let t = this.single ? h.get(this.single) : this.nodeAt(e);
-		if (!t) throw Error(k("ws.missingFile", { path: e }));
+		if (!t) throw Error(O("ws.missingFile", { path: e }));
 		let n = await h.read(t.id), r = this.kindOf(t.name) === "windows" ? u.parse(n) : c.parse(n);
 		return this.#e.set(e, r), this.#n(r, t.id), r;
 	}
@@ -304,7 +304,7 @@ var O = ce("logicstudio", {
 	}
 	async save(e) {
 		let t = this.#t.get(e);
-		if (!t || !h.exists(t)) throw Error(k("ws.gone"));
+		if (!t || !h.exists(t)) throw Error(O("ws.gone"));
 		await h.write(t, e.toText()), e.markSaved();
 	}
 	async saveAll() {
@@ -349,8 +349,8 @@ var O = ce("logicstudio", {
 				let i = new Set(Object.values(t[n]));
 				for (let [r, a] of e[n]) {
 					if (i.has(r)) continue;
-					let e = M(a.name);
-					for (let r = 2; e in t[n]; r++) e = `${M(a.name)} ${r}`;
+					let e = j(a.name);
+					for (let r = 2; e in t[n]; r++) e = `${j(a.name)} ${r}`;
 					t[n][e] = r;
 				}
 			}
@@ -358,8 +358,8 @@ var O = ce("logicstudio", {
 		}, { record: !1 });
 	}
 	async createElement(e, t, n) {
-		let r = A.find((t) => t.key === e), i = String(n).trim() || (e === "schemas" ? "schema" : "finestra");
-		if (i in this.project.data[e]) throw Error(k("ws.nameTaken", { name: i }));
+		let r = k.find((t) => t.key === e), i = String(n).trim() || (e === "schemas" ? "schema" : "finestra");
+		if (i in this.project.data[e]) throw Error(O("ws.nameTaken", { name: i }));
 		let a = h.uniqueName(t, `${i}.${r.ext}`), o = h.create(t, {
 			type: "file",
 			name: a
@@ -371,7 +371,7 @@ var O = ce("logicstudio", {
 	createFolder(e, t) {
 		let n = h.create(e, {
 			type: "folder",
-			name: h.uniqueName(e, String(t).trim() || k("ws.newFolder"))
+			name: h.uniqueName(e, String(t).trim() || O("ws.newFolder"))
 		});
 		return this.emit("change"), n.id;
 	}
@@ -385,8 +385,8 @@ var O = ce("logicstudio", {
 				let r = this.kindOf(n.name), i = this.relative(e), a = String(t).trim();
 				if (r) {
 					let t = this.nameOf(r, i);
-					if (a !== t && a in this.project.data[r]) throw Error(k("ws.nameTaken", { name: a }));
-					h.rename(e, `${a}.${j(n.name)}`);
+					if (a !== t && a in this.project.data[r]) throw Error(O("ws.nameTaken", { name: a }));
+					h.rename(e, `${a}.${A(n.name)}`);
 					let o = this.#e.get(i);
 					o && (this.#e.delete(i), this.#e.set(this.relative(e), o)), this.project.renameElement(r, t, a, this.relative(e)), await this.save(this.project);
 				} else h.rename(e, a);
@@ -417,11 +417,11 @@ var O = ce("logicstudio", {
 		await this.#r(), await this.save(this.project), this.emit("change");
 	}
 };
-function P(e, t) {
+function N(e, t) {
 	return h.children(e).find((e) => e.name.toLowerCase() === String(t).toLowerCase()) ?? null;
 }
 // src/logicstudio/explorer.js
-var le = class {
+var ue = class {
 	el;
 	#e;
 	#t = /* @__PURE__ */ new Set();
@@ -430,19 +430,19 @@ var le = class {
 		this.#e = e, this.el = g("div", {
 			class: "ls-tree",
 			role: "tree",
-			"aria-label": k("left.project")
+			"aria-label": O("left.project")
 		}), this.el.addEventListener("contextmenu", (e) => e.preventDefault());
 	}
 	render() {
 		let e = this.#e.ws;
 		if (!e) {
-			this.el.replaceChildren(g("p", { class: "ls-empty" }, k("explorer.none")));
+			this.el.replaceChildren(g("p", { class: "ls-empty" }, O("explorer.none")));
 			return;
 		}
 		let t = g("div", { class: "ls-tree-h" }, g("span", { class: "ls-fico" }, _("blocks")), g("b", {}, e.name), e.project ? g("button", {
 			type: "button",
 			class: "ls-icon-btn",
-			title: k("tb.map"),
+			title: O("tb.map"),
 			onclick: () => this.#e.openMap()
 		}, _("grid")) : null);
 		if (!e.project) {
@@ -481,10 +481,10 @@ var le = class {
 						});
 					}
 				}
-			}, g("span", {}, k(`group.${t.key}`)), g("span", { class: "n" }, String(e)), g("button", {
+			}, g("span", {}, O(`group.${t.key}`)), g("span", { class: "n" }, String(e)), g("button", {
 				type: "button",
 				class: "ls-icon-btn",
-				title: k(`explorer.new.${t.key}`),
+				title: O(`explorer.new.${t.key}`),
 				onclick: () => this.#u(t.key, t.folder)
 			}, _("plus")))), this.#h(n.at(-1), t.folder, t.key), n.push(...this.#a(t.folder, t.key, 1));
 		}
@@ -554,13 +554,13 @@ var le = class {
 			})
 		}, _(l), g("span", { class: "nm" }, a), c?.dirty ? g("span", {
 			class: "dot",
-			title: k("explorer.unsaved")
+			title: O("explorer.unsaved")
 		}) : null, o ? g("span", {
 			class: "star",
-			title: k("explorer.main")
+			title: O("explorer.main")
 		}, "★") : null, s ? g("span", {
 			class: "ep",
-			title: k(`entry.${s.kind}`)
+			title: O(`entry.${s.kind}`)
 		}, _("link")) : null);
 		return r.single || this.#m(u, e), u;
 	}
@@ -591,36 +591,36 @@ var le = class {
 		if (!s?.project) return;
 		let c = [], l = n ?? (r ? r.parent : null);
 		(n || o) && (t !== "resources" && c.push({
-			label: k(`explorer.new.${t}`),
+			label: O(`explorer.new.${t}`),
 			icon: t === "schemas" ? "blocks" : "window",
 			action: () => this.#u(t, l)
 		}), c.push({
-			label: k("explorer.newFolder"),
+			label: O("explorer.newFolder"),
 			icon: "folderPlus",
 			action: () => this.#d(l)
 		})), r?.type === "file" && (c.push({
-			label: k("explorer.open"),
+			label: O("explorer.open"),
 			icon: "open",
 			action: () => this.#s(t, i, r)
 		}), t === "windows" && s.project.data.main !== a && c.push({
-			label: k("explorer.makeMain"),
+			label: O("explorer.makeMain"),
 			icon: "star",
 			action: () => {
 				s.project.setMain(a), s.save(s.project), this.render();
 			}
 		})), r && !o && (c.length && c.push("-"), c.push({
-			label: k("explorer.rename"),
+			label: O("explorer.rename"),
 			icon: "pencil",
 			shortcut: "F2",
 			action: () => this.#f(r, a)
 		}), c.push({
-			label: k("explorer.remove"),
+			label: O("explorer.remove"),
 			icon: "trash",
 			danger: !0,
 			shortcut: "Canc",
 			action: () => this.#p(r, a)
 		})), c.length && c.push("-"), c.push({
-			label: k("menu.docs"),
+			label: O("menu.docs"),
 			icon: "help",
 			action: () => this.#e.showDoc({
 				schemas: "ide/schemas",
@@ -631,22 +631,22 @@ var le = class {
 	async #u(e, t) {
 		let n = this.#e.ws, r = await y(this.#e.win, {
 			icon: e === "schemas" ? "blocks" : "window",
-			title: k(`explorer.new.${e}`),
+			title: O(`explorer.new.${e}`),
 			fields: [{
 				name: "name",
-				label: k("explorer.name"),
+				label: O("explorer.name"),
 				value: "",
 				required: !0,
 				maxLength: 60,
 				pattern: /^[^/\\:*?"<>|]+$/,
-				invalid: k("explorer.badName")
+				invalid: O("explorer.badName")
 			}],
 			buttons: ["cancel", {
 				value: "ok",
-				label: k("common.create"),
+				label: O("common.create"),
 				primary: !0
 			}],
-			validate: (t) => String(t.name).trim() in n.project.data[e] ? k("ws.nameTaken", { name: String(t.name).trim() }) : !0
+			validate: (t) => String(t.name).trim() in n.project.data[e] ? O("ws.nameTaken", { name: String(t.name).trim() }) : !0
 		});
 		if (r?.button === "ok") try {
 			let i = await n.createElement(e, t, r.values.name);
@@ -654,7 +654,7 @@ var le = class {
 		} catch (e) {
 			y(this.#e.win, {
 				icon: "error",
-				title: k("explorer.failed"),
+				title: O("explorer.failed"),
 				text: e.message
 			});
 		}
@@ -662,19 +662,19 @@ var le = class {
 	async #d(e) {
 		let t = await y(this.#e.win, {
 			icon: "folderPlus",
-			title: k("explorer.newFolder"),
+			title: O("explorer.newFolder"),
 			fields: [{
 				name: "name",
-				label: k("explorer.name"),
-				value: k("ws.newFolder"),
+				label: O("explorer.name"),
+				value: O("ws.newFolder"),
 				required: !0,
 				maxLength: 60,
 				pattern: /^[^/\\:*?"<>|]+$/,
-				invalid: k("explorer.badName")
+				invalid: O("explorer.badName")
 			}],
 			buttons: ["cancel", {
 				value: "ok",
-				label: k("common.create"),
+				label: O("common.create"),
 				primary: !0
 			}]
 		});
@@ -685,19 +685,19 @@ var le = class {
 	async #f(e, t) {
 		let n = await y(this.#e.win, {
 			icon: "pencil",
-			title: k("explorer.rename"),
+			title: O("explorer.rename"),
 			fields: [{
 				name: "name",
-				label: k("explorer.name"),
+				label: O("explorer.name"),
 				value: t ?? e.name,
 				required: !0,
 				maxLength: 60,
 				pattern: /^[^/\\:*?"<>|]+$/,
-				invalid: k("explorer.badName")
+				invalid: O("explorer.badName")
 			}],
 			buttons: ["cancel", {
 				value: "ok",
-				label: k("explorer.rename"),
+				label: O("explorer.rename"),
 				primary: !0
 			}]
 		});
@@ -708,7 +708,7 @@ var le = class {
 		} catch (e) {
 			y(this.#e.win, {
 				icon: "error",
-				title: k("explorer.failed"),
+				title: O("explorer.failed"),
 				text: e.message
 			});
 		}
@@ -716,11 +716,11 @@ var le = class {
 	async #p(e, t) {
 		if (await y(this.#e.win, {
 			icon: "warning",
-			title: k(e.type === "folder" ? "explorer.removeFolder" : "explorer.removeItem", { name: t ?? e.name }),
-			text: k(e.type === "folder" ? "explorer.removeFolderText" : "explorer.removeItemText"),
+			title: O(e.type === "folder" ? "explorer.removeFolder" : "explorer.removeItem", { name: t ?? e.name }),
+			text: O(e.type === "folder" ? "explorer.removeFolderText" : "explorer.removeItemText"),
 			buttons: ["cancel", {
 				value: "ok",
-				label: k("explorer.remove"),
+				label: O("explorer.remove"),
 				danger: !0
 			}]
 		}) !== "ok") return;
@@ -751,13 +751,13 @@ var le = class {
 			} catch (e) {
 				y(this.#e.win, {
 					icon: "error",
-					title: k("explorer.failed"),
+					title: O("explorer.failed"),
 					text: e.message
 				});
 			}
 		});
 	}
-}, ue = [
+}, de = [
 	"value",
 	"logic",
 	"math",
@@ -766,6 +766,7 @@ var le = class {
 	"list",
 	"matrix",
 	"units",
+	"signal",
 	"time",
 	"console",
 	"schema",
@@ -774,14 +775,14 @@ var le = class {
 	"net",
 	"exception",
 	"other"
-], de = [
+], fe = [
 	"text",
 	"values",
 	"commands",
 	"containers",
 	"charts",
 	"other"
-], F = "application/x-logicstudio-item", I = "logicstudio.palette", fe = class {
+], P = "application/x-logicstudio-item", F = "logicstudio.palette", pe = class {
 	el;
 	#e;
 	#t;
@@ -796,12 +797,12 @@ var le = class {
 		this.#n = e, this.#t = g("input", {
 			type: "search",
 			class: "ls-search",
-			placeholder: k("palette.search"),
-			"aria-label": k("palette.search")
+			placeholder: O("palette.search"),
+			"aria-label": O("palette.search")
 		}), this.#t.addEventListener("input", () => {
 			this.#r = this.#t.value.trim().toLowerCase(), this.#a.clear(), this.render();
 		});
-		let t = C.get(I, {}) ?? {};
+		let t = C.get(F, {}) ?? {};
 		for (let e of ["blocks", "components"]) Array.isArray(t[e]) && t[e].filter((e) => typeof e == "string").forEach((t) => this.#i[e].add(t));
 		this.#e = g("div", { class: "ls-pal-list" }), this.el = g("div", { class: "ls-pal" }, this.#t, this.#e);
 	}
@@ -815,7 +816,7 @@ var le = class {
 		let n = this.#o();
 		for (let r of e) t ? n.add(r) : n.delete(r);
 		if (!this.#r) try {
-			C.set(I, {
+			C.set(F, {
 				blocks: [...this.#i.blocks],
 				components: [...this.#i.components]
 			});
@@ -828,7 +829,7 @@ var le = class {
 			def: e,
 			pack: n
 		});
-		let i = this.#r, a = r.filter(({ def: t }) => !i || e.label(t).toLowerCase().includes(i) || t.type.toLowerCase().includes(i)), o = t === "blocks" ? ue : de, s = /* @__PURE__ */ new Map();
+		let i = this.#r, a = r.filter(({ def: t }) => !i || e.label(t).toLowerCase().includes(i) || t.type.toLowerCase().includes(i)), o = t === "blocks" ? de : fe, s = /* @__PURE__ */ new Map();
 		for (let e of a) {
 			let t = o.includes(e.def.category) ? e.def.category : "other";
 			(s.get(t) ?? s.set(t, []).get(t)).push(e);
@@ -839,28 +840,28 @@ var le = class {
 				type: "button",
 				class: `ls-pal-cat cat-${r}${a ? " folded" : ""}`,
 				"aria-expanded": String(!a),
-				title: k(a ? "palette.expand" : "palette.collapse"),
+				title: O(a ? "palette.expand" : "palette.collapse"),
 				onclick: () => this.#s([r], !a)
 			}, g("span", {
 				class: "tw",
 				"aria-hidden": "true"
-			}, a ? "▸" : "▾"), g("i", { class: "sw" }), g("span", { class: "nm" }, k(`cat.${t}.${r}`)), g("span", { class: "n" }, String(i.length)));
+			}, a ? "▸" : "▾"), g("i", { class: "sw" }), g("span", { class: "nm" }, O(`cat.${t}.${r}`)), g("span", { class: "n" }, String(i.length)));
 			if (o.addEventListener("contextmenu", (e) => {
 				e.preventDefault();
 				let t = o.getBoundingClientRect();
 				b(e.clientX || t.left + 24, e.clientY || t.bottom, [
 					{
-						label: k(a ? "palette.expand" : "palette.collapse"),
+						label: O(a ? "palette.expand" : "palette.collapse"),
 						icon: a ? "plus" : "minus",
 						action: () => this.#s([r], !a)
 					},
 					{
-						label: k("palette.collapseAll"),
+						label: O("palette.collapseAll"),
 						disabled: u.every((e) => l.has(e)),
 						action: () => this.#s(u, !0)
 					},
 					{
-						label: k("palette.expandAll"),
+						label: O("palette.expandAll"),
 						disabled: !u.some((e) => l.has(e)),
 						action: () => this.#s(u, !1)
 					}
@@ -875,17 +876,17 @@ var le = class {
 					onclick: () => n?.place?.(t)
 				}, _(t.icon ?? "blocks"), g("span", {}, e.label(t)));
 				i.addEventListener("dragstart", (e) => {
-					e.dataTransfer.setData(F, t.type), e.dataTransfer.effectAllowed = "copy";
+					e.dataTransfer.setData(P, t.type), e.dataTransfer.effectAllowed = "copy";
 				}), i.addEventListener("contextmenu", (r) => {
 					r.preventDefault();
 					let a = i.getBoundingClientRect(), o = r.clientX || a.left + 24, s = r.clientY || a.bottom;
 					b(o, s, [{
-						label: k("palette.add"),
+						label: O("palette.add"),
 						icon: "plus",
 						disabled: !n?.place,
 						action: () => n?.place?.(t)
 					}, {
-						label: k("menu.docs"),
+						label: O("menu.docs"),
 						icon: "help",
 						shortcut: "F1",
 						action: () => e.showDoc(t.type)
@@ -895,9 +896,9 @@ var le = class {
 				}), c.push(i);
 			}
 		}
-		c.length || c.push(g("p", { class: "ls-empty" }, e.engineError ? k("palette.noEngine") : k(i ? "palette.noMatch" : "palette.empty"))), this.#e.replaceChildren(...c);
+		c.length || c.push(g("p", { class: "ls-empty" }, e.engineError ? O("palette.noEngine") : O(i ? "palette.noMatch" : "palette.empty"))), this.#e.replaceChildren(...c);
 	}
-}, L = [
+}, I = [
 	"index",
 	"projects",
 	"schemas",
@@ -912,64 +913,65 @@ var le = class {
 	"formats",
 	"shortcuts",
 	"docs"
-], R = [
+], L = [
 	"logicstudio-core",
 	"logicstudio-collections",
 	"logicstudio-constants",
 	"logicstudio-units",
+	"logicstudio-signals",
 	"logicstudio-lilos",
 	"logicstudio-net",
 	"logicstudio-ui",
 	"logicstudio-charts",
 	"logicstudio-engine"
-], z = /^[a-z][a-z0-9]*\.[a-zA-Z][a-zA-Z0-9]{0,40}$/, B = /^[a-z][a-z0-9-]{0,40}$/, pe = /^[a-z][a-z0-9-]{0,40}$/, me = /* #__PURE__ */ Object.assign({
+], R = /^[a-z][a-z0-9]*\.[a-zA-Z][a-zA-Z0-9]{0,40}$/, z = /^[a-z][a-z0-9-]{0,40}$/, me = /^[a-z][a-z0-9-]{0,40}$/, he = /* #__PURE__ */ Object.assign({
 	"./docs/en/blocks.md": () => import("./blocks-6zj1b7m1.js").then((e) => e.default),
 	"./docs/en/components.md": () => import("./components-D0ttlK1L.js").then((e) => e.default),
 	"./docs/en/consoles.md": () => import("./consoles-B4tKL3Wx.js").then((e) => e.default),
 	"./docs/en/create-app.md": () => import("./create-app-D249mcH_.js").then((e) => e.default),
 	"./docs/en/docs.md": () => import("./docs-DQZ0zRLz.js").then((e) => e.default),
-	"./docs/en/formats.md": () => import("./formats-Dm6mYS0q.js").then((e) => e.default),
+	"./docs/en/formats.md": () => import("./formats-C2-AaNF_.js").then((e) => e.default),
 	"./docs/en/groups.md": () => import("./groups-qARP1JOM.js").then((e) => e.default),
-	"./docs/en/index.md": () => import("./en-DacLJ34c.js").then((e) => e.default),
+	"./docs/en/index.md": () => import("./en-a5Ma49lz.js").then((e) => e.default),
 	"./docs/en/links.md": () => import("./links-kLRXqV8E.js").then((e) => e.default),
-	"./docs/en/projects.md": () => import("./projects-sESAb_Xe.js").then((e) => e.default),
+	"./docs/en/projects.md": () => import("./projects-BkhagYO2.js").then((e) => e.default),
 	"./docs/en/run.md": () => import("./run-DtRD52kt.js").then((e) => e.default),
-	"./docs/en/schemas.md": () => import("./schemas-BWeIpaZu.js").then((e) => e.default),
+	"./docs/en/schemas.md": () => import("./schemas-8qrnw6oV.js").then((e) => e.default),
 	"./docs/en/shortcuts.md": () => import("./shortcuts-BkGl08IM.js").then((e) => e.default),
-	"./docs/en/windows.md": () => import("./windows-CcWhrLTJ.js").then((e) => e.default),
+	"./docs/en/windows.md": () => import("./windows-CNmA7S2Z.js").then((e) => e.default),
 	"./docs/it/blocks.md": () => import("./blocks-BnvQtbu_.js").then((e) => e.default),
 	"./docs/it/components.md": () => import("./components-r4Q-FBV7.js").then((e) => e.default),
 	"./docs/it/consoles.md": () => import("./consoles-D9kB6SVP.js").then((e) => e.default),
 	"./docs/it/create-app.md": () => import("./create-app-DL92JJ6E.js").then((e) => e.default),
 	"./docs/it/docs.md": () => import("./docs-CwZBfv32.js").then((e) => e.default),
-	"./docs/it/formats.md": () => import("./formats-DinFRdXU.js").then((e) => e.default),
+	"./docs/it/formats.md": () => import("./formats-BlfnZKhS.js").then((e) => e.default),
 	"./docs/it/groups.md": () => import("./groups-D_wgFO8J.js").then((e) => e.default),
-	"./docs/it/index.md": () => import("./it-DdRLjVrF.js").then((e) => e.default),
+	"./docs/it/index.md": () => import("./it-BdDsymGM.js").then((e) => e.default),
 	"./docs/it/links.md": () => import("./links-Dd445l89.js").then((e) => e.default),
-	"./docs/it/projects.md": () => import("./projects-B5kx90Dz.js").then((e) => e.default),
+	"./docs/it/projects.md": () => import("./projects-Cjcy3JIm.js").then((e) => e.default),
 	"./docs/it/run.md": () => import("./run-DJVRb-s6.js").then((e) => e.default),
-	"./docs/it/schemas.md": () => import("./schemas-DCSx_7pf.js").then((e) => e.default),
+	"./docs/it/schemas.md": () => import("./schemas-C3qS5NdC.js").then((e) => e.default),
 	"./docs/it/shortcuts.md": () => import("./shortcuts-CjEQDbNC.js").then((e) => e.default),
-	"./docs/it/windows.md": () => import("./windows-DTGpJSKt.js").then((e) => e.default)
-}), V = /* @__PURE__ */ new Map(), H = null;
-function U() {
-	return H ??= Promise.all(L.map(async (e) => {
+	"./docs/it/windows.md": () => import("./windows-CcrUY3sp.js").then((e) => e.default)
+}), B = /* @__PURE__ */ new Map(), V = null;
+function H() {
+	return V ??= Promise.all(I.map(async (e) => {
 		for (let t of [
-			O.lang,
+			D.lang,
 			"en",
 			"it"
 		]) {
-			let n = me[`./docs/${t}/${e}.md`];
+			let n = he[`./docs/${t}/${e}.md`];
 			if (n) try {
-				V.set(e, await n());
+				B.set(e, await n());
 				return;
 			} catch {}
 		}
 	})).catch(() => {
-		H = null;
-	}), H;
+		V = null;
+	}), V;
 }
-var W = (e) => V.get(e) ?? null, G = (e) => /^#\s+(.+)$/m.exec(e ?? "")?.[1]?.trim() ?? null, he = class {
+var U = (e) => B.get(e) ?? null, W = (e) => /^#\s+(.+)$/m.exec(e ?? "")?.[1]?.trim() ?? null, ge = class {
 	win;
 	#e;
 	#t;
@@ -984,7 +986,7 @@ var W = (e) => V.get(e) ?? null, G = (e) => /^#\s+(.+)$/m.exec(e ?? "")?.[1]?.tr
 	#u = null;
 	constructor(e) {
 		this.#e = e, this.win = new d({
-			title: k("docs.title"),
+			title: O("docs.title"),
 			icon: "help",
 			width: 980,
 			height: 680,
@@ -993,35 +995,35 @@ var W = (e) => V.get(e) ?? null, G = (e) => /^#\s+(.+)$/m.exec(e ?? "")?.[1]?.tr
 		}), this.#i = g("button", {
 			type: "button",
 			class: "ls-doc-nav",
-			title: k("docs.back"),
-			"aria-label": k("docs.back"),
+			title: O("docs.back"),
+			"aria-label": O("docs.back"),
 			onclick: () => this.#g(-1)
 		}, _("arrowLeft")), this.#a = g("button", {
 			type: "button",
 			class: "ls-doc-nav",
-			title: k("docs.forward"),
-			"aria-label": k("docs.forward"),
+			title: O("docs.forward"),
+			"aria-label": O("docs.forward"),
 			onclick: () => this.#g(1)
 		}, _("arrowRight"));
 		let t = g("button", {
 			type: "button",
 			class: "ls-doc-nav",
-			title: k("docs.home"),
-			"aria-label": k("docs.home"),
+			title: O("docs.home"),
+			"aria-label": O("docs.home"),
 			onclick: () => this.go("ide/index")
 		}, _("home"));
 		this.#r = g("input", {
 			type: "search",
 			class: "ls-search",
-			placeholder: k("docs.search"),
-			"aria-label": k("docs.search")
+			placeholder: O("docs.search"),
+			"aria-label": O("docs.search")
 		}), this.#r.addEventListener("input", () => {
 			this.#l = this.#r.value.trim().toLowerCase(), this.#_();
 		}), this.#r.addEventListener("keydown", (e) => {
 			e.key === "Enter" && this.#t.querySelector("button.ls-doc-it")?.click();
 		}), this.#t = g("nav", {
 			class: "ls-doc-tree",
-			"aria-label": k("docs.contents")
+			"aria-label": O("docs.contents")
 		}), this.#n = g("article", {
 			class: "ls-doc-page lilos-md",
 			tabIndex: 0
@@ -1037,9 +1039,9 @@ var W = (e) => V.get(e) ?? null, G = (e) => /^#\s+(.+)$/m.exec(e ?? "")?.[1]?.tr
 		t && (this.#s.splice(this.#c + 1), this.#s.push(e), this.#c = this.#s.length - 1), this.#m(n, e);
 	}
 	async #d() {
-		await U();
+		await H();
 		try {
-			this.#o = await v.docIndex(O.lang);
+			this.#o = await v.docIndex(D.lang);
 		} catch {
 			this.#o = [];
 		}
@@ -1047,11 +1049,11 @@ var W = (e) => V.get(e) ?? null, G = (e) => /^#\s+(.+)$/m.exec(e ?? "")?.[1]?.tr
 	}
 	#f(e) {
 		let t = String(e ?? "").trim();
-		if (t.startsWith("ide/")) return B.test(t.slice(4)) ? {
+		if (t.startsWith("ide/")) return z.test(t.slice(4)) ? {
 			pack: "ide",
 			page: t.slice(4)
 		} : null;
-		if (z.test(t)) {
+		if (R.test(t)) {
 			let e = (this.#e.catalog?.packages ?? []).find((e) => e.blocks.some((e) => e.type === t) || e.components.some((e) => e.type === t));
 			return e ? {
 				pack: e.name,
@@ -1062,7 +1064,7 @@ var W = (e) => V.get(e) ?? null, G = (e) => /^#\s+(.+)$/m.exec(e ?? "")?.[1]?.tr
 			};
 		}
 		let [n, r = "index", i] = t.split("/");
-		return i !== void 0 || !pe.test(n) || !(r === "index" || B.test(r) || z.test(r)) ? null : {
+		return i !== void 0 || !me.test(n) || !(r === "index" || z.test(r) || R.test(r)) ? null : {
 			pack: n,
 			page: r
 		};
@@ -1072,65 +1074,65 @@ var W = (e) => V.get(e) ?? null, G = (e) => /^#\s+(.+)$/m.exec(e ?? "")?.[1]?.tr
 		this.#u = e, this.#i.disabled = this.#c <= 0, this.#a.disabled = this.#c >= this.#s.length - 1, this.#_();
 		let n = null;
 		if (e?.pack === "ide") {
-			if (await U(), this.#u !== e) return;
-			n = W(e.page);
+			if (await H(), this.#u !== e) return;
+			n = U(e.page);
 		} else if (e?.pack) {
-			this.#n.replaceChildren(g("p", { class: "ls-hint" }, k("docs.loading")));
+			this.#n.replaceChildren(g("p", { class: "ls-hint" }, O("docs.loading")));
 			try {
-				n = (await v.doc(e.pack, e.page, O.lang))?.markdown ?? null;
+				n = (await v.doc(e.pack, e.page, D.lang))?.markdown ?? null;
 			} catch (t) {
 				if (this.#u !== e) return;
-				this.#n.replaceChildren(g("h1", {}, k("docs.title")), g("p", {}, k("docs.failed", { error: t.message })));
+				this.#n.replaceChildren(g("h1", {}, O("docs.title")), g("p", {}, O("docs.failed", { error: t.message })));
 				return;
 			}
 		}
-		this.#u === e && (n ? this.#n.replaceChildren(...ne(n, { link: this.#p })) : this.#n.replaceChildren(...this.#h(e, t)), this.#n.parentElement.scrollTop = 0, this.win.setTitle(k("docs.title"), G(n) ?? t), this.#t.querySelector(".on")?.scrollIntoView?.({ block: "nearest" }));
+		this.#u === e && (n ? this.#n.replaceChildren(...ne(n, { link: this.#p })) : this.#n.replaceChildren(...this.#h(e, t)), this.#n.parentElement.scrollTop = 0, this.win.setTitle(O("docs.title"), W(n) ?? t), this.#t.querySelector(".on")?.scrollIntoView?.({ block: "nearest" }));
 	}
 	#h(e, t) {
-		let n = [g("h1", {}, k("docs.missingTitle"))], r = e?.page && (this.#e.blockDef(e.page) ?? this.#e.componentDef(e.page));
-		return r ? (n.push(g("p", {}, k("docs.missingType", {
+		let n = [g("h1", {}, O("docs.missingTitle"))], r = e?.page && (this.#e.blockDef(e.page) ?? this.#e.componentDef(e.page));
+		return r ? (n.push(g("p", {}, O("docs.missingType", {
 			name: this.#e.label(r),
 			type: r.type
-		}))), r.description && n.push(g("p", {}, this.#e.label({ label: r.description })))) : n.push(g("p", {}, k("docs.missing", { address: t }))), e?.pack && e.pack !== "ide" && e.page !== "index" && n.push(g("p", {}, g("a", {
+		}))), r.description && n.push(g("p", {}, this.#e.label({ label: r.description })))) : n.push(g("p", {}, O("docs.missing", { address: t }))), e?.pack && e.pack !== "ide" && e.page !== "index" && n.push(g("p", {}, g("a", {
 			href: "#",
 			onclick: (t) => {
 				t.preventDefault(), this.go(e.pack);
 			}
-		}, k("docs.packIndex")))), n;
+		}, O("docs.packIndex")))), n;
 	}
 	#g(e) {
 		let t = this.#c + e;
 		t < 0 || t >= this.#s.length || (this.#c = t, this.go(this.#s[t], { push: !1 }));
 	}
 	#_() {
-		let e = this.#l, t = (...t) => !e || t.some((t) => String(t ?? "").toLowerCase().includes(e)), n = [], r = L.filter((e) => W(e)).map((e) => ({
+		let e = this.#l, t = (...t) => !e || t.some((t) => String(t ?? "").toLowerCase().includes(e)), n = [], r = I.filter((e) => U(e)).map((e) => ({
 			address: `ide/${e}`,
-			title: G(W(e)) ?? e,
+			title: W(U(e)) ?? e,
 			pack: "ide",
 			page: e
 		}));
 		n.push({
-			label: k("docs.ide"),
+			label: O("docs.ide"),
 			items: r.filter((e) => t(e.title, e.page))
 		});
-		let i = [...this.#o ?? []].sort((e, t) => K(e.pack) - K(t.pack) || e.pack.localeCompare(t.pack));
+		let i = [...this.#o ?? []].sort((e, t) => G(e.pack) - G(t.pack) || e.pack.localeCompare(t.pack));
 		for (let e of i) {
 			let r = [];
 			e.pages.find((e) => e.page === "index") && r.push({
 				address: e.pack,
-				title: k("docs.overview"),
+				title: O("docs.overview"),
 				pack: e.pack,
 				page: "index",
 				strong: !0
 			});
-			let i = e.pages.filter((e) => e.page !== "index" && !z.test(e.page)).sort((e, t) => e.title.localeCompare(t.title));
+			let i = e.pages.filter((e) => e.page !== "index" && !R.test(e.page)).sort((e, t) => e.title.localeCompare(t.title));
 			for (let t of i) r.push({
 				address: `${e.pack}/${t.page}`,
 				title: t.title,
 				pack: e.pack,
 				page: t.page
 			});
-			let a = e.pages.filter((e) => z.test(e.page)).map((e) => ({
+			let a = e.pages.filter((e) => R.test(e.page)).map((e) => ({
 				...e,
 				def: this.#e.blockDef(e.page) ?? this.#e.componentDef(e.page)
 			})), o = /* @__PURE__ */ new Map();
@@ -1140,7 +1142,7 @@ var W = (e) => V.get(e) ?? null, G = (e) => /^#\s+(.+)$/m.exec(e ?? "")?.[1]?.tr
 			}
 			for (let [t, n] of o) {
 				let i = n[0].def && this.#e.componentDef(n[0].page) ? "components" : "blocks";
-				r.push({ heading: k(`cat.${i}.${t}`) ?? t });
+				r.push({ heading: O(`cat.${i}.${t}`) ?? t });
 				for (let t of n.sort((e, t) => e.title.localeCompare(t.title))) r.push({
 					address: t.page,
 					title: t.title,
@@ -1174,32 +1176,32 @@ var W = (e) => V.get(e) ?? null, G = (e) => /^#\s+(.+)$/m.exec(e ?? "")?.[1]?.tr
 				}, t.title));
 			}
 		}
-		this.#o === null ? o.push(g("p", { class: "ls-hint" }, k("docs.loading"))) : o.length || o.push(g("p", { class: "ls-hint" }, k("docs.noResults"))), this.#t.replaceChildren(...o);
+		this.#o === null ? o.push(g("p", { class: "ls-hint" }, O("docs.loading"))) : o.length || o.push(g("p", { class: "ls-hint" }, O("docs.noResults"))), this.#t.replaceChildren(...o);
 	}
-}, K = (e) => {
-	let t = R.indexOf(e);
-	return t < 0 ? R.length : t;
+}, G = (e) => {
+	let t = L.indexOf(e);
+	return t < 0 ? L.length : t;
 };
-function ge(e, t = "ide/index") {
+function _e(e, t = "ide/index") {
 	let n = e.docsViewer;
-	return (!n || n.closed) && (n = e.docsViewer = new he(e), n.win.on("destroy", () => {
+	return (!n || n.closed) && (n = e.docsViewer = new ge(e), n.win.on("destroy", () => {
 		e.docsViewer === n && (e.docsViewer = null);
 	})), n.go(t), e.openWindow(n.win, "docs"), n;
 }
-function q(e, t, n) {
+function K(e, t, n) {
 	return e.blockDef(t?.type)?.role === "component" ? (n?.(t))?.def?.type ?? t.type : t?.type ?? "ide/blocks";
 }
-function J(e, t) {
+function q(e, t) {
 	return g("button", {
 		type: "button",
 		class: "ls-doc-q",
-		title: `${k("menu.docs")} (F1)`,
-		"aria-label": k("menu.docs"),
+		title: `${O("menu.docs")} (F1)`,
+		"aria-label": O("menu.docs"),
 		onclick: () => e.showDoc(t)
 	}, _("help"));
 }
 // src/logicstudio/schemaEditor.js
-var _e = class {
+var ve = class {
 	el;
 	canvas;
 	doc;
@@ -1213,17 +1215,17 @@ var _e = class {
 		this.#e = e, this.doc = t, this.name = n, this.canvas = new i({
 			schema: t,
 			catalog: e.catalog,
-			lang: O.lang,
+			lang: D.lang,
 			componentOf: (e) => this.componentOf(e),
 			labels: {
-				error: k("port.error"),
-				missing: k("block.missing"),
-				run: k("group.run"),
-				group: k("group.name"),
-				blocks: k("group.blocks"),
-				thread: k("group.thread"),
-				collapse: k("group.collapse"),
-				runOff: k("group.runOff")
+				error: O("port.error"),
+				missing: O("block.missing"),
+				run: O("group.run"),
+				group: O("group.name"),
+				blocks: O("group.blocks"),
+				thread: O("group.thread"),
+				collapse: O("group.collapse"),
+				runOff: O("group.runOff")
 			}
 		}), this.el = g("div", { class: "ls-editor ls-schema" }, this.canvas.el), this.canvas.on("select", () => {
 			e.inspector.render(), e.renderToolbar();
@@ -1232,7 +1234,7 @@ var _e = class {
 		}), this.el.addEventListener("dragover", (e) => {
 			e.dataTransfer.types.includes("application/x-logicstudio-item") && (e.preventDefault(), e.dataTransfer.dropEffect = "copy");
 		}), this.el.addEventListener("drop", (t) => {
-			let n = t.dataTransfer.getData(F), r = n && e.blockDef(n);
+			let n = t.dataTransfer.getData(P), r = n && e.blockDef(n);
 			r && (t.preventDefault(), this.place(r, this.canvas.toWorld(t.clientX, t.clientY)));
 		}), this.#n(), requestAnimationFrame(() => {
 			t.data.blocks.length && t.data.view?.zoom || this.canvas.fit();
@@ -1270,7 +1272,7 @@ var _e = class {
 	place(e, t = null) {
 		return this.doc.data.blocks.length >= this.#t.maxBlocks ? (y(this.#e.win, {
 			icon: "warning",
-			title: k("limit.blocks", { n: this.#t.maxBlocks })
+			title: O("limit.blocks", { n: this.#t.maxBlocks })
 		}), null) : this.canvas.place(e, t);
 	}
 	setLimits(e) {
@@ -1280,7 +1282,7 @@ var _e = class {
 		};
 	}
 	statusText() {
-		return k("status.schema", {
+		return O("status.schema", {
 			blocks: this.doc.data.blocks.length,
 			maxBlocks: this.#t.maxBlocks,
 			links: this.doc.data.links.length,
@@ -1290,28 +1292,28 @@ var _e = class {
 	}
 	toolbar(e) {
 		return [
-			e("minus", null, () => this.canvas.zoomAt(1 / 1.2), { title: k("tb.zoomOut") }),
+			e("minus", null, () => this.canvas.zoomAt(1 / 1.2), { title: O("tb.zoomOut") }),
 			e(null, `${Math.round(this.canvas.view.zoom * 100)}%`, () => this.canvas.setView({
 				...this.canvas.view,
 				zoom: 1
 			}), {
 				cls: "pct",
-				title: k("tb.zoomReset")
+				title: O("tb.zoomReset")
 			}),
-			e("plus", null, () => this.canvas.zoomAt(1.2), { title: k("tb.zoomIn") }),
-			e("fit", k("tb.fit"), () => this.canvas.fit()),
-			e("cols", k("tb.align"), (e) => {
+			e("plus", null, () => this.canvas.zoomAt(1.2), { title: O("tb.zoomIn") }),
+			e("fit", O("tb.fit"), () => this.canvas.fit()),
+			e("cols", O("tb.align"), (e) => {
 				let t = e.currentTarget.getBoundingClientRect();
 				b(t.left, t.bottom + 2, this.#r());
 			}, {
 				disabled: this.canvas.readOnly || this.canvas.selection.blocks.length < 2,
-				title: k("tb.alignHint")
+				title: O("tb.alignHint")
 			})
 		];
 	}
 	#r() {
 		let e = this.canvas.selection.blocks.length, t = (e, t = !1) => ({
-			label: k(`align.${e}`),
+			label: O(`align.${e}`),
 			disabled: t,
 			action: () => this.align(e)
 		});
@@ -1364,46 +1366,46 @@ var _e = class {
 		if (e.kind === "block") {
 			let r = this.doc.block(e.id), i = this.#e.blockDef(r?.type);
 			t.push({
-				label: k("menu.duplicate"),
+				label: O("menu.duplicate"),
 				icon: "copy",
 				shortcut: "Ctrl+D",
 				action: () => this.canvas.duplicateSelection()
 			}), t.push({
-				label: k("menu.label"),
+				label: O("menu.label"),
 				icon: "pencil",
 				action: () => this.#c(e.id)
 			}), t.push(...this.#o(n.blocks)), n.blocks.length > 1 && !this.canvas.readOnly && t.push({
-				label: k("tb.align"),
+				label: O("tb.align"),
 				icon: "cols",
 				items: this.#r()
 			}), i?.role === "component" && t.push({
-				label: k("menu.openWindow"),
+				label: O("menu.openWindow"),
 				icon: "window",
 				action: () => this.#i(e.id)
 			}), t.push({
-				label: k("menu.docs"),
+				label: O("menu.docs"),
 				icon: "help",
 				shortcut: "F1",
-				action: () => this.#e.showDoc(q(this.#e, r, (e) => this.componentOf(e)))
+				action: () => this.#e.showDoc(K(this.#e, r, (e) => this.componentOf(e)))
 			}), t.push("-"), t.push({
-				label: k(n.blocks.length > 1 ? "menu.removeBlocks" : "menu.removeBlock", { n: n.blocks.length }),
+				label: O(n.blocks.length > 1 ? "menu.removeBlocks" : "menu.removeBlock", { n: n.blocks.length }),
 				icon: "trash",
 				danger: !0,
 				shortcut: "Canc",
 				action: () => this.canvas.removeSelection()
 			});
 		} else e.kind === "group" ? t.push(...this.#s(e.id)) : e.kind === "link" ? (t.push({
-			label: k("menu.docs"),
+			label: O("menu.docs"),
 			icon: "help",
 			action: () => this.#e.showDoc("ide/links")
 		}), t.push("-"), t.push({
-			label: k("menu.removeLink"),
+			label: O("menu.removeLink"),
 			icon: "trash",
 			danger: !0,
 			shortcut: "Canc",
 			action: () => this.canvas.removeSelection()
 		})) : (t.push({
-			label: k("menu.addHere"),
+			label: O("menu.addHere"),
 			icon: "plus",
 			action: () => this.#l({
 				world: e.world,
@@ -1411,15 +1413,15 @@ var _e = class {
 				clientY: e.clientY
 			})
 		}), t.push({
-			label: k("menu.selectAll"),
+			label: O("menu.selectAll"),
 			shortcut: "Ctrl+A",
 			action: () => this.canvas.selectAll()
 		}), t.push({
-			label: k("tb.fit"),
+			label: O("tb.fit"),
 			icon: "fit",
 			action: () => this.canvas.fit()
 		}), t.push("-"), t.push({
-			label: k("menu.docsSchema"),
+			label: O("menu.docsSchema"),
 			icon: "help",
 			shortcut: "F1",
 			action: () => this.#e.showDoc("ide/schemas")
@@ -1431,14 +1433,14 @@ var _e = class {
 		let t = e.filter((e) => !this.doc.groupOf(e)), n = [];
 		if (t.length) {
 			n.push({
-				label: k("group.make"),
+				label: O("group.make"),
 				icon: "group",
 				shortcut: "Ctrl+G",
 				action: () => this.canvas.groupSelection()
 			});
 			let e = this.doc.groups;
 			e.length && n.push({
-				label: k("group.addTo"),
+				label: O("group.addTo"),
 				icon: "group",
 				items: e.map((e) => ({
 					label: e.name,
@@ -1447,7 +1449,7 @@ var _e = class {
 			});
 		}
 		return t.length < e.length && n.push({
-			label: k("group.takeOut"),
+			label: O("group.takeOut"),
 			icon: "arrowLeft",
 			action: () => this.doc.removeFromGroup(e)
 		}), n;
@@ -1458,46 +1460,46 @@ var _e = class {
 		let n = this.canvas.readOnly;
 		return [
 			{
-				label: k(t.collapsed ? "group.expand" : "group.collapse"),
+				label: O(t.collapsed ? "group.expand" : "group.collapse"),
 				icon: t.collapsed ? "plus" : "minus",
 				disabled: n,
 				action: () => this.doc.setGroup(e, { collapsed: !t.collapsed })
 			},
 			{
-				label: k("group.rename"),
+				label: O("group.rename"),
 				icon: "pencil",
 				disabled: n,
 				action: () => this.renameGroup(e)
 			},
 			{
-				label: k("group.threadToggle"),
+				label: O("group.threadToggle"),
 				icon: t.thread ? "check" : "chip",
 				disabled: n,
 				action: () => this.doc.setGroup(e, { thread: !t.thread })
 			},
 			{
-				label: k("menu.duplicate"),
+				label: O("menu.duplicate"),
 				icon: "copy",
 				shortcut: "Ctrl+D",
 				disabled: n,
 				action: () => this.canvas.duplicateSelection()
 			},
 			{
-				label: k("group.ungroup"),
+				label: O("group.ungroup"),
 				icon: "group",
 				shortcut: "Ctrl+Shift+G",
 				disabled: n,
 				action: () => this.canvas.ungroupSelection()
 			},
 			{
-				label: k("menu.docs"),
+				label: O("menu.docs"),
 				icon: "help",
 				shortcut: "F1",
 				action: () => this.#e.showDoc("ide/groups")
 			},
 			"-",
 			{
-				label: k("group.remove"),
+				label: O("group.remove"),
 				icon: "trash",
 				danger: !0,
 				shortcut: "Canc",
@@ -1509,16 +1511,16 @@ var _e = class {
 	async renameGroup(e) {
 		let t = this.doc.group(e), n = await y(this.#e.win, {
 			icon: "pencil",
-			title: k("group.rename"),
+			title: O("group.rename"),
 			fields: [{
 				name: "name",
-				label: k("inspector.name"),
+				label: O("inspector.name"),
 				value: t?.name ?? "",
 				maxLength: 80
 			}],
 			buttons: ["cancel", {
 				value: "ok",
-				label: k("common.ok"),
+				label: O("common.ok"),
 				primary: !0
 			}]
 		});
@@ -1527,17 +1529,17 @@ var _e = class {
 	async #c(e) {
 		let t = this.doc.block(e), n = await y(this.#e.win, {
 			icon: "pencil",
-			title: k("menu.label"),
-			text: k("menu.labelText"),
+			title: O("menu.label"),
+			text: O("menu.labelText"),
 			fields: [{
 				name: "label",
-				label: k("inspector.label"),
+				label: O("inspector.label"),
 				value: t?.label ?? "",
 				maxLength: 80
 			}],
 			buttons: ["cancel", {
 				value: "ok",
-				label: k("common.ok"),
+				label: O("common.ok"),
 				primary: !0
 			}]
 		});
@@ -1552,7 +1554,7 @@ var _e = class {
 		let o = (i.catalog?.packages ?? []).flatMap((e) => e.blocks).filter((e) => !e.role || e.role === "schemaOut").filter((t) => !e || t.inputs.some((e) => T(a, e.type ?? "any"))), s = /* @__PURE__ */ new Map();
 		for (let e of o) (s.get(e.category) ?? s.set(e.category, []).get(e.category)).push(e);
 		let c = [...s].map(([n, r]) => ({
-			label: k(`cat.blocks.${n}`) ?? n,
+			label: O(`cat.blocks.${n}`) ?? n,
 			items: r.sort((e, t) => i.label(e).localeCompare(i.label(t))).map((n) => ({
 				label: i.label(n),
 				icon: n.icon,
@@ -1570,7 +1572,14 @@ var _e = class {
 		let t = new Set(e);
 		return this.doc.data.links.filter((e) => t.has(e.from[0]) || t.has(e.to[0])).map(te);
 	}
-}, ve = [
+}, J = 30, Y = {
+	w: 160,
+	h: 120
+}, X = 4e3, ye = [
+	"e",
+	"s",
+	"se"
+], be = [
 	"",
 	"drop",
 	"play",
@@ -1590,7 +1599,7 @@ var _e = class {
 	"home",
 	"window",
 	"link"
-], ye = class {
+], xe = class {
 	el;
 	doc;
 	name;
@@ -1626,7 +1635,7 @@ var _e = class {
 	}
 	statusText() {
 		let e = this.doc.components((e) => this.#e.componentDef(e)).length;
-		return k("status.window", {
+		return O("status.window", {
 			n: e,
 			max: this.#e.limits?.maxComponents ?? 200,
 			w: this.doc.data.size.w,
@@ -1634,7 +1643,7 @@ var _e = class {
 		});
 	}
 	toolbar(e) {
-		return [e("pencil", k("window.design"), () => this.setMode("design"), { cls: this.#i === "design" ? "on" : "" }), e("eye", k("window.preview"), () => this.setMode("preview"), { cls: this.#i === "design" ? "" : "on" })];
+		return [e("pencil", O("window.design"), () => this.setMode("design"), { cls: this.#i === "design" ? "on" : "" }), e("eye", O("window.preview"), () => this.setMode("preview"), { cls: this.#i === "design" ? "" : "on" })];
 	}
 	setMode(e) {
 		this.#i = e, this.render(), this.#e.renderToolbar();
@@ -1646,18 +1655,37 @@ var _e = class {
 		this.#o = null, this.#i !== "design" && this.render();
 	}
 	#u() {
-		return (this.#e.ws?.project?.data.texts ?? {})[O.lang] ?? {};
+		return (this.#e.ws?.project?.data.texts ?? {})[D.lang] ?? {};
 	}
 	render() {
 		let e = this.#e, t = this.doc.data, n = this.#i === "design" ? "design" : this.#o ? "live" : "preview";
 		this.#r?.destroy(), this.#c.splice(0).forEach((e) => URL.revokeObjectURL(e)), this.#r = new l({
 			window: t,
 			components: e.components ?? /* @__PURE__ */ new Map(),
-			lang: O.lang,
+			lang: D.lang,
 			texts: this.#u(),
 			host: this.#d(),
 			mode: n
-		}), n === "live" && this.#r.attach(this.#o, this.name), this.#r.on("action", ({ action: e }) => this.#f(e)), this.#n.style.width = `${t.size.w}px`, this.#n.style.height = `${t.size.h}px`, this.#n.replaceChildren(g("div", { class: "ls-wtitle" }, _("window"), g("span", {}, t.title || this.name), g("span", { class: "sp" }), g("i"), g("i"), g("i")), g("div", { class: "ls-wbody" }, this.#r.el)), this.#a && this.#r.elementOf(this.#a)?.classList.add("lui-sel");
+		}), n === "live" && this.#r.attach(this.#o, this.name), this.#r.on("action", ({ action: e }) => this.#f(e)), this.#n.style.width = `${t.size.w}px`, this.#n.style.height = `${t.size.h + J}px`;
+		let r = [
+			t.state === "maximized" && g("span", {
+				class: "ls-wflag",
+				title: O("window.state")
+			}, _("max"), O("window.state.maximized")),
+			t.modal && g("span", {
+				class: "ls-wflag",
+				title: O("window.modalHint")
+			}, _("lock"), O("window.flag.modal")),
+			t.onTop && g("span", {
+				class: "ls-wflag",
+				title: O("window.onTop")
+			}, _("star"), O("window.flag.onTop"))
+		].filter(Boolean);
+		this.#n.replaceChildren(g("div", { class: "ls-wtitle" }, _("window"), g("span", {}, t.title || this.name), ...r, g("span", { class: "sp" }), g("i"), g("i"), g("i")), g("div", { class: "ls-wbody" }, this.#r.el), ...ye.map((e) => g("div", {
+			class: `ls-wresize ${e}`,
+			dataset: { edge: e },
+			title: O("window.resize")
+		}))), this.#a && this.#r.elementOf(this.#a)?.classList.add("lui-sel");
 	}
 	#d() {
 		let e = this.#e;
@@ -1671,7 +1699,7 @@ var _e = class {
 				return this.#c.push(r), r;
 			},
 			pickFile: async ({ kind: t, exts: n }) => {
-				let r = await D(e.openWindow, {
+				let r = await se(e.openWindow, {
 					kind: t,
 					exts: n
 				});
@@ -1688,21 +1716,26 @@ var _e = class {
 		if (e.kind !== "open" || !e.window) return;
 		let n = t.ws?.project?.data.windows[e.window];
 		if (!n) return;
-		let r = await t.ws.doc(n), i = new d({
-			title: r.data.title || e.window,
-			subtitle: k("window.previewOf"),
+		let r = await t.ws.doc(n), i = r.data, a = new d({
+			title: i.title || e.window,
+			subtitle: O("window.previewOf"),
 			icon: "window",
-			width: r.data.size.w,
-			height: r.data.size.h + 30
-		}), a = new l({
+			width: i.size.w,
+			height: i.size.h + J,
+			minWidth: Math.min(320, i.size.w),
+			minHeight: Math.min(200, i.size.h + J),
+			resizable: i.size.resizable !== !1,
+			modal: i.modal === !0,
+			onTop: i.onTop === !0
+		}), o = new l({
 			window: r.data,
 			components: t.components,
-			lang: O.lang,
+			lang: D.lang,
 			texts: this.#u(),
 			host: this.#d(),
 			mode: this.#o ? "live" : "preview"
 		});
-		this.#o && a.attach(this.#o, e.window), i.body.append(g("div", { class: "ls-wbody" }, a.el)), i.on("destroy", () => a.destroy()), t.openWindow(i, `preview-${e.window}`);
+		this.#o && o.attach(this.#o, e.window), a.body.append(g("div", { class: "ls-wbody" }, o.el)), a.on("destroy", () => o.destroy()), t.openWindow(a, `preview-${e.window}`), i.state === "maximized" && !a.el.classList.contains("max") && a.emit("maximize");
 	}
 	select(e) {
 		this.#a = e;
@@ -1717,7 +1750,7 @@ var _e = class {
 		let n = this.#e.limits?.maxComponents ?? 200;
 		if (this.doc.nodes().length > n) return y(this.#e.win, {
 			icon: "warning",
-			title: k("limit.components", { n })
+			title: O("limit.components", { n })
 		}), null;
 		let r = "root", i = Infinity;
 		if (t) ({parent: r, index: i} = t);
@@ -1728,7 +1761,7 @@ var _e = class {
 		let a = (e.type, {});
 		try {
 			let n = this.doc.add(e, r, i, a);
-			return t?.layout && this.doc.setLayout(n, t.layout), this.select(n), e.container || this.#x(n, e), n;
+			return t?.layout && this.doc.setLayout(n, t.layout), this.select(n), e.container || this.#S(n, e), n;
 		} catch (e) {
 			return y(this.#e.win, {
 				icon: "warning",
@@ -1738,36 +1771,39 @@ var _e = class {
 	}
 	#m() {
 		let e = this.#t;
-		e.addEventListener("click", (e) => {
-			if (this.#i !== "design") return;
+		e.addEventListener("pointerdown", (e) => {
+			let t = e.button === 0 && e.target.closest?.(".ls-wresize")?.dataset.edge;
+			t && this.#h(e, t);
+		}, !0), e.addEventListener("click", (e) => {
+			if (this.#i !== "design" || e.target.closest(".ls-wresize")) return;
 			let t = e.target.closest(".lui-c");
 			this.select(t && t.dataset.id !== "root" ? t.dataset.id : null);
 		}), e.addEventListener("dblclick", (e) => {
 			let t = e.target.closest(".lui-c");
-			t && this.#i === "design" && this.#y(t.dataset.id);
+			t && this.#i === "design" && this.#b(t.dataset.id);
 		}), e.addEventListener("contextmenu", (t) => {
 			if (this.#i !== "design") return;
 			t.preventDefault();
 			let n = t.target.closest(".lui-c"), r = n && n.dataset.id !== "root" ? n.dataset.id : null;
 			this.select(r);
 			let i = r ? this.doc.find(r)?.node : null, a = [];
-			i ? (this.#v(r) && a.push({
-				label: k("menu.openObject"),
+			i ? (this.#y(r) && a.push({
+				label: O("menu.openObject"),
 				icon: "blocks",
-				action: () => this.#y(r)
+				action: () => this.#b(r)
 			}), a.push({
-				label: k("menu.docs"),
+				label: O("menu.docs"),
 				icon: "help",
 				shortcut: "F1",
 				action: () => this.#e.showDoc(i.type)
 			}), a.push("-"), a.push({
-				label: k("window.remove"),
+				label: O("window.remove"),
 				icon: "trash",
 				danger: !0,
 				shortcut: "Canc",
-				action: () => this.#_(r)
+				action: () => this.#v(r)
 			})) : a.push({
-				label: k("menu.docsWindow"),
+				label: O("menu.docsWindow"),
 				icon: "help",
 				shortcut: "F1",
 				action: () => this.#e.showDoc("ide/windows")
@@ -1775,30 +1811,44 @@ var _e = class {
 			let o = (n ?? e).getBoundingClientRect();
 			b(t.clientX || o.left + 20, t.clientY || o.top + 20, a);
 		}), e.addEventListener("keydown", (e) => {
-			this.#i === "design" && this.#a && !/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName) && ((e.key === "Delete" || e.key === "Backspace") && (e.preventDefault(), this.#_(this.#a)), e.key === "Escape" && this.select(null));
+			this.#i === "design" && this.#a && !/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName) && ((e.key === "Delete" || e.key === "Backspace") && (e.preventDefault(), this.#v(this.#a)), e.key === "Escape" && this.select(null));
 		}), e.addEventListener("dragover", (e) => {
-			e.dataTransfer.types.includes("application/x-logicstudio-item") && this.#i === "design" && (e.preventDefault(), e.dataTransfer.dropEffect = "copy", this.#h(e.clientX, e.clientY, null));
+			e.dataTransfer.types.includes("application/x-logicstudio-item") && this.#i === "design" && (e.preventDefault(), e.dataTransfer.dropEffect = "copy", this.#g(e.clientX, e.clientY, null));
 		}), e.addEventListener("dragleave", (t) => {
-			e.contains(t.relatedTarget) || this.#g();
+			e.contains(t.relatedTarget) || this.#_();
 		}), e.addEventListener("drop", (e) => {
-			let t = e.dataTransfer.getData(F), n = t && this.#e.componentDef(t), r = this.#s;
-			this.#g(), n && r && (e.preventDefault(), this.place(n, r));
+			let t = e.dataTransfer.getData(P), n = t && this.#e.componentDef(t), r = this.#s;
+			this.#_(), n && r && (e.preventDefault(), this.place(n, r));
 		}), e.addEventListener("pointerdown", (e) => {
 			if (this.#i !== "design" || e.button !== 0) return;
 			let t = e.target.closest(".lui-c");
 			if (!t || t.dataset.id === "root") return;
 			let n = t.dataset.id, r = e.clientX, i = e.clientY, a = !1, o = (e) => {
-				!a && Math.hypot(e.clientX - r, e.clientY - i) < 5 || (a = !0, t.classList.add("lui-moving"), this.#h(e.clientX, e.clientY, n));
+				!a && Math.hypot(e.clientX - r, e.clientY - i) < 5 || (a = !0, t.classList.add("lui-moving"), this.#g(e.clientX, e.clientY, n));
 			}, s = () => {
 				removeEventListener("pointermove", o), removeEventListener("pointerup", s), t.classList.remove("lui-moving");
 				let e = this.#s;
-				this.#g(), a && e && (e.layout ? (e.parent === this.doc.find(n)?.parent?.id || this.doc.move(n, e.parent, e.index), this.doc.setLayout(n, e.layout)) : this.doc.move(n, e.parent, e.index), this.select(n));
+				this.#_(), a && e && (e.layout ? (e.parent === this.doc.find(n)?.parent?.id || this.doc.move(n, e.parent, e.index), this.doc.setLayout(n, e.layout)) : this.doc.move(n, e.parent, e.index), this.select(n));
 			};
 			addEventListener("pointermove", o), addEventListener("pointerup", s);
 		});
 	}
-	#h(e, t, n) {
-		this.#g(!1);
+	#h(e, t) {
+		e.preventDefault(), e.stopPropagation();
+		let n = this.#n, r = n.getBoundingClientRect().width / n.offsetWidth || 1, { w: i, h: a } = this.doc.data.size, o = e.clientX, s = e.clientY, c = i, l = a, u = e.target.closest(".ls-wresize"), d = g("div", { class: "ls-wsize" }, `${i} × ${a}`);
+		n.append(d), n.classList.add("resizing"), u.classList.add("on");
+		let f = (e, t) => Math.max(t, Math.min(X, Math.round(e))), p = (e) => {
+			t.includes("e") && (c = f(i + (e.clientX - o) / r, Y.w)), t.includes("s") && (l = f(a + (e.clientY - s) / r, Y.h)), n.style.width = `${c}px`, n.style.height = `${l + J}px`, d.textContent = `${c} × ${l}`;
+		}, m = () => {
+			removeEventListener("pointermove", p), removeEventListener("pointerup", m), removeEventListener("pointercancel", m), d.remove(), n.classList.remove("resizing"), u.classList.remove("on"), (c !== i || l !== a) && this.doc.setSize({
+				w: c,
+				h: l
+			});
+		};
+		addEventListener("pointermove", p), addEventListener("pointerup", m), addEventListener("pointercancel", m);
+	}
+	#g(e, t, n) {
+		this.#_(!1);
 		let r = document.elementFromPoint(e, t)?.closest(".lui-c");
 		for (; r && n && (r.dataset.id === n || r.closest(`[data-id="${n}"]`));) r = r.parentElement?.closest(".lui-c");
 		let i = r;
@@ -1857,25 +1907,25 @@ var _e = class {
 		});
 		this.#n.append(m), i.classList.add("lui-drop-in");
 	}
-	#g(e = !0) {
+	#_(e = !0) {
 		for (let e of this.#n.querySelectorAll(".lui-drop-line")) e.remove();
 		for (let e of this.#n.querySelectorAll(".lui-drop-in")) e.classList.remove("lui-drop-in");
 		e && (this.#s = null);
 	}
-	async #_(e) {
-		let t = this.#v(e);
+	async #v(e) {
+		let t = this.#y(e);
 		t && await y(this.#e.win, {
 			icon: "warning",
-			title: k("window.removeQ"),
-			text: k("window.removeObject", { schema: t.schema }),
+			title: O("window.removeQ"),
+			text: O("window.removeObject", { schema: t.schema }),
 			buttons: ["cancel", {
 				value: "ok",
-				label: k("explorer.remove"),
+				label: O("explorer.remove"),
 				danger: !0
 			}]
 		}) !== "ok" || (this.doc.remove([e]), this.select(null));
 	}
-	#v(e) {
+	#y(e) {
 		let t = this.#e.ws;
 		if (!t?.project) return null;
 		for (let [n, r] of Object.entries(t.project.data.schemas)) {
@@ -1888,14 +1938,14 @@ var _e = class {
 		}
 		return null;
 	}
-	async #y(e) {
-		let t = this.#v(e);
+	async #b(e) {
+		let t = this.#y(e);
 		if (!t) return;
 		await this.#e.openElement("schemas", t.path);
 		let n = this.#e.current?.view;
 		n?.canvas.select([t.block]), n?.canvas.fit([t.block]);
 	}
-	async #b(e, t, { show: n = !0 } = {}) {
+	async #x(e, t, { show: n = !0 } = {}) {
 		let r = this.#e.ws, i = r.project.data.schemas[t], a = (this.#e.catalog?.packages ?? []).flatMap((e) => e.blocks).find((e) => e.role === "component");
 		if (!i || !a) return;
 		let o = await r.doc(i), s = this.doc.find(e)?.node, c = o.data.view ?? {
@@ -1910,68 +1960,68 @@ var _e = class {
 				component: e
 			}
 		});
-		(s?.props?.label || s?.props?.text) && o.setLabel(u, String(s.props.label || s.props.text).slice(0, 80)), n ? await this.#y(e) : (this.#e.inspector.render(), this.#e.renderToolbar());
+		(s?.props?.label || s?.props?.text) && o.setLabel(u, String(s.props.label || s.props.text).slice(0, 80)), n ? await this.#b(e) : (this.#e.inspector.render(), this.#e.renderToolbar());
 	}
-	async #x(e, t) {
+	async #S(e, t) {
 		let n = this.#e, r = n.ws, i = (n.catalog?.packages ?? []).some((e) => e.blocks.some((e) => e.role === "component"));
 		if (!r?.project || !i) return;
 		let a = Object.keys(r.project.data.schemas), o = "/new", s = await y(n.win, {
 			icon: "blocks",
-			title: k("window.askTitle", { name: n.label(t) }),
-			text: k("window.askText"),
+			title: O("window.askTitle", { name: n.label(t) }),
+			text: O("window.askText"),
 			fields: [{
 				name: "schema",
 				type: "select",
-				label: k("window.inSchema"),
+				label: O("window.inSchema"),
 				value: a.includes(this.#l) ? this.#l : a[0] ?? o,
 				options: [...a, {
 					value: o,
-					label: k("window.newSchema")
+					label: O("window.newSchema")
 				}]
 			}],
 			buttons: [{
 				value: "cancel",
-				label: k("window.later")
+				label: O("window.later")
 			}, {
 				value: "ok",
-				label: k("window.makeObject"),
+				label: O("window.makeObject"),
 				primary: !0
 			}]
 		});
 		if (s?.button !== "ok" || !this.doc.find(e)) return;
 		let c = s.values.schema;
-		if (!(c === o && (c = await this.#S(), !c))) {
+		if (!(c === o && (c = await this.#C(), !c))) {
 			this.#l = c;
 			try {
-				await this.#b(e, c, { show: !1 });
+				await this.#x(e, c, { show: !1 });
 			} catch (e) {
 				y(n.win, {
 					icon: "error",
-					title: k("explorer.failed"),
+					title: O("explorer.failed"),
 					text: e.message
 				});
 			}
 		}
 	}
-	async #S() {
+	async #C() {
 		let e = this.#e, t = e.ws, n = t.groups.find((e) => e.key === "schemas")?.folder, r = await y(e.win, {
 			icon: "blocks",
-			title: k("explorer.new.schemas"),
+			title: O("explorer.new.schemas"),
 			fields: [{
 				name: "name",
-				label: k("explorer.name"),
+				label: O("explorer.name"),
 				value: this.name,
 				required: !0,
 				maxLength: 60,
 				pattern: /^[^/\\:*?"<>|]+$/,
-				invalid: k("explorer.badName")
+				invalid: O("explorer.badName")
 			}],
 			buttons: ["cancel", {
 				value: "ok",
-				label: k("common.create"),
+				label: O("common.create"),
 				primary: !0
 			}],
-			validate: (e) => String(e.name).trim() in t.project.data.schemas ? k("ws.nameTaken", { name: String(e.name).trim() }) : !0
+			validate: (e) => String(e.name).trim() in t.project.data.schemas ? O("ws.nameTaken", { name: String(e.name).trim() }) : !0
 		});
 		if (r?.button !== "ok" || !n) return null;
 		try {
@@ -1980,7 +2030,7 @@ var _e = class {
 		} catch (t) {
 			return y(e.win, {
 				icon: "error",
-				title: k("explorer.failed"),
+				title: O("explorer.failed"),
 				text: t.message
 			}), null;
 		}
@@ -1990,49 +2040,70 @@ var _e = class {
 		if (!this.#a) {
 			let e = this.doc.data;
 			return [
-				t(k("window.window")),
-				n(k("window.title"), w({
+				t(O("window.window")),
+				n(O("window.title"), w({
 					value: e.title,
 					maxLength: 120,
 					onChange: (e) => this.doc.setTitle(e)
 				})),
-				n(k("window.width"), w({
+				n(O("window.width"), w({
 					type: "number",
 					value: e.size.w,
-					min: 160,
-					max: 4e3,
-					onChange: (e) => this.doc.setSize({ w: Math.max(160, Number(e) || 480) })
+					min: Y.w,
+					max: X,
+					onChange: (e) => this.doc.setSize({ w: Math.min(X, Math.max(Y.w, Number(e) || 480)) })
 				})),
-				n(k("window.height"), w({
+				n(O("window.height"), w({
 					type: "number",
 					value: e.size.h,
-					min: 120,
-					max: 4e3,
-					onChange: (e) => this.doc.setSize({ h: Math.max(120, Number(e) || 360) })
+					min: Y.h,
+					max: X,
+					onChange: (e) => this.doc.setSize({ h: Math.min(X, Math.max(Y.h, Number(e) || 360)) })
 				})),
+				g("p", { class: "ls-hint" }, O("window.resizeHint")),
 				g("div", { class: "ls-field" }, m({
 					value: e.size.resizable !== !1,
-					label: k("window.resizable"),
+					label: O("window.resizable"),
 					onChange: (e) => this.doc.setSize({ resizable: e })
 				})),
-				t(k("window.opens")),
-				g("p", { class: "ls-hint" }, this.#C()),
-				g("p", { class: "ls-hint" }, k("window.hint"))
+				t(O("window.opening")),
+				n(O("window.state"), S({
+					value: e.state ?? "normal",
+					options: ["normal", "maximized"].map((e) => ({
+						value: e,
+						label: O(`window.state.${e}`)
+					})),
+					onChange: (e) => this.doc.setOptions({ state: e })
+				})),
+				g("div", { class: "ls-field" }, m({
+					value: e.modal === !0,
+					label: O("window.modal"),
+					onChange: (e) => this.doc.setOptions({ modal: e })
+				})),
+				g("p", { class: "ls-hint" }, O("window.modalHint")),
+				g("div", { class: "ls-field" }, m({
+					value: e.onTop === !0,
+					label: O("window.onTop"),
+					onChange: (e) => this.doc.setOptions({ onTop: e })
+				})),
+				t(O("window.opens")),
+				g("p", { class: "ls-hint" }, this.#w()),
+				g("p", { class: "ls-hint" }, O("window.hint"))
 			];
 		}
 		let r = this.doc.find(this.#a);
 		if (!r) return [];
 		let i = r.node, a = e.componentDef(i.type);
-		if (!a) return [g("p", { class: "ls-insp-note warn" }, k("window.missing", { type: i.type }))];
+		if (!a) return [g("p", { class: "ls-insp-note warn" }, O("window.missing", { type: i.type }))];
 		let o = [g("div", { class: "ls-insp-h cat-ui" }, _(a.icon ?? "window"), g("b", {}, e.label(a)), g("span", {
 			class: "ls-hint mono",
 			style: "margin-left:auto"
-		}, i.id), J(e, a.type))];
-		(a.props ?? []).length && o.push(t(k("inspector.settings")));
-		for (let e of a.props ?? []) o.push(this.#w(i, e));
+		}, i.id), q(e, a.type))];
+		(a.props ?? []).length && o.push(t(O("inspector.settings")));
+		for (let e of a.props ?? []) o.push(this.#T(i, e));
 		if (!a.container) {
 			let r = x(i, a, {
-				lang: O.lang,
+				lang: D.lang,
 				component: {
 					def: a,
 					added: i.added ?? {
@@ -2041,46 +2112,46 @@ var _e = class {
 					}
 				}
 			});
-			o.push(t(k("inspector.ports"))), o.push(g("table", { class: "ls-ports" }, ...r.inputs.map((e) => g("tr", {}, g("td", { class: "nm" }, g("i", { class: `ls-dotc t-${e.type}` }), e.label), g("td", { class: "ty" }, `← ${k(`type.${e.type}`)}`))), ...r.outputs.filter((e) => !e.error).map((e) => g("tr", {}, g("td", { class: "nm" }, g("i", { class: `ls-dotc t-${e.type}` }), e.label), g("td", { class: "ty" }, `→ ${k(`type.${e.type}`)}`))))), o.push(g("p", { class: "ls-hint" }, k("window.portsHint"))), o.push(t(k("window.object")));
-			let s = this.#v(i.id), c = e.ws;
+			o.push(t(O("inspector.ports"))), o.push(g("table", { class: "ls-ports" }, ...r.inputs.map((e) => g("tr", {}, g("td", { class: "nm" }, g("i", { class: `ls-dotc t-${e.type}` }), e.label), g("td", { class: "ty" }, `← ${O(`type.${e.type}`)}`))), ...r.outputs.filter((e) => !e.error).map((e) => g("tr", {}, g("td", { class: "nm" }, g("i", { class: `ls-dotc t-${e.type}` }), e.label), g("td", { class: "ty" }, `→ ${O(`type.${e.type}`)}`))))), o.push(g("p", { class: "ls-hint" }, O("window.portsHint"))), o.push(t(O("window.object")));
+			let s = this.#y(i.id), c = e.ws;
 			if (s) o.push(g("div", { class: "ls-port-line" }, _("blocks"), g("span", {}, `${s.schema} › ${s.block}`))), o.push(g("div", { class: "ls-insp-acts" }, f({
-				label: k("window.openObject"),
+				label: O("window.openObject"),
 				icon: _("open"),
-				onClick: () => this.#y(i.id)
+				onClick: () => this.#b(i.id)
 			})));
 			else if (c?.project) {
 				let e = Object.keys(c.project.data.schemas);
-				o.push(g("p", { class: "ls-hint" }, k("window.noObject")));
+				o.push(g("p", { class: "ls-hint" }, O("window.noObject")));
 				let t = e.includes(this.#l) ? this.#l : e[0];
-				o.push(n(k("window.inSchema"), S({
+				o.push(n(O("window.inSchema"), S({
 					value: t,
 					options: e,
 					onChange: (e) => {
 						t = e;
 					}
 				}))), o.push(g("div", { class: "ls-insp-acts" }, f({
-					label: k("window.makeObject"),
+					label: O("window.makeObject"),
 					icon: _("plus"),
 					primary: !0,
-					onClick: () => this.#b(i.id, t)
+					onClick: () => this.#x(i.id, t)
 				})));
 			}
 		}
 		return o.push(g("div", { class: "ls-insp-acts" }, f({
-			label: k("window.remove"),
+			label: O("window.remove"),
 			icon: _("trash"),
 			danger: !0,
-			onClick: () => this.#_(i.id)
+			onClick: () => this.#v(i.id)
 		}))), o;
 	}
-	#C() {
+	#w() {
 		let e = this.#e.ws?.project?.data;
 		if (!e) return "";
-		if (e.main === this.name) return k("entry.main");
+		if (e.main === this.name) return O("entry.main");
 		let t = e.entrypoints?.[this.name];
-		return k(t ? `entry.${t.kind}` : "entry.none");
+		return O(t ? `entry.${t.kind}` : "entry.none");
 	}
-	#w(e, t) {
+	#T(e, t) {
 		let n = this.#e, r = e.props?.[t.key] ?? t.default, i = (n) => this.doc.setProp(e.id, t.key, n), a = n.label(t), o = (e) => g("label", { class: "ls-field" }, g("span", {}, a), e);
 		switch (t.type) {
 			case "checkbox": return g("div", { class: "ls-field" }, m({
@@ -2100,13 +2171,13 @@ var _e = class {
 				value: r,
 				options: (t.options ?? []).map((e) => ({
 					value: e,
-					label: be(t.key, e)
+					label: Se(t.key, e)
 				})),
 				onChange: i
 			}));
 			case "icon": return o(S({
 				value: r ?? "",
-				options: ve.map((e) => ({
+				options: be.map((e) => ({
 					value: e,
 					label: e || "—"
 				})),
@@ -2115,7 +2186,7 @@ var _e = class {
 			case "console": {
 				let e = n.ws?.project?.data.consoles.list ?? [{
 					id: "main",
-					name: k("console.main")
+					name: O("console.main")
 				}];
 				return o(S({
 					value: r ?? "main",
@@ -2127,7 +2198,7 @@ var _e = class {
 				}));
 			}
 			case "resource": {
-				let e = this.#T();
+				let e = this.#E();
 				return o(S({
 					value: r ?? "",
 					options: [{
@@ -2150,7 +2221,7 @@ var _e = class {
 						"close"
 					].map((e) => ({
 						value: e,
-						label: k(`action.${e}`)
+						label: O(`action.${e}`)
 					})),
 					onChange: (e) => i(e === "open" ? {
 						kind: e,
@@ -2163,7 +2234,7 @@ var _e = class {
 						...e,
 						window: t
 					})
-				}) : null, g("small", { class: "ls-hint" }, k("action.hint")));
+				}) : null, g("small", { class: "ls-hint" }, O("action.hint")));
 			}
 			default: return o(w({
 				value: r ?? "",
@@ -2172,19 +2243,19 @@ var _e = class {
 			}));
 		}
 	}
-	#T() {
+	#E() {
 		let e = this.#e.ws, t = e?.groups.find((e) => e.key === "resources")?.folder, n = [], r = (t) => {
 			for (let i of h.children(t)) i.type === "folder" ? r(i.id) : n.push(e.relative(i.id));
 		};
 		return t && r(t), n;
 	}
 };
-function be(e, t) {
-	let n = `opt.${e}.${t}`, r = k(n);
+function Se(e, t) {
+	let n = `opt.${e}.${t}`, r = O(n);
 	return r === n ? String(t) : r;
 }
 // src/logicstudio/projectMap.js
-var xe = class extends c {
+var Ce = class extends c {
 	constructor(e) {
 		super({
 			format: r.schema,
@@ -2225,7 +2296,7 @@ var xe = class extends c {
 	addBlock() {
 		return null;
 	}
-}, Se = class {
+}, we = class {
 	el;
 	canvas;
 	view = null;
@@ -2234,11 +2305,11 @@ var xe = class extends c {
 	#n = [];
 	#r = /* @__PURE__ */ new Map();
 	constructor(e) {
-		this.#e = e, this.#t = new xe(this), this.canvas = new i({
+		this.#e = e, this.#t = new Ce(this), this.canvas = new i({
 			schema: this.#t,
 			catalog: { packages: [] },
-			lang: O.lang,
-			labels: { error: k("port.error") }
+			lang: D.lang,
+			labels: { error: O("port.error") }
 		}), this.el = g("div", { class: "ls-editor ls-map" }, this.canvas.el), this.canvas.on("select", () => e.inspector.render()), this.canvas.on("open", ({ id: t }) => {
 			let [n, ...r] = t.split("__"), i = this.#i(t), a = e.ws.project.data[n === "s" ? "schemas" : "windows"][i];
 			a && r && e.openElement(n === "s" ? "schemas" : "windows", a);
@@ -2330,10 +2401,10 @@ var xe = class extends c {
 				v: 1,
 				x: f,
 				y: p,
-				config: { info: u.size ? k("map.objectsIn", {
+				config: { info: u.size ? O("map.objectsIn", {
 					list: [...u].join(", "),
 					n: m
-				}) : k("map.noObjects", { n: m }) },
+				}) : O("map.noObjects", { n: m }) },
 				ports: {}
 			});
 		}
@@ -2364,42 +2435,42 @@ var xe = class extends c {
 		this.canvas.destroy();
 	}
 	statusText() {
-		return k("status.map", {
+		return O("status.map", {
 			schemas: Object.keys(this.project.data.schemas).length,
 			windows: Object.keys(this.project.data.windows).length,
 			links: this.project.data.links.length
 		});
 	}
 	toolbar(e) {
-		return [e("fit", k("tb.fit"), () => this.canvas.fit())];
+		return [e("fit", O("tb.fit"), () => this.canvas.fit())];
 	}
 	inspector() {
 		let e = this.project.data, t = this.canvas.selection.blocks, n = [];
 		if (t.length === 1) {
 			let r = this.#i(t[0]), i = t[0].startsWith("s__") ? "schemas" : "windows";
 			return n.push(g("div", { class: "ls-insp-h" }, _(i === "schemas" ? "blocks" : "window"), g("b", {}, r))), n.push(g("p", { class: "ls-hint" }, e[i][r])), n.push(g("div", { class: "ls-insp-acts" }, f({
-				label: k("explorer.open"),
+				label: O("explorer.open"),
 				icon: _("open"),
 				onClick: () => this.#e.openElement(i, e[i][r])
 			}))), n;
 		}
-		n.push(g("h5", { class: "ls-sec" }, k("map.project"))), n.push(g("div", { class: "ls-field ro" }, g("span", {}, k("inspector.name")), g("b", {}, e.name))), n.push(g("div", { class: "ls-field ro" }, g("span", {}, k("map.main")), g("b", {}, e.main ?? "—"))), n.push(g("h5", { class: "ls-sec" }, k("map.links"))), e.links.length || n.push(g("p", { class: "ls-hint" }, k("map.noLinks")));
+		n.push(g("h5", { class: "ls-sec" }, O("map.project"))), n.push(g("div", { class: "ls-field ro" }, g("span", {}, O("inspector.name")), g("b", {}, e.name))), n.push(g("div", { class: "ls-field ro" }, g("span", {}, O("map.main")), g("b", {}, e.main ?? "—"))), n.push(g("h5", { class: "ls-sec" }, O("map.links"))), e.links.length || n.push(g("p", { class: "ls-hint" }, O("map.noLinks")));
 		for (let t of e.links) n.push(g("div", { class: "ls-port-line" }, g("span", {}, `${t.from.replace(":", " › ")}  →  ${t.to.replace(":", " › ")}`), g("button", {
 			type: "button",
 			class: "ls-link-btn danger",
 			onclick: () => this.project.unlink(t.from, t.to)
-		}, k("inspector.unlink"))));
-		return n.push(g("p", { class: "ls-hint" }, k("map.hint"))), n;
+		}, O("inspector.unlink"))));
+		return n.push(g("p", { class: "ls-hint" }, O("map.hint"))), n;
 	}
-}, Ce = class {
+}, Te = class {
 	el;
 	#e;
 	constructor(e) {
 		this.#e = e, this.el = g("div", { class: "ls-insp" });
 	}
 	render() {
-		let e = this.#e.current, t = g("div", { class: "ls-insp-tabs" }, g("span", { class: "on" }, k("inspector.title"))), n;
-		n = e?.kind === "schema" ? this.#t(e.view) : e?.kind === "window" || e?.kind === "map" ? e.view.inspector?.() ?? [] : [g("p", { class: "ls-empty" }, k("inspector.nothing"))], this.el.replaceChildren(t, g("div", { class: "ls-insp-body" }, ...[n].flat()));
+		let e = this.#e.current, t = g("div", { class: "ls-insp-tabs" }, g("span", { class: "on" }, O("inspector.title"))), n;
+		n = e?.kind === "schema" ? this.#t(e.view) : e?.kind === "window" || e?.kind === "map" ? e.view.inspector?.() ?? [] : [g("p", { class: "ls-empty" }, O("inspector.nothing"))], this.el.replaceChildren(t, g("div", { class: "ls-insp-body" }, ...[n].flat()));
 	}
 	#t(e) {
 		let { blocks: t, links: n, groups: r = [] } = e.selection, i = e.doc;
@@ -2407,69 +2478,69 @@ var xe = class extends c {
 		if (t.length === 1 && !r.length) return this.#a(e, i.block(t[0]));
 		if (t.length || r.length) {
 			let n = t.filter((e) => !i.groupOf(e)).length;
-			return [g("p", { class: "ls-insp-note" }, r.length ? k("group.manySel", {
+			return [g("p", { class: "ls-insp-note" }, r.length ? O("group.manySel", {
 				blocks: t.length,
 				groups: r.length
-			}) : k("inspector.many", { n: t.length })), g("div", { class: "ls-insp-acts col" }, n && !e.canvas.readOnly ? f({
-				label: k("group.make"),
+			}) : O("inspector.many", { n: t.length })), g("div", { class: "ls-insp-acts col" }, n && !e.canvas.readOnly ? f({
+				label: O("group.make"),
 				icon: _("group"),
 				primary: !0,
 				onClick: () => e.canvas.groupSelection()
 			}) : null, f({
-				label: k("menu.removeBlocks", { n: t.length + r.length }),
+				label: O("menu.removeBlocks", { n: t.length + r.length }),
 				danger: !0,
 				icon: "trash",
 				onClick: () => e.canvas.removeSelection()
 			}))];
 		}
-		if (n.length) return [g("p", { class: "ls-insp-note" }, k("inspector.links", { n: n.length })), g("div", { class: "ls-insp-acts" }, f({
-			label: k("menu.removeLink"),
+		if (n.length) return [g("p", { class: "ls-insp-note" }, O("inspector.links", { n: n.length })), g("div", { class: "ls-insp-acts" }, f({
+			label: O("menu.removeLink"),
 			danger: !0,
 			icon: _("trash"),
 			onClick: () => e.canvas.removeSelection()
 		}))];
-		let a = i.schemaPorts((e) => this.#e.blockDef(e)), o = [this.#g(k("inspector.schema"))];
-		o.push(this.#_(k("inspector.name"), g("span", { class: "ls-ro" }, e.name))), o.push(this.#_(k("inspector.blocks"), g("span", { class: "ls-ro" }, String(i.data.blocks.length)))), o.push(this.#g(k("inspector.schemaPorts"))), !a.inputs.length && !a.outputs.length && o.push(g("p", { class: "ls-hint" }, k("inspector.noSchemaPorts")));
-		for (let e of a.inputs) o.push(g("div", { class: "ls-port-line" }, _("portIn"), g("span", {}, e.name), g("em", {}, k(`type.${e.type}`))));
-		for (let e of a.outputs) o.push(g("div", { class: "ls-port-line" }, _("portOut"), g("span", {}, e.name), g("em", {}, k(`type.${e.type}`))));
-		return o.push(g("p", { class: "ls-hint" }, k("inspector.schemaHint"))), o;
+		let a = i.schemaPorts((e) => this.#e.blockDef(e)), o = [this.#g(O("inspector.schema"))];
+		o.push(this.#_(O("inspector.name"), g("span", { class: "ls-ro" }, e.name))), o.push(this.#_(O("inspector.blocks"), g("span", { class: "ls-ro" }, String(i.data.blocks.length)))), o.push(this.#g(O("inspector.schemaPorts"))), !a.inputs.length && !a.outputs.length && o.push(g("p", { class: "ls-hint" }, O("inspector.noSchemaPorts")));
+		for (let e of a.inputs) o.push(g("div", { class: "ls-port-line" }, _("portIn"), g("span", {}, e.name), g("em", {}, O(`type.${e.type}`))));
+		for (let e of a.outputs) o.push(g("div", { class: "ls-port-line" }, _("portOut"), g("span", {}, e.name), g("em", {}, O(`type.${e.type}`))));
+		return o.push(g("p", { class: "ls-hint" }, O("inspector.schemaHint"))), o;
 	}
 	#n(e, t) {
 		if (!t) return [];
 		let n = this.#e, r = e.doc, i = e.canvas.readOnly, a = [];
-		a.push(g("div", { class: "ls-insp-h cat-group" }, _("group"), g("b", {}, t.name), J(n, "ide/groups"))), a.push(this.#_(k("inspector.name"), w({
+		a.push(g("div", { class: "ls-insp-h cat-group" }, _("group"), g("b", {}, t.name), q(n, "ide/groups"))), a.push(this.#_(O("inspector.name"), w({
 			value: t.name,
 			maxLength: 80,
 			disabled: i,
 			onChange: (e) => r.setGroup(t.id, { name: e })
 		}))), a.push(g("div", { class: "ls-field" }, m({
 			value: t.collapsed,
-			label: k("group.collapsedField"),
+			label: O("group.collapsedField"),
 			disabled: i,
 			onChange: (e) => r.setGroup(t.id, { collapsed: e })
 		}))), a.push(g("div", { class: "ls-field" }, m({
 			value: t.thread,
-			label: k("group.threadField"),
+			label: O("group.threadField"),
 			disabled: i,
 			onChange: (e) => r.setGroup(t.id, { thread: e })
-		}))), a.push(g("p", { class: "ls-hint" }, k("group.threadHint"))), t.thread && t.blocks.some((e) => [
+		}))), a.push(g("p", { class: "ls-hint" }, O("group.threadHint"))), t.thread && t.blocks.some((e) => [
 			"schemaIn",
 			"schemaOut",
 			"component"
-		].includes(n.blockDef(r.block(e)?.type)?.role)) && a.push(g("p", { class: "ls-insp-note warn" }, k("group.threadNo"))), a.push(this.#g(k("group.run")));
+		].includes(n.blockDef(r.block(e)?.type)?.role)) && a.push(g("p", { class: "ls-insp-note warn" }, O("group.threadNo"))), a.push(this.#g(O("group.run")));
 		let o = r.data.links.filter((e) => e.to[0] === t.id), s = r.data.links.filter((e) => e.from[0] === t.id);
-		if (a.push(g("p", { class: `ls-insp-note${o.length ? "" : " warn"}` }, o.length ? k("group.runOn", { n: o.length }) : k("group.runOff"))), a.push(g("p", { class: "ls-hint" }, k("group.runInside", { n: s.length }))), a.push(this.#g(k("group.exposed"))), !t.expose.length) a.push(g("p", { class: "ls-hint" }, k("group.noExposed")));
+		if (a.push(g("p", { class: `ls-insp-note${o.length ? "" : " warn"}` }, o.length ? O("group.runOn", { n: o.length }) : O("group.runOff"))), a.push(g("p", { class: "ls-hint" }, O("group.runInside", { n: s.length }))), a.push(this.#g(O("group.exposed"))), !t.expose.length) a.push(g("p", { class: "ls-hint" }, O("group.noExposed")));
 		else {
 			let o = [];
 			t.expose.forEach((a, s) => {
 				let c = r.block(a.block), l = c && n.blockDef(c.type), u = l?.role === "component" ? e.componentOf(c) : null, d = l && x(c, l, {
-					lang: O.lang,
+					lang: D.lang,
 					component: u,
-					errorLabel: k("port.error")
+					errorLabel: O("port.error")
 				})[a.side === "in" ? "inputs" : "outputs"].find((e) => e.name === a.port);
 				if (!d) return;
 				let f = `${c.label || n.label(l)} › ${d.label}`;
-				o.push(g("tr", {}, g("td", { class: "vis" }, g("span", { title: k(a.side === "in" ? "inspector.inputs" : "inspector.outputs") }, _(a.side === "in" ? "portIn" : "portOut"))), g("td", { class: "nm" }, g("i", { class: `ls-dotc t-${d.type}` }), w({
+				o.push(g("tr", {}, g("td", { class: "vis" }, g("span", { title: O(a.side === "in" ? "inspector.inputs" : "inspector.outputs") }, _(a.side === "in" ? "portIn" : "portOut"))), g("td", { class: "nm" }, g("i", { class: `ls-dotc t-${d.type}` }), w({
 					value: a.name ?? "",
 					placeholder: d.label,
 					maxLength: 60,
@@ -2479,13 +2550,13 @@ var xe = class extends c {
 				})), g("td", { class: "acts" }, g("span", { class: "ls-port-acts" }, g("button", {
 					type: "button",
 					class: "ls-icon-btn",
-					title: k("inspector.up"),
+					title: O("inspector.up"),
 					disabled: i || s === 0,
 					onclick: () => r.moveExposed(t.id, s, s - 1)
 				}, _("arrowUp")), g("button", {
 					type: "button",
 					class: "ls-icon-btn",
-					title: k("inspector.down"),
+					title: O("inspector.down"),
 					disabled: i || s === t.expose.length - 1,
 					onclick: () => r.moveExposed(t.id, s, s + 1)
 				}, _("arrowDown")), g("button", {
@@ -2493,16 +2564,16 @@ var xe = class extends c {
 					class: "ls-link-btn danger",
 					disabled: i,
 					onclick: () => this.#r(e, t, a, d.label)
-				}, k("inspector.removePort")))))), o.push(g("tr", { class: "opts" }, g("td", { colspan: 3 }, g("span", { class: "ls-hint" }, f))));
+				}, O("inspector.removePort")))))), o.push(g("tr", { class: "opts" }, g("td", { colspan: 3 }, g("span", { class: "ls-hint" }, f))));
 			}), a.push(g("table", { class: "ls-ports" }, ...o));
 		}
-		return a.push(g("p", { class: "ls-hint" }, k("group.exposeHint"))), a.push(this.#g(k("inspector.blocks"))), a.push(g("p", { class: "ls-hint" }, k("group.blocks", { n: t.blocks.length }))), a.push(g("div", { class: "ls-insp-acts col" }, f({
-			label: k("group.ungroup"),
+		return a.push(g("p", { class: "ls-hint" }, O("group.exposeHint"))), a.push(this.#g(O("inspector.blocks"))), a.push(g("p", { class: "ls-hint" }, O("group.blocks", { n: t.blocks.length }))), a.push(g("div", { class: "ls-insp-acts col" }, f({
+			label: O("group.ungroup"),
 			icon: _("group"),
 			disabled: i,
 			onClick: () => e.canvas.ungroupSelection()
 		}), f({
-			label: k("group.remove"),
+			label: O("group.remove"),
 			icon: _("trash"),
 			danger: !0,
 			disabled: i,
@@ -2513,11 +2584,11 @@ var xe = class extends c {
 		let i = e.doc, a = (e) => t.blocks.includes(e) || e === t.id, o = i.data.links.filter((e) => n.side === "out" ? e.from[0] === n.block && e.from[1] === n.port && !a(e.to[0]) : e.to[0] === n.block && e.to[1] === n.port && !a(e.from[0]));
 		o.length && await y(this.#e.win, {
 			icon: "warning",
-			title: k("group.unexposeQ", { name: r }),
-			text: k("inspector.removeLinks", { n: o.length }),
+			title: O("group.unexposeQ", { name: r }),
+			text: O("inspector.removeLinks", { n: o.length }),
 			buttons: ["cancel", {
 				value: "ok",
-				label: k("group.unexpose"),
+				label: O("group.unexpose"),
 				danger: !0
 			}]
 		}) !== "ok" || i.setExposed(t.id, n.block, n.side, n.port, !1);
@@ -2525,7 +2596,7 @@ var xe = class extends c {
 	#i(e, t, n, r) {
 		let i = e.doc.groupOf(t.id);
 		if (!i) return null;
-		let a = n === "inputs" ? "in" : "out", o = i.expose.some((e) => e.block === t.id && e.side === a && e.port === r.name), s = k(o ? "group.unexpose" : "group.expose");
+		let a = n === "inputs" ? "in" : "out", o = i.expose.some((e) => e.block === t.id && e.side === a && e.port === r.name), s = O(o ? "group.unexpose" : "group.expose");
 		return g("button", {
 			type: "button",
 			class: `ls-icon-btn ls-expose${o ? " on" : ""}`,
@@ -2543,27 +2614,27 @@ var xe = class extends c {
 	#a(e, t) {
 		if (!t) return [];
 		let n = this.#e, r = e.doc, i = n.blockDef(t.type), a = [];
-		if (!i) return [g("p", { class: "ls-insp-note warn" }, k("block.missingText", { type: t.type })), g("div", { class: "ls-insp-acts" }, f({
-			label: k("menu.removeBlock"),
+		if (!i) return [g("p", { class: "ls-insp-note warn" }, O("block.missingText", { type: t.type })), g("div", { class: "ls-insp-acts" }, f({
+			label: O("menu.removeBlock"),
 			danger: !0,
 			icon: _("trash"),
 			onClick: () => e.canvas.removeSelection()
 		}))];
-		a.push(g("div", { class: `ls-insp-h cat-${i.category}` }, _(i.icon ?? "blocks"), g("b", {}, n.label(i)), J(n, q(n, t, (t) => e.componentOf(t))))), i.description && a.push(g("p", { class: "ls-hint" }, n.label({ label: i.description }))), i.role || a.push(this.#_(k("inspector.label"), w({
+		a.push(g("div", { class: `ls-insp-h cat-${i.category}` }, _(i.icon ?? "blocks"), g("b", {}, n.label(i)), q(n, K(n, t, (t) => e.componentOf(t))))), i.description && a.push(g("p", { class: "ls-hint" }, n.label({ label: i.description }))), i.role || a.push(this.#_(O("inspector.label"), w({
 			value: t.label ?? "",
 			placeholder: n.label(i),
 			maxLength: 80,
 			onChange: (e) => r.setLabel(t.id, e.trim())
 		})));
 		let o = r.groupOf(t.id);
-		o && a.push(g("div", { class: "ls-port-line" }, _("group"), g("span", {}, k("group.inGroup", { name: o.name })), g("button", {
+		o && a.push(g("div", { class: "ls-port-line" }, _("group"), g("span", {}, O("group.inGroup", { name: o.name })), g("button", {
 			type: "button",
 			class: "ls-link-btn",
 			onclick: () => e.canvas.select([], [], { groups: [o.id] })
-		}, k("group.show")))), i.role === "component" && a.push(...this.#m(e, t));
+		}, O("group.show")))), i.role === "component" && a.push(...this.#m(e, t));
 		let s = (i.config ?? []).filter((e) => i.role !== "component");
 		if (s.length) {
-			a.push(this.#g(k("inspector.settings")));
+			a.push(this.#g(O("inspector.settings")));
 			for (let r of s) (!r.when || Object.entries(r.when).every(([e, n]) => Array.isArray(n) ? n.includes(t.config[e]) : t.config[e] === n)) && (r.type === "checkbox" ? a.push(g("div", { class: "ls-field" }, m({
 				value: !!t.config[r.key],
 				label: n.label(r),
@@ -2572,25 +2643,25 @@ var xe = class extends c {
 			(i.role === "schemaIn" || i.role === "schemaOut") && a.push(...this.#p(e, t, i));
 		}
 		let c = i.role === "component" ? e.canvas && this.#h(e, t) : null, l = x(t, i, {
-			lang: O.lang,
+			lang: D.lang,
 			component: c,
-			errorLabel: k("port.error")
+			errorLabel: O("port.error")
 		});
-		if (a.push(this.#g(k("inspector.ports"))), a.push(this.#o(e, t, i, l, c)), i.grow && !c) {
+		if (a.push(this.#g(O("inspector.ports"))), a.push(this.#o(e, t, i, l, c)), i.grow && !c) {
 			let e = [];
 			for (let a of ["inputs", "outputs"]) {
 				let o = i.grow[a];
 				if (!o) continue;
 				let s = t.added?.[a]?.length ?? 0, c = Math.min(o.max, n.limits?.maxAddedPorts ?? 32);
 				e.push(f({
-					label: k(a === "inputs" ? "inspector.addInput" : "inspector.addOutput"),
+					label: O(a === "inputs" ? "inspector.addInput" : "inspector.addOutput"),
 					icon: _("plus"),
 					primary: !0,
 					onClick: () => {
 						try {
 							r.addPort(t.id, i, a, {
 								limit: c,
-								lang: O.lang
+								lang: D.lang
 							});
 						} catch (e) {
 							y(n.win, {
@@ -2599,14 +2670,14 @@ var xe = class extends c {
 							});
 						}
 					}
-				})), s >= c && (e.at(-1).disabled = !0), e.push(g("span", { class: "ls-hint" }, k("inspector.addedCount", {
+				})), s >= c && (e.at(-1).disabled = !0), e.push(g("span", { class: "ls-hint" }, O("inspector.addedCount", {
 					n: s,
 					max: c
 				})));
 			}
 			a.push(g("div", { class: "ls-insp-acts col" }, ...e));
 		}
-		a.push(this.#g(k("inspector.block")));
+		a.push(this.#g(O("inspector.block")));
 		let u = (n.catalog?.packages ?? []).find((e) => e.blocks.some((e) => e.type === i.type));
 		return a.push(g("p", { class: "ls-hint mono" }, `${i.type} v${i.version}${u ? ` · ${u.name} ${u.version}` : ""}`)), a;
 	}
@@ -2615,7 +2686,7 @@ var xe = class extends c {
 		for (let s of ["inputs", "outputs"]) {
 			let c = r[s];
 			if (!c.length) continue;
-			o.push(g("tr", { class: "side" }, g("th", { colspan: 4 }, k(s === "inputs" ? "inspector.inputs" : "inspector.outputs"))));
+			o.push(g("tr", { class: "side" }, g("th", { colspan: 4 }, O(s === "inputs" ? "inspector.inputs" : "inspector.outputs"))));
 			let l = c.filter((e) => e.added);
 			for (let r of c) {
 				let c = r.added && n.grow?.[s]?.name === "user" && !i ? w({
@@ -2626,30 +2697,30 @@ var xe = class extends c {
 				}) : g("span", { class: r.added ? "added" : "" }, r.label), u;
 				if (!r.added) u = g("span", {
 					class: "ls-lock",
-					title: k("inspector.basePort")
+					title: O("inspector.basePort")
 				}, _("lock"));
-				else if (i) u = g("span", { class: "ls-hint" }, k("inspector.ofComponent"));
+				else if (i) u = g("span", { class: "ls-hint" }, O("inspector.ofComponent"));
 				else {
 					let n = l.indexOf(r);
 					u = g("span", { class: "ls-port-acts" }, g("button", {
 						type: "button",
 						class: "ls-icon-btn",
-						title: k("inspector.up"),
+						title: O("inspector.up"),
 						disabled: n === 0,
 						onclick: () => a.movePort(t.id, s, n, n - 1)
 					}, _("arrowUp")), g("button", {
 						type: "button",
 						class: "ls-icon-btn",
-						title: k("inspector.down"),
+						title: O("inspector.down"),
 						disabled: n === l.length - 1,
 						onclick: () => a.movePort(t.id, s, n, n + 1)
 					}, _("arrowDown")), g("button", {
 						type: "button",
 						class: "ls-link-btn danger",
 						onclick: () => this.#u(e, t, s, r)
-					}, k("inspector.removePort")));
+					}, O("inspector.removePort")));
 				}
-				o.push(g("tr", { class: `${r.error ? "err" : ""}${r.hidden && !this.#s(a, t, s, r) ? " hid" : ""}` }, g("td", { class: `vis${a.groupOf(t.id) ? " two" : ""}` }, this.#c(e, t, s, r), this.#i(e, t, s, r)), g("td", { class: "nm" }, g("i", { class: `ls-dotc t-${r.type}` }), c), g("td", { class: "ty" }, k(`type.${r.type}`)), g("td", { class: "acts" }, u))), s === "inputs" && !r.error && !i && o.push(g("tr", { class: "opts" }, g("td", { colspan: 4 }, this.#l(a, t, r))));
+				o.push(g("tr", { class: `${r.error ? "err" : ""}${r.hidden && !this.#s(a, t, s, r) ? " hid" : ""}` }, g("td", { class: `vis${a.groupOf(t.id) ? " two" : ""}` }, this.#c(e, t, s, r), this.#i(e, t, s, r)), g("td", { class: "nm" }, g("i", { class: `ls-dotc t-${r.type}` }), c), g("td", { class: "ty" }, O(`type.${r.type}`)), g("td", { class: "acts" }, u))), s === "inputs" && !r.error && !i && o.push(g("tr", { class: "opts" }, g("td", { colspan: 4 }, this.#l(a, t, r))));
 			}
 		}
 		return g("table", { class: "ls-ports" }, ...o);
@@ -2662,8 +2733,8 @@ var xe = class extends c {
 		return g("button", {
 			type: "button",
 			class: `ls-icon-btn ls-eye${a ? " off" : ""}`,
-			title: k(i ? "inspector.linkedPort" : a ? "inspector.showPort" : "inspector.hidePort"),
-			"aria-label": `${k(i ? "inspector.linkedPort" : a ? "inspector.showPort" : "inspector.hidePort")}: ${r.label}`,
+			title: O(i ? "inspector.linkedPort" : a ? "inspector.showPort" : "inspector.hidePort"),
+			"aria-label": `${O(i ? "inspector.linkedPort" : a ? "inspector.showPort" : "inspector.hidePort")}: ${r.label}`,
 			"aria-disabled": i ? "true" : null,
 			disabled: e.canvas?.readOnly,
 			dataset: { eye: o },
@@ -2676,11 +2747,11 @@ var xe = class extends c {
 		let r = t.ports?.[n.name] ?? {};
 		return g("span", { class: "ls-in-opts" }, m({
 			value: r.trigger !== !1,
-			label: k("inspector.starts"),
+			label: O("inspector.starts"),
 			onChange: (r) => e.setPort(t.id, n.name, { trigger: r })
 		}), n.type === "pulse" ? null : w({
 			value: r.start === void 0 ? "" : JSON.stringify(r.start),
-			placeholder: k("inspector.startValue"),
+			placeholder: O("inspector.startValue"),
 			className: "ls-start",
 			mono: !0,
 			onChange: (r) => {
@@ -2697,11 +2768,11 @@ var xe = class extends c {
 		let i = e.doc, a = i.linksOf(t.id, r.name, n);
 		a.length && await y(this.#e.win, {
 			icon: "warning",
-			title: k("inspector.removeQ", { name: r.label }),
-			text: k("inspector.removeLinks", { n: a.length }),
+			title: O("inspector.removeQ", { name: r.label }),
+			text: O("inspector.removeLinks", { n: a.length }),
 			buttons: ["cancel", {
 				value: "ok",
-				label: k("inspector.removePort"),
+				label: O("inspector.removePort"),
 				danger: !0
 			}]
 		}) !== "ok" || i.removePort(t.id, n, r.name);
@@ -2722,7 +2793,7 @@ var xe = class extends c {
 					label: a.label(e)
 				} : {
 					value: e,
-					label: we(r.key, e)
+					label: Ee(r.key, e)
 				}),
 				onChange: s
 			});
@@ -2763,36 +2834,36 @@ var xe = class extends c {
 	#f() {
 		return (this.#e.ws?.project?.data.consoles.list ?? this.#e.current?.doc?.data.consoles?.list ?? [{
 			id: "main",
-			name: k("console.main")
+			name: O("console.main")
 		}]).map((e) => ({
 			id: e.id,
-			name: e.id === "main" ? `${e.name || k("console.main")} ★` : e.name
+			name: e.id === "main" ? `${e.name || O("console.main")} ★` : e.name
 		}));
 	}
 	#p(e, t, n) {
 		let r = this.#e.ws?.project;
-		if (!r) return [g("p", { class: "ls-hint" }, k("inspector.aloneHint"))];
-		let i = `${e.name}:${t.config.port}`, a = r.data.links.filter((e) => n.role === "schemaOut" ? e.from === i : e.to === i), o = [this.#g(k("inspector.projectLinks"))];
-		a.length || o.push(g("p", { class: "ls-hint" }, k("inspector.noProjectLinks")));
+		if (!r) return [g("p", { class: "ls-hint" }, O("inspector.aloneHint"))];
+		let i = `${e.name}:${t.config.port}`, a = r.data.links.filter((e) => n.role === "schemaOut" ? e.from === i : e.to === i), o = [this.#g(O("inspector.projectLinks"))];
+		a.length || o.push(g("p", { class: "ls-hint" }, O("inspector.noProjectLinks")));
 		for (let e of a) {
 			let t = n.role === "schemaOut" ? e.to : e.from;
 			o.push(g("div", { class: "ls-port-line" }, _(n.role === "schemaOut" ? "arrowRight" : "arrowLeft"), g("span", {}, t.replace(":", " › ")), g("button", {
 				type: "button",
 				class: "ls-link-btn danger",
 				onclick: () => r.unlink(e.from, e.to)
-			}, k("inspector.unlink"))));
+			}, O("inspector.unlink"))));
 		}
 		return o.push(g("div", { class: "ls-insp-acts" }, f({
-			label: k("inspector.inMap"),
+			label: O("inspector.inMap"),
 			icon: _("grid"),
 			onClick: () => this.#e.openMap()
 		}))), o;
 	}
 	#m(e, t) {
-		let n = this.#e.ws, r = [this.#g(k("inspector.component"))];
-		if (!n?.project) return [...r, g("p", { class: "ls-hint" }, k("inspector.componentAlone"))];
+		let n = this.#e.ws, r = [this.#g(O("inspector.component"))];
+		if (!n?.project) return [...r, g("p", { class: "ls-hint" }, O("inspector.componentAlone"))];
 		let i = Object.keys(n.project.data.windows);
-		r.push(this.#_(k("inspector.window"), S({
+		r.push(this.#_(O("inspector.window"), S({
 			value: t.config.window,
 			options: i,
 			onChange: (n) => {
@@ -2803,7 +2874,7 @@ var xe = class extends c {
 			value: e.id,
 			label: `${e.props?.label || e.props?.text || e.id} · ${this.#e.label(this.#e.componentDef(e.type)) || e.type}`
 		})) : [];
-		return r.push(this.#_(k("inspector.componentName"), S({
+		return r.push(this.#_(O("inspector.componentName"), S({
 			value: t.config.component,
 			options: [{
 				value: "",
@@ -2829,12 +2900,12 @@ var xe = class extends c {
 		return g("label", { class: "ls-field" }, g("span", {}, e), t);
 	}
 };
-function we(e, t) {
-	let n = `opt.${e}.${t}`, r = k(n);
+function Ee(e, t) {
+	let n = `opt.${e}.${t}`, r = O(n);
 	return r === n ? String(t) : r;
 }
 // src/logicstudio/bottom.js
-var Te = class {
+var De = class {
 	el;
 	#e;
 	#t;
@@ -2859,10 +2930,10 @@ var Te = class {
 			ask: !!e.ask
 		})) : (this.#n.ws?.project?.data.consoles.list ?? [{
 			id: "main",
-			name: k("console.main")
+			name: O("console.main")
 		}]).map((e) => ({
 			id: e.id,
-			name: e.id === "main" ? e.name || k("console.main") : e.name,
+			name: e.id === "main" ? e.name || O("console.main") : e.name,
 			color: e.color ?? null,
 			main: e.id === "main",
 			ask: !1
@@ -2893,30 +2964,30 @@ var Te = class {
 			style: `background:${e.color || "#6b7280"}`
 		}), ...e.main ? [g("b", {
 			class: "star",
-			title: k("console.mainHint")
+			title: O("console.mainHint")
 		}, "★")] : []]));
 		for (let [t, r] of e.entries()) r.ask && n[t].append(g("b", {
 			class: "kb",
-			title: k("console.asking")
+			title: O("console.asking")
 		}, "⌨"));
 		let r = this.#n.ws, i = [g("span", { class: "sp" })];
 		if (this.#r !== "problems" && this.#n.runner.consoles && i.push(g("button", {
 			type: "button",
 			class: "act",
 			onclick: () => this.#d(this.#r)
-		}, k("console.detach"))), i.push(g("button", {
+		}, O("console.detach"))), i.push(g("button", {
 			type: "button",
 			class: "act",
-			title: k(this.#o ? "console.expand" : "console.collapse"),
+			title: O(this.#o ? "console.expand" : "console.collapse"),
 			onclick: () => {
 				this.#o = !this.#o, this.render();
 			}
 		}, _(this.#o ? "arrowUp" : "arrowDown"))), this.#e.replaceChildren(...n, r?.project ? g("button", {
 			type: "button",
 			class: "add",
-			title: k("console.add"),
+			title: O("console.add"),
 			onclick: () => this.#u()
-		}, "+") : null, g("span", { class: "bsep" }), t("problems", k("problems.title"), this.#a.length ? [g("span", { class: "n" }, String(this.#a.length))] : []), ...i), this.el.classList.toggle("collapsed", this.#o), this.#o) {
+		}, "+") : null, g("span", { class: "bsep" }), t("problems", O("problems.title"), this.#a.length ? [g("span", { class: "n" }, String(this.#a.length))] : []), ...i), this.el.classList.toggle("collapsed", this.#o), this.#o) {
 			this.#t.replaceChildren();
 			return;
 		}
@@ -2926,19 +2997,19 @@ var Te = class {
 		}
 		let o = this.#n.runner.consoles;
 		if (!o) {
-			this.#t.replaceChildren(g("p", { class: "ls-empty" }, k("console.idle")));
+			this.#t.replaceChildren(g("p", { class: "ls-empty" }, O("console.idle")));
 			return;
 		}
 		let s = this.#i.get(this.#r);
 		s || (s = new a(o, {
 			console: this.#r,
 			labels: {
-				hint: k("console.hint"),
+				hint: O("console.hint"),
 				kinds: {
-					text: k("kind.text"),
-					number: k("kind.number"),
-					bool: k("kind.bool"),
-					key: k("kind.key")
+					text: O("kind.text"),
+					number: O("kind.number"),
+					bool: O("kind.bool"),
+					key: O("kind.key")
 				}
 			}
 		}), this.#i.set(this.#r, s)), this.#t.replaceChildren(s.el);
@@ -2951,7 +3022,7 @@ var Te = class {
 			onkeydown: (t) => {
 				t.key === "Enter" && this.#l(e.where);
 			}
-		}, _(e.level === "warning" ? "warning" : "error"), g("span", {}, e.message), e.where?.schema ? g("em", {}, e.where.schema) : e.where?.window ? g("em", {}, e.where.window) : null))) : g("p", { class: "ls-empty" }, k("problems.none"));
+		}, _(e.level === "warning" ? "warning" : "error"), g("span", {}, e.message), e.where?.schema ? g("em", {}, e.where.schema) : e.where?.window ? g("em", {}, e.where.window) : null))) : g("p", { class: "ls-empty" }, O("problems.none"));
 	}
 	async #l(e) {
 		let t = this.#n;
@@ -2971,17 +3042,17 @@ var Te = class {
 		if (!e) return;
 		let t = await y(this.#n.win, {
 			icon: "terminal",
-			title: k("console.add"),
+			title: O("console.add"),
 			fields: [{
 				name: "name",
-				label: k("explorer.name"),
+				label: O("explorer.name"),
 				value: "",
 				required: !0,
 				maxLength: 60
 			}],
 			buttons: ["cancel", {
 				value: "ok",
-				label: k("common.create"),
+				label: O("common.create"),
 				primary: !0
 			}]
 		});
@@ -2991,18 +3062,18 @@ var Te = class {
 		let t = this.#n.runner.consoles, n = t?.get(e);
 		if (!n) return;
 		let r = new d({
-			title: k("console.windowTitle", { name: n.name }),
+			title: O("console.windowTitle", { name: n.name }),
 			subtitle: this.#n.ws?.name ?? "",
 			icon: "terminal",
 			width: 560,
 			height: 340
 		}), i = new a(t, {
 			console: e,
-			labels: { hint: k("console.hint") }
+			labels: { hint: O("console.hint") }
 		});
 		r.body.append(i.el), r.on("destroy", () => i.destroy()), this.#n.openWindow(r, `console-${e}`);
 	}
-}, Ee = class {
+}, Oe = class {
 	program = null;
 	live = null;
 	consoles = null;
@@ -3015,7 +3086,7 @@ var Te = class {
 	statusText() {
 		if (!this.program) return "";
 		let e = Math.floor((Date.now() - (this.program.started ?? Date.now())) / 1e3);
-		return k("run.testing", { time: `${String(Math.floor(e / 60)).padStart(2, "0")}:${String(e % 60).padStart(2, "0")}` });
+		return O("run.testing", { time: `${String(Math.floor(e / 60)).padStart(2, "0")}:${String(e % 60).padStart(2, "0")}` });
 	}
 	async test() {
 		let e = this.#e;
@@ -3037,7 +3108,7 @@ var Te = class {
 					kind: "test",
 					name: e.ws.name,
 					documents: t,
-					lang: O.lang,
+					lang: D.lang,
 					watch: !0
 				});
 			} catch (t) {
@@ -3078,11 +3149,11 @@ var Te = class {
 		if (t.dirty) {
 			if (await y(e.win, {
 				icon: "warning",
-				title: k("run.saveFirst"),
-				text: k("run.saveFirstText"),
+				title: O("run.saveFirst"),
+				text: O("run.saveFirstText"),
 				buttons: ["cancel", {
 					value: "save",
-					label: k("close.saveAll"),
+					label: O("close.saveAll"),
 					primary: !0
 				}]
 			}) !== "save") return;
@@ -3094,11 +3165,11 @@ var Te = class {
 			if (n.length) {
 				if (await y(e.win, {
 					icon: "power",
-					title: k("run.alreadyActive", { name: t.name }),
-					text: k("run.alreadyActiveText"),
+					title: O("run.alreadyActive", { name: t.name }),
+					text: O("run.alreadyActiveText"),
 					buttons: ["cancel", {
 						value: "replace",
-						label: k("run.replace"),
+						label: O("run.replace"),
 						primary: !0
 					}]
 				}) !== "replace") return;
@@ -3109,12 +3180,12 @@ var Te = class {
 				name: t.name,
 				documents: i,
 				source: { path: r },
-				lang: O.lang
+				lang: D.lang
 			});
 			await y(e.win, {
 				icon: "power",
-				title: k("run.activated", { name: a.name }),
-				text: k("run.activatedText")
+				title: O("run.activated", { name: a.name }),
+				text: O("run.activatedText")
 			}), e.home.refresh();
 		} catch (t) {
 			e.bottom.setProblems([{
@@ -3128,7 +3199,7 @@ var Te = class {
 		for (let [r, i] of Object.entries(e.schemas)) for (let a of i.blocks ?? []) {
 			let i = t.blockDef(a.type);
 			if (!i) n.push({
-				message: k("problems.missingBlock", {
+				message: O("problems.missingBlock", {
 					block: a.label ?? a.id,
 					type: a.type
 				}),
@@ -3141,7 +3212,7 @@ var Te = class {
 				if (i.role === "component") {
 					let t = e.windows[a.config?.window];
 					t ? JSON.stringify(t.root).includes(`"id":"${a.config.component}"`) || n.push({
-						message: k("problems.noComponent", {
+						message: O("problems.noComponent", {
 							block: a.id,
 							component: a.config?.component ?? ""
 						}),
@@ -3150,7 +3221,7 @@ var Te = class {
 							block: a.id
 						}
 					}) : n.push({
-						message: k("problems.noWindow", {
+						message: O("problems.noWindow", {
 							block: a.id,
 							window: a.config?.window ?? ""
 						}),
@@ -3161,7 +3232,7 @@ var Te = class {
 					});
 				}
 				i.role !== "schemaIn" && i.role !== "schemaOut" || String(a.config?.port ?? "").trim() || n.push({
-					message: k("problems.noPortName"),
+					message: O("problems.noPortName"),
 					where: {
 						schema: r,
 						block: a.id
@@ -3171,10 +3242,10 @@ var Te = class {
 		}
 		return e.project && Object.keys(e.windows).length && !e.project.main && n.push({
 			level: "warning",
-			message: k("problems.noMain")
+			message: O("problems.noMain")
 		}), n;
 	}
-}, De = class {
+}, ke = class {
 	el;
 	#e;
 	#t = g("div", { class: "ls-home-progs" });
@@ -3187,53 +3258,53 @@ var Te = class {
 	}
 	render() {
 		let e = this.#e, t = $.list().map((e) => h.get(e)).filter(Boolean);
-		this.el.replaceChildren(g("div", { class: "ls-home-main" }, g("h2", {}, _("blocks"), k("app.name")), g("p", { class: "ls-hint" }, k("home.intro")), g("div", { class: "ls-home-acts" }, f({
-			label: k("home.new"),
+		this.el.replaceChildren(g("div", { class: "ls-home-main" }, g("h2", {}, _("blocks"), O("app.name")), g("p", { class: "ls-hint" }, O("home.intro")), g("div", { class: "ls-home-acts" }, f({
+			label: O("home.new"),
 			icon: _("plus"),
 			primary: !0,
 			onClick: () => e.newProject()
 		}), f({
-			label: k("home.open"),
+			label: O("home.open"),
 			icon: _("open"),
 			onClick: () => e.openProjectPicker()
-		})), g("h3", {}, k("home.recent")), t.length ? g("ul", { class: "ls-recent" }, ...t.map((t) => g("li", {}, g("button", {
+		})), g("h3", {}, O("home.recent")), t.length ? g("ul", { class: "ls-recent" }, ...t.map((t) => g("li", {}, g("button", {
 			type: "button",
 			onclick: () => e.open(t.id)
-		}, _(t.name.endsWith(".lsch") ? "blocks" : "grid"), g("b", {}, t.name.replace(/\.(lsproj|lsch)$/i, "")), g("small", {}, h.path(t.parent)))))) : g("p", { class: "ls-empty" }, k("home.noRecent")), g("h3", {}, k("home.programs")), this.#t), g("div", { class: "ls-home-side" }, g("h3", {}, k("home.usage")), this.#n));
+		}, _(t.name.endsWith(".lsch") ? "blocks" : "grid"), g("b", {}, t.name.replace(/\.(lsproj|lsch)$/i, "")), g("small", {}, h.path(t.parent)))))) : g("p", { class: "ls-empty" }, O("home.noRecent")), g("h3", {}, O("home.programs")), this.#t), g("div", { class: "ls-home-side" }, g("h3", {}, O("home.usage")), this.#n));
 	}
 	async refresh() {
 		let e = [], t = null;
 		try {
 			[e, t] = await Promise.all([v.programs(), v.status()]);
 		} catch {
-			this.#t.replaceChildren(g("div", { class: "ls-notice" }, _("warning"), g("span", {}, k("home.noEngine")), f({
-				label: k("home.appstore"),
+			this.#t.replaceChildren(g("div", { class: "ls-notice" }, _("warning"), g("span", {}, O("home.noEngine")), f({
+				label: O("home.appstore"),
 				onClick: () => ae("appstore")
 			}))), this.#n.replaceChildren();
 			return;
 		}
-		e.length ? this.#t.replaceChildren(g("table", { class: "ls-progs" }, g("tr", {}, g("th", {}, k("home.colName")), g("th", {}, k("home.colKind")), g("th", {}, k("home.colState")), g("th", {}, k("home.colSince")), g("th", {})), ...e.map((e) => g("tr", {}, g("td", {}, g("b", {}, e.name), e.source?.path ? g("small", {}, e.source.path) : null, e.error ? g("small", { class: "err" }, e.error) : null), g("td", {}, k(`kind.${e.kind}`)), g("td", {}, g("span", { class: `ls-st ${e.status}` }, k(`state.${e.status}`))), g("td", {}, e.started ? O.date(e.started, {
+		e.length ? this.#t.replaceChildren(g("table", { class: "ls-progs" }, g("tr", {}, g("th", {}, O("home.colName")), g("th", {}, O("home.colKind")), g("th", {}, O("home.colState")), g("th", {}, O("home.colSince")), g("th", {})), ...e.map((e) => g("tr", {}, g("td", {}, g("b", {}, e.name), e.source?.path ? g("small", {}, e.source.path) : null, e.error ? g("small", { class: "err" }, e.error) : null), g("td", {}, O(`kind.${e.kind}`)), g("td", {}, g("span", { class: `ls-st ${e.status}` }, O(`state.${e.status}`))), g("td", {}, e.started ? D.date(e.started, {
 			dateStyle: "short",
 			timeStyle: "short"
 		}) : "—"), g("td", { class: "acts" }, e.status === "running" && e.windows?.length && E.logicHost ? g("button", {
 			type: "button",
 			class: "ls-link-btn",
 			onclick: () => E.logicHost.openMain(e.id)
-		}, k("home.openWindow")) : null, e.source?.path && h.resolve(e.source.path) ? g("button", {
+		}, O("home.openWindow")) : null, e.source?.path && h.resolve(e.source.path) ? g("button", {
 			type: "button",
 			class: "ls-link-btn",
 			onclick: () => this.#e.open(h.resolve(e.source.path).id)
-		}, k("home.openProject")) : null, e.status === "running" || e.status === "starting" ? g("button", {
+		}, O("home.openProject")) : null, e.status === "running" || e.status === "starting" ? g("button", {
 			type: "button",
 			class: "ls-link-btn",
 			onclick: () => this.#r(e)
-		}, k("home.stop")) : g("button", {
+		}, O("home.stop")) : g("button", {
 			type: "button",
 			class: "ls-link-btn danger",
 			onclick: () => v.forget(e.id).then(() => this.refresh())
-		}, k("home.forget"))))))) : this.#t.replaceChildren(g("p", { class: "ls-empty" }, k("home.noPrograms")));
+		}, O("home.forget"))))))) : this.#t.replaceChildren(g("p", { class: "ls-empty" }, O("home.noPrograms")));
 		let n = t.quota, r = (e, t, n, r = `${t} / ${n}`) => g("div", { class: "ls-u" }, g("span", {}, e), g("b", {}, r), g("i", { class: "bar" }, g("i", { style: `width:${n ? Math.min(100, t / n * 100) : 0}%` })));
-		this.#n.replaceChildren(r(k("usage.active"), t.active, n.maxActive), r(k("usage.tests"), t.tests, n.maxTests), r(k("usage.net"), t.net, n.netPerMinute), r(k("usage.log"), t.log, n.logMb * 1024 * 1024, `${Math.round(t.log / 1024)} KB / ${n.logMb} MB`), g("p", { class: "ls-hint" }, k("usage.cpuMem", {
+		this.#n.replaceChildren(r(O("usage.active"), t.active, n.maxActive), r(O("usage.tests"), t.tests, n.maxTests), r(O("usage.net"), t.net, n.netPerMinute), r(O("usage.log"), t.log, n.logMb * 1024 * 1024, `${Math.round(t.log / 1024)} KB / ${n.logMb} MB`), g("p", { class: "ls-hint" }, O("usage.cpuMem", {
 			cpu: n.cpuPercent,
 			mem: n.memoryMb
 		})));
@@ -3241,22 +3312,22 @@ var Te = class {
 	async #r(e) {
 		(e.kind !== "active" || await y(this.#e.win, {
 			icon: "power",
-			title: k("home.stopQ", { name: e.name }),
-			text: k("home.stopText"),
+			title: O("home.stopQ", { name: e.name }),
+			text: O("home.stopText"),
 			buttons: ["cancel", {
 				value: "ok",
-				label: k("home.stop"),
+				label: O("home.stop"),
 				danger: !0
 			}]
 		}) === "ok") && (await v.stop(e.id).catch(() => {}), this.refresh());
 	}
-}, Oe = [
+}, Ae = [
 	"none",
 	"file",
 	"action",
 	"call",
 	"login"
-], ke = [
+], je = [
 	"#6b7280",
 	"#0f9d9a",
 	"#d9822b",
@@ -3266,7 +3337,7 @@ var Te = class {
 	"#2da44e",
 	"#d9a514"
 ];
-function Ae(e, t = "general") {
+function Me(e, t = "general") {
 	let n = e.ws?.project;
 	if (!n) return;
 	let r = e.optionsWindow;
@@ -3275,7 +3346,7 @@ function Ae(e, t = "general") {
 		return;
 	}
 	let i = new d({
-		title: k("options.title"),
+		title: O("options.title"),
 		subtitle: n.data.name,
 		icon: "gear",
 		width: 820,
@@ -3301,11 +3372,11 @@ function Ae(e, t = "general") {
 			onclick: () => {
 				s = e, c();
 			}
-		}, k(`options.${e}`)))), o.replaceChildren(...{
-			general: je,
-			windows: Me,
-			consoles: Ne,
-			app: Fe
+		}, O(`options.${e}`)))), o.replaceChildren(...{
+			general: Ne,
+			windows: Pe,
+			consoles: Fe,
+			app: Le
 		}[s](e, n, c));
 	}, l = () => c();
 	return n.on("change", l), i.on("destroy", () => {
@@ -3314,42 +3385,42 @@ function Ae(e, t = "general") {
 		s = e, c();
 	}, e.optionsWindow = i, c(), e.openWindow(i, "options"), i;
 }
-var Y = (e, t, n = null) => g("label", { class: "ls-field" }, g("span", {}, e), t, n ? g("small", { class: "ls-hint" }, n) : null), X = (e) => g("h4", { class: "ls-opt-h" }, e);
-function je(e, t) {
+var Z = (e, t, n = null) => g("label", { class: "ls-field" }, g("span", {}, e), t, n ? g("small", { class: "ls-hint" }, n) : null), Q = (e) => g("h4", { class: "ls-opt-h" }, e);
+function Ne(e, t) {
 	let n = t.data;
 	return [
-		X(k("options.general")),
-		Y(k("options.name"), w({
+		Q(O("options.general")),
+		Z(O("options.name"), w({
 			value: n.name,
 			maxLength: 80,
 			onChange: (e) => e.trim() && t.setInfo({ name: e.trim() })
 		})),
-		Y(k("options.version"), w({
+		Z(O("options.version"), w({
 			value: n.version,
 			maxLength: 20,
 			onChange: (e) => /^\d+\.\d+\.\d+$/.test(e.trim()) && t.setInfo({ version: e.trim() })
-		}), k("options.versionHint")),
-		Y(k("options.description"), w({
+		}), O("options.versionHint")),
+		Z(O("options.description"), w({
 			value: n.description ?? "",
 			maxLength: 300,
 			onChange: (e) => t.setInfo({ description: e })
 		}))
 	];
 }
-function Me(e, t) {
-	let n = t.data, r = Object.keys(n.windows), i = [X(k("options.windows")), g("p", { class: "ls-hint" }, k("options.windowsHint"))];
-	if (!r.length) return [...i, g("p", { class: "ls-empty" }, k("options.noWindows"))];
-	i.push(Y(k("options.main"), S({
+function Pe(e, t) {
+	let n = t.data, r = Object.keys(n.windows), i = [Q(O("options.windows")), g("p", { class: "ls-hint" }, O("options.windowsHint"))];
+	if (!r.length) return [...i, g("p", { class: "ls-empty" }, O("options.noWindows"))];
+	i.push(Z(O("options.main"), S({
 		value: n.main,
 		options: r,
 		onChange: (e) => t.setMain(e)
-	}), k("options.mainHint")));
+	}), O("options.mainHint")));
 	let a = r.map((e) => {
-		let r = n.entrypoints[e] ?? null, i = e === n.main ? "main" : r?.kind ?? "none", a = e === n.main ? g("span", { class: "ls-hint" }, k("entry.main")) : g("span", { class: "ls-entry" }, S({
+		let r = n.entrypoints[e] ?? null, i = e === n.main ? "main" : r?.kind ?? "none", a = e === n.main ? g("span", { class: "ls-hint" }, O("entry.main")) : g("span", { class: "ls-entry" }, S({
 			value: i,
-			options: Oe.map((e) => ({
+			options: Ae.map((e) => ({
 				value: e,
-				label: k(`entry.${e}`)
+				label: O(`entry.${e}`)
 			})),
 			onChange: (n) => t.setEntrypoint(e, n === "none" ? null : {
 				kind: n,
@@ -3358,14 +3429,14 @@ function Me(e, t) {
 			})
 		}), i === "file" ? w({
 			value: (r.ext ?? []).join(", "),
-			placeholder: k("entry.extPlaceholder"),
+			placeholder: O("entry.extPlaceholder"),
 			onChange: (n) => t.setEntrypoint(e, {
 				...r,
 				ext: n.split(/[\s,;]+/).map((e) => e.replace(/^\./, "").toLowerCase()).filter((e) => /^[a-z0-9]{1,16}$/.test(e)).slice(0, 12)
 			})
 		}) : null, i === "none" ? null : w({
 			value: r?.label ?? "",
-			placeholder: k("entry.label"),
+			placeholder: O("entry.label"),
 			maxLength: 60,
 			onChange: (n) => t.setEntrypoint(e, {
 				...r,
@@ -3374,14 +3445,14 @@ function Me(e, t) {
 		}));
 		return g("tr", {}, g("td", {}, _("window"), g("b", {}, e), e === n.main ? g("span", { class: "pill" }, "main") : null), g("td", {}, a));
 	});
-	return i.push(g("table", { class: "ls-opt-table" }, g("tr", {}, g("th", {}, k("options.window")), g("th", {}, k("options.opensFrom"))), ...a)), i.push(g("p", { class: "ls-hint" }, k("options.unlinkedHint"))), i;
+	return i.push(g("table", { class: "ls-opt-table" }, g("tr", {}, g("th", {}, O("options.window")), g("th", {}, O("options.opensFrom"))), ...a)), i.push(g("p", { class: "ls-hint" }, O("options.unlinkedHint"))), i;
 }
-function Ne(e, t) {
-	let n = t.data.consoles, r = [X(k("options.consoleList"))], i = n.list.map((n) => g("tr", {}, g("td", {}, n.id === "main" ? g("b", {}, n.name || k("console.main"), " ★") : w({
+function Fe(e, t) {
+	let n = t.data.consoles, r = [Q(O("options.consoleList"))], i = n.list.map((n) => g("tr", {}, g("td", {}, n.id === "main" ? g("b", {}, n.name || O("console.main"), " ★") : w({
 		value: n.name,
 		maxLength: 60,
 		onChange: (e) => e.trim() && t.updateConsole(n.id, { name: e.trim() })
-	})), g("td", {}, g("span", { class: "ls-swatches" }, ...ke.map((e) => g("button", {
+	})), g("td", {}, g("span", { class: "ls-swatches" }, ...je.map((e) => g("button", {
 		type: "button",
 		class: `sw${(n.color ?? "#6b7280") === e ? " on" : ""}`,
 		style: `background:${e}`,
@@ -3395,18 +3466,18 @@ function Ne(e, t) {
 		max: 2e3,
 		step: 100,
 		onChange: (e) => t.updateConsole(n.id, { keep: Math.max(100, Math.min(2e3, Number(e) || 1e3)) })
-	})), g("td", {}, n.id === "main" ? g("span", { class: "ls-hint" }, k("options.mainConsole")) : g("button", {
+	})), g("td", {}, n.id === "main" ? g("span", { class: "ls-hint" }, O("options.mainConsole")) : g("button", {
 		type: "button",
 		class: "ls-link-btn danger",
-		onclick: () => Pe(e, t, n)
-	}, k("options.remove")))));
-	r.push(g("table", { class: "ls-opt-table" }, g("tr", {}, g("th", {}, k("options.consoleName")), g("th", {}, k("options.color")), g("th", {}, k("options.keep")), g("th", {})), ...i));
+		onclick: () => Ie(e, t, n)
+	}, O("options.remove")))));
+	r.push(g("table", { class: "ls-opt-table" }, g("tr", {}, g("th", {}, O("options.consoleName")), g("th", {}, O("options.color")), g("th", {}, O("options.keep")), g("th", {})), ...i));
 	let a = f({
-		label: k("console.add"),
+		label: O("console.add"),
 		icon: _("plus"),
-		onClick: () => t.addConsole(k("options.newConsole", { n: n.list.length }))
+		onClick: () => t.addConsole(O("options.newConsole", { n: n.list.length }))
 	});
-	return a.disabled = n.list.length >= (e.limits?.maxConsoles ?? 10), r.push(g("div", { class: "ls-insp-acts" }, a, g("span", { class: "ls-hint" }, k("options.removeHint")))), r.push(X(k("options.outside"))), r.push(re({
+	return a.disabled = n.list.length >= (e.limits?.maxConsoles ?? 10), r.push(g("div", { class: "ls-insp-acts" }, a, g("span", { class: "ls-hint" }, O("options.removeHint")))), r.push(Q(O("options.outside"))), r.push(re({
 		value: n.outside,
 		onChange: (e) => t.setConsoles({ outside: e }),
 		options: [
@@ -3416,19 +3487,19 @@ function Ne(e, t) {
 			"main"
 		].map((e) => ({
 			value: e,
-			label: `${k(`outside.${e}`)} — ${k(`outside.${e}.hint`)}`
+			label: `${O(`outside.${e}`)} — ${O(`outside.${e}.hint`)}`
 		}))
-	})), r.push(X(k("options.details"))), r.push(m({
+	})), r.push(Q(O("options.details"))), r.push(m({
 		value: n.closeAfterAnswer !== !1,
-		label: k("options.closeAfter"),
+		label: O("options.closeAfter"),
 		disabled: n.outside !== "onInput",
 		onChange: (e) => t.setConsoles({ closeAfterAnswer: e })
 	})), r.push(m({
 		value: n.notify !== !1,
-		label: k("options.notify"),
+		label: O("options.notify"),
 		disabled: n.outside === "hidden",
 		onChange: (e) => t.setConsoles({ notify: e })
-	})), r.push(Y(k("options.copyToLog"), S({
+	})), r.push(Z(O("options.copyToLog"), S({
 		value: n.copyToLog ?? "warnings",
 		options: [
 			"none",
@@ -3436,53 +3507,53 @@ function Ne(e, t) {
 			"all"
 		].map((e) => ({
 			value: e,
-			label: k(`log.${e}`)
+			label: O(`log.${e}`)
 		})),
 		onChange: (e) => t.setConsoles({ copyToLog: e })
-	}))), r.push(Y(k("options.mainOpens"), S({
+	}))), r.push(Z(O("options.mainOpens"), S({
 		value: n.mainOpens ?? "start",
 		disabled: n.outside !== "main",
 		options: ["start", "onInput"].map((e) => ({
 			value: e,
-			label: k(`mainOpens.${e}`)
+			label: O(`mainOpens.${e}`)
 		})),
 		onChange: (e) => t.setConsoles({ mainOpens: e })
-	}))), r.push(g("p", { class: "ls-hint" }, k("options.consoleQuota"))), r;
+	}))), r.push(g("p", { class: "ls-hint" }, O("options.consoleQuota"))), r;
 }
-async function Pe(e, t, n) {
+async function Ie(e, t, n) {
 	await y(e.win, {
 		icon: "warning",
-		title: k("options.removeConsoleQ", { name: n.name }),
-		text: k("options.removeHint"),
+		title: O("options.removeConsoleQ", { name: n.name }),
+		text: O("options.removeHint"),
 		buttons: ["cancel", {
 			value: "ok",
-			label: k("options.remove"),
+			label: O("options.remove"),
 			danger: !0
 		}]
 	}) === "ok" && t.removeConsole(n.id);
 }
-function Fe(e, t) {
+function Le(e, t) {
 	let n = t.data.options;
 	return [
-		X(k("options.app")),
-		g("p", { class: "ls-hint" }, k("options.appHint")),
+		Q(O("options.app")),
+		g("p", { class: "ls-hint" }, O("options.appHint")),
 		m({
 			value: n.keepValues !== !1,
-			label: k("options.keepValues"),
+			label: O("options.keepValues"),
 			onChange: (e) => t.setOptions({ keepValues: e })
 		}),
-		g("p", { class: "ls-hint ind" }, k("options.keepValuesHint")),
+		g("p", { class: "ls-hint ind" }, O("options.keepValuesHint")),
 		m({
 			value: n.syncCopies !== !1,
-			label: k("options.syncCopies"),
+			label: O("options.syncCopies"),
 			onChange: (e) => t.setOptions({ syncCopies: e })
 		}),
-		g("p", { class: "ls-hint ind" }, k("options.syncCopiesHint")),
-		g("p", { class: "ls-hint" }, k("options.commandsHint"))
+		g("p", { class: "ls-hint ind" }, O("options.syncCopiesHint")),
+		g("p", { class: "ls-hint" }, O("options.commandsHint"))
 	];
 }
 // src/logicstudio/createApp.js
-var Ie = [
+var Re = [
 	"blocks",
 	"window",
 	"chart",
@@ -3495,20 +3566,20 @@ var Ie = [
 	"home",
 	"globe",
 	"terminal"
-], Le = [
+], ze = [
 	["#2da44e", "green"],
 	["#3b6ef5", "blue"],
 	["#6e56cf", "violet"],
 	["#0f7d74", "teal"],
 	["#d9822b", "orange"],
 	["#e5484d", "red"]
-], Re = /^[a-z][a-z0-9-]{1,40}$/;
-async function ze(e) {
+], Be = /^[a-z][a-z0-9-]{1,40}$/;
+async function Ve(e) {
 	let t = e.ws;
 	if (!t?.project) return;
 	t.dirty && await e.saveAll();
 	let n = t.project.data, r = {
-		id: n.app?.id || Be(n.name),
+		id: n.app?.id || He(n.name),
 		glyph: n.app?.glyph || "blocks",
 		color: n.app?.color || "#2da44e"
 	}, i = g("span", { class: "ls-app-preview" });
@@ -3518,55 +3589,55 @@ async function ze(e) {
 	})))(r.glyph, r.color);
 	let a = await y(e.win, {
 		icon: "blocks",
-		title: k("app.title", { name: n.name }),
-		text: k("app.text"),
+		title: O("app.title", { name: n.name }),
+		text: O("app.text"),
 		width: 520,
-		content: g("div", { class: "ls-app-head" }, i, g("small", { class: "ls-hint" }, k("app.where", { folder: `~/${k("app.folder")}/` }))),
+		content: g("div", { class: "ls-app-head" }, i, g("small", { class: "ls-hint" }, O("app.where", { folder: `~/${O("app.folder")}/` }))),
 		fields: [
 			{
 				name: "name",
-				label: k("app.appName"),
+				label: O("app.appName"),
 				value: n.name,
 				required: !0,
 				maxLength: 60
 			},
 			{
 				name: "id",
-				label: k("app.id"),
+				label: O("app.id"),
 				value: r.id,
 				required: !0,
-				pattern: Re,
-				invalid: k("app.badId")
+				pattern: Be,
+				invalid: O("app.badId")
 			},
 			{
 				name: "version",
-				label: k("app.version"),
+				label: O("app.version"),
 				value: n.version || "1.0.0",
 				required: !0,
 				pattern: /^\d+\.\d+\.\d+$/,
-				invalid: k("options.versionHint")
+				invalid: O("options.versionHint")
 			},
 			{
 				name: "description",
-				label: k("app.description"),
+				label: O("app.description"),
 				value: n.description ?? "",
 				maxLength: 200
 			},
 			{
 				name: "glyph",
 				type: "select",
-				label: k("app.icon"),
+				label: O("app.icon"),
 				value: r.glyph,
-				options: Ie
+				options: Re
 			},
 			{
 				name: "color",
 				type: "select",
-				label: k("app.color"),
+				label: O("app.color"),
 				value: r.color,
-				options: Le.map(([e, t]) => ({
+				options: ze.map(([e, t]) => ({
 					value: e,
-					label: k(`app.color.${t}`)
+					label: O(`app.color.${t}`)
 				}))
 			}
 		],
@@ -3574,11 +3645,11 @@ async function ze(e) {
 			"cancel",
 			{
 				value: "create",
-				label: k("app.create")
+				label: O("app.create")
 			},
 			{
 				value: "run",
-				label: k("app.createRun"),
+				label: O("app.createRun"),
 				primary: !0
 			}
 		]
@@ -3594,39 +3665,39 @@ async function ze(e) {
 		description: o.description
 	}), await t.save(t.project);
 	try {
-		let t = await Ue(e, o);
+		let t = await Ke(e, o);
 		if (a.button === "run") {
-			if (!E.logicHost?.runApp) throw Error(k("app.needsLilos"));
+			if (!E.logicHost?.runApp) throw Error(O("app.needsLilos"));
 			await E.logicHost.runApp(t);
 		} else await y(e.win, {
 			icon: "blocks",
-			title: k("app.done", { name: o.name }),
-			text: k("app.doneText", { path: h.path(h.get(t).parent) })
+			title: O("app.done", { name: o.name }),
+			text: O("app.doneText", { path: h.path(h.get(t).parent) })
 		});
 	} catch (t) {
 		await y(e.win, {
 			icon: "error",
-			title: k("app.failed"),
+			title: O("app.failed"),
 			text: t.message
 		});
 	}
 }
-var Be = (e) => String(e).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").replace(/^(\d)/, "app-$1").slice(0, 40) || "app";
-function Ve(e, t) {
+var He = (e) => String(e).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").replace(/^(\d)/, "app-$1").slice(0, 40) || "app";
+function Ue(e, t) {
 	return h.children(e).find((e) => e.type === "folder" && e.name === t)?.id ?? h.create(e, {
 		type: "folder",
 		name: t
 	}).id;
 }
-async function Z(e, t, n) {
+async function We(e, t, n) {
 	let r = h.create(t, {
 		type: "folder",
 		name: n
 	});
-	for (let t of h.children(e)) t.type === "folder" ? await Z(t.id, r.id, t.name) : t.type === "file" && await h.copy(t.id, r.id);
+	for (let t of h.children(e)) t.type === "folder" ? await We(t.id, r.id, t.name) : t.type === "file" && await h.copy(t.id, r.id);
 	return r.id;
 }
-async function He(e, t) {
+async function Ge(e, t) {
 	let n = /* @__PURE__ */ new Set();
 	for (let e of Object.values(t.schemas)) for (let t of e.blocks ?? []) n.add(t.type);
 	let r = (e) => {
@@ -3644,8 +3715,8 @@ async function He(e, t) {
 	});
 	return i;
 }
-async function Ue(e, t) {
-	let n = e.ws, r = await n.documents(), i = n.project.data, a = Ve(h.root, k("app.folder")), o = h.children(a).find((e) => e.type === "folder" && e.name === t.id);
+async function Ke(e, t) {
+	let n = e.ws, r = await n.documents(), i = n.project.data, a = Ue(h.root, O("app.folder")), o = h.children(a).find((e) => e.type === "folder" && e.name === t.id);
 	o && h.trash([o.id]);
 	let s = h.create(a, {
 		type: "folder",
@@ -3654,7 +3725,7 @@ async function Ue(e, t) {
 		type: "folder",
 		name: "project"
 	}).id, l = h.get(n.projectFile).name;
-	for (let e of n.groups) e.folder && await Z(e.folder, c, h.get(e.folder).name);
+	for (let e of n.groups) e.folder && await We(e.folder, c, h.get(e.folder).name);
 	await h.copy(n.projectFile, c, { name: l });
 	let u = { main: { kind: "window" } }, d = [];
 	for (let [e, t] of Object.entries(i.entrypoints ?? {})) e !== i.main && t?.kind && t.kind !== "none" && (u[`w${Object.keys(u).length}`] = {
@@ -3681,7 +3752,7 @@ async function Ue(e, t) {
 		sdk: "2",
 		lilos: ">=1.37.0",
 		entrypoints: u,
-		dependencies: await He(e, r),
+		dependencies: await Ge(e, r),
 		permissions: [],
 		...d.length && { contributes: { fileTypes: [...new Set(d)] } },
 		logicstudio: {
@@ -3695,13 +3766,13 @@ async function Ue(e, t) {
 		});
 		return await h.write(n.id, t), n.id;
 	};
-	return await p("lilos.json", `${JSON.stringify(f, null, 2)}\n`), await p("index.js", Ge), await p("locales.json", `${JSON.stringify(We(i, t), null, 2)}\n`), p(`${t.id}.lsapp`, `${JSON.stringify({
+	return await p("lilos.json", `${JSON.stringify(f, null, 2)}\n`), await p("index.js", Je), await p("locales.json", `${JSON.stringify(qe(i, t), null, 2)}\n`), p(`${t.id}.lsapp`, `${JSON.stringify({
 		format: "lilos-lsapp/1",
 		manifest: "lilos.json",
 		project: `project/${l}`
 	}, null, 2)}\n`);
 }
-function We(e, t) {
+function qe(e, t) {
 	let n = { en: { strings: {
 		"@name": t.name,
 		"@description": t.description || t.name
@@ -3709,25 +3780,25 @@ function We(e, t) {
 	for (let [t, r] of Object.entries(e.texts ?? {})) n[t] ??= { strings: {} }, Object.assign(n[t].strings, r);
 	return n;
 }
-var Ge = "/**\n * An app made with Logic Studio IDE from a project (folder project/). lilOS runs its project in\n * the Logic Studio engine and opens its windows: each entry point is one of its windows.\n * Made by «Crea app»: change the project in Logic Studio and make the app again.\n */\nexport default function main({ lilos, entry = 'main', args } = {}) {\n  return lilos?.logic?.runApp?.({ entry, args });\n}\n";
+var Je = "/**\n * An app made with Logic Studio IDE from a project (folder project/). lilOS runs its project in\n * the Logic Studio engine and opens its windows: each entry point is one of its windows.\n * Made by «Crea app»: change the project in Logic Studio and make the app again.\n */\nexport default function main({ lilos, entry = 'main', args } = {}) {\n  return lilos?.logic?.runApp?.({ entry, args });\n}\n";
 // src/logicstudio/LogicStudioApp.js
-function Ke({ args: e, openWindow: t } = {}) {
-	if (e?.file && Q(e.file)) {
+function Ye({ args: e, openWindow: t } = {}) {
+	if (e?.file && Xe(e.file)) {
 		E.logicHost?.runApp(e.file);
 		let t = new d({
-			title: k("app.name"),
+			title: O("app.name"),
 			icon: "blocks",
 			width: 280,
 			height: 120
 		});
 		return setTimeout(() => t.emit("close"), 0), t;
 	}
-	let n = new qe(t);
+	let n = new Ze(t);
 	return e?.file && h.exists(e.file) && n.open(e.file), n.win.on("launch", (e) => {
-		e?.file && Q(e.file) ? E.logicHost?.runApp(e.file) : e?.file && h.exists(e.file) && n.open(e.file);
+		e?.file && Xe(e.file) ? E.logicHost?.runApp(e.file) : e?.file && h.exists(e.file) && n.open(e.file);
 	}), n.win;
 }
-var Q = (e) => h.get(e)?.name.toLowerCase().endsWith(".lsapp"), qe = class {
+var Xe = (e) => h.get(e)?.name.toLowerCase().endsWith(".lsapp"), Ze = class {
 	win;
 	openWindow;
 	ws = null;
@@ -3737,7 +3808,7 @@ var Q = (e) => h.get(e)?.name.toLowerCase().endsWith(".lsapp"), qe = class {
 	#e = new AbortController();
 	constructor(e) {
 		this.openWindow = e, this.win = new d({
-			title: k("app.name"),
+			title: O("app.name"),
 			icon: "blocks",
 			width: 1240,
 			height: 760,
@@ -3745,16 +3816,16 @@ var Q = (e) => h.get(e)?.name.toLowerCase().endsWith(".lsapp"), qe = class {
 			minHeight: 480
 		}), this.win.el.dataset.pan = "native", this.win.getState = () => ({ file: this.ws ? this.ws.projectFile ?? this.ws.single : null }), this.win.canClose = () => this.canClose(), this.win.on("destroy", () => {
 			this.#e.abort(), this.runner?.stop();
-		}), this.tabBar = new se({
-			t: k,
+		}), this.tabBar = new ce({
+			t: O,
 			signal: this.#e.signal,
-			label: k("tabs.label"),
+			label: O("tabs.label"),
 			newButton: !1,
 			reorder: !0
 		}), this.tabBar.on("select", (e) => this.show(e)), this.tabBar.on("close", (e) => this.closeTab(e)), this.tabBar.on("move", ({ key: e, index: t }) => {
 			let n = this.tabs.findIndex((t) => t.key === e), [r] = this.tabs.splice(n, 1);
 			this.tabs.splice(t, 0, r), this.renderTabs();
-		}), this.toolbar = g("div", { class: "ls-tbar" }), this.center = g("div", { class: "ls-center" }), this.explorer = new le(this), this.palette = new fe(this), this.inspector = new Ce(this), this.bottom = new Te(this), this.runner = new Ee(this), this.status = g("div", { class: "ls-sbar" }), this.leftTabs = g("div", {
+		}), this.toolbar = g("div", { class: "ls-tbar" }), this.center = g("div", { class: "ls-center" }), this.explorer = new ue(this), this.palette = new pe(this), this.inspector = new Te(this), this.bottom = new De(this), this.runner = new Oe(this), this.status = g("div", { class: "ls-sbar" }), this.leftTabs = g("div", {
 			class: "ls-ltabs",
 			role: "tablist"
 		}), this.leftBody = g("div", { class: "ls-lbody" }), this.left = g("div", { class: "ls-left" }, this.leftTabs, this.leftBody), this.right = g("div", { class: "ls-right" }, this.inspector.el);
@@ -3770,7 +3841,7 @@ var Q = (e) => h.get(e)?.name.toLowerCase().endsWith(".lsapp"), qe = class {
 			reset: t === "left" ? 220 : 280,
 			invert: n,
 			host: e,
-			label: k("left.resize"),
+			label: O("left.resize"),
 			set: (n, r) => {
 				e.style.width = `${n}px`, r && C.set("logicstudio.panels", {
 					...C.get("logicstudio.panels", {}),
@@ -3778,10 +3849,10 @@ var Q = (e) => h.get(e)?.name.toLowerCase().endsWith(".lsapp"), qe = class {
 				});
 			}
 		}), r = n(this.left, "left", !1), i = n(this.right, "right", !0);
-		this.main = g("div", { class: "ls-main" }, this.center, this.bottom.el), this.win.body.append(g("div", { class: "ls lgc-scope" }, this.tabBar.el, this.toolbar, g("div", { class: "ls-work" }, this.left, r, this.main, i, this.right), this.status)), this.leftTab = "project", this.home = new De(this), this.explorer.render(), this.bottom.render(), this.tabs.push({
+		this.main = g("div", { class: "ls-main" }, this.center, this.bottom.el), this.win.body.append(g("div", { class: "ls lgc-scope" }, this.tabBar.el, this.toolbar, g("div", { class: "ls-work" }, this.left, r, this.main, i, this.right), this.status)), this.leftTab = "project", this.home = new ke(this), this.explorer.render(), this.bottom.render(), this.tabs.push({
 			key: "home",
 			kind: "home",
-			label: k("tabs.home"),
+			label: O("tabs.home"),
 			view: this.home
 		}), this.show("home"), this.#n(), this.loadCatalog();
 	}
@@ -3809,45 +3880,45 @@ var Q = (e) => h.get(e)?.name.toLowerCase().endsWith(".lsapp"), qe = class {
 		return null;
 	}
 	label(e) {
-		return e?.label?.[O.lang] ?? e?.label?.en ?? e?.type ?? "";
+		return e?.label?.[D.lang] ?? e?.label?.en ?? e?.type ?? "";
 	}
 	showDoc(e) {
-		return ge(this, e);
+		return _e(this, e);
 	}
 	docOfSelection() {
 		let e = this.current;
 		if (e?.kind === "schema") {
 			let t = e.view.selection;
-			return t.blocks.length === 1 ? q(this, e.view.doc.block(t.blocks[0]), (t) => e.view.componentOf(t)) : t.groups?.length ? "ide/groups" : t.links.length ? "ide/links" : "ide/schemas";
+			return t.blocks.length === 1 ? K(this, e.view.doc.block(t.blocks[0]), (t) => e.view.componentOf(t)) : t.groups?.length ? "ide/groups" : t.links.length ? "ide/links" : "ide/schemas";
 		}
 		return e?.kind === "window" ? (e.view.selected && e.view.doc.find(e.view.selected)?.node)?.type ?? "ide/windows" : e?.kind === "map" ? "ide/projects" : "ide/index";
 	}
 	renderStatus() {
 		let e = this.current, t = [];
-		this.engineError ? t.push(g("span", { class: "ls-eng off" }, k("status.noEngine"))) : t.push(g("span", { class: "ls-eng" }, k("status.engine", { n: (this.catalog?.packages ?? []).length }))), e?.view?.statusText && t.push(g("span", {}, e.view.statusText())), this.runner.program && t.push(g("span", { class: "ls-run-st" }, this.runner.statusText())), t.push(g("span", { class: "sp" })), this.ws && t.push(g("span", {}, this.ws.project ? k("status.project", { name: this.ws.name }) : k("status.single"))), this.status.replaceChildren(...t);
+		this.engineError ? t.push(g("span", { class: "ls-eng off" }, O("status.noEngine"))) : t.push(g("span", { class: "ls-eng" }, O("status.engine", { n: (this.catalog?.packages ?? []).length }))), e?.view?.statusText && t.push(g("span", {}, e.view.statusText())), this.runner.program && t.push(g("span", { class: "ls-run-st" }, this.runner.statusText())), t.push(g("span", { class: "sp" })), this.ws && t.push(g("span", {}, this.ws.project ? O("status.project", { name: this.ws.name }) : O("status.single"))), this.status.replaceChildren(...t);
 	}
 	async open(e) {
 		if (!await this.canClose()) return;
 		let t = e, n = h.get(e);
 		if (n?.name.toLowerCase().endsWith(".lsui")) {
-			let e = Je(n.parent);
+			let e = Qe(n.parent);
 			if (!e) {
 				await y(this.win, {
 					icon: "warning",
-					title: k("open.uiAlone"),
-					text: k("open.uiAloneText")
+					title: O("open.uiAlone"),
+					text: O("open.uiAloneText")
 				});
 				return;
 			}
 			t = e;
 		}
 		try {
-			let r = await N.open(t);
+			let r = await M.open(t);
 			this.setWorkspace(r), n?.name.toLowerCase().endsWith(".lsui") ? this.openElement("windows", r.relative(e)) : r.single ? this.openElement("schemas", h.get(r.single).name) : this.openMap(), $.add(t);
 		} catch (e) {
 			await y(this.win, {
 				icon: "error",
-				title: k("open.failed"),
+				title: O("open.failed"),
 				text: e.message
 			});
 		}
@@ -3859,33 +3930,33 @@ var Q = (e) => h.get(e)?.name.toLowerCase().endsWith(".lsapp"), qe = class {
 			this.renderTabs(), this.renderToolbar();
 		}), e.on("change", () => {
 			this.explorer.render(), this.inspector.render();
-		}), e.project?.on("change", () => this.bottom.render()), this.win.setTitle(k("app.name"), e.name), this.explorer.render(), this.bottom.render(), this.renderTabs();
+		}), e.project?.on("change", () => this.bottom.render()), this.win.setTitle(O("app.name"), e.name), this.explorer.render(), this.bottom.render(), this.renderTabs();
 	}
 	async newProject() {
 		let e = await y(this.win, {
 			icon: "blocks",
-			title: k("new.title"),
-			text: k("new.text", { folder: k("new.folder") }),
+			title: O("new.title"),
+			text: O("new.text", { folder: O("new.folder") }),
 			fields: [{
 				name: "name",
-				label: k("new.name"),
-				value: k("new.default"),
+				label: O("new.name"),
+				value: O("new.default"),
 				required: !0,
 				maxLength: 80
 			}],
 			buttons: ["cancel", {
 				value: "ok",
-				label: k("new.create"),
+				label: O("new.create"),
 				primary: !0
 			}]
 		});
 		if (e?.button !== "ok") return;
-		let t = Ye(h.root, k("new.folder")), n = await N.create(t, e.values.name);
+		let t = $e(h.root, O("new.folder")), n = await M.create(t, e.values.name);
 		await this.open(n);
 	}
 	async openProjectPicker() {
-		let e = await D(this.openWindow, {
-			title: k("open.pick"),
+		let e = await se(this.openWindow, {
+			title: O("open.pick"),
 			exts: ["lsproj", "lsch"]
 		});
 		e && await this.open(e.id ?? e);
@@ -3894,7 +3965,7 @@ var Q = (e) => h.get(e)?.name.toLowerCase().endsWith(".lsapp"), qe = class {
 		let n = `${e}:${t}`;
 		if (this.tabs.some((e) => e.key === n)) this.show(n);
 		else try {
-			let r = await this.ws.doc(t), i = this.ws.single ? r.data.name : this.ws.nameOf(e, t) ?? t, a = e === "schemas" ? new _e(this, r, i) : new ye(this, r, i);
+			let r = await this.ws.doc(t), i = this.ws.single ? r.data.name : this.ws.nameOf(e, t) ?? t, a = e === "schemas" ? new ve(this, r, i) : new xe(this, r, i);
 			this.tabs.push({
 				key: n,
 				kind: e === "schemas" ? "schema" : "window",
@@ -3906,7 +3977,7 @@ var Q = (e) => h.get(e)?.name.toLowerCase().endsWith(".lsapp"), qe = class {
 		} catch (e) {
 			await y(this.win, {
 				icon: "error",
-				title: k("open.failed"),
+				title: O("open.failed"),
 				text: e.message
 			});
 		}
@@ -3915,15 +3986,15 @@ var Q = (e) => h.get(e)?.name.toLowerCase().endsWith(".lsapp"), qe = class {
 		this.ws?.project && (this.tabs.some((e) => e.key === "map") || this.tabs.splice(+(this.tabs[0]?.kind === "home"), 0, {
 			key: "map",
 			kind: "map",
-			label: k("tabs.map", { name: this.ws.name }),
-			view: new Se(this)
+			label: O("tabs.map", { name: this.ws.name }),
+			view: new we(this)
 		}), this.show("map"));
 	}
 	openHome() {
 		this.tabs.some((e) => e.kind === "home") || this.tabs.unshift({
 			key: "home",
 			kind: "home",
-			label: k("tabs.home"),
+			label: O("tabs.home"),
 			view: this.home
 		}), this.show("home");
 	}
@@ -3940,18 +4011,18 @@ var Q = (e) => h.get(e)?.name.toLowerCase().endsWith(".lsapp"), qe = class {
 		if (t.doc?.dirty) {
 			let e = await y(this.win, {
 				icon: "warning",
-				title: k("close.unsaved", { name: t.label }),
-				text: k("close.unsavedText"),
+				title: O("close.unsaved", { name: t.label }),
+				text: O("close.unsavedText"),
 				buttons: [
 					"cancel",
 					{
 						value: "discard",
-						label: k("close.discard"),
+						label: O("close.discard"),
 						danger: !0
 					},
 					{
 						value: "save",
-						label: k("common.save"),
+						label: O("common.save"),
 						primary: !0
 					}
 				]
@@ -3964,8 +4035,8 @@ var Q = (e) => h.get(e)?.name.toLowerCase().endsWith(".lsapp"), qe = class {
 		this.tabs.splice(n, 1), this.active === e ? this.tabs.length ? this.show(this.tabs[Math.max(0, n - 1)].key) : this.#t() : this.renderTabs();
 	}
 	#t() {
-		this.current?.view?.hide?.(), this.active = null, this.center.replaceChildren(g("div", { class: "ls-notabs" }, g("p", {}, k("empty.text")), f({
-			label: k("tb.home"),
+		this.current?.view?.hide?.(), this.active = null, this.center.replaceChildren(g("div", { class: "ls-notabs" }, g("p", {}, O("empty.text")), f({
+			label: O("tb.home"),
 			icon: _("home"),
 			onClick: () => this.openHome()
 		}))), this.renderTabs(), this.renderToolbar(), this.renderLeft(), this.inspector.render(), this.renderStatus();
@@ -3991,22 +4062,22 @@ var Q = (e) => h.get(e)?.name.toLowerCase().endsWith(".lsapp"), qe = class {
 			title: a ?? t,
 			onclick: n
 		}, e ? _(e) : null, t ? g("span", {}, t) : null), r = [];
-		this.ws ? (r.push(n("save", k("tb.save"), () => this.saveAll(), {
+		this.ws ? (r.push(n("save", O("tb.save"), () => this.saveAll(), {
 			disabled: !this.ws.dirty,
-			title: `${k("tb.save")} (Ctrl+S)`
+			title: `${O("tb.save")} (Ctrl+S)`
 		})), r.push(g("span", { class: "sep" })), r.push(n("undo", null, () => t?.history.undo(), {
 			disabled: !t?.history.canUndo,
-			title: k("tb.undo")
+			title: O("tb.undo")
 		})), r.push(n("redo", null, () => t?.history.redo(), {
 			disabled: !t?.history.canRedo,
-			title: k("tb.redo")
+			title: O("tb.redo")
 		})), r.push(g("span", { class: "sep" })), this.runner.program ? (r.push(n("play", this.runner.statusText(), null, {
 			cls: "run",
 			disabled: !0
-		})), r.push(n("stop", k("tb.stop"), () => this.runner.stop(), { cls: "stop" }))) : r.push(n("play", k("tb.test"), () => this.runner.test(), {
+		})), r.push(n("stop", O("tb.stop"), () => this.runner.stop(), { cls: "stop" }))) : r.push(n("play", O("tb.test"), () => this.runner.test(), {
 			cls: "test",
-			title: `${k("tb.test")} (F5)`
-		})), r.push(n("power", k("tb.activate"), () => this.runner.activate(), { title: k("tb.activateHint") })), r.push(g("span", { class: "sep" })), e?.view?.toolbar && r.push(...e.view.toolbar(n)), this.current?.view?.setLimits?.(this.limits ?? {}), r.push(g("span", { class: "sp" })), this.ws.project && (r.push(n("grid", k("tb.map"), () => this.openMap())), r.push(n("archive", k("tb.createApp"), () => ze(this), { title: k("tb.createAppHint") })), r.push(n("gear", k("tb.options"), () => Ae(this))))) : (r.push(n("plus", k("home.new"), () => this.newProject())), r.push(n("open", k("home.open"), () => this.openProjectPicker())), r.push(g("span", { class: "sp" }))), this.tabs.some((e) => e.kind === "home") || r.push(n("home", k("tb.home"), () => this.openHome())), r.push(n("help", null, () => this.showDoc(this.docOfSelection()), { title: `${k("tb.docs")} (F1)` })), this.toolbar.replaceChildren(...r), t?.history && !t._lsHistory && (t._lsHistory = !0, t.history.on("change", () => this.renderToolbar()));
+			title: `${O("tb.test")} (F5)`
+		})), r.push(n("power", O("tb.activate"), () => this.runner.activate(), { title: O("tb.activateHint") })), r.push(g("span", { class: "sep" })), e?.view?.toolbar && r.push(...e.view.toolbar(n)), this.current?.view?.setLimits?.(this.limits ?? {}), r.push(g("span", { class: "sp" })), this.ws.project && (r.push(n("grid", O("tb.map"), () => this.openMap())), r.push(n("archive", O("tb.createApp"), () => Ve(this), { title: O("tb.createAppHint") })), r.push(n("gear", O("tb.options"), () => Me(this))))) : (r.push(n("plus", O("home.new"), () => this.newProject())), r.push(n("open", O("home.open"), () => this.openProjectPicker())), r.push(g("span", { class: "sp" }))), this.tabs.some((e) => e.kind === "home") || r.push(n("home", O("tb.home"), () => this.openHome())), r.push(n("help", null, () => this.showDoc(this.docOfSelection()), { title: `${O("tb.docs")} (F1)` })), this.toolbar.replaceChildren(...r), t?.history && !t._lsHistory && (t._lsHistory = !0, t.history.on("change", () => this.renderToolbar()));
 	}
 	renderLeft() {
 		let e = this.current?.kind === "window" ? "components" : "blocks";
@@ -4020,7 +4091,7 @@ var Q = (e) => h.get(e)?.name.toLowerCase().endsWith(".lsapp"), qe = class {
 				this.leftTab = e, this.renderLeft();
 			}
 		}, t);
-		this.leftTabs.replaceChildren(t("project", k("left.project")), t(e, k(e === "components" ? "left.components" : "left.blocks"))), this.leftBody.replaceChildren(this.leftTab === "project" ? this.explorer.el : this.palette.el), this.leftTab !== "project" && this.palette.render();
+		this.leftTabs.replaceChildren(t("project", O("left.project")), t(e, O(e === "components" ? "left.components" : "left.blocks"))), this.leftBody.replaceChildren(this.leftTab === "project" ? this.explorer.el : this.palette.el), this.leftTab !== "project" && this.palette.render();
 	}
 	async saveAll() {
 		if (this.ws) {
@@ -4029,7 +4100,7 @@ var Q = (e) => h.get(e)?.name.toLowerCase().endsWith(".lsapp"), qe = class {
 			} catch (e) {
 				await y(this.win, {
 					icon: "error",
-					title: k("save.failed"),
+					title: O("save.failed"),
 					text: e.message
 				});
 			}
@@ -4040,18 +4111,18 @@ var Q = (e) => h.get(e)?.name.toLowerCase().endsWith(".lsapp"), qe = class {
 		if (!this.ws?.dirty) return !0;
 		let e = await y(this.win, {
 			icon: "warning",
-			title: k("close.project", { name: this.ws.name }),
-			text: k("close.unsavedText"),
+			title: O("close.project", { name: this.ws.name }),
+			text: O("close.unsavedText"),
 			buttons: [
 				"cancel",
 				{
 					value: "discard",
-					label: k("close.discard"),
+					label: O("close.discard"),
 					danger: !0
 				},
 				{
 					value: "save",
-					label: k("close.saveAll"),
+					label: O("close.saveAll"),
 					primary: !0
 				}
 			]
@@ -4079,7 +4150,7 @@ var Q = (e) => h.get(e)?.name.toLowerCase().endsWith(".lsapp"), qe = class {
 		}, { signal: this.#e.signal });
 	}
 };
-function Je(e) {
+function Qe(e) {
 	for (let t = e; t; t = h.get(t)?.parent) {
 		let e = h.children(t).find((e) => e.type === "file" && e.name.toLowerCase().endsWith(".lsproj"));
 		if (e) return e.id;
@@ -4087,7 +4158,7 @@ function Je(e) {
 	}
 	return null;
 }
-function Ye(e, t) {
+function $e(e, t) {
 	return h.children(e).find((e) => e.type === "folder" && e.name.toLowerCase() === t.toLowerCase())?.id ?? h.create(e, {
 		type: "folder",
 		name: t
@@ -4099,4 +4170,4 @@ var $ = {
 		C.set("logicstudio.recent", [e, ...this.list().filter((t) => t !== e)].slice(0, 10));
 	}
 };
-export { Ke as default, $ as recent };
+export { Ye as default, $ as recent };

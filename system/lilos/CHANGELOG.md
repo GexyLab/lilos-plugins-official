@@ -1,5 +1,11 @@
 # Changelog di lilOS
 
+## 1.46.0 — 2026-11-11
+
+- **Nuova funzionalità — il colore e i simboli dei blocchi dei segnali.** In Logic Studio i blocchi della nuova categoria **Segnali** (pacchetto **Segnali**, che un amministratore installa dall'AppStore → Kernel) hanno la loro striscia rosa e le icone dell'onda e del filtro. Serve a Logic Studio IDE 1.11.0.
+- **Nuova funzionalità — finestre di dialogo (da 1.45.0).** Una finestra può essere «di dialogo»: finché è aperta, le altre finestre della stessa app sono bloccate; un clic su di loro porta avanti la finestra di dialogo, che lampeggia. Le usano le finestre dei progetti di Logic Studio (IDE 1.10.0), che possono anche aprirsi estese o restare sempre in primo piano.
+- **Per gli sviluppatori — SDK 0.30.0 e 0.31.0.** `Window` con `modal`, `setBlocked`, `blocked` e `flash()`, il `WindowManager` con i gruppi di finestre; `LogicWindow` con `state`, `modal` e `onTop`; nuovi simboli `wave` e `filter` di `icon()` e la categoria di blocchi `signal`.
+
 ## 1.44.1 — 2026-11-11
 
 - **Miglioramento — un colore per i blocchi delle unità di misura.** In Logic Studio i blocchi della nuova categoria **Unità di misura** (pacchetto **Grandezze e unità**, che un amministratore installa dall'AppStore → Kernel) hanno la loro striscia arancione nello schema e nella scheda Blocchi. Serve a Logic Studio IDE 1.8.0.

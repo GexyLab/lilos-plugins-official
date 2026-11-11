@@ -3197,7 +3197,8 @@ function An(e) {
 				"maxProjectLinks",
 				"maxConsoles",
 				"consoleLinesPerSecond",
-				"chartPoints"
+				"chartPoints",
+				"signalSamples"
 			]), Y.settings.values, {
 				t: F,
 				save: r
