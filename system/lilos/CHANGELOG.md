@@ -1,5 +1,10 @@
 # Changelog di lilOS
 
+## 1.44.1 — 2026-11-11
+
+- **Miglioramento — un colore per i blocchi delle unità di misura.** In Logic Studio i blocchi della nuova categoria **Unità di misura** (pacchetto **Grandezze e unità**, che un amministratore installa dall'AppStore → Kernel) hanno la loro striscia arancione nello schema e nella scheda Blocchi. Serve a Logic Studio IDE 1.8.0.
+- **Per gli sviluppatori — SDK 0.29.1.** Nuova categoria di blocchi `units` in `LogicCanvas` (`.cat-units`, `--lc-units`).
+
 ## 1.44.0 — 2026-11-11
 
 - **Nuova funzionalità — i gruppi di blocchi in Logic Studio.** Con Logic Studio IDE 1.7.0 i blocchi di uno schema si raggruppano (Ctrl+G) in una cornice che si può comprimere in un solo blocco, con la porta **Run** per farli partire e le porte esposte verso l'esterno.
